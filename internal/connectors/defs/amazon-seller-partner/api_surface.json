@@ -7,17 +7,27 @@
     {
       "method": "POST",
       "path": "/aplus/2020-11-01/contentAsinValidations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/approvalSubmissions",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -30,33 +40,53 @@
     {
       "method": "POST",
       "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/suspendSubmissions",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -69,9 +99,14 @@
     {
       "method": "POST",
       "path": "/aplus/2020-11-01/contentDocuments",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -105,17 +140,27 @@
     {
       "method": "POST",
       "path": "/applications/2023-11-30/clientSecret",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/awd/2024-05-09/inboundEligibility",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -163,9 +208,14 @@
     {
       "method": "GET",
       "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/labels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -262,33 +312,53 @@
     {
       "method": "POST",
       "path": "/batches/products/pricing/2022-05-01/items/competitiveSummary",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/batches/products/pricing/2022-05-01/offer/featuredOfferExpectedPrice",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/batches/products/pricing/v0/itemOffers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/batches/products/pricing/v0/listingOffers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -385,9 +455,14 @@
     {
       "method": "GET",
       "path": "/dataKiosk/2023-11-15/documents/{documentId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -435,17 +510,27 @@
     {
       "method": "GET",
       "path": "/delivery/2022-07-01/invoice/status",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/delivery/2022-07-01/invoice",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -479,9 +564,14 @@
     {
       "method": "POST",
       "path": "/easyShip/2022-03-23/timeSlot",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -508,9 +598,14 @@
     {
       "method": "POST",
       "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -537,9 +632,14 @@
     {
       "method": "PUT",
       "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/shipLabels",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -559,9 +659,14 @@
     {
       "method": "POST",
       "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -595,9 +700,14 @@
     {
       "method": "GET",
       "path": "/fba/inbound/v0/shipments/{shipmentId}/billOfLading",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -610,9 +720,14 @@
     {
       "method": "GET",
       "path": "/fba/inbound/v0/shipments/{shipmentId}/labels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -632,9 +747,14 @@
     {
       "method": "DELETE",
       "path": "/fba/inventory/v1/items/{sellerSku}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -724,9 +844,14 @@
     {
       "method": "POST",
       "path": "/fba/outbound/2020-07-01/fulfillmentOrders/preview",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -760,17 +885,27 @@
     {
       "method": "GET",
       "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice/status",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -783,17 +918,27 @@
     {
       "method": "GET",
       "path": "/feeds/2021-06-30/documents/{feedDocumentId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/feeds/2021-06-30/documents",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -883,9 +1028,14 @@
     {
       "method": "POST",
       "path": "/finances/transfers/wallet/2024-03-01/transactions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -898,9 +1048,14 @@
     {
       "method": "DELETE",
       "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -920,17 +1075,27 @@
     {
       "method": "POST",
       "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PUT",
       "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1069,9 +1234,14 @@
     {
       "method": "POST",
       "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}/confirmation",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1091,17 +1261,27 @@
     {
       "method": "POST",
       "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryChallanDocument",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1170,9 +1350,14 @@
     {
       "method": "POST",
       "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1248,17 +1433,27 @@
     {
       "method": "PUT",
       "path": "/inbound/fba/2024-03-20/items/compliance",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/inbound/fba/2024-03-20/items/labels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1278,41 +1473,66 @@
     {
       "method": "GET",
       "path": "/inbound/fba/2024-03-20/operations/{operationId}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "DELETE",
       "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PATCH",
       "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PUT",
       "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "DELETE",
       "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1325,17 +1545,27 @@
     {
       "method": "PATCH",
       "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PUT",
       "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1355,81 +1585,131 @@
     {
       "method": "GET",
       "path": "/messaging/v1/orders/{amazonOrderId}/attributes",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmCustomizationDetails",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmDeliveryDetails",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmOrderDetails",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmServiceDetails",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/digitalAccessKey",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/invoice",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/legalDisclosure",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/unexpectedProblem",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/messaging/v1/orders/{amazonOrderId}/messages/warranty",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1442,17 +1722,27 @@
     {
       "method": "POST",
       "path": "/mfn/v0/additionalSellerInputs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/mfn/v0/eligibleShippingServices",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1556,25 +1846,40 @@
     {
       "method": "GET",
       "path": "/orders/v0/orders/{orderId}/address",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/orders/v0/orders/{orderId}/buyerInfo",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/orders/v0/orders/{orderId}/orderItems/buyerInfo",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1587,9 +1892,14 @@
     {
       "method": "GET",
       "path": "/orders/v0/orders/{orderId}/regulatedInfo",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1630,25 +1940,40 @@
     {
       "method": "POST",
       "path": "/products/fees/v0/feesEstimate",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/products/fees/v0/items/{Asin}/feesEstimate",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/products/fees/v0/listings/{SellerSKU}/feesEstimate",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1682,33 +2007,53 @@
     {
       "method": "POST",
       "path": "/replenishment/2022-11-07/offers/metrics/search",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/replenishment/2022-11-07/offers/search",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/replenishment/2022-11-07/sellingPartners/metrics/search",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/reports/2021-06-30/documents/{reportDocumentId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1798,33 +2143,53 @@
     {
       "method": "POST",
       "path": "/service/v1/documents",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "DELETE",
       "path": "/service/v1/reservation/{reservationId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PUT",
       "path": "/service/v1/reservation/{reservationId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/service/v1/reservation",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1865,9 +2230,14 @@
     {
       "method": "PUT",
       "path": "/service/v1/serviceJobs/{serviceJobId}/cancellations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1894,25 +2264,40 @@
     {
       "method": "POST",
       "path": "/service/v1/serviceResources/{resourceId}/capacity/fixed",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/service/v1/serviceResources/{resourceId}/capacity/range",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PUT",
       "path": "/service/v1/serviceResources/{resourceId}/schedules",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1932,9 +2317,14 @@
     {
       "method": "POST",
       "path": "/shipping/v1/rates",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -1947,17 +2337,27 @@
     {
       "method": "POST",
       "path": "/shipping/v1/shipments/{shipmentId}/containers/{trackingId}/label",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/shipping/v1/shipments/{shipmentId}/purchaseLabels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2019,9 +2419,14 @@
     {
       "method": "PUT",
       "path": "/shipping/v2/carrierAccounts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2041,9 +2446,14 @@
     {
       "method": "PUT",
       "path": "/shipping/v2/collectionForms/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2098,9 +2508,14 @@
     {
       "method": "POST",
       "path": "/shipping/v2/shipments/rates",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2120,17 +2535,27 @@
     {
       "method": "PUT",
       "path": "/shipping/v2/unmanifestedShipments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/solicitations/v1/orders/{amazonOrderId}/solicitations/productReviewAndSellerFeedback",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2185,17 +2610,27 @@
     {
       "method": "GET",
       "path": "/tax/invoices/2024-06-19/attributes",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/tax/invoices/2024-06-19/documents/{invoicesDocumentId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2215,33 +2650,53 @@
     {
       "method": "POST",
       "path": "/tax/invoices/2024-06-19/exports",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests/{shipmentId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2261,17 +2716,27 @@
     {
       "method": "POST",
       "path": "/tokens/2021-03-01/restrictedDataToken",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/uploads/2020-11-01/uploadDestinations/{resource}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2326,9 +2791,14 @@
     {
       "method": "POST",
       "path": "/vendor/directFulfillment/payments/v1/invoices",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2348,9 +2818,14 @@
     {
       "method": "POST",
       "path": "/vendor/directFulfillment/shipping/2021-12-28/containerLabel",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2370,17 +2845,27 @@
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips/{purchaseOrderNumber}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2400,33 +2885,53 @@
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2446,17 +2951,27 @@
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/v1/packingSlips/{purchaseOrderNumber}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/v1/packingSlips",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2476,25 +2991,40 @@
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/v1/shippingLabels/{purchaseOrderNumber}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2542,9 +3072,14 @@
     {
       "method": "POST",
       "path": "/vendor/payments/v1/invoices",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2571,9 +3106,14 @@
     {
       "method": "GET",
       "path": "/vendor/shipping/v1/transportLabels",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
       }
     },
     {
@@ -2583,5 +3123,6 @@
         "stream": "get_transaction_vendor_transactions_v1_transactions_transaction_id"
       }
     }
-  ]
+  ],
+  "operation_ledger_version": 1
 }

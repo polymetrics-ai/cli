@@ -1,0 +1,1885 @@
+{
+  "generated_at": "2026-08-19T00:00:00Z",
+  "connectors": [
+    {
+      "connector": "grafana",
+      "api_surface_rows": 314,
+      "exact_source_rows": 314,
+      "declared_operations": 314,
+      "declared_percent": 100,
+      "enabled_operations": 0,
+      "enabled_percent": 0,
+      "disabled_operations": 314,
+      "documented_deletes": 44,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 139
+        },
+        {
+          "key": "direct_write",
+          "count": 171
+        },
+        {
+          "key": "etl",
+          "count": 4
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 4,
+      "writes_actions": 0,
+      "terminal_commands": 0,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 0,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 314
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 0,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-grafana",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/grafana/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "typed-operation-contract-grafana",
+        "sync-transport-source-definition-grafana"
+      ],
+      "declaration_pending": [
+        {
+          "id": "typed-operation-contract-grafana",
+          "count": 310
+        },
+        {
+          "id": "sync-transport-source-definition-grafana",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "connector": "trello",
+      "api_surface_rows": 261,
+      "exact_source_rows": 261,
+      "declared_operations": 261,
+      "declared_percent": 100,
+      "enabled_operations": 0,
+      "enabled_percent": 0,
+      "disabled_operations": 261,
+      "documented_deletes": 37,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 126
+        },
+        {
+          "key": "direct_write",
+          "count": 133
+        },
+        {
+          "key": "etl",
+          "count": 2
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 2,
+      "writes_actions": 0,
+      "terminal_commands": 0,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 0,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 261
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 0,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-trello",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/trello/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "typed-operation-contract-trello",
+        "sync-transport-source-definition-trello"
+      ],
+      "declaration_pending": [
+        {
+          "id": "typed-operation-contract-trello",
+          "count": 259
+        },
+        {
+          "id": "sync-transport-source-definition-trello",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "connector": "slack",
+      "api_surface_rows": 174,
+      "exact_source_rows": 174,
+      "declared_operations": 174,
+      "declared_percent": 100,
+      "enabled_operations": 0,
+      "enabled_percent": 0,
+      "disabled_operations": 174,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 76
+        },
+        {
+          "key": "direct_write",
+          "count": 94
+        },
+        {
+          "key": "etl",
+          "count": 4
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 4,
+      "writes_actions": 0,
+      "terminal_commands": 0,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 0,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 174
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 0,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-slack",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/slack/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "typed-operation-contract-slack",
+        "sync-transport-source-definition-slack"
+      ],
+      "declaration_pending": [
+        {
+          "id": "typed-operation-contract-slack",
+          "count": 170
+        },
+        {
+          "id": "sync-transport-source-definition-slack",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "connector": "n8n",
+      "api_surface_rows": 100,
+      "exact_source_rows": 100,
+      "declared_operations": 100,
+      "declared_percent": 100,
+      "enabled_operations": 26,
+      "enabled_percent": 26,
+      "disabled_operations": 74,
+      "documented_deletes": 15,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 17
+        },
+        {
+          "key": "direct_write",
+          "count": 66
+        },
+        {
+          "key": "etl",
+          "count": 17
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 17,
+      "writes_actions": 26,
+      "terminal_commands": 26,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 26,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 74
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 26,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-n8n",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/n8n/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "typed-operation-contract-n8n",
+        "sync-transport-source-definition-n8n"
+      ],
+      "declaration_pending": [
+        {
+          "id": "typed-operation-contract-n8n",
+          "count": 57
+        },
+        {
+          "id": "sync-transport-source-definition-n8n",
+          "count": 17
+        }
+      ]
+    },
+    {
+      "connector": "google-calendar",
+      "api_surface_rows": 38,
+      "exact_source_rows": 38,
+      "declared_operations": 38,
+      "declared_percent": 100,
+      "enabled_operations": 27,
+      "enabled_percent": 71.05,
+      "disabled_operations": 11,
+      "documented_deletes": 4,
+      "enabled_deletes": 4,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 1
+        },
+        {
+          "key": "direct_write",
+          "count": 26
+        },
+        {
+          "key": "etl",
+          "count": 11
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 11,
+      "writes_actions": 26,
+      "terminal_commands": 27,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 26,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 11
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 26,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-google-calendar",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-google-calendar"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-google-calendar",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "connector": "gmail",
+      "api_surface_rows": 79,
+      "exact_source_rows": 79,
+      "declared_operations": 79,
+      "declared_percent": 100,
+      "enabled_operations": 56,
+      "enabled_percent": 70.89,
+      "disabled_operations": 23,
+      "documented_deletes": 10,
+      "enabled_deletes": 9,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 20
+        },
+        {
+          "key": "direct_write",
+          "count": 49
+        },
+        {
+          "key": "etl",
+          "count": 10
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 10,
+      "writes_actions": 40,
+      "terminal_commands": 56,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 40,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 23
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 40,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-gmail",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/gmail/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-gmail",
+        "typed-operation-contract-gmail"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-gmail",
+          "count": 10
+        },
+        {
+          "id": "typed-operation-contract-gmail",
+          "count": 13
+        }
+      ]
+    },
+    {
+      "connector": "twilio",
+      "api_surface_rows": 197,
+      "exact_source_rows": 197,
+      "declared_operations": 197,
+      "declared_percent": 100,
+      "enabled_operations": 94,
+      "enabled_percent": 47.72,
+      "disabled_operations": 103,
+      "documented_deletes": 32,
+      "enabled_deletes": 32,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 0
+        },
+        {
+          "key": "direct_write",
+          "count": 94
+        },
+        {
+          "key": "etl",
+          "count": 103
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 103,
+      "writes_actions": 94,
+      "terminal_commands": 94,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 94,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 103
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 94,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-twilio",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/twilio/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-twilio"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-twilio",
+          "count": 103
+        }
+      ]
+    },
+    {
+      "connector": "amazon-sqs",
+      "api_surface_rows": 23,
+      "exact_source_rows": 23,
+      "declared_operations": 23,
+      "declared_percent": 100,
+      "enabled_operations": 22,
+      "enabled_percent": 95.65,
+      "disabled_operations": 1,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 6
+        },
+        {
+          "key": "direct_write",
+          "count": 16
+        },
+        {
+          "key": "etl",
+          "count": 1
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 1,
+      "writes_actions": 16,
+      "terminal_commands": 22,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 16,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 1
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 16,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-amazon-sqs",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/amazon-sqs/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-amazon-sqs"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-amazon-sqs",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "connector": "elasticsearch",
+      "api_surface_rows": 845,
+      "exact_source_rows": 845,
+      "declared_operations": 845,
+      "declared_percent": 100,
+      "enabled_operations": 0,
+      "enabled_percent": 0,
+      "disabled_operations": 845,
+      "documented_deletes": 72,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 361
+        },
+        {
+          "key": "direct_write",
+          "count": 482
+        },
+        {
+          "key": "etl",
+          "count": 2
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 2,
+      "writes_actions": 0,
+      "terminal_commands": 0,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 0,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 845
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 0,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-elasticsearch",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/elasticsearch/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "typed-operation-contract-elasticsearch",
+        "sync-transport-source-definition-elasticsearch"
+      ],
+      "declaration_pending": [
+        {
+          "id": "typed-operation-contract-elasticsearch",
+          "count": 843
+        },
+        {
+          "id": "sync-transport-source-definition-elasticsearch",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "connector": "gong",
+      "api_surface_rows": 69,
+      "exact_source_rows": 69,
+      "declared_operations": 69,
+      "declared_percent": 100,
+      "enabled_operations": 57,
+      "enabled_percent": 82.61,
+      "disabled_operations": 12,
+      "documented_deletes": 3,
+      "enabled_deletes": 3,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 30
+        },
+        {
+          "key": "direct_write",
+          "count": 27
+        },
+        {
+          "key": "etl",
+          "count": 12
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 12,
+      "writes_actions": 27,
+      "terminal_commands": 57,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 27,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 12
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 27,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-gong",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/gong/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-gong"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-gong",
+          "count": 12
+        }
+      ]
+    },
+    {
+      "connector": "google-ads",
+      "api_surface_rows": 164,
+      "exact_source_rows": 164,
+      "declared_operations": 164,
+      "declared_percent": 100,
+      "enabled_operations": 28,
+      "enabled_percent": 17.07,
+      "disabled_operations": 136,
+      "documented_deletes": 1,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 28
+        },
+        {
+          "key": "direct_write",
+          "count": 133
+        },
+        {
+          "key": "etl",
+          "count": 3
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 3,
+      "writes_actions": 7,
+      "terminal_commands": 28,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 7,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 136
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 7,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-google-ads",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/google-ads/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-google-ads",
+        "typed-operation-contract-google-ads"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-google-ads",
+          "count": 3
+        },
+        {
+          "id": "typed-operation-contract-google-ads",
+          "count": 133
+        }
+      ]
+    },
+    {
+      "connector": "facebook-marketing",
+      "api_surface_rows": 36,
+      "exact_source_rows": 36,
+      "declared_operations": 36,
+      "declared_percent": 100,
+      "enabled_operations": 5,
+      "enabled_percent": 13.89,
+      "disabled_operations": 31,
+      "documented_deletes": 2,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 16
+        },
+        {
+          "key": "direct_write",
+          "count": 10
+        },
+        {
+          "key": "etl",
+          "count": 10
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 10,
+      "writes_actions": 5,
+      "terminal_commands": 5,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 5,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 31
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 5,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-facebook-marketing",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-facebook-marketing",
+        "typed-operation-contract-facebook-marketing"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "count": 10
+        },
+        {
+          "id": "typed-operation-contract-facebook-marketing",
+          "count": 21
+        }
+      ]
+    },
+    {
+      "connector": "linkedin-ads",
+      "api_surface_rows": 10,
+      "exact_source_rows": 10,
+      "declared_operations": 10,
+      "declared_percent": 100,
+      "enabled_operations": 0,
+      "enabled_percent": 0,
+      "disabled_operations": 10,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 4
+        },
+        {
+          "key": "direct_write",
+          "count": 2
+        },
+        {
+          "key": "etl",
+          "count": 4
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 4,
+      "writes_actions": 0,
+      "terminal_commands": 0,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 0,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 10
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 0,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-linkedin-ads",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-linkedin-ads",
+        "typed-operation-contract-linkedin-ads"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-linkedin-ads",
+          "count": 4
+        },
+        {
+          "id": "typed-operation-contract-linkedin-ads",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "connector": "aircall",
+      "api_surface_rows": 93,
+      "exact_source_rows": 93,
+      "declared_operations": 93,
+      "declared_percent": 100,
+      "enabled_operations": 20,
+      "enabled_percent": 21.51,
+      "disabled_operations": 73,
+      "documented_deletes": 13,
+      "enabled_deletes": 6,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 32
+        },
+        {
+          "key": "direct_write",
+          "count": 54
+        },
+        {
+          "key": "etl",
+          "count": 7
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 7,
+      "writes_actions": 20,
+      "terminal_commands": 20,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 20,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 73
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 20,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-aircall",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/aircall/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-aircall",
+        "typed-operation-contract-aircall"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-aircall",
+          "count": 7
+        },
+        {
+          "id": "typed-operation-contract-aircall",
+          "count": 66
+        }
+      ]
+    },
+    {
+      "connector": "xero",
+      "api_surface_rows": 235,
+      "exact_source_rows": 235,
+      "declared_operations": 235,
+      "declared_percent": 100,
+      "enabled_operations": 87,
+      "enabled_percent": 37.02,
+      "disabled_operations": 148,
+      "documented_deletes": 10,
+      "enabled_deletes": 10,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 0
+        },
+        {
+          "key": "direct_write",
+          "count": 87
+        },
+        {
+          "key": "etl",
+          "count": 100
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 26
+        },
+        {
+          "key": "binary_write",
+          "count": 22
+        }
+      ],
+      "stream_bindings": 100,
+      "writes_actions": 87,
+      "terminal_commands": 87,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 87,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 148
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 87,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-xero",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/xero/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-xero",
+        "typed-operation-contract-xero"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-xero",
+          "count": 100
+        },
+        {
+          "id": "typed-operation-contract-xero",
+          "count": 48
+        }
+      ]
+    },
+    {
+      "connector": "paypal-transaction",
+      "api_surface_rows": 10,
+      "exact_source_rows": 10,
+      "declared_operations": 10,
+      "declared_percent": 100,
+      "enabled_operations": 0,
+      "enabled_percent": 0,
+      "disabled_operations": 10,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 4
+        },
+        {
+          "key": "direct_write",
+          "count": 2
+        },
+        {
+          "key": "etl",
+          "count": 4
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 4,
+      "writes_actions": 0,
+      "terminal_commands": 0,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 0,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 10
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 0,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-paypal-transaction",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-paypal-transaction",
+        "typed-operation-contract-paypal-transaction"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-paypal-transaction",
+          "count": 4
+        },
+        {
+          "id": "typed-operation-contract-paypal-transaction",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "connector": "gocardless",
+      "api_surface_rows": 142,
+      "exact_source_rows": 142,
+      "declared_operations": 142,
+      "declared_percent": 100,
+      "enabled_operations": 76,
+      "enabled_percent": 53.52,
+      "disabled_operations": 66,
+      "documented_deletes": 1,
+      "enabled_deletes": 1,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 0
+        },
+        {
+          "key": "direct_write",
+          "count": 79
+        },
+        {
+          "key": "etl",
+          "count": 63
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 63,
+      "writes_actions": 76,
+      "terminal_commands": 76,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 76,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 66
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 76,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-gocardless",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/gocardless/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-gocardless",
+        "typed-operation-contract-gocardless"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-gocardless",
+          "count": 63
+        },
+        {
+          "id": "typed-operation-contract-gocardless",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "connector": "amazon-seller-partner",
+      "api_surface_rows": 353,
+      "exact_source_rows": 353,
+      "declared_operations": 353,
+      "declared_percent": 100,
+      "enabled_operations": 98,
+      "enabled_percent": 27.76,
+      "disabled_operations": 255,
+      "documented_deletes": 13,
+      "enabled_deletes": 8,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 10
+        },
+        {
+          "key": "direct_write",
+          "count": 156
+        },
+        {
+          "key": "etl",
+          "count": 147
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 40
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 147,
+      "writes_actions": 98,
+      "terminal_commands": 98,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 98,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 255
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 98,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-amazon-seller-partner",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/amazon-seller-partner/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "typed-operation-contract-amazon-seller-partner",
+        "sync-transport-source-definition-amazon-seller-partner"
+      ],
+      "declaration_pending": [
+        {
+          "id": "typed-operation-contract-amazon-seller-partner",
+          "count": 108
+        },
+        {
+          "id": "sync-transport-source-definition-amazon-seller-partner",
+          "count": 147
+        }
+      ]
+    },
+    {
+      "connector": "miro",
+      "api_surface_rows": 197,
+      "exact_source_rows": 197,
+      "declared_operations": 197,
+      "declared_percent": 100,
+      "enabled_operations": 104,
+      "enabled_percent": 52.79,
+      "disabled_operations": 93,
+      "documented_deletes": 34,
+      "enabled_deletes": 34,
+      "parity_class_counts": [
+        {
+          "key": "direct_read",
+          "count": 1
+        },
+        {
+          "key": "direct_write",
+          "count": 112
+        },
+        {
+          "key": "etl",
+          "count": 84
+        },
+        {
+          "key": "reverse_etl",
+          "count": 0
+        },
+        {
+          "key": "binary_read",
+          "count": 0
+        },
+        {
+          "key": "binary_write",
+          "count": 0
+        }
+      ],
+      "stream_bindings": 84,
+      "writes_actions": 104,
+      "terminal_commands": 104,
+      "live_certification": "pending",
+      "gap_ids": [
+        "generic-typed-destination-executor"
+      ],
+      "foundation_gaps": [
+        {
+          "id": "generic-typed-destination-executor",
+          "count": 104,
+          "scope": "destination_transport"
+        }
+      ],
+      "rejected_by_reason": [
+        {
+          "key": "declaration-pending",
+          "count": 93
+        }
+      ],
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "typed_direct_write_operations": 104,
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "transport": {
+        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "source_transport": {
+          "state": "declaration-pending",
+          "declaration_pending": {
+            "id": "sync-transport-source-definition-miro",
+            "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/miro/sync_transport.json is absent.",
+            "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+          }
+        },
+        "destination_transport": {
+          "state": "gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      },
+      "declaration_pending_ids": [
+        "sync-transport-source-definition-miro",
+        "typed-operation-contract-miro"
+      ],
+      "declaration_pending": [
+        {
+          "id": "sync-transport-source-definition-miro",
+          "count": 84
+        },
+        {
+          "id": "typed-operation-contract-miro",
+          "count": 9
+        }
+      ]
+    }
+  ]
+}

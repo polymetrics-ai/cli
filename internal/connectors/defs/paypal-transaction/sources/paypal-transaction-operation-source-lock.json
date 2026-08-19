@@ -1,0 +1,118 @@
+{
+  "schema_version": 2,
+  "connector": "paypal-transaction",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developer.paypal.com/api/rest/",
+    "sha256": "a227eadf7eaa3379441a6569ba212c6b7440ba63b9a5344bcbcd0f4895d0cd48",
+    "bytes": 196206,
+    "format": "text/html; charset=utf-8",
+    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "operation_counts": {
+      "GET": 8,
+      "POST": 2
+    },
+    "operations": [
+      {
+        "id": "paypal-transaction.rest.get.v1_reporting_transactions.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/reporting/transactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/reporting/transactions",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.get.v1_reporting_balances.2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/reporting/balances",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/reporting/balances",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.get.v1_catalogs_products.3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/catalogs/products",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/catalogs/products",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.get.v1_customer_disputes.4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customer/disputes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/customer/disputes",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.post.v1_oauth2_token.5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/oauth2/token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v1/oauth2/token",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.get.v2_checkout_orders.6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/checkout/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/checkout/orders",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.get.v1_payments_payouts.7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/payments/payouts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/payments/payouts",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.get.v1_invoicing_invoices.8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/invoicing/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/invoicing/invoices",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.get.v1_billing_subscriptions.9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/billing/subscriptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/billing/subscriptions",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      },
+      {
+        "id": "paypal-transaction.rest.post.v1_customer_disputes_id_accept_claim.10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/customer/disputes/{id}/accept-claim",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v1/customer/disputes/{id}/accept-claim",
+        "source_url": "https://developer.paypal.com/api/rest/"
+      }
+    ]
+  }
+}

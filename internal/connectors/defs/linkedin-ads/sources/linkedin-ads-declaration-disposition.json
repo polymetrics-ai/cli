@@ -1,0 +1,559 @@
+{
+  "schema_version": 1,
+  "connector": "linkedin-ads",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+    "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+    "source_sha256": "9e26dc877582c3296e903ae498515983dc45e3a0611f561d31ed8cc331c42521",
+    "source_bytes": 214702,
+    "source_operation_count": 10
+  },
+  "summary": {
+    "api_surface_rows": 10,
+    "exact_source_rows": 10,
+    "declared_operations": 10,
+    "declared_percent": 100,
+    "enabled_operations": 0,
+    "enabled_percent": 0,
+    "disabled_operations": 10,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 4
+      },
+      {
+        "key": "direct_write",
+        "count": 2
+      },
+      {
+        "key": "etl",
+        "count": 4
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0,
+        "scope": "destination_transport"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 10
+      }
+    ],
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "typed_direct_write_operations": 0,
+      "foundation_gap": {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+      }
+    },
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-linkedin-ads",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-source-definition-linkedin-ads",
+      "typed-operation-contract-linkedin-ads"
+    ],
+    "declaration_pending": [
+      {
+        "id": "sync-transport-source-definition-linkedin-ads",
+        "count": 4
+      },
+      {
+        "id": "typed-operation-contract-linkedin-ads",
+        "count": 6
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/rest/adAccounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/adAccounts",
+        "covered_by": {
+          "stream": "accounts"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_adaccounts.1",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/adAccounts",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-linkedin-ads",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/adAccounts.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/adAccounts."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adAccountGroups",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/adAccountGroups",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_adaccountgroups.2",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/adAccountGroups",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-linkedin-ads",
+          "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/adAccountGroups is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/adAccountGroups is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adCampaignGroups",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/adCampaignGroups",
+        "covered_by": {
+          "stream": "campaign_groups"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_adcampaigngroups.3",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/adCampaignGroups",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-linkedin-ads",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/adCampaignGroups.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/adCampaignGroups."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adCampaigns",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/adCampaigns",
+        "covered_by": {
+          "stream": "campaigns"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_adcampaigns.4",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/adCampaigns",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-linkedin-ads",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/adCampaigns.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/adCampaigns."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/creatives",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/creatives",
+        "covered_by": {
+          "stream": "creatives"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_creatives.5",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/creatives",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-linkedin-ads",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/creatives.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/linkedin-ads/sync_transport.json is absent for GET /rest/creatives."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adAnalytics",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/adAnalytics",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_adanalytics.6",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/adAnalytics",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-linkedin-ads",
+          "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/adAnalytics is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/adAnalytics is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/conversions",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/conversions",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_conversions.7",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/conversions",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-linkedin-ads",
+          "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/conversions is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/conversions is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adTargetingFacets",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/rest/adTargetingFacets",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.get.rest_adtargetingfacets.8",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint GET /rest/adTargetingFacets",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-linkedin-ads",
+          "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/adTargetingFacets is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: GET /rest/adTargetingFacets is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/adAccounts",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/rest/adAccounts",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+          "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.post.rest_adaccounts.9",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint POST /rest/adAccounts",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-linkedin-ads",
+          "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: POST /rest/adAccounts is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: POST /rest/adAccounts is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-linkedin-ads",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/adCampaigns",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/rest/adCampaigns",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+          "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/linkedin-ads-operation-source-lock.json",
+        "source_id": "linkedin-ads.rest.post.rest_adcampaigns.10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_location": "documented endpoint POST /rest/adCampaigns",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-linkedin-ads",
+          "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: POST /rest/adCampaigns is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/linkedin-ads/api_surface.json: POST /rest/adCampaigns is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-linkedin-ads",
+        "contract": null
+      }
+    }
+  ]
+}

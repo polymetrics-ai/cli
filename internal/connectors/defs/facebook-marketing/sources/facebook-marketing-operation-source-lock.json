@@ -1,0 +1,379 @@
+{
+  "schema_version": 2,
+  "connector": "facebook-marketing",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.facebook.com/docs/marketing-api/",
+    "sha256": "5b8bc0e250898ea1dffd1974f4c976a6e8e37e7f5402db058107ba52774134c2",
+    "bytes": 2689319,
+    "format": "text/html; charset=\"utf-8\"",
+    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "operation_counts": {
+      "DELETE": 2,
+      "GET": 26,
+      "POST": 8
+    },
+    "operations": [
+      {
+        "id": "facebook-marketing.rest.get.me_adaccounts.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/me/adaccounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /me/adaccounts",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_campaigns.2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/campaigns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/campaigns",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.ad_account_id_campaigns.3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{ad_account_id}/campaigns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{ad_account_id}/campaigns",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.campaign_id.4",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{campaign_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{campaign_id}",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.delete.campaign_id.5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{campaign_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /{campaign_id}",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_ads.6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/ads",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/ads",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.ad_account_id_ads.7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{ad_account_id}/ads",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{ad_account_id}/ads",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.ad_id.8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{ad_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{ad_id}",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_adsets.9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/adsets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/adsets",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.ad_account_id_adsets.10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{ad_account_id}/adsets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{ad_account_id}/adsets",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.adset_id.11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{adset_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{adset_id}",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.delete.adset_id.12",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/{adset_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /{adset_id}",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_adcreatives.13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/adcreatives",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/adcreatives",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.ad_account_id_adcreatives.14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{ad_account_id}/adcreatives",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{ad_account_id}/adcreatives",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_customaudiences.15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/customaudiences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/customaudiences",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.post.ad_account_id_customaudiences.16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{ad_account_id}/customaudiences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /{ad_account_id}/customaudiences",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_insights.17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/insights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/insights",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.campaign_id_insights.18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{campaign_id}/insights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{campaign_id}/insights",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.adset_id_insights.19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{adset_id}/insights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{adset_id}/insights",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_id_insights.20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_id}/insights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_id}/insights",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_activities.21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/activities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/activities",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_adimages.22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/adimages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/adimages",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_advideos.23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/advideos",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/advideos",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_adlabels.24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/adlabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/adlabels",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_adrules_library.25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/adrules_library",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/adrules_library",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_adrules_history.26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/adrules_history",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/adrules_history",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_adspixels.27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/adspixels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/adspixels",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_applications.28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/applications",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/applications",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_assigned_users.29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/assigned_users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/assigned_users",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_async_requests.30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/async_requests",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/async_requests",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_ads_reporting_mmm_reports.31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/ads_reporting_mmm_reports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/ads_reporting_mmm_reports",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_ad_studies.32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/ad_studies",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/ad_studies",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_broadtargetingcategories.33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/broadtargetingcategories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/broadtargetingcategories",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_businessprojects.34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/businessprojects",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/businessprojects",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_ad_place_page_sets.35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/ad_place_page_sets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/ad_place_page_sets",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      },
+      {
+        "id": "facebook-marketing.rest.get.ad_account_id_ad_saved_keywords.36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{ad_account_id}/ad_saved_keywords",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /{ad_account_id}/ad_saved_keywords",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+      }
+    ]
+  }
+}

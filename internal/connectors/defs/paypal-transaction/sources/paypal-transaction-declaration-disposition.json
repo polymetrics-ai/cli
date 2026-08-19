@@ -1,0 +1,559 @@
+{
+  "schema_version": 1,
+  "connector": "paypal-transaction",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+    "source_url": "https://developer.paypal.com/api/rest/",
+    "source_sha256": "a227eadf7eaa3379441a6569ba212c6b7440ba63b9a5344bcbcd0f4895d0cd48",
+    "source_bytes": 196206,
+    "source_operation_count": 10
+  },
+  "summary": {
+    "api_surface_rows": 10,
+    "exact_source_rows": 10,
+    "declared_operations": 10,
+    "declared_percent": 100,
+    "enabled_operations": 0,
+    "enabled_percent": 0,
+    "disabled_operations": 10,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 4
+      },
+      {
+        "key": "direct_write",
+        "count": 2
+      },
+      {
+        "key": "etl",
+        "count": 4
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0,
+        "scope": "destination_transport"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 10
+      }
+    ],
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "typed_direct_write_operations": 0,
+      "foundation_gap": {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+      }
+    },
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-paypal-transaction",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-source-definition-paypal-transaction",
+      "typed-operation-contract-paypal-transaction"
+    ],
+    "declaration_pending": [
+      {
+        "id": "sync-transport-source-definition-paypal-transaction",
+        "count": 4
+      },
+      {
+        "id": "typed-operation-contract-paypal-transaction",
+        "count": 6
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/v1/reporting/transactions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/reporting/transactions",
+        "covered_by": {
+          "stream": "transactions"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v1_reporting_transactions.1",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v1/reporting/transactions",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-paypal-transaction",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/reporting/transactions.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/reporting/transactions."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reporting/balances",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/reporting/balances",
+        "covered_by": {
+          "stream": "balances"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v1_reporting_balances.2",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v1/reporting/balances",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-paypal-transaction",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/reporting/balances.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/reporting/balances."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalogs/products",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/catalogs/products",
+        "covered_by": {
+          "stream": "products"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v1_catalogs_products.3",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v1/catalogs/products",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-paypal-transaction",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/catalogs/products.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/catalogs/products."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customer/disputes",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/customer/disputes",
+        "covered_by": {
+          "stream": "disputes"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v1_customer_disputes.4",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v1/customer/disputes",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-paypal-transaction",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/customer/disputes.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/paypal-transaction/sync_transport.json is absent for GET /v1/customer/disputes."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/oauth2/token",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/oauth2/token",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "OAuth2 client-credentials token exchange, not a syncable object stream (consumed internally by the AuthHook)",
+          "source_url": "https://developer.paypal.com/api/rest/",
+          "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.post.v1_oauth2_token.5",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint POST /v1/oauth2/token",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-paypal-transaction",
+          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: POST /v1/oauth2/token is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: POST /v1/oauth2/token is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/checkout/orders",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/checkout/orders",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://developer.paypal.com/api/rest/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v2_checkout_orders.6",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v2/checkout/orders",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-paypal-transaction",
+          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v2/checkout/orders is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v2/checkout/orders is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payments/payouts",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/payments/payouts",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://developer.paypal.com/api/rest/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v1_payments_payouts.7",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v1/payments/payouts",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-paypal-transaction",
+          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/payments/payouts is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/payments/payouts is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/invoicing/invoices",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/invoicing/invoices",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://developer.paypal.com/api/rest/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v1_invoicing_invoices.8",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v1/invoicing/invoices",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-paypal-transaction",
+          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/invoicing/invoices is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/invoicing/invoices is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/billing/subscriptions",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/billing/subscriptions",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "source_url": "https://developer.paypal.com/api/rest/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.get.v1_billing_subscriptions.9",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint GET /v1/billing/subscriptions",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-paypal-transaction",
+          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/billing/subscriptions is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/billing/subscriptions is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/accept-claim",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/customer/disputes/{id}/accept-claim",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "no approved reverse-ETL write surface; connector is read-only",
+          "source_url": "https://developer.paypal.com/api/rest/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/paypal-transaction-operation-source-lock.json",
+        "source_id": "paypal-transaction.rest.post.v1_customer_disputes_id_accept_claim.10",
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_location": "documented endpoint POST /v1/customer/disputes/{id}/accept-claim",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-paypal-transaction",
+          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: POST /v1/customer/disputes/{id}/accept-claim is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: POST /v1/customer/disputes/{id}/accept-claim is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
+        "contract": null
+      }
+    }
+  ]
+}

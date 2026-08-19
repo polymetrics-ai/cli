@@ -1,0 +1,290 @@
+{
+  "generated_at": "2026-08-19T00:00:00Z",
+  "checks": [
+    {
+      "connector": "grafana",
+      "documented_operations": 314,
+      "enabled_operations": 0,
+      "disabled_operations": 314,
+      "documented_deletes": 44,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 790237,
+        "sha256": "8d54e6ceb1aeef72ef8fe31213eed910d82d264b0d8328b7e53670ce4c88b46c",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "trello",
+      "documented_operations": 261,
+      "enabled_operations": 0,
+      "disabled_operations": 261,
+      "documented_deletes": 37,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 261671,
+        "sha256": "b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "slack",
+      "documented_operations": 174,
+      "enabled_operations": 0,
+      "disabled_operations": 174,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 1237332,
+        "sha256": "742a5c977180a829df8767cf57bc417d99b3713583aee83741efb9c08ca731e7",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "n8n",
+      "documented_operations": 100,
+      "enabled_operations": 26,
+      "disabled_operations": 74,
+      "documented_deletes": 15,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 8956,
+        "sha256": "ff35172ab6ea789c2d3d9effd48964d51bb420f7f66f52e6f7757262d3eb8c0f",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "google-calendar",
+      "documented_operations": 38,
+      "enabled_operations": 27,
+      "disabled_operations": 11,
+      "documented_deletes": 4,
+      "enabled_deletes": 4,
+      "source_lock": {
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 169810,
+        "sha256": "55537f18631fa45e5458c46b0c9a6f9cc288f38a8f4657ebc2bca87b0874be49",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "gmail",
+      "documented_operations": 79,
+      "enabled_operations": 56,
+      "disabled_operations": 23,
+      "documented_deletes": 10,
+      "enabled_deletes": 9,
+      "source_lock": {
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 217687,
+        "sha256": "dccd8e614f0836e264faa6216ba031301fb9361f3f1ef224c9b89945f02e45f9",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "twilio",
+      "documented_operations": 197,
+      "enabled_operations": 94,
+      "disabled_operations": 103,
+      "documented_deletes": 32,
+      "enabled_deletes": 32,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 1877530,
+        "sha256": "6b6ffccef14cd55fd6d2fd38c3fde68585e1937eead4c099a92c5efe696b882c",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "amazon-sqs",
+      "documented_operations": 23,
+      "enabled_operations": 22,
+      "disabled_operations": 1,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 157139,
+        "sha256": "282d08c85a2003ab91ed400a81339fe81952e446ae40a599877705903e870c0f",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "elasticsearch",
+      "documented_operations": 845,
+      "enabled_operations": 0,
+      "disabled_operations": 845,
+      "documented_deletes": 72,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 6458869,
+        "sha256": "9b2ad824cfc8c8c4ea1b942ef6797da63ac6306c69f7e30e108b11a1e527dde9",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "gong",
+      "documented_operations": 69,
+      "enabled_operations": 57,
+      "disabled_operations": 12,
+      "documented_deletes": 3,
+      "enabled_deletes": 3,
+      "source_lock": {
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 453797,
+        "sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "google-ads",
+      "documented_operations": 164,
+      "enabled_operations": 28,
+      "disabled_operations": 136,
+      "documented_deletes": 1,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 2937930,
+        "sha256": "b04e992e2e4e602d9f356635361a65115d1ea923d6be3116054b7d2e3917339c",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "facebook-marketing",
+      "documented_operations": 36,
+      "enabled_operations": 5,
+      "disabled_operations": 31,
+      "documented_deletes": 2,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 2689319,
+        "sha256": "5b8bc0e250898ea1dffd1974f4c976a6e8e37e7f5402db058107ba52774134c2",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "linkedin-ads",
+      "documented_operations": 10,
+      "enabled_operations": 0,
+      "disabled_operations": 10,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 214702,
+        "sha256": "9e26dc877582c3296e903ae498515983dc45e3a0611f561d31ed8cc331c42521",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "aircall",
+      "documented_operations": 93,
+      "enabled_operations": 20,
+      "disabled_operations": 73,
+      "documented_deletes": 13,
+      "enabled_deletes": 6,
+      "source_lock": {
+        "source_url": "https://developer.aircall.io/api-references/",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 875367,
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "xero",
+      "documented_operations": 235,
+      "enabled_operations": 87,
+      "disabled_operations": 148,
+      "documented_deletes": 10,
+      "enabled_deletes": 10,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 929720,
+        "sha256": "f980dbcfc317b9ea60c5095f1861f9e60fe05e5f8059781c4f2c2a816e918746",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "paypal-transaction",
+      "documented_operations": 10,
+      "enabled_operations": 0,
+      "disabled_operations": 10,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://developer.paypal.com/api/rest/",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 196206,
+        "sha256": "a227eadf7eaa3379441a6569ba212c6b7440ba63b9a5344bcbcd0f4895d0cd48",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "gocardless",
+      "documented_operations": 142,
+      "enabled_operations": 76,
+      "disabled_operations": 66,
+      "documented_deletes": 1,
+      "enabled_deletes": 1,
+      "source_lock": {
+        "source_url": "https://developer.gocardless.com/api-reference/openapi",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 265226,
+        "sha256": "6ae95829354fd09a383df72b1a0239f86311d7098a8a3ff7666849fa9dc884e4",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "amazon-seller-partner",
+      "documented_operations": 353,
+      "enabled_operations": 98,
+      "disabled_operations": 255,
+      "documented_deletes": 13,
+      "enabled_deletes": 8,
+      "source_lock": {
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 345239,
+        "sha256": "bcd9bfdddc538b022a11be225a8343bcf0a5034b5b13a54a31ab7e7980d5d357",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "miro",
+      "documented_operations": 197,
+      "enabled_operations": 104,
+      "disabled_operations": 93,
+      "documented_deletes": 34,
+      "enabled_deletes": 34,
+      "source_lock": {
+        "source_url": "https://developers.miro.com/reference/overview",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 588083,
+        "sha256": "85edf9a8f69697169d874f9807894107a9d26897168584d4e9a89cab984b52bd",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    }
+  ]
+}

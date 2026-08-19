@@ -1,0 +1,1991 @@
+{
+  "schema_version": 2,
+  "connector": "miro",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.miro.com/reference/overview",
+    "sha256": "85edf9a8f69697169d874f9807894107a9d26897168584d4e9a89cab984b52bd",
+    "bytes": 588083,
+    "format": "text/html; charset=utf-8",
+    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "operation_counts": {
+      "DELETE": 34,
+      "GET": 85,
+      "PATCH": 31,
+      "POST": 41,
+      "PUT": 6
+    },
+    "operations": [
+      {
+        "id": "miro.rest.get.v2_boards.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_members.2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_items.3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/items",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_tags.4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/tags",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_connectors.5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/connectors",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/connectors",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v1_oauth_revoke.6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/oauth/revoke",
+        "operation_id": null,
+        "deprecated": true,
+        "source_location": "documented endpoint POST /v1/oauth/revoke",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v1_oauth_token.7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/oauth-token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v1/oauth-token",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_ai_interaction_logs.8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/ai-interaction-logs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/ai-interaction-logs",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_audit_logs.9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/audit/logs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/audit/logs",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_data_classification_settings.10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/data-classification-settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/data-classification-settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id_data_classification.11",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/data-classification",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}/data-classification",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_data_classification_settings.12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/data-classification-settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/data-classification-settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id_data_classification_settings.13",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/data-classification-settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}/data-classification-settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_boards_board_id_data_classification.14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/boards/{board_id}/data-classification",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/boards/{board_id}/data-classification",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_teams_team_id_boards_board_id_data_classification.15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/boards/{board_id}/data-classification",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/teams/{team_id}/boards/{board_id}/data-classification",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_docs.16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/docs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/docs",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_docs_item_id.17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/docs/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/docs/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_docs_item_id.18",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/docs/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/docs/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_cases.19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/cases",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/cases",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_cases.20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/cases",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/cases",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_cases_case_id.21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/cases/{case_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.put.v2_orgs_org_id_cases_case_id.22",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/orgs/{org_id}/cases/{case_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_cases_case_id.23",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/cases/{case_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_cases_case_id_legal_holds.24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/cases/{case_id}/legal-holds",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_cases_case_id_legal_holds.25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/cases/{case_id}/legal-holds",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_cases_case_id_export_jobs.26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}/export-jobs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/cases/{case_id}/export-jobs",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_cases_case_id_legal_holds_legal_hold_id.27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.put.v2_orgs_org_id_cases_case_id_legal_holds_legal_hold_id.28",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_cases_case_id_legal_holds_legal_hold_id.29",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_cases_case_id_legal_holds_legal_hold_id_content_items.30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}/content-items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}/content-items",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_boards_export_jobs.31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/boards/export/jobs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/boards/export/jobs",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_boards_export_jobs.32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/boards/export/jobs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/boards/export/jobs",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_boards_export_jobs_job_id.33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/boards/export/jobs/{job_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/boards/export/jobs/{job_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_boards_export_jobs_job_id_results.34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/boards/export/jobs/{job_id}/results",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/boards/export/jobs/{job_id}/results",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.put.v2_orgs_org_id_boards_export_jobs_job_id_status.35",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orgs/{org_id}/boards/export/jobs/{job_id}/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/orgs/{org_id}/boards/export/jobs/{job_id}/status",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_boards_export_jobs_job_id_tasks.36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/boards/export/jobs/{job_id}/tasks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/boards/export/jobs/{job_id}/tasks",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_boards_export_jobs_job_id_tasks_task_id_export_link.37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/boards/export/jobs/{job_id}/tasks/{task_id}/export-link",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/boards/export/jobs/{job_id}/tasks/{task_id}/export-link",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_content_logs_items.38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/content-logs/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/content-logs/items",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_sessions_reset_all.39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/sessions/reset_all",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/sessions/reset_all",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.users.40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Users",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.users.41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Users",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.users_id.42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Users/{id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.put.users_id.43",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Users/{id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.users_id.44",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/Users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /Users/{id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.users_id.45",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/Users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /Users/{id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.groups.46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.groups_id.47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Groups/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Groups/{id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.groups_id.48",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/Groups/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /Groups/{id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.serviceproviderconfig.49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ServiceProviderConfig",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ServiceProviderConfig",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.resourcetypes.50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ResourceTypes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ResourceTypes",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.resourcetypes_resource.51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ResourceTypes/{resource}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ResourceTypes/{resource}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.schemas.52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Schemas",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Schemas",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.schemas_uri.53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Schemas/{uri}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Schemas/{uri}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id.54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_members.55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_members_member_id.56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards.57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.put.v2_boards.58",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/boards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/boards",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id.59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id.60",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id.61",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_app_cards.62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/app_cards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/app_cards",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_app_cards_item_id.63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/app_cards/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/app_cards/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_app_cards_item_id.64",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/app_cards/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/app_cards/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_app_cards_item_id.65",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/app_cards/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/app_cards/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_cards.66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/cards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/cards",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_cards_item_id.67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/cards/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/cards/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_cards_item_id.68",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/cards/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/cards/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_cards_item_id.69",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/cards/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/cards/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_connectors.70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/connectors",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/connectors",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_connectors_connector_id.71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/connectors/{connector_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/connectors/{connector_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_connectors_connector_id.72",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/connectors/{connector_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/connectors/{connector_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_connectors_connector_id.73",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/connectors/{connector_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/connectors/{connector_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_documents.74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/documents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/documents",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_documents_item_id.75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/documents/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/documents/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_documents_item_id.76",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/documents/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/documents/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_documents_item_id.77",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/documents/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/documents/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_embeds.78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/embeds",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/embeds",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_embeds_item_id.79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/embeds/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/embeds/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_embeds_item_id.80",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/embeds/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/embeds/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_embeds_item_id.81",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/embeds/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/embeds/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_images.82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/images",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/images",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_images_item_id.83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/images/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/images/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_images_item_id.84",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/images/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/images/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_images_item_id.85",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/images/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/images/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_items_item_id.86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/items/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_items_item_id.87",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/items/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_items_item_id.88",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/items/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_members.89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_members_board_member_id.90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/members/{board_member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/members/{board_member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_members_board_member_id.91",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/members/{board_member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/members/{board_member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_members_board_member_id.92",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/members/{board_member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/members/{board_member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_shapes.93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/shapes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/shapes",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_shapes_item_id.94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/shapes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/shapes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_shapes_item_id.95",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/shapes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/shapes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_shapes_item_id.96",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/shapes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/shapes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_sticky_notes.97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/sticky_notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/sticky_notes",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_sticky_notes_item_id.98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/sticky_notes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/sticky_notes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_sticky_notes_item_id.99",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/sticky_notes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/sticky_notes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_sticky_notes_item_id.100",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/sticky_notes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/sticky_notes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_texts.101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/texts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/texts",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_texts_item_id.102",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/texts/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/texts/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_texts_item_id.103",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/texts/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/texts/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_texts_item_id.104",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/texts/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/texts/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_items_bulk.105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/items/bulk",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/items/bulk",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_frames.106",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/frames",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/frames",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_frames_item_id.107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/frames/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/frames/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_frames_item_id.108",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/frames/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/frames/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_frames_item_id.109",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/frames/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/frames/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_platformcontainers_items.110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id_PlatformContainers}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id_PlatformContainers}/items",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_platformcreateitemsinbulkusingfilefromdevice_items_bulk.111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id_Platformcreateitemsinbulkusingfilefromdevice}/items/bulk",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id_Platformcreateitemsinbulkusingfilefromdevice}/items/bulk",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_apps_app_id_metrics.112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/apps/{app_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/apps/{app_id}/metrics",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_apps_app_id_metrics_total.113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/apps/{app_id}/metrics-total",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/apps/{app_id}/metrics-total",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_boards_board_id_mindmap_nodes_item_id.114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/boards/{board_id}/mindmap_nodes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/boards/{board_id}/mindmap_nodes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_experimental_boards_board_id_mindmap_nodes_item_id.115",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2-experimental/boards/{board_id}/mindmap_nodes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2-experimental/boards/{board_id}/mindmap_nodes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_boards_board_id_mindmap_nodes.116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/boards/{board_id}/mindmap_nodes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/boards/{board_id}/mindmap_nodes",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_experimental_boards_board_id_mindmap_nodes.117",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2-experimental/boards/{board_id}/mindmap_nodes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2-experimental/boards/{board_id}/mindmap_nodes",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_boards_board_id_items.118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/boards/{board_id}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/boards/{board_id}/items",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_boards_board_id_items_item_id.119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/boards/{board_id}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/boards/{board_id}/items/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_experimental_boards_board_id_items_item_id.120",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2-experimental/boards/{board_id}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2-experimental/boards/{board_id}/items/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_experimental_boards_board_id_shapes.121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2-experimental/boards/{board_id}/shapes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2-experimental/boards/{board_id}/shapes",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_boards_board_id_shapes_item_id.122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/boards/{board_id}/shapes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/boards/{board_id}/shapes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_experimental_boards_board_id_shapes_item_id.123",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2-experimental/boards/{board_id}/shapes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2-experimental/boards/{board_id}/shapes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_experimental_boards_board_id_shapes_item_id.124",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2-experimental/boards/{board_id}/shapes/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2-experimental/boards/{board_id}/shapes/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_boards_board_id_code_widgets.125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/boards/{board_id}/code_widgets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/boards/{board_id}/code_widgets",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_experimental_boards_board_id_code_widgets.126",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2-experimental/boards/{board_id}/code_widgets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2-experimental/boards/{board_id}/code_widgets",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_experimental_boards_board_id_code_widgets_item_id.127",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_experimental_boards_board_id_code_widgets_item_id.128",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_experimental_boards_board_id_code_widgets_item_id.129",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_experimental_boards_board_id_code_widgets_item_id_position.130",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2-experimental/boards/{board_id}/code_widgets/{item_id}/position",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2-experimental/boards/{board_id}/code_widgets/{item_id}/position",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_platformfileupload_documents.131",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id_PlatformFileUpload}/documents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id_PlatformFileUpload}/documents",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_platformfileupload_documents_item_id.132",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id_PlatformFileUpload}/documents/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id_PlatformFileUpload}/documents/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_platformfileupload_images.133",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id_PlatformFileUpload}/images",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id_PlatformFileUpload}/images",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_platformfileupload_images_item_id.134",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id_PlatformFileUpload}/images/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id_PlatformFileUpload}/images/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_groups.135",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_groups.136",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_groups_items.137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/groups/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/groups/items",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_groups_group_id.138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.put.v2_boards_board_id_groups_group_id.139",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/boards/{board_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/boards/{board_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_groups_group_id.140",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_groups_group_id.141",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/groups/{group_id}?",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/groups/{group_id}?",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_oauth_revoke.142",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/oauth/revoke",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/oauth/revoke",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_items_item_id_tags.143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/items/{item_id}/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/items/{item_id}/tags",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_tags.144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id}/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id}/tags",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_tags_tag_id.145",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id}/tags/{tag_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id}/tags/{tag_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_boards_board_id_tags_tag_id.146",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/boards/{board_id}/tags/{tag_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/boards/{board_id}/tags/{tag_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_tags_tag_id.147",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id}/tags/{tag_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id}/tags/{tag_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_boards_board_id_platformtags_items.148",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/boards/{board_id_PlatformTags}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/boards/{board_id_PlatformTags}/items",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_boards_board_id_platformtags_items_item_id.149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/boards/{board_id_PlatformTags}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/boards/{board_id_PlatformTags}/items/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_boards_board_id_platformtags_items_item_id.150",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/boards/{board_id_PlatformTags}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/boards/{board_id_PlatformTags}/items/{item_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_projects.151",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/projects",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_teams_team_id_projects.152",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/teams/{team_id}/projects",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_projects_project_id.153",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id_projects_project_id.154",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_teams_team_id_projects_project_id.155",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_projects_project_id_settings.156",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id_projects_project_id_settings.157",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_projects_project_id_members.158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_teams_team_id_projects_project_id_members.159",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_projects_project_id_members_member_id.160",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id_projects_project_id_members_member_id.161",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_teams_team_id_projects_project_id_members_member_id.162",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams.163",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_teams.164",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/teams",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id.165",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id.166",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_teams_team_id.167",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/teams/{team_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_members.168",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_teams_team_id_members.169",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/teams/{team_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_members_member_id.170",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id_members_member_id.171",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_teams_team_id_members_member_id.172",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_default_teams_settings.173",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/default_teams_settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/default_teams_settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_settings.174",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_teams_team_id_settings.175",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/teams/{team_id}/settings",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_groups.176",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_groups.177",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_groups_group_id.178",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_groups_group_id.179",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_groups_group_id.180",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_groups_group_id_members.181",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/groups/{group_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_groups_group_id_members.182",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/groups/{group_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.patch.v2_orgs_org_id_groups_group_id_members.183",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}/members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/orgs/{org_id}/groups/{group_id}/members",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_groups_group_id_members_member_id.184",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/groups/{group_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_groups_group_id_members_member_id.185",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}/members/{member_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/groups/{group_id}/members/{member_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_groups_group_id_teams.186",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/groups/{group_id}/teams",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_groups_group_id_teams_team_id.187",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/groups/{group_id}/teams/{team_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/groups/{group_id}/teams/{team_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_groups.188",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_teams_team_id_groups.189",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/teams/{team_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_teams_team_id_groups_group_id.190",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/teams/{team_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_teams_team_id_groups_group_id.191",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/teams/{team_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/teams/{team_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_boards_board_id_groups.192",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/boards/{board_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/boards/{board_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_boards_board_id_groups.193",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/boards/{board_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/boards/{board_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_boards_board_id_groups_group_id.194",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/boards/{board_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/boards/{board_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.get.v2_orgs_org_id_projects_project_id_groups.195",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_id}/projects/{project_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/orgs/{org_id}/projects/{project_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.post.v2_orgs_org_id_projects_project_id_groups.196",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_id}/projects/{project_id}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/orgs/{org_id}/projects/{project_id}/groups",
+        "source_url": "https://developers.miro.com/reference/overview"
+      },
+      {
+        "id": "miro.rest.delete.v2_orgs_org_id_projects_project_id_groups_group_id.197",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_id}/projects/{project_id}/groups/{group_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/orgs/{org_id}/projects/{project_id}/groups/{group_id}",
+        "source_url": "https://developers.miro.com/reference/overview"
+      }
+    ]
+  }
+}

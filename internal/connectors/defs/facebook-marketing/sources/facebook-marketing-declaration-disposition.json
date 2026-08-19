@@ -1,0 +1,1720 @@
+{
+  "schema_version": 1,
+  "connector": "facebook-marketing",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+    "source_url": "https://developers.facebook.com/docs/marketing-api/",
+    "source_sha256": "5b8bc0e250898ea1dffd1974f4c976a6e8e37e7f5402db058107ba52774134c2",
+    "source_bytes": 2689319,
+    "source_operation_count": 36
+  },
+  "summary": {
+    "api_surface_rows": 36,
+    "exact_source_rows": 36,
+    "declared_operations": 36,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 13.89,
+    "disabled_operations": 31,
+    "documented_deletes": 2,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 16
+      },
+      {
+        "key": "direct_write",
+        "count": 10
+      },
+      {
+        "key": "etl",
+        "count": 10
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 10,
+    "writes_actions": 5,
+    "terminal_commands": 5,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 5,
+        "scope": "destination_transport"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 31
+      }
+    ],
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "typed_direct_write_operations": 5,
+      "foundation_gap": {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+      }
+    },
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-source-definition-facebook-marketing",
+      "typed-operation-contract-facebook-marketing"
+    ],
+    "declaration_pending": [
+      {
+        "id": "sync-transport-source-definition-facebook-marketing",
+        "count": 10
+      },
+      {
+        "id": "typed-operation-contract-facebook-marketing",
+        "count": 21
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/me/adaccounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/me/adaccounts",
+        "covered_by": {
+          "stream": "ad_accounts"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.me_adaccounts.1",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /me/adaccounts",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /me/adaccounts.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /me/adaccounts."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/campaigns",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/campaigns",
+        "covered_by": {
+          "stream": "campaigns"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_campaigns.2",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/campaigns",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/campaigns.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/campaigns."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{ad_account_id}/campaigns",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{ad_account_id}/campaigns",
+        "covered_by": {
+          "write": "create_campaign"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.ad_account_id_campaigns.3",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{ad_account_id}/campaigns",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_campaign"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{campaign_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{campaign_id}",
+        "covered_by": {
+          "write": "update_campaign"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.campaign_id.4",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{campaign_id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_campaign"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{campaign_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/{campaign_id}",
+        "covered_by": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversible campaign deletion (Facebook's own docs recommend archiving/pausing instead); excluded pending a dedicated approval/risk review",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.delete.campaign_id.5",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint DELETE /{campaign_id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: DELETE /{campaign_id} is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: DELETE /{campaign_id} is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/ads",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/ads",
+        "covered_by": {
+          "stream": "ads"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_ads.6",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/ads",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/ads.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/ads."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{ad_account_id}/ads",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{ad_account_id}/ads",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "creating an ad requires a pre-existing adcreative id and a fully-specified ad set; the natural incremental next mutation after create_campaign/create_ad_set is left for a future pass rather than guessing a minimal viable ad-creation payload",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.ad_account_id_ads.7",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{ad_account_id}/ads",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: POST /{ad_account_id}/ads is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: POST /{ad_account_id}/ads is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{campaign_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{campaign_id}",
+        "covered_by": {
+          "write": "update_campaign"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.ad_id.8",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{ad_id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_campaign"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/adsets",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/adsets",
+        "covered_by": {
+          "stream": "ad_sets"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_adsets.9",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/adsets",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/adsets.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/adsets."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{ad_account_id}/adsets",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{ad_account_id}/adsets",
+        "covered_by": {
+          "write": "create_ad_set"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.ad_account_id_adsets.10",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{ad_account_id}/adsets",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_ad_set"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{campaign_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{campaign_id}",
+        "covered_by": {
+          "write": "update_campaign"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.adset_id.11",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{adset_id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_campaign"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{campaign_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/{campaign_id}",
+        "covered_by": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "irreversible campaign deletion (Facebook's own docs recommend archiving/pausing instead); excluded pending a dedicated approval/risk review",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.delete.adset_id.12",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint DELETE /{adset_id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: DELETE /{campaign_id} is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: DELETE /{campaign_id} is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/adcreatives",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/adcreatives",
+        "covered_by": {
+          "stream": "ad_creatives"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_adcreatives.13",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/adcreatives",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/adcreatives.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/adcreatives."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{ad_account_id}/adcreatives",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{ad_account_id}/adcreatives",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "ad creative creation requires a fully-specified object_story_spec (page id, link, image hash/video id) with a large, product-page-specific required-field surface; deferred rather than guessing a minimal contract",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.ad_account_id_adcreatives.14",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{ad_account_id}/adcreatives",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: POST /{ad_account_id}/adcreatives is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: POST /{ad_account_id}/adcreatives is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/customaudiences",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/customaudiences",
+        "covered_by": {
+          "stream": "custom_audiences"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_customaudiences.15",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/customaudiences",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/customaudiences.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/customaudiences."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{ad_account_id}/customaudiences",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{ad_account_id}/customaudiences",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "creating custom audiences (especially customer-list-hash-based) requires additional Meta platform terms acceptance and PII-hashing handling this bundle does not implement",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.post.ad_account_id_customaudiences.16",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint POST /{ad_account_id}/customaudiences",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: POST /{ad_account_id}/customaudiences is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: POST /{ad_account_id}/customaudiences is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/insights",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/insights",
+        "covered_by": {
+          "stream": "insights"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_insights.17",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/insights",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/insights",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/insights",
+        "covered_by": {
+          "stream": "insights"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.campaign_id_insights.18",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{campaign_id}/insights",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/insights",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/insights",
+        "covered_by": {
+          "stream": "insights"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.adset_id_insights.19",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{adset_id}/insights",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/insights",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/insights",
+        "covered_by": {
+          "stream": "insights"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_id_insights.20",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_id}/insights",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/facebook-marketing/sync_transport.json is absent for GET /{ad_account_id}/insights."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/activities",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/activities",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "audit-log-style change-history feed, not a core business object stream",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_activities.21",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/activities",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/activities is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/activities is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/adimages",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/adimages",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "creative asset library (uploaded images), narrow supporting resource for ad creative construction, not core reporting/entity data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_adimages.22",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/adimages",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adimages is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adimages is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/advideos",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/advideos",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "creative asset library (uploaded videos), same reason as adimages",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_advideos.23",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/advideos",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/advideos is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/advideos is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/adlabels",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/adlabels",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "organizational label catalog, narrow metadata not core business object data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_adlabels.24",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/adlabels",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adlabels is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adlabels is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/adrules_library",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/adrules_library",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "automated-rule configuration, a distinct product feature (rule engine) not core ad-entity/reporting data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_adrules_library.25",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/adrules_library",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adrules_library is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adrules_library is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/adrules_history",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/adrules_history",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "automated-rule execution history, same reason as adrules_library",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_adrules_history.26",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/adrules_history",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adrules_history is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adrules_history is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/adspixels",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/adspixels",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "conversion-tracking pixel catalog, narrow supporting resource not core reporting/entity data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_adspixels.27",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/adspixels",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adspixels is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/adspixels is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/applications",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/applications",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "connected-application catalog, account administration metadata not core ad data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_applications.28",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/applications",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/applications is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/applications is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/assigned_users",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/assigned_users",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "account access-control/permissions listing, not core ad-entity data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_assigned_users.29",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/assigned_users",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/assigned_users is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/assigned_users is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/async_requests",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/async_requests",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "async bulk-operation job status polling; a StreamHook-shaped async-polling capability this Pass B (Tier-1-only, no new hook packages) does not add",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_async_requests.30",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/async_requests",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/async_requests is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/async_requests is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/ads_reporting_mmm_reports",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/ads_reporting_mmm_reports",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "marketing-mix-modeling report subsystem, a distinct specialized reporting product beyond standard insights",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_ads_reporting_mmm_reports.31",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/ads_reporting_mmm_reports",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ads_reporting_mmm_reports is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ads_reporting_mmm_reports is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/ad_studies",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/ad_studies",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "lift-study experiment configuration/results, a distinct specialized measurement product",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_ad_studies.32",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/ad_studies",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ad_studies is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ad_studies is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/broadtargetingcategories",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/broadtargetingcategories",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "static targeting-taxonomy reference lookup, not account-specific business object data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_broadtargetingcategories.33",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/broadtargetingcategories",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/broadtargetingcategories is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/broadtargetingcategories is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/businessprojects",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/businessprojects",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Business Manager project organization, account administration metadata not core ad data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_businessprojects.34",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/businessprojects",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/businessprojects is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/businessprojects is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/ad_place_page_sets",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/ad_place_page_sets",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "multi-location ads page-set configuration, a narrow specialized feature",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_ad_place_page_sets.35",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/ad_place_page_sets",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ad_place_page_sets is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ad_place_page_sets is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ad_account_id}/ad_saved_keywords",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{ad_account_id}/ad_saved_keywords",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "saved-keyword-targeting library, narrow supporting resource not core ad-entity data",
+          "source_url": "https://developers.facebook.com/docs/marketing-api/",
+          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+        }
+      },
+      "source": {
+        "source_lock": "sources/facebook-marketing-operation-source-lock.json",
+        "source_id": "facebook-marketing.rest.get.ad_account_id_ad_saved_keywords.36",
+        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_location": "documented endpoint GET /{ad_account_id}/ad_saved_keywords",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-facebook-marketing",
+          "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ad_saved_keywords is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/facebook-marketing/api_surface.json: GET /{ad_account_id}/ad_saved_keywords is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-facebook-marketing",
+        "contract": null
+      }
+    }
+  ]
+}

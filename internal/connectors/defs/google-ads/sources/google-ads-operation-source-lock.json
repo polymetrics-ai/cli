@@ -1,0 +1,1659 @@
+{
+  "schema_version": 2,
+  "connector": "google-ads",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+    "sha256": "b04e992e2e4e602d9f356635361a65115d1ea923d6be3116054b7d2e3917339c",
+    "bytes": 2937930,
+    "format": "application/json; charset=UTF-8",
+    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "operation_counts": {
+      "DELETE": 1,
+      "GET": 11,
+      "POST": 152
+    },
+    "operations": [
+      {
+        "id": "google-ads.rest.get.v22_customers_listaccessiblecustomers.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/customers:listAccessibleCustomers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/customers:listAccessibleCustomers",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_googleads_search_fixed_gaql_campaign.2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/googleAds:search (fixed GAQL: campaign)",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/googleAds:search (fixed GAQL: campaign)",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_googleads_search_fixed_gaql_ad_group.3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/googleAds:search (fixed GAQL: ad_group)",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/googleAds:search (fixed GAQL: ad_group)",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_audienceinsights_listinsightseligibledates.4",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/audienceInsights:listInsightsEligibleDates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/audienceInsights:listInsightsEligibleDates",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupcriterioncustomizers_mutate.5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/AdGroupCriterionCustomizers:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/AdGroupCriterionCustomizers:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaigngoalconfigs_mutate.6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/CampaignGoalConfigs:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/CampaignGoalConfigs:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customercustomizers_mutate.7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/CustomerCustomizers:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/CustomerCustomizers:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_goals_mutate.8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/Goals:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/Goals:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_accountbudgetproposals_mutate.9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/accountBudgetProposals:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/accountBudgetProposals:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_accountlinks_create.10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/accountLinks:create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/accountLinks:create",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_accountlinks_mutate.11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/accountLinks:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/accountLinks:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupadlabels_mutate.12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAdLabels:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupAdLabels:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupads_mutate.13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAds:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupAds:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_ad_group_ad_removeautomaticallycreatedassets.14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{ad_group_ad}:removeAutomaticallyCreatedAssets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{ad_group_ad}:removeAutomaticallyCreatedAssets",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupassetsets_mutate.15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAssetSets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupAssetSets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupassets_mutate.16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAssets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupAssets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupbidmodifiers_mutate.17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupBidModifiers:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupBidModifiers:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupcriteria_mutate.18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupCriteria:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupCriteria:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupcriterionlabels_mutate.19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupCriterionLabels:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupCriterionLabels:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroupcustomizers_mutate.20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupCustomizers:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupCustomizers:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgrouplabels_mutate.21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupLabels:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroupLabels:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adgroups_mutate.22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroups:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adGroups:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_adparameters_mutate.23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adParameters:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/adParameters:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_ads_mutate.24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/ads:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/ads:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetgenerations_generateimages.25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGenerations:generateImages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetGenerations:generateImages",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetgenerations_generatetext.26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGenerations:generateText",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetGenerations:generateText",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetgroupassets_mutate.27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroupAssets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetGroupAssets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetgrouplistinggroupfilters_mutate.28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroupListingGroupFilters:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetGroupListingGroupFilters:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetgroupsignals_mutate.29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroupSignals:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetGroupSignals:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetgroups_mutate.30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroups:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetGroups:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetsetassets_mutate.31",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetSetAssets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetSetAssets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assetsets_mutate.32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetSets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assetSets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_assets_mutate.33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/assets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_audiences_mutate.34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/audiences:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/audiences:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_addoperations.35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:addOperations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:addOperations",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_resource_name_listresults.36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/{resource_name}:listResults",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/{resource_name}:listResults",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_batchjobs_mutate.37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/batchJobs:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/batchJobs:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_run.38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:run",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:run",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_biddingdataexclusions_mutate.39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/biddingDataExclusions:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/biddingDataExclusions:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_biddingseasonalityadjustments_mutate.40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/biddingSeasonalityAdjustments:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/biddingSeasonalityAdjustments:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_biddingstrategies_mutate.41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/biddingStrategies:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/biddingStrategies:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_billingsetups_mutate.42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/billingSetups:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/billingSetups:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignassetsets_mutate.43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignAssetSets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignAssetSets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignassets_mutate.44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignAssets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignAssets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignbidmodifiers_mutate.45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignBidModifiers:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignBidModifiers:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignbudgets_mutate.46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignBudgets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignBudgets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignconversiongoals_mutate.47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignConversionGoals:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignConversionGoals:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaigncriteria_mutate.48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignCriteria:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignCriteria:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaigncustomizers_mutate.49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignCustomizers:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignCustomizers:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_resource_name_listasyncerrors.50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/{resource_name}:listAsyncErrors",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/{resource_name}:listAsyncErrors",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaigndrafts_mutate.51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignDrafts:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignDrafts:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_campaign_draft_promote.52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{campaign_draft}:promote",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{campaign_draft}:promote",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaigngroups_mutate.53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignGroups:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignGroups:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignlabels_mutate.54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignLabels:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignLabels:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignlifecyclegoal_configurecampaignlifecyclegoals.55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignLifecycleGoal:configureCampaignLifecycleGoals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignLifecycleGoal:configureCampaignLifecycleGoals",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaignsharedsets_mutate.56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignSharedSets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaignSharedSets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaigns_enablepmaxbrandguidelines.57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaigns:enablePMaxBrandGuidelines",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaigns:enablePMaxBrandGuidelines",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_campaigns_mutate.58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaigns:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/campaigns:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_conversionactions_mutate.59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionActions:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/conversionActions:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_conversioncustomvariables_mutate.60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionCustomVariables:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/conversionCustomVariables:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_conversiongoalcampaignconfigs_mutate.61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionGoalCampaignConfigs:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/conversionGoalCampaignConfigs:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_conversionvaluerulesets_mutate.62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionValueRuleSets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/conversionValueRuleSets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_conversionvaluerules_mutate.63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionValueRules:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/conversionValueRules:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_createcustomerclient.64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:createCustomerClient",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:createCustomerClient",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customaudiences_mutate.65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customAudiences:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customAudiences:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customconversiongoals_mutate.66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customConversionGoals:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customConversionGoals:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_custominterests_mutate.67",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customInterests:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customInterests:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customerassetsets_mutate.68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerAssetSets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerAssetSets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customerassets_mutate.69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerAssets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerAssets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customerclientlinks_mutate.70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerClientLinks:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerClientLinks:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customerconversiongoals_mutate.71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerConversionGoals:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerConversionGoals:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customerlabels_mutate.72",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerLabels:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerLabels:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customerlifecyclegoal_configurecustomerlifecyclegoals.73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerLifecycleGoal:configureCustomerLifecycleGoals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerLifecycleGoal:configureCustomerLifecycleGoals",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customermanagerlinks_movemanagerlink.74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerManagerLinks:moveManagerLink",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerManagerLinks:moveManagerLink",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customermanagerlinks_mutate.75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerManagerLinks:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerManagerLinks:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customernegativecriteria_mutate.76",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerNegativeCriteria:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerNegativeCriteria:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customerskadnetworkconversionvalueschemas_mutate.77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerSkAdNetworkConversionValueSchemas:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerSkAdNetworkConversionValueSchemas:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customeruseraccessinvitations_mutate.78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerUserAccessInvitations:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerUserAccessInvitations:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customeruseraccesses_mutate.79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerUserAccesses:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customerUserAccesses:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_customizerattributes_mutate.80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customizerAttributes:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/customizerAttributes:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_datalinks_create.81",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/dataLinks:create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/dataLinks:create",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_datalinks_remove.82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/dataLinks:remove",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/dataLinks:remove",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_datalinks_update.83",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/dataLinks:update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/dataLinks:update",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_experimentarms_mutate.84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/experimentArms:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/experimentArms:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_experiment_endexperiment.85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{experiment}:endExperiment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{experiment}:endExperiment",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_experiment_graduateexperiment.86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{experiment}:graduateExperiment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{experiment}:graduateExperiment",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_resource_name_listexperimentasyncerrors.87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/{resource_name}:listExperimentAsyncErrors",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/{resource_name}:listExperimentAsyncErrors",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_experiments_mutate.88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/experiments:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/experiments:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_promoteexperiment.89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:promoteExperiment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:promoteExperiment",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_scheduleexperiment.90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:scheduleExperiment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:scheduleExperiment",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generateadgroupthemes.91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateAdGroupThemes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateAdGroupThemes",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generateaudiencecompositioninsights.92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateAudienceCompositionInsights",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generateaudienceoverlapinsights.93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateAudienceOverlapInsights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateAudienceOverlapInsights",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatecreatorinsights.94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateCreatorInsights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateCreatorInsights",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generateinsightsfinderreport.95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateInsightsFinderReport",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateInsightsFinderReport",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatekeywordforecastmetrics.96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateKeywordForecastMetrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateKeywordForecastMetrics",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatekeywordhistoricalmetrics.97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateKeywordHistoricalMetrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateKeywordHistoricalMetrics",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatekeywordideas.98",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateKeywordIdeas",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateKeywordIdeas",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatereachforecast.99",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateReachForecast",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateReachForecast",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generateshareablepreviews.100",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateShareablePreviews",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateShareablePreviews",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatesuggestedtargetinginsights.101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateSuggestedTargetingInsights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateSuggestedTargetingInsights",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatetargetingsuggestionmetrics.102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_generatetrendinginsights.103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateTrendingInsights",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:generateTrendingInsights",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_customers_customer_id_getidentityverification.104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/customers/{customer_id}/getIdentityVerification",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/customers/{customer_id}/getIdentityVerification",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_googleads_mutate.105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/googleAds:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/googleAds:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_googleads_searchstream.106",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/googleAds:searchStream",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/googleAds:searchStream",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_customers_customer_id_invoices.107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/customers/{customer_id}/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/customers/{customer_id}/invoices",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_keywordplanadgroupkeywords_mutate.108",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanAdGroupKeywords:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/keywordPlanAdGroupKeywords:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_keywordplanadgroups_mutate.109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanAdGroups:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/keywordPlanAdGroups:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_keywordplancampaignkeywords_mutate.110",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanCampaignKeywords:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/keywordPlanCampaignKeywords:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_keywordplancampaigns_mutate.111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanCampaigns:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/keywordPlanCampaigns:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_keywordplans_mutate.112",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlans:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/keywordPlans:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_labels_mutate.113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/labels:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/labels:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_localservices_appendleadconversation.114",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/localServices:appendLeadConversation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/localServices:appendLeadConversation",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_provideleadfeedback.115",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:provideLeadFeedback",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:provideLeadFeedback",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_multipartyauthreview_resolve.116",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/multiPartyAuthReview:resolve",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/multiPartyAuthReview:resolve",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_mutate.117",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_addoperations.118",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:addOperations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:addOperations",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_offlineuserdatajobs_create.119",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/offlineUserDataJobs:create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/offlineUserDataJobs:create",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_run.120",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:run",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:run",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_name_cancel.121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{name}:cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{name}:cancel",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.delete.v22_name.122",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v22/{name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v22/{name}",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_name.123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/{name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/{name}",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_name.124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/{name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/{name}",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_name_wait.125",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{name}:wait",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{name}:wait",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_customers_customer_id_paymentsaccounts.126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/customers/{customer_id}/paymentsAccounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/customers/{customer_id}/paymentsAccounts",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_productlinkinvitations_create.127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/productLinkInvitations:create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/productLinkInvitations:create",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_productlinkinvitations_remove.128",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/productLinkInvitations:remove",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/productLinkInvitations:remove",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_productlinkinvitations_update.129",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/productLinkInvitations:update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/productLinkInvitations:update",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_productlinks_create.130",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/productLinks:create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/productLinks:create",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_productlinks_remove.131",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/productLinks:remove",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/productLinks:remove",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_recommendationsubscriptions_mutaterecommendationsubscription.132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendationSubscriptions:mutateRecommendationSubscription",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/recommendationSubscriptions:mutateRecommendationSubscription",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_recommendations_apply.133",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendations:apply",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/recommendations:apply",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_recommendations_dismiss.134",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendations:dismiss",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/recommendations:dismiss",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_recommendations_generate.135",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendations:generate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/recommendations:generate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_remarketingactions_mutate.136",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/remarketingActions:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/remarketingActions:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_removecampaignautomaticallycreatedasset.137",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:removeCampaignAutomaticallyCreatedAsset",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:removeCampaignAutomaticallyCreatedAsset",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_searchaudienceinsightsattributes.138",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:searchAudienceInsightsAttributes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:searchAudienceInsightsAttributes",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_sharedcriteria_mutate.139",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/sharedCriteria:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/sharedCriteria:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_sharedsets_mutate.140",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/sharedSets:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/sharedSets:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_resource_name_getsmartcampaignstatus.141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/{resource_name}:getSmartCampaignStatus",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/{resource_name}:getSmartCampaignStatus",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_smartcampaignsettings_mutate.142",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/smartCampaignSettings:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/smartCampaignSettings:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_startidentityverification.143",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:startIdentityVerification",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:startIdentityVerification",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_suggestbrands.144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestBrands",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:suggestBrands",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_suggestkeywordthemes.145",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestKeywordThemes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:suggestKeywordThemes",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_suggestsmartcampaignad.146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestSmartCampaignAd",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:suggestSmartCampaignAd",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_suggestsmartcampaignbudgetoptions.147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_suggesttravelassets.148",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestTravelAssets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:suggestTravelAssets",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_resource_name_regenerateshareablelinkid.149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/{resource_name}:regenerateShareableLinkId",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/{resource_name}:regenerateShareableLinkId",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_uploadcallconversions.150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadCallConversions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:uploadCallConversions",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_uploadclickconversions.151",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadClickConversions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:uploadClickConversions",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_uploadconversionadjustments.152",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadConversionAdjustments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:uploadConversionAdjustments",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_uploaduserdata.153",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadUserData",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}:uploadUserData",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_userlistcustomertypes_mutate.154",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/userListCustomerTypes:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/userListCustomerTypes:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_customers_customer_id_userlists_mutate.155",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/userLists:mutate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/customers/{customer_id}/userLists:mutate",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_geotargetconstants_suggest.156",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/geoTargetConstants:suggest",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/geoTargetConstants:suggest",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.get.v22_resource_name.157",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v22/{resource_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v22/{resource_name}",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_googleadsfields_search.158",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/googleAdsFields:search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/googleAdsFields:search",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_keywordthemeconstants_suggest.159",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22/keywordThemeConstants:suggest",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22/keywordThemeConstants:suggest",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_generateconversionrates.160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22:generateConversionRates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22:generateConversionRates",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_listplannablelocations.161",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22:listPlannableLocations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22:listPlannableLocations",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_listplannableproducts.162",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22:listPlannableProducts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22:listPlannableProducts",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_listplannableuserinterests.163",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22:listPlannableUserInterests",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22:listPlannableUserInterests",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      {
+        "id": "google-ads.rest.post.v22_listplannableuserlists.164",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v22:listPlannableUserLists",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v22:listPlannableUserLists",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      }
+    ]
+  }
+}

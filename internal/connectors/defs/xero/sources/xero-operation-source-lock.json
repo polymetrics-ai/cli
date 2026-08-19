@@ -1,0 +1,2370 @@
+{
+  "schema_version": 2,
+  "connector": "xero",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+    "sha256": "f980dbcfc317b9ea60c5095f1861f9e60fe05e5f8059781c4f2c2a816e918746",
+    "bytes": 929720,
+    "format": "text/plain; charset=utf-8",
+    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "operation_counts": {
+      "DELETE": 10,
+      "GET": 126,
+      "POST": 46,
+      "PUT": 53
+    },
+    "operations": [
+      {
+        "id": "xero.rest.get.accounts.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Accounts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.accounts.2",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Accounts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.accounts_accountid.3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Accounts/{AccountID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Accounts/{AccountID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.accounts_accountid.4",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Accounts/{AccountID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Accounts/{AccountID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.accounts_accountid.5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/Accounts/{AccountID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /Accounts/{AccountID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.accounts_accountid_attachments.6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Accounts/{AccountID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Accounts/{AccountID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.accounts_accountid_attachments_attachmentid.7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Accounts/{AccountID}/Attachments/{AttachmentID}",
+        "operation_id": "getAccountAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Accounts/{AccountID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.accounts_accountid_attachments_filename.8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+        "operation_id": "getAccountAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Accounts/{AccountID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.accounts_accountid_attachments_filename.9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+        "operation_id": "updateAccountAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Accounts/{AccountID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.accounts_accountid_attachments_filename.10",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+        "operation_id": "createAccountAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Accounts/{AccountID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.batchpayments.11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BatchPayments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BatchPayments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.batchpayments.12",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BatchPayments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BatchPayments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.batchpayments.13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BatchPayments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BatchPayments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.batchpayments_batchpaymentid.14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BatchPayments/{BatchPaymentID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BatchPayments/{BatchPaymentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.batchpayments_batchpaymentid.15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BatchPayments/{BatchPaymentID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BatchPayments/{BatchPaymentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.batchpayments_batchpaymentid_history.16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BatchPayments/{BatchPaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BatchPayments/{BatchPaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.batchpayments_batchpaymentid_history.17",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BatchPayments/{BatchPaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BatchPayments/{BatchPaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransactions.18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransactions",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.banktransactions.19",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BankTransactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BankTransactions",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.banktransactions.20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BankTransactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BankTransactions",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransactions_banktransactionid.21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransactions/{BankTransactionID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransactions/{BankTransactionID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.banktransactions_banktransactionid.22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BankTransactions/{BankTransactionID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BankTransactions/{BankTransactionID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransactions_banktransactionid_attachments.23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransactions/{BankTransactionID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransactions/{BankTransactionID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransactions_banktransactionid_attachments_attachmentid.24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
+        "operation_id": "getBankTransactionAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransactions_banktransactionid_attachments_filename.25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "operation_id": "getBankTransactionAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.banktransactions_banktransactionid_attachments_filename.26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "operation_id": "updateBankTransactionAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.banktransactions_banktransactionid_attachments_filename.27",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "operation_id": "createBankTransactionAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransactions_banktransactionid_history.28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransactions/{BankTransactionID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransactions/{BankTransactionID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.banktransactions_banktransactionid_history.29",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BankTransactions/{BankTransactionID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BankTransactions/{BankTransactionID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransfers.30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransfers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransfers",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.banktransfers.31",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BankTransfers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BankTransfers",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.banktransfers.32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BankTransfers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BankTransfers",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransfers_banktransferid.33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransfers/{BankTransferID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransfers/{BankTransferID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.banktransfers_banktransferid.34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BankTransfers/{BankTransferID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BankTransfers/{BankTransferID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransfers_banktransferid_attachments.35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransfers/{BankTransferID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransfers/{BankTransferID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransfers_banktransferid_attachments_attachmentid.36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
+        "operation_id": "getBankTransferAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransfers_banktransferid_attachments_filename.37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "operation_id": "getBankTransferAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.banktransfers_banktransferid_attachments_filename.38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "operation_id": "updateBankTransferAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.banktransfers_banktransferid_attachments_filename.39",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "operation_id": "createBankTransferAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.banktransfers_banktransferid_history.40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BankTransfers/{BankTransferID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BankTransfers/{BankTransferID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.banktransfers_banktransferid_history.41",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/BankTransfers/{BankTransferID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /BankTransfers/{BankTransferID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.brandingthemes.42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BrandingThemes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BrandingThemes",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.brandingthemes_brandingthemeid.43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BrandingThemes/{BrandingThemeID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BrandingThemes/{BrandingThemeID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.brandingthemes_brandingthemeid_paymentservices.44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/BrandingThemes/{BrandingThemeID}/PaymentServices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /BrandingThemes/{BrandingThemeID}/PaymentServices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.brandingthemes_brandingthemeid_paymentservices.45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/BrandingThemes/{BrandingThemeID}/PaymentServices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /BrandingThemes/{BrandingThemeID}/PaymentServices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.budgets.46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Budgets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Budgets",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.budgets_budgetid.47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Budgets/{BudgetID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Budgets/{BudgetID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts.48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.contacts.49",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Contacts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.contacts.50",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Contacts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts_contactnumber.51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts/{ContactNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts/{ContactNumber}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts_contactid.52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts/{ContactID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts/{ContactID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.contacts_contactid.53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Contacts/{ContactID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Contacts/{ContactID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts_contactid_attachments.54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts/{ContactID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts/{ContactID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts_contactid_attachments_attachmentid.55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}",
+        "operation_id": "getContactAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts/{ContactID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts_contactid_attachments_filename.56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+        "operation_id": "getContactAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts/{ContactID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.contacts_contactid_attachments_filename.57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+        "operation_id": "updateContactAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Contacts/{ContactID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.contacts_contactid_attachments_filename.58",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+        "operation_id": "createContactAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Contacts/{ContactID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts_contactid_cissettings.59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts/{ContactID}/CISSettings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts/{ContactID}/CISSettings",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contacts_contactid_history.60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Contacts/{ContactID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Contacts/{ContactID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.contacts_contactid_history.61",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Contacts/{ContactID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Contacts/{ContactID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contactgroups.62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ContactGroups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ContactGroups",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.contactgroups.63",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ContactGroups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /ContactGroups",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.contactgroups_contactgroupid.64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ContactGroups/{ContactGroupID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ContactGroups/{ContactGroupID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.contactgroups_contactgroupid.65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ContactGroups/{ContactGroupID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /ContactGroups/{ContactGroupID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.contactgroups_contactgroupid_contacts.66",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ContactGroups/{ContactGroupID}/Contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /ContactGroups/{ContactGroupID}/Contacts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.contactgroups_contactgroupid_contacts.67",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ContactGroups/{ContactGroupID}/Contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /ContactGroups/{ContactGroupID}/Contacts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.contactgroups_contactgroupid_contacts_contactid.68",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ContactGroups/{ContactGroupID}/Contacts/{ContactID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /ContactGroups/{ContactGroupID}/Contacts/{ContactID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.creditnotes.69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/CreditNotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /CreditNotes",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.creditnotes.70",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/CreditNotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /CreditNotes",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.creditnotes.71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/CreditNotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /CreditNotes",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.creditnotes_creditnoteid.72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/CreditNotes/{CreditNoteID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /CreditNotes/{CreditNoteID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.creditnotes_creditnoteid.73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/CreditNotes/{CreditNoteID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /CreditNotes/{CreditNoteID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.creditnotes_creditnoteid_attachments.74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/CreditNotes/{CreditNoteID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /CreditNotes/{CreditNoteID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.creditnotes_creditnoteid_attachments_attachmentid.75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
+        "operation_id": "getCreditNoteAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.creditnotes_creditnoteid_attachments_filename.76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "operation_id": "getCreditNoteAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.creditnotes_creditnoteid_attachments_filename.77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "operation_id": "updateCreditNoteAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.creditnotes_creditnoteid_attachments_filename.78",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "operation_id": "createCreditNoteAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.creditnotes_creditnoteid_pdf.79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/CreditNotes/{CreditNoteID}/pdf",
+        "operation_id": "getCreditNoteAsPdf",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /CreditNotes/{CreditNoteID}/pdf",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.creditnotes_creditnoteid_allocations.80",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/CreditNotes/{CreditNoteID}/Allocations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /CreditNotes/{CreditNoteID}/Allocations",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.creditnotes_creditnoteid_allocations_allocationid.81",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/CreditNotes/{CreditNoteID}/Allocations/{AllocationID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /CreditNotes/{CreditNoteID}/Allocations/{AllocationID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.creditnotes_creditnoteid_history.82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/CreditNotes/{CreditNoteID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /CreditNotes/{CreditNoteID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.creditnotes_creditnoteid_history.83",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/CreditNotes/{CreditNoteID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /CreditNotes/{CreditNoteID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.currencies.84",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Currencies",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Currencies",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.currencies.85",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Currencies",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Currencies",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.expenseclaims.86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ExpenseClaims",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ExpenseClaims",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.expenseclaims.87",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ExpenseClaims",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /ExpenseClaims",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.expenseclaims_expenseclaimid.88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ExpenseClaims/{ExpenseClaimID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ExpenseClaims/{ExpenseClaimID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.expenseclaims_expenseclaimid.89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ExpenseClaims/{ExpenseClaimID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /ExpenseClaims/{ExpenseClaimID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.expenseclaims_expenseclaimid_history.90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ExpenseClaims/{ExpenseClaimID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ExpenseClaims/{ExpenseClaimID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.expenseclaims_expenseclaimid_history.91",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ExpenseClaims/{ExpenseClaimID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /ExpenseClaims/{ExpenseClaimID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices.92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.invoices.93",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Invoices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.invoices.94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Invoices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices_invoiceid.95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices/{InvoiceID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices/{InvoiceID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.invoices_invoiceid.96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Invoices/{InvoiceID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Invoices/{InvoiceID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices_invoiceid_pdf.97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices/{InvoiceID}/pdf",
+        "operation_id": "getInvoiceAsPdf",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices/{InvoiceID}/pdf",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices_invoiceid_attachments.98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices/{InvoiceID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices/{InvoiceID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices_invoiceid_attachments_attachmentid.99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices/{InvoiceID}/Attachments/{AttachmentID}",
+        "operation_id": "getInvoiceAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices/{InvoiceID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices_invoiceid_attachments_filename.100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+        "operation_id": "getInvoiceAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices/{InvoiceID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.invoices_invoiceid_attachments_filename.101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+        "operation_id": "updateInvoiceAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Invoices/{InvoiceID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.invoices_invoiceid_attachments_filename.102",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+        "operation_id": "createInvoiceAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Invoices/{InvoiceID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices_invoiceid_onlineinvoice.103",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices/{InvoiceID}/OnlineInvoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices/{InvoiceID}/OnlineInvoice",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.invoices_invoiceid_email.104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Invoices/{InvoiceID}/Email",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Invoices/{InvoiceID}/Email",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoices_invoiceid_history.105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Invoices/{InvoiceID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Invoices/{InvoiceID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.invoices_invoiceid_history.106",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Invoices/{InvoiceID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Invoices/{InvoiceID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.invoicereminders_settings.107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/InvoiceReminders/Settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /InvoiceReminders/Settings",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.items.108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Items",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.items.109",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Items",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.items.110",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Items",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.items_itemid.111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Items/{ItemID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Items/{ItemID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.items_itemid.112",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Items/{ItemID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Items/{ItemID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.items_itemid.113",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/Items/{ItemID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /Items/{ItemID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.items_itemid_history.114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Items/{ItemID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Items/{ItemID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.items_itemid_history.115",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Items/{ItemID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Items/{ItemID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.journals.116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Journals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Journals",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.journals_journalid.117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Journals/{JournalID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Journals/{JournalID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.journals_journalnumber.118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Journals/{JournalNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Journals/{JournalNumber}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.linkedtransactions.119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/LinkedTransactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /LinkedTransactions",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.linkedtransactions.120",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/LinkedTransactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /LinkedTransactions",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.linkedtransactions_linkedtransactionid.121",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/LinkedTransactions/{LinkedTransactionID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /LinkedTransactions/{LinkedTransactionID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.linkedtransactions_linkedtransactionid.122",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/LinkedTransactions/{LinkedTransactionID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /LinkedTransactions/{LinkedTransactionID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.linkedtransactions_linkedtransactionid.123",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/LinkedTransactions/{LinkedTransactionID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /LinkedTransactions/{LinkedTransactionID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.manualjournals.124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ManualJournals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ManualJournals",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.manualjournals.125",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ManualJournals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /ManualJournals",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.manualjournals.126",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ManualJournals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /ManualJournals",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.manualjournals_manualjournalid.127",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ManualJournals/{ManualJournalID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ManualJournals/{ManualJournalID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.manualjournals_manualjournalid.128",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ManualJournals/{ManualJournalID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /ManualJournals/{ManualJournalID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.manualjournals_manualjournalid_attachments.129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ManualJournals/{ManualJournalID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ManualJournals/{ManualJournalID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.manualjournals_manualjournalid_attachments_attachmentid.130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
+        "operation_id": "getManualJournalAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.manualjournals_manualjournalid_attachments_filename.131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "operation_id": "getManualJournalAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.manualjournals_manualjournalid_attachments_filename.132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "operation_id": "updateManualJournalAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.manualjournals_manualjournalid_attachments_filename.133",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "operation_id": "createManualJournalAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.manualjournals_manualjournalid_history.134",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ManualJournals/{ManualJournalID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /ManualJournals/{ManualJournalID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.manualjournals_manualjournalid_history.135",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ManualJournals/{ManualJournalID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /ManualJournals/{ManualJournalID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.organisation.136",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Organisation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Organisation",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.organisation_actions.137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Organisation/Actions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Organisation/Actions",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.organisation_organisationid_cissettings.138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Organisation/{OrganisationID}/CISSettings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Organisation/{OrganisationID}/CISSettings",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.overpayments.139",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Overpayments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Overpayments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.overpayments_overpaymentid.140",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Overpayments/{OverpaymentID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Overpayments/{OverpaymentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.overpayments_overpaymentid_allocations.141",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Overpayments/{OverpaymentID}/Allocations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Overpayments/{OverpaymentID}/Allocations",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.overpayments_overpaymentid_allocations_allocationid.142",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/Overpayments/{OverpaymentID}/Allocations/{AllocationID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /Overpayments/{OverpaymentID}/Allocations/{AllocationID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.overpayments_overpaymentid_history.143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Overpayments/{OverpaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Overpayments/{OverpaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.overpayments_overpaymentid_history.144",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Overpayments/{OverpaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Overpayments/{OverpaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.payments.145",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Payments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Payments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.payments.146",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Payments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Payments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.payments.147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Payments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Payments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.payments_paymentid.148",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Payments/{PaymentID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Payments/{PaymentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.payments_paymentid.149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Payments/{PaymentID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Payments/{PaymentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.payments_paymentid_history.150",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Payments/{PaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Payments/{PaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.payments_paymentid_history.151",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Payments/{PaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Payments/{PaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.paymentservices.152",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PaymentServices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PaymentServices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.paymentservices.153",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/PaymentServices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /PaymentServices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.prepayments.154",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Prepayments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Prepayments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.prepayments_prepaymentid.155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Prepayments/{PrepaymentID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Prepayments/{PrepaymentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.prepayments_prepaymentid_allocations.156",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Prepayments/{PrepaymentID}/Allocations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Prepayments/{PrepaymentID}/Allocations",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.prepayments_prepaymentid_allocations_allocationid.157",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/Prepayments/{PrepaymentID}/Allocations/{AllocationID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /Prepayments/{PrepaymentID}/Allocations/{AllocationID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.prepayments_prepaymentid_history.158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Prepayments/{PrepaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Prepayments/{PrepaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.prepayments_prepaymentid_history.159",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Prepayments/{PrepaymentID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Prepayments/{PrepaymentID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders.160",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.purchaseorders.161",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/PurchaseOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /PurchaseOrders",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.purchaseorders.162",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/PurchaseOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /PurchaseOrders",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders_purchaseorderid_pdf.163",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/pdf",
+        "operation_id": "getPurchaseOrderAsPdf",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders/{PurchaseOrderID}/pdf",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders_purchaseorderid.164",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders/{PurchaseOrderID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders/{PurchaseOrderID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.purchaseorders_purchaseorderid.165",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/PurchaseOrders/{PurchaseOrderID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /PurchaseOrders/{PurchaseOrderID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders_purchaseordernumber.166",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders/{PurchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders/{PurchaseOrderNumber}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders_purchaseorderid_history.167",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders/{PurchaseOrderID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.purchaseorders_purchaseorderid_history.168",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /PurchaseOrders/{PurchaseOrderID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders_purchaseorderid_attachments.169",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders/{PurchaseOrderID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders_purchaseorderid_attachments_attachmentid.170",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
+        "operation_id": "getPurchaseOrderAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.purchaseorders_purchaseorderid_attachments_filename.171",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "operation_id": "getPurchaseOrderAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.purchaseorders_purchaseorderid_attachments_filename.172",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "operation_id": "updatePurchaseOrderAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.purchaseorders_purchaseorderid_attachments_filename.173",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "operation_id": "createPurchaseOrderAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.quotes.174",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Quotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Quotes",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.quotes.175",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Quotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Quotes",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.quotes.176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Quotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Quotes",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.quotes_quoteid.177",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Quotes/{QuoteID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Quotes/{QuoteID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.quotes_quoteid.178",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Quotes/{QuoteID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Quotes/{QuoteID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.quotes_quoteid_history.179",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Quotes/{QuoteID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Quotes/{QuoteID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.quotes_quoteid_history.180",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Quotes/{QuoteID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Quotes/{QuoteID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.quotes_quoteid_pdf.181",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Quotes/{QuoteID}/pdf",
+        "operation_id": "getQuoteAsPdf",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Quotes/{QuoteID}/pdf",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.quotes_quoteid_attachments.182",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Quotes/{QuoteID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Quotes/{QuoteID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.quotes_quoteid_attachments_attachmentid.183",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Quotes/{QuoteID}/Attachments/{AttachmentID}",
+        "operation_id": "getQuoteAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Quotes/{QuoteID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.quotes_quoteid_attachments_filename.184",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+        "operation_id": "getQuoteAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Quotes/{QuoteID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.quotes_quoteid_attachments_filename.185",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+        "operation_id": "updateQuoteAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Quotes/{QuoteID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.quotes_quoteid_attachments_filename.186",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+        "operation_id": "createQuoteAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Quotes/{QuoteID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.receipts.187",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Receipts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Receipts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.receipts.188",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Receipts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Receipts",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.receipts_receiptid.189",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Receipts/{ReceiptID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Receipts/{ReceiptID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.receipts_receiptid.190",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Receipts/{ReceiptID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Receipts/{ReceiptID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.receipts_receiptid_attachments.191",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Receipts/{ReceiptID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Receipts/{ReceiptID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.receipts_receiptid_attachments_attachmentid.192",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Receipts/{ReceiptID}/Attachments/{AttachmentID}",
+        "operation_id": "getReceiptAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Receipts/{ReceiptID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.receipts_receiptid_attachments_filename.193",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+        "operation_id": "getReceiptAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Receipts/{ReceiptID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.receipts_receiptid_attachments_filename.194",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+        "operation_id": "updateReceiptAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Receipts/{ReceiptID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.receipts_receiptid_attachments_filename.195",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+        "operation_id": "createReceiptAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Receipts/{ReceiptID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.receipts_receiptid_history.196",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Receipts/{ReceiptID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Receipts/{ReceiptID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.receipts_receiptid_history.197",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/Receipts/{ReceiptID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /Receipts/{ReceiptID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.repeatinginvoices.198",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/RepeatingInvoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /RepeatingInvoices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.repeatinginvoices.199",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/RepeatingInvoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /RepeatingInvoices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.repeatinginvoices.200",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/RepeatingInvoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /RepeatingInvoices",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.repeatinginvoices_repeatinginvoiceid.201",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /RepeatingInvoices/{RepeatingInvoiceID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.repeatinginvoices_repeatinginvoiceid.202",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /RepeatingInvoices/{RepeatingInvoiceID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.repeatinginvoices_repeatinginvoiceid_attachments.203",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /RepeatingInvoices/{RepeatingInvoiceID}/Attachments",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.repeatinginvoices_repeatinginvoiceid_attachments_attachmentid.204",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
+        "operation_id": "getRepeatingInvoiceAttachmentById",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.repeatinginvoices_repeatinginvoiceid_attachments_filename.205",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "operation_id": "getRepeatingInvoiceAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint GET /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.repeatinginvoices_repeatinginvoiceid_attachments_filename.206",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "operation_id": "updateRepeatingInvoiceAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint POST /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.repeatinginvoices_repeatinginvoiceid_attachments_filename.207",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "operation_id": "createRepeatingInvoiceAttachmentByFileName",
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.repeatinginvoices_repeatinginvoiceid_history.208",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /RepeatingInvoices/{RepeatingInvoiceID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.repeatinginvoices_repeatinginvoiceid_history.209",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/History",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /RepeatingInvoices/{RepeatingInvoiceID}/History",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_tenninetynine.210",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/TenNinetyNine",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/TenNinetyNine",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_agedpayablesbycontact.211",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/AgedPayablesByContact",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/AgedPayablesByContact",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_agedreceivablesbycontact.212",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/AgedReceivablesByContact",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/AgedReceivablesByContact",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_balancesheet.213",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/BalanceSheet",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/BalanceSheet",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_banksummary.214",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/BankSummary",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/BankSummary",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_reportid.215",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/{ReportID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/{ReportID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_budgetsummary.216",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/BudgetSummary",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/BudgetSummary",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_executivesummary.217",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/ExecutiveSummary",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/ExecutiveSummary",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports.218",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_profitandloss.219",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/ProfitAndLoss",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/ProfitAndLoss",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.reports_trialbalance.220",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Reports/TrialBalance",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Reports/TrialBalance",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.setup.221",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Setup",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /Setup",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.taxrates.222",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/TaxRates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /TaxRates",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.taxrates.223",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/TaxRates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /TaxRates",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.taxrates.224",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/TaxRates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /TaxRates",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.taxrates_taxtype.225",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/TaxRates/{TaxType}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /TaxRates/{TaxType}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.trackingcategories.226",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/TrackingCategories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /TrackingCategories",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.trackingcategories.227",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/TrackingCategories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /TrackingCategories",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.trackingcategories_trackingcategoryid.228",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/TrackingCategories/{TrackingCategoryID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /TrackingCategories/{TrackingCategoryID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.trackingcategories_trackingcategoryid.229",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/TrackingCategories/{TrackingCategoryID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /TrackingCategories/{TrackingCategoryID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.trackingcategories_trackingcategoryid.230",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/TrackingCategories/{TrackingCategoryID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /TrackingCategories/{TrackingCategoryID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.put.trackingcategories_trackingcategoryid_options.231",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/TrackingCategories/{TrackingCategoryID}/Options",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /TrackingCategories/{TrackingCategoryID}/Options",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.post.trackingcategories_trackingcategoryid_options_trackingoptionid.232",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.delete.trackingcategories_trackingcategoryid_options_trackingoptionid.233",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.users.234",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Users",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      },
+      {
+        "id": "xero.rest.get.users_userid.235",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/Users/{UserID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /Users/{UserID}",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
+      }
+    ]
+  }
+}

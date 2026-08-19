@@ -1,0 +1,2724 @@
+{
+  "schema_version": 1,
+  "connector": "gong",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/gong-operation-source-lock.json",
+    "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+    "source_sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
+    "source_bytes": 453797,
+    "source_operation_count": 69
+  },
+  "summary": {
+    "api_surface_rows": 69,
+    "exact_source_rows": 69,
+    "declared_operations": 69,
+    "declared_percent": 100,
+    "enabled_operations": 57,
+    "enabled_percent": 82.61,
+    "disabled_operations": 12,
+    "documented_deletes": 3,
+    "enabled_deletes": 3,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 30
+      },
+      {
+        "key": "direct_write",
+        "count": 27
+      },
+      {
+        "key": "etl",
+        "count": 12
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 12,
+    "writes_actions": 27,
+    "terminal_commands": 57,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 27,
+        "scope": "destination_transport"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 12
+      }
+    ],
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "typed_direct_write_operations": 27,
+      "foundation_gap": {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+      }
+    },
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/gong/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-source-definition-gong"
+    ],
+    "declaration_pending": [
+      {
+        "id": "sync-transport-source-definition-gong",
+        "count": 12
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/v2/calls",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/calls",
+        "covered_by": {
+          "stream": "calls"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_calls.1",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/calls",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/calls.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/calls."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/calls",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/calls",
+        "covered_by": {
+          "write": "add_call"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_calls.2",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/calls",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "add_call"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/calls/{id}/media",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/calls/{id}/media",
+        "covered_by": {
+          "write": "upload_call_media"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_calls_id_media.3",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/calls/{id}/media",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "upload_call_media"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/calls/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/calls/{id}",
+        "covered_by": {
+          "direct_read": "calls get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_calls_id.4",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/calls/{id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "calls get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/calls/extensive",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/calls/extensive",
+        "covered_by": {
+          "direct_read": "calls extensive"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_calls_extensive.5",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/calls/extensive",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "calls extensive"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/permission-profile",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/permission-profile",
+        "covered_by": {
+          "direct_read": "permissions profile get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_permission_profile.6",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/permission-profile",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "permissions profile get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/permission-profile",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/permission-profile",
+        "covered_by": {
+          "write": "create_permission_profile"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_permission_profile.7",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/permission-profile",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_permission_profile"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/permission-profile",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/permission-profile",
+        "covered_by": {
+          "write": "update_permission_profile"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_permission_profile.8",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/permission-profile",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_permission_profile"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/meetings/{meetingId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/meetings/{meetingId}",
+        "covered_by": {
+          "write": "update_meeting"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_meetings_meetingid.9",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/meetings/{meetingId}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_meeting"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/meetings/{meetingId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v2/meetings/{meetingId}",
+        "covered_by": {
+          "write": "delete_meeting"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.delete.v2_meetings_meetingid.10",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint DELETE /v2/meetings/{meetingId}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_meeting"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customer-engagement/content/viewed",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/customer-engagement/content/viewed",
+        "covered_by": {
+          "write": "content_viewed"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_customer_engagement_content_viewed.11",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/customer-engagement/content/viewed",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "content_viewed"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customer-engagement/content/shared",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/customer-engagement/content/shared",
+        "covered_by": {
+          "write": "content_shared"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_customer_engagement_content_shared.12",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/customer-engagement/content/shared",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "content_shared"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customer-engagement/action",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/customer-engagement/action",
+        "covered_by": {
+          "write": "custom_action"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_customer_engagement_action.13",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/customer-engagement/action",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "custom_action"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm/integrations",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/crm/integrations",
+        "covered_by": {
+          "stream": "crm_integrations"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_crm_integrations.14",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/crm/integrations",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/crm/integrations.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/crm/integrations."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/crm/integrations",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/crm/integrations",
+        "covered_by": {
+          "write": "register_crm_integration"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_crm_integrations.15",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/crm/integrations",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "register_crm_integration"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/crm/integrations",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v2/crm/integrations",
+        "covered_by": {
+          "write": "delete_crm_integration"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.delete.v2_crm_integrations.16",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint DELETE /v2/crm/integrations",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_crm_integration"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/calls/users-access",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/calls/users-access",
+        "covered_by": {
+          "direct_read": "calls users-access get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_calls_users_access.17",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/calls/users-access",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "calls users-access get"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/calls/users-access",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v2/calls/users-access",
+        "covered_by": {
+          "write": "add_calls_users_access"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.put.v2_calls_users_access.18",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PUT /v2/calls/users-access",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "add_calls_users_access"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/calls/users-access",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v2/calls/users-access",
+        "covered_by": {
+          "write": "delete_calls_users_access"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.delete.v2_calls_users_access.19",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint DELETE /v2/calls/users-access",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_calls_users_access"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/users/extensive",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/users/extensive",
+        "covered_by": {
+          "direct_read": "users extensive"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_users_extensive.20",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/users/extensive",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "users extensive"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/tasks",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/tasks",
+        "covered_by": {
+          "direct_read": "tasks list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_tasks.21",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/tasks",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "tasks list"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stats/interaction",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/stats/interaction",
+        "covered_by": {
+          "direct_read": "stats interaction"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_stats_interaction.22",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/stats/interaction",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "stats interaction"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stats/activity/scorecards",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/stats/activity/scorecards",
+        "covered_by": {
+          "direct_read": "stats activity-scorecards"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_stats_activity_scorecards.23",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/stats/activity/scorecards",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "stats activity-scorecards"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stats/activity/day-by-day",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/stats/activity/day-by-day",
+        "covered_by": {
+          "direct_read": "stats activity-day-by-day"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_stats_activity_day_by_day.24",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/stats/activity/day-by-day",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "stats activity-day-by-day"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stats/activity/aggregate",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate",
+        "covered_by": {
+          "direct_read": "stats activity-aggregate"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_stats_activity_aggregate.25",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/stats/activity/aggregate",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "stats activity-aggregate"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stats/activity/aggregate-by-period",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate-by-period",
+        "covered_by": {
+          "direct_read": "stats activity-aggregate-by-period"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_stats_activity_aggregate_by_period.26",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/stats/activity/aggregate-by-period",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "stats activity-aggregate-by-period"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/meetings",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/meetings",
+        "covered_by": {
+          "write": "create_meeting"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_meetings.27",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/meetings",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_meeting"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/meetings/integration/status",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/meetings/integration/status",
+        "covered_by": {
+          "direct_read": "meetings integration-status"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_meetings_integration_status.28",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/meetings/integration/status",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "meetings integration-status"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/integration-settings",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/integration-settings",
+        "covered_by": {
+          "write": "integration_settings"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_integration_settings.29",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/integration-settings",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "integration_settings"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/flows/steps",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/flows/steps",
+        "covered_by": {
+          "direct_read": "flows steps"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_flows_steps.30",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/flows/steps",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "flows steps"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/flows/prospects",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/flows/prospects",
+        "covered_by": {
+          "direct_read": "flows prospects"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_flows_prospects.31",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/flows/prospects",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "flows prospects"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/flows/prospects/unassign-flows-by-instance-id",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/flows/prospects/unassign-flows-by-instance-id",
+        "covered_by": {
+          "write": "unassign_flows_by_instance_id"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_flows_prospects_unassign_flows_by_instance_id.32",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/flows/prospects/unassign-flows-by-instance-id",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "unassign_flows_by_instance_id"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/flows/prospects/unassign-flows-by-crm-id",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/flows/prospects/unassign-flows-by-crm-id",
+        "covered_by": {
+          "write": "unassign_flows_by_crm_id"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_flows_prospects_unassign_flows_by_crm_id.33",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/flows/prospects/unassign-flows-by-crm-id",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "unassign_flows_by_crm_id"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/flows/prospects/bulk-assignments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/flows/prospects/bulk-assignments",
+        "covered_by": {
+          "write": "submit_flow_prospects_bulk_assignment"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_flows_prospects_bulk_assignments.34",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/flows/prospects/bulk-assignments",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "submit_flow_prospects_bulk_assignment"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/flows/prospects/assign",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/flows/prospects/assign",
+        "covered_by": {
+          "write": "assign_prospects"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_flows_prospects_assign.35",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/flows/prospects/assign",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "assign_prospects"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/flows/prospects/assign/cool-off-override",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/flows/prospects/assign/cool-off-override",
+        "covered_by": {
+          "write": "assign_prospects_cool_off_override"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_flows_prospects_assign_cool_off_override.36",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/flows/prospects/assign/cool-off-override",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "assign_prospects_cool_off_override"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/digital-interaction",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/digital-interaction",
+        "covered_by": {
+          "write": "add_digital_interaction"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_digital_interaction.37",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/digital-interaction",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "add_digital_interaction"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/data-privacy/erase-data-for-phone-number",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/data-privacy/erase-data-for-phone-number",
+        "covered_by": {
+          "write": "purge_phone_number"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_data_privacy_erase_data_for_phone_number.38",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/data-privacy/erase-data-for-phone-number",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "purge_phone_number"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/data-privacy/erase-data-for-email-address",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/data-privacy/erase-data-for-email-address",
+        "covered_by": {
+          "write": "purge_email_address"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_data_privacy_erase_data_for_email_address.39",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/data-privacy/erase-data-for-email-address",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "purge_email_address"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm/entity-schema",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/crm/entity-schema",
+        "covered_by": {
+          "direct_read": "crm entity-schema get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_crm_entity_schema.40",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/crm/entity-schema",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "crm entity-schema get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/crm/entity-schema",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/crm/entity-schema",
+        "covered_by": {
+          "write": "upload_crm_entity_schema"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_crm_entity_schema.41",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/crm/entity-schema",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "upload_crm_entity_schema"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm/entities",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/crm/entities",
+        "covered_by": {
+          "direct_read": "crm entities get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_crm_entities.42",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/crm/entities",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "crm entities get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/crm/entities",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/crm/entities",
+        "covered_by": {
+          "write": "upload_crm_entities"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_crm_entities.43",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/crm/entities",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "upload_crm_entities"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/calls/transcript",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/calls/transcript",
+        "covered_by": {
+          "direct_read": "calls transcript"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_calls_transcript.44",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/calls/transcript",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "calls transcript"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/tasks/{taskId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v2/tasks/{taskId}",
+        "covered_by": {
+          "write": "update_task"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.patch.v2_tasks_taskid.45",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint PATCH /v2/tasks/{taskId}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_task"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workspaces",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/workspaces",
+        "covered_by": {
+          "stream": "workspaces"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_workspaces.46",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/workspaces",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/workspaces.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/workspaces."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/users",
+        "covered_by": {
+          "stream": "users"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_users.47",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/users",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/users.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/users."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/users/{id}",
+        "covered_by": {
+          "direct_read": "users get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_users_id.48",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/users/{id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "users get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{id}/settings-history",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/users/{id}/settings-history",
+        "covered_by": {
+          "direct_read": "users settings-history"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_users_id_settings_history.49",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/users/{id}/settings-history",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "users settings-history"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/settings/trackers",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/settings/trackers",
+        "covered_by": {
+          "stream": "trackers"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_settings_trackers.50",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/settings/trackers",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/trackers.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/trackers."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/settings/scorecards",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/settings/scorecards",
+        "covered_by": {
+          "stream": "scorecards"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_settings_scorecards.51",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/settings/scorecards",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/scorecards.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/scorecards."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/settings/briefs",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/settings/briefs",
+        "covered_by": {
+          "stream": "briefs"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_settings_briefs.52",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/settings/briefs",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/briefs.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/briefs."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/permission-profile/users",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/permission-profile/users",
+        "covered_by": {
+          "direct_read": "permissions profile-users list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_permission_profile_users.53",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/permission-profile/users",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "permissions profile-users list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/logs",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/logs",
+        "covered_by": {
+          "direct_read": "logs list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_logs.54",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/logs",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "logs list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/library/folders",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/library/folders",
+        "covered_by": {
+          "stream": "library_folders"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_library_folders.55",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/library/folders",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/library/folders.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/library/folders."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/library/folder-content",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/library/folder-content",
+        "covered_by": {
+          "direct_read": "library folder-content list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_library_folder_content.56",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/library/folder-content",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "library folder-content list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/flows",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/flows",
+        "covered_by": {
+          "stream": "flows"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_flows.57",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/flows",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/flows/prospects/bulk-assignments/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/flows/prospects/bulk-assignments/{id}",
+        "covered_by": {
+          "direct_read": "flows bulk-assignment get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_flows_prospects_bulk_assignments_id.58",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/flows/prospects/bulk-assignments/{id}",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "flows bulk-assignment get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/flows/folders",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/flows/folders",
+        "covered_by": {
+          "stream": "flow_folders"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_flows_folders.59",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/flows/folders",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows/folders.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows/folders."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/entities/get-brief",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/entities/get-brief",
+        "covered_by": {
+          "direct_read": "entities get-brief"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_entities_get_brief.60",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/entities/get-brief",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "entities get-brief"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/entities/ask-entity",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/entities/ask-entity",
+        "covered_by": {
+          "direct_read": "entities ask"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_entities_ask_entity.61",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/entities/ask-entity",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "entities ask"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data-privacy/data-for-phone-number",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/data-privacy/data-for-phone-number",
+        "covered_by": {
+          "direct_read": "privacy find-phone"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_data_privacy_data_for_phone_number.62",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/data-privacy/data-for-phone-number",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "privacy find-phone"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data-privacy/data-for-email-address",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/data-privacy/data-for-email-address",
+        "covered_by": {
+          "direct_read": "privacy find-email"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_data_privacy_data_for_email_address.63",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/data-privacy/data-for-email-address",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "privacy find-email"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm/request-status",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/crm/request-status",
+        "covered_by": {
+          "direct_read": "crm request-status get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_crm_request_status.64",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/crm/request-status",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "crm request-status get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/coaching",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/coaching",
+        "covered_by": {
+          "direct_read": "coaching list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_coaching.65",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/coaching",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "coaching list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/call-outcomes",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/call-outcomes",
+        "covered_by": {
+          "stream": "call_outcomes"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_call_outcomes.66",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/call-outcomes",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/call-outcomes.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/call-outcomes."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/all-permission-profiles",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/all-permission-profiles",
+        "covered_by": {
+          "stream": "permission_profiles"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_all_permission_profiles.67",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/all-permission-profiles",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gong",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/all-permission-profiles.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/all-permission-profiles."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/targets",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/targets",
+        "covered_by": {
+          "direct_read": "targets list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.get.v2_targets.68",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint GET /v2/targets",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "targets list"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/targets/{targetId}/assignments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/targets/{targetId}/assignments",
+        "covered_by": {
+          "write": "upload_target_assignments"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gong-operation-source-lock.json",
+        "source_id": "gong.rest.post.v2_targets_targetid_assignments.69",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "source_location": "documented endpoint POST /v2/targets/{targetId}/assignments",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "upload_target_assignments"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    }
+  ]
+}

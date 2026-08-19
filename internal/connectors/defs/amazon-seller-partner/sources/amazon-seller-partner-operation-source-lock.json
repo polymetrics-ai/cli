@@ -1,0 +1,3551 @@
+{
+  "schema_version": 2,
+  "connector": "amazon-seller-partner",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+    "sha256": "bcd9bfdddc538b022a11be225a8343bcf0a5034b5b13a54a31ab7e7980d5d357",
+    "bytes": 345239,
+    "format": "text/html; charset=utf-8",
+    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "operation_counts": {
+      "DELETE": 13,
+      "GET": 176,
+      "PATCH": 5,
+      "POST": 126,
+      "PUT": 33
+    },
+    "operations": [
+      {
+        "id": "amazon-seller-partner.rest.post.aplus_2020_11_01_contentasinvalidations.1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/aplus/2020-11-01/contentAsinValidations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /aplus/2020-11-01/contentAsinValidations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.aplus_2020_11_01_contentdocuments_contentreferencekey_approvalsubmissions.2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/approvalSubmissions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /aplus/2020-11-01/contentDocuments/{contentReferenceKey}/approvalSubmissions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.aplus_2020_11_01_contentdocuments_contentreferencekey_asins.3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.aplus_2020_11_01_contentdocuments_contentreferencekey_asins.4",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.aplus_2020_11_01_contentdocuments_contentreferencekey_suspendsubmissions.5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/suspendSubmissions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /aplus/2020-11-01/contentDocuments/{contentReferenceKey}/suspendSubmissions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.aplus_2020_11_01_contentdocuments_contentreferencekey.6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.aplus_2020_11_01_contentdocuments_contentreferencekey.7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.aplus_2020_11_01_contentdocuments.8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/aplus/2020-11-01/contentDocuments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /aplus/2020-11-01/contentDocuments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.aplus_2020_11_01_contentdocuments.9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/aplus/2020-11-01/contentDocuments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /aplus/2020-11-01/contentDocuments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.aplus_2020_11_01_contentpublishrecords.10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/aplus/2020-11-01/contentPublishRecords",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /aplus/2020-11-01/contentPublishRecords",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.appintegrations_2024_04_01_notifications_notificationid_feedback.11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/appIntegrations/2024-04-01/notifications/{notificationId}/feedback",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /appIntegrations/2024-04-01/notifications/{notificationId}/feedback",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.appintegrations_2024_04_01_notifications_deletion.12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/appIntegrations/2024-04-01/notifications/deletion",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /appIntegrations/2024-04-01/notifications/deletion",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.appintegrations_2024_04_01_notifications.13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/appIntegrations/2024-04-01/notifications",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /appIntegrations/2024-04-01/notifications",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.applications_2023_11_30_clientsecret.14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/2023-11-30/clientSecret",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /applications/2023-11-30/clientSecret",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_inboundeligibility.15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/inboundEligibility",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/inboundEligibility",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_inboundorders_orderid_cancellation.16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/inboundOrders/{orderId}/cancellation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/inboundOrders/{orderId}/cancellation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_inboundorders_orderid_confirmation.17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/inboundOrders/{orderId}/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/inboundOrders/{orderId}/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_inboundorders_orderid.18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/inboundOrders/{orderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/inboundOrders/{orderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.awd_2024_05_09_inboundorders_orderid.19",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/awd/2024-05-09/inboundOrders/{orderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /awd/2024-05-09/inboundOrders/{orderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_inboundorders.20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/inboundOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/inboundOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_inboundshipments_shipmentid_labelpagetypes.21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/labelPageTypes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/inboundShipments/{shipmentId}/labelPageTypes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_inboundshipments_shipmentid_labels.22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/labels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/inboundShipments/{shipmentId}/labels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.awd_2024_05_09_inboundshipments_shipmentid_transport.23",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/transport",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /awd/2024-05-09/inboundShipments/{shipmentId}/transport",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_inboundshipments_shipmentid.24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/inboundShipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/inboundShipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_inboundshipments.25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/inboundShipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/inboundShipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_inventory.26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/inventory",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/inventory",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_outboundorders_orderid_confirmation.27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/outboundOrders/{orderId}/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/outboundOrders/{orderId}/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_outboundorders_orderid.28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/outboundOrders/{orderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/outboundOrders/{orderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.awd_2024_05_09_outboundorders_orderid.29",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/awd/2024-05-09/outboundOrders/{orderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /awd/2024-05-09/outboundOrders/{orderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_outboundorders.30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/outboundOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/outboundOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_outboundorders.31",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/outboundOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/outboundOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_replenishmentorders_orderid_confirmation.32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/replenishmentOrders/{orderId}/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/replenishmentOrders/{orderId}/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_replenishmentorders_orderid.33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/replenishmentOrders/{orderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/replenishmentOrders/{orderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.awd_2024_05_09_replenishmentorders.34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/awd/2024-05-09/replenishmentOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /awd/2024-05-09/replenishmentOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.awd_2024_05_09_replenishmentorders.35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/awd/2024-05-09/replenishmentOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /awd/2024-05-09/replenishmentOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.batches_products_pricing_2022_05_01_items_competitivesummary.36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/batches/products/pricing/2022-05-01/items/competitiveSummary",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /batches/products/pricing/2022-05-01/items/competitiveSummary",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.batches_products_pricing_2022_05_01_offer_featuredofferexpectedprice.37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/batches/products/pricing/2022-05-01/offer/featuredOfferExpectedPrice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /batches/products/pricing/2022-05-01/offer/featuredOfferExpectedPrice",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.batches_products_pricing_v0_itemoffers.38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/batches/products/pricing/v0/itemOffers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /batches/products/pricing/v0/itemOffers",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.batches_products_pricing_v0_listingoffers.39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/batches/products/pricing/v0/listingOffers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /batches/products/pricing/v0/listingOffers",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.catalog_2020_12_01_items_asin.40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/2020-12-01/items/{asin}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /catalog/2020-12-01/items/{asin}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.catalog_2020_12_01_items.41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/2020-12-01/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /catalog/2020-12-01/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.catalog_2022_04_01_items_asin.42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/2022-04-01/items/{asin}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /catalog/2022-04-01/items/{asin}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.catalog_2022_04_01_items.43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/2022-04-01/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /catalog/2022-04-01/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.catalog_2024_11_01_automotive_vehicles.44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/2024-11-01/automotive/vehicles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /catalog/2024-11-01/automotive/vehicles",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.catalog_v0_categories.45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/v0/categories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /catalog/v0/categories",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.customerfeedback_2024_06_01_browsenodes_browsenodeid_returns_topics.46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/topics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/topics",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.customerfeedback_2024_06_01_browsenodes_browsenodeid_returns_trends.47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/trends",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/trends",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.customerfeedback_2024_06_01_browsenodes_browsenodeid_reviews_topics.48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/topics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/topics",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.customerfeedback_2024_06_01_browsenodes_browsenodeid_reviews_trends.49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/trends",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/trends",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.customerfeedback_2024_06_01_items_asin_browsenode.50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customerFeedback/2024-06-01/items/{asin}/browseNode",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /customerFeedback/2024-06-01/items/{asin}/browseNode",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.customerfeedback_2024_06_01_items_asin_reviews_topics.51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customerFeedback/2024-06-01/items/{asin}/reviews/topics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /customerFeedback/2024-06-01/items/{asin}/reviews/topics",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.customerfeedback_2024_06_01_items_asin_reviews_trends.52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customerFeedback/2024-06-01/items/{asin}/reviews/trends",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /customerFeedback/2024-06-01/items/{asin}/reviews/trends",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.datakiosk_2023_11_15_documents_documentid.53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dataKiosk/2023-11-15/documents/{documentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /dataKiosk/2023-11-15/documents/{documentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.datakiosk_2023_11_15_queries_queryid.54",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/dataKiosk/2023-11-15/queries/{queryId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /dataKiosk/2023-11-15/queries/{queryId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.datakiosk_2023_11_15_queries_queryid.55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dataKiosk/2023-11-15/queries/{queryId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /dataKiosk/2023-11-15/queries/{queryId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.datakiosk_2023_11_15_queries.56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dataKiosk/2023-11-15/queries",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /dataKiosk/2023-11-15/queries",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.datakiosk_2023_11_15_queries.57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/dataKiosk/2023-11-15/queries",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /dataKiosk/2023-11-15/queries",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.definitions_2020_09_01_producttypes_producttype.58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/definitions/2020-09-01/productTypes/{productType}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /definitions/2020-09-01/productTypes/{productType}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.definitions_2020_09_01_producttypes.59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/definitions/2020-09-01/productTypes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /definitions/2020-09-01/productTypes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.delivery_2022_07_01_invoice_status.60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/delivery/2022-07-01/invoice/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /delivery/2022-07-01/invoice/status",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.delivery_2022_07_01_invoice.61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/delivery/2022-07-01/invoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /delivery/2022-07-01/invoice",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.easyship_2022_03_23_package.62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/easyShip/2022-03-23/package",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /easyShip/2022-03-23/package",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.patch.easyship_2022_03_23_package.63",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/easyShip/2022-03-23/package",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /easyShip/2022-03-23/package",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.easyship_2022_03_23_package.64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/easyShip/2022-03-23/package",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /easyShip/2022-03-23/package",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.easyship_2022_03_23_packages_bulk.65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/easyShip/2022-03-23/packages/bulk",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /easyShip/2022-03-23/packages/bulk",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.easyship_2022_03_23_timeslot.66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/easyShip/2022-03-23/timeSlot",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /easyShip/2022-03-23/timeSlot",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.externalfulfillment_2024_09_11_returns_returnid.67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/externalFulfillment/2024-09-11/returns/{returnId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /externalFulfillment/2024-09-11/returns/{returnId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.externalfulfillment_2024_09_11_returns.68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/externalFulfillment/2024-09-11/returns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /externalFulfillment/2024-09-11/returns",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.externalfulfillment_2024_09_11_shipments_shipmentid_invoice.69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.externalfulfillment_2024_09_11_shipments_shipmentid_invoice.70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.patch.externalfulfillment_2024_09_11_shipments_shipmentid_packages_packageid.71",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.externalfulfillment_2024_09_11_shipments_shipmentid_packages_packageid.72",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.externalfulfillment_2024_09_11_shipments_shipmentid_packages.73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.externalfulfillment_2024_09_11_shipments_shipmentid_shiplabels.74",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/shipLabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /externalFulfillment/2024-09-11/shipments/{shipmentId}/shipLabels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.externalfulfillment_2024_09_11_shipments_shipmentid_shippingoptions.75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/shippingOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /externalFulfillment/2024-09-11/shipments/{shipmentId}/shippingOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.externalfulfillment_2024_09_11_shipments_shipmentid.76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /externalFulfillment/2024-09-11/shipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.externalfulfillment_2024_09_11_shipments_shipmentid.77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /externalFulfillment/2024-09-11/shipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.externalfulfillment_2024_09_11_shipments.78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/externalFulfillment/2024-09-11/shipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /externalFulfillment/2024-09-11/shipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.externalfulfillment_inventory_2024_09_11_inventories.79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/externalFulfillment/inventory/2024-09-11/inventories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /externalFulfillment/inventory/2024-09-11/inventories",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inbound_v0_prepinstructions.80",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inbound/v0/prepInstructions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inbound/v0/prepInstructions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inbound_v0_shipmentitems.81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inbound/v0/shipmentItems",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inbound/v0/shipmentItems",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inbound_v0_shipments_shipmentid_billoflading.82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inbound/v0/shipments/{shipmentId}/billOfLading",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inbound/v0/shipments/{shipmentId}/billOfLading",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inbound_v0_shipments_shipmentid_items.83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inbound/v0/shipments/{shipmentId}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inbound/v0/shipments/{shipmentId}/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inbound_v0_shipments_shipmentid_labels.84",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inbound/v0/shipments/{shipmentId}/labels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inbound/v0/shipments/{shipmentId}/labels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inbound_v0_shipments.85",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inbound/v0/shipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inbound/v0/shipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inbound_v1_eligibility_itempreview.86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inbound/v1/eligibility/itemPreview",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inbound/v1/eligibility/itemPreview",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.fba_inventory_v1_items_sellersku.87",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/fba/inventory/v1/items/{sellerSku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /fba/inventory/v1/items/{sellerSku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.fba_inventory_v1_items_inventory.88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/fba/inventory/v1/items/inventory",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /fba/inventory/v1/items/inventory",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.fba_inventory_v1_items.89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/fba/inventory/v1/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /fba/inventory/v1/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_inventory_v1_summaries.90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/inventory/v1/summaries",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/inventory/v1/summaries",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.fba_outbound_2020_07_01_deliveryoffers.91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/fba/outbound/2020-07-01/deliveryOffers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /fba/outbound/2020-07-01/deliveryOffers",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_2020_07_01_features_inventory_featurename_sellersku.92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/2020-07-01/features/inventory/{featureName}/{sellerSku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/2020-07-01/features/inventory/{featureName}/{sellerSku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_2020_07_01_features_inventory_featurename.93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/2020-07-01/features/inventory/{featureName}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/2020-07-01/features/inventory/{featureName}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_2020_07_01_features.94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/2020-07-01/features",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/2020-07-01/features",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.fba_outbound_2020_07_01_fulfillmentorders_sellerfulfillmentorderid_cancel.95",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.fba_outbound_2020_07_01_fulfillmentorders_sellerfulfillmentorderid_return.96",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.fba_outbound_2020_07_01_fulfillmentorders_sellerfulfillmentorderid_status.97",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_2020_07_01_fulfillmentorders_sellerfulfillmentorderid.98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.fba_outbound_2020_07_01_fulfillmentorders_sellerfulfillmentorderid.99",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.fba_outbound_2020_07_01_fulfillmentorders_preview.100",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders/preview",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /fba/outbound/2020-07-01/fulfillmentOrders/preview",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_2020_07_01_fulfillmentorders.101",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/2020-07-01/fulfillmentOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.fba_outbound_2020_07_01_fulfillmentorders.102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /fba/outbound/2020-07-01/fulfillmentOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_2020_07_01_returnreasoncodes.103",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/2020-07-01/returnReasonCodes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/2020-07-01/returnReasonCodes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_2020_07_01_tracking.104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/2020-07-01/tracking",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/2020-07-01/tracking",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_brazil_v0_shipments_shipmentid_invoice_status.105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/brazil/v0/shipments/{shipmentId}/invoice/status",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.fba_outbound_brazil_v0_shipments_shipmentid_invoice.106",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /fba/outbound/brazil/v0/shipments/{shipmentId}/invoice",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.fba_outbound_brazil_v0_shipments_shipmentid.107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /fba/outbound/brazil/v0/shipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.feeds_2021_06_30_documents_feeddocumentid.108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/feeds/2021-06-30/documents/{feedDocumentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /feeds/2021-06-30/documents/{feedDocumentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.feeds_2021_06_30_documents.109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/feeds/2021-06-30/documents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /feeds/2021-06-30/documents",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.feeds_2021_06_30_feeds_feedid.110",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/feeds/2021-06-30/feeds/{feedId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /feeds/2021-06-30/feeds/{feedId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.feeds_2021_06_30_feeds_feedid.111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/feeds/2021-06-30/feeds/{feedId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /feeds/2021-06-30/feeds/{feedId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.feeds_2021_06_30_feeds.112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/feeds/2021-06-30/feeds",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /feeds/2021-06-30/feeds",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.feeds_2021_06_30_feeds.113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/feeds/2021-06-30/feeds",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /feeds/2021-06-30/feeds",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_2024_06_19_transactions.114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/2024-06-19/transactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/2024-06-19/transactions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_2024_06_01_paymentmethods.115",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/2024-06-01/paymentMethods",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/2024-06-01/paymentMethods",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.finances_transfers_2024_06_01_payouts.116",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/finances/transfers/2024-06-01/payouts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /finances/transfers/2024-06-01/payouts",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_accounts_accountid_balance.117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/accounts/{accountId}/balance",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/accounts/{accountId}/balance",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_accounts_accountid.118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/accounts/{accountId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/accounts/{accountId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_accounts.119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/accounts",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_transactions_transactionid.120",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/transactions/{transactionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/transactions/{transactionId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_transactions.121",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/transactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/transactions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.finances_transfers_wallet_2024_03_01_transactions.122",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/finances/transfers/wallet/2024-03-01/transactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /finances/transfers/wallet/2024-03-01/transactions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_transferpreview.123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/transferPreview",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/transferPreview",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.finances_transfers_wallet_2024_03_01_transferschedules_transferscheduleid.124",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_transferschedules_transferscheduleid.125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_transfers_wallet_2024_03_01_transferschedules.126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/transfers/wallet/2024-03-01/transferSchedules",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.finances_transfers_wallet_2024_03_01_transferschedules.127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /finances/transfers/wallet/2024-03-01/transferSchedules",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.finances_transfers_wallet_2024_03_01_transferschedules.128",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /finances/transfers/wallet/2024-03-01/transferSchedules",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_v0_financialeventgroups_eventgroupid_financialevents.129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/v0/financialEventGroups/{eventGroupId}/financialEvents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/v0/financialEventGroups/{eventGroupId}/financialEvents",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_v0_financialeventgroups.130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/v0/financialEventGroups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/v0/financialEventGroups",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_v0_financialevents.131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/v0/financialEvents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/v0/financialEvents",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.finances_v0_orders_orderid_financialevents.132",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/finances/v0/orders/{orderId}/financialEvents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /finances/v0/orders/{orderId}/financialEvents",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_boxes.133",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/boxes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/boxes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.inbound_fba_2024_03_20_inboundplans_inboundplanid_cancellation.134",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_items.135",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.inbound_fba_2024_03_20_inboundplans_inboundplanid_name.136",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_packinggroups_packinggroupid_boxes.137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/boxes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/boxes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_packinggroups_packinggroupid_items.138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_packinginformation.139",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_packingoptions_packingoptionid_confirmation.140",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_packingoptions.141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_packingoptions.142",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_pallets.143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/pallets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/pallets",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_placementoptions_placementoptionid_confirmation.144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_placementoptions.145",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_placementoptions.146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_boxes.147",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/boxes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/boxes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_contentupdatepreviews_contentupdatepreviewid_confirmation.148",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_contentupdatepreviews_contentupdatepreviewid.149",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_contentupdatepreviews.150",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_contentupdatepreviews.151",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_deliverychallandocument.152",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryChallanDocument",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryChallanDocument",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_deliverywindowoptions_deliverywindowoptionid_confirmation.153",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_deliverywindowoptions.154",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_deliverywindowoptions.155",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_items.156",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_name.157",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_pallets.158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/pallets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/pallets",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_selfshipappointmentcancellation.159",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_selfshipappointmentslots_slotid_schedule.160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_selfshipappointmentslots.161",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_selfshipappointmentslots.162",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_sourceaddress.163",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid_trackingdetails.164",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_shipments_shipmentid.165",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_transportationoptions_confirmation.166",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid_transportationoptions.167",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans_inboundplanid_transportationoptions.168",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans_inboundplanid.169",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_inboundplans.170",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/inboundPlans",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/inboundPlans",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_inboundplans.171",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/inboundPlans",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/inboundPlans",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_items_compliance.172",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/items/compliance",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/items/compliance",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.inbound_fba_2024_03_20_items_compliance.173",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/inbound/fba/2024-03-20/items/compliance",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /inbound/fba/2024-03-20/items/compliance",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_items_labels.174",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/items/labels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/items/labels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_items_prepdetails.175",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/items/prepDetails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/items/prepDetails",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.inbound_fba_2024_03_20_items_prepdetails.176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/inbound/fba/2024-03-20/items/prepDetails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /inbound/fba/2024-03-20/items/prepDetails",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.inbound_fba_2024_03_20_operations_operationid.177",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/inbound/fba/2024-03-20/operations/{operationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /inbound/fba/2024-03-20/operations/{operationId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.listings_2020_09_01_items_sellerid_sku.178",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /listings/2020-09-01/items/{sellerId}/{sku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.patch.listings_2020_09_01_items_sellerid_sku.179",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /listings/2020-09-01/items/{sellerId}/{sku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.listings_2020_09_01_items_sellerid_sku.180",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /listings/2020-09-01/items/{sellerId}/{sku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.listings_2021_08_01_items_sellerid_sku.181",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /listings/2021-08-01/items/{sellerId}/{sku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.listings_2021_08_01_items_sellerid_sku.182",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /listings/2021-08-01/items/{sellerId}/{sku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.patch.listings_2021_08_01_items_sellerid_sku.183",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /listings/2021-08-01/items/{sellerId}/{sku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.listings_2021_08_01_items_sellerid_sku.184",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /listings/2021-08-01/items/{sellerId}/{sku}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.listings_2021_08_01_items_sellerid.185",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/listings/2021-08-01/items/{sellerId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /listings/2021-08-01/items/{sellerId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.listings_2021_08_01_restrictions.186",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/listings/2021-08-01/restrictions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /listings/2021-08-01/restrictions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.messaging_v1_orders_amazonorderid_attributes.187",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/messaging/v1/orders/{amazonOrderId}/attributes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /messaging/v1/orders/{amazonOrderId}/attributes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_confirmcustomizationdetails.188",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmCustomizationDetails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/confirmCustomizationDetails",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_confirmdeliverydetails.189",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmDeliveryDetails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/confirmDeliveryDetails",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_confirmorderdetails.190",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmOrderDetails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/confirmOrderDetails",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_confirmservicedetails.191",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmServiceDetails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/confirmServiceDetails",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_digitalaccesskey.192",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/digitalAccessKey",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/digitalAccessKey",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_invoice.193",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/invoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/invoice",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_legaldisclosure.194",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/legalDisclosure",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/legalDisclosure",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_unexpectedproblem.195",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/unexpectedProblem",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/unexpectedProblem",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.messaging_v1_orders_amazonorderid_messages_warranty.196",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messaging/v1/orders/{amazonOrderId}/messages/warranty",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /messaging/v1/orders/{amazonOrderId}/messages/warranty",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.messaging_v1_orders_amazonorderid.197",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/messaging/v1/orders/{amazonOrderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /messaging/v1/orders/{amazonOrderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.mfn_v0_additionalsellerinputs.198",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mfn/v0/additionalSellerInputs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /mfn/v0/additionalSellerInputs",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.mfn_v0_eligibleshippingservices.199",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mfn/v0/eligibleShippingServices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /mfn/v0/eligibleShippingServices",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.mfn_v0_shipments_shipmentid.200",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/mfn/v0/shipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /mfn/v0/shipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.mfn_v0_shipments_shipmentid.201",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/mfn/v0/shipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /mfn/v0/shipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.mfn_v0_shipments.202",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mfn/v0/shipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /mfn/v0/shipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.notifications_v1_destinations_destinationid.203",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/notifications/v1/destinations/{destinationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /notifications/v1/destinations/{destinationId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.notifications_v1_destinations_destinationid.204",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/notifications/v1/destinations/{destinationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /notifications/v1/destinations/{destinationId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.notifications_v1_destinations.205",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/notifications/v1/destinations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /notifications/v1/destinations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.notifications_v1_destinations.206",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/notifications/v1/destinations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /notifications/v1/destinations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.notifications_v1_subscriptions_notificationtype_subscriptionid.207",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.notifications_v1_subscriptions_notificationtype_subscriptionid.208",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.notifications_v1_subscriptions_notificationtype_testnotification.209",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/notifications/v1/subscriptions/{notificationType}/testNotification",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /notifications/v1/subscriptions/{notificationType}/testNotification",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.notifications_v1_subscriptions_notificationtype.210",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/notifications/v1/subscriptions/{notificationType}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /notifications/v1/subscriptions/{notificationType}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.notifications_v1_subscriptions_notificationtype.211",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/notifications/v1/subscriptions/{notificationType}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /notifications/v1/subscriptions/{notificationType}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_2026_01_01_orders_orderid.212",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/2026-01-01/orders/{orderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/2026-01-01/orders/{orderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_2026_01_01_orders.213",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/2026-01-01/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/2026-01-01/orders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_v0_orders_orderid_address.214",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/v0/orders/{orderId}/address",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/v0/orders/{orderId}/address",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_v0_orders_orderid_buyerinfo.215",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/v0/orders/{orderId}/buyerInfo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/v0/orders/{orderId}/buyerInfo",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_v0_orders_orderid_orderitems_buyerinfo.216",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/v0/orders/{orderId}/orderItems/buyerInfo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/v0/orders/{orderId}/orderItems/buyerInfo",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_v0_orders_orderid_orderitems.217",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/v0/orders/{orderId}/orderItems",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/v0/orders/{orderId}/orderItems",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_v0_orders_orderid_regulatedinfo.218",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/v0/orders/{orderId}/regulatedInfo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/v0/orders/{orderId}/regulatedInfo",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.patch.orders_v0_orders_orderid_regulatedinfo.219",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/orders/v0/orders/{orderId}/regulatedInfo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /orders/v0/orders/{orderId}/regulatedInfo",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.orders_v0_orders_orderid_shipmentconfirmation.220",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/orders/v0/orders/{orderId}/shipmentConfirmation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /orders/v0/orders/{orderId}/shipmentConfirmation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.orders_v0_orders_orderid_shipment.221",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/orders/v0/orders/{orderId}/shipment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /orders/v0/orders/{orderId}/shipment",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_v0_orders_orderid.222",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/v0/orders/{orderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/v0/orders/{orderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.orders_v0_orders.223",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders/v0/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /orders/v0/orders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.products_fees_v0_feesestimate.224",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/products/fees/v0/feesEstimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /products/fees/v0/feesEstimate",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.products_fees_v0_items_asin_feesestimate.225",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/products/fees/v0/items/{Asin}/feesEstimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /products/fees/v0/items/{Asin}/feesEstimate",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.products_fees_v0_listings_sellersku_feesestimate.226",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/products/fees/v0/listings/{SellerSKU}/feesEstimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /products/fees/v0/listings/{SellerSKU}/feesEstimate",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.products_pricing_v0_competitiveprice.227",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products/pricing/v0/competitivePrice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /products/pricing/v0/competitivePrice",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.products_pricing_v0_items_asin_offers.228",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products/pricing/v0/items/{Asin}/offers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /products/pricing/v0/items/{Asin}/offers",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.products_pricing_v0_listings_sellersku_offers.229",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products/pricing/v0/listings/{SellerSKU}/offers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /products/pricing/v0/listings/{SellerSKU}/offers",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.products_pricing_v0_price.230",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products/pricing/v0/price",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /products/pricing/v0/price",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.replenishment_2022_11_07_offers_metrics_search.231",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/replenishment/2022-11-07/offers/metrics/search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /replenishment/2022-11-07/offers/metrics/search",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.replenishment_2022_11_07_offers_search.232",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/replenishment/2022-11-07/offers/search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /replenishment/2022-11-07/offers/search",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.replenishment_2022_11_07_sellingpartners_metrics_search.233",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/replenishment/2022-11-07/sellingPartners/metrics/search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /replenishment/2022-11-07/sellingPartners/metrics/search",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.reports_2021_06_30_documents_reportdocumentid.234",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/2021-06-30/documents/{reportDocumentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /reports/2021-06-30/documents/{reportDocumentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.reports_2021_06_30_reports_reportid.235",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/reports/2021-06-30/reports/{reportId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /reports/2021-06-30/reports/{reportId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.reports_2021_06_30_reports_reportid.236",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/2021-06-30/reports/{reportId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /reports/2021-06-30/reports/{reportId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.reports_2021_06_30_reports.237",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/2021-06-30/reports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /reports/2021-06-30/reports",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.reports_2021_06_30_reports.238",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reports/2021-06-30/reports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /reports/2021-06-30/reports",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.reports_2021_06_30_schedules_reportscheduleid.239",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/reports/2021-06-30/schedules/{reportScheduleId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /reports/2021-06-30/schedules/{reportScheduleId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.reports_2021_06_30_schedules_reportscheduleid.240",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/2021-06-30/schedules/{reportScheduleId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /reports/2021-06-30/schedules/{reportScheduleId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.reports_2021_06_30_schedules.241",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reports/2021-06-30/schedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /reports/2021-06-30/schedules",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.reports_2021_06_30_schedules.242",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reports/2021-06-30/schedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /reports/2021-06-30/schedules",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.sales_v1_ordermetrics.243",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sales/v1/orderMetrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /sales/v1/orderMetrics",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.sellers_v1_account.244",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sellers/v1/account",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /sellers/v1/account",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.sellers_v1_marketplaceparticipations.245",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sellers/v1/marketplaceParticipations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /sellers/v1/marketplaceParticipations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.service_v1_appointmentslots.246",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/v1/appointmentSlots",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /service/v1/appointmentSlots",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.service_v1_documents.247",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/v1/documents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /service/v1/documents",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.service_v1_reservation_reservationid.248",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/service/v1/reservation/{reservationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /service/v1/reservation/{reservationId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.service_v1_reservation_reservationid.249",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/v1/reservation/{reservationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /service/v1/reservation/{reservationId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.service_v1_reservation.250",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/v1/reservation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /service/v1/reservation",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.service_v1_servicejobs_servicejobid_appointments_appointmentid_fulfillment.251",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.service_v1_servicejobs_servicejobid_appointments_appointmentid_resources.252",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.service_v1_servicejobs_servicejobid_appointments_appointmentid.253",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.service_v1_servicejobs_servicejobid_appointmentslots.254",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/v1/serviceJobs/{serviceJobId}/appointmentSlots",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /service/v1/serviceJobs/{serviceJobId}/appointmentSlots",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.service_v1_servicejobs_servicejobid_appointments.255",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/v1/serviceJobs/{serviceJobId}/appointments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /service/v1/serviceJobs/{serviceJobId}/appointments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.service_v1_servicejobs_servicejobid_cancellations.256",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/v1/serviceJobs/{serviceJobId}/cancellations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /service/v1/serviceJobs/{serviceJobId}/cancellations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.service_v1_servicejobs_servicejobid_completions.257",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/v1/serviceJobs/{serviceJobId}/completions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /service/v1/serviceJobs/{serviceJobId}/completions",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.service_v1_servicejobs_servicejobid.258",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/v1/serviceJobs/{serviceJobId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /service/v1/serviceJobs/{serviceJobId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.service_v1_servicejobs.259",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/v1/serviceJobs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /service/v1/serviceJobs",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.service_v1_serviceresources_resourceid_capacity_fixed.260",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/v1/serviceResources/{resourceId}/capacity/fixed",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /service/v1/serviceResources/{resourceId}/capacity/fixed",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.service_v1_serviceresources_resourceid_capacity_range.261",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/v1/serviceResources/{resourceId}/capacity/range",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /service/v1/serviceResources/{resourceId}/capacity/range",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.service_v1_serviceresources_resourceid_schedules.262",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/v1/serviceResources/{resourceId}/schedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /service/v1/serviceResources/{resourceId}/schedules",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v1_account.263",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v1/account",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v1/account",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v1_purchaseshipment.264",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v1/purchaseShipment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v1/purchaseShipment",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v1_rates.265",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v1/rates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v1/rates",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v1_shipments_shipmentid_cancel.266",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v1/shipments/{shipmentId}/cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v1/shipments/{shipmentId}/cancel",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v1_shipments_shipmentid_containers_trackingid_label.267",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v1/shipments/{shipmentId}/containers/{trackingId}/label",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v1/shipments/{shipmentId}/containers/{trackingId}/label",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v1_shipments_shipmentid_purchaselabels.268",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v1/shipments/{shipmentId}/purchaseLabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v1/shipments/{shipmentId}/purchaseLabels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v1_shipments_shipmentid.269",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v1/shipments/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v1/shipments/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v1_shipments.270",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v1/shipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v1/shipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v1_tracking_trackingid.271",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v1/tracking/{trackingId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v1/tracking/{trackingId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v2_accesspoints.272",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v2/accessPoints",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v2/accessPoints",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v2_carrieraccountforminputs.273",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v2/carrierAccountFormInputs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v2/carrierAccountFormInputs",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.shipping_v2_carrieraccounts_carrierid_unlink.274",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/shipping/v2/carrierAccounts/{carrierId}/unlink",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /shipping/v2/carrierAccounts/{carrierId}/unlink",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_carrieraccounts_carrierid.275",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/carrierAccounts/{carrierId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/carrierAccounts/{carrierId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.shipping_v2_carrieraccounts_carrierid.276",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/shipping/v2/carrierAccounts/{carrierId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /shipping/v2/carrierAccounts/{carrierId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.shipping_v2_carrieraccounts.277",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/shipping/v2/carrierAccounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /shipping/v2/carrierAccounts",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_claims.278",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/claims",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/claims",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v2_collectionforms_collectionformid.279",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v2/collectionForms/{collectionFormId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v2/collectionForms/{collectionFormId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.shipping_v2_collectionforms_history.280",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/shipping/v2/collectionForms/history",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /shipping/v2/collectionForms/history",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_collectionforms.281",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/collectionForms",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/collectionForms",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_ndrfeedback.282",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/ndrFeedback",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/ndrFeedback",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_oneclickshipment.283",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/oneClickShipment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/oneClickShipment",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.shipping_v2_shipments_shipmentid_cancel.284",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/shipping/v2/shipments/{shipmentId}/cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /shipping/v2/shipments/{shipmentId}/cancel",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v2_shipments_shipmentid_documents.285",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v2/shipments/{shipmentId}/documents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v2/shipments/{shipmentId}/documents",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v2_shipments_additionalinputs_schema.286",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v2/shipments/additionalInputs/schema",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v2/shipments/additionalInputs/schema",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_shipments_directpurchase.287",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/shipments/directPurchase",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/shipments/directPurchase",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_shipments_rates.288",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/shipments/rates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/shipments/rates",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.shipping_v2_shipments.289",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipping/v2/shipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /shipping/v2/shipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.shipping_v2_tracking.290",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipping/v2/tracking",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /shipping/v2/tracking",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.shipping_v2_unmanifestedshipments.291",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/shipping/v2/unmanifestedShipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /shipping/v2/unmanifestedShipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.solicitations_v1_orders_amazonorderid_solicitations_productreviewandsellerfeedback.292",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/solicitations/v1/orders/{amazonOrderId}/solicitations/productReviewAndSellerFeedback",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /solicitations/v1/orders/{amazonOrderId}/solicitations/productReviewAndSellerFeedback",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.solicitations_v1_orders_amazonorderid.293",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/solicitations/v1/orders/{amazonOrderId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /solicitations/v1/orders/{amazonOrderId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.supplysources_2020_07_01_supplysources_supplysourceid_status.294",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /supplySources/2020-07-01/supplySources/{supplySourceId}/status",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.delete.supplysources_2020_07_01_supplysources_supplysourceid.295",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /supplySources/2020-07-01/supplySources/{supplySourceId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.supplysources_2020_07_01_supplysources_supplysourceid.296",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /supplySources/2020-07-01/supplySources/{supplySourceId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.put.supplysources_2020_07_01_supplysources_supplysourceid.297",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /supplySources/2020-07-01/supplySources/{supplySourceId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.supplysources_2020_07_01_supplysources.298",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/supplySources/2020-07-01/supplySources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /supplySources/2020-07-01/supplySources",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.supplysources_2020_07_01_supplysources.299",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/supplySources/2020-07-01/supplySources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /supplySources/2020-07-01/supplySources",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_attributes.300",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/attributes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/attributes",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_documents_invoicesdocumentid.301",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/documents/{invoicesDocumentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/documents/{invoicesDocumentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_exports_exportid.302",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/exports/{exportId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/exports/{exportId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_exports.303",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/exports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/exports",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.tax_invoices_2024_06_19_exports.304",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tax/invoices/2024-06-19/exports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /tax/invoices/2024-06-19/exports",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_governmentinvoicerequests_shipmentid.305",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests/{shipmentId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/governmentInvoiceRequests/{shipmentId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_governmentinvoicerequests.306",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/governmentInvoiceRequests",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.tax_invoices_2024_06_19_governmentinvoicerequests.307",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /tax/invoices/2024-06-19/governmentInvoiceRequests",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_invoices_invoiceid.308",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/invoices/{invoiceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/invoices/{invoiceId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.tax_invoices_2024_06_19_invoices.309",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax/invoices/2024-06-19/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /tax/invoices/2024-06-19/invoices",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.tokens_2021_03_01_restricteddatatoken.310",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tokens/2021-03-01/restrictedDataToken",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /tokens/2021-03-01/restrictedDataToken",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.uploads_2020_11_01_uploaddestinations_resource.311",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/uploads/2020-11-01/uploadDestinations/{resource}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /uploads/2020-11-01/uploadDestinations/{resource}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_inventory_v1_warehouses_warehouseid_items.312",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_orders_2021_12_28_acknowledgements.313",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/orders/2021-12-28/acknowledgements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/orders/2021-12-28/acknowledgements",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_orders_2021_12_28_purchaseorders_purchaseordernumber.314",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/orders/2021-12-28/purchaseOrders/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_orders_2021_12_28_purchaseorders.315",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/orders/2021-12-28/purchaseOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_orders_v1_acknowledgements.316",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/orders/v1/acknowledgements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/orders/v1/acknowledgements",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_orders_v1_purchaseorders_purchaseordernumber.317",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_orders_v1_purchaseorders.318",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/orders/v1/purchaseOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/orders/v1/purchaseOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_payments_v1_invoices.319",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/payments/v1/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/payments/v1/invoices",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_sandbox_2021_10_28_orders.320",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/sandbox/2021-10-28/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/sandbox/2021-10-28/orders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_sandbox_2021_10_28_transactions_transactionid.321",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/sandbox/2021-10-28/transactions/{transactionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/sandbox/2021-10-28/transactions/{transactionId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_2021_12_28_containerlabel.322",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/containerLabel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/2021-12-28/containerLabel",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_2021_12_28_customerinvoices_purchaseordernumber.323",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/2021-12-28/customerInvoices/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_2021_12_28_customerinvoices.324",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/2021-12-28/customerInvoices",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_2021_12_28_packingslips_purchaseordernumber.325",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/2021-12-28/packingSlips/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_2021_12_28_packingslips.326",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/2021-12-28/packingSlips",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_2021_12_28_shipmentconfirmations.327",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_2021_12_28_shipmentstatusupdates.328",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_2021_12_28_shippinglabels_purchaseordernumber.329",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_2021_12_28_shippinglabels_purchaseordernumber.330",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_2021_12_28_shippinglabels.331",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_2021_12_28_shippinglabels.332",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_v1_customerinvoices_purchaseordernumber.333",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/v1/customerInvoices/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/v1/customerInvoices/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_v1_customerinvoices.334",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/v1/customerInvoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/v1/customerInvoices",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_v1_packingslips_purchaseordernumber.335",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/v1/packingSlips/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/v1/packingSlips/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_v1_packingslips.336",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/v1/packingSlips",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/v1/packingSlips",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_v1_shipmentconfirmations.337",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/v1/shipmentConfirmations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/v1/shipmentConfirmations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_v1_shipmentstatusupdates.338",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/v1/shipmentStatusUpdates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/v1/shipmentStatusUpdates",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_v1_shippinglabels_purchaseordernumber.339",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/v1/shippingLabels/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/v1/shippingLabels/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_shipping_v1_shippinglabels.340",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/shipping/v1/shippingLabels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_directfulfillment_shipping_v1_shippinglabels.341",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/directFulfillment/shipping/v1/shippingLabels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_transactions_2021_12_28_transactions_transactionid.342",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/transactions/2021-12-28/transactions/{transactionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/transactions/2021-12-28/transactions/{transactionId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_directfulfillment_transactions_v1_transactions_transactionid.343",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/directFulfillment/transactions/v1/transactions/{transactionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/directFulfillment/transactions/v1/transactions/{transactionId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_orders_v1_acknowledgements.344",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/orders/v1/acknowledgements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/orders/v1/acknowledgements",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_orders_v1_purchaseorders_purchaseordernumber.345",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_orders_v1_purchaseorders.346",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/orders/v1/purchaseOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/orders/v1/purchaseOrders",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_orders_v1_purchaseordersstatus.347",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/orders/v1/purchaseOrdersStatus",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/orders/v1/purchaseOrdersStatus",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_payments_v1_invoices.348",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/payments/v1/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/payments/v1/invoices",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_shipping_v1_shipmentconfirmations.349",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/shipping/v1/shipmentConfirmations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/shipping/v1/shipmentConfirmations",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_shipping_v1_shipments.350",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/shipping/v1/shipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/shipping/v1/shipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.post.vendor_shipping_v1_shipments.351",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/vendor/shipping/v1/shipments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /vendor/shipping/v1/shipments",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_shipping_v1_transportlabels.352",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/shipping/v1/transportLabels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/shipping/v1/transportLabels",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      },
+      {
+        "id": "amazon-seller-partner.rest.get.vendor_transactions_v1_transactions_transactionid.353",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/vendor/transactions/v1/transactions/{transactionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /vendor/transactions/v1/transactions/{transactionId}",
+        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models"
+      }
+    ]
+  }
+}

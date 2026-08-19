@@ -14,9 +14,14 @@
     {
       "method": "GET",
       "path": "/rest/adAccountGroups",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -43,42 +48,68 @@
     {
       "method": "GET",
       "path": "/rest/adAnalytics",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/rest/conversions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "GET",
       "path": "/rest/adTargetingFacets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/rest/adAccounts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "POST",
       "path": "/rest/adCampaigns",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     }
-  ]
+  ],
+  "operation_ledger_version": 1
 }

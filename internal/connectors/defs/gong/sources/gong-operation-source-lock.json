@@ -1,0 +1,711 @@
+{
+  "schema_version": 2,
+  "connector": "gong",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+    "sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
+    "bytes": 453797,
+    "format": "application/json;charset=UTF-8",
+    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "operation_counts": {
+      "DELETE": 3,
+      "GET": 29,
+      "PATCH": 1,
+      "POST": 28,
+      "PUT": 8
+    },
+    "operations": [
+      {
+        "id": "gong.rest.get.v2_calls.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/calls",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_calls.2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/calls",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_calls_id_media.3",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/calls/{id}/media",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/calls/{id}/media",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_calls_id.4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/calls/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/calls/{id}",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_calls_extensive.5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/calls/extensive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/calls/extensive",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_permission_profile.6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/permission-profile",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/permission-profile",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_permission_profile.7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/permission-profile",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/permission-profile",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_permission_profile.8",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/permission-profile",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/permission-profile",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_meetings_meetingid.9",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/meetings/{meetingId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/meetings/{meetingId}",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.delete.v2_meetings_meetingid.10",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/meetings/{meetingId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/meetings/{meetingId}",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_customer_engagement_content_viewed.11",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/customer-engagement/content/viewed",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/customer-engagement/content/viewed",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_customer_engagement_content_shared.12",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/customer-engagement/content/shared",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/customer-engagement/content/shared",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_customer_engagement_action.13",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/customer-engagement/action",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/customer-engagement/action",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_crm_integrations.14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/crm/integrations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/crm/integrations",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_crm_integrations.15",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/crm/integrations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/crm/integrations",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.delete.v2_crm_integrations.16",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/crm/integrations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/crm/integrations",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_calls_users_access.17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/calls/users-access",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/calls/users-access",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.put.v2_calls_users_access.18",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/calls/users-access",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PUT /v2/calls/users-access",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.delete.v2_calls_users_access.19",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/calls/users-access",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint DELETE /v2/calls/users-access",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_users_extensive.20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/users/extensive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/users/extensive",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_tasks.21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/tasks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/tasks",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_stats_interaction.22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/stats/interaction",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/stats/interaction",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_stats_activity_scorecards.23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/stats/activity/scorecards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/stats/activity/scorecards",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_stats_activity_day_by_day.24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/stats/activity/day-by-day",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/stats/activity/day-by-day",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_stats_activity_aggregate.25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/stats/activity/aggregate",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_stats_activity_aggregate_by_period.26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate-by-period",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/stats/activity/aggregate-by-period",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_meetings.27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/meetings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/meetings",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_meetings_integration_status.28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/meetings/integration/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/meetings/integration/status",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_integration_settings.29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/integration-settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/integration-settings",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_flows_steps.30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/flows/steps",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/flows/steps",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_flows_prospects.31",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/flows/prospects",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/flows/prospects",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_flows_prospects_unassign_flows_by_instance_id.32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/flows/prospects/unassign-flows-by-instance-id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/flows/prospects/unassign-flows-by-instance-id",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_flows_prospects_unassign_flows_by_crm_id.33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/flows/prospects/unassign-flows-by-crm-id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/flows/prospects/unassign-flows-by-crm-id",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_flows_prospects_bulk_assignments.34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/flows/prospects/bulk-assignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/flows/prospects/bulk-assignments",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_flows_prospects_assign.35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/flows/prospects/assign",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/flows/prospects/assign",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_flows_prospects_assign_cool_off_override.36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/flows/prospects/assign/cool-off-override",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/flows/prospects/assign/cool-off-override",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_digital_interaction.37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/digital-interaction",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/digital-interaction",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_data_privacy_erase_data_for_phone_number.38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/data-privacy/erase-data-for-phone-number",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/data-privacy/erase-data-for-phone-number",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_data_privacy_erase_data_for_email_address.39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/data-privacy/erase-data-for-email-address",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/data-privacy/erase-data-for-email-address",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_crm_entity_schema.40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/crm/entity-schema",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/crm/entity-schema",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_crm_entity_schema.41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/crm/entity-schema",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/crm/entity-schema",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_crm_entities.42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/crm/entities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/crm/entities",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_crm_entities.43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/crm/entities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/crm/entities",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_calls_transcript.44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/calls/transcript",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/calls/transcript",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.patch.v2_tasks_taskid.45",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/tasks/{taskId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint PATCH /v2/tasks/{taskId}",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_workspaces.46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/workspaces",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_users.47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/users",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_users_id.48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/users/{id}",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_users_id_settings_history.49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users/{id}/settings-history",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/users/{id}/settings-history",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_settings_trackers.50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/settings/trackers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/settings/trackers",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_settings_scorecards.51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/settings/scorecards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/settings/scorecards",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_settings_briefs.52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/settings/briefs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/settings/briefs",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_permission_profile_users.53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/permission-profile/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/permission-profile/users",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_logs.54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/logs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/logs",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_library_folders.55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/library/folders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/library/folders",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_library_folder_content.56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/library/folder-content",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/library/folder-content",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_flows.57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/flows",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/flows",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_flows_prospects_bulk_assignments_id.58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/flows/prospects/bulk-assignments/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/flows/prospects/bulk-assignments/{id}",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_flows_folders.59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/flows/folders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/flows/folders",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_entities_get_brief.60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/entities/get-brief",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/entities/get-brief",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_entities_ask_entity.61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/entities/ask-entity",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/entities/ask-entity",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_data_privacy_data_for_phone_number.62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/data-privacy/data-for-phone-number",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/data-privacy/data-for-phone-number",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_data_privacy_data_for_email_address.63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/data-privacy/data-for-email-address",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/data-privacy/data-for-email-address",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_crm_request_status.64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/crm/request-status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/crm/request-status",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_coaching.65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/coaching",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/coaching",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_call_outcomes.66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/call-outcomes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/call-outcomes",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_all_permission_profiles.67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/all-permission-profiles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/all-permission-profiles",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.get.v2_targets.68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/targets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint GET /v2/targets",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      },
+      {
+        "id": "gong.rest.post.v2_targets_targetid_assignments.69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/targets/{targetId}/assignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "documented endpoint POST /v2/targets/{targetId}/assignments",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+      }
+    ]
+  }
+}
