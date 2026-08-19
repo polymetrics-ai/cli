@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "connector": "tiktok-marketing",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+    "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+    "source_sha256": null,
+    "source_bytes": null,
+    "source_operation_count": 7,
+    "normalized_inventory_sha256": "0011d1c064e201aabca15e3f524e1f4733914a04dc74bc0f8019f8a16a367f9a",
+    "source_retrieval": "skipped"
+  },
+  "summary": {
+    "api_surface_rows": 7,
+    "exact_source_rows": 7,
+    "declared_operations": 7,
+    "declared_percent": 100,
+    "enabled_operations": 0,
+    "declaration_pending_operations": 7,
+    "disabled_operations": 0,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 1
+      },
+      {
+        "key": "direct_write",
+        "count": 2
+      },
+      {
+        "key": "etl",
+        "count": 4
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class."
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 7
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/tiktok-marketing/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    }
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/advertiser/info/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/advertiser/info/",
+        "operation": null,
+        "covered_by": {
+          "stream": "advertisers"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_id": "tiktok-marketing.api_surface.get-advertiser-info-1",
+        "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "get-advertiser-info-1",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/tiktok-marketing/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaign/get/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/campaign/get/",
+        "operation": null,
+        "covered_by": {
+          "stream": "campaigns"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_id": "tiktok-marketing.api_surface.get-campaign-get-2",
+        "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "get-campaign-get-2",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/tiktok-marketing/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adgroup/get/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/adgroup/get/",
+        "operation": null,
+        "covered_by": {
+          "stream": "adgroups"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_id": "tiktok-marketing.api_surface.get-adgroup-get-3",
+        "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "get-adgroup-get-3",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/tiktok-marketing/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad/get/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/ad/get/",
+        "operation": null,
+        "covered_by": {
+          "stream": "ads"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_id": "tiktok-marketing.api_surface.get-ad-get-4",
+        "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "get-ad-get-4",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/tiktok-marketing/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/integrated/get/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/report/integrated/get/",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/report/integrated/get/ is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+        }
+      },
+      "source": {
+        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_id": "tiktok-marketing.api_surface.get-report-integrated-get-5",
+        "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "get-report-integrated-get-5",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaign/create/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/campaign/create/",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "destructive_admin",
+          "reason": "no allow-listed reverse-ETL writes; tiktok-marketing connector is read-only"
+        }
+      },
+      "source": {
+        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_id": "tiktok-marketing.api_surface.post-campaign-create-6",
+        "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "post-campaign-create-6",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[5]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaign/update/status/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/campaign/update/status/",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "destructive_admin",
+          "reason": "no allow-listed reverse-ETL writes; tiktok-marketing connector is read-only"
+        }
+      },
+      "source": {
+        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_id": "tiktok-marketing.api_surface.post-campaign-update-status-7",
+        "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "post-campaign-update-status-7",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[6]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,1038 @@
+{
+  "schema_version": 1,
+  "connector": "buildkite",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://buildkite.com/docs/apis/rest-api",
+    "requested_url": "https://buildkite.com/docs/apis/rest-api",
+    "sha256": "b069396e58d33aae8c44e570c06977d46e6fa072e1dd1f8a54666e0f3c58696c",
+    "bytes": 437677,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "197ce69dc5996ad4f6850269bed377940a221ad43e9af4348540c49a4cb75853",
+    "bytes": 28645,
+    "source_operation_count": 99
+  },
+  "rest": {
+    "source_url": "https://buildkite.com/docs/apis/rest-api",
+    "sha256": "b069396e58d33aae8c44e570c06977d46e6fa072e1dd1f8a54666e0f3c58696c",
+    "bytes": 437677,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 16
+      },
+      {
+        "key": "GET",
+        "count": 46
+      },
+      {
+        "key": "PATCH",
+        "count": 6
+      },
+      {
+        "key": "POST",
+        "count": 19
+      },
+      {
+        "key": "PUT",
+        "count": 12
+      }
+    ],
+    "operations": [
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations",
+        "operation_id": "get-v2-organizations-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}",
+        "operation_id": "get-v2-organizations-org-slug-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipelines-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipelines",
+        "operation_id": "get-v2-organizations-org-slug-pipelines-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipelines-slug-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipelines/{slug}",
+        "operation_id": "get-v2-organizations-org-slug-pipelines-slug-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-pipelines-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/pipelines",
+        "operation_id": "post-v2-organizations-org-slug-pipelines-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "buildkite.api_surface.patch-v2-organizations-org-slug-pipelines-slug-6",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/organizations/{org.slug}/pipelines/{slug}",
+        "operation_id": "patch-v2-organizations-org-slug-pipelines-slug-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-pipelines-slug-archive-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/pipelines/{slug}/archive",
+        "operation_id": "post-v2-organizations-org-slug-pipelines-slug-archive-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-pipelines-slug-unarchive-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/pipelines/{slug}/unarchive",
+        "operation_id": "post-v2-organizations-org-slug-pipelines-slug-unarchive-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-pipelines-slug-9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/pipelines/{slug}",
+        "operation_id": "delete-v2-organizations-org-slug-pipelines-slug-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-pipelines-slug-webhook-10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/pipelines/{slug}/webhook",
+        "operation_id": "post-v2-organizations-org-slug-pipelines-slug-webhook-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-builds-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/builds",
+        "operation_id": "get-v2-builds-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-builds-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/builds",
+        "operation_id": "get-v2-organizations-org-slug-builds-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds",
+        "operation_id": "get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "api_surface_index": 12
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}",
+        "operation_id": "get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "api_surface_index": 13
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds",
+        "operation_id": "post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "api_surface_index": 14
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-cancel-16",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/cancel",
+        "operation_id": "put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-cancel-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "api_surface_index": 15
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-rebuild-17",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/rebuild",
+        "operation_id": "put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-rebuild-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "api_surface_index": 16
+      },
+      {
+        "id": "buildkite.api_surface.put-organizations-org-slug-jobs-job-id-retry-18",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/organizations/{org.slug}/jobs/{job.id}/retry",
+        "operation_id": "put-organizations-org-slug-jobs-job-id-retry-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "api_surface_index": 17
+      },
+      {
+        "id": "buildkite.api_surface.put-organizations-org-slug-jobs-job-id-reprioritize-19",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/organizations/{org.slug}/jobs/{job.id}/reprioritize",
+        "operation_id": "put-organizations-org-slug-jobs-job-id-reprioritize-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "api_surface_index": 18
+      },
+      {
+        "id": "buildkite.api_surface.put-organizations-org-slug-jobs-job-id-unblock-20",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/organizations/{org.slug}/jobs/{job.id}/unblock",
+        "operation_id": "put-organizations-org-slug-jobs-job-id-unblock-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "api_surface_index": 19
+      },
+      {
+        "id": "buildkite.api_surface.get-organizations-org-slug-jobs-job-id-log-21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{org.slug}/jobs/{job.id}/log",
+        "operation_id": "get-organizations-org-slug-jobs-job-id-log-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "api_surface_index": 20
+      },
+      {
+        "id": "buildkite.api_surface.delete-organizations-org-slug-jobs-job-id-log-22",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organizations/{org.slug}/jobs/{job.id}/log",
+        "operation_id": "delete-organizations-org-slug-jobs-job-id-log-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "api_surface_index": 21
+      },
+      {
+        "id": "buildkite.api_surface.get-organizations-org-slug-jobs-job-id-env-23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{org.slug}/jobs/{job.id}/env",
+        "operation_id": "get-organizations-org-slug-jobs-job-id-env-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "api_surface_index": 22
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations",
+        "operation_id": "get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "api_surface_index": 23
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations",
+        "operation_id": "post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "api_surface_index": 24
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-annotation-uuid-26",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations/{annotation.uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-annotation-uuid-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "api_surface_index": 25
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-jobs-job-id-annotations-27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/jobs/{job.id}/annotations",
+        "operation_id": "get-v2-organizations-org-slug-jobs-job-id-annotations-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "api_surface_index": 26
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-jobs-job-id-annotations-28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/jobs/{job.id}/annotations",
+        "operation_id": "post-v2-organizations-org-slug-jobs-job-id-annotations-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "api_surface_index": 27
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-jobs-job-id-annotations-annotation-uuid-29",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/jobs/{job.id}/annotations/{annotation.uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-jobs-job-id-annotations-annotation-uuid-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "api_surface_index": 28
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-artifacts-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/artifacts",
+        "operation_id": "get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-artifacts-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "api_surface_index": 29
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-jobs-job-id-artifacts-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts",
+        "operation_id": "get-v2-organizations-org-slug-jobs-job-id-artifacts-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "api_surface_index": 30
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-jobs-job-id-artifacts-id-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts/{id}",
+        "operation_id": "get-v2-organizations-org-slug-jobs-job-id-artifacts-id-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "api_surface_index": 31
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-jobs-job-id-artifacts-id-download-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts/{id}/download",
+        "operation_id": "get-v2-organizations-org-slug-jobs-job-id-artifacts-id-download-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "api_surface_index": 32
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-jobs-job-id-artifacts-id-34",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts/{id}",
+        "operation_id": "delete-v2-organizations-org-slug-jobs-job-id-artifacts-id-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "api_surface_index": 33
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-agents-35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/agents",
+        "operation_id": "get-v2-organizations-org-slug-agents-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "api_surface_index": 34
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-agents-id-36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/agents/{id}",
+        "operation_id": "get-v2-organizations-org-slug-agents-id-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "api_surface_index": 35
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-agents-id-stop-37",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/agents/{id}/stop",
+        "operation_id": "put-v2-organizations-org-slug-agents-id-stop-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "api_surface_index": 36
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-agents-id-pause-38",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/agents/{id}/pause",
+        "operation_id": "put-v2-organizations-org-slug-agents-id-pause-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "api_surface_index": 37
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-agents-id-resume-39",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/agents/{id}/resume",
+        "operation_id": "put-v2-organizations-org-slug-agents-id-resume-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "api_surface_index": 38
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams",
+        "operation_id": "get-v2-organizations-org-slug-teams-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "api_surface_index": 39
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-team-uuid-41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}",
+        "operation_id": "get-v2-organizations-org-slug-teams-team-uuid-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "api_surface_index": 40
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-teams-42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/teams",
+        "operation_id": "post-v2-organizations-org-slug-teams-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "api_surface_index": 41
+      },
+      {
+        "id": "buildkite.api_surface.patch-v2-organizations-org-slug-teams-team-uuid-43",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}",
+        "operation_id": "patch-v2-organizations-org-slug-teams-team-uuid-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "api_surface_index": 42
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-teams-team-uuid-44",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-teams-team-uuid-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "api_surface_index": 43
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-team-uuid-members-45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members",
+        "operation_id": "get-v2-organizations-org-slug-teams-team-uuid-members-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "api_surface_index": 44
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
+        "operation_id": "get-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "api_surface_index": 45
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-teams-team-uuid-members-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members",
+        "operation_id": "post-v2-organizations-org-slug-teams-team-uuid-members-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "api_surface_index": 46
+      },
+      {
+        "id": "buildkite.api_surface.patch-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-48",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
+        "operation_id": "patch-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "api_surface_index": 47
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-49",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "api_surface_index": 48
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-team-uuid-pipelines-50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines",
+        "operation_id": "get-v2-organizations-org-slug-teams-team-uuid-pipelines-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "api_surface_index": 49
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
+        "operation_id": "get-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "api_surface_index": 50
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-teams-team-uuid-pipelines-52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines",
+        "operation_id": "post-v2-organizations-org-slug-teams-team-uuid-pipelines-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "api_surface_index": 51
+      },
+      {
+        "id": "buildkite.api_surface.patch-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-53",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
+        "operation_id": "patch-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "api_surface_index": 52
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-54",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "api_surface_index": 53
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-team-uuid-suites-55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites",
+        "operation_id": "get-v2-organizations-org-slug-teams-team-uuid-suites-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "api_surface_index": 54
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-teams-team-uuid-suites-uuid-56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
+        "operation_id": "get-v2-organizations-org-slug-teams-team-uuid-suites-uuid-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "api_surface_index": 55
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-teams-team-uuid-suites-57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites",
+        "operation_id": "post-v2-organizations-org-slug-teams-team-uuid-suites-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "api_surface_index": 56
+      },
+      {
+        "id": "buildkite.api_surface.patch-v2-organizations-org-slug-teams-team-uuid-suites-uuid-58",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
+        "operation_id": "patch-v2-organizations-org-slug-teams-team-uuid-suites-uuid-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "api_surface_index": 57
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-teams-team-uuid-suites-uuid-59",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-teams-team-uuid-suites-uuid-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "api_surface_index": 58
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-clusters-60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/clusters",
+        "operation_id": "get-v2-organizations-org-slug-clusters-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "api_surface_index": 59
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-clusters-id-61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/clusters/{id}",
+        "operation_id": "get-v2-organizations-org-slug-clusters-id-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "api_surface_index": 60
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-clusters-62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/clusters",
+        "operation_id": "post-v2-organizations-org-slug-clusters-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "api_surface_index": 61
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-clusters-id-63",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/clusters/{id}",
+        "operation_id": "put-v2-organizations-org-slug-clusters-id-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "api_surface_index": 62
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-clusters-id-64",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/clusters/{id}",
+        "operation_id": "delete-v2-organizations-org-slug-clusters-id-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "api_surface_index": 63
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-clusters-cluster-id-queues-65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues",
+        "operation_id": "get-v2-organizations-org-slug-clusters-cluster-id-queues-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "api_surface_index": 64
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-clusters-cluster-id-queues-id-66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
+        "operation_id": "get-v2-organizations-org-slug-clusters-cluster-id-queues-id-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "api_surface_index": 65
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-clusters-cluster-id-queues-67",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues",
+        "operation_id": "post-v2-organizations-org-slug-clusters-cluster-id-queues-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "api_surface_index": 66
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-clusters-cluster-id-queues-id-68",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
+        "operation_id": "put-v2-organizations-org-slug-clusters-cluster-id-queues-id-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "api_surface_index": 67
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-clusters-cluster-id-queues-id-69",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
+        "operation_id": "delete-v2-organizations-org-slug-clusters-cluster-id-queues-id-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "api_surface_index": 68
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-clusters-cluster-id-queues-id-pause-dispatch-70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/pause_dispatch",
+        "operation_id": "post-v2-organizations-org-slug-clusters-cluster-id-queues-id-pause-dispatch-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "api_surface_index": 69
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-clusters-cluster-id-queues-id-resume-dispatch-71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/resume_dispatch",
+        "operation_id": "post-v2-organizations-org-slug-clusters-cluster-id-queues-id-resume-dispatch-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "api_surface_index": 70
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-clusters-cluster-id-tokens-72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens",
+        "operation_id": "get-v2-organizations-org-slug-clusters-cluster-id-tokens-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "api_surface_index": 71
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-clusters-cluster-id-tokens-id-73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
+        "operation_id": "get-v2-organizations-org-slug-clusters-cluster-id-tokens-id-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "api_surface_index": 72
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-clusters-cluster-id-tokens-74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens",
+        "operation_id": "post-v2-organizations-org-slug-clusters-cluster-id-tokens-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "api_surface_index": 73
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-clusters-cluster-id-tokens-id-75",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
+        "operation_id": "put-v2-organizations-org-slug-clusters-cluster-id-tokens-id-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "api_surface_index": 74
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-clusters-cluster-id-tokens-id-76",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
+        "operation_id": "delete-v2-organizations-org-slug-clusters-cluster-id-tokens-id-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "api_surface_index": 75
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipeline-templates-77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipeline-templates",
+        "operation_id": "get-v2-organizations-org-slug-pipeline-templates-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "api_surface_index": 76
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-pipeline-templates-uuid-78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
+        "operation_id": "get-v2-organizations-org-slug-pipeline-templates-uuid-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "api_surface_index": 77
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-pipeline-templates-79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/pipeline-templates",
+        "operation_id": "post-v2-organizations-org-slug-pipeline-templates-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "api_surface_index": 78
+      },
+      {
+        "id": "buildkite.api_surface.patch-v2-organizations-org-slug-pipeline-templates-uuid-80",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
+        "operation_id": "patch-v2-organizations-org-slug-pipeline-templates-uuid-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "api_surface_index": 79
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-pipeline-templates-uuid-81",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-pipeline-templates-uuid-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "api_surface_index": 80
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-rules-82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/rules",
+        "operation_id": "get-v2-organizations-org-slug-rules-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "api_surface_index": 81
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-rules-uuid-83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/rules/{uuid}",
+        "operation_id": "get-v2-organizations-org-slug-rules-uuid-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "api_surface_index": 82
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-rules-84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/rules",
+        "operation_id": "post-v2-organizations-org-slug-rules-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "api_surface_index": 83
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-rules-uuid-85",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/rules/{uuid}",
+        "operation_id": "delete-v2-organizations-org-slug-rules-uuid-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "api_surface_index": 84
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-portals-86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/portals",
+        "operation_id": "get-v2-organizations-org-slug-portals-86",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "api_surface_index": 85
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-portals-portal-slug-87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
+        "operation_id": "get-v2-organizations-org-slug-portals-portal-slug-87",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "api_surface_index": 86
+      },
+      {
+        "id": "buildkite.api_surface.post-v2-organizations-org-slug-portals-88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/organizations/{org.slug}/portals",
+        "operation_id": "post-v2-organizations-org-slug-portals-88",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "api_surface_index": 87
+      },
+      {
+        "id": "buildkite.api_surface.put-v2-organizations-org-slug-portals-portal-slug-89",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
+        "operation_id": "put-v2-organizations-org-slug-portals-portal-slug-89",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "api_surface_index": 88
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-organizations-org-slug-portals-portal-slug-90",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
+        "operation_id": "delete-v2-organizations-org-slug-portals-portal-slug-90",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "api_surface_index": 89
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-audit-events-91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/audit_events",
+        "operation_id": "get-v2-organizations-org-slug-audit-events-91",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "api_surface_index": 90
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-audit-events-uuid-92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/audit_events/{uuid}",
+        "operation_id": "get-v2-organizations-org-slug-audit-events-uuid-92",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "api_surface_index": 91
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-members-93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/members",
+        "operation_id": "get-v2-organizations-org-slug-members-93",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "api_surface_index": 92
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-members-user-uuid-94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/members/{user.uuid}",
+        "operation_id": "get-v2-organizations-org-slug-members-user-uuid-94",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "api_surface_index": 93
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-meta-95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/meta",
+        "operation_id": "get-v2-meta-95",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "api_surface_index": 94
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-organizations-org-slug-emojis-96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/organizations/{org.slug}/emojis",
+        "operation_id": "get-v2-organizations-org-slug-emojis-96",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "api_surface_index": 95
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-access-token-97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/access-token",
+        "operation_id": "get-v2-access-token-97",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "api_surface_index": 96
+      },
+      {
+        "id": "buildkite.api_surface.delete-v2-access-token-98",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/access-token",
+        "operation_id": "delete-v2-access-token-98",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "api_surface_index": 97
+      },
+      {
+        "id": "buildkite.api_surface.get-v2-user-99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/user",
+        "operation_id": "get-v2-user-99",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "api_surface_index": 98
+      }
+    ]
+  }
+}

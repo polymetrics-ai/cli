@@ -1,0 +1,1606 @@
+{
+  "schema_version": 1,
+  "connector": "sonar-cloud",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://sonarcloud.io/web_api",
+    "requested_url": "https://sonarcloud.io/web_api",
+    "sha256": "1eac8f61a76aaa683fb5f79dafb6e921685b7bbc5617d26762f3f3e460a5f693",
+    "bytes": 28883,
+    "content_type": "text/html"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "53e20ccf5dc8583260ea08fda953ad29983c28a50eff0d65bde0fd723852a527",
+    "bytes": 37934,
+    "source_operation_count": 157
+  },
+  "rest": {
+    "source_url": "https://sonarcloud.io/web_api",
+    "sha256": "1eac8f61a76aaa683fb5f79dafb6e921685b7bbc5617d26762f3f3e460a5f693",
+    "bytes": 28883,
+    "operation_counts": [
+      {
+        "key": "GET",
+        "count": 70
+      },
+      {
+        "key": "POST",
+        "count": 87
+      }
+    ],
+    "operations": [
+      {
+        "id": "sonar-cloud.api_surface.post-api-authentication-logout-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/authentication/logout",
+        "operation_id": "post-api-authentication-logout-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-authentication-validate-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/authentication/validate",
+        "operation_id": "get-api-authentication-validate-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-ce-activity-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/ce/activity",
+        "operation_id": "get-api-ce-activity-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-ce-activity-status-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/ce/activity_status",
+        "operation_id": "get-api-ce-activity-status-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-ce-component-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/ce/component",
+        "operation_id": "get-api-ce-component-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-ce-task-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/ce/task",
+        "operation_id": "get-api-ce-task-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-components-search-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/components/search",
+        "operation_id": "get-api-components-search-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-components-show-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/components/show",
+        "operation_id": "get-api-components-show-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-components-tree-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/components/tree",
+        "operation_id": "get-api-components-tree-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-duplications-show-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/duplications/show",
+        "operation_id": "get-api-duplications-show-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-favorites-add-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/favorites/add",
+        "operation_id": "post-api-favorites-add-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-favorites-remove-12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/favorites/remove",
+        "operation_id": "post-api-favorites-remove-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-favorites-search-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/favorites/search",
+        "operation_id": "get-api-favorites-search-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "api_surface_index": 12
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-favourites-index-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/favourites/index",
+        "operation_id": "get-api-favourites-index-14",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[13]",
+        "api_surface_index": 13
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-hotspots-change-status-15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/hotspots/change_status",
+        "operation_id": "post-api-hotspots-change-status-15",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[14]",
+        "api_surface_index": 14
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-hotspots-search-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/hotspots/search",
+        "operation_id": "get-api-hotspots-search-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "api_surface_index": 15
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-hotspots-show-17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/hotspots/show",
+        "operation_id": "get-api-hotspots-show-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "api_surface_index": 16
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-add-comment-18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/add_comment",
+        "operation_id": "post-api-issues-add-comment-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "api_surface_index": 17
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-assign-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/assign",
+        "operation_id": "post-api-issues-assign-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "api_surface_index": 18
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-issues-authors-20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/issues/authors",
+        "operation_id": "get-api-issues-authors-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "api_surface_index": 19
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-bulk-change-21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/bulk_change",
+        "operation_id": "post-api-issues-bulk-change-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "api_surface_index": 20
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-issues-changelog-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/issues/changelog",
+        "operation_id": "get-api-issues-changelog-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "api_surface_index": 21
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-delete-comment-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/delete_comment",
+        "operation_id": "post-api-issues-delete-comment-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "api_surface_index": 22
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-do-transition-24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/do_transition",
+        "operation_id": "post-api-issues-do-transition-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "api_surface_index": 23
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-edit-comment-25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/edit_comment",
+        "operation_id": "post-api-issues-edit-comment-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "api_surface_index": 24
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-issues-search-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/issues/search",
+        "operation_id": "get-api-issues-search-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "api_surface_index": 25
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-set-severity-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/set_severity",
+        "operation_id": "post-api-issues-set-severity-27",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[26]",
+        "api_surface_index": 26
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-set-tags-28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/set_tags",
+        "operation_id": "post-api-issues-set-tags-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "api_surface_index": 27
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-issues-set-type-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/issues/set_type",
+        "operation_id": "post-api-issues-set-type-29",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[28]",
+        "api_surface_index": 28
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-issues-tags-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/issues/tags",
+        "operation_id": "get-api-issues-tags-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "api_surface_index": 29
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-languages-list-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/languages/list",
+        "operation_id": "get-api-languages-list-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "api_surface_index": 30
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-measures-component-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/measures/component",
+        "operation_id": "get-api-measures-component-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "api_surface_index": 31
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-measures-component-tree-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/measures/component_tree",
+        "operation_id": "get-api-measures-component-tree-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "api_surface_index": 32
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-measures-search-history-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/measures/search_history",
+        "operation_id": "get-api-measures-search-history-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "api_surface_index": 33
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-measures-search-35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/measures/search",
+        "operation_id": "get-api-measures-search-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "api_surface_index": 34
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-metrics-domains-36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/metrics/domains",
+        "operation_id": "get-api-metrics-domains-36",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[35]",
+        "api_surface_index": 35
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-metrics-search-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/metrics/search",
+        "operation_id": "get-api-metrics-search-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "api_surface_index": 36
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-metrics-types-38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/metrics/types",
+        "operation_id": "get-api-metrics-types-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "api_surface_index": 37
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-notifications-add-39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/notifications/add",
+        "operation_id": "post-api-notifications-add-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "api_surface_index": 38
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-notifications-list-40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/notifications/list",
+        "operation_id": "get-api-notifications-list-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "api_surface_index": 39
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-notifications-remove-41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/notifications/remove",
+        "operation_id": "post-api-notifications-remove-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "api_surface_index": 40
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-add-group-42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/add_group",
+        "operation_id": "post-api-permissions-add-group-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "api_surface_index": 41
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-add-group-to-template-43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/add_group_to_template",
+        "operation_id": "post-api-permissions-add-group-to-template-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "api_surface_index": 42
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-add-project-creator-to-template-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/add_project_creator_to_template",
+        "operation_id": "post-api-permissions-add-project-creator-to-template-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "api_surface_index": 43
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-add-user-45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/add_user",
+        "operation_id": "post-api-permissions-add-user-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "api_surface_index": 44
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-add-user-to-template-46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/add_user_to_template",
+        "operation_id": "post-api-permissions-add-user-to-template-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "api_surface_index": 45
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-apply-template-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/apply_template",
+        "operation_id": "post-api-permissions-apply-template-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "api_surface_index": 46
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-bulk-apply-template-48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/bulk_apply_template",
+        "operation_id": "post-api-permissions-bulk-apply-template-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "api_surface_index": 47
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-create-template-49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/create_template",
+        "operation_id": "post-api-permissions-create-template-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "api_surface_index": 48
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-delete-template-50",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/delete_template",
+        "operation_id": "post-api-permissions-delete-template-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "api_surface_index": 49
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-remove-group-51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/remove_group",
+        "operation_id": "post-api-permissions-remove-group-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "api_surface_index": 50
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-remove-group-from-template-52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/remove_group_from_template",
+        "operation_id": "post-api-permissions-remove-group-from-template-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "api_surface_index": 51
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-remove-project-creator-from-template-53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/remove_project_creator_from_template",
+        "operation_id": "post-api-permissions-remove-project-creator-from-template-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "api_surface_index": 52
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-remove-user-54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/remove_user",
+        "operation_id": "post-api-permissions-remove-user-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "api_surface_index": 53
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-remove-user-from-template-55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/remove_user_from_template",
+        "operation_id": "post-api-permissions-remove-user-from-template-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "api_surface_index": 54
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-permissions-search-templates-56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/permissions/search_templates",
+        "operation_id": "get-api-permissions-search-templates-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "api_surface_index": 55
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-set-default-template-57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/set_default_template",
+        "operation_id": "post-api-permissions-set-default-template-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "api_surface_index": 56
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-permissions-update-template-58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/permissions/update_template",
+        "operation_id": "post-api-permissions-update-template-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "api_surface_index": 57
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-analyses-create-event-59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_analyses/create_event",
+        "operation_id": "post-api-project-analyses-create-event-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "api_surface_index": 58
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-analyses-delete-60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_analyses/delete",
+        "operation_id": "post-api-project-analyses-delete-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "api_surface_index": 59
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-analyses-delete-event-61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_analyses/delete_event",
+        "operation_id": "post-api-project-analyses-delete-event-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "api_surface_index": 60
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-analyses-search-62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_analyses/search",
+        "operation_id": "get-api-project-analyses-search-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "api_surface_index": 61
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-analyses-set-baseline-63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_analyses/set_baseline",
+        "operation_id": "post-api-project-analyses-set-baseline-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "api_surface_index": 62
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-analyses-unset-baseline-64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_analyses/unset_baseline",
+        "operation_id": "post-api-project-analyses-unset-baseline-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "api_surface_index": 63
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-analyses-update-event-65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_analyses/update_event",
+        "operation_id": "post-api-project-analyses-update-event-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "api_surface_index": 64
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-badges-ai-code-assurance-66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_badges/ai_code_assurance",
+        "operation_id": "get-api-project-badges-ai-code-assurance-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "api_surface_index": 65
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-badges-measure-67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_badges/measure",
+        "operation_id": "get-api-project-badges-measure-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "api_surface_index": 66
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-badges-quality-gate-68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_badges/quality_gate",
+        "operation_id": "get-api-project-badges-quality-gate-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "api_surface_index": 67
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-branches-delete-69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_branches/delete",
+        "operation_id": "post-api-project-branches-delete-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "api_surface_index": 68
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-branches-list-70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_branches/list",
+        "operation_id": "get-api-project-branches-list-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "api_surface_index": 69
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-branches-rename-71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_branches/rename",
+        "operation_id": "post-api-project-branches-rename-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "api_surface_index": 70
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-links-create-72",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_links/create",
+        "operation_id": "post-api-project-links-create-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "api_surface_index": 71
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-links-delete-73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_links/delete",
+        "operation_id": "post-api-project-links-delete-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "api_surface_index": 72
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-links-search-74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_links/search",
+        "operation_id": "get-api-project-links-search-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "api_surface_index": 73
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-pull-requests-delete-75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_pull_requests/delete",
+        "operation_id": "post-api-project-pull-requests-delete-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "api_surface_index": 74
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-pull-requests-list-76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_pull_requests/list",
+        "operation_id": "get-api-project-pull-requests-list-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "api_surface_index": 75
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-project-tags-search-77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/project_tags/search",
+        "operation_id": "get-api-project-tags-search-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "api_surface_index": 76
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-project-tags-set-78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/project_tags/set",
+        "operation_id": "post-api-project-tags-set-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "api_surface_index": 77
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-projects-bulk-delete-79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/projects/bulk_delete",
+        "operation_id": "post-api-projects-bulk-delete-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "api_surface_index": 78
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-projects-bulk-update-key-80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/projects/bulk_update_key",
+        "operation_id": "post-api-projects-bulk-update-key-80",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[79]",
+        "api_surface_index": 79
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-projects-create-81",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/projects/create",
+        "operation_id": "post-api-projects-create-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "api_surface_index": 80
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-projects-delete-82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/projects/delete",
+        "operation_id": "post-api-projects-delete-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "api_surface_index": 81
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-projects-search-83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/search",
+        "operation_id": "get-api-projects-search-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "api_surface_index": 82
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-projects-update-key-84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/projects/update_key",
+        "operation_id": "post-api-projects-update-key-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "api_surface_index": 83
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-projects-update-visibility-85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/projects/update_visibility",
+        "operation_id": "post-api-projects-update-visibility-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "api_surface_index": 84
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-properties-index-86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/properties/index",
+        "operation_id": "get-api-properties-index-86",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[85]",
+        "api_surface_index": 85
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-copy-87",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/copy",
+        "operation_id": "post-api-qualitygates-copy-87",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[86]",
+        "api_surface_index": 86
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-create-88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/create",
+        "operation_id": "post-api-qualitygates-create-88",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[87]",
+        "api_surface_index": 87
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-create-condition-89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/create_condition",
+        "operation_id": "post-api-qualitygates-create-condition-89",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[88]",
+        "api_surface_index": 88
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-delete-condition-90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/delete_condition",
+        "operation_id": "post-api-qualitygates-delete-condition-90",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[89]",
+        "api_surface_index": 89
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-deselect-91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/deselect",
+        "operation_id": "post-api-qualitygates-deselect-91",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[90]",
+        "api_surface_index": 90
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-destroy-92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/destroy",
+        "operation_id": "post-api-qualitygates-destroy-92",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[91]",
+        "api_surface_index": 91
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualitygates-get-by-project-93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualitygates/get_by_project",
+        "operation_id": "get-api-qualitygates-get-by-project-93",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[92]",
+        "api_surface_index": 92
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualitygates-list-94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualitygates/list",
+        "operation_id": "get-api-qualitygates-list-94",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "api_surface_index": 93
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualitygates-project-status-95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualitygates/project_status",
+        "operation_id": "get-api-qualitygates-project-status-95",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[94]",
+        "api_surface_index": 94
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-rename-96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/rename",
+        "operation_id": "post-api-qualitygates-rename-96",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[95]",
+        "api_surface_index": 95
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualitygates-search-97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualitygates/search",
+        "operation_id": "get-api-qualitygates-search-97",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[96]",
+        "api_surface_index": 96
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-select-98",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/select",
+        "operation_id": "post-api-qualitygates-select-98",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[97]",
+        "api_surface_index": 97
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-set-as-default-99",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/set_as_default",
+        "operation_id": "post-api-qualitygates-set-as-default-99",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[98]",
+        "api_surface_index": 98
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualitygates-show-100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualitygates/show",
+        "operation_id": "get-api-qualitygates-show-100",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[99]",
+        "api_surface_index": 99
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-unset-default-101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/unset_default",
+        "operation_id": "post-api-qualitygates-unset-default-101",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[100]",
+        "api_surface_index": 100
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualitygates-update-condition-102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualitygates/update_condition",
+        "operation_id": "post-api-qualitygates-update-condition-102",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[101]",
+        "api_surface_index": 101
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-activate-rule-103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/activate_rule",
+        "operation_id": "post-api-qualityprofiles-activate-rule-103",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "api_surface_index": 102
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-activate-rules-104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/activate_rules",
+        "operation_id": "post-api-qualityprofiles-activate-rules-104",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "api_surface_index": 103
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-add-project-105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/add_project",
+        "operation_id": "post-api-qualityprofiles-add-project-105",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "api_surface_index": 104
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-backup-106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/backup",
+        "operation_id": "get-api-qualityprofiles-backup-106",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "api_surface_index": 105
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-change-parent-107",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/change_parent",
+        "operation_id": "post-api-qualityprofiles-change-parent-107",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "api_surface_index": 106
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-changelog-108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/changelog",
+        "operation_id": "get-api-qualityprofiles-changelog-108",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "api_surface_index": 107
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-copy-109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/copy",
+        "operation_id": "post-api-qualityprofiles-copy-109",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "api_surface_index": 108
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-create-110",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/create",
+        "operation_id": "post-api-qualityprofiles-create-110",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "api_surface_index": 109
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-deactivate-rule-111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/deactivate_rule",
+        "operation_id": "post-api-qualityprofiles-deactivate-rule-111",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "api_surface_index": 110
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-deactivate-rules-112",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/deactivate_rules",
+        "operation_id": "post-api-qualityprofiles-deactivate-rules-112",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "api_surface_index": 111
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-delete-113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/delete",
+        "operation_id": "post-api-qualityprofiles-delete-113",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "api_surface_index": 112
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-export-114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/export",
+        "operation_id": "get-api-qualityprofiles-export-114",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[113]",
+        "api_surface_index": 113
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-exporters-115",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/exporters",
+        "operation_id": "get-api-qualityprofiles-exporters-115",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[114]",
+        "api_surface_index": 114
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-importers-116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/importers",
+        "operation_id": "get-api-qualityprofiles-importers-116",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[115]",
+        "api_surface_index": 115
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-inheritance-117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/inheritance",
+        "operation_id": "get-api-qualityprofiles-inheritance-117",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]",
+        "api_surface_index": 116
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-projects-118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/projects",
+        "operation_id": "get-api-qualityprofiles-projects-118",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]",
+        "api_surface_index": 117
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-remove-project-119",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/remove_project",
+        "operation_id": "post-api-qualityprofiles-remove-project-119",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]",
+        "api_surface_index": 118
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-rename-120",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/rename",
+        "operation_id": "post-api-qualityprofiles-rename-120",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]",
+        "api_surface_index": 119
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-restore-121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/restore",
+        "operation_id": "post-api-qualityprofiles-restore-121",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]",
+        "api_surface_index": 120
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-restore-built-in-122",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/restore_built_in",
+        "operation_id": "post-api-qualityprofiles-restore-built-in-122",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[121]",
+        "api_surface_index": 121
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-qualityprofiles-search-123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/qualityprofiles/search",
+        "operation_id": "get-api-qualityprofiles-search-123",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]",
+        "api_surface_index": 122
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-qualityprofiles-set-default-124",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/qualityprofiles/set_default",
+        "operation_id": "post-api-qualityprofiles-set-default-124",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]",
+        "api_surface_index": 123
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-rules-repositories-125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/rules/repositories",
+        "operation_id": "get-api-rules-repositories-125",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]",
+        "api_surface_index": 124
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-rules-search-126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/rules/search",
+        "operation_id": "get-api-rules-search-126",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]",
+        "api_surface_index": 125
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-rules-show-127",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/rules/show",
+        "operation_id": "get-api-rules-show-127",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]",
+        "api_surface_index": 126
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-rules-tags-128",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/rules/tags",
+        "operation_id": "get-api-rules-tags-128",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]",
+        "api_surface_index": 127
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-rules-update-129",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/rules/update",
+        "operation_id": "post-api-rules-update-129",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]",
+        "api_surface_index": 128
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-settings-list-definitions-130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/settings/list_definitions",
+        "operation_id": "get-api-settings-list-definitions-130",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]",
+        "api_surface_index": 129
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-settings-reset-131",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/settings/reset",
+        "operation_id": "post-api-settings-reset-131",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]",
+        "api_surface_index": 130
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-settings-set-132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/settings/set",
+        "operation_id": "post-api-settings-set-132",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]",
+        "api_surface_index": 131
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-settings-values-133",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/settings/values",
+        "operation_id": "get-api-settings-values-133",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]",
+        "api_surface_index": 132
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-sources-raw-134",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/sources/raw",
+        "operation_id": "get-api-sources-raw-134",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]",
+        "api_surface_index": 133
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-sources-scm-135",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/sources/scm",
+        "operation_id": "get-api-sources-scm-135",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]",
+        "api_surface_index": 134
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-sources-show-136",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/sources/show",
+        "operation_id": "get-api-sources-show-136",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]",
+        "api_surface_index": 135
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-timemachine-index-137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/timemachine/index",
+        "operation_id": "get-api-timemachine-index-137",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[136]",
+        "api_surface_index": 136
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-user-groups-add-user-138",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user_groups/add_user",
+        "operation_id": "post-api-user-groups-add-user-138",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]",
+        "api_surface_index": 137
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-user-groups-create-139",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user_groups/create",
+        "operation_id": "post-api-user-groups-create-139",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]",
+        "api_surface_index": 138
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-user-groups-delete-140",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user_groups/delete",
+        "operation_id": "post-api-user-groups-delete-140",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]",
+        "api_surface_index": 139
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-user-groups-remove-user-141",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user_groups/remove_user",
+        "operation_id": "post-api-user-groups-remove-user-141",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]",
+        "api_surface_index": 140
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-user-groups-search-142",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user_groups/search",
+        "operation_id": "get-api-user-groups-search-142",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]",
+        "api_surface_index": 141
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-user-groups-update-143",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user_groups/update",
+        "operation_id": "post-api-user-groups-update-143",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]",
+        "api_surface_index": 142
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-user-groups-users-144",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user_groups/users",
+        "operation_id": "get-api-user-groups-users-144",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]",
+        "api_surface_index": 143
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-user-properties-index-145",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user_properties/index",
+        "operation_id": "get-api-user-properties-index-145",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[144]",
+        "api_surface_index": 144
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-user-tokens-generate-146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user_tokens/generate",
+        "operation_id": "post-api-user-tokens-generate-146",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]",
+        "api_surface_index": 145
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-user-tokens-revoke-147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user_tokens/revoke",
+        "operation_id": "post-api-user-tokens-revoke-147",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]",
+        "api_surface_index": 146
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-user-tokens-search-148",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user_tokens/search",
+        "operation_id": "get-api-user-tokens-search-148",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]",
+        "api_surface_index": 147
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-users-groups-149",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users/groups",
+        "operation_id": "get-api-users-groups-149",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]",
+        "api_surface_index": 148
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-webhooks-create-150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/webhooks/create",
+        "operation_id": "post-api-webhooks-create-150",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]",
+        "api_surface_index": 149
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-webhooks-delete-151",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/webhooks/delete",
+        "operation_id": "post-api-webhooks-delete-151",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]",
+        "api_surface_index": 150
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-webhooks-deliveries-152",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/webhooks/deliveries",
+        "operation_id": "get-api-webhooks-deliveries-152",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]",
+        "api_surface_index": 151
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-webhooks-delivery-153",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/webhooks/delivery",
+        "operation_id": "get-api-webhooks-delivery-153",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]",
+        "api_surface_index": 152
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-webhooks-list-154",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/webhooks/list",
+        "operation_id": "get-api-webhooks-list-154",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]",
+        "api_surface_index": 153
+      },
+      {
+        "id": "sonar-cloud.api_surface.post-api-webhooks-update-155",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/webhooks/update",
+        "operation_id": "post-api-webhooks-update-155",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]",
+        "api_surface_index": 154
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-webservices-list-156",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/webservices/list",
+        "operation_id": "get-api-webservices-list-156",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]",
+        "api_surface_index": 155
+      },
+      {
+        "id": "sonar-cloud.api_surface.get-api-webservices-response-example-157",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/webservices/response_example",
+        "operation_id": "get-api-webservices-response-example-157",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]",
+        "api_surface_index": 156
+      }
+    ]
+  }
+}

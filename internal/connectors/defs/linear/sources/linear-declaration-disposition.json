@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "connector": "linear",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/linear-operation-source-lock.json",
+    "source_url": "https://linear.app/developers",
+    "source_sha256": "5cdef9877717896b32412ba7dc69a1e168414740f39da641027b81f99b2f3dd9",
+    "source_bytes": 442268,
+    "source_operation_count": 7,
+    "normalized_inventory_sha256": "b483ea172466c7f78edfc2f9ff340cdc757e3c56d68d0e58f3ae9f21280062b8",
+    "source_retrieval": "fetched"
+  },
+  "summary": {
+    "api_surface_rows": 7,
+    "exact_source_rows": 7,
+    "declared_operations": 7,
+    "declared_percent": 100,
+    "enabled_operations": 0,
+    "declaration_pending_operations": 6,
+    "disabled_operations": 1,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 2
+      },
+      {
+        "key": "direct_write",
+        "count": 1
+      },
+      {
+        "key": "etl",
+        "count": 4
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class."
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 6
+      },
+      {
+        "key": "provider-does-not-expose",
+        "count": 1
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/linear/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    }
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/graphql (query: issues)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/graphql (query: issues)",
+        "operation": null,
+        "covered_by": {
+          "stream": "issues"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/linear-operation-source-lock.json",
+        "source_id": "linear.api_surface.get-graphql-query-issues-1",
+        "source_url": "https://linear.app/developers",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "get-graphql-query-issues-1",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/linear/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: teams)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/graphql (query: teams)",
+        "operation": null,
+        "covered_by": {
+          "stream": "teams"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/linear-operation-source-lock.json",
+        "source_id": "linear.api_surface.get-graphql-query-teams-2",
+        "source_url": "https://linear.app/developers",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "get-graphql-query-teams-2",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/linear/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: projects)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/graphql (query: projects)",
+        "operation": null,
+        "covered_by": {
+          "stream": "projects"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/linear-operation-source-lock.json",
+        "source_id": "linear.api_surface.get-graphql-query-projects-3",
+        "source_url": "https://linear.app/developers",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "get-graphql-query-projects-3",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/linear/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: users)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/graphql (query: users)",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/linear-operation-source-lock.json",
+        "source_id": "linear.api_surface.get-graphql-query-users-4",
+        "source_url": "https://linear.app/developers",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "get-graphql-query-users-4",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/linear/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: viewer)",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/graphql (query: viewer)",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/linear-operation-source-lock.json",
+        "source_id": "linear.api_surface.get-graphql-query-viewer-5",
+        "source_url": "https://linear.app/developers",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "get-graphql-query-viewer-5",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+      },
+      "rejection": {
+        "reason": "provider-does-not-expose",
+        "recoverable": false,
+        "detail": "bounded identity/connectivity check used by Check(), not a syncable object stream",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutations: issueCreate, issueUpdate, commentCreate, ...)",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/graphql (mutations: issueCreate, issueUpdate, commentCreate, ...)",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear mutations require fixed GraphQL query documents and variables in the JSON body; the write dialect can only send record-shaped bodies, and exposing a generic GraphQL mutation body would violate connector tool-surface rules."
+        }
+      },
+      "source": {
+        "source_lock": "sources/linear-operation-source-lock.json",
+        "source_id": "linear.api_surface.post-graphql-mutations-issuecreate-issueupdate-commentcreate-6",
+        "source_url": "https://linear.app/developers",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "post-graphql-mutations-issuecreate-issueupdate-commentcreate-6",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[5]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: comments, cycles, labels, workflowStates, webhooks, other root connections)",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/graphql (query: comments, cycles, labels, workflowStates, webhooks, other root connections)",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear read connections require POST request bodies and body-cursor pagination via variables, but the declarative read path currently sends nil body and this pass cannot add or edit a StreamHook."
+        }
+      },
+      "source": {
+        "source_lock": "sources/linear-operation-source-lock.json",
+        "source_id": "linear.api_surface.get-graphql-query-comments-cycles-labels-workflowstates-webhooks-other-root-connections-7",
+        "source_url": "https://linear.app/developers",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "get-graphql-query-comments-cycles-labels-workflowstates-webhooks-other-root-connections-7",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[6]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    }
+  ]
+}

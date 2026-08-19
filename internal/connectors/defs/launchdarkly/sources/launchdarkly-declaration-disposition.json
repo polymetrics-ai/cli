@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "connector": "launchdarkly",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/launchdarkly-operation-source-lock.json",
+    "source_url": "https://apidocs.launchdarkly.com/",
+    "source_sha256": "346ad78b3b4015b61c9c43a5f2f8d4de3f3f939382d9bdadbe072e443dc028de",
+    "source_bytes": 72904,
+    "source_operation_count": 7,
+    "normalized_inventory_sha256": "fe6192034011c0097467a85f0fc0bc220d10e0e232c72ffdbaf9105ffb722943",
+    "source_retrieval": "fetched"
+  },
+  "summary": {
+    "api_surface_rows": 7,
+    "exact_source_rows": 7,
+    "declared_operations": 7,
+    "declared_percent": 100,
+    "enabled_operations": 0,
+    "declaration_pending_operations": 7,
+    "disabled_operations": 0,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_write",
+        "count": 2
+      },
+      {
+        "key": "etl",
+        "count": 5
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class."
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 7
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/launchdarkly/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    }
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/api/v2/projects",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/projects",
+        "operation": null,
+        "covered_by": {
+          "stream": "projects"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_id": "launchdarkly.api_surface.get-api-v2-projects-1",
+        "source_url": "https://apidocs.launchdarkly.com/",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "get-api-v2-projects-1",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/launchdarkly/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/members",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/members",
+        "operation": null,
+        "covered_by": {
+          "stream": "members"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_id": "launchdarkly.api_surface.get-api-v2-members-2",
+        "source_url": "https://apidocs.launchdarkly.com/",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "get-api-v2-members-2",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/launchdarkly/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/auditlog",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/auditlog",
+        "operation": null,
+        "covered_by": {
+          "stream": "auditlog"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_id": "launchdarkly.api_surface.get-api-v2-auditlog-3",
+        "source_url": "https://apidocs.launchdarkly.com/",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "get-api-v2-auditlog-3",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/launchdarkly/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{project_key}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/flags/{project_key}",
+        "operation": null,
+        "covered_by": {
+          "stream": "flags"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_id": "launchdarkly.api_surface.get-api-v2-flags-project-key-4",
+        "source_url": "https://apidocs.launchdarkly.com/",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "get-api-v2-flags-project-key-4",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/launchdarkly/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{project_key}/environments",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/projects/{project_key}/environments",
+        "operation": null,
+        "covered_by": {
+          "stream": "environments"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_id": "launchdarkly.api_surface.get-api-v2-projects-project-key-environments-5",
+        "source_url": "https://apidocs.launchdarkly.com/",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "get-api-v2-projects-project-key-environments-5",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/launchdarkly/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "*",
+      "path": "/api/v2/segments/*, /api/v2/metrics/*, /api/v2/experiments/*, /api/v2/webhooks/*, /api/v2/integrations/*, /api/v2/approval-requests/*",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "*",
+        "path": "/api/v2/segments/*, /api/v2/metrics/*, /api/v2/experiments/*, /api/v2/webhooks/*, /api/v2/integrations/*, /api/v2/approval-requests/*",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "not implemented in this connector's current declared surface"
+        }
+      },
+      "source": {
+        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_id": "launchdarkly.api_surface.*-api-v2-segments-api-v2-metrics-api-v2-experiments-api-v2-webhooks-api-v2-integrations-api-v2-approval-requests-6",
+        "source_url": "https://apidocs.launchdarkly.com/",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "*-api-v2-segments-api-v2-metrics-api-v2-experiments-api-v2-webhooks-api-v2-integrations-api-v2-approval-requests-6",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[5]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST/PATCH/DELETE",
+      "path": "all LaunchDarkly mutation endpoints",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST/PATCH/DELETE",
+        "path": "all LaunchDarkly mutation endpoints",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "not implemented in this bundle; legacy itself is read-only (capabilities.write: false)"
+        }
+      },
+      "source": {
+        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_id": "launchdarkly.api_surface.post/patch/delete-all-launchdarkly-mutation-endpoints-7",
+        "source_url": "https://apidocs.launchdarkly.com/",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "post/patch/delete-all-launchdarkly-mutation-endpoints-7",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[6]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    }
+  ]
+}
