@@ -2,7 +2,7 @@
   "issue": 4289,
   "branch": "fm/cli-map-batch23-r1",
   "base": "main",
-  "state": "executing",
+  "state": "verified-pending-rebase-and-pr",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "commands_reviewed": [
@@ -21,5 +21,11 @@
     "map_integrity": "green: 19 connectors / 3340 documented operations",
     "connectorgen_validate": "green: 552 connectors / 0 findings",
     "surface_sync": "green: 552 connectors / 0 field changes"
+  },
+  "verification": {
+    "targeted_conformance": "green",
+    "runtime_preflight": "green",
+    "connector_boundary": "green: clean / 292 files / 552 connectors",
+    "repository_gates": "green"
   }
 }
