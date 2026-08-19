@@ -604,6 +604,122 @@ func findZoomWriteAction(actions []engine.WriteAction, name string) (engine.Writ
 	return engine.WriteAction{}, false
 }
 
+// TestEveryTypedZoomActionHasReverseETLCommandAndCandidate preserves the
+// connector-owned inputs that a future generic typed destination can select.
+// It deliberately declares neither a destination transport nor a transport
+// binding: until #4303 supplies the connector-neutral executor and schema,
+// either claim would be a false declaration.
+func TestEveryTypedZoomActionHasReverseETLCommandAndCandidate(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		if action.Name == "" || action.Kind == "" || action.Method == "" || action.Path == "" {
+			t.Errorf("typed write action is incomplete: %+v", action)
+			continue
+		}
+		if _, duplicate := actions[action.Name]; duplicate {
+			t.Errorf("typed write action %q is duplicated", action.Name)
+		}
+		actions[action.Name] = action
+	}
+	if got := len(actions); got != 204 {
+		t.Fatalf("typed Zoom write actions = %d, want 204", got)
+	}
+
+	commands := make(map[string]connectors.CommandSurfaceCommand, len(actions))
+	for _, command := range connector.CommandSurface().Commands {
+		if command.Intent != "reverse_etl" {
+			continue
+		}
+		if command.Availability != "implemented" || command.Write == "" {
+			t.Errorf("reverse-ETL command %q = availability:%q write:%q, want implemented named action", command.Path, command.Availability, command.Write)
+			continue
+		}
+		if _, duplicate := commands[command.Write]; duplicate {
+			t.Errorf("typed action %q is selected by more than one reverse-ETL command", command.Write)
+		}
+		commands[command.Write] = command
+	}
+	if got := len(commands); got != len(actions) {
+		t.Errorf("reverse-ETL commands with distinct actions = %d, want %d", got, len(actions))
+	}
+
+	var candidates struct {
+		MutationCandidates []struct {
+			Command     string `json:"command"`
+			Intent      string `json:"intent"`
+			Declaration struct {
+				Kind     string `json:"kind"`
+				ID       string `json:"id"`
+				Executor string `json:"executor"`
+			} `json:"declaration"`
+			Classification struct {
+				Code   string `json:"code"`
+				Family string `json:"family"`
+			} `json:"classification"`
+		} `json:"mutation_candidates"`
+	}
+	raw, err := os.ReadFile("certification-mutation-candidates.json")
+	if err != nil {
+		t.Fatalf("read mutation candidates: %v", err)
+	}
+	if err := json.Unmarshal(raw, &candidates); err != nil {
+		t.Fatalf("decode mutation candidates: %v", err)
+	}
+	candidatesByAction := make(map[string]struct {
+		command  string
+		intent   string
+		kind     string
+		executor string
+		code     string
+		family   string
+	}, len(candidates.MutationCandidates))
+	for _, candidate := range candidates.MutationCandidates {
+		if candidate.Declaration.ID == "" {
+			t.Errorf("mutation candidate %q has no typed action ID", candidate.Command)
+			continue
+		}
+		if _, duplicate := candidatesByAction[candidate.Declaration.ID]; duplicate {
+			t.Errorf("typed action %q has more than one mutation candidate", candidate.Declaration.ID)
+		}
+		candidatesByAction[candidate.Declaration.ID] = struct {
+			command  string
+			intent   string
+			kind     string
+			executor string
+			code     string
+			family   string
+		}{candidate.Command, candidate.Intent, candidate.Declaration.Kind, candidate.Declaration.Executor, candidate.Classification.Code, candidate.Classification.Family}
+	}
+	if got := len(candidatesByAction); got != len(actions) {
+		t.Errorf("mutation candidates with distinct typed actions = %d, want %d", got, len(actions))
+	}
+
+	for name, action := range actions {
+		command, ok := commands[name]
+		if !ok {
+			t.Errorf("typed action %q has no reverse-ETL command", name)
+			continue
+		}
+		if len(command.APISurface) != 1 || command.APISurface[0].Method != action.Method {
+			t.Errorf("typed action %q command %q API surface = %+v, want one %s endpoint", name, command.Path, command.APISurface, action.Method)
+		}
+		candidate, ok := candidatesByAction[name]
+		if !ok {
+			t.Errorf("typed action %q has no mutation candidate", name)
+			continue
+		}
+		if candidate.command != command.Path || candidate.intent != "reverse_etl" || candidate.kind != "write_action" || candidate.executor != "reverse_plan" {
+			t.Errorf("typed action %q candidate = %+v, want command:%q reverse_etl write_action/reverse_plan", name, candidate, command.Path)
+		}
+		if candidate.code != "unassessed" || candidate.family != "generic_typed_destination_executor_deferred" {
+			t.Errorf("typed action %q candidate classification = code:%q family:%q, want deferred generic typed destination", name, candidate.code, candidate.family)
+		}
+	}
+}
+
 func (fixture zoomWriteFixture) Status() int {
 	if fixture.Expect.Status != 0 {
 		return fixture.Expect.Status

@@ -20,6 +20,9 @@ Phase: `zoom-full-definition-mapping-r1`
 - Generated one bounded authenticated direct-read candidate and 204 typed mutation candidates.
   The live external-proof run returned HTTP 200 for two Zoom GET exchanges and published one
   fingerprint-only `observed_operations` evidence record.
+- Added a reverse-ETL merge-freeze readiness guard: all 204 implemented reverse-ETL commands,
+  connector-owned typed actions, and generated mutation candidates form an exact one-to-one set.
+  This is preparation for #4303, not a destination declaration.
 - Recorded a disposition for every 1,913 ledger row and 26 source-only rows. The 1,131 disabled
   ledger rows use only `foundation-gap`, `schema-incompatible`, `provider-does-not-expose`, or
   `requires-paid-tier`, with evidence and recovery state.
@@ -44,4 +47,7 @@ Phase: `zoom-full-definition-mapping-r1`
 - Reverse-ETL mutations are generated but unassessed/deferred on
   `generic-typed-destination-executor`; certification must not claim them without that executor,
   explicit source bindings, acknowledgement, and per-mode apply strategies.
+- The connector deliberately has no `destination_transport` or `transport_binding` while #4303 is
+  in flight. Those fields would imply an executor, acknowledgement, source bindings, and
+  connector-owned evidence that do not yet exist.
 - No auth, engine, generator, certification allowlist, or status code was changed.

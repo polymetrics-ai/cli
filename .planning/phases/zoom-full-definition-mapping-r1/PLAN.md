@@ -109,6 +109,20 @@ The implementation passes proceed in dependency order:
 Each pass gets focused no-credential preflight evidence and the command-count/rejection evidence is
 kept in the TDD ledger and verification record before the required full `make verify` gate.
 
+## Reverse-ETL merge-freeze readiness (2026-08-19)
+
+Issue #4303 is the estate-wide merge prerequisite. Its connector-neutral typed destination factory
+must select only a connector-owned named action, explicit source bindings, acknowledgement, per-mode
+apply strategies, and connector-owned conformance evidence. Zoom must not predeclare a
+`destination_transport` or invent a `transport_binding` before that schema and executor land.
+
+The pre-#4303 connector-local readiness contract is therefore exhaustive set equality: every
+implemented Zoom `reverse_etl` command must name exactly one `writes.json` typed action, and every
+typed action must have exactly one generated mutation candidate with the same declaration ID. The
+audit currently proves 204 commands, 204 distinct typed actions, and 204 candidates (11 creates,
+8 updates, and 185 destructive deletes). A regression test keeps that future destination input
+complete while `generic-typed-destination-executor` remains the honest availability boundary.
+
 ## Required skills
 
 Loaded for this connector/CLI/test/documentation work: `golang-how-to`, `golang-cli`, `golang-testing`,

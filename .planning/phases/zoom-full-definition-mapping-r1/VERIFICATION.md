@@ -15,6 +15,7 @@ the matrix requires fixture plus live proof, and the applicable fixture projecti
 | Command | Result |
 | --- | --- |
 | `go test -timeout 20m ./internal/connectors/defs/zoom -count=1` | PASS — 1,748 source contracts, 311 delete contracts, 712 runnable commands, and the exhaustive no-credential preflight sweep. |
+| `go test -timeout 20m ./internal/connectors/defs/zoom -run '^TestEveryTypedZoomActionHasReverseETLCommandAndCandidate$' -count=1` | PASS — 204 implemented reverse-ETL commands, typed write actions, and generated mutation candidates are an exact one-to-one set; no destination declaration is present before #4303. |
 | `go test -timeout 20m ./internal/connectors/engine -run '^TestEveryShippedWriteActionHasExpectedBatchability$' -count=1` | PASS — Zoom actions use the repository default batchability policy while retaining reverse-ETL approval. |
 | `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1` | PASS — regenerated root-help transcripts for the declared Zoom surface. |
 | `go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1` | PASS — regenerated transcripts are asserted without update mode. |

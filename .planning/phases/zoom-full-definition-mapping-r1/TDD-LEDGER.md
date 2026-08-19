@@ -116,3 +116,18 @@ literal root body for `direct_read` (`internal/connectors/commandrunner/runner.g
 471 affected Zoom JSON-body writes stay disabled on `rest-write-root-json-input`; 25 source
 contracts needing array query serialization stay disabled on `rest-query-array-encoding` until an
 approved foundation change makes their typed transport possible.
+
+## Reverse-ETL destination readiness under merge freeze
+
+Red: the prior tests proved runnable source-operation commands, but did not make the complete
+three-way relationship between `cli_surface.json`, `writes.json`, and generated mutation candidates
+an explicit invariant. Removing an action or candidate could therefore leave the future #4303
+typed-destination input incomplete until a later destination declaration failed closed.
+
+Green: `TestEveryTypedZoomActionHasReverseETLCommandAndCandidate` asserts exact 204-way set equality:
+every implemented reverse-ETL command names one unique typed action, every action has one command
+and one `write_action`/`reverse_plan` candidate, every command address agrees with its action method,
+and all candidates retain the deferred typed-destination classification. The current cohort is 11
+creates, 8 updates, and 185 destructive deletes. The test does not add `destination_transport`, a
+transport binding, source binding, acknowledgement, or conformance evidence; those are #4303 inputs
+that cannot be honestly declared beforehand.
