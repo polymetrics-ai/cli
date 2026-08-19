@@ -23,7 +23,11 @@
 
 Source recovered from `origin/fm/cli-twenty-parity-wave02-r1` commit
 `11eb2a74d5e812c94f8bb2c10a3e0eb86f21f618`; it has no merge base with current
-`main`, so it must be cherry-picked rather than rebased as history.
+`main`. The commit contains 1,898 historical tree changes rather than an
+isolatable connector commit. Its cherry-pick was aborted without a commit after
+it created unrelated conflicts. Recovery therefore extracts only the verified
+`internal/connectors/defs/twenty/**` subtree from that commit; no unrelated
+historical file is imported.
 
 ### Survives
 
@@ -41,9 +45,10 @@ Source recovered from `origin/fm/cli-twenty-parity-wave02-r1` commit
 - `api_surface.json` is v1 and covers get-by-id endpoints through a stream instead
   of an operation-backed direct-read command. It has no v2 provider-artifact
   provenance.
-- The CLI surface marks all 28 ETL reads `planned` and all 28 direct reads
-  `partial`; only the 112 reverse-ETL commands say `implemented`. This cannot
-  meet all-ops working CLI parity.
+- The CLI surface leaves all 28 object `get` commands `planned` and all 28
+  batch commands `partial`; ETL lists and scalar create/update/delete commands
+  already resolve. Thus 56 declared API operations are not runtime-executable,
+  which cannot meet all-ops working CLI parity.
 - No `operations.json` binds the direct-read commands to current operation-backed
   endpoint contracts, so generated `maps_to`, output policies, and runtime
   preflight cannot prove those get operations.

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "settings": "Fixture settings 1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/workflowAutomatedTriggers",
+    "body": {
+      "settings": "Fixture settings 1"
+    }
+  }
+}
