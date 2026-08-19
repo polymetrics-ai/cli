@@ -125,7 +125,7 @@
 - [ding-connect](ding-connect/MANUAL.md): Reads DingConnect reference catalogs (countries, currencies, regions, providers, products, product descriptions, promotions, provider status, error code descriptions, account balance) through the DingConnect REST API, and sends real-money mobile top-up transfers.
 - [discord](discord/MANUAL.md): Reads Discord guild, channel, and role data through the Discord REST API using a bot token. The members stream is out of scope for this migration (see docs.md's Known limits).
 - [dixa](dixa/MANUAL.md): Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API.
-- [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.
+- [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories and image tags, and performs source-declared organization mutations through the approved reverse-ETL write lifecycle.
 - [docuseal](docuseal/MANUAL.md): Reads DocuSeal templates, submissions, and submitters, and writes submission/submitter/template mutations through the DocuSeal REST API.
 - [dolibarr](dolibarr/MANUAL.md): Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
 - [dremio](dremio/MANUAL.md): Reads and writes Dremio catalog entries, reflections, sources, users, and roles through the Dremio REST API.

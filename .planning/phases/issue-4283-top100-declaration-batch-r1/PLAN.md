@@ -91,3 +91,74 @@ surface rows blocked, records live certification as pending, and does not create
 | HEAD operation | A bounded response-less status/existence executor | `foundation-gap`; retain an explicit disabled disposition. |
 | Deprecated login | Pinned source marks `deprecated: true` | `provider-does-not-expose`; do not materialize a terminal contract. |
 | Sync transport | Connector-neutral registration, connector evidence, and destination acknowledgement | Existing recoverable #4093 record; no placeholder descriptor. |
+
+## Captain correction — elevated scope is runtime authorization, not a disabled declaration
+
+Captain's 2026-08-19 correction supersedes the Docker Hub elevated-scope
+disposition above. A source operation which merely requires an administrator,
+organization role, SCIM permission, or bearer token remains **enabled as a
+source-contract declaration**: the required permission is retained as
+source-backed security metadata and an actual `403` is a runtime authorization
+outcome. It must not be counted as disabled or entered in the rejection list.
+
+The exception is an operation whose purpose is to mint, exchange, list, rotate,
+or revoke credentials/session tokens. Docker Hub's documented login, two-factor
+login, auth-token, personal access-token, and organization access-token routes
+remain disabled as `unsafe-to-exercise`; their source contract remains in the
+inventory so the omission is never hidden. The three HEAD operations remain a
+recoverable `foundation-gap`. The members CSV export is `schema-incompatible`:
+the pinned document exposes `text/csv`, but the connector declaration has no
+source-backed bounded byte contract for an executable binary transfer.
+
+This correction does not turn a source-contract inventory record into a
+terminal CLI command. Terminal direct read/write still requires the separate
+complete command contract and preflight evidence. Docker Hub reporting must
+therefore distinguish 100% declared coverage from the enabled source-contract
+percentage, and state that live certification remains pending.
+
+## Captain deliverable correction — runnable command/action parity
+
+Captain's 2026-08-19 deliverable correction supersedes the preceding
+inventory-only stopping condition. An operation contract which no
+`cli_surface.json` command binds is not user capability: `surface-sync` only
+reconciles metadata for commands already declared. Docker Hub is not complete
+until each executable pinned operation has a typed contract, a runnable command
+whose real preflight reaches the expected credential/lifecycle boundary, and
+each create/update/delete has a source-backed `writes.json` action (including
+every safe ordinary delete). Existing ETL streams satisfy their four mapped
+read routes; remaining executable GETs require `direct_read` commands and
+mutations require `reverse_etl` commands plus typed write actions so the shared
+plan, preview, approval, and execute boundary remains in force.
+
+The Docker Hub target is therefore 33 executable documented operations: four
+existing ETL commands, 13 new direct reads, and 16 new reverse-ETL commands
+with 16 write actions, four of them deletes. The remaining 21 rows are the only
+disabled set: 13 credential/session routes (`unsafe-to-exercise`), five
+executor/pagination routes (`foundation-gap`), and three unsupported
+source-content routes (`schema-incompatible`). The pinned OpenAPI is the sole
+source for parameter, request-body, response, and pagination declarations;
+unknown constraints stay disabled rather than guessed.
+
+## Captain correction — secret risk is a foundation gap, not unsafe refusal
+
+Captain's later 2026-08-19 clarification supersedes the target and disposition
+in the preceding paragraph. Docker Hub's eight personal/organization
+access-token list, detail, update, and delete routes return metadata, not the
+secret token: they are runnable via four direct reads and four typed
+reverse-ETL commands. The target is therefore 41 executable operations: four
+ETL, 17 direct reads, and 20 reverse-ETL commands with six typed deletes.
+
+The two token-create responses expose `token`; login and 2FA return `token`
+(and login's continuation can return `login_2fa_token`); auth-token returns
+`access_token`. Those exact source fields are marked in the operation
+dispositions, the affected operation contracts are `secret_sensitive` with
+`sensitive_policy`, and exact secret request fields are `x-secret` in
+`spec.json`. They remain declared, disabled, recoverable `foundation-gap`
+because `internal/connectors/engine/bundle.go:2772-2776` says live secret
+writes are not implemented, and a typed secret-response storage/redaction
+contract is also absent. Docker Hub's `unsafe-to-exercise` count is zero.
+
+For every later connector, use this criterion: only a live operation that is
+genuinely destructive or irreversible without user intent belongs in
+`unsafe-to-exercise`; a secret ingress/egress limitation is a named,
+recoverable foundation gap.

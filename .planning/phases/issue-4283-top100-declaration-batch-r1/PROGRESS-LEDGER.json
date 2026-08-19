@@ -3,7 +3,7 @@
   "issue": 4283,
   "cohort": "top100-daily-use-increment-001",
   "scope": "public-source declarations plus non-live certification only",
-  "generated_at": "2026-08-19T13:01:43Z",
+  "generated_at": "2026-08-19T00:00:00Z",
   "connectors": [
     {
       "connector": "asana",
@@ -275,26 +275,34 @@
       "files_produced": [
         "api_surface.json (source cross-check)",
         "certification-sweep.json",
+        "cli_surface.json",
+        "docs.md",
         "operations.json",
         "sources/dockerhub-declaration-disposition.json",
         "sources/dockerhub-operation-crosswalk.json",
+        "spec.json",
+        "streams.json",
         "writes.json"
       ],
       "operations": {
         "documented": 54,
         "declared": 54,
-        "surface_unblocked": 4,
-        "disabled": 50,
-        "coverage_percent": 100,
-        "operation_ledger_entries": 49,
-        "typed_source_contracts": 49,
+        "declared_percent": 100,
+        "runnable_commands": 41,
+        "surface_unblocked": 41,
+        "disabled": 13,
+        "enabled_percent": 75.93,
+        "operation_ledger_entries": 50,
+        "typed_source_contracts": 50,
         "typed_source_contracts_by_kind": {
           "rest_read": 23,
-          "rest_write": 26
+          "rest_write": 27
         },
         "delete_source_contracts": 6,
-        "terminal_commands": 4,
-        "coverage_basis": "54/54 pinned operations are explicitly crosswalked and dispositioned; 49 have source-contract inventory, four remain ETL stream bindings, and 50 terminal routes are disabled."
+        "enabled_deletes": 6,
+        "documented_deletes": 6,
+        "terminal_commands": 41,
+        "coverage_basis": "54/54 pinned operations are explicitly crosswalked and dispositioned. 41 have a runnable CLI binding (4 ETL, 17 direct-read, 20 reverse-ETL); 13 are disabled only for named bounded-executor/pagination/secret-response foundation gaps or source-schema incompatibility. No Docker Hub operation is classified unsafe-to-exercise."
       },
       "sync_transport": {
         "state": "blocked",
@@ -318,32 +326,39 @@
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/dockerhub/certification-sweep.json",
-        "declared_rows": 5,
-        "cli_commands": 4,
+        "declared_rows": 43,
+        "cli_commands": 41,
         "statuses": {
-          "fixture_required": 5
+          "fixture_required": 43
         },
+        "static_contract_validation": "connectorgen validate and surface-sync --check pass locally; fixture or live proof remains pending.",
         "live_certification": "pending",
         "certification_json": {
-          "state": "not_applicable",
-          "reason": "No new direct-read or direct-write terminal command was declared; source-contract inventory rows remain non-terminal. Live certification remains pending."
+          "state": "not_emitted",
+          "reason": "The generated certification sweep is the non-live declaration record. No live credentialed certification was attempted."
         }
       },
       "parity_classes": [
         "source-lock",
         "api-surface",
         "operations",
+        "cli-surface",
         "writes",
         "non-live-certification-sweep",
         "sync-transport-blocked-foundation-gap"
       ],
-      "state": "full-parity-declarations-complete_non-live-certification-pending",
-      "timestamp": "2026-08-19T13:01:43Z",
-      "resume_pointer": "Full parity order: Docker Hub complete; next connector is Notion after captain review.",
+      "state": "full-parity-runnable-commands-non-live-certification-pending",
+      "timestamp": "2026-08-19T00:00:00Z",
+      "resume_pointer": "Docker Hub secret-policy retrofit is generated and ready for non-live validation, boundary capture, and commit; no increment-2 connector work has begun.",
       "writes": {
-        "actions": 0,
-        "kinds": {},
-        "reason": "No documented Docker Hub mutation is an approved warehouse destination action in this credential-free bundle."
+        "actions": 20,
+        "kinds": {
+          "update": 8,
+          "create": 6,
+          "delete": 6
+        },
+        "enabled_deletes": 6,
+        "lifecycle": "All actions use reverse-ETL plan, preview, approval, and execute."
       }
     },
     {

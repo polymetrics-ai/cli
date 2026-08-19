@@ -1,24 +1,36 @@
 # Increment 001 summary
 
-Ten ranked daily-use API connectors now have reproducible public-source locks and complete source-to-`api_surface` declaration parity: Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana.
+Ten ranked daily-use API connectors have reproducible public-source locks and
+exact source-to-`api_surface` declaration records. This remains a
+declaration-only, non-live-certification checkpoint.
 
 - Public operations pinned and declared: 4,378 / 4,378 (100%).
-- Explicitly disabled with exact evidence/recovery: 3,405.
-- Typed write actions retained: 471, including 157 `delete` actions.
-- Generated non-live certification commands: 909; all connector live certifications remain pending.
-- No `sync_transport.json` was invented: all ten source/destination transport gaps are explicitly `recoverable: true`, with runtime evidence and the smallest safe recovery in `TRANSPORT-GAP.md`; #4093 tracks the foundation.
+- Docker Hub runnable retrofit: 41 commands, 20 typed write actions, and six
+  typed delete actions across 54 pinned operations.
+- Docker Hub disabled dispositions: 13 (ten named foundation gaps and three
+  schema/media incompatibilities; `unsafe-to-exercise` is zero).
+- All ten connectors retain the recoverable #4093 `sync_transport` gap; no
+  generic transport descriptor was invented.
+- No credential was requested or used; all live certification remains pending.
 
-Verification and review evidence is in `VERIFICATION.md`, `SOURCE-LOCK-VERIFICATION.json`, and `REVIEW.md`. This is a checkpoint summary, not the final batch delivery: the captain's full-parity order requires the existing cohort to be completed before any new daily-use connector is selected.
+## Docker Hub corrected deliverable
 
-## Captain full-parity correction — Docker Hub complete
+Docker Hub is the first runnable-parity proof slice. Its 50 operation contracts
+(23 `rest_read`, 27 `rest_write`) are backed by four existing ETL commands, 17
+operation-bound direct reads, and 20 reverse-ETL commands linked to typed
+writes. The reverse-ETL surface preserves plan, preview, approval, and execute;
+it does not expose a generic HTTP mutation path.
 
-The later full-parity order suspends new-connector selection until this first
-cohort is declared exhaustively. Docker Hub is now the completed proof slice:
-54 / 54 pinned operations have an exact source-to-surface crosswalk and an
-itemized declaration/disposition. Its 49 source-contract inventory entries are
-23 `rest_read` plus 26 `rest_write`, including six typed delete contracts.
-Four existing streams remain the only executable routes; 50 terminal routes
-remain explicitly disabled (46 elevated-scope, three response-less HEAD
-foundation gaps, one deprecated login). No `writes.json` action,
-`sync_transport.json`, provider credential, or live certification claim was
-added. The next full-parity connector is Notion, not Increment 2.
+The public OpenAPI is the only schema source. Required path-item parameters are
+derived exactly from the pinned document. The `params-import` limitation that
+does not merge those inherited parameters is recorded as a recoverable
+foundation/generator gap rather than concealed by manual flag invention. The
+token creates and the three credential exchanges remain source-declared
+foundation gaps because the current engine cannot safely execute
+`sensitive_policy` writes or return a secret response.
+
+Verification evidence is recorded in `VERIFICATION.md`, source pin evidence in
+`SOURCE-LOCK-VERIFICATION.json`, and exact operation rejections in
+`REJECTION-LIST.json`. Complete the current local gates and commit this Docker
+Hub slice before selecting another connector. Gitea is not a definition bundle
+on `main` and must be created or substituted before a later increment.

@@ -35634,7 +35634,7 @@
   {
     "name": "dockerhub",
     "display_name": "Docker Hub",
-    "description": "Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.",
+    "description": "Reads public Docker Hub repositories and image tags, and performs source-declared organization mutations through the approved reverse-ETL write lifecycle.",
     "integration_type": "api",
     "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
     "release_stage": "ga",
@@ -35642,7 +35642,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -35653,6 +35653,11 @@
         "docker_username"
       ],
       "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "Docker Hub bearer token for authenticated organization and SCIM operations. Store it through the credential flow; never pass it inline.",
+          "x-secret": true
+        },
         "docker_username": {
           "type": "string",
           "pattern": "^[a-z0-9_-]+$",
@@ -35676,6 +35681,26 @@
           "type": "integer",
           "default": 100,
           "description": "Page size (1-100) for the initial request of each paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own absolute next URL verbatim."
+        },
+        "password": {
+          "type": "string",
+          "description": "Docker Hub password or personal access token for the documented /v2/users/login credential-minting route. It is secret material and is intentionally not accepted inline.",
+          "x-secret": true
+        },
+        "login_2fa_token": {
+          "type": "string",
+          "description": "Intermediate 2FA token returned by the documented /v2/users/login route. It is secret material and is intentionally not accepted inline.",
+          "x-secret": true
+        },
+        "code": {
+          "type": "string",
+          "description": "Time-based one-time password for the documented /v2/users/2fa-login route. It is secret material and is intentionally not accepted inline.",
+          "x-secret": true
+        },
+        "secret": {
+          "type": "string",
+          "description": "Password, personal access token, or organization access token accepted by the documented /v2/auth/token route. It is secret material and is intentionally not accepted inline.",
+          "x-secret": true
         }
       }
     },
@@ -35725,9 +35750,158 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "update_organization_settings",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/v2/orgs/{{ record.name }}/settings",
+        "risk": "high"
+      },
+      {
+        "name": "update_repository_immutable_tags",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/namespaces/{{ record.namespace }}/repositories/{{ record.repository }}/immutabletags",
+        "risk": "high"
+      },
+      {
+        "name": "verify_repository_immutable_tags",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/namespaces/{{ record.namespace }}/repositories/{{ record.repository }}/immutabletags/verify",
+        "risk": "high"
+      },
+      {
+        "name": "create_repository_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/repositories/{{ record.namespace }}/{{ record.repository }}/groups",
+        "risk": "high"
+      },
+      {
+        "name": "create_repository",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/namespaces/{{ record.namespace }}/repositories",
+        "risk": "high"
+      },
+      {
+        "name": "update_organization_member",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/v2/orgs/{{ record.org_name }}/members/{{ record.username }}",
+        "risk": "high"
+      },
+      {
+        "name": "delete_organization_member",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v2/orgs/{{ record.org_name }}/members/{{ record.username }}",
+        "risk": "high",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_organization_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/orgs/{{ record.org_name }}/groups",
+        "risk": "high"
+      },
+      {
+        "name": "replace_organization_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+        "risk": "high"
+      },
+      {
+        "name": "update_organization_group",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+        "risk": "high"
+      },
+      {
+        "name": "delete_organization_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+        "risk": "high",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_organization_group_member",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members",
+        "risk": "high"
+      },
+      {
+        "name": "delete_organization_group_member",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members/{{ record.username }}",
+        "risk": "high",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_organization_invite",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v2/invites/{{ record.id }}",
+        "risk": "high",
+        "confirm": "destructive"
+      },
+      {
+        "name": "resend_organization_invite",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/invites/{{ record.id }}/resend",
+        "risk": "high"
+      },
+      {
+        "name": "create_organization_invites",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/invites/bulk",
+        "risk": "high"
+      },
+      {
+        "name": "update_personal_access_token",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/access-tokens/{{ record.uuid }}",
+        "risk": "high"
+      },
+      {
+        "name": "delete_personal_access_token",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v2/access-tokens/{{ record.uuid }}",
+        "risk": "high",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_organization_access_token",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
+        "risk": "high"
+      },
+      {
+        "name": "delete_organization_access_token",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v2/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
+        "risk": "high",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Docker Hub API read of public repository and tag data",
-      "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+      "read": "external Docker Hub API reads, including public repository and authenticated organization resources",
+      "write": "source-declared Docker Hub organization mutations require reverse-ETL plan, preview, approval, and execute",
+      "approval": "reverse-ETL writes require plan, preview, approval, and execute"
     },
     "icon": {
       "id": "dockerhub",

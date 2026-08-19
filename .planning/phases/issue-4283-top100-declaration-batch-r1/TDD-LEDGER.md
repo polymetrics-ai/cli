@@ -68,27 +68,106 @@ declaration record.
 ### Green
 
 The Docker Hub bundle contains source-derived `rest_read` and `rest_write`
-inventory rows only where the pinned OpenAPI supports their GET or mutating
-method and documented parameters/content type. A connector-local crosswalk and
-declaration-disposition ledger account for all 54 source rows. Every inventory
-row binds to an exact existing API-surface method/path; all non-terminal rows
-remain blocked in `api_surface.json`. The three HEAD rows are explicit
-`foundation-gap` dispositions and the deprecated login row is explicit
-`provider-does-not-expose`.
+contracts only where the pinned OpenAPI supports their GET or mutating method
+and documented parameters/content type. A connector-local crosswalk and
+disposition ledger account for all 54 source rows. Each enabled contract binds
+to one existing API-surface method/path and then to a runnable command or typed
+write action. The three HEAD rows are explicit `foundation-gap` dispositions;
+credential/session routes remain `unsafe-to-exercise`.
 
 ### Refactor
 
-Keep the derivation connector-local and data-only. Do not add a generator,
-engine executor, command, fixture, credential path, transport descriptor, or
-provider request. Re-run surface synchronization only to prove it introduces
-no unreviewed command-surface drift.
+Keep the derivation connector-local and data-only. Do not add a generator or
+engine executor, request or use a credential, invent a transport descriptor,
+or make a provider request. Re-run surface synchronization and the binary
+preflight so a command claim cannot drift from its declared executor.
 
-Observed green result: `operations.json` now holds 49 source-backed inventory
-contracts (23 `rest_read`, 26 `rest_write`, including six `delete` contracts).
-The exact 54-row crosswalk and disposition ledger retain four declared stream
-bindings and 50 disabled terminal rows: 46 `requires-elevated-scope`, three
-`foundation-gap` HEAD operations, and one `provider-does-not-expose` deprecated
-login. Docker Hub-only validation, source-byte verification, certification
-sweep check, conformance, runtime preflight, surface sync, docs, CLI golden
-tests, boundary/canon checks, and the applicable repository gates pass without
-a provider credential or provider request.
+## Docker Hub elevated-scope correction
+
+### Red
+
+The first Docker Hub disposition treated 46 merely privileged operations as
+`requires-elevated-scope` disabled declarations. That conflates a runtime
+authorization result (`403`) with a missing executable foundation and reports a
+false disabled count.
+
+### Green
+
+Every non-credential-management Docker Hub operation with a pinned
+`bearerAuth`/administrator requirement is enabled; its source security metadata
+stays visible in the crosswalk and disposition record. Repository creation and
+the immutable-tag routes are normal provider-authorized actions, not paid-plan
+gates. Exactly the session/token minting and access-token management routes
+remain `unsafe-to-exercise`; three HEAD routes and two collection-paging routes
+remain `foundation-gap`; the CSV export and two SCIM media-type writes remain
+`schema-incompatible`. The Docker Hub ledger reports both `declared_percent`
+and `enabled_percent`, while live certification remains pending.
+
+### Refactor
+
+Update only connector-local source declarations and issue evidence. Do not
+invent scopes the source does not enumerate, a direct command, a binary
+transport limit, or a runtime authorization bypass.
+
+## Docker Hub runnable command/action correction
+
+### Red
+
+After the source-contract inventory was added, Docker Hub exposes only four ETL
+commands and zero write actions. `surface-sync` cannot promote the 49 inventory
+entries into commands, so the binary has no user-facing command for 33 enabled
+source operations. The old “full parity” count is therefore invalid.
+
+### Green
+
+Each executable Docker Hub source row is bound to exactly one runnable command:
+the four existing ETL streams retain their command bindings, 13 remaining JSON
+GET operations get direct-read commands, and 16 normal JSON mutating operations
+get reverse-ETL commands backed by typed write actions. All four ordinary
+DELETE operations are typed delete actions with destructive confirmation. The
+source-required SCIM mutation media type and the two operation-scoped
+pagination shapes remain disabled because the executor cannot represent them
+without foundation work. Docker Hub's inherited OpenAPI path-item parameters
+are copied exactly from the pinned document while `params-import` is recorded
+as a generator limitation. Surface synchronization derives command metadata
+without inventing endpoints. Runtime preflight must prove direct reads reach
+the credential boundary and reverse-ETL writes reach the shared lifecycle
+boundary without a provider request.
+
+### Refactor
+
+Do not promote unsafe credential/session routes, response-less HEAD routes, or
+the unbounded CSV export. Do not hand-author opaque pagination, schema fields,
+or provider scopes. Leave live certification pending.
+
+## Docker Hub credential-sensitive correction
+
+### Red
+
+The initial runnable-parity projection incorrectly places 13 credential and
+token-management rows in `unsafe-to-exercise`. It exposes no terminal command
+for the eight token metadata routes, and the five secret-bearing routes have no
+declared `secret_sensitive`/`sensitive_policy` contract or source response
+secret-field marker. `connectorgen validate` first reports the new declared
+commands without their generated output bounds and reverse-ETL required flag
+mappings.
+
+### Green
+
+The eight token list/detail/update/delete rows are runnable: four direct reads
+and four typed reverse-ETL commands, including two destructive deletes. Each
+is source-bound and reaches the normal no-credential runtime boundary. The two
+token creation routes declare `token` as a redacted secret response; login,
+2FA, and auth-token declare their exact x-secret request fields and redacted
+response secrets. All five remain recoverable `foundation-gap` because
+`internal/connectors/engine/bundle.go:2772-2776` explicitly withholds live
+secret-write execution. After `surface-sync`, `connectorgen validate` and
+`surface-sync --check` are green; Docker Hub reports 54/54 declared (100.00%)
+and 41/54 enabled (75.93%), with zero `unsafe-to-exercise` rows.
+
+### Refactor
+
+Retain the engine gap rather than inventing a response schema field or a secret
+write executor in the connector bundle. For later connectors, classify a
+secret hazard as a `foundation-gap` unless the live operation itself is truly
+destructive or irreversible without user intent.

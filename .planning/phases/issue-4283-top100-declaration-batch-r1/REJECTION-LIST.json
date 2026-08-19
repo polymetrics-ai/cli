@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": 4283,
-  "generated_at": "2026-08-19T11:37:51Z",
+  "generated_at": "2026-08-19T00:00:00Z",
   "entries": [
     {
       "connector": "asana",
@@ -4325,556 +4325,6 @@
       "evidence": "single-job detail by job ID; identical record shape to the jobs stream's per-item object, already covered by that stream",
       "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
       "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/users/login"
-      },
-      "reason": "provider-does-not-expose",
-      "evidence": "Pinned Docker Hub OpenAPI marks this session-login operation deprecated: true; it remains source-inventoried but is not declared as a terminal command.",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Revisit only after a newly pinned provider API description removes the deprecated marker and a least-privilege authentication contract is documented."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/users/2fa-login"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "second-factor login continuation of the excluded /v2/users/login session exchange",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/auth/token"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "scoped registry bearer-token exchange (docker login/pull credential flow); not a data-read endpoint and out of scope for this credential-free public bundle",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/access-tokens"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "personal access token creation; authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/access-tokens"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "personal access token management requires an authenticated user session this bundle has no credential for",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PATCH",
-        "path": "/v2/access-tokens/{uuid}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "personal access token update; authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/access-tokens/{uuid}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "personal access token detail; authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "DELETE",
-        "path": "/v2/access-tokens/{uuid}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "revokes a personal access token; destructive and authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/auditlogs/{account}/actions"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "organization audit log action catalog; same auth gate as the audit log stream above",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/auditlogs/{account}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "organization audit log read; requires an authenticated org-admin session not available to this credential-free bundle",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{name}/settings"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org settings read; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PUT",
-        "path": "/v2/orgs/{name}/settings"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org settings mutation; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/orgs/{name}/access-tokens"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org-scoped access token creation; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{name}/access-tokens"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org-scoped access token listing; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org-scoped access token detail; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PATCH",
-        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org-scoped access token update; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "DELETE",
-        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "revokes an org-scoped access token; destructive and authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "HEAD",
-        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
-      },
-      "reason": "foundation-gap",
-      "evidence": "HEAD existence-check only; no response body to stream",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "HEAD",
-        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
-      },
-      "reason": "foundation-gap",
-      "evidence": "HEAD existence-check only; no response body to stream",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PATCH",
-        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org-admin immutable-tag policy mutation; requires an authenticated session this credential-free public bundle has no auth path for",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org-admin immutable-tag policy verification; requires an authenticated session this credential-free public bundle has no auth path for",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/repositories/{namespace}/{repository}/groups"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "assigns a Team/group to a repository; org-admin operation requiring an authenticated session not available to this credential-free bundle",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/namespaces/{namespace}/repositories"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "repository creation requires an authenticated session; legacy never implemented repository create/update and this bundle's spec.json declares no credential to authenticate the request",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "HEAD",
-        "path": "/v2/namespaces/{namespace}/repositories/{repository}"
-      },
-      "reason": "foundation-gap",
-      "evidence": "HEAD existence-check only; no response body to stream",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{org_name}/members"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org member listing; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{org_name}/members/export"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org member CSV export; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PUT",
-        "path": "/v2/orgs/{org_name}/members/{username}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "updates an org member's role; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "DELETE",
-        "path": "/v2/orgs/{org_name}/members/{username}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "removes a member from an org; destructive and authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{org_name}/invites"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org pending-invite listing; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{org_name}/groups"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org Teams/groups listing; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/orgs/{org_name}/groups"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org Team/group creation; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{org_name}/groups/{group_name}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org Team/group detail; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PUT",
-        "path": "/v2/orgs/{org_name}/groups/{group_name}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org Team/group full update; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PATCH",
-        "path": "/v2/orgs/{org_name}/groups/{group_name}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org Team/group partial update; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "DELETE",
-        "path": "/v2/orgs/{org_name}/groups/{group_name}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "deletes an org Team/group; destructive and authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/orgs/{org_name}/groups/{group_name}/members"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org Team/group membership listing; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/orgs/{org_name}/groups/{group_name}/members"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "adds a member to an org Team/group; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "DELETE",
-        "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "removes a user from an org Team/group; destructive and authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "DELETE",
-        "path": "/v2/invites/{id}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "cancels a pending org invite; destructive and authenticated-session-only",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PATCH",
-        "path": "/v2/invites/{id}/resend"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "resends an org invite email; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/invites/bulk"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "org member invitation creation; authenticated org-admin session required",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/scim/2.0/ServiceProviderConfig"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM service provider config; same SCIM-token gate",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/scim/2.0/ResourceTypes"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM identity-provisioning metadata; requires a separate SCIM bearer token this bundle has no auth path for",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/scim/2.0/ResourceTypes/{name}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM identity-provisioning metadata; same SCIM-token gate",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/scim/2.0/Schemas"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM schema metadata; same SCIM-token gate",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/scim/2.0/Schemas/{id}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM schema metadata; same SCIM-token gate",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/scim/2.0/Users"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM-provisioned user listing; same SCIM-token gate, also PII-adjacent identity data outside this connector's public-registry-data scope",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "POST",
-        "path": "/v2/scim/2.0/Users"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM user provisioning; same SCIM-token gate",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "GET",
-        "path": "/v2/scim/2.0/Users/{id}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM user detail; same SCIM-token gate",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "PUT",
-        "path": "/v2/scim/2.0/Users/{id}"
-      },
-      "reason": "requires-elevated-scope",
-      "evidence": "SCIM user update; same SCIM-token gate",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
     },
     {
       "connector": "gitlab",
@@ -37459,23 +36909,6 @@
       "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available."
     },
     {
-      "connector": "dockerhub",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
       "connector": "gitlab",
       "parity_class": "sync_transport",
       "operation": {
@@ -37624,6 +37057,179 @@
       "reason": "foundation-gap",
       "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
       "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "POST",
+        "path": "/v2/users/login"
+      },
+      "reason": "foundation-gap",
+      "evidence": "Pinned UsersLoginRequest requires password and its success response returns token; the 401 continuation can return login_2fa_token. Matching x-secret fields and sensitive_policy are declared, but live secret writes remain blocked. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/users/login\"].post; internal/connectors/engine/bundle.go:2772-2776.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the named secret-response contract and sensitive_policy live execution path redact values from output, logs, and warehouse storage, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "POST",
+        "path": "/v2/users/2fa-login"
+      },
+      "reason": "foundation-gap",
+      "evidence": "Pinned Users2FALoginRequest requires login_2fa_token and code, and its success response returns token. Matching x-secret fields and sensitive_policy are declared, but live secret writes remain blocked. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/users/2fa-login\"].post; internal/connectors/engine/bundle.go:2772-2776.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the named secret-response contract and sensitive_policy live execution path redact values from output, logs, and warehouse storage, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "POST",
+        "path": "/v2/auth/token"
+      },
+      "reason": "foundation-gap",
+      "evidence": "Pinned request requires secret and AuthCreateTokenResponse returns access_token. Matching x-secret field and sensitive_policy are declared, but live secret writes remain blocked. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/auth/token\"].post; internal/connectors/engine/bundle.go:2772-2776.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the named secret-response contract and sensitive_policy live execution path redact values from output, logs, and warehouse storage, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "POST",
+        "path": "/v2/access-tokens"
+      },
+      "reason": "foundation-gap",
+      "evidence": "Pinned createAccessTokensResponse returns accessToken.token, the actual personal access-token value. The operation is declared secret_sensitive with sensitive_policy redaction, but the engine has no secret-response contract to redact stdout/logs/warehouse and route it to secure storage. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/access-tokens\"].post; internal/connectors/engine/bundle.go:2772-2776.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the named secret-response contract and sensitive_policy live execution path redact values from output, logs, and warehouse storage, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}"
+      },
+      "reason": "foundation-gap",
+      "evidence": "The pinned source declares page/page_size query parameters but no source-backed next URL field; the bundle has only a global next_url direct-read paginator. Per-operation pagination is not expressible. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/auditlogs/{account}\"].get; dockerhub.rest.AuditLogs_ListAuditLogs.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "POST",
+        "path": "/v2/orgs/{name}/access-tokens"
+      },
+      "reason": "foundation-gap",
+      "evidence": "Pinned createOrgAccessTokenResponse returns token, the actual organization access-token value. The operation is declared secret_sensitive with sensitive_policy redaction, but the engine has no secret-response contract to redact stdout/logs/warehouse and route it to secure storage. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/orgs/{name}/access-tokens\"].post; internal/connectors/engine/bundle.go:2772-2776.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the named secret-response contract and sensitive_policy live execution path redact values from output, logs, and warehouse storage, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
+      },
+      "reason": "foundation-gap",
+      "evidence": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head; dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
+      },
+      "reason": "foundation-gap",
+      "evidence": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head; dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}"
+      },
+      "reason": "foundation-gap",
+      "evidence": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head; dockerhub.rest.CheckRepository.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/members/export"
+      },
+      "reason": "schema-incompatible",
+      "evidence": "The pinned source exposes a text/csv success response but no bounded byte contract. The available binary_download contract requires a positive max_bytes (internal/connectors/engine/bundle.go:2733-2739), so no executable binary declaration is inferred. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/orgs/{org_name}/members/export\"].get; dockerhub.rest.get_/v2/orgs/{org_name}/members/export.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users"
+      },
+      "reason": "foundation-gap",
+      "evidence": "The pinned source declares SCIM startIndex/count pagination, while the bundle has only a global next_url direct-read paginator. Per-operation pagination is not expressible. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/scim/2.0/Users\"].get; dockerhub.rest.get_/v2/scim/2.0/Users.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "POST",
+        "path": "/v2/scim/2.0/Users"
+      },
+      "reason": "schema-incompatible",
+      "evidence": "The pinned source requires application/scim+json. The typed direct-write executor admits application/json and application/x-www-form-urlencoded only (internal/connectors/engine/direct_write.go:639-672), so this content type cannot be executed without a foundation extension. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/scim/2.0/Users\"].post; dockerhub.rest.post_/v2/scim/2.0/Users.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "operation": {
+        "method": "PUT",
+        "path": "/v2/scim/2.0/Users/{id}"
+      },
+      "reason": "schema-incompatible",
+      "evidence": "The pinned source requires application/scim+json. The typed direct-write executor admits application/json and application/x-www-form-urlencoded only (internal/connectors/engine/direct_write.go:639-672), so this content type cannot be executed without a foundation extension. Evidence: https://docs.docker.com/reference/api/hub/latest.yaml; paths[\"/v2/scim/2.0/Users/{id}\"].put; dockerhub.rest.put_/v2/scim/2.0/Users/{id}.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Enable after the cited provider contract or the named bounded runtime capability is available, then add connector-local non-live proof."
+    },
+    {
+      "connector": "dockerhub",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
       "recoverable": true,
       "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
       "foundation_issue": 4093

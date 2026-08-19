@@ -29,3 +29,58 @@ The rejection list classifies 1,602 operations as `schema-incompatible`. This in
   command contract that cannot be presented as a JSON direct read; then add
   connector-local source, fixture, and non-live evidence. Until then all three
   remain `foundation-gap`, disabled, and recoverable.
+
+## Docker Hub operation-scoped pagination
+
+- Affected operations: `GET /v2/auditlogs/{account}` and
+  `GET /v2/scim/2.0/Users`.
+- Evidence: the pinned document declares `page`/`page_size` for the audit-log
+  collection and `startIndex`/`count` for the SCIM collection. The runtime
+  reads only `streams.json` base pagination at
+  `internal/connectors/engine/direct_read_paginate.go:126-130` and refuses a
+  conflicting raw paging parameter at lines 181-183.
+- Recovery: add source-derived per-operation `PaginationSpec` support to the
+  direct-read paginator. The two disabled operations can then gain bounded
+  direct-read commands without exposing raw cursors.
+
+## Docker Hub SCIM write media type
+
+- Affected operations: `POST /v2/scim/2.0/Users` and
+  `PUT /v2/scim/2.0/Users/{id}`.
+- Evidence: the pinned requests require `application/scim+json`, while
+  `internal/connectors/engine/direct_write.go:639-672` admits only
+  `application/json` and `application/x-www-form-urlencoded`.
+- Recovery: add a closed `application/scim+json` branch to the typed executor,
+  retain the pinned schemas, and add connector-local non-live proof. No generic
+  media-type or raw-body escape hatch is acceptable.
+
+## Docker Hub credential minting and secret responses
+
+- Affected operations: `POST /v2/access-tokens`; `POST
+  /v2/orgs/{name}/access-tokens`; `POST /v2/users/login`; `POST
+  /v2/users/2fa-login`; and `POST /v2/auth/token`.
+- Evidence: the pinned response schemas expose `token` or `access_token` for
+  each create/exchange response. The login and exchange inputs are now exact
+  `x-secret` fields in `spec.json`; the operation contracts declare
+  `secret_sensitive` and `sensitive_policy`. Yet
+  `internal/connectors/engine/bundle.go:2772-2776` says that this is schema and
+  validator support only and that live secret writes remain blocked.
+- Recovery: add a typed live secret-write execution path and a secret-response
+  contract that redacts stdout, logs, and warehouse records and routes a
+  returned credential to secure storage. Then enable the five already-declared
+  contracts and add connector-local non-live proof.
+- Disposition: these are `foundation-gap`, recoverable. The eight personal and
+  organization access-token list/detail/update/delete routes are enabled now:
+  their pinned responses return metadata rather than a secret. Docker Hub has
+  zero `unsafe-to-exercise` rows.
+
+## Docker Hub OpenAPI path-item parameter inheritance
+
+- Evidence: `cmd/connectorgen/paramsimport.go:161-203` reads only
+  `operation.Parameters` and lines 211-214 import that slice. Docker Hub
+  carries required path parameters on path items, so this bundle derives the
+  exact inherited parameter contracts directly from its pinned document.
+- Recovery: merge path-item and operation parameters with operation-level
+  overrides in `params-import`; then regenerate and check the command flags.
+  This limitation does not disable an operation because the connector-local
+  parameters remain exact source-derived declarations.

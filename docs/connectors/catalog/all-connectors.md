@@ -121,7 +121,7 @@
 | `ding-connect` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Ding Connect | `api` | ga | check, catalog, read, write | 10 | 1 | [Documentation](https://docs.ding.com/) | bundle definition |
 | `discord` | [`icons/simple-icons/discord.svg`](../icons/simple-icons/discord.svg) | Discord | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://discord.com/developers/docs/reference) | bundle definition |
 | `dixa` | [`icons/dixa.svg`](../icons/dixa.svg) | Dixa | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.dixa.io/openapi/) | bundle definition |
-| `dockerhub` | [`icons/dockerhub.svg`](../icons/dockerhub.svg) | Docker Hub | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.docker.com/docker-hub/api/latest/) | bundle definition |
+| `dockerhub` | [`icons/dockerhub.svg`](../icons/dockerhub.svg) | Docker Hub | `api` | ga | check, catalog, read, write | 4 | 20 | [Documentation](https://docs.docker.com/docker-hub/api/latest/) | bundle definition |
 | `docuseal` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | DocuSeal | `api` | ga | check, catalog, read, write | 4 | 6 | [Documentation](https://www.docuseal.co/docs/api) | bundle definition |
 | `dolibarr` | [`icons/simple-icons/dolibarr.svg`](../icons/simple-icons/dolibarr.svg) | Dolibarr | `api` | ga | check, catalog, read, write | 10 | 17 | [Documentation](https://www.dolibarr.org/webservices.html) | bundle definition |
 | `dremio` | [`icons/dremio.svg`](../icons/dremio.svg) | Dremio | `api` | ga | check, catalog, read, write | 5 | 11 | [Documentation](https://docs.dremio.com/software/rest-api/) | bundle definition |

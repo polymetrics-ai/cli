@@ -42,3 +42,28 @@ per-operation dispositions against the pinned OpenAPI source.
   evidence changed.
 
 No Critical, Warning, or Info findings remain for the Docker Hub proof slice.
+
+## Docker Hub secret-policy retrofit review
+
+Reviewed the captain's credential-endpoint correction against the pinned Docker
+Hub OpenAPI and the runnable command contracts.
+
+- The eight personal/organization token list, detail, update, and delete routes
+  are enabled only because their pinned response schemas expose metadata; the
+  two destructive routes use typed delete actions and the shared reverse-ETL
+  lifecycle.
+- The two token-create responses expose `token`, while login/2FA/auth-token
+  expose `token` or `access_token`. All five are declared source contracts with
+  `secret_sensitive`, redacting `sensitive_policy`, source secret-field marks,
+  and recoverable `foundation-gap` records. No secret response executor was
+  invented.
+- `spec.json` marks each source-named credential ingress field `x-secret`.
+  Full source request schemas remain in `operations.json`; `writes.json`
+  projects only the engine-supported schema subset, as conformance requires.
+- Static validation, sweep generation, fixture-backed conformance, commandrunner
+  preflight, generated documentation, and all 41 no-credential binary dispatch
+  checks pass. `connector-boundary` is explicitly pending CI after two worker
+  detached-capture attempts terminated before an exit record.
+
+No new Critical, Warning, or Info finding was identified. The pending boundary
+gate is preserved as a required merge check, not treated as a pass.

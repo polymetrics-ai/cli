@@ -1459,36 +1459,6 @@
       ]
     },
     {
-      "reason": "HEAD existence-check only; no response body to stream",
-      "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available.",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        }
-      ]
-    },
-    {
       "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
       "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available.",
       "operations": [
@@ -11715,133 +11685,6 @@
       ]
     },
     {
-      "reason": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "gitlab",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
-        },
-        {
-          "connector": "jira",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
-        },
-        {
-          "connector": "vercel",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
-        },
-        {
-          "connector": "notion",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
-        },
-        {
-          "connector": "stripe",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
-        },
-        {
-          "connector": "bitbucket",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
-        },
-        {
-          "connector": "circleci",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
-        },
-        {
-          "connector": "sentry",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json"
-        },
-        {
-          "connector": "asana",
-          "operation": {
-            "kind": "sync_transport",
-            "roles": [
-              "source_transport",
-              "destination_transport"
-            ]
-          },
-          "parity_class": "sync_transport",
-          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
-        }
-      ]
-    },
-    {
       "reason": "Docker Hub documents three response-less HEAD existence checks. The declarative operation model rejects HEAD for rest_read before dispatch, so the routes remain explicitly disabled rather than being misrepresented as JSON reads.",
       "evidence": [
         "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request.",
@@ -11871,6 +11714,125 @@
           "operation": {
             "method": "HEAD",
             "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        }
+      ]
+    },
+    {
+      "reason": "Docker Hub source pagination is operation-scoped for the audit-log and SCIM-user collections, but direct-read pagination is currently read only from streams.json base.pagination.",
+      "evidence": [
+        "internal/connectors/engine/direct_read_paginate.go:126-130 (builds from bundle.HTTP.Pagination only)",
+        "internal/connectors/engine/direct_read_paginate.go:181-183 (rejects conflicting raw pagination parameters)"
+      ],
+      "recoverability": "Add a source-derived per-rest-operation PaginationSpec and have direct reads use it before deriving a command for these collections.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "GET",
+            "path": "/v2/auditlogs/{account}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "GET",
+            "path": "/v2/scim/2.0/Users"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        }
+      ]
+    },
+    {
+      "reason": "Docker Hub SCIM writes declare application/scim+json, while the typed direct-write executor supports only application/json and application/x-www-form-urlencoded.",
+      "evidence": [
+        "internal/connectors/engine/direct_write.go:639-672"
+      ],
+      "recoverability": "Add a closed application/scim+json media-type branch to the typed executor, then retain the pinned request schemas and add non-live proof.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/scim/2.0/Users"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "PUT",
+            "path": "/v2/scim/2.0/Users/{id}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        }
+      ]
+    },
+    {
+      "reason": "params-import reads operation parameters but does not merge OpenAPI path-item parameters; Docker Hub command parameter contracts retain the exact inherited parameters from the pinned document.",
+      "evidence": [
+        "cmd/connectorgen/paramsimport.go:161-203 (reads only operation.Parameters)",
+        "cmd/connectorgen/paramsimport.go:211-214 (imports only that operation-level slice)"
+      ],
+      "recoverability": "Merge path-item and operation parameters in params-import with operation-level overrides, then verify generated command flags against the pinned document.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "kind": "source-parameter-derivation"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        }
+      ]
+    },
+    {
+      "reason": "Docker Hub credential-minting routes are live-safe only after secret-response handling and sensitive_policy live execution are implemented; their source contracts are declared but disabled as recoverable foundation gaps.",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy schema and validation exist, but live secret writes remain blocked.",
+        "internal/connectors/defs/dockerhub/sources/dockerhub-declaration-disposition.json: pinned response secret fields token/access_token and secret request fields are marked on each affected source row."
+      ],
+      "minimal_change": "Build the live secret-sensitive direct-write path and a typed secret-response contract that redacts output/logs/warehouse and routes returned credentials to OS keychain storage.",
+      "recoverability": "Enable after the bounded secret execution and response-redaction contracts, then add connector-local non-live proof.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/access-tokens"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/orgs/{name}/access-tokens"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/users/login"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/users/2fa-login"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/auth/token"
           },
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         }

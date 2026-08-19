@@ -2,8 +2,15 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Docker Hub Connection Specification",
   "type": "object",
-  "required": ["docker_username"],
+  "required": [
+    "docker_username"
+  ],
   "properties": {
+    "access_token": {
+      "type": "string",
+      "description": "Docker Hub bearer token for authenticated organization and SCIM operations. Store it through the credential flow; never pass it inline.",
+      "x-secret": true
+    },
     "docker_username": {
       "type": "string",
       "pattern": "^[a-z0-9_-]+$",
@@ -27,6 +34,26 @@
       "type": "integer",
       "default": 100,
       "description": "Page size (1-100) for the initial request of each paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own absolute next URL verbatim."
+    },
+    "password": {
+      "type": "string",
+      "description": "Docker Hub password or personal access token for the documented /v2/users/login credential-minting route. It is secret material and is intentionally not accepted inline.",
+      "x-secret": true
+    },
+    "login_2fa_token": {
+      "type": "string",
+      "description": "Intermediate 2FA token returned by the documented /v2/users/login route. It is secret material and is intentionally not accepted inline.",
+      "x-secret": true
+    },
+    "code": {
+      "type": "string",
+      "description": "Time-based one-time password for the documented /v2/users/2fa-login route. It is secret material and is intentionally not accepted inline.",
+      "x-secret": true
+    },
+    "secret": {
+      "type": "string",
+      "description": "Password, personal access token, or organization access token accepted by the documented /v2/auth/token route. It is secret material and is intentionally not accepted inline.",
+      "x-secret": true
     }
   }
 }

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "full-parity-dockerhub-complete",
+  "state": "full-parity-dockerhub-secret-policy-retrofit-verification",
   "delivery_mode": "declaration-only-non-live-certification",
   "connectors": [
     "dockerhub",
@@ -17,5 +17,5 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Commit and report the Docker Hub full-parity proof slice. Do not select Increment 2; the next permitted connector under the captain order is Notion."
+  "next": "Complete Docker Hub static and binary no-credential proof gates, capture connector-boundary detached output and exit status, regenerate connector documentation, update the ledger evidence, commit the full-parity retrofit, and report before selecting any next connector. Gitea is unavailable as a bundle and must be substituted or created first."
 }
