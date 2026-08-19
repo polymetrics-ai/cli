@@ -491,9 +491,11 @@ func TestPMBinaryExecutesPostgresWarehouseGitHubIssueLabels(t *testing.T) {
 // TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels is the opt-in
 // production proof for the PostgreSQL-to-GitHub route. Unlike the deterministic
 // test above, this test writes only to its retained private proof repository:
-// karthik-sivadas/pm-parity-proof-db-to-api. It uses dedicated, label-free
+// karthik-sivadas/pm-parity-proof-db-to-api. It uses dedicated, label-owned
 // issues #1 and #2 so no other lane can change either action's result. The
 // written labels remain on those issues as independently inspectable evidence.
+// A later proof may therefore begin with exactly its previously written label;
+// any other baseline still fails closed.
 //
 // The test deliberately has two independent observations of each mutation:
 // the destination's production read-back before the polling watermark commits,
@@ -522,8 +524,8 @@ func TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
 	defer cancel()
 
-	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelAddIssue, nil)
-	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, nil)
+	assertLivePostgresGitHubIssueLabelBaseline(t, ctx, token, livePostgresGitHubIssueLabelAddIssue, livePostgresGitHubIssueLabelAddLabel)
+	assertLivePostgresGitHubIssueLabelBaseline(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, livePostgresGitHubIssueLabelSetLabel)
 
 	harness := newPostgresTransportHarness(t)
 	defer func() {
@@ -586,6 +588,7 @@ func TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels(t *testing.T) {
 	assertPostgresIssueLabelWarehouseArtifacts(t, root, addConnectionID)
 	assertPostgresIssueLabelCheckpoint(t, root, addRun.RunID, "postgres-github-live-add", "public.issue_label_live_add")
 	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelAddIssue, []string{livePostgresGitHubIssueLabelAddLabel})
+	t.Logf("live neutral GitHub issue-label add: status=%s records_read=%d records_loaded=%d acknowledgement=checkpoint-recorded read_back=matched", addRun.Status, addRun.RecordsRead, addRun.RecordsLoaded)
 
 	setConnectionID := createConnection("postgres-github-live-set", "public.issue_label_live_set", "incremental_upsert", livePostgresGitHubIssueLabelSetIssue, livePostgresGitHubIssueLabelSetLabel, "transport_allow_keyed=true")
 	setApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-live-set", "set_issue_labels")
@@ -594,6 +597,7 @@ func TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels(t *testing.T) {
 	assertPostgresIssueLabelWarehouseArtifacts(t, root, setConnectionID)
 	assertPostgresIssueLabelCheckpoint(t, root, setRun.RunID, "postgres-github-live-set", "public.issue_label_live_set")
 	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, []string{livePostgresGitHubIssueLabelSetLabel})
+	t.Logf("live neutral GitHub issue-label set: status=%s records_read=%d records_loaded=%d acknowledgement=checkpoint-recorded read_back=matched", setRun.Status, setRun.RecordsRead, setRun.RecordsLoaded)
 
 	if _, err := admin.Exec(ctx, `UPDATE public.issue_label_live_set SET sequence = 20 WHERE id = 1`); err != nil {
 		t.Fatalf("advance live PostgreSQL keyed replay watermark: %v", err)
@@ -604,7 +608,9 @@ func TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels(t *testing.T) {
 	}
 	keyedReplay := decodePostgresIssueLabelRun(t, keyedReplayOutput, "postgres-github-live-set", "public.issue_label_live_set")
 	assertPostgresIssueLabelRun(t, keyedReplay, 1)
+	assertPostgresIssueLabelCheckpoint(t, root, keyedReplay.RunID, "postgres-github-live-set", "public.issue_label_live_set")
 	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, []string{livePostgresGitHubIssueLabelSetLabel})
+	t.Logf("live neutral GitHub issue-label keyed replay: status=%s records_read=%d records_loaded=%d acknowledgement=checkpoint-recorded read_back=matched", keyedReplay.Status, keyedReplay.RecordsRead, keyedReplay.RecordsLoaded)
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
 
 }
@@ -1685,6 +1691,24 @@ func assertLivePostgresGitHubIssueLabels(t *testing.T, ctx context.Context, toke
 		t.Fatalf("independent live GitHub labels for issue %d = %v, want exact %v", issue, got, want)
 	}
 	t.Logf("independent live GitHub labels for issue %d = %v", issue, got)
+}
+
+func assertLivePostgresGitHubIssueLabelBaseline(t *testing.T, ctx context.Context, token string, issue int, ownedLabel string) {
+	t.Helper()
+	got, err := livePostgresGitHubIssueLabels(ctx, token, issue)
+	if err != nil {
+		t.Fatalf("independently read live GitHub label baseline for issue %d: %v", issue, err)
+	}
+	got = append([]string(nil), got...)
+	sort.Strings(got)
+	if len(got) == 0 {
+		t.Logf("independent live GitHub label baseline for issue %d = []", issue)
+		return
+	}
+	if !reflect.DeepEqual(got, []string{ownedLabel}) {
+		t.Fatalf("independent live GitHub label baseline for issue %d = %v, want empty or exactly retained %q", issue, got, ownedLabel)
+	}
+	t.Logf("independent live GitHub label baseline for issue %d = retained %v", issue, got)
 }
 
 func livePostgresGitHubIssueLabels(ctx context.Context, token string, issue int) ([]string, error) {

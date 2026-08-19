@@ -11,6 +11,7 @@
 | Wrong role and source binding fail before I/O | `TestDestinationTransportDescriptorRefusesChangeCaptureDestinationMode`, `TestTransportFamilyHalfPathConformanceRefusesChangeCaptureDestinationBeforeIO`, `TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration`, `TestRunETLTransportRefusesDeclaredChangeCaptureDestinationBeforeIO` | pass; `change_capture` is source-only into the connection warehouse |
 | Kill-after-commit and owned-stage bounds | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit`, `TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages` | pass |
 | Existing GitHub execution route | `TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle` | pass |
+| Live GitHub Gate A: fresh binary through neutral definition composition | `TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels` with the approved local Docker endpoint and an ephemeral `gh auth token` environment value | pass: append, keyed set, and keyed replay each report `completed`, `records_read=1`, `records_loaded=1`; each durable acknowledgement checkpoint and independent post-exit GitHub label read-back match |
 | Mechanical authoring guide | `docs/sync-transport-definition.md` reviewed by `make docs-check` | pass |
 
 ## Commands
@@ -73,6 +74,14 @@ make release-workflow-check
 make connector-canon-check
 make connectorgen-certification-matrix
 make github-parity-artifacts-check
+
+# Live GitHub Gate A (red: retained proof label exposed a non-rerunnable empty baseline)
+POLYMETRICS_GITHUB_TOKEN="$(gh auth token)" POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_GITHUB_ISSUE_LABEL_LIVE_PROOF=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/cli -run '^TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels$'
+# failed before mutation: issue 1 retained [pm-db-api-live-add], test wanted exact []
+
+# Live GitHub Gate A (green; a fresh pm binary is built by the test)
+POLYMETRICS_GITHUB_TOKEN="$(gh auth token)" POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_GITHUB_ISSUE_LABEL_LIVE_PROOF=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/cli -run '^TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels$'
+# PASS 43.29s: add, keyed set, keyed replay each status=completed records_read=1 records_loaded=1 acknowledgement=checkpoint-recorded read_back=matched
 ```
 
 `golangci-lint run ./internal/app/... ./internal/synctransport/...` was also

@@ -62,9 +62,35 @@ The runner guidance defers a monolithic `go test ./...` to CI; it can exceed the
 per-command window. The complete command/evidence record is in
 `.planning/phases/synctransport-4093-foundation-r1/VERIFICATION.md`.
 
-No CLI command/help/manual/website surface changed. No credentials were read,
-stored, or printed. No generic HTTP, SQL, shell, or arbitrary write surface
-was added.
+No CLI command/help/manual/website surface changed. No credential value was
+stored or printed. No generic HTTP, SQL, shell, or arbitrary write surface was
+added.
+
+## Live GitHub Gate A proof
+
+The purpose-built test builds a fresh `pm` binary, then uses the declared
+GitHub issue-label transport through its typed plan, preview, approval, run,
+acknowledgement, and read-back path. Its GitHub token was supplied only as an
+ephemeral process environment value; no credential value appears here or in
+the test project.
+
+```bash
+POLYMETRICS_GITHUB_TOKEN="$(gh auth token)" \
+POLYMETRICS_DATABASE_INTEGRATION=1 \
+POLYMETRICS_GITHUB_ISSUE_LABEL_LIVE_PROOF=1 \
+POLYMETRICS_CONTAINER_RUNTIME=docker \
+POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/cli \
+  -run '^TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels$'
+```
+
+Observed result: **PASS** (43.29s). The owned proof issues began with only
+their retained proof labels. Through the new definition-owned composition,
+append, keyed set, and keyed replay each completed with `records_read=1` and
+`records_loaded=1`; each persisted its acknowledgement checkpoint, and an
+independent authenticated GitHub labels request after the fresh process exited
+matched the expected label. The test also asserts that the temporary project
+contains no credential material.
 
 ## Review
 
