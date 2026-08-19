@@ -747,6 +747,12 @@ func declarativeTypedDestinationIdempotencyHeader(b Bundle, actionName string) (
 	return header, nil
 }
 
+// PreflightOperationStructuredJSONBodyField validates a native connector's
+// declaration-owned structured input without resolving credentials or I/O.
+func (b Base) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	return PreflightOperationStructuredJSONBodyField(b.bundle, operation, field)
+}
+
 // OperationDirectReadMaxBytes returns the bounded response limit for a
 // declared operation direct read.
 func (b Base) OperationDirectReadMaxBytes(operation string, requested int) (int, error) {
