@@ -3,9 +3,9 @@
 ## Task Delivery Header
 
 - Issue: Refs #277 — twenty (Twenty CRM): connector all-ops CLI parity (parent)
-- Base branch: main
-- Merges into: main
-- Delivery: A pull request from `fm/cli-twenty-crm-gtm-parity-r1` to `main`, with the connector bundle committed, repository gates green, and recorded real-data read/write/delete proof from a disposable self-hosted Twenty instance.
+- Base branch: fm/cli-reverse-etl-destination-r1
+- Merges into: fm/cli-reverse-etl-destination-r1 → main
+- Delivery: PR #4298 is retargeted to `fm/cli-reverse-etl-destination-r1`, contains the dependency merge and a complete connector-owned seven-surface declaration, has its repository gates green, and retains or re-runs real-data read/write/delete proof from a disposable self-hosted Twenty instance.
 - Working branch: fm/cli-twenty-crm-gtm-parity-r1
 - Task: Recover the previous Twenty bundle, reconcile it with current declarative connector foundations, and prove the real CLI can read, page, write, read back, and delete bounded disposable records without contacting the captain's Twenty workspace.
 - Verification: targeted Twenty tests and conformance; connectorgen validation, surface sync and certification sweep checks; connector-boundary, generated docs/goldens, lint, build, and verification gates; built-binary live proof using a self-hosted Twenty instance and stdin-only credentials.
@@ -80,3 +80,22 @@ shared-engine, generator, allowlist, schema, or website change is a foundation
 decision, not a connector workaround. The required GSD prompts were resolved
 with `scripts/gsd prompt`; this execution uses the documented inline/manual
 fallback because compatible isolated Pi workers are unavailable.
+
+## Reconciliation — 2026-08-20
+
+The historical recovery survives as a coherent six-surface REST bundle: it has
+168 documented REST operations, 168 command rows, 28 ETL streams, 28 direct
+reads, and 112 typed actions (56 create, 28 update, and 28 delete). Its source
+locks and fixtures remain connector-owned, and its prior self-hosted proof is
+preserved as historical evidence only. It is stale against the temporary
+typed-destination foundation in PR #4304: no action has the new
+connector-owned destination declaration required to make eligible actions
+reverse-ETL destinations. The required next slice is therefore to merge
+`origin/fm/cli-reverse-etl-destination-r1` without rewriting history, retarget
+PR #4298 to that exact branch, and bind every eligible action through the
+installed destination schema. Documented file transfer is modeled only as a
+binary capability, never as a REST writer or reverse-ETL action.
+
+This reconciliation stays scoped to the Twenty definition bundle, its derived
+artifacts, and delivery evidence. An absent schema or executor capability is a
+keyed `needs-decision`, not a foundation edit or an omitted operation.

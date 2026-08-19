@@ -22,6 +22,24 @@
 | Certification artifacts | `certification-sweep --check` passes for current allowed scope; assess whether Twenty is allowlisted | Adding Twenty to the allowlist would require a foundation decision. |
 | Live provider | Published Docker Compose starts a disposable local Twenty; the image's seeded API-key emitter is piped directly into `pm credentials add --value-stdin`, then the built CLI proves read/page/write/read-back/delete | After a genuine start attempt, document exact blocker and remain uncertified. Keychain is intentionally out of scope because it truncates this image's long JWT-style key. |
 
+## Reconciliation slice — typed destinations
+
+1. Merge `origin/fm/cli-reverse-etl-destination-r1` without rewriting the
+   existing Twenty history and retarget PR #4298 to that exact branch.
+2. Audit source-locked operations across `binary_read`, `binary_write`,
+   `direct_read`, `direct_write`, `etl`, `reverse_etl`, and executable CLI
+   commands. The ledger must account for all 168 published REST operations;
+   privileged or destructive operations remain reachable and safety-gated.
+3. Bind each eligible action through a connector-owned typed destination with an
+   exact declared strategy, `input_fields`, delivery/acknowledgement facts, and
+   conformance evidence. Do not create a generic HTTP writer or alter engine
+   code.
+4. Add red/green tests for declared destination coverage, an invalid/missing
+   input binding, and the binary-file boundary. Regenerate connector-owned
+   projections and run focused generator, binary, and live reversible proof.
+5. Record the seven-surface ledger, the exact PR dependency, command results,
+   and the API read-back of PR #4298's base.
+
 ## TDD slices
 
 1. Add a Twenty-local source contract test that fails while the recovered bundle

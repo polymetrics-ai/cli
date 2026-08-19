@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "planned",
+  "status": "reconciling_typed_destinations",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -11,6 +11,6 @@
   ],
   "inline_manual_fallback": "No compatible isolated Pi worker runtime is available; execute the resolved GSD prompts inline.",
   "target_connector": "twenty",
-  "base_branch": "main",
+  "base_branch": "fm/cli-reverse-etl-destination-r1",
   "working_branch": "fm/cli-twenty-crm-gtm-parity-r1"
 }
