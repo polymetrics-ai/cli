@@ -16,6 +16,9 @@
 - [x] `go build ./cmd/pm`, `go vet ./...`, `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make connector-canon-check`, and `make release-workflow-check` → PASS.
 - [x] Inline `verify-work` and data-focused code review found no actionable map defects; see `REVIEW.md`.
 - [x] No provider credential, live provider call, provider write, or live-certification claim appears in the diff or evidence. Public provider documentation was read only during source capture.
-- [ ] PR uses `Refs #4289` and its GitHub API base is read back as `main` (pending push/open).
+- [x] Reconciliation stack: `git merge --no-ff origin/fm/cli-reverse-etl-destination-r1` produced merge `85830fa00` carrying `Refs #4289`; `gh-axi api PATCH /repos/polymetrics-ai/cli/pulls/4300 --field base=fm/cli-reverse-etl-destination-r1` retargeted PR #4300, and `gh-axi api /repos/polymetrics-ai/cli/pulls/4300 --jq .base.ref` returned `fm/cli-reverse-etl-destination-r1`.
+- [ ] Reconciliation seven-surface ledger proves all 19 connectors across binary read/write, direct read/write, ETL, reverse ETL, and executable CLI commands with exact connector-owned bindings.
+- [ ] Reconciliation generated artifact, conformance, runtime preflight, boundary, and full repository verification gates are green after connector-local changes.
+- [ ] PR #4300 body and API base read-back reflect the stacked delivery (`Refs #4289`, `fm/cli-reverse-etl-destination-r1 → main`) after the reconciliation push.
 
 The full `go test -timeout 20m ./...` suite was intentionally left to CI: the repository instruction documents that the 550+ connector suite routinely exceeds this worker's per-command window and requires scoped local checks. The changed definition paths are covered by the targeted conformance run above, and the production preflight test sweeps every implemented command.

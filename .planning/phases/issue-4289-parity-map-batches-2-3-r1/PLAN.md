@@ -1,12 +1,12 @@
 ## Task Delivery Header
 
 - Issue: Refs #4289 — chore(connectors): map parity batches 2 and 3
-- Base branch: main
-- Merges into: main
-- Delivery: A pull request against `main` from `fm/cli-map-batch23-r1`, with each selected bundle holding a public source lock and six-class disposition ledger; no credentials or provider calls are used.
-- Working branch: fm/cli-map-batch23-r1
-- Task: Produce source-locked, complete six-class maps for batch 2 (`grafana`, `trello`, `slack`, `n8n`, `google-calendar`, `gmail`, `twilio`, `amazon-sqs`, `elasticsearch`) and batch 3 (`gong`, `google-ads`, `facebook-marketing`, `linkedin-ads`, `aircall`, `xero`, `paypal-transaction`, `gocardless`, `amazon-seller-partner`, `miro`). Every documented source operation is bound to exactly one API-surface row and parity class. The task deliberately excludes Gitea and touches no engine or unrelated connector path.
-- Verification: source-lock/disposition integrity checks; `go run ./cmd/connectorgen validate`; `go run ./cmd/connectorgen surface-sync --check`; targeted conformance and commandrunner tests; `connector-boundary` as a detached capture; repository generated/snapshot checks applicable to definition data.
+- Base branch: fm/cli-reverse-etl-destination-r1
+- Merges into: fm/cli-reverse-etl-destination-r1 → main
+- Delivery: PR #4300 remains open from `fm/cli-map-batch23-r1` after a non-rewriting merge of the temporary typed-destination foundation; its GitHub API base is `fm/cli-reverse-etl-destination-r1`, local and generated gates are green, and final merge remains human-gated.
+- Working branch: fm/cli-map-batch23-repair-r1 (publishes fast-forward to `fm/cli-map-batch23-r1`)
+- Task: Reconcile the preserved source-locked maps for batch 2 (`grafana`, `trello`, `slack`, `n8n`, `google-calendar`, `gmail`, `twilio`, `amazon-sqs`, `elasticsearch`) and batch 3 (`gong`, `google-ads`, `facebook-marketing`, `linkedin-ads`, `aircall`, `xero`, `paypal-transaction`, `gocardless`, `amazon-seller-partner`, `miro`) across binary read, binary write, direct read, direct write, ETL, reverse ETL, and installed-binary CLI command surfaces. Every documented operation remains connector-owned, source-pinned, API-surface-bound, and reachable when faithfully representable; Gitea remains excluded.
+- Verification: seven-surface ledger assertion; source-lock/disposition integrity checks; `go run ./cmd/connectorgen validate`; `go run ./cmd/connectorgen surface-sync --check`; generated-artifact checks; targeted conformance and commandrunner tests; detached `connector-boundary`; and repository verification gates applicable to definition data.
 
 ## Evidence Table
 
@@ -19,7 +19,7 @@
 
 ## Scope and Ownership
 
-This is a map-only exception to the one-connector implementation lane: the issue owns nineteen disjoint connector bundle trees and their common planning evidence. Production edits are restricted to `internal/connectors/defs/<listed-connector>/sources/**`; no `operations.json`, executable command, schema, engine, or shared-tool change is in scope. The working directory name is `paypal-transaction`, which is the bundle corresponding to the issue's PayPal Transactions label.
+This is a nineteen-connector reconciliation exception to the one-connector implementation lane. The issue owns the listed disjoint connector bundle trees and common planning evidence. Production edits remain connector-local under `internal/connectors/defs/<listed-connector>/`; no engine or shared-tool change is in scope. The working directory name is `paypal-transaction`, which is the bundle corresponding to the issue's PayPal Transactions label.
 
 ## GSD Lifecycle and Inline Fallback
 
