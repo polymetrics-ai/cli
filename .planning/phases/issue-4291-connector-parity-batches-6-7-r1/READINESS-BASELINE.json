@@ -427,7 +427,10 @@
         "source_transport": false
       },
       "reverse_etl": {
-        "destination_action_bindings": 0
+        "destination_action_bindings": 0,
+        "cli_commands": 65,
+        "deployable_application_dispatch": false,
+        "pending_foundation": "#4304 camelCase source-binding validation and persisted App/CLI dispatch integration"
       },
       "binary": {
         "ledger_rows": 0,

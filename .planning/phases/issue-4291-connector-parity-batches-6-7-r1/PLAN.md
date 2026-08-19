@@ -20,6 +20,7 @@
 | Generator and connector surfaces remain valid | live | `connectorgen validate` and `surface-sync --check` operate on the real changed definition directories. |
 | Every documented provider operation remains user-reachable unless a precise technical contract is absent | live | The seven-surface readiness ledger compares every source-locked direct-read/write/binary row against an exact command or typed action and rejects safety or certification as an unreachability reason. |
 | Reverse-ETL declarations use the merged typed-destination contract | live | Bundle validation and runtime preflight load each connector-owned `sync_transport.json`, select only a named `writes.json` action, and reject an absent source binding, acknowledgement, or per-mode strategy before I/O. |
+| Captain pre-merge zero-omission gate | required before merge | For every provider-defined operation, the final ledger must preserve source URL/version/hash, canonical surface mapping, enabled runtime reachability, generated CLI command, generated website row, and executable fixture/conformance evidence. It separately records ETL, reverse ETL, direct read/write, binary download/upload; `N/A` requires provider evidence that the capability is absent. Typed scope/tier/destructive/safety metadata and confirmation must never substitute for reachability. |
 
 ## Lifecycle record
 
@@ -63,6 +64,11 @@ available foundation. `READINESS-BASELINE.{json,md}` is the before-state for thi
 3. **REFACTOR / review:** remove stale `generic-typed-destination-executor` statements, make
    transport evidence connector-owned, classify binary operations separately, and preserve
    `provider_live_certification: pending` rather than treating fixture proof as certification.
+4. **PRE-MERGE ZERO-OMISSION AUDIT — captain gate:** before a PR can be marked ready, construct a
+   twenty-connector operation-level matrix proving source URL/version/hash, canonical mapping,
+   installed-binary reachability, generated CLI and website projection, fixture/conformance evidence,
+   and separately each of ETL/reverse/direct/binary upload/download. An `N/A` cell cites provider
+   evidence of absence; safety, scope, tier, and destructive state appear only as execution metadata.
 
 The canonical contract forbids role spawning. The GSD lifecycle therefore runs inline with this
 issue-local phase evidence; generated prompts were refreshed on 2026-08-20 after `scripts/gsd

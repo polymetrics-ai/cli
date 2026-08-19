@@ -21,7 +21,7 @@ provider-live certification. The machine-readable source is
 | segment | complete | 201 | 0 / 97 | 0 / 101 | 0 / 3 | 0 | 0 / 0 | 28 | 0 |
 | activecampaign | complete | 296 | 0 / 128 | 0 / 157 | 0 / 11 | 0 | 0 / 0 | 50 | 0 |
 | iterable | complete | 148 | 0 / 49 | 0 / 96 | 0 / 3 | 0 | 0 / 0 | 12 | 0 |
-| help-scout | unproven | 144 | 50 / 55 | 65 / 65 | 0 / 24 | 0 | 1 / 0 | 18 | 139 |
+| help-scout | unproven | 144 | 50 / 55 | 65 / 65 | 0 / 24 | 0 (camelCase foundation pending) | 1 / 0 | 18 | 139 |
 | gorgias | complete | 114 | 41 / 42 | 61 / 68 | 1 / 4 | 1 (App dispatch pending) | 1 / 1 | 18 | 94 |
 | service-now | dynamic templates | 6 | 0 / 1 | 2 / 4 | 1 / 3 | 1 (App dispatch pending) | 0 / 0 | 1 | 0 |
 | chatwoot | complete | 148 | 32 / 57 | 60 / 84 | 1 / 7 | 1 (App dispatch pending) | 0 / 0 | 18 | 100 |
@@ -107,3 +107,10 @@ Braze declares its current 21 fixture-backed streams and `content_blocks(content
 update_content_block` proof, with all 29 typed actions explicitly eligible (one bound, 28 pending
 selection). Its source inventory remains unproven pending public recovery; no completeness claim is
 made. #4304 App/CLI dispatch remains pending.
+
+## Help Scout candidate — blocked foundation proof
+
+The exact `conversations(id) → update_conversation(conversationId)` draft is blocked by the common
+declarative destination validator, which currently rejects camelCase input names before it can check
+the selected closed action schema. It will be revalidated only after #4304 publishes the approved
+schema-validated camelCase foundation fix. The inventory and binary-ledger defect remain open.

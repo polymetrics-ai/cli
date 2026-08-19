@@ -253,3 +253,30 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   -count=1` passed.
 - **PENDING:** #4304 App/CLI dispatch and Braze provider-inventory recovery are independent open
   requirements; this declaration makes neither a false deployment nor a completeness claim.
+
+## Help Scout connector-owned destination increment — 2026-08-20
+
+- **RED — current:** `go run ./cmd/connectorgen validate` refuses the draft source mapping with
+  `help-scout: ... sync_transport.json: destination transport: destination source binding:
+  input_fields source record mapping requires concrete input and field names`. The exact action input
+  `conversationId` is camelCase; `internal/connectors/sync_transport.go:673-687` rejects uppercase
+  identifiers before it can validate the selected `writes.json` action field.
+- **PENDING FOUNDATION:** the captain approved a common, schema-validated camelCase declaration
+  rule—not a Help Scout exception. This lane must wait for #4304's published implementation and App/CLI
+  dispatch integration, merge it, then rerun the binding and all focused/generated gates. The draft
+  cannot be committed or counted as a declared transport before that green run.
+
+## Captain zero-omission pre-merge gate — 2026-08-20
+
+Before merge, the final evidence will carry an operation-level, twenty-connector matrix with source
+URL/version/hash, canonical mapping, runtime reachability, generated CLI command, generated website row,
+and executable fixture/conformance evidence. ETL, reverse ETL, direct read/write, binary download, and
+binary upload are independent cells. `N/A` requires provider evidence that the capability is absent;
+scope, tier, destructive, and safety controls are typed runtime/confirmation metadata, never omission
+reasons.
+
+`FOUNDATION-GAPS.json` is the required machine-readable complement: it deduplicates three shared
+provider-neutral gap IDs while retaining one provenance-rich row per affected operation, explicit
+fan-out rollups, owner/lane/status, and exact closure verification. Its portfolio rollup is currently
+`merge_ready: false`; rows with an open foundation gap are not enabled and cannot contribute to a
+merge-ready verdict.

@@ -30,7 +30,7 @@ certification never make an operation unreachable.
 | segment | complete | 0 / 97 | 0 / 101 | 0 | 0 / 3 | 0 | 0 / 0 | 28 |
 | activecampaign | complete | 0 / 128 | 0 / 157 | 0 | 0 / 11 | 0 | 0 / 0 | 50 |
 | iterable | complete | 0 / 49 | 0 / 96 | 0 | 0 / 3 | 0 | 0 / 0 | 12 |
-| help-scout | unproven | 50 / 55 | 65 / 65 | 0 | 0 / 24 | 0 | 1 / 0 | 18 |
+| help-scout | unproven | 50 / 55 | 65 / 65 | 65 | 0 / 24 | 0 (camelCase foundation pending) | 1 / 0 | 18 |
 | gorgias | complete | 41 / 42 | 61 / 68 | 61 | 1 / 4 | 1 (App dispatch pending) | 1 / 1 | 18 |
 | service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 1 / 3 | 1 (App dispatch pending) | 0 / 0 | 1 |
 | chatwoot | complete | 32 / 57 | 60 / 84 | 60 | 1 / 7 | 1 (App dispatch pending) | 0 / 0 | 18 |
@@ -55,11 +55,17 @@ certification never make an operation unreachable.
   await closed exact-action selection; un-authored direct writes are correctly declaration-pending,
   and Gorgias multipart `upload_file` has a named binary/multipart semantic exclusion while
   remaining CLI-reachable.
+- Help Scout has an exact candidate `conversations(id) → update_conversation(conversationId)`, but
+  the unmerged common #4304 camelCase source-binding validation refuses it before I/O. It is not
+  counted as declared until foundation integration and focused/generated gates pass.
 - Braze, Help Scout, and Braintree source inventories remain unproven; the rest use a complete
   provider specification/reference or ServiceNow's explicitly dynamic fixed-template basis.
 - Help Scout still needs its binary command represented as a binary parity row; Gorgias now is.
 - Every connector is provider-live-certification pending; no credentials or provider calls are
   authorized for this lane.
+- `FOUNDATION-GAPS.json` records shared provider-neutral gaps once per stable ID, with exact
+  source URL/version/hash rows and batch/portfolio fan-out. Its current `merge_ready: false` is
+  authoritative: no open foundation-gap operation is counted as enabled or merge-ready.
 
 ## Lifecycle and verification
 
