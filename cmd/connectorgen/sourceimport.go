@@ -8,14 +8,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -130,8 +129,17 @@ type sourceByteLimits struct {
 }
 
 type sourceAuthScope struct {
-	Scheme string `json:"scheme"`
-	Scope  string `json:"scope"`
+	Scheme string   `json:"scheme"`
+	Scopes []string `json:"scopes"`
+}
+
+type sourceAuthRequirementGroup struct {
+	AllOf []sourceAuthScope `json:"all_of"`
+}
+
+type sourceAuthDescriptor struct {
+	Declared bool                         `json:"declared"`
+	AnyOf    []sourceAuthRequirementGroup `json:"any_of"`
 }
 
 // sourceOperationDescriptor is the immutable bridge from a verified provider
@@ -150,7 +158,7 @@ type sourceOperationDescriptor struct {
 	Output              sourceOutputDescriptor     `json:"output"`
 	Pagination          any                        `json:"pagination,omitempty"`
 	ByteLimits          sourceByteLimits           `json:"byte_limits"`
-	AuthScopes          []sourceAuthScope          `json:"auth_scopes"`
+	AuthScopes          sourceAuthDescriptor       `json:"auth_scopes"`
 }
 
 type sourceImportDescriptorDocument struct {
@@ -209,9 +217,8 @@ func validateSourceImportConnector(connector string) error {
 }
 
 func validateSourceImportArtifact(artifact sourceImportArtifact) error {
-	parsed, err := url.Parse(artifact.SourceURL)
-	if err != nil || parsed.Scheme != "https" || parsed.Host == "" || parsed.User != nil || parsed.Fragment != "" {
-		return fmt.Errorf("source lock has invalid public artifact URL")
+	if _, err := parseBatchArtifactURL(artifact.SourceURL); err != nil {
+		return fmt.Errorf("source lock has invalid public artifact URL: %w", err)
 	}
 	if artifact.Bytes <= 0 {
 		return fmt.Errorf("source lock has invalid artifact byte count")
@@ -329,7 +336,7 @@ func parseSourceImportDocument(raw []byte) (map[string]any, string, error) {
 	var value any
 	if err := decodeSourceJSON(raw, &value); err != nil {
 		var yamlValue any
-		if yamlErr := yaml.Unmarshal(raw, &yamlValue); yamlErr != nil {
+		if yamlErr := decodeSourceYAML(raw, &yamlValue); yamlErr != nil {
 			return nil, "", fmt.Errorf("parse source artifact as JSON or YAML: JSON: %v; YAML: %w", err, yamlErr)
 		}
 		canonical, yamlErr := json.Marshal(normalizeSourceYAML(yamlValue))
@@ -372,6 +379,21 @@ func sourceJSONEOF(decoder *json.Decoder) error {
 		return fmt.Errorf("unexpected trailing JSON value")
 	}
 	return err
+}
+
+func decodeSourceYAML(raw []byte, target *any) error {
+	decoder := yaml.NewDecoder(bytes.NewReader(raw))
+	if err := decoder.Decode(target); err != nil {
+		return err
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("multiple YAML documents are unsupported")
+	}
+	return nil
 }
 
 func normalizeSourceYAML(value any) any {
@@ -498,7 +520,7 @@ func importSourceDocument(lock sourceImportLock, doc map[string]any, version str
 	}
 	var descriptors []sourceOperationDescriptor
 	for _, path := range sortedSourceMapKeys(paths) {
-		if !strings.HasPrefix(path, "/") || strings.Contains(path, "://") {
+		if err := validateSourceImportPath(path); err != nil {
 			return nil, fmt.Errorf("path %q is not a connector-relative path template", path)
 		}
 		resolvedPathItem, err := resolver.resolve(paths[path])
@@ -546,19 +568,30 @@ func importSourceDocument(lock sourceImportLock, doc map[string]any, version str
 
 var sourceHTTPMethods = []string{"delete", "get", "head", "options", "patch", "post", "put", "trace"}
 
+func validateSourceImportPath(path string) error {
+	if path == "" || path != strings.TrimSpace(path) || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.Contains(path, "://") || strings.ContainsAny(path, "\r\n?#") {
+		return fmt.Errorf("not connector-relative")
+	}
+	return nil
+}
+
 func importSourceOperation(lock sourceImportLock, doc map[string]any, version string, resolver *sourceReferenceResolver, path, method string, pathParameters []sourceParameterValue, operation map[string]any, limits sourceImportLimits) (sourceOperationDescriptor, error) {
 	location := fmt.Sprintf("paths[%q].%s", path, method)
 	operationParameters, err := sourceParameterValues(operation["parameters"], resolver, version)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s parameters: %w", location, err)
 	}
-	request, err := sourceRequestDescriptorFrom(pathParameters, operationParameters, operation, version, resolver, limits)
+	request, err := sourceRequestDescriptorFrom(path, pathParameters, operationParameters, operation, doc, version, resolver, limits)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s request: %w", location, err)
 	}
 	responses, mediaTypes, err := sourceResponses(operation, doc, version, resolver, limits)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s responses: %w", location, err)
+	}
+	outputClass, err := sourceOutputClassFor(method, mediaTypes)
+	if err != nil {
+		return sourceOperationDescriptor{}, fmt.Errorf("%s output: %w", location, err)
 	}
 	providerID, _ := operation["operationId"].(string)
 	sourceID := providerID
@@ -573,7 +606,7 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, version st
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s: %w", location, err)
 	}
-	authScopes, err := sourceAuthScopes(operation, doc)
+	authScopes, err := sourceAuthRequirements(operation, doc)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s auth scopes: %w", location, err)
 	}
@@ -586,7 +619,7 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, version st
 		Path:                path,
 		Request:             request,
 		Responses:           responses,
-		Output:              sourceOutputDescriptor{Class: sourceOutputClassFor(method, mediaTypes), MediaTypes: mediaTypes},
+		Output:              sourceOutputDescriptor{Class: outputClass, MediaTypes: mediaTypes},
 		Pagination:          pagination,
 		ByteLimits:          byteLimits,
 		AuthScopes:          authScopes,
@@ -620,7 +653,8 @@ func sourceParameterValues(raw any, resolver *sourceReferenceResolver, version s
 		}
 		name, _ := parameter["name"].(string)
 		in, _ := parameter["in"].(string)
-		if name == "" || (in != "path" && in != "query" && in != "header") {
+		allowedLocation := in == "path" || in == "query" || in == "header" || (version == "swagger2" && in == "body")
+		if name == "" || name != strings.TrimSpace(name) || !allowedLocation {
 			return nil, fmt.Errorf("parameter %q has unsupported location %q", name, in)
 		}
 		schema, err := sourceParameterSchema(parameter, version)
@@ -659,18 +693,17 @@ func sourceParameterSchema(parameter map[string]any, version string) (any, error
 	return schema, nil
 }
 
-func sourceRequestDescriptorFrom(pathParameters, operationParameters []sourceParameterValue, operation map[string]any, version string, resolver *sourceReferenceResolver, limits sourceImportLimits) (sourceRequestDescriptor, error) {
-	parameters := append(append([]sourceParameterValue(nil), pathParameters...), operationParameters...)
-	seen := map[string]bool{}
+func sourceRequestDescriptorFrom(path string, pathParameters, operationParameters []sourceParameterValue, operation, doc map[string]any, version string, resolver *sourceReferenceResolver, limits sourceImportLimits) (sourceRequestDescriptor, error) {
+	parameters, err := sourceEffectiveParameters(pathParameters, operationParameters)
+	if err != nil {
+		return sourceRequestDescriptor{}, err
+	}
 	request := sourceRequestDescriptor{Path: []sourceParameterDescriptor{}, Query: []sourceParameterDescriptor{}, Header: []sourceParameterDescriptor{}}
+	var bodyParameters []sourceParameterValue
 	for _, parameter := range parameters {
-		key := parameter.In + "\x00" + parameter.Name
-		if seen[key] {
-			return sourceRequestDescriptor{}, fmt.Errorf("ambiguous parameter %q in %q", parameter.Name, parameter.In)
-		}
-		seen[key] = true
-		if parameter.In == "path" && !parameter.Required {
-			return sourceRequestDescriptor{}, fmt.Errorf("path parameter %q must be required", parameter.Name)
+		if parameter.In == "body" {
+			bodyParameters = append(bodyParameters, parameter)
+			continue
 		}
 		if err := validateBoundedRequestSchema(parameter.Schema, limits, 0); err != nil {
 			return sourceRequestDescriptor{}, fmt.Errorf("parameter %q: %w", parameter.Name, err)
@@ -685,11 +718,33 @@ func sourceRequestDescriptorFrom(pathParameters, operationParameters []sourcePar
 			request.Header = append(request.Header, descriptor)
 		}
 	}
+	if err := validateSourcePathParameters(path, parameters); err != nil {
+		return sourceRequestDescriptor{}, err
+	}
 	for _, group := range [][]sourceParameterDescriptor{request.Path, request.Query, request.Header} {
 		sort.Slice(group, func(i, j int) bool { return group[i].Name < group[j].Name })
 	}
 	if version == "swagger2" {
+		if len(bodyParameters) == 0 {
+			return request, nil
+		}
+		if len(bodyParameters) != 1 {
+			return sourceRequestDescriptor{}, fmt.Errorf("Swagger request body is ambiguous")
+		}
+		body := bodyParameters[0]
+		if err := validateBoundedRequestSchema(body.Schema, limits, 0); err != nil {
+			return sourceRequestDescriptor{}, fmt.Errorf("request body: %w", err)
+		}
+		mediaType, err := sourceSwaggerRequestMediaType(operation, doc)
+		if err != nil {
+			return sourceRequestDescriptor{}, err
+		}
+		request.Body = &sourceRequestBodyDescriptor{Required: body.Required, Schema: body.Schema}
+		request.MediaType = mediaType
 		return request, nil
+	}
+	if len(bodyParameters) > 0 {
+		return sourceRequestDescriptor{}, fmt.Errorf("request body parameter is only supported by Swagger 2")
 	}
 	rawBody, ok := operation["requestBody"]
 	if !ok {
@@ -729,6 +784,124 @@ func sourceRequestDescriptorFrom(pathParameters, operationParameters []sourcePar
 	request.Body = &sourceRequestBodyDescriptor{Required: sourceBool(body["required"]), Schema: resolvedSchema}
 	request.MediaType = mediaType
 	return request, nil
+}
+
+func sourceEffectiveParameters(pathParameters, operationParameters []sourceParameterValue) ([]sourceParameterValue, error) {
+	effective := make(map[string]sourceParameterValue, len(pathParameters)+len(operationParameters))
+	for _, parameters := range [][]sourceParameterValue{pathParameters, operationParameters} {
+		seen := make(map[string]bool, len(parameters))
+		for _, parameter := range parameters {
+			key := parameter.In + "\x00" + parameter.Name
+			if seen[key] {
+				return nil, fmt.Errorf("ambiguous parameter %q in %q", parameter.Name, parameter.In)
+			}
+			seen[key] = true
+			effective[key] = parameter
+		}
+	}
+	parameters := make([]sourceParameterValue, 0, len(effective))
+	for _, parameter := range effective {
+		parameters = append(parameters, parameter)
+	}
+	sort.Slice(parameters, func(i, j int) bool {
+		if parameters[i].In != parameters[j].In {
+			return parameters[i].In < parameters[j].In
+		}
+		return parameters[i].Name < parameters[j].Name
+	})
+	return parameters, nil
+}
+
+func validateSourcePathParameters(path string, parameters []sourceParameterValue) error {
+	placeholders, err := sourcePathTemplateParameters(path)
+	if err != nil {
+		return err
+	}
+	pathParameters := make(map[string]bool)
+	for _, parameter := range parameters {
+		if parameter.In != "path" {
+			continue
+		}
+		if !parameter.Required {
+			return fmt.Errorf("path parameter %q must be required", parameter.Name)
+		}
+		pathParameters[parameter.Name] = true
+	}
+	for _, placeholder := range placeholders {
+		if !pathParameters[placeholder] {
+			return fmt.Errorf("path placeholder %q has no required path parameter", placeholder)
+		}
+	}
+	for _, parameter := range parameters {
+		if parameter.In == "path" && !containsSourceString(placeholders, parameter.Name) {
+			return fmt.Errorf("path parameter %q is not present in the path template", parameter.Name)
+		}
+	}
+	return nil
+}
+
+func sourcePathTemplateParameters(path string) ([]string, error) {
+	seen := map[string]bool{}
+	var parameters []string
+	for remaining := path; remaining != ""; {
+		open := strings.IndexByte(remaining, '{')
+		close := strings.IndexByte(remaining, '}')
+		if open == -1 {
+			if close >= 0 {
+				return nil, fmt.Errorf("invalid path placeholder")
+			}
+			break
+		}
+		if close >= 0 && close < open {
+			return nil, fmt.Errorf("invalid path placeholder")
+		}
+		remaining = remaining[open+1:]
+		close = strings.IndexByte(remaining, '}')
+		if close < 0 {
+			return nil, fmt.Errorf("invalid path placeholder")
+		}
+		name := remaining[:close]
+		if name == "" || name != strings.TrimSpace(name) || strings.ContainsAny(name, "{}") {
+			return nil, fmt.Errorf("invalid path placeholder")
+		}
+		if !seen[name] {
+			seen[name] = true
+			parameters = append(parameters, name)
+		}
+		remaining = remaining[close+1:]
+	}
+	sort.Strings(parameters)
+	return parameters, nil
+}
+
+func containsSourceString(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceSwaggerRequestMediaType(operation, doc map[string]any) (string, error) {
+	rawConsumes, exists := operation["consumes"]
+	if !exists {
+		rawConsumes, exists = doc["consumes"]
+	}
+	if !exists {
+		return "", fmt.Errorf("Swagger request body has no declared consumes media type")
+	}
+	mediaTypes, err := sourceStringArray(rawConsumes, "Swagger consumes")
+	if err != nil {
+		return "", err
+	}
+	if len(mediaTypes) != 1 {
+		return "", fmt.Errorf("Swagger request body requires exactly one unambiguous media type")
+	}
+	if !sourceJSONMediaType(mediaTypes[0]) {
+		return "", fmt.Errorf("unsupported request encoding %q", mediaTypes[0])
+	}
+	return mediaTypes[0], nil
 }
 
 func validateBoundedRequestSchema(schema any, limits sourceImportLimits, depth int) error {
@@ -782,8 +955,14 @@ func validateBoundedRequestSchema(schema any, limits sourceImportLimits, depth i
 		}
 		return validateBoundedRequestSchema(items, limits, depth+1)
 	case "object":
-		if additional, exists := object["additionalProperties"]; exists && additional != false {
+		additional, exists := object["additionalProperties"]
+		if !exists || additional != false {
 			return fmt.Errorf("unbounded request schema object has dynamic additionalProperties")
+		}
+		for _, keyword := range []string{"patternProperties", "propertyNames", "unevaluatedProperties", "dependentSchemas", "dependentRequired"} {
+			if _, exists := object[keyword]; exists {
+				return fmt.Errorf("unbounded request schema object uses dynamic %s", keyword)
+			}
 		}
 		properties, exists := object["properties"]
 		if !exists {
@@ -833,12 +1012,18 @@ func sourceResponses(operation, doc map[string]any, version string, resolver *so
 		}
 	}
 	if version == "swagger2" && len(mediaSet) == 0 {
-		produces := operation["produces"]
-		if produces == nil {
-			produces = doc["produces"]
+		produces, declared := operation["produces"]
+		if !declared {
+			produces, declared = doc["produces"]
 		}
-		for _, mediaType := range sourceStringSlice(produces) {
-			mediaSet[mediaType] = true
+		if declared {
+			mediaTypes, err := sourceStringArray(produces, "Swagger produces")
+			if err != nil {
+				return nil, nil, err
+			}
+			for _, mediaType := range mediaTypes {
+				mediaSet[mediaType] = true
+			}
 		}
 	}
 	mediaTypes := make([]string, 0, len(mediaSet))
@@ -849,24 +1034,28 @@ func sourceResponses(operation, doc map[string]any, version string, resolver *so
 	return responses, mediaTypes, nil
 }
 
-func sourceOutputClassFor(method string, mediaTypes []string) sourceOutputClass {
+func sourceOutputClassFor(method string, mediaTypes []string) (sourceOutputClass, error) {
 	if method == "head" || len(mediaTypes) == 0 {
-		return sourceOutputStatus
+		return sourceOutputStatus, nil
 	}
-	allText := true
+	var class sourceOutputClass
 	for _, mediaType := range mediaTypes {
-		lower := strings.ToLower(mediaType)
-		if lower == "application/octet-stream" || strings.Contains(lower, "application/zip") || strings.Contains(lower, "application/pdf") {
-			return sourceOutputBinary
+		normalizedMediaType := strings.ToLower(strings.TrimSpace(strings.Split(mediaType, ";")[0]))
+		if normalizedMediaType == "" {
+			return "", fmt.Errorf("response output media type is empty")
 		}
-		if !strings.HasPrefix(lower, "text/") {
-			allText = false
+		mediaClass := sourceOutputBinary
+		if sourceJSONMediaType(mediaType) {
+			mediaClass = sourceOutputJSON
+		} else if strings.HasPrefix(normalizedMediaType, "text/") {
+			mediaClass = sourceOutputText
 		}
+		if class != "" && class != mediaClass {
+			return "", fmt.Errorf("ambiguous response output media types")
+		}
+		class = mediaClass
 	}
-	if allText {
-		return sourceOutputText
-	}
-	return sourceOutputJSON
+	return class, nil
 }
 
 func sourcePagination(operation map[string]any, resolver *sourceReferenceResolver) (any, error) {
@@ -903,37 +1092,58 @@ func sourceOperationByteLimits(operation map[string]any) (sourceByteLimits, erro
 	return limits, nil
 }
 
-func sourceAuthScopes(operation, doc map[string]any) ([]sourceAuthScope, error) {
-	security := operation["security"]
-	if security == nil {
-		security = doc["security"]
+func sourceAuthRequirements(operation, doc map[string]any) (sourceAuthDescriptor, error) {
+	descriptor := sourceAuthDescriptor{AnyOf: []sourceAuthRequirementGroup{}}
+	security, declared := operation["security"]
+	if !declared {
+		security, declared = doc["security"]
 	}
-	if security == nil {
-		return []sourceAuthScope{}, nil
+	if !declared {
+		return descriptor, nil
 	}
+	descriptor.Declared = true
 	items, ok := security.([]any)
 	if !ok {
-		return nil, fmt.Errorf("security must be an array")
+		return sourceAuthDescriptor{}, fmt.Errorf("security must be an array")
 	}
-	var scopes []sourceAuthScope
+	groups := make([]sourceAuthRequirementGroup, 0, len(items))
 	for _, item := range items {
 		requirement, ok := item.(map[string]any)
 		if !ok {
-			return nil, fmt.Errorf("security requirement must be an object")
+			return sourceAuthDescriptor{}, fmt.Errorf("security requirement must be an object")
 		}
+		group := sourceAuthRequirementGroup{AllOf: []sourceAuthScope{}}
 		for _, scheme := range sortedSourceMapKeys(requirement) {
-			for _, scope := range sourceStringSlice(requirement[scheme]) {
-				scopes = append(scopes, sourceAuthScope{Scheme: scheme, Scope: scope})
+			if scheme == "" {
+				return sourceAuthDescriptor{}, fmt.Errorf("security requirement has an empty scheme")
+			}
+			scopes, err := sourceStringArray(requirement[scheme], "security requirement scopes")
+			if err != nil {
+				return sourceAuthDescriptor{}, err
+			}
+			group.AllOf = append(group.AllOf, sourceAuthScope{Scheme: scheme, Scopes: scopes})
+		}
+		groups = append(groups, group)
+	}
+	sort.Slice(groups, func(i, j int) bool {
+		left, right := groups[i].AllOf, groups[j].AllOf
+		for index := 0; index < len(left) && index < len(right); index++ {
+			if left[index].Scheme != right[index].Scheme {
+				return left[index].Scheme < right[index].Scheme
+			}
+			for scopeIndex := 0; scopeIndex < len(left[index].Scopes) && scopeIndex < len(right[index].Scopes); scopeIndex++ {
+				if left[index].Scopes[scopeIndex] != right[index].Scopes[scopeIndex] {
+					return left[index].Scopes[scopeIndex] < right[index].Scopes[scopeIndex]
+				}
+			}
+			if len(left[index].Scopes) != len(right[index].Scopes) {
+				return len(left[index].Scopes) < len(right[index].Scopes)
 			}
 		}
-	}
-	sort.Slice(scopes, func(i, j int) bool {
-		if scopes[i].Scheme != scopes[j].Scheme {
-			return scopes[i].Scheme < scopes[j].Scheme
-		}
-		return scopes[i].Scope < scopes[j].Scope
+		return len(left) < len(right)
 	})
-	return scopes, nil
+	descriptor.AnyOf = groups
+	return descriptor, nil
 }
 
 func sourceJSONMediaType(mediaType string) bool {
@@ -970,19 +1180,21 @@ func sourceBool(value any) bool {
 	return result
 }
 
-func sourceStringSlice(value any) []string {
+func sourceStringArray(value any, field string) ([]string, error) {
 	items, ok := value.([]any)
 	if !ok {
-		return nil
+		return nil, fmt.Errorf("%s must be an array", field)
 	}
 	stringsOut := make([]string, 0, len(items))
 	for _, item := range items {
-		if stringValue, ok := item.(string); ok {
-			stringsOut = append(stringsOut, stringValue)
+		stringValue, ok := item.(string)
+		if !ok || stringValue == "" || stringValue != strings.TrimSpace(stringValue) {
+			return nil, fmt.Errorf("%s must contain non-empty strings", field)
 		}
+		stringsOut = append(stringsOut, stringValue)
 	}
 	sort.Strings(stringsOut)
-	return stringsOut
+	return stringsOut, nil
 }
 
 func sortedSourceMapKeys(values map[string]any) []string {
@@ -1015,7 +1227,7 @@ type sourceImportOptions struct {
 }
 
 func runSourceImport(args []string, stdout, stderr io.Writer) int {
-	return runSourceImportWithFetcher(args, stdout, stderr, httpSourceImportFetcher(defaultSourceImportLimits()))
+	return runSourceImportWithFetcher(args, stdout, stderr, newHTTPSourceImportFetcher(defaultSourceImportLimits()))
 }
 
 func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher sourceImportFetcher) int {
@@ -1105,19 +1317,36 @@ func loadConnectorSourceImportLock(defsDir, connector string) (sourceImportLock,
 	if err := validateSourceImportConnector(connector); err != nil {
 		return sourceImportLock{}, err
 	}
-	bundleDir := filepath.Join(defsDir, connector)
+	absDefsDir, err := filepath.Abs(defsDir)
+	if err != nil {
+		return sourceImportLock{}, fmt.Errorf("resolve connector definitions directory: %w", err)
+	}
+	resolvedDefsDir, err := filepath.EvalSymlinks(absDefsDir)
+	if err != nil {
+		return sourceImportLock{}, fmt.Errorf("resolve connector definitions directory: %w", err)
+	}
+	bundleDir := filepath.Join(absDefsDir, connector)
 	sourcesDir := filepath.Join(bundleDir, "sources")
 	path := filepath.Join(sourcesDir, connector+"-operation-source-lock.json")
+	resolvedBundleDir, err := filepath.EvalSymlinks(bundleDir)
+	if err != nil {
+		return sourceImportLock{}, fmt.Errorf("resolve connector bundle directory: %w", err)
+	}
+	if !sourceImportPathWithin(resolvedDefsDir, resolvedBundleDir) {
+		return sourceImportLock{}, fmt.Errorf("connector bundle is outside definitions directory")
+	}
 	resolvedSourcesDir, err := filepath.EvalSymlinks(sourcesDir)
 	if err != nil {
 		return sourceImportLock{}, fmt.Errorf("resolve connector-owned source directory: %w", err)
+	}
+	if !sourceImportPathWithin(resolvedBundleDir, resolvedSourcesDir) {
+		return sourceImportLock{}, fmt.Errorf("source directory is outside connector-owned bundle")
 	}
 	resolvedPath, err := filepath.EvalSymlinks(path)
 	if err != nil {
 		return sourceImportLock{}, fmt.Errorf("resolve connector-owned source lock: %w", err)
 	}
-	relativePath, err := filepath.Rel(resolvedSourcesDir, resolvedPath)
-	if err != nil || relativePath == ".." || strings.HasPrefix(relativePath, ".."+string(filepath.Separator)) {
+	if !sourceImportPathWithin(resolvedSourcesDir, resolvedPath) {
 		return sourceImportLock{}, fmt.Errorf("source lock is outside connector-owned sources directory")
 	}
 	raw, err := os.ReadFile(resolvedPath)
@@ -1127,19 +1356,39 @@ func loadConnectorSourceImportLock(defsDir, connector string) (sourceImportLock,
 	return parseSourceImportLock(raw, connector)
 }
 
-type httpSourceImportFetcher sourceImportLimits
+func sourceImportPathWithin(root, path string) bool {
+	relativePath, err := filepath.Rel(root, path)
+	return err == nil && relativePath != ".." && !strings.HasPrefix(relativePath, ".."+string(filepath.Separator)) && !filepath.IsAbs(relativePath)
+}
 
-func (limits httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, sourceURL, nil)
+type httpSourceImportFetcher struct {
+	limits sourceImportLimits
+	lookup batchArtifactLookupIPAddr
+}
+
+func newHTTPSourceImportFetcher(limits sourceImportLimits) sourceImportFetcher {
+	return httpSourceImportFetcher{limits: limits, lookup: batchArtifactLookupIPAddr(net.DefaultResolver.LookupIPAddr)}
+}
+
+func (fetcher httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
+	if err := validateSourceImportLimits(fetcher.limits); err != nil {
+		return nil, err
+	}
+	if fetcher.lookup == nil {
+		return nil, fmt.Errorf("source importer has no public address resolver")
+	}
+	parsed, err := parseBatchArtifactURL(sourceURL)
+	if err != nil {
+		return nil, fmt.Errorf("validate locked source artifact URL: %w", err)
+	}
+	if err := validateBatchArtifactRequestURL(ctx, parsed, fetcher.lookup); err != nil {
+		return nil, fmt.Errorf("validate locked source artifact destination: %w", err)
+	}
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
 	if err != nil {
 		return nil, err
 	}
-	client := &http.Client{
-		Timeout: 30 * time.Second,
-		CheckRedirect: func(*http.Request, []*http.Request) error {
-			return fmt.Errorf("source-lock artifact redirects are not permitted")
-		},
-	}
+	client := newSourceImportHTTPClient(fetcher.lookup)
 	response, err := client.Do(request)
 	if err != nil {
 		return nil, err
@@ -1150,7 +1399,7 @@ func (limits httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL strin
 		}
 		return nil, fmt.Errorf("source-lock artifact returned HTTP %d", response.StatusCode)
 	}
-	raw, readErr := io.ReadAll(io.LimitReader(response.Body, int64(limits.MaxArtifactBytes)+1))
+	raw, readErr := io.ReadAll(io.LimitReader(response.Body, fetcher.limits.MaxArtifactBytes+1))
 	closeErr := response.Body.Close()
 	if readErr != nil {
 		return nil, readErr
@@ -1159,4 +1408,12 @@ func (limits httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL strin
 		return nil, fmt.Errorf("close source-lock artifact response: %w", closeErr)
 	}
 	return raw, nil
+}
+
+func newSourceImportHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
+	client := newBatchArtifactHTTPClient(lookup)
+	client.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return fmt.Errorf("source-lock artifact redirects are not permitted")
+	}
+	return client
 }

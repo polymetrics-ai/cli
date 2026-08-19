@@ -1,0 +1,1 @@
+{"openapi":"3.0.3","info":{"title":"invalid","version":"1"},"paths":{"/items":{"post":{"operationId":"implicitAdditionalProperties","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string","maxLength":80}}}}}},"responses":{"200":{"description":"x"}}}}}}

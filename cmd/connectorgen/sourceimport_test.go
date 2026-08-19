@@ -6,6 +6,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"net"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -64,7 +67,7 @@ func TestSourceImportProducesClosedCanonicalDescriptors(t *testing.T) {
 	if read.Request.Path[0].Name != "widget_id" || read.Request.Query[0].Name != "include_archived" || read.Request.Header[0].Name != "x-request-id" {
 		t.Fatalf("separated parameter names = %#v", read.Request)
 	}
-	if read.Pagination == nil || read.ByteLimits.Response != 4096 || len(read.AuthScopes) != 1 || read.AuthScopes[0].Scope != "widgets.read" {
+	if read.Pagination == nil || read.ByteLimits.Response != 4096 || !read.AuthScopes.Declared || len(read.AuthScopes.AnyOf) != 1 || len(read.AuthScopes.AnyOf[0].AllOf) != 1 || read.AuthScopes.AnyOf[0].AllOf[0].Scheme != "token" || len(read.AuthScopes.AnyOf[0].AllOf[0].Scopes) != 1 || read.AuthScopes.AnyOf[0].AllOf[0].Scopes[0] != "widgets.read" {
 		t.Fatalf("read metadata = %#v", read)
 	}
 	response200 := descriptorResponse(t, read, "200")
@@ -107,7 +110,12 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "callback route", artifact: "callback-route.json", want: "callback-only route", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
+		{name: "missing additional properties", artifact: "missing-additional-properties.json", want: "dynamic additionalProperties", limits: baseLimits},
 		{name: "unsupported encoding", artifact: "unsupported-encoding.json", want: "unsupported request encoding", limits: baseLimits},
+		{name: "invalid relative path", artifact: "invalid-relative-path.json", want: "connector-relative", limits: baseLimits},
+		{name: "whitespace path", artifact: "whitespace-path.json", want: "connector-relative", limits: baseLimits},
+		{name: "missing path parameter", artifact: "missing-path-parameter.json", want: "path placeholder", limits: baseLimits},
+		{name: "multiple YAML documents", artifact: "multiple-documents.yaml", want: "multiple YAML documents", limits: baseLimits},
 		{name: "reference depth", artifact: "deep-reference.json", want: "reference depth limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: baseLimits.MaxReferences, MaxReferenceDepth: 1}},
 		{name: "reference count", artifact: "many-references.json", want: "reference count limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: 1, MaxReferenceDepth: baseLimits.MaxReferenceDepth}},
 		{name: "operation count", artifact: "many-operations.json", want: "operation count limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: 1, MaxReferences: baseLimits.MaxReferences, MaxReferenceDepth: baseLimits.MaxReferenceDepth}},
@@ -123,6 +131,104 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
 			if err == nil || !strings.Contains(err.Error(), tc.want) {
 				t.Fatalf("import error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+}
+
+func TestSourceImportRejectsUnsafeArtifactDestinations(t *testing.T) {
+	t.Parallel()
+	for _, sourceURL := range []string{
+		"https://127.0.0.1/openapi.json",
+		"https://artifact.example/openapi.json?x=1",
+		"https://user@artifact.example/openapi.json",
+	} {
+		artifact := sourceImportArtifact{SourceURL: sourceURL, SHA256: strings.Repeat("0", sha256.Size*2), Bytes: 1}
+		if err := validateSourceImportArtifact(artifact); err == nil {
+			t.Fatalf("validate source artifact %q: accepted unsafe URL", sourceURL)
+		}
+	}
+
+	privateLookup := batchArtifactLookupIPAddr(func(context.Context, string) ([]net.IPAddr, error) {
+		return []net.IPAddr{{IP: net.ParseIP("169.254.169.254")}}, nil
+	})
+	fetcher := httpSourceImportFetcher{limits: defaultSourceImportLimits(), lookup: privateLookup}
+	if _, err := fetcher.Fetch(context.Background(), "https://artifact.example/openapi.json"); err == nil || !strings.Contains(err.Error(), "not public") {
+		t.Fatalf("private resolved source artifact error = %v", err)
+	}
+
+	publicLookup := batchArtifactLookupIPAddr(func(context.Context, string) ([]net.IPAddr, error) {
+		return []net.IPAddr{{IP: net.ParseIP("8.8.8.8")}}, nil
+	})
+	redirectURL, err := url.Parse("https://artifact.example/redirected.json")
+	if err != nil {
+		t.Fatalf("parse redirect URL: %v", err)
+	}
+	if err := newSourceImportHTTPClient(publicLookup).CheckRedirect(&http.Request{URL: redirectURL}, nil); err == nil {
+		t.Fatal("source importer accepted a redirect")
+	}
+}
+
+func TestSourceImportProjectsSwaggerBodiesPathOverridesAndAuthGroups(t *testing.T) {
+	t.Parallel()
+	raw := loadSourceImportFixture(t, filepath.Join("supported", "swagger2-body.json"))
+	lock := sourceImportFixtureLock("beta", "https://fixtures.polymetrics.invalid/swagger2-body.json", raw)
+	descriptors, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return raw, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import Swagger body fixture: %v", err)
+	}
+	if len(descriptors) != 1 {
+		t.Fatalf("Swagger descriptor count = %d, want 1", len(descriptors))
+	}
+	descriptor := descriptors[0]
+	if descriptor.Request.Body == nil || !descriptor.Request.Body.Required || descriptor.Request.MediaType != "application/json" {
+		t.Fatalf("Swagger body descriptor = %#v", descriptor.Request)
+	}
+	if len(descriptor.Request.Path) != 1 {
+		t.Fatalf("effective Swagger path parameters = %#v", descriptor.Request.Path)
+	}
+	pathSchema, ok := descriptor.Request.Path[0].Schema.(map[string]any)
+	if !ok || sourcePositiveInteger(pathSchema["maxLength"]) != 24 {
+		t.Fatalf("effective Swagger path schema = %#v", descriptor.Request.Path[0].Schema)
+	}
+	if len(descriptor.Request.Query) != 1 || descriptor.Request.Query[0].Name != "include_archived" {
+		t.Fatalf("inherited Swagger query parameters = %#v", descriptor.Request.Query)
+	}
+	auth := descriptor.AuthScopes
+	if !auth.Declared || len(auth.AnyOf) != 2 || len(auth.AnyOf[0].AllOf) != 2 || auth.AnyOf[0].AllOf[0].Scheme != "apiKey" || len(auth.AnyOf[0].AllOf[0].Scopes) != 0 || auth.AnyOf[0].AllOf[1].Scheme != "oauth2" || len(auth.AnyOf[0].AllOf[1].Scopes) != 1 || auth.AnyOf[0].AllOf[1].Scopes[0] != "widgets.write" || len(auth.AnyOf[1].AllOf) != 1 || auth.AnyOf[1].AllOf[0].Scheme != "bearerAuth" || len(auth.AnyOf[1].AllOf[0].Scopes) != 0 {
+		t.Fatalf("Swagger auth requirements = %#v", auth)
+	}
+}
+
+func TestSourceOutputClassifiesOnlyJSONAsJSON(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name       string
+		mediaTypes []string
+		want       sourceOutputClass
+		wantErr    bool
+	}{
+		{name: "JSON", mediaTypes: []string{"application/vnd.api+json"}, want: sourceOutputJSON},
+		{name: "text", mediaTypes: []string{"text/csv"}, want: sourceOutputText},
+		{name: "image", mediaTypes: []string{"image/png"}, want: sourceOutputBinary},
+		{name: "gzip", mediaTypes: []string{"application/gzip"}, want: sourceOutputBinary},
+		{name: "mixed", mediaTypes: []string{"application/json", "image/png"}, wantErr: true},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			got, err := sourceOutputClassFor("get", tc.mediaTypes)
+			if tc.wantErr {
+				if err == nil {
+					t.Fatal("mixed response media types were accepted")
+				}
+				return
+			}
+			if err != nil || got != tc.want {
+				t.Fatalf("output class = %q, %v; want %q", got, err, tc.want)
 			}
 		})
 	}
@@ -216,6 +322,29 @@ func TestSourceImportCommandUsesOnlyConnectorOwnedLockAndCheckMode(t *testing.T)
 
 	if _, err := loadConnectorSourceImportLock(defsRoot, "beta"); err == nil {
 		t.Fatal("missing beta connector-owned lock was accepted")
+	}
+}
+
+func TestSourceImportRejectsSourcesDirectoryEscapingConnectorBundle(t *testing.T) {
+	t.Parallel()
+	defsRoot := filepath.Join(t.TempDir(), "defs")
+	bundleDir := filepath.Join(defsRoot, "alpha")
+	externalSources := filepath.Join(t.TempDir(), "external-sources")
+	if err := os.MkdirAll(externalSources, 0o755); err != nil {
+		t.Fatalf("create external source directory: %v", err)
+	}
+	lockPath := filepath.Join(externalSources, "alpha-operation-source-lock.json")
+	if err := os.WriteFile(lockPath, loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json")), 0o644); err != nil {
+		t.Fatalf("write external source lock: %v", err)
+	}
+	if err := os.MkdirAll(bundleDir, 0o755); err != nil {
+		t.Fatalf("create bundle directory: %v", err)
+	}
+	if err := os.Symlink(externalSources, filepath.Join(bundleDir, "sources")); err != nil {
+		t.Fatalf("create escaping source symlink: %v", err)
+	}
+	if _, err := loadConnectorSourceImportLock(defsRoot, "alpha"); err == nil || !strings.Contains(err.Error(), "outside connector-owned bundle") {
+		t.Fatalf("escaping source directory error = %v", err)
 	}
 }
 
