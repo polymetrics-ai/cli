@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "connector": "launchdarkly",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://apidocs.launchdarkly.com/",
+    "requested_url": "https://apidocs.launchdarkly.com/",
+    "sha256": "346ad78b3b4015b61c9c43a5f2f8d4de3f3f939382d9bdadbe072e443dc028de",
+    "bytes": 72904,
+    "content_type": "text/html"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "fe6192034011c0097467a85f0fc0bc220d10e0e232c72ffdbaf9105ffb722943",
+    "bytes": 1802,
+    "source_operation_count": 7
+  },
+  "rest": {
+    "source_url": "https://apidocs.launchdarkly.com/",
+    "sha256": "346ad78b3b4015b61c9c43a5f2f8d4de3f3f939382d9bdadbe072e443dc028de",
+    "bytes": 72904,
+    "operation_counts": [
+      {
+        "key": "*",
+        "count": 1
+      },
+      {
+        "key": "GET",
+        "count": 5
+      },
+      {
+        "key": "POST/PATCH/DELETE",
+        "count": 1
+      }
+    ],
+    "operations": [
+      {
+        "id": "launchdarkly.api_surface.get-api-v2-projects-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/projects",
+        "operation_id": "get-api-v2-projects-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "launchdarkly.api_surface.get-api-v2-members-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/members",
+        "operation_id": "get-api-v2-members-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "launchdarkly.api_surface.get-api-v2-auditlog-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/auditlog",
+        "operation_id": "get-api-v2-auditlog-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "launchdarkly.api_surface.get-api-v2-flags-project-key-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/flags/{project_key}",
+        "operation_id": "get-api-v2-flags-project-key-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "launchdarkly.api_surface.get-api-v2-projects-project-key-environments-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/projects/{project_key}/environments",
+        "operation_id": "get-api-v2-projects-project-key-environments-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "launchdarkly.api_surface.*-api-v2-segments-api-v2-metrics-api-v2-experiments-api-v2-webhooks-api-v2-integrations-api-v2-approval-requests-6",
+        "protocol": "rest",
+        "method": "*",
+        "path": "/api/v2/segments/*, /api/v2/metrics/*, /api/v2/experiments/*, /api/v2/webhooks/*, /api/v2/integrations/*, /api/v2/approval-requests/*",
+        "operation_id": "*-api-v2-segments-api-v2-metrics-api-v2-experiments-api-v2-webhooks-api-v2-integrations-api-v2-approval-requests-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "launchdarkly.api_surface.post/patch/delete-all-launchdarkly-mutation-endpoints-7",
+        "protocol": "rest",
+        "method": "POST/PATCH/DELETE",
+        "path": "all LaunchDarkly mutation endpoints",
+        "operation_id": "post/patch/delete-all-launchdarkly-mutation-endpoints-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      }
+    ]
+  }
+}

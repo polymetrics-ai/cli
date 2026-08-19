@@ -7,7 +7,7 @@
   "working_branch": "fm/cli-map-batch45-r1",
   "batches": {
     "4": "materialized-and-asserted",
-    "5": "pending"
+    "5": "materialized-and-asserted"
   },
   "credentials_used": false,
   "live_provider_calls": false,

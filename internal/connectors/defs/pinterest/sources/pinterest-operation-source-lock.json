@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "connector": "pinterest",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
+    "requested_url": "https://developers.pinterest.com/docs/api/v5/",
+    "sha256": "9d86a6829eb38aedfdae7608390d537ae3a33cc18c54a1fc6fb74f03ad747cf4",
+    "bytes": 651698,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "faf182d7525746b01adf86ef0e305b436164a50aa610b2649dbdd00a03dcb43e",
+    "bytes": 2507,
+    "source_operation_count": 12
+  },
+  "rest": {
+    "source_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
+    "sha256": "9d86a6829eb38aedfdae7608390d537ae3a33cc18c54a1fc6fb74f03ad747cf4",
+    "bytes": 651698,
+    "operation_counts": [
+      {
+        "key": "GET",
+        "count": 10
+      },
+      {
+        "key": "POST",
+        "count": 2
+      }
+    ],
+    "operations": [
+      {
+        "id": "pinterest.api_surface.get-v5-ad-accounts-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/ad_accounts",
+        "operation_id": "get-v5-ad-accounts-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-boards-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/boards",
+        "operation_id": "get-v5-boards-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-ad-accounts-ad-account-id-campaigns-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/ad_accounts/{ad_account_id}/campaigns",
+        "operation_id": "get-v5-ad-accounts-ad-account-id-campaigns-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-ad-accounts-ad-account-id-ad-groups-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/ad_accounts/{ad_account_id}/ad_groups",
+        "operation_id": "get-v5-ad-accounts-ad-account-id-ad-groups-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-ad-accounts-ad-account-id-audiences-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/ad_accounts/{ad_account_id}/audiences",
+        "operation_id": "get-v5-ad-accounts-ad-account-id-audiences-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "pinterest.api_surface.post-v5-oauth-token-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v5/oauth/token",
+        "operation_id": "post-v5-oauth-token-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-pins-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/pins",
+        "operation_id": "get-v5-pins-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-ad-accounts-ad-account-id-ads-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/ad_accounts/{ad_account_id}/ads",
+        "operation_id": "get-v5-ad-accounts-ad-account-id-ads-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-ad-accounts-ad-account-id-campaigns-analytics-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/ad_accounts/{ad_account_id}/campaigns/analytics",
+        "operation_id": "get-v5-ad-accounts-ad-account-id-campaigns-analytics-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-catalogs-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/catalogs",
+        "operation_id": "get-v5-catalogs-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "pinterest.api_surface.post-v5-ad-accounts-ad-account-id-events-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v5/ad_accounts/{ad_account_id}/events",
+        "operation_id": "post-v5-ad-accounts-ad-account-id-events-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "pinterest.api_surface.get-v5-user-account-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v5/user_account",
+        "operation_id": "get-v5-user-account-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      }
+    ]
+  }
+}

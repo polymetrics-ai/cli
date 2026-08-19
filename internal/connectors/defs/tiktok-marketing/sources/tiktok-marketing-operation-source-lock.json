@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "connector": "tiktok-marketing",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "skipped",
+    "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+    "reason": "no-public-api-description",
+    "evidence": "chrome-devtools-axi browser fetch on 2026-08-19: https://business-api.tiktok.com/portal/docs?id=1740029169927169 returned chrome-error://chromewebdata/ ERR_SSL_PROTOCOL_ERROR."
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "0011d1c064e201aabca15e3f524e1f4733914a04dc74bc0f8019f8a16a367f9a",
+    "bytes": 1960,
+    "source_operation_count": 7
+  },
+  "rest": {
+    "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+    "sha256": null,
+    "bytes": null,
+    "operation_counts": [
+      {
+        "key": "GET",
+        "count": 5
+      },
+      {
+        "key": "POST",
+        "count": 2
+      }
+    ],
+    "operations": [
+      {
+        "id": "tiktok-marketing.api_surface.get-advertiser-info-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/advertiser/info/",
+        "operation_id": "get-advertiser-info-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "tiktok-marketing.api_surface.get-campaign-get-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaign/get/",
+        "operation_id": "get-campaign-get-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "tiktok-marketing.api_surface.get-adgroup-get-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/adgroup/get/",
+        "operation_id": "get-adgroup-get-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "tiktok-marketing.api_surface.get-ad-get-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ad/get/",
+        "operation_id": "get-ad-get-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "tiktok-marketing.api_surface.get-report-integrated-get-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/report/integrated/get/",
+        "operation_id": "get-report-integrated-get-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "tiktok-marketing.api_surface.post-campaign-create-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaign/create/",
+        "operation_id": "post-campaign-create-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "tiktok-marketing.api_surface.post-campaign-update-status-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaign/update/status/",
+        "operation_id": "post-campaign-update-status-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      }
+    ]
+  }
+}

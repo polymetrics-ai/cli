@@ -1,0 +1,518 @@
+{
+  "schema_version": 1,
+  "connector": "squarespace",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://developers.squarespace.com/commerce-apis/overview",
+    "requested_url": "https://developers.squarespace.com/commerce-apis/overview",
+    "sha256": "f863ba8a9e888880adce6d4ba0f3d4586588e40aac5086cade3178c7969a824d",
+    "bytes": 74269,
+    "content_type": "text/html"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "bd92bbecb2ce846a94c92a658910454bffae4168fd8b0529d00c7079d0e7b6a0",
+    "bytes": 13847,
+    "source_operation_count": 47
+  },
+  "rest": {
+    "source_url": "https://developers.squarespace.com/commerce-apis/overview",
+    "sha256": "f863ba8a9e888880adce6d4ba0f3d4586588e40aac5086cade3178c7969a824d",
+    "bytes": 74269,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 6
+      },
+      {
+        "key": "GET",
+        "count": 20
+      },
+      {
+        "key": "PATCH",
+        "count": 1
+      },
+      {
+        "key": "POST",
+        "count": 19
+      },
+      {
+        "key": "PUT",
+        "count": 1
+      }
+    ],
+    "operations": [
+      {
+        "id": "squarespace.api_surface.get-1-0-commerce-orders-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/orders",
+        "operation_id": "get-1-0-commerce-orders-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "squarespace.api_surface.post-1-0-commerce-orders-2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/commerce/orders",
+        "operation_id": "post-1-0-commerce-orders-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-commerce-orders-id-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/orders/{id}",
+        "operation_id": "get-1-0-commerce-orders-id-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "squarespace.api_surface.post-1-0-commerce-orders-id-fulfillments-4",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/commerce/orders/{id}/fulfillments",
+        "operation_id": "post-1-0-commerce-orders-id-fulfillments-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-commerce-store-pages-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/store_pages",
+        "operation_id": "get-1-0-commerce-store-pages-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-commerce-transactions-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/transactions",
+        "operation_id": "get-1-0-commerce-transactions-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-commerce-transactions-documentids-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/transactions/{documentIds}",
+        "operation_id": "get-1-0-commerce-transactions-documentids-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-commerce-inventory-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/inventory",
+        "operation_id": "get-1-0-commerce-inventory-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-commerce-inventory-variantidcsvs-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/inventory/{variantIdCsvs}",
+        "operation_id": "get-1-0-commerce-inventory-variantidcsvs-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "squarespace.api_surface.post-1-0-commerce-inventory-adjustments-10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/commerce/inventory/adjustments",
+        "operation_id": "post-1-0-commerce-inventory-adjustments-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-profiles-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/profiles",
+        "operation_id": "get-1-0-profiles-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-profiles-profileidcsvs-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/profiles/{profileIdCsvs}",
+        "operation_id": "get-1-0-profiles-profileidcsvs-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-webhook-subscriptions-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/webhook_subscriptions",
+        "operation_id": "get-1-0-webhook-subscriptions-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "api_surface_index": 12
+      },
+      {
+        "id": "squarespace.api_surface.post-1-0-webhook-subscriptions-14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions",
+        "operation_id": "post-1-0-webhook-subscriptions-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "api_surface_index": 13
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-webhook-subscriptions-subscriptionid-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation_id": "get-1-0-webhook-subscriptions-subscriptionid-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "api_surface_index": 14
+      },
+      {
+        "id": "squarespace.api_surface.post-1-0-webhook-subscriptions-subscriptionid-16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation_id": "post-1-0-webhook-subscriptions-subscriptionid-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "api_surface_index": 15
+      },
+      {
+        "id": "squarespace.api_surface.delete-1-0-webhook-subscriptions-subscriptionid-17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation_id": "delete-1-0-webhook-subscriptions-subscriptionid-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "api_surface_index": 16
+      },
+      {
+        "id": "squarespace.api_surface.post-1-0-webhook-subscriptions-subscriptionid-actions-rotatesecret-18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
+        "operation_id": "post-1-0-webhook-subscriptions-subscriptionid-actions-rotatesecret-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "api_surface_index": 17
+      },
+      {
+        "id": "squarespace.api_surface.post-1-0-webhook-subscriptions-subscriptionid-actions-sendtestnotification-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification",
+        "operation_id": "post-1-0-webhook-subscriptions-subscriptionid-actions-sendtestnotification-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "api_surface_index": 18
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-authorization-member-20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/authorization/member",
+        "operation_id": "get-1-0-authorization-member-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "api_surface_index": 19
+      },
+      {
+        "id": "squarespace.api_surface.get-1-0-authorization-website-21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/authorization/website",
+        "operation_id": "get-1-0-authorization-website-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "api_surface_index": 20
+      },
+      {
+        "id": "squarespace.api_surface.get-v1-contacts-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts",
+        "operation_id": "get-v1-contacts-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "api_surface_index": 21
+      },
+      {
+        "id": "squarespace.api_surface.post-v1-contacts-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts",
+        "operation_id": "post-v1-contacts-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "api_surface_index": 22
+      },
+      {
+        "id": "squarespace.api_surface.post-v1-contacts-query-24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts/query",
+        "operation_id": "post-v1-contacts-query-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "api_surface_index": 23
+      },
+      {
+        "id": "squarespace.api_surface.get-v1-contacts-contactid-25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}",
+        "operation_id": "get-v1-contacts-contactid-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "api_surface_index": 24
+      },
+      {
+        "id": "squarespace.api_surface.patch-v1-contacts-contactid-26",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/contacts/{contactId}",
+        "operation_id": "patch-v1-contacts-contactid-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "api_surface_index": 25
+      },
+      {
+        "id": "squarespace.api_surface.delete-v1-contacts-contactid-27",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}",
+        "operation_id": "delete-v1-contacts-contactid-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "api_surface_index": 26
+      },
+      {
+        "id": "squarespace.api_surface.get-v1-contacts-contactid-address-book-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}/address-book",
+        "operation_id": "get-v1-contacts-contactid-address-book-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "api_surface_index": 27
+      },
+      {
+        "id": "squarespace.api_surface.post-v1-contacts-contactid-address-book-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts/{contactId}/address-book",
+        "operation_id": "post-v1-contacts-contactid-address-book-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "api_surface_index": 28
+      },
+      {
+        "id": "squarespace.api_surface.get-v1-contacts-contactid-address-book-addressbookentryid-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation_id": "get-v1-contacts-contactid-address-book-addressbookentryid-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "api_surface_index": 29
+      },
+      {
+        "id": "squarespace.api_surface.put-v1-contacts-contactid-address-book-addressbookentryid-31",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation_id": "put-v1-contacts-contactid-address-book-addressbookentryid-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "api_surface_index": 30
+      },
+      {
+        "id": "squarespace.api_surface.delete-v1-contacts-contactid-address-book-addressbookentryid-32",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation_id": "delete-v1-contacts-contactid-address-book-addressbookentryid-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "api_surface_index": 31
+      },
+      {
+        "id": "squarespace.api_surface.post-v1-analytics-transaction-summaries-33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/analytics/transaction-summaries",
+        "operation_id": "post-v1-analytics-transaction-summaries-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "api_surface_index": 32
+      },
+      {
+        "id": "squarespace.api_surface.get-v2-commerce-products-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/commerce/products",
+        "operation_id": "get-v2-commerce-products-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "api_surface_index": 33
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products",
+        "operation_id": "post-v2-commerce-products-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "api_surface_index": 34
+      },
+      {
+        "id": "squarespace.api_surface.get-v2-commerce-products-productidcsvs-36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/commerce/products/{productIdCsvs}",
+        "operation_id": "get-v2-commerce-products-productidcsvs-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "api_surface_index": 35
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-productid-37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}",
+        "operation_id": "post-v2-commerce-products-productid-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "api_surface_index": 36
+      },
+      {
+        "id": "squarespace.api_surface.delete-v2-commerce-products-productid-38",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}",
+        "operation_id": "delete-v2-commerce-products-productid-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "api_surface_index": 37
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-productid-images-39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images",
+        "operation_id": "post-v2-commerce-products-productid-images-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "api_surface_index": 38
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-productid-images-imageid-40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "operation_id": "post-v2-commerce-products-productid-images-imageid-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "api_surface_index": 39
+      },
+      {
+        "id": "squarespace.api_surface.delete-v2-commerce-products-productid-images-imageid-41",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "operation_id": "delete-v2-commerce-products-productid-images-imageid-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "api_surface_index": 40
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-productid-images-imageid-order-42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/order",
+        "operation_id": "post-v2-commerce-products-productid-images-imageid-order-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "api_surface_index": 41
+      },
+      {
+        "id": "squarespace.api_surface.get-v2-commerce-products-productid-images-imageid-status-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/status",
+        "operation_id": "get-v2-commerce-products-productid-images-imageid-status-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "api_surface_index": 42
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-productid-variants-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants",
+        "operation_id": "post-v2-commerce-products-productid-variants-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "api_surface_index": 43
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-productid-variants-variantid-45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "operation_id": "post-v2-commerce-products-productid-variants-variantid-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "api_surface_index": 44
+      },
+      {
+        "id": "squarespace.api_surface.delete-v2-commerce-products-productid-variants-variantid-46",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "operation_id": "delete-v2-commerce-products-productid-variants-variantid-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "api_surface_index": 45
+      },
+      {
+        "id": "squarespace.api_surface.post-v2-commerce-products-productid-variants-variantid-image-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}/image",
+        "operation_id": "post-v2-commerce-products-productid-variants-variantid-image-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "api_surface_index": 46
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "connector": "ebay-fulfillment",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "skipped",
+    "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+    "reason": "no-public-api-description",
+    "evidence": "chrome-devtools-axi browser fetch on 2026-08-19: https://developer.ebay.com/develop/api/fulfillment-api/release-notes returned the official Error Page | eBay rather than API documentation."
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "5543a2cc434eeaeb2d9f6a685d21b30b588fc7fa2cb93dda83672a5ccbfa34f3",
+    "bytes": 4129,
+    "source_operation_count": 11
+  },
+  "rest": {
+    "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+    "sha256": null,
+    "bytes": null,
+    "operation_counts": [
+      {
+        "key": "GET",
+        "count": 8
+      },
+      {
+        "key": "POST",
+        "count": 3
+      }
+    ],
+    "operations": [
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order",
+        "operation_id": "get-sell-fulfillment-v1-order-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-exploded-lineitems-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order (exploded lineItems)",
+        "operation_id": "get-sell-fulfillment-v1-order-exploded-lineitems-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-shipping-projection-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order (shipping projection)",
+        "operation_id": "get-sell-fulfillment-v1-order-shipping-projection-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-payment-dispute-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/payment_dispute",
+        "operation_id": "get-sell-fulfillment-v1-payment-dispute-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-orderid-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order/{orderId}",
+        "operation_id": "get-sell-fulfillment-v1-order-orderid-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+        "operation_id": "get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-fulfillmentid-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment/{fulfillmentId}",
+        "operation_id": "get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-fulfillmentid-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.post-sell-fulfillment-v1-order-orderid-shipping-fulfillment-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+        "operation_id": "post-sell-fulfillment-v1-order-orderid-shipping-fulfillment-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-payment-dispute-payment-dispute-id-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}",
+        "operation_id": "get-sell-fulfillment-v1-payment-dispute-payment-dispute-id-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-accept-10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/accept",
+        "operation_id": "post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-accept-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "ebay-fulfillment.api_surface.post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-contest-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/contest",
+        "operation_id": "post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-contest-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      }
+    ]
+  }
+}

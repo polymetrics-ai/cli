@@ -1,0 +1,514 @@
+{
+  "schema_version": 1,
+  "connector": "ebay-fulfillment",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+    "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+    "source_sha256": null,
+    "source_bytes": null,
+    "source_operation_count": 11,
+    "normalized_inventory_sha256": "5543a2cc434eeaeb2d9f6a685d21b30b588fc7fa2cb93dda83672a5ccbfa34f3",
+    "source_retrieval": "skipped"
+  },
+  "summary": {
+    "api_surface_rows": 11,
+    "exact_source_rows": 11,
+    "declared_operations": 11,
+    "declared_percent": 100,
+    "enabled_operations": 0,
+    "declaration_pending_operations": 11,
+    "disabled_operations": 0,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 4
+      },
+      {
+        "key": "direct_write",
+        "count": 3
+      },
+      {
+        "key": "etl",
+        "count": 4
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0,
+        "scope": "shared_destination_runtime",
+        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class."
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 11
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/ebay-fulfillment/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    }
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order",
+        "operation": null,
+        "covered_by": {
+          "stream": "orders"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-1",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "get-sell-fulfillment-v1-order-1",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/ebay-fulfillment/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order (exploded lineItems)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order (exploded lineItems)",
+        "operation": null,
+        "covered_by": {
+          "stream": "order_line_items"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-exploded-lineitems-2",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "get-sell-fulfillment-v1-order-exploded-lineitems-2",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/ebay-fulfillment/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order (shipping projection)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order (shipping projection)",
+        "operation": null,
+        "covered_by": {
+          "stream": "shipping_fulfillments"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-shipping-projection-3",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "get-sell-fulfillment-v1-order-shipping-projection-3",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/ebay-fulfillment/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/payment_dispute",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/payment_dispute",
+        "operation": null,
+        "covered_by": {
+          "stream": "payment_disputes"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-payment-dispute-4",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "get-sell-fulfillment-v1-payment-dispute-4",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/ebay-fulfillment/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order/{orderId}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/sell/fulfillment/v1/order/{orderId} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-orderid-5",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "get-sell-fulfillment-v1-order-orderid-5",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-6",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-6",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[5]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment/{fulfillmentId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment/{fulfillmentId}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment/{fulfillmentId} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-fulfillmentid-7",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-fulfillmentid-7",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[6]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.post-sell-fulfillment-v1-order-orderid-shipping-fulfillment-8",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": "post-sell-fulfillment-v1-order-orderid-shipping-fulfillment-8",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[7]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.get-sell-fulfillment-v1-payment-dispute-payment-dispute-id-9",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": "get-sell-fulfillment-v1-payment-dispute-payment-dispute-id-9",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[8]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/accept",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/accept",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "destructive_admin",
+          "reason": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/accept is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle"
+        }
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-accept-10",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": "post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-accept-10",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[9]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/contest",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/contest",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "destructive_admin",
+          "reason": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/contest is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle"
+        }
+      },
+      "source": {
+        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_id": "ebay-fulfillment.api_surface.post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-contest-11",
+        "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": "post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-contest-11",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[10]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    }
+  ]
+}

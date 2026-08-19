@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "connector": "shipstation",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://www.shipstation.com/docs/api/",
+    "requested_url": "https://www.shipstation.com/docs/api/",
+    "sha256": "4e18126e07b725cba99855b31986f0ce5c820325dac325ba4e5588efd59ad871",
+    "bytes": 25299,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "5e3c28c1b92d62f451ba2b701638076b51cc5e930abe5eca70e77cf051a3a547",
+    "bytes": 2359,
+    "source_operation_count": 9
+  },
+  "rest": {
+    "source_url": "https://www.shipstation.com/docs/api/",
+    "sha256": "4e18126e07b725cba99855b31986f0ce5c820325dac325ba4e5588efd59ad871",
+    "bytes": 25299,
+    "operation_counts": [
+      {
+        "key": "GET",
+        "count": 6
+      },
+      {
+        "key": "POST",
+        "count": 3
+      }
+    ],
+    "operations": [
+      {
+        "id": "shipstation.api_surface.get-orders-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/orders",
+        "operation_id": "get-orders-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "shipstation.api_surface.get-shipments-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shipments",
+        "operation_id": "get-shipments-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "shipstation.api_surface.get-products-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products",
+        "operation_id": "get-products-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "shipstation.api_surface.get-customers-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customers",
+        "operation_id": "get-customers-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "shipstation.api_surface.post-orders-createorder-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/orders/createorder",
+        "operation_id": "post-orders-createorder-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "shipstation.api_surface.post-shipments-createlabel-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shipments/createlabel",
+        "operation_id": "post-shipments-createlabel-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "shipstation.api_surface.get-warehouses-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses",
+        "operation_id": "get-warehouses-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "shipstation.api_surface.get-carriers-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/carriers",
+        "operation_id": "get-carriers-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "shipstation.api_surface.post-webhooks-subscribe-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhooks/subscribe",
+        "operation_id": "post-webhooks-subscribe-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      }
+    ]
+  }
+}

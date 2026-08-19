@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "connector": "linear",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://linear.app/developers",
+    "requested_url": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+    "sha256": "5cdef9877717896b32412ba7dc69a1e168414740f39da641027b81f99b2f3dd9",
+    "bytes": 442268,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "b483ea172466c7f78edfc2f9ff340cdc757e3c56d68d0e58f3ae9f21280062b8",
+    "bytes": 2239,
+    "source_operation_count": 7
+  },
+  "rest": {
+    "source_url": "https://linear.app/developers",
+    "sha256": "5cdef9877717896b32412ba7dc69a1e168414740f39da641027b81f99b2f3dd9",
+    "bytes": 442268,
+    "operation_counts": [
+      {
+        "key": "GET",
+        "count": 6
+      },
+      {
+        "key": "POST",
+        "count": 1
+      }
+    ],
+    "operations": [
+      {
+        "id": "linear.api_surface.get-graphql-query-issues-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/graphql (query: issues)",
+        "operation_id": "get-graphql-query-issues-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "linear.api_surface.get-graphql-query-teams-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/graphql (query: teams)",
+        "operation_id": "get-graphql-query-teams-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "linear.api_surface.get-graphql-query-projects-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/graphql (query: projects)",
+        "operation_id": "get-graphql-query-projects-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "linear.api_surface.get-graphql-query-users-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/graphql (query: users)",
+        "operation_id": "get-graphql-query-users-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "linear.api_surface.get-graphql-query-viewer-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/graphql (query: viewer)",
+        "operation_id": "get-graphql-query-viewer-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "linear.api_surface.post-graphql-mutations-issuecreate-issueupdate-commentcreate-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/graphql (mutations: issueCreate, issueUpdate, commentCreate, ...)",
+        "operation_id": "post-graphql-mutations-issuecreate-issueupdate-commentcreate-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "linear.api_surface.get-graphql-query-comments-cycles-labels-workflowstates-webhooks-other-root-connections-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/graphql (query: comments, cycles, labels, workflowStates, webhooks, other root connections)",
+        "operation_id": "get-graphql-query-comments-cycles-labels-workflowstates-webhooks-other-root-connections-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      }
+    ]
+  }
+}

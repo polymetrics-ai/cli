@@ -1,0 +1,588 @@
+{
+  "schema_version": 1,
+  "connector": "fastly",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://www.fastly.com/documentation/reference/api/",
+    "requested_url": "https://developer.fastly.com/reference/api/",
+    "sha256": "47e6f4df3b2162211133a2db12dae3a8139d3d3ca413bb11f1a98e9a592a822c",
+    "bytes": 418434,
+    "content_type": "text/html"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "0a77fda6319d2ae8047d15730373187fa6c35f2c0117c90a25ada3d7d228379e",
+    "bytes": 12236,
+    "source_operation_count": 54
+  },
+  "rest": {
+    "source_url": "https://www.fastly.com/documentation/reference/api/",
+    "sha256": "47e6f4df3b2162211133a2db12dae3a8139d3d3ca413bb11f1a98e9a592a822c",
+    "bytes": 418434,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 4
+      },
+      {
+        "key": "GET",
+        "count": 31
+      },
+      {
+        "key": "PATCH",
+        "count": 1
+      },
+      {
+        "key": "POST",
+        "count": 10
+      },
+      {
+        "key": "PUT",
+        "count": 8
+      }
+    ],
+    "operations": [
+      {
+        "id": "fastly.api_surface.get-service-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service",
+        "operation_id": "get-service-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "fastly.api_surface.get-current-user-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/current_user",
+        "operation_id": "get-current-user-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "fastly.api_surface.get-current-customer-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/current_customer",
+        "operation_id": "get-current-customer-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "fastly.api_surface.get-datacenters-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/datacenters",
+        "operation_id": "get-datacenters-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-details-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}/details",
+        "operation_id": "get-service-service-id-details-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "fastly.api_surface.get-customer-customer-id-users-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customer/{customer_id}/users",
+        "operation_id": "get-customer-customer-id-users-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "fastly.api_surface.post-service-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service",
+        "operation_id": "post-service-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "fastly.api_surface.put-service-service-id-8",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/{service_id}",
+        "operation_id": "put-service-service-id-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "fastly.api_surface.delete-service-service-id-9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/service/{service_id}",
+        "operation_id": "delete-service-service-id-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "fastly.api_surface.get-service-search-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/search",
+        "operation_id": "get-service-search-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}",
+        "operation_id": "get-service-service-id-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-domain-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}/domain",
+        "operation_id": "get-service-service-id-domain-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "api_surface_index": 11
+      },
+      {
+        "id": "fastly.api_surface.post-service-service-id-version-13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/{service_id}/version",
+        "operation_id": "post-service-service-id-version-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "api_surface_index": 12
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-version-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}/version",
+        "operation_id": "get-service-service-id-version-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "api_surface_index": 13
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-version-version-id-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}/version/{version_id}",
+        "operation_id": "get-service-service-id-version-version-id-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "api_surface_index": 14
+      },
+      {
+        "id": "fastly.api_surface.put-service-service-id-version-version-id-16",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/{service_id}/version/{version_id}",
+        "operation_id": "put-service-service-id-version-version-id-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "api_surface_index": 15
+      },
+      {
+        "id": "fastly.api_surface.put-service-service-id-version-version-id-activate-17",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/{service_id}/version/{version_id}/activate",
+        "operation_id": "put-service-service-id-version-version-id-activate-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "api_surface_index": 16
+      },
+      {
+        "id": "fastly.api_surface.put-service-service-id-version-version-id-deactivate-18",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/{service_id}/version/{version_id}/deactivate",
+        "operation_id": "put-service-service-id-version-version-id-deactivate-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "api_surface_index": 17
+      },
+      {
+        "id": "fastly.api_surface.put-service-service-id-version-version-id-clone-19",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/{service_id}/version/{version_id}/clone",
+        "operation_id": "put-service-service-id-version-version-id-clone-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "api_surface_index": 18
+      },
+      {
+        "id": "fastly.api_surface.put-service-service-id-version-version-id-lock-20",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/service/{service_id}/version/{version_id}/lock",
+        "operation_id": "put-service-service-id-version-version-id-lock-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "api_surface_index": 19
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-version-version-id-validate-21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}/version/{version_id}/validate",
+        "operation_id": "get-service-service-id-version-version-id-validate-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "api_surface_index": 20
+      },
+      {
+        "id": "fastly.api_surface.get-user-user-id-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/{user_id}",
+        "operation_id": "get-user-user-id-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "api_surface_index": 21
+      },
+      {
+        "id": "fastly.api_surface.post-user-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user",
+        "operation_id": "post-user-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "api_surface_index": 22
+      },
+      {
+        "id": "fastly.api_surface.put-user-user-id-24",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/user/{user_id}",
+        "operation_id": "put-user-user-id-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "api_surface_index": 23
+      },
+      {
+        "id": "fastly.api_surface.delete-user-user-id-25",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/user/{user_id}",
+        "operation_id": "delete-user-user-id-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "api_surface_index": 24
+      },
+      {
+        "id": "fastly.api_surface.post-current-user-password-26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/current_user/password",
+        "operation_id": "post-current-user-password-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "api_surface_index": 25
+      },
+      {
+        "id": "fastly.api_surface.post-user-user-login-password-request-reset-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user/{user_login}/password/request_reset",
+        "operation_id": "post-user-user-login-password-request-reset-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "api_surface_index": 26
+      },
+      {
+        "id": "fastly.api_surface.get-customer-customer-id-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customer/{customer_id}",
+        "operation_id": "get-customer-customer-id-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "api_surface_index": 27
+      },
+      {
+        "id": "fastly.api_surface.put-customer-customer-id-29",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/customer/{customer_id}",
+        "operation_id": "put-customer-customer-id-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "api_surface_index": 28
+      },
+      {
+        "id": "fastly.api_surface.delete-customer-customer-id-30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/customer/{customer_id}",
+        "operation_id": "delete-customer-customer-id-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "api_surface_index": 29
+      },
+      {
+        "id": "fastly.api_surface.get-billing-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/billing",
+        "operation_id": "get-billing-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "api_surface_index": 30
+      },
+      {
+        "id": "fastly.api_surface.get-tokens-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tokens",
+        "operation_id": "get-tokens-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "api_surface_index": 31
+      },
+      {
+        "id": "fastly.api_surface.post-tokens-33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tokens",
+        "operation_id": "post-tokens-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "api_surface_index": 32
+      },
+      {
+        "id": "fastly.api_surface.delete-tokens-token-id-34",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tokens/{token_id}",
+        "operation_id": "delete-tokens-token-id-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "api_surface_index": 33
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-version-version-id-acl-35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}/version/{version_id}/acl",
+        "operation_id": "get-service-service-id-version-version-id-acl-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "api_surface_index": 34
+      },
+      {
+        "id": "fastly.api_surface.post-service-service-id-version-version-id-acl-36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/{service_id}/version/{version_id}/acl",
+        "operation_id": "post-service-service-id-version-version-id-acl-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "api_surface_index": 35
+      },
+      {
+        "id": "fastly.api_surface.get-service-service-id-version-version-id-dictionary-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/service/{service_id}/version/{version_id}/dictionary",
+        "operation_id": "get-service-service-id-version-version-id-dictionary-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "api_surface_index": 36
+      },
+      {
+        "id": "fastly.api_surface.patch-service-service-id-dictionary-dictionary-id-item-dictionary-item-key-38",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/service/{service_id}/dictionary/{dictionary_id}/item/{dictionary_item_key}",
+        "operation_id": "patch-service-service-id-dictionary-dictionary-id-item-dictionary-item-key-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "api_surface_index": 37
+      },
+      {
+        "id": "fastly.api_surface.post-purge-url-39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/purge/{url}",
+        "operation_id": "post-purge-url-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "api_surface_index": 38
+      },
+      {
+        "id": "fastly.api_surface.post-service-service-id-purge-all-40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/service/{service_id}/purge_all",
+        "operation_id": "post-service-service-id-purge-all-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "api_surface_index": 39
+      },
+      {
+        "id": "fastly.api_surface.get-tls-subscriptions-41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tls/subscriptions",
+        "operation_id": "get-tls-subscriptions-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "api_surface_index": 40
+      },
+      {
+        "id": "fastly.api_surface.post-tls-subscriptions-42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tls/subscriptions",
+        "operation_id": "post-tls-subscriptions-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "api_surface_index": 41
+      },
+      {
+        "id": "fastly.api_surface.get-wafs-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/wafs",
+        "operation_id": "get-wafs-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "api_surface_index": 42
+      },
+      {
+        "id": "fastly.api_surface.get-ngwaf-v1-workspaces-44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ngwaf/v1/workspaces",
+        "operation_id": "get-ngwaf-v1-workspaces-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "api_surface_index": 43
+      },
+      {
+        "id": "fastly.api_surface.get-load-balancing-directors-45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/load-balancing/directors",
+        "operation_id": "get-load-balancing-directors-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "api_surface_index": 44
+      },
+      {
+        "id": "fastly.api_surface.get-metrics-domains-service-id-46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/metrics/domains/{service_id}",
+        "operation_id": "get-metrics-domains-service-id-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "api_surface_index": 45
+      },
+      {
+        "id": "fastly.api_surface.get-observability-alerts-definitions-47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/observability/alerts/definitions",
+        "operation_id": "get-observability-alerts-definitions-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "api_surface_index": 46
+      },
+      {
+        "id": "fastly.api_surface.get-logging-logging-provider-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/logging/{logging_provider}",
+        "operation_id": "get-logging-logging-provider-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "api_surface_index": 47
+      },
+      {
+        "id": "fastly.api_surface.get-api-security-campaigns-49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api-security/campaigns",
+        "operation_id": "get-api-security-campaigns-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "api_surface_index": 48
+      },
+      {
+        "id": "fastly.api_surface.get-ddos-protection-events-50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ddos-protection/events",
+        "operation_id": "get-ddos-protection-events-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "api_surface_index": 49
+      },
+      {
+        "id": "fastly.api_surface.get-domain-management-v1-domains-51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/domain-management/v1/domains",
+        "operation_id": "get-domain-management-v1-domains-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "api_surface_index": 50
+      },
+      {
+        "id": "fastly.api_surface.get-client-side-protection-configurations-52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/client-side-protection/configurations",
+        "operation_id": "get-client-side-protection-configurations-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "api_surface_index": 51
+      },
+      {
+        "id": "fastly.api_surface.get-products-53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products",
+        "operation_id": "get-products-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "api_surface_index": 52
+      },
+      {
+        "id": "fastly.api_surface.get-utils-belt-and-braces-check-54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/utils/belt_and_braces_check",
+        "operation_id": "get-utils-belt-and-braces-check-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "api_surface_index": 53
+      }
+    ]
+  }
+}
