@@ -5,8 +5,7 @@ supplied): make the generated parity projection trustworthy, preserve delete as
 an independently selectable direct-write mutation, and make accepted-evidence
 publication safe under concurrent readers.
 
-Refs #4015 — incremental foundation delivery for the integration branch's
-Production MVP certification parent issue.
+Refs #4260 — dedicated G1/G2/G6 certification-foundation tracking issue.
 
 Base: `integration/4015-mvp-flat-r1` → `main`.
 

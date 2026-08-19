@@ -2,8 +2,8 @@
 
 ## Task Delivery Header
 
-- Issue: Refs #4015 — incremental foundation delivery for the integration
-  branch's Production MVP certification parent issue.
+- Issue: Refs #4260 — dedicated G1/G2/G6 certification-foundation tracking
+  issue (incremental delivery to the #4015 integration branch).
 - Base branch: `integration/4015-mvp-flat-r1`
 - Merges into: `integration/4015-mvp-flat-r1` → `main`
 - Delivery: Pull request open against `integration/4015-mvp-flat-r1` with local gates complete and GitHub checks green; read the API-reported base after opening.
