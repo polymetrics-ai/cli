@@ -11750,14 +11750,70 @@
       "minimal_change": "Make source bindings action-scoped (or permit separately named destination declarations) and resolve the mapping with the selected apply-strategy action.",
       "recoverability": "Bind each remaining typed action after action-scoped source mappings are available; no provider credential or live certification is required for this declaration step.",
       "operations": [
-        {"connector": "dockerhub", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"},
-        {"connector": "notion", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"},
-        {"connector": "stripe", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"},
-        {"connector": "bitbucket", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"},
-        {"connector": "circleci", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"},
-        {"connector": "vercel", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"},
-        {"connector": "asana", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"},
-        {"connector": "jira", "operation": {"kind": "typed_action_set", "source": "writes.json"}, "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"}
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "notion",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
+        },
+        {
+          "connector": "stripe",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
+        },
+        {
+          "connector": "bitbucket",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
+        },
+        {
+          "connector": "circleci",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
+        },
+        {
+          "connector": "vercel",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
+        },
+        {
+          "connector": "asana",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
+        },
+        {
+          "connector": "jira",
+          "operation": {
+            "kind": "typed_action_set",
+            "source": "writes.json"
+          },
+          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
+        }
       ]
     },
     {
@@ -11767,235 +11823,136 @@
       "minimal_change": "Merge the current origin/fm/cli-reverse-etl-destination-r1 head and exercise the installed application/CLI path against these declared destination contracts without provider credentials.",
       "recoverability": "Upstream #4304 integration is in progress; this is not a connector-local workaround request.",
       "operations": [
-        {"connector": "notion", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_view"}, "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"},
-        {"connector": "stripe", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_customer"}, "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"},
-        {"connector": "circleci", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_schedule"}, "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"},
-        {"connector": "vercel", "operation": {"kind": "sync_transport", "role": "destination_transport", "action": "update_project"}, "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"}
+        {
+          "connector": "notion",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport",
+            "action": "update_view"
+          },
+          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
+        },
+        {
+          "connector": "stripe",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport",
+            "action": "update_customer"
+          },
+          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
+        },
+        {
+          "connector": "circleci",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport",
+            "action": "update_schedule"
+          },
+          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
+        },
+        {
+          "connector": "vercel",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport",
+            "action": "update_project"
+          },
+          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
+        }
       ]
     }
   ],
   "complete_map_foundation_gaps": [
     {
-      "id": "operation-kind-loader-registration",
-      "reason": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
-      "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
-      "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "HEAD",
-            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "GET",
-            "path": "/v2/orgs/{org_name}/members/export"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
-        }
-      ]
-    },
-    {
-      "id": "typed-action-content-type",
-      "reason": "The pinned SCIM writes require application/scim+json, but a writes.json typed action can declare only existing body types and the JSON path emits application/json.",
-      "evidence": "internal/connectors/engine/bundle.go:470; internal/connectors/engine/write_prepare.go:169,223-237",
-      "minimal_change": "allow a connector-owned typed write action to declare its source-required request content type and preserve it through write preparation",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "POST",
-            "path": "/v2/scim/2.0/Users"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-          "capability": "reverse_etl_typed_action"
-        },
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "method": "PUT",
-            "path": "/v2/scim/2.0/Users/{id}"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-          "capability": "reverse_etl_typed_action"
-        }
-      ]
-    },
-    {
-      "id": "generic-typed-destination-executor",
-      "reason": "The production composition has no connector-neutral typed destination DefinitionFactory for these declarative API bundles.",
-      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
-      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
-      "operations": [
-        {
-          "connector": "dockerhub",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "notion",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "stripe",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "bitbucket",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "gitlab",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "circleci",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "sentry",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "vercel",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "asana",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        },
-        {
-          "connector": "jira",
-          "operation": {
-            "kind": "sync_transport",
-            "role": "destination_transport"
-          },
-          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
-          "capability": "reverse_etl_eligibility"
-        }
-      ]
-    },
-    {
-      "reason": "Connector-local cli_surface metadata cannot bind a documented endpoint that has no materialized operation, stream, or typed write: validation rejects that api_surface reference, while runtime rejects an operation-backed partial command before dispatch. A closed disabled-operation command target is required to make the exact provider operation CLI-reachable without introducing generic provider I/O.",
+      "foundation_gap_id": "hash-matched-source-contract-import",
+      "reason": "The 3,217 fixed REST read/write candidates need their exact provider operation imported from the source artifact whose URL, digest, byte count, and inventory the connector lock pins. No command may be generated until that artifact is rehydrated and its bytes match the lock; a source drift is a lock-refresh decision, not schema inference.",
       "evidence": [
-        "cmd/connectorgen/validate.go:2106-2169",
-        "internal/connectors/commandrunner/runner.go:365-458"
+        ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json",
+        ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md"
       ],
-      "recoverability": "Requires a keyed shared-foundation decision to add a declaration-bound disabled-operation target. It must name exactly one existing api_surface endpoint and rejection record, resolve as BlockedCommandError, and never construct or dispatch generic HTTP, SQL, shell, or provider input.",
+      "minimal_change": "F0 import an exact fixed operation descriptor (source operation identity, fixed method/path, declared path/query/header/body schemas and media types) only after byte-for-byte source-lock verification; F1 materialize that descriptor connector-locally through the existing fixed REST runtime.",
       "operations": [
         {
-          "connector": "dockerhub",
-          "operation": {"kind": "all-unbound-source-operations", "count": 11},
-          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+          "kind": "fixed-rest-read-contract-materialization",
+          "count": 1389,
+          "audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json"
         },
         {
-          "connector": "notion",
-          "operation": {"kind": "all-unbound-source-operations", "count": 5},
-          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
+          "kind": "fixed-rest-write-contract-materialization",
+          "count": 1828,
+          "audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json"
+        }
+      ]
+    },
+    {
+      "foundation_gap_id": "declaration-bound-typed-operation-headers",
+      "reason": "The operation contract has imported parameters and bounded path/query/body mapping, but RESTOperationSpec has no declared header schema and operationDirectReadOverrides recognizes only path., query., and body. targets. Exact provider-required non-auth headers therefore cannot yet be represented through the installed CLI.",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:785-823",
+        "internal/connectors/commandrunner/runner.go:1391-1456"
+      ],
+      "minimal_change": "F2 add a closed header declaration and header. map target validated against the imported per-operation schema; reserve Authorization, Cookie, Host and proxy metadata to existing transport/auth policy, and reject undeclared header names and values.",
+      "operations": [
+        {
+          "kind": "all-reclassified-source-operations",
+          "count": 3366,
+          "audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json"
+        }
+      ]
+    },
+    {
+      "foundation_gap_id": "declaration-bound-structured-body-materialization",
+      "reason": "Nested object/array action bodies must be constructed only from the exact declared schema; a raw JSON escape hatch would violate the closed operation contract.",
+      "evidence": [
+        "GitHub issue #4305",
+        ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json#structured_body_downstream"
+      ],
+      "minimal_change": "F3 land the #4305 shared structured body materializer, preserving operation identity and approval-payload binding; connector declarations then map only admitted typed fields.",
+      "operations": [
+        {
+          "kind": "typed-actions-with-nested-object-or-array-schema",
+          "count": 224,
+          "audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json"
+        }
+      ]
+    },
+    {
+      "foundation_gap_id": "bounded-binary-status-text-operation-materialization",
+      "reason": "Binary, multipart, status and text operations need the exact fixed operation identity, declared media type, bounded file/byte values and the registered operation kind; they must not be modeled as a generic byte-stream or generic HTTP command.",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:2514-2599",
+        "internal/connectors/engine/bundle.go:2718-2732",
+        "internal/connectors/engine/bundle.go:2770-2793",
+        "GitHub issue #4302"
+      ],
+      "minimal_change": "F4 complete the bounded binary/multipart/status/text declaration path and register required kinds; keep each connector command fixed to its declared verb, template, schemas, media types and byte limits.",
+      "operations": [
+        {
+          "kind": "bounded-binary-transfer-contract",
+          "count": 120,
+          "audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json"
         },
         {
-          "connector": "stripe",
-          "operation": {"kind": "all-unbound-source-operations", "count": 581},
-          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
-        },
+          "kind": "status-check-operation-kind-registration",
+          "count": 10,
+          "audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json"
+        }
+      ]
+    },
+    {
+      "foundation_gap_id": "typed-destination-app-dispatch-and-action-bindings",
+      "reason": "The current #4304 branch owns persisted application/CLI dispatch of declarative destinations; action-scoped source bindings are also required to attach every eligible typed action to its own exact source-to-input mapping. Connector-local declarations must not work around either gap.",
+      "evidence": [
+        "GitHub pull request #4304",
+        "internal/connectors/sync_transport.go:147-150,431-456",
+        "internal/app/issue_label_warehouse_transport.go:310-365"
+      ],
+      "minimal_change": "F5 merge #4304, prove the installed App/CLI path, and select source bindings by apply-strategy action (or separately named exact destinations) so every representable record-driven typed action is bound without multiplicity loss.",
+      "operations": [
         {
-          "connector": "bitbucket",
-          "operation": {"kind": "all-unbound-source-operations", "count": 134},
-          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
-        },
-        {
-          "connector": "gitlab",
-          "operation": {"kind": "all-unbound-source-operations", "count": 1751},
-          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
-        },
-        {
-          "connector": "circleci",
-          "operation": {"kind": "all-unbound-source-operations", "count": 95},
-          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
-        },
-        {
-          "connector": "sentry",
-          "operation": {"kind": "all-unbound-source-operations", "count": 220},
-          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json"
-        },
-        {
-          "connector": "vercel",
-          "operation": {"kind": "all-unbound-source-operations", "count": 378},
-          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
-        },
-        {
-          "connector": "asana",
-          "operation": {"kind": "all-unbound-source-operations", "count": 164},
-          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
-        },
-        {
-          "connector": "jira",
-          "operation": {"kind": "all-unbound-source-operations", "count": 27},
-          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
+          "kind": "typed-reverse-etl-actions",
+          "count": 491,
+          "audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json"
         }
       ]
     }
@@ -12005,5 +11962,19 @@
     "cli-surface-missing",
     "cli-command-contract",
     "command-availability"
-  ]
+  ],
+  "supersession": {
+    "at": "2026-08-20T00:00:00+05:30",
+    "decision": "Captain rejected the declaration-bound disabled-command/BlockedCommandError target. A documented operation is reachable only when the installed CLI can dispatch its exact declaration through real provider I/O after typed input and credential preflight.",
+    "authoritative_audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json",
+    "historical_entries": "entries and complete_map_declaration_pending retain prior discovery evidence only. They are not active safety, scope, tier, privilege, or credential reachability exclusions.",
+    "forbidden": [
+      "caller-selected raw URL",
+      "caller-selected verb",
+      "caller-selected headers",
+      "caller-selected raw body",
+      "arbitrary JSON",
+      "generic HTTP write"
+    ]
+  }
 }

@@ -6,13 +6,14 @@ declaration-only, non-live-certification checkpoint.
 
 - Public operations found and mapped: 4,378 / 4,378; every Batch-1 source is
   a complete provider-published OpenAPI document with high input confidence.
-- Docker Hub runnable retrofit: 41 commands, 20 typed write actions, and six
-  typed delete actions across 54 pinned operations.
-- Docker Hub disabled dispositions: 13 (ten named foundation gaps and three
-  schema/media incompatibilities; `unsafe-to-exercise` is zero).
-- All ten connectors now declare the reusable ETL source transport. Reverse
-  ETL eligibility is the recoverable `generic-typed-destination-executor` gap;
-  no generic writer or destination binding was invented.
+- Docker Hub runnable retrofit baseline: 41 commands, 20 typed write actions,
+  and six typed delete actions across 54 pinned operations. The remaining
+  operations are now exact executable-capability records, not disabled-command
+  dispositions.
+- All ten connectors declare the reusable ETL source transport. Four
+  fixture-bound destination mappings exist; the other typed actions are
+  explicitly pending action-scoped source binding and persisted #4304 App/CLI
+  dispatch, with no generic writer or destination binding invented.
 - No credential was requested or used; all live certification remains pending.
 
 ## Docker Hub corrected deliverable
@@ -42,9 +43,10 @@ on `main` and must be created or substituted before a later increment.
 Every provider mutation is now classified as a direct-write endpoint. The
 cohort has 2,370 direct-write endpoints and 118 enabled direct-write bindings;
 the former reverse-ETL primary-class count is zero. Reverse ETL is an
-eligibility attribute on those direct writes and stays zero-eligible until a
-connector-neutral typed destination factory supplies the required transport
-binding, apply strategies, and acknowledgement contract.
+eligibility attribute on those direct writes: the current seven-surface ledger
+has four fixture-bound mappings and 487 explicit pending action-scoped
+binding/App-dispatch dependencies. This does not claim a provider-live
+deployment.
 
 ## Provider surface reconciliation
 
@@ -84,10 +86,11 @@ foundation dependency for differing action field maps. Persisted App/CLI
 destination dispatch is additionally pending in the #4304 foundation branch.
 No provider credential was used; live certification remains pending.
 
-The same audit establishes a separate command-reachability foundation boundary:
-3,366 source-documented operations have no declared command binding. Current
-validation and runtime refuse a connector-authored placeholder for a blocked
-or unmaterialized endpoint, which correctly prevents a generic provider-I/O
-escape hatch but also prevents direct CLI reachability. The exact counts and
-per-operation rejections are recorded; the minimal closed
-`declaration-bound-disabled-command-surface` needs a keyed foundation decision.
+The same audit establishes a separate executable-operation foundation plan:
+3,366 source-documented operations have no declared command binding. Captain
+rejected a placeholder command, so the machine audit now assigns each one to
+the next real capability—1,389 fixed REST reads, 1,828 fixed REST writes, 120
+bounded binary transfers, 10 status registrations, or 19 provider contracts
+without a bounded schema. The structured-body handoff covers 224 existing
+typed actions with nested schemas. The design gives Firstmate the exact closed
+foundation and connector-batch slices; no raw or generic transport is proposed.

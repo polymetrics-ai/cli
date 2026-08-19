@@ -20,6 +20,17 @@
 
 Captain clarification on 2026-08-19 defines this as a parity-declaration lane, not a certification lane: the one-connector certification rule does not constrain its declaration increments. This work makes no live certification claim, changes no engine/foundation code, and records every unavailable executor or unsafe/elevated operation as disabled with evidence. No files under `defs/github/` or `defs/zoom/` may change.
 
+## Current reachability supersession — 2026-08-20
+
+The later captain decision supersedes the preceding historical disabled-command
+language: every documented operation remains a target for installed-CLI
+execution through its exact, source-locked typed declaration. The authoritative
+classification is `EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json`; neither safety,
+privilege, tier, destructive behavior, nor the absence of live credentials is
+an active reachability exclusion. The connector lane still makes no shared
+runtime edits; its job is to dispatch the closed foundation slices recorded
+below and to materialize their connector-owned declarations.
+
 ## Increment 1 Plan
 
 1. Retrieve each provider's public machine-readable API description without credentials and pin source URL, retrieval time, SHA-256, byte count, method counts, and operation inventory under the connector's `sources/` directory.
@@ -382,19 +393,19 @@ never relabelled as a REST write or reverse destination.
   conventions, architecture v2, and certification design were reviewed before
   declaration edits.
 
-## Command-reachability foundation boundary — 2026-08-20
+## Executable-operation foundation plan — 2026-08-20
 
-The source map now provides an exact proof that 3,366 of the 4,378 pinned
-operations lack a declared command binding. The unbound operation's existing
-endpoint rejection remains the source of record; it cannot be duplicated as a
-connector-local partial command because `checkCLISurfaceEndpointCoverage`
-rejects an unbound API endpoint and `resolvePreflightCommand` rejects a
-partial operation before dispatch.
+Captain rejected a disabled-command placeholder: a source operation is
+reachable only when an installed CLI command executes its exact typed provider
+contract. `EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json` reclassifies all 3,366
+unbound source operations by source identity and next capability: 1,389 fixed
+REST reads, 1,828 fixed REST writes, 120 bounded binary transfers, 10 status
+registrations, and 19 provider schemas too open to represent without a raw
+escape hatch.
 
-The needed capability is deliberately narrow: a declaration-bound disabled
-operation target naming exactly one existing API-surface endpoint and its
-rejection, returning `BlockedCommandError` without any generic HTTP/SQL/shell
-payload or provider I/O. This is shared engine/command-surface work and needs a
-keyed decision outside this connector-local lane. Until then the row remains a
-precise foundation gap, never a safety, scope, credential, or paid-tier
-exclusion.
+The implementation plan is `EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md`:
+rehydrate only hash-matched public source artifacts, materialize fixed operation
+contracts, add closed typed headers, compose #4305 structured bodies, add
+bounded binary/status/text paths, then prove #4304 App/CLI destination dispatch
+and action-scoped source mapping. No caller-selected URL, verb, header, body,
+arbitrary JSON, or generic transport is acceptable.

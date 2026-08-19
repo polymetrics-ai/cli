@@ -39,12 +39,17 @@ operations without a declared command binding: Docker Hub 11, Notion 5, Stripe
 164, and Jira 27. This count excludes the documented surface-only variants
 that are not in each pinned provider source denominator.
 
-Existing operation-level rejections identify every affected endpoint. The
-current connector-local schema cannot give one of those rejected endpoints a
-direct CLI command: `checkCLISurfaceEndpointCoverage` rejects its unbound
-`api_surface` reference and `resolvePreflightCommand` rejects an
-operation-backed partial command. The needed closed foundation is
-`declaration-bound-disabled-command-surface`, which would produce a precise
-`BlockedCommandError` for exactly one declared endpoint without permitting
-generic provider I/O. This connector lane does not implement that shared change
-without a keyed foundation decision.
+Captain rejected a disabled-command placeholder: an endpoint is reachable only
+when the installed CLI executes its fixed provider operation with typed inputs
+and a credential. `EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json` reclassifies all
+3,366 rows by their next executable capability: 1,389 fixed REST reads, 1,828
+fixed REST writes, 120 bounded binary transfers, 10 status-kind registrations,
+and 19 provider contracts with no bounded typed payload. The 224 typed actions
+with nested schemas are a downstream #4305 structured-body consumer.
+
+`EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md` defines the closed implementation
+slices: hash-matched source import; fixed REST contract materialization;
+typed declared headers; #4305 structured bodies; bounded binary/multipart,
+status, and text paths; #4304 App/CLI destination dispatch and action-scoped
+mapping; then connector-local command/binary proof. No caller-selected URL,
+verb, header, body, arbitrary JSON, or generic provider transport is proposed.

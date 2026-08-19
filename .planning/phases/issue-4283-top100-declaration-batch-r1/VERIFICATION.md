@@ -1,5 +1,14 @@
 # Issue #4283 — Verification Checklist
 
+> Current reachability supersession (2026-08-20): earlier “disabled” counts in
+> this historical verification record are not an endpoint disposition. The
+> authoritative status is `EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json`: each
+> of the 3,366 unbound source operations has an exact typed execution
+> capability, and a command counts only after installed-CLI dispatch to real
+> provider I/O. `BlockedCommandError` placeholders, scope, privilege, cost,
+> destructive risk, and unavailable live credentials are not reachability
+> exclusions.
+
 - [x] Source-lock file exists and parses for each increment-1 connector; `SOURCE-LOCK-VERIFICATION.json` confirms raw byte and SHA-256 agreement (10 / 10).
 - [x] Source-lock operation inventory and `api_surface.json` method/path
   inventory are reconciled: 4,378 operations found and 4,378 mapped rows.
@@ -220,8 +229,33 @@
   persisted App/CLI dispatch proof, `connector-boundary`, full `make verify`,
   and provider-live certification remain outstanding. Live certification is
   intentionally pending; no credentials are authorized.
-- [ ] The source-crosswalk audit finds 3,366 documented endpoints without a
-  declared command binding. The required closed disabled-operation command
-  target is recorded as `declaration-bound-disabled-command-surface` with
-  exact refusing code in the foundation-gap log. It requires a keyed shared
-  foundation decision and is not implemented in this connector-local lane.
+- [x] The source-crosswalk audit reclassifies all 3,366 source operations
+  without a binding by exact executable capability, source identity, method,
+  path, source location, and existing rejection evidence. Its totals are 1,389
+  fixed REST reads, 1,828 fixed REST writes, 120 bounded binary transfers, 10
+  status registrations, and 19 provider contracts without bounded schemas.
+- [ ] The closed executable-operation foundation slices in
+  `EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md` are implementation work: source
+  artifact hash rehydration/import, typed headers, #4305 structured bodies,
+  bounded binary/status/text, #4304 persisted dispatch, and connector command
+  materialization. A disabled-command placeholder is expressly rejected.
+
+## Executable-operation audit/design correction (2026-08-20)
+
+- [x] JSON parsing, source-key uniqueness, source-lock/identity presence, and
+  the two-way audit/rejection-ledger join pass: 4,378 total source operations,
+  1,012 already bound, and 3,366 exact reclassifications, with no missing or
+  duplicate record on either side.
+- [x] The active rejection vocabulary contains zero `requires-elevated-scope`,
+  `requires-paid-tier`, or `unsafe-to-exercise` exclusions. Their prior
+  evidence, where any, remains historical context only.
+- [x] `go run ./cmd/agentcontractgen check` — canonical delivery contract and
+  registered projections are current.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/<each of
+  dockerhub,notion,stripe,bitbucket,gitlab,circleci,sentry,vercel,asana,jira>
+  --json` — ten zero-finding runs.
+- [x] `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check`
+  — 552 connectors scanned; zero fields filled or corrected.
+- [x] `git diff --check` — clean. This correction changes planning/audit
+  artifacts only; it deliberately makes no engine, command, generated-artifact,
+  credential, or provider-I/O claim.

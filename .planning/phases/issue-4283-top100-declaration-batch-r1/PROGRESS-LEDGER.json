@@ -1697,17 +1697,19 @@
     }
   ],
   "reconciliation": {
-  "at": "2026-08-19T19:39:57Z",
+  "at": "2026-08-19T19:59:12Z",
     "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json",
     "summary": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.md",
     "scope": "The existing ten PR #4294 connector directories only; excludes the obsolete top-100 expansion.",
     "supersedes": "The per-connector generic-typed-destination-executor summaries above. #4304 composes the destination factory, while its persisted App/CLI dispatch integration remains an upstream prerequisite.",
     "command_reachability": {
       "documented_source_operations": 4378,
-      "without_declared_command_binding": 3366,
-      "state": "needs-keyed-foundation-decision",
-      "foundation_gap": "declaration-bound-disabled-command-surface",
-      "evidence": "SEVEN-SURFACE-RECONCILIATION.json command_reachability; FOUNDATION-GAP-REASONS.json"
+      "already_bound": 1012,
+      "reclassified_without_binding": 3366,
+      "state": "executable-foundation-slices-defined",
+      "capability_audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json",
+      "foundation_design": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md",
+      "captain_decision": "Rejected the disabled-command target. Reachability requires installed-CLI provider execution through an exact typed declaration, not a BlockedCommandError placeholder."
     },
     "destination_static_mappings": {
       "notion": "views -> update_view",
@@ -1716,6 +1718,6 @@
       "vercel": "projects -> update_project"
     },
     "non_live_certification": "focused connector validation and installed command preflight reached missing --credential without provider I/O; provider-live certification remains pending.",
-    "resume_pointer": "Await a keyed decision for declaration-bound disabled-operation commands; then continue connector-local reachability declarations. Before final push, merge the newest origin/fm/cli-reverse-etl-destination-r1, prove its SHA is an ancestor, then exercise the installed App/CLI reverse-ETL dispatch path."
+    "resume_pointer": "Dispatch F0–F5 from EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md, beginning with #4305 structured body coordination and hash-matched source contract import. Before final push, merge the newest origin/fm/cli-reverse-etl-destination-r1, prove its SHA is an ancestor, then exercise the installed App/CLI reverse-ETL dispatch path."
   }
 }

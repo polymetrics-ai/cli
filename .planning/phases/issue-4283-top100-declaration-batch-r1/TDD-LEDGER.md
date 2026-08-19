@@ -470,10 +470,18 @@ endpoint cannot be added as partial commands: `checkCLISurfaceEndpointCoverage`
 rejects their unbound endpoints, and `resolvePreflightCommand` rejects the
 operation-backed partial route before provider dispatch.
 
-**Green boundary:** no connector-local workaround was added. The ledger and
-foundation-gap log retain the exact per-connector count, source crosswalk,
-rejection records, and refusing source lines. The smallest compatible shared
-change is a closed `disabled_operation` target that produces
-`BlockedCommandError` for exactly one declared endpoint and cannot carry raw
-provider input. It needs a keyed foundation decision; the existing declarative
-destination work in #4304 does not provide it.
+**Captain decision / green design:** the disabled command proposal is rejected:
+`BlockedCommandError` is not API reachability. The new capability audit retains
+an exact source identity, method, path, location, prior rejection, and next
+executable capability for all 3,366 rows. Its allocation is 1,389 fixed REST
+reads, 1,828 fixed REST writes, 120 bounded binary transfers, 10 status-kind
+registrations, and 19 provider contracts without a bounded typed schema. The
+separate typed-action audit identifies 224 nested object/array actions as
+downstream #4305 structured-body consumers.
+
+**Refactor / dispatch:** `EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md` defines
+the closed source-import, header, structured-body, binary/status/text,
+destination-dispatch, and connector-batch slices. Each promoted command must
+use an exact source operation, fixed method/path, declared input schemas,
+bounded values, existing policy, and real provider I/O. No raw/generic
+transport or caller-selected metadata is introduced.
