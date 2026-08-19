@@ -1,0 +1,143 @@
+{
+  "actions": [
+    {
+      "name": "update_clinical_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/clinical_notes/notes/{{ record.note_id }}",
+      "path_fields": [
+        "note_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": "string",
+            "description": "Clinical note identifier used only in the fixed request path."
+          },
+          "is_note_completed": {
+            "type": "boolean",
+            "description": "Whether the clinical note is marked completed."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "note_id",
+          "is_note_completed"
+        ]
+      },
+      "redact_fields": [
+        "note_id"
+      ],
+      "risk": "high: mutates a patient's clinical note completion status; requires reverse ETL approval"
+    },
+    {
+      "name": "create_quality_management_interaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/qm/interactions",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "download_url": {
+            "type": "string",
+            "description": "Third-party download URL for the interaction media."
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ],
+            "description": "Call direction."
+          },
+          "disposition": {
+            "type": "string",
+            "description": "Disposition name."
+          },
+          "interaction_info": {
+            "type": "object",
+            "properties": {
+              "channel_type": {
+                "type": "string",
+                "enum": [
+                  "video",
+                  "voice"
+                ],
+                "description": "Interaction channel."
+              },
+              "agent_email": {
+                "type": "string",
+                "description": "Agent email address."
+              },
+              "agent_id": {
+                "type": "string",
+                "description": "Agent Zoom user ID."
+              },
+              "consumer_name": {
+                "type": "string",
+                "description": "Consumer name."
+              },
+              "from": {
+                "type": "string",
+                "description": "Caller phone number in E.164 format."
+              },
+              "to": {
+                "type": "string",
+                "description": "Recipient phone number in E.164 format."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "channel_type"
+            ]
+          },
+          "primary_language": {
+            "type": "string",
+            "enum": [
+              "en-GB",
+              "en-US",
+              "ar",
+              "da-DK",
+              "de-DE",
+              "es-ES",
+              "es-MX",
+              "fr-CA",
+              "fr-FR",
+              "it-IT",
+              "ja",
+              "ko-KR",
+              "nl-NL",
+              "pt-BR",
+              "pt-PT",
+              "ru",
+              "zh-CN",
+              "zh-HK"
+            ],
+            "description": "Optional primary transcription language."
+          },
+          "queue_id": {
+            "type": "string",
+            "description": "Contact Center queue ID."
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Interaction start time as RFC3339."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "download_url"
+        ]
+      },
+      "redact_fields": [
+        "download_url",
+        "interaction_info"
+      ],
+      "risk": "high: imports a third-party interaction into Zoom Quality Management; requires reverse ETL approval"
+    }
+  ]
+}

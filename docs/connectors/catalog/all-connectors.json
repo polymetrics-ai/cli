@@ -180069,7 +180069,7 @@
   {
     "name": "zoom",
     "display_name": "Zoom",
-    "description": "Reads Zoom users, meetings, and webinars through the Zoom REST API.",
+    "description": "Reads Zoom users, meetings, and webinars, and plans two source-backed approval-gated Zoom warehouse destination actions through the Zoom REST API.",
     "integration_type": "api",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "release_stage": "ga",
@@ -180077,7 +180077,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -180151,9 +180151,25 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "update_clinical_note",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/clinical_notes/notes/{{ record.note_id }}",
+        "risk": "high: mutates a patient's clinical note completion status; requires reverse ETL approval"
+      },
+      {
+        "name": "create_quality_management_interaction",
+        "kind": "create",
+        "method": "POST",
+        "path": "/qm/interactions",
+        "risk": "high: imports a third-party interaction into Zoom Quality Management; requires reverse ETL approval"
+      }
+    ],
     "risk": {
       "read": "external Zoom API read of user, meeting, and webinar data",
-      "approval": "none; read-only"
+      "approval": "reverse ETL actions require plan, preview, explicit approval, and execute; all other provider writes remain disabled"
     },
     "icon": {
       "id": "zoom",

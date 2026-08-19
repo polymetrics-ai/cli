@@ -87,31 +87,26 @@
       },
       {
         "function_kind": "capability:write",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
-        "fixture_tested": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": true,
         "live_tested": false,
-        "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "no_declared_write_actions",
-          "reason": "connector \"zoom\" has no declared writes.json actions; the shared engine Write method is unavailable for this bundle"
-        }
+        "fixture_evidence": [
+          "internal/connectors/defs/zoom/fixtures/writes/create_quality_management_interaction.json",
+          "internal/connectors/defs/zoom/fixtures/writes/update_clinical_note.json"
+        ],
+        "live_evidence": []
       },
       {
         "function_kind": "operation:binary_download",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "operation_kind_not_declared",
-          "reason": "connector \"zoom\" does not declare operation kind \"binary_download\""
-        }
+        "live_evidence": []
       },
       {
         "function_kind": "operation:browser_open",
@@ -227,31 +222,23 @@
       },
       {
         "function_kind": "operation:rest_read",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "operation_kind_not_declared",
-          "reason": "connector \"zoom\" does not declare operation kind \"rest_read\""
-        }
+        "live_evidence": []
       },
       {
         "function_kind": "operation:rest_write",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "operation_kind_not_declared",
-          "reason": "connector \"zoom\" does not declare operation kind \"rest_write\""
-        }
+        "live_evidence": []
       },
       {
         "function_kind": "operation:stream_etl",
@@ -502,17 +489,16 @@
       },
       {
         "workflow_kind": "reverse_etl",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
-        "fixture_tested": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": true,
         "live_tested": false,
-        "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "connector_capability_not_applicable",
-          "reason": "connector \"zoom\" has no applicable capability:write capability for workflow \"reverse_etl\""
-        }
+        "fixture_evidence": [
+          "internal/connectors/defs/zoom/fixtures/writes/create_quality_management_interaction.json",
+          "internal/connectors/defs/zoom/fixtures/writes/update_clinical_note.json"
+        ],
+        "live_evidence": []
       },
       {
         "workflow_kind": "schedule",
@@ -976,7 +962,7 @@
       {
         "role": "api_destination",
         "applicable": true,
-        "declared": false,
+        "declared": true,
         "implemented": false
       },
       {

@@ -1,14 +1,14 @@
 {
   "name": "zoom",
   "display_name": "Zoom",
-  "description": "Reads Zoom users, meetings, and webinars through the Zoom REST API.",
+  "description": "Reads Zoom users, meetings, and webinars, and plans two source-backed approval-gated Zoom warehouse destination actions through the Zoom REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.zoom.us/docs/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,6 +18,6 @@
   },
   "risk": {
     "read": "external Zoom API read of user, meeting, and webinar data",
-    "approval": "none; read-only"
+    "approval": "reverse ETL actions require plan, preview, explicit approval, and execute; all other provider writes remain disabled"
   }
 }

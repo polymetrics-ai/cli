@@ -1,22 +1,35 @@
 {
-  "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes.",
-  "usage": "pm zoom <users|meetings|webinars> list [flags]",
+  "tagline": "Read existing Zoom streams and plan the two source-backed, approval-gated warehouse destination actions.",
+  "usage": "pm zoom <users|meetings|webinars|healthcare|quality-management> <action> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
     "docs": "https://developers.zoom.us/docs/api/",
-    "reference": "OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05",
+    "reference": "Pinned public source lock at sources/zoom-operation-source-lock.json (captured 2026-08-19; provider documents report OpenAPI 3.0.0); api_surface retains the 2026-08-05 ledger snapshot for inventory continuity.",
     "source": "provider_api"
   },
   "groups": [
     {
       "id": "users",
       "title": "Users",
-      "commands": ["users"]
+      "commands": [
+        "users"
+      ]
     },
     {
       "id": "meetings",
       "title": "Meetings and webinars",
-      "commands": ["meetings", "webinars"]
+      "commands": [
+        "meetings",
+        "webinars"
+      ]
+    },
+    {
+      "id": "writes",
+      "title": "Approval-gated warehouse destination actions",
+      "commands": [
+        "healthcare",
+        "quality-management"
+      ]
     }
   ],
   "global_flags": [
@@ -56,7 +69,10 @@
       "source_cli_path": "GET /v2/users",
       "source_url": "https://developers.zoom.us/docs/api/users.md",
       "api_surface": [
-        { "method": "GET", "path": "/v2/users" }
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
       ],
       "examples": [
         "pm zoom users list --credential zoom-fixture --limit 25 --json"
@@ -80,7 +96,10 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/meetings" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/meetings"
+        }
       ],
       "examples": [
         "pm zoom meetings list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
@@ -104,17 +123,190 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/webinars" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/webinars"
+        }
       ],
       "examples": [
         "pm zoom webinars list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
+      ]
+    },
+    {
+      "path": "healthcare clinical-notes update",
+      "summary": "Plan an update to a clinical note's completion status.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_clinical_note",
+      "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/healthcare.json?slug=healthcare",
+      "risk": "high: changes a patient's clinical note completion status through an approval-gated reverse ETL action",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "flags": [
+        {
+          "name": "note-id",
+          "type": "string",
+          "summary": "Clinical note ID.",
+          "maps_to": "record.note_id",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "is-note-completed",
+          "type": "boolean",
+          "summary": "Whether the clinical note is marked completed.",
+          "maps_to": "record.is_note_completed",
+          "required": true
+        }
+      ],
+      "notes": "Typed high-risk mutation; preview and explicit approval are required before execute. The clinical note ID is redacted in write errors.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/clinical_notes/notes/{noteId}"
+        }
+      ],
+      "examples": [
+        "pm zoom healthcare clinical-notes update --note-id fixture-note --is-note-completed true --preview --json"
+      ]
+    },
+    {
+      "path": "quality-management interactions create",
+      "summary": "Plan creation of a Quality Management interaction from a third-party download URL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_quality_management_interaction",
+      "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/quality-management.json?slug=quality-management",
+      "risk": "high: imports a third-party interaction into Zoom Quality Management through an approval-gated reverse ETL action",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "flags": [
+        {
+          "name": "download-url",
+          "type": "string",
+          "summary": "Third-party URL from which Zoom downloads the interaction media.",
+          "maps_to": "record.download_url",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "direction",
+          "type": "enum",
+          "values": [
+            "inbound",
+            "outbound"
+          ],
+          "summary": "Call direction.",
+          "maps_to": "record.direction"
+        },
+        {
+          "name": "disposition",
+          "type": "string",
+          "summary": "Disposition name.",
+          "maps_to": "record.disposition",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-channel-type",
+          "type": "enum",
+          "values": [
+            "video",
+            "voice"
+          ],
+          "summary": "Interaction channel; required when any interaction-info field is supplied.",
+          "maps_to": "record.interaction_info.channel_type"
+        },
+        {
+          "name": "interaction-agent-email",
+          "type": "string",
+          "summary": "Agent email address.",
+          "maps_to": "record.interaction_info.agent_email",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-agent-id",
+          "type": "string",
+          "summary": "Agent Zoom user ID.",
+          "maps_to": "record.interaction_info.agent_id",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-consumer-name",
+          "type": "string",
+          "summary": "Consumer name.",
+          "maps_to": "record.interaction_info.consumer_name",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-from",
+          "type": "string",
+          "summary": "Caller phone number in E.164 format.",
+          "maps_to": "record.interaction_info.from",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-to",
+          "type": "string",
+          "summary": "Recipient phone number in E.164 format.",
+          "maps_to": "record.interaction_info.to",
+          "allow_empty": false
+        },
+        {
+          "name": "primary-language",
+          "type": "enum",
+          "values": [
+            "en-GB",
+            "en-US",
+            "ar",
+            "da-DK",
+            "de-DE",
+            "es-ES",
+            "es-MX",
+            "fr-CA",
+            "fr-FR",
+            "it-IT",
+            "ja",
+            "ko-KR",
+            "nl-NL",
+            "pt-BR",
+            "pt-PT",
+            "ru",
+            "zh-CN",
+            "zh-HK"
+          ],
+          "summary": "Optional primary transcription language.",
+          "maps_to": "record.primary_language"
+        },
+        {
+          "name": "queue-id",
+          "type": "string",
+          "summary": "Contact Center queue ID.",
+          "maps_to": "record.queue_id",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "format": "date-time",
+          "summary": "Interaction start time as RFC3339.",
+          "maps_to": "record.start_time",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Typed high-risk mutation. Download URL and interaction-info fields are redacted in generic write errors; preview and explicit approval are required before execute. If any interaction-info field is supplied, Zoom requires interaction-channel-type.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/qm/interactions"
+        }
+      ],
+      "examples": [
+        "pm zoom quality-management interactions create --download-url https://files.example.invalid/interaction.mp3 --interaction-channel-type voice --preview --json"
       ]
     }
   ],
   "help_topics": [
     {
       "name": "provider-inventory",
-      "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads."
+      "summary": "The Zoom source lock and disposition ledger account for all 1,913 tracked REST operations. This connector exposes three preserved ETL streams and two fixture-proven, approval-gated destination actions; the remaining provider contracts are explicitly disabled pending their recorded evidence and foundations."
     }
   ]
 }

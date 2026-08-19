@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "connector": "zoom",
+  "generated_at": "2026-08-19T11:45:00Z",
+  "source_basis": {
+    "source_lock": "sources/zoom-operation-source-lock.json",
+    "crosswalk": "sources/zoom-operation-crosswalk.json",
+    "api_surface": "api_surface.json",
+    "source_operations": 1937,
+    "api_surface_endpoints": 1913,
+    "exact_source_to_surface": 1911,
+    "source_only": 26,
+    "surface_only": 2
+  },
+  "gaps": [
+    {
+      "id": "operation-backed-rest-write-api-surface-coverage",
+      "tracking": "#4281",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:679-721 only admits covered_by.operations for fixed GraphQL operation kinds, rejecting REST rest_write coverage.",
+        "cmd/connectorgen/validate.go:696-721 repeats the REST operation coverage restriction."
+      ],
+      "minimal_change": "Admit an exact REST rest_write operation identity, method, path, policy, and request-contract binding without treating it as a GraphQL operation.",
+      "recoverable": true,
+      "affected_count": 575,
+      "applicable_source_contract_count": 971,
+      "applicable_delete_contract_count": 311,
+      "primary_rejection_count": 575,
+      "restricted_additional_count": 396
+    },
+    {
+      "id": "file-upload-executor",
+      "tracking": "G12",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:2745-2753 validates file_upload metadata but no connector command executor is registered for file_upload.",
+        "internal/connectors/engine/schema/operations.schema.json:139-168 cannot express the legacy multipart.parts[].allowed_file_extensions field."
+      ],
+      "minimal_change": "Register a bounded file_upload executor and support provider-backed extension policy only if it is enforced at execution time.",
+      "recoverable": true,
+      "affected_count": 34,
+      "applicable_source_contract_count": 34
+    },
+    {
+      "id": "binary-redirect-origin-contract",
+      "tracking": null,
+      "evidence": [
+        "Zoom source clips Download a clip documents an HTTP 302 redirect to the actual download location.",
+        "internal/connectors/engine/schema/operations.schema.json:90-169 has no per-operation server_url or bearer_redirect field.",
+        "internal/connectors/engine/binary_read_test.go:581-615 enforces cross-host allowlisting; the public source does not declare a safe redirect host."
+      ],
+      "minimal_change": "Support an evidence-backed per-operation origin and redirect policy that preserves credential safety and allowlists provider-issued redirect hosts.",
+      "recoverable": true,
+      "affected_count": 1,
+      "applicable_source_contract_count": 1
+    },
+    {
+      "id": "declarative-stream-source-transport-registration",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/certify/stages_transport_internal_test.go:89 proves declarative_stream_source fails closed because it is not registered.",
+        "internal/connectors/certify/stages_transport.go:70-89 requires durable registered source and destination proof before a transport claim."
+      ],
+      "minimal_change": "Register a declarative stream source transport adapter and prove an executable Zoom source-to-warehouse conformance run before declaring sync_transport.json.",
+      "recoverable": true,
+      "affected_count": 3,
+      "applicable_existing_stream_count": 3,
+      "primary_rejection_count": 0
+    }
+  ]
+}
