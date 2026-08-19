@@ -7,7 +7,7 @@ The source-lock recovery audit covers every connector owned by this issue. A row
 | close-com | 297 | — | pending provider-surface audit | pending |
 | outreach | 259 | — | pending provider-surface audit | pending |
 | salesloft | 12 | 211 | complete rendered reference: all 315 public API pages in provider sitemap | complete — remapped |
-| copper | 5 | — | pending complete rendered-reference crawl | pending |
+| copper | 5 | 89 | complete rendered reference: all 637 provider-published MkDocs search-index documentation nodes | complete — remapped |
 | zoho-bigin | 50 | — | pending provider-surface audit | pending |
 | klaviyo | 9 | 345 | official OpenAPI 3.0.2 full GA specification | complete — remapped |
 | braze | 95 | — | pending provider-surface audit | pending |

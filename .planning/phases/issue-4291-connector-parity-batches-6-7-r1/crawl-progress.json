@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-19T00:00:00Z",
+  "updated_at": "2026-08-19T16:24:44.647Z",
   "crawls": {
     "salesloft": {
       "state": "complete",
@@ -41,10 +41,1850 @@
       "last_error": "HTTP 429 while retrieving /reference/square/invoices-api; no partial group or partial operation count is promoted into api_surface.json or a source lock."
     },
     "copper": {
-      "state": "not_started",
+      "state": "complete",
       "reference_root": "https://developer.copper.com/",
       "expected_documents": 637,
-      "coverage_confidence": "none"
+      "coverage_confidence": "complete_rendered_reference",
+      "document_operations": {
+        "index.html": [],
+        "index.html#changelog": [],
+        "index.html#domain-update": [],
+        "index.html#change-policy": [],
+        "index.html#postman-resources": [],
+        "index.html#import-the-collection": [],
+        "index.html#import-and-use-the-environment": [],
+        "account-and-users/fetch-account-details.html": [
+          {
+            "method": "GET",
+            "path": "/v1/account",
+            "source_url": "https://developer.copper.com/account-and-users/fetch-account-details.html",
+            "title": "Fetch Account Details"
+          }
+        ],
+        "account-and-users/fetch-account-details.html#example": [],
+        "account-and-users/fetch-api-user.html": [
+          {
+            "method": "GET",
+            "path": "/v1/users/me",
+            "source_url": "https://developer.copper.com/account-and-users/fetch-api-user.html",
+            "title": "Fetch API User"
+          }
+        ],
+        "account-and-users/fetch-user-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/users/{user_id}",
+            "source_url": "https://developer.copper.com/account-and-users/fetch-user-by-id.html",
+            "title": "Fetch User by ID"
+          }
+        ],
+        "account-and-users/fetch-user-by-id.html#response-body": [],
+        "account-and-users/fetch-user-by-id.html#example": [],
+        "account-and-users/list-users.html": [
+          {
+            "method": "POST",
+            "path": "/v1/users/search",
+            "source_url": "https://developer.copper.com/account-and-users/list-users.html",
+            "title": "List Users"
+          }
+        ],
+        "account-and-users/list-users.html#parameters": [],
+        "account-and-users/list-users.html#example": [],
+        "account-and-users/list-users.html#list-of-users": [],
+        "account-and-users/overview.html": [],
+        "account-and-users/overview.html#account": [],
+        "activities/bulk-create-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/activities/bulk_create",
+            "source_url": "https://developer.copper.com/activities/bulk-create-activities.html",
+            "title": "Bulk Create Activities"
+          }
+        ],
+        "activities/bulk-create-activities.html#beta-disclaimer": [],
+        "activities/bulk-create-activities.html#request-size-limit": [],
+        "activities/bulk-create-activities.html#responses": [],
+        "activities/bulk-create-activities.html#notes": [],
+        "activities/bulk-create-activities.html#request-body": [],
+        "activities/bulk-create-activities.html#example-requests": [],
+        "activities/bulk-create-activities.html#bulk-create-activities_1": [],
+        "activities/create-a-new-activity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/activities",
+            "source_url": "https://developer.copper.com/activities/create-a-new-activity.html",
+            "title": "Create a New Activity"
+          }
+        ],
+        "activities/create-a-new-activity.html#request-body": [],
+        "activities/create-a-new-activity.html#example-requests": [],
+        "activities/create-a-new-activity.html#create-new-note": [],
+        "activities/delete-an-activity.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/activities/{activity_id}",
+            "source_url": "https://developer.copper.com/activities/delete-an-activity.html",
+            "title": "Delete an Activity"
+          }
+        ],
+        "activities/delete-an-activity.html#example-requests": [],
+        "activities/delete-an-activity.html#delete-activity": [],
+        "activities/fetch-an-activity-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/activities/{activity_id}",
+            "source_url": "https://developer.copper.com/activities/fetch-an-activity-by-id.html",
+            "title": "Fetch an Activity by ID"
+          }
+        ],
+        "activities/fetch-an-activity-by-id.html#example-requests": [],
+        "activities/fetch-an-activity-by-id.html#get-activity": [],
+        "activities/list-activities-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/activities/search",
+            "source_url": "https://developer.copper.com/activities/list-activities-search.html",
+            "title": "List Activities (Search)"
+          }
+        ],
+        "activities/list-activities-search.html#example-requests": [],
+        "activities/list-activities-search.html#search-activities": [],
+        "activities/list-activities-search.html#search-activities-by-date": [],
+        "activities/list-activities-search.html#search-activities-with-the-full_result-parameter": [],
+        "activities/list-activity-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/activity_types",
+            "source_url": "https://developer.copper.com/activities/list-activity-types.html",
+            "title": "List Activity Types"
+          }
+        ],
+        "activities/list-activity-types.html#example-requests": [],
+        "activities/list-activity-types.html#list-activity-types_1": [],
+        "activities/overview.html": [],
+        "activities/overview.html#activity-properties": [],
+        "activities/update-an-activity.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/activities/{activity_id}",
+            "source_url": "https://developer.copper.com/activities/update-an-activity.html",
+            "title": "Update an Activity"
+          }
+        ],
+        "activities/update-an-activity.html#request-body": [],
+        "activities/update-an-activity.html#example-requests": [],
+        "activities/update-an-activity.html#update-a-note": [],
+        "companies/bulk-company-create.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/bulk_create",
+            "source_url": "https://developer.copper.com/companies/bulk-company-create.html",
+            "title": "Bulk Create Companies"
+          }
+        ],
+        "companies/bulk-company-create.html#beta-disclaimer": [],
+        "companies/bulk-company-create.html#request-size-limit": [],
+        "companies/bulk-company-create.html#responses": [],
+        "companies/bulk-company-create.html#notes": [],
+        "companies/bulk-company-create.html#request-body": [],
+        "companies/bulk-company-create.html#example-requests": [],
+        "companies/bulk-company-create.html#create-company": [],
+        "companies/bulk-company-update.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/bulk_update",
+            "source_url": "https://developer.copper.com/companies/bulk-company-update.html",
+            "title": "Bulk Update Companies"
+          }
+        ],
+        "companies/bulk-company-update.html#beta-disclaimer": [],
+        "companies/bulk-company-update.html#request-size-limit": [],
+        "companies/bulk-company-update.html#responses": [],
+        "companies/bulk-company-update.html#notes": [],
+        "companies/bulk-company-update.html#request-body": [],
+        "companies/bulk-company-update.html#example-requests": [],
+        "companies/bulk-company-update.html#bulk-update-companies_1": [],
+        "companies/create-a-new-company.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies",
+            "source_url": "https://developer.copper.com/companies/create-a-new-company.html",
+            "title": "Create a New Company"
+          }
+        ],
+        "companies/create-a-new-company.html#request-body": [],
+        "companies/create-a-new-company.html#example-requests": [],
+        "companies/create-a-new-company.html#create-company": [],
+        "companies/delete-a-company.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/companies/{company_id}",
+            "source_url": "https://developer.copper.com/companies/delete-a-company.html",
+            "title": "Delete a Company"
+          }
+        ],
+        "companies/delete-a-company.html#example-requests": [],
+        "companies/delete-a-company.html#delete-person": [],
+        "companies/fetch-a-company-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/companies/{company_id}",
+            "source_url": "https://developer.copper.com/companies/fetch-a-company-by-id.html",
+            "title": "Fetch a Company by ID"
+          }
+        ],
+        "companies/fetch-a-company-by-id.html#example-requests": [],
+        "companies/fetch-a-company-by-id.html#company": [],
+        "companies/list-companies-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/search",
+            "source_url": "https://developer.copper.com/companies/list-companies-search.html",
+            "title": "List Companies (Search)"
+          }
+        ],
+        "companies/list-companies-search.html#request-body": [],
+        "companies/list-companies-search.html#example-requests": [],
+        "companies/list-companies-search.html#companies-search": [],
+        "companies/list-companies-search.html#search-companies-by-email-domains": [],
+        "companies/list-companies-search.html#search-companies-by-contact-type-ids": [],
+        "companies/list-companies-search.html#search-companies-by-custom-date-field": [],
+        "companies/list-companies-search.html#search-companies-by-postal-code": [],
+        "companies/list-companies-search.html#search-companies-by-last-interaction": [],
+        "companies/list-companies-search.html#search-companies-by-city": [],
+        "companies/list-companies-search.html#search-companies-by-socials": [],
+        "companies/list-contact-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/contact_types",
+            "source_url": "https://developer.copper.com/companies/list-contact-types.html",
+            "title": "List Contact Types"
+          }
+        ],
+        "companies/list-contact-types.html#example-requests": [],
+        "companies/list-contact-types.html#contact-types": [],
+        "companies/overview.html": [],
+        "companies/overview.html#company-properties": [],
+        "companies/see-a-companys-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/{company_id}/activities",
+            "source_url": "https://developer.copper.com/companies/see-a-companys-activities.html",
+            "title": "See a Company's Activities"
+          }
+        ],
+        "companies/see-a-companys-activities.html#request-body": [],
+        "companies/see-a-companys-activities.html#example-requests": [],
+        "companies/see-a-companys-activities.html#company-activities": [],
+        "companies/update-a-company.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/companies/{company_id}",
+            "source_url": "https://developer.copper.com/companies/update-a-company.html",
+            "title": "Update a Company"
+          }
+        ],
+        "companies/update-a-company.html#request-body": [],
+        "companies/update-a-company.html#example-requests": [],
+        "companies/update-a-company.html#update-company": [],
+        "custom-fields/connect-fields/create-a-connection.html": [
+          {
+            "method": "POST",
+            "path": "/v1/related_links",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/create-a-connection.html",
+            "title": "Create a connection"
+          }
+        ],
+        "custom-fields/connect-fields/create-a-connection.html#request-body": [],
+        "custom-fields/connect-fields/create-a-connection.html#example-requests": [],
+        "custom-fields/connect-fields/create-a-connection.html#create-a-new-connection": [],
+        "custom-fields/connect-fields/delete-a-connection.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/related_links/{connection_id}",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/delete-a-connection.html",
+            "title": "Delete a connection"
+          }
+        ],
+        "custom-fields/connect-fields/delete-a-connection.html#example-requests": [],
+        "custom-fields/connect-fields/delete-a-connection.html#delete-a-connection_1": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/related_links",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html",
+            "title": "List the connections on specified entity for a specific custom-field-definition-id"
+          }
+        ],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html#parameters": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html#example-requests": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html#list-the-connections-on-specified-entity": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html": [
+          {
+            "method": "GET",
+            "path": "/v1/related_links",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity.html",
+            "title": "List all connections on specified entity"
+          }
+        ],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html#parameters": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html#example-requests": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html#list-the-connections-on-specified-entity": [],
+        "custom-fields/connect-fields/overview.html": [],
+        "custom-fields/general/computed_cf_values.html": [],
+        "custom-fields/general/computed_cf_values.html#what-is-a-computed-custom-field": [],
+        "custom-fields/general/computed_cf_values.html#eligible-endpoints": [],
+        "custom-fields/general/computed_cf_values.html#people": [],
+        "custom-fields/general/computed_cf_values.html#leads": [],
+        "custom-fields/general/computed_cf_values.html#companies": [],
+        "custom-fields/general/computed_cf_values.html#opportunities": [],
+        "custom-fields/general/computed_cf_values.html#projects": [],
+        "custom-fields/general/computed_cf_values.html#tasks": [],
+        "custom-fields/general/computed_cf_values.html#webhooks": [],
+        "custom-fields/general/create-a-new-custom-activity-type.html": [
+          {
+            "method": "POST",
+            "path": "/v1/custom_activity_types",
+            "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-activity-type.html",
+            "title": "Create a New Custom Activity Type"
+          }
+        ],
+        "custom-fields/general/create-a-new-custom-activity-type.html#request-body": [],
+        "custom-fields/general/create-a-new-custom-activity-type.html#example-requests": [],
+        "custom-fields/general/create-a-new-custom-activity-type.html#create-a-new-custom-activity-type_1": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html": [
+          {
+            "method": "POST",
+            "path": "/v1/custom_field_definitions",
+            "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-field-definition.html",
+            "title": "Create a new custom field definition"
+          }
+        ],
+        "custom-fields/general/create-a-new-custom-field-definition.html#request-body": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#create-a-dropdown-custom-field": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#create-a-currency-custom-field": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#create-a-string-custom-field": [],
+        "custom-fields/general/delete-a-custom-field-definition.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/delete-a-custom-field-definition.html",
+            "title": "Delete a Custom Field Definition"
+          }
+        ],
+        "custom-fields/general/delete-a-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/delete-a-custom-field-definition.html#delete-a-custom-field-definition_1": [],
+        "custom-fields/general/fetch-a-custom-field-definition.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/fetch-a-custom-field-definition.html",
+            "title": "Fetch a Custom Field Definition"
+          }
+        ],
+        "custom-fields/general/fetch-a-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/fetch-a-custom-field-definition.html#custom-field-definitioin": [],
+        "custom-fields/general/get-custom-activity-type.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/get-custom-activity-type.html",
+            "title": "Get Custom Activity Type"
+          }
+        ],
+        "custom-fields/general/get-custom-activity-type.html#example-requests": [],
+        "custom-fields/general/get-custom-activity-type.html#get-custom-activity-type_1": [],
+        "custom-fields/general/list-all-custom-activity-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_activity_types",
+            "source_url": "https://developer.copper.com/custom-fields/general/list-all-custom-activity-types.html",
+            "title": "List All Custom Activity Types"
+          }
+        ],
+        "custom-fields/general/list-all-custom-activity-types.html#example-requests": [],
+        "custom-fields/general/list-all-custom-activity-types.html#list-all-custom-activity-types_1": [],
+        "custom-fields/general/list-custom-field-definitions.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_field_definitions",
+            "source_url": "https://developer.copper.com/custom-fields/general/list-custom-field-definitions.html",
+            "title": "List Custom Field Definitions"
+          }
+        ],
+        "custom-fields/general/list-custom-field-definitions.html#example-requests": [],
+        "custom-fields/general/list-custom-field-definitions.html#custom-field-definitions": [],
+        "custom-fields/general/overview.html": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html": [
+          {
+            "method": "POST",
+            "path": "/v1/{entity_name_in_plural}/search",
+            "source_url": "https://developer.copper.com/custom-fields/general/search-entity-leads-people-etc-by-custom-field.html",
+            "title": "Search Entity (Leads, People, etc) by Custom Field"
+          }
+        ],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#request-body": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#example-requests": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-date-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-percentage-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-multi-select-dropdown-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-dropdown-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-currency-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-dropdown-field-for-empty-value": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-multi-select-dropdown-field-for-both-set-value-and-empty-value": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-number-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-checkbox-field": [],
+        "custom-fields/general/update-an-existing-custom-activity-type.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-activity-type.html",
+            "title": "Update an Existing Custom Activity Type"
+          }
+        ],
+        "custom-fields/general/update-an-existing-custom-activity-type.html#request-body": [],
+        "custom-fields/general/update-an-existing-custom-activity-type.html#example-requests": [],
+        "custom-fields/general/update-an-existing-custom-activity-type.html#update-an-existing-custom-activity-type_1": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-field-definition.html",
+            "title": "Update an existing custom field definition"
+          }
+        ],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#request-body": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#update-options-for-an-existing-dropdown-custom-field": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#update-a-string-custom-field": [],
+        "field-layouts/list-field-layout-by-entity-type.html": [
+          {
+            "method": "GET",
+            "path": "/v1/field_layouts/by_entity/{entity_name_in_plural}",
+            "source_url": "https://developer.copper.com/field-layouts/list-field-layout-by-entity-type.html",
+            "title": "List Field Layout by Entity Type"
+          }
+        ],
+        "field-layouts/list-field-layout-by-entity-type.html#field-layouts": [],
+        "field-layouts/list-field-layout-by-entity-type.html#field-attributes": [],
+        "field-layouts/list-field-layout-by-entity-type.html#example-requests": [],
+        "field-layouts/list-field-layout-by-entity-type.html#people-field-layout": [],
+        "field-layouts/list-field-layout-by-entity-type.html#opportunities-field-layout": [],
+        "file-upload/delete-a-file.html": [],
+        "file-upload/delete-a-file.html#example-requests": [],
+        "file-upload/delete-a-file.html#delete-a-file_1": [],
+        "file-upload/get-metadata-of-a-specific-attached-file.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files/{file_id}",
+            "source_url": "https://developer.copper.com/file-upload/get-metadata-of-a-specific-attached-file.html",
+            "title": "Get metadata of a specific attached file"
+          }
+        ],
+        "file-upload/get-metadata-of-a-specific-attached-file.html#example-requests": [],
+        "file-upload/get-metadata-of-a-specific-attached-file.html#get-metadata-of-a-specific-attached-file-on-an-existing-lead": [],
+        "file-upload/get-signed-s3-url.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files/s3_signed_url",
+            "source_url": "https://developer.copper.com/file-upload/get-signed-s3-url.html",
+            "title": "Get signed S3 URL"
+          }
+        ],
+        "file-upload/get-signed-s3-url.html#example-requests": [],
+        "file-upload/get-signed-s3-url.html#get-signed-s3-url-to-upload-file-to-leads-entity": [],
+        "file-upload/list-attached-files-of-an-entity-record.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files",
+            "source_url": "https://developer.copper.com/file-upload/list-attached-files-of-an-entity-record.html",
+            "title": "List attached files of an entity record"
+          }
+        ],
+        "file-upload/list-attached-files-of-an-entity-record.html#example-requests": [],
+        "file-upload/list-attached-files-of-an-entity-record.html#list-attached-files-of-an-existing-lead": [],
+        "file-upload/overview.html": [],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/{entity_type}/{entity_id}/files",
+            "source_url": "https://developer.copper.com/file-upload/relate-the-uploaded-file-to-a-specific-entity.html",
+            "title": "Relate the uploaded file to a specific entity"
+          }
+        ],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html#request-body": [],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html#example-requests": [],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html#relate-the-uploaded-file-to-a-specific-entity_1": [],
+        "file-upload/upload-your-file-to-s3.html": [],
+        "file-upload/upload-your-file-to-s3.html#example-requests": [],
+        "file-upload/upload-your-file-to-s3.html#upload-your-file-to-s3_1": [],
+        "introduction/appendix.html": [],
+        "introduction/appendix.html#basic-data-types": [],
+        "introduction/appendix.html#categories": [],
+        "introduction/authentication.html": [],
+        "introduction/authentication.html#api-keys": [],
+        "introduction/authentication.html#oauth20": [],
+        "introduction/best_practices.html": [],
+        "introduction/best_practices.html#date-formats": [],
+        "introduction/best_practices.html#the-api-respects-team-permissions": [],
+        "introduction/best_practices.html#create-a-developer-user": [],
+        "introduction/best_practices.html#entity-id-scopes": [],
+        "introduction/best_practices.html#file-upload": [],
+        "introduction/change_policy.html": [],
+        "introduction/change_policy.html#backwards-compatible-changes": [],
+        "introduction/change_policy.html#what-you-can-expect-from-copper": [],
+        "introduction/change_policy.html#change-process": [],
+        "introduction/change_policy.html#incompatible-changes": [],
+        "introduction/change_policy.html#what-you-can-expect-from-copper_1": [],
+        "introduction/change_policy.html#change-process_1": [],
+        "introduction/change_policy.html#communication-plan": [],
+        "introduction/change_policy.html#glossary": [],
+        "introduction/changelog.html": [],
+        "introduction/changelog.html#july-2-2026": [],
+        "introduction/changelog.html#february-24-2026": [],
+        "introduction/changelog.html#august-15-2025": [],
+        "introduction/changelog.html#march-10-2025": [],
+        "introduction/changelog.html#january-9-2025": [],
+        "introduction/changelog.html#december-5-2024": [],
+        "introduction/changelog.html#november-11-2024": [],
+        "introduction/changelog.html#october-30-2024": [],
+        "introduction/changelog.html#june-19-2024": [],
+        "introduction/changelog.html#april-24-2024": [],
+        "introduction/changelog.html#november-1-2023": [],
+        "introduction/changelog.html#september-14-2023": [],
+        "introduction/changelog.html#august-22-2023": [],
+        "introduction/changelog.html#bulk-apis-available-beta": [],
+        "introduction/changelog.html#august-14-2023": [],
+        "introduction/changelog.html#headers-supported-in-webhooks": [],
+        "introduction/changelog.html#august-11-2023": [],
+        "introduction/changelog.html#oauth20-support": [],
+        "introduction/changelog.html#july-20-2023": [],
+        "introduction/changelog.html#search-by-ids": [],
+        "introduction/changelog.html#march-9-2023": [],
+        "introduction/changelog.html#new-field-is_filterable-for-customfielddefinitions": [],
+        "introduction/changelog.html#february-14-2023": [],
+        "introduction/changelog.html#new-primary-timezone-field-for-account": [],
+        "introduction/changelog.html#december-5-2022": [],
+        "introduction/changelog.html#invalid-target-error-for-webhook-subscription-createupdate": [],
+        "introduction/changelog.html#june-15-2022": [],
+        "introduction/changelog.html#custom-field-definition-canonical-name": [],
+        "introduction/changelog.html#june-15-2022_1": [],
+        "introduction/changelog.html#moved-page_size-to-relevent-area": [],
+        "introduction/changelog.html#january-12-2022": [],
+        "introduction/changelog.html#changelog-added": [],
+        "introduction/changelog.html#search-by-social-media-accounts": [],
+        "introduction/changelog.html#computed-custom-field-values-for-endpoints-webhooks": [],
+        "introduction/changelog.html#december-13-2021": [],
+        "introduction/changelog.html#new-webhook-request-timestamp-field": [],
+        "introduction/changelog.html#october-29-2021": [],
+        "introduction/changelog.html#postman-environment": [],
+        "introduction/changelog.html#october-15-2021": [],
+        "introduction/changelog.html#get-tags-index": [],
+        "introduction/changelog.html#september-17-2021": [],
+        "introduction/changelog.html#added-update-activity-endpoint": [],
+        "introduction/changelog.html#september-7-2021": [],
+        "introduction/changelog.html#change-policy": [],
+        "introduction/changelog.html#august-18-2021": [],
+        "introduction/changelog.html#domain-update": [],
+        "introduction/embedded_apps.html": [],
+        "introduction/pagination.html": [],
+        "introduction/pagination.html#strategy-1-calculate-the-number-of-pages": [],
+        "introduction/pagination.html#strategy-2-count-the-records-on-each-page": [],
+        "introduction/pagination.html#remember-to-sort-you-search-results": [],
+        "introduction/requests.html": [],
+        "introduction/requests.html#encryption": [],
+        "introduction/requests.html#headers": [],
+        "introduction/requests.html#body": [],
+        "introduction/requests.html#rate-limits": [],
+        "introduction/responses.html": [],
+        "introduction/search.html": [],
+        "introduction/search.html#search-by-phone-number": [],
+        "introduction/support.html": [],
+        "introduction/oauth/index.html": [],
+        "introduction/oauth/index.html#1-introduction": [],
+        "introduction/oauth/index.html#2-prerequisites": [],
+        "introduction/oauth/index.html#3-authorization-flow-overview": [],
+        "introduction/oauth/index.html#4-quickstart-guide": [],
+        "introduction/oauth/index.html#5-documentation": [],
+        "introduction/oauth/index.html#6-access-token-management": [],
+        "introduction/oauth/index.html#7-scopes": [],
+        "introduction/oauth/index.html#8-client-libraries": [],
+        "introduction/oauth/index.html#9-resources": [],
+        "introduction/oauth/flow.html": [],
+        "introduction/oauth/flow.html#1-introduction": [],
+        "introduction/oauth/flow.html#11-prerequisites": [],
+        "introduction/oauth/flow.html#12-the-authorization-flow": [],
+        "introduction/oauth/flow.html#13-sequence-diagram": [],
+        "introduction/oauth/flow.html#2-flow-steps": [],
+        "introduction/oauth/flow.html#21-authorization-request": [],
+        "introduction/oauth/flow.html#22-user-authentication": [],
+        "introduction/oauth/flow.html#23-authorization-grant": [],
+        "introduction/oauth/flow.html#24-token-request": [],
+        "introduction/oauth/flow.html#25-access-protected-resources": [],
+        "introduction/oauth/quickstart.html": [],
+        "introduction/oauth/quickstart.html#introduction": [],
+        "introduction/oauth/quickstart.html#prerequisites": [],
+        "introduction/oauth/quickstart.html#integration": [],
+        "leads/bulk-create-leads.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/bulk_create",
+            "source_url": "https://developer.copper.com/leads/bulk-create-leads.html",
+            "title": "Bulk Create Leads"
+          }
+        ],
+        "leads/bulk-create-leads.html#beta-disclaimer": [],
+        "leads/bulk-create-leads.html#request-size-limit": [],
+        "leads/bulk-create-leads.html#responses": [],
+        "leads/bulk-create-leads.html#notes": [],
+        "leads/bulk-create-leads.html#request-body": [],
+        "leads/bulk-create-leads.html#example-requests": [],
+        "leads/bulk-create-leads.html#create-new-person": [],
+        "leads/bulk-update-leads.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/bulk_update",
+            "source_url": "https://developer.copper.com/leads/bulk-update-leads.html",
+            "title": "Bulk Update Leads"
+          }
+        ],
+        "leads/bulk-update-leads.html#beta-disclaimer": [],
+        "leads/bulk-update-leads.html#request-size-limit": [],
+        "leads/bulk-update-leads.html#responses": [],
+        "leads/bulk-update-leads.html#notes": [],
+        "leads/bulk-update-leads.html#request-body": [],
+        "leads/bulk-update-leads.html#example-requests": [],
+        "leads/bulk-update-leads.html#update-leads": [],
+        "leads/convert-a-lead.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/{leadconvert_id}/convert",
+            "source_url": "https://developer.copper.com/leads/convert-a-lead.html",
+            "title": "Convert a Lead"
+          }
+        ],
+        "leads/convert-a-lead.html#request-body": [],
+        "leads/convert-a-lead.html#example-requests": [],
+        "leads/convert-a-lead.html#lead-conversion": [],
+        "leads/create-a-new-lead.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads",
+            "source_url": "https://developer.copper.com/leads/create-a-new-lead.html",
+            "title": "Create a New Lead"
+          }
+        ],
+        "leads/create-a-new-lead.html#request-body": [],
+        "leads/create-a-new-lead.html#example-requests": [],
+        "leads/create-a-new-lead.html#create-new-lead": [],
+        "leads/delete-a-lead.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/leads/{lead_id}",
+            "source_url": "https://developer.copper.com/leads/delete-a-lead.html",
+            "title": "Delete a Lead"
+          }
+        ],
+        "leads/delete-a-lead.html#example-requests": [],
+        "leads/delete-a-lead.html#delete-a-lead_1": [],
+        "leads/fetch-a-lead-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/leads/{lead_id}",
+            "source_url": "https://developer.copper.com/leads/fetch-a-lead-by-id.html",
+            "title": "Fetch a Lead by ID"
+          }
+        ],
+        "leads/fetch-a-lead-by-id.html#example-requests": [],
+        "leads/fetch-a-lead-by-id.html#sample-lead": [],
+        "leads/list-customer-sources.html": [
+          {
+            "method": "GET",
+            "path": "/v1/customer_sources",
+            "source_url": "https://developer.copper.com/leads/list-customer-sources.html",
+            "title": "List Customer Sources"
+          }
+        ],
+        "leads/list-customer-sources.html#example-requests": [],
+        "leads/list-customer-sources.html#customer-sources": [],
+        "leads/list-lead-statuses.html": [
+          {
+            "method": "GET",
+            "path": "/v1/lead_statuses",
+            "source_url": "https://developer.copper.com/leads/list-lead-statuses.html",
+            "title": "List Lead Statuses"
+          }
+        ],
+        "leads/list-lead-statuses.html#example-requests": [],
+        "leads/list-lead-statuses.html#lead-statuses": [],
+        "leads/list-leads-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/search",
+            "source_url": "https://developer.copper.com/leads/list-leads-search.html",
+            "title": "List Leads (Search)"
+          }
+        ],
+        "leads/list-leads-search.html#request-body": [],
+        "leads/list-leads-search.html#example-requests": [],
+        "leads/list-leads-search.html#leads-search": [],
+        "leads/list-leads-search.html#list-leads-in-groups-of-200": [],
+        "leads/list-leads-search.html#search-by-full-name": [],
+        "leads/list-leads-search.html#search-by-followed": [],
+        "leads/list-leads-search.html#search-by-assignee-ids": [],
+        "leads/list-leads-search.html#search-by-interaction-count": [],
+        "leads/list-leads-search.html#search-by-city": [],
+        "leads/list-leads-search.html#search-by-state": [],
+        "leads/list-leads-search.html#search-by-postal-code": [],
+        "leads/list-leads-search.html#search-by-country": [],
+        "leads/list-leads-search.html#search-by-customer-source-ids": [],
+        "leads/list-leads-search.html#search-by-email": [],
+        "leads/list-leads-search.html#search-by-monetary-value": [],
+        "leads/list-leads-search.html#search-by-phone-number": [],
+        "leads/list-leads-search.html#search-by-status-ids": [],
+        "leads/list-leads-search.html#search-by-tags": [],
+        "leads/list-leads-search.html#search-by-socials": [],
+        "leads/list-leads-search.html#search-by-created-date": [],
+        "leads/list-leads-search.html#search-by-modified-date": [],
+        "leads/list-leads-search.html#search-by-interaction-date": [],
+        "leads/list-leads-search.html#search-by-status-change-date": [],
+        "leads/list-leads-search.html#search-by-empty-field": [],
+        "leads/list-leads-search.html#search-by-custom-multi-select-dropdown": [],
+        "leads/list-leads-search.html#search-by-custom-multi-select-dropdown-set-to-empty": [],
+        "leads/list-leads-search.html#search-by-custom-date-field": [],
+        "leads/overview.html": [],
+        "leads/overview.html#lead-properties": [],
+        "leads/see-a-leads-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/{lead_id}/activities",
+            "source_url": "https://developer.copper.com/leads/see-a-leads-activities.html",
+            "title": "See a Lead's Activities"
+          }
+        ],
+        "leads/see-a-leads-activities.html#request-body": [],
+        "leads/see-a-leads-activities.html#example-requests": [],
+        "leads/see-a-leads-activities.html#lead-activities": [],
+        "leads/update-a-lead.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/leads/{lead_id}",
+            "source_url": "https://developer.copper.com/leads/update-a-lead.html",
+            "title": "Update a Lead"
+          }
+        ],
+        "leads/update-a-lead.html#request-body": [],
+        "leads/update-a-lead.html#example-requests": [],
+        "leads/update-a-lead.html#update-a-lead_1": [],
+        "leads/upsert-a-lead-by-custom-field.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/leads/upsert",
+            "source_url": "https://developer.copper.com/leads/upsert-a-lead-by-custom-field.html",
+            "title": "UPSERT a Lead (by custom field)"
+          }
+        ],
+        "leads/upsert-a-lead-by-custom-field.html#request-body": [],
+        "leads/upsert-a-lead-by-custom-field.html#example-requests": [],
+        "leads/upsert-a-lead-by-custom-field.html#upsert-a-leads": [],
+        "leads/upsert-a-lead.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/leads/upsert",
+            "source_url": "https://developer.copper.com/leads/upsert-a-lead.html",
+            "title": "UPSERT a Lead"
+          }
+        ],
+        "leads/upsert-a-lead.html#functionality": [],
+        "leads/upsert-a-lead.html#match-criteria": [],
+        "leads/upsert-a-lead.html#match-outcomes": [],
+        "leads/upsert-a-lead.html#request-body": [],
+        "leads/upsert-a-lead.html#example-requests": [],
+        "leads/upsert-a-lead.html#upsert-a-lead_1": [],
+        "opportunities/bulk-create-opportunities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/opportunities/bulk_create",
+            "source_url": "https://developer.copper.com/opportunities/bulk-create-opportunities.html",
+            "title": "Bulk Create Opportunities"
+          }
+        ],
+        "opportunities/bulk-create-opportunities.html#beta-disclaimer": [],
+        "opportunities/bulk-create-opportunities.html#request-size-limit": [],
+        "opportunities/bulk-create-opportunities.html#responses": [],
+        "opportunities/bulk-create-opportunities.html#notes": [],
+        "opportunities/bulk-create-opportunities.html#request-body": [],
+        "opportunities/bulk-create-opportunities.html#example-requests": [],
+        "opportunities/bulk-create-opportunities.html#create-new-person": [],
+        "opportunities/create-a-new-opportunity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/opportunities",
+            "source_url": "https://developer.copper.com/opportunities/create-a-new-opportunity.html",
+            "title": "Create a New Opportunity"
+          }
+        ],
+        "opportunities/create-a-new-opportunity.html#request-body": [],
+        "opportunities/create-a-new-opportunity.html#example-requests": [],
+        "opportunities/create-a-new-opportunity.html#new-opportunity": [],
+        "opportunities/delete-an-opportunity.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "source_url": "https://developer.copper.com/opportunities/delete-an-opportunity.html",
+            "title": "Delete an Opportunity"
+          }
+        ],
+        "opportunities/delete-an-opportunity.html#example-requests": [],
+        "opportunities/delete-an-opportunity.html#delete-opportunity": [],
+        "opportunities/fetch-an-opportunity-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "source_url": "https://developer.copper.com/opportunities/fetch-an-opportunity-by-id.html",
+            "title": "Fetch an Opportunity by ID"
+          }
+        ],
+        "opportunities/fetch-an-opportunity-by-id.html#example-requests": [],
+        "opportunities/fetch-an-opportunity-by-id.html#get-opportunity": [],
+        "opportunities/list-customer-sources.html": [
+          {
+            "method": "GET",
+            "path": "/v1/customer_sources",
+            "source_url": "https://developer.copper.com/opportunities/list-customer-sources.html",
+            "title": "List Customer Sources"
+          }
+        ],
+        "opportunities/list-customer-sources.html#example-requests": [],
+        "opportunities/list-customer-sources.html#customer-sources": [],
+        "opportunities/list-loss-reasons.html": [
+          {
+            "method": "GET",
+            "path": "/v1/loss_reasons",
+            "source_url": "https://developer.copper.com/opportunities/list-loss-reasons.html",
+            "title": "List Loss Reasons"
+          }
+        ],
+        "opportunities/list-loss-reasons.html#example-requests": [],
+        "opportunities/list-loss-reasons.html#loss-reasons": [],
+        "opportunities/list-opportunities-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/opportunities/search",
+            "source_url": "https://developer.copper.com/opportunities/list-opportunities-search.html",
+            "title": "List Opportunities (Search)"
+          }
+        ],
+        "opportunities/list-opportunities-search.html#request-body": [],
+        "opportunities/list-opportunities-search.html#example-requests": [],
+        "opportunities/list-opportunities-search.html#opportunities-search": [],
+        "opportunities/list-opportunities-search.html#search-by-assignee-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-priorities": [],
+        "opportunities/list-opportunities-search.html#search-by-date-stage-changed": [],
+        "opportunities/list-opportunities-search.html#search-by-value": [],
+        "opportunities/list-opportunities-search.html#search-by-pipeline-stage-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-primary-contact-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-statuses": [],
+        "opportunities/list-opportunities-search.html#search-by-company-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-loss-reason-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-tags": [],
+        "opportunities/list-opportunities-search.html#list-opportunities-in-groups-of-200": [],
+        "opportunities/list-opportunities-search.html#search-by-close-date": [],
+        "opportunities/list-opportunities-search.html#search-by-date-last-interacted": [],
+        "opportunities/list-opportunities-search.html#search-by-name": [],
+        "opportunities/list-opportunities-search.html#search-by-followed": [],
+        "opportunities/list-opportunities-search.html#search-by-interaction-count": [],
+        "opportunities/list-opportunities-search.html#search-by-customer-source-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-created-date": [],
+        "opportunities/list-opportunities-search.html#search-by-custom-date-field": [],
+        "opportunities/list-opportunities-search.html#search-by-custom-multi-select-dropdown": [],
+        "opportunities/list-opportunities-search.html#search-by-multi-select-dropdown-set-to-empty": [],
+        "opportunities/list-pipeline-stages.html": [],
+        "opportunities/list-pipeline-stages.html#list-pipeline-stages": [
+          {
+            "method": "GET",
+            "path": "/v1/pipeline_stages",
+            "source_url": "https://developer.copper.com/opportunities/list-pipeline-stages.html#list-pipeline-stages",
+            "title": "List Pipeline Stages"
+          }
+        ],
+        "opportunities/list-pipeline-stages.html#example-requests": [],
+        "opportunities/list-pipeline-stages.html#pipeline-stages": [],
+        "opportunities/list-pipelines.html": [],
+        "opportunities/list-pipelines.html#list-pipelines": [
+          {
+            "method": "GET",
+            "path": "/v1/pipelines",
+            "source_url": "https://developer.copper.com/opportunities/list-pipelines.html#list-pipelines",
+            "title": "List Pipelines"
+          }
+        ],
+        "opportunities/list-pipelines.html#example-requests": [],
+        "opportunities/list-pipelines.html#pipelines": [],
+        "opportunities/list-stages-in-a-pipeline.html": [
+          {
+            "method": "GET",
+            "path": "/v1/pipeline_stages/pipeline/{pipeline_id}",
+            "source_url": "https://developer.copper.com/opportunities/list-stages-in-a-pipeline.html",
+            "title": "List Stages in a Pipeline"
+          }
+        ],
+        "opportunities/list-stages-in-a-pipeline.html#example-requests": [],
+        "opportunities/list-stages-in-a-pipeline.html#stages-in-a-pipeline": [],
+        "opportunities/overview.html": [],
+        "opportunities/overview.html#opportunity-properties": [],
+        "opportunities/update-an-opportunity.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "source_url": "https://developer.copper.com/opportunities/update-an-opportunity.html",
+            "title": "Update an Opportunity"
+          }
+        ],
+        "opportunities/update-an-opportunity.html#request-body": [],
+        "opportunities/update-an-opportunity.html#example-requests": [],
+        "opportunities/update-an-opportunity.html#update-opportunity": [],
+        "people/bulk-create-people.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/bulk_create",
+            "source_url": "https://developer.copper.com/people/bulk-create-people.html",
+            "title": "Bulk Create People"
+          }
+        ],
+        "people/bulk-create-people.html#beta-disclaimer": [],
+        "people/bulk-create-people.html#request-size-limit": [],
+        "people/bulk-create-people.html#responses": [],
+        "people/bulk-create-people.html#notes": [],
+        "people/bulk-create-people.html#request-body": [],
+        "people/bulk-create-people.html#example-requests": [],
+        "people/bulk-create-people.html#create-new-person": [],
+        "people/bulk-update-people.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/bulk_update",
+            "source_url": "https://developer.copper.com/people/bulk-update-people.html",
+            "title": "Bulk Update People"
+          }
+        ],
+        "people/bulk-update-people.html#beta-disclaimer": [],
+        "people/bulk-update-people.html#request-size-limit": [],
+        "people/bulk-update-people.html#responses": [],
+        "people/bulk-update-people.html#notes": [],
+        "people/bulk-update-people.html#request-body": [],
+        "people/bulk-update-people.html#example-requests": [],
+        "people/bulk-update-people.html#create-new-person": [],
+        "people/create-a-new-person.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people",
+            "source_url": "https://developer.copper.com/people/create-a-new-person.html",
+            "title": "Create a New Person"
+          }
+        ],
+        "people/create-a-new-person.html#request-body": [],
+        "people/create-a-new-person.html#example-requests": [],
+        "people/create-a-new-person.html#create-new-person": [],
+        "people/delete-a-person.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/people/{person_id}",
+            "source_url": "https://developer.copper.com/people/delete-a-person.html",
+            "title": "Delete a Person"
+          }
+        ],
+        "people/delete-a-person.html#example-requests": [],
+        "people/delete-a-person.html#delete-person": [],
+        "people/fetch-a-person-by-email.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/fetch_by_email",
+            "source_url": "https://developer.copper.com/people/fetch-a-person-by-email.html",
+            "title": "Fetch a Person by Email"
+          }
+        ],
+        "people/fetch-a-person-by-email.html#request-body": [],
+        "people/fetch-a-person-by-email.html#example-requests": [],
+        "people/fetch-a-person-by-email.html#fetch-by-email": [],
+        "people/fetch-a-person-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/people/{person_id}",
+            "source_url": "https://developer.copper.com/people/fetch-a-person-by-id.html",
+            "title": "Fetch a Person by ID"
+          }
+        ],
+        "people/fetch-a-person-by-id.html#examples": [],
+        "people/fetch-a-person-by-id.html#fetch-a-person-by-id_1": [],
+        "people/list-contact-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/contact_types",
+            "source_url": "https://developer.copper.com/people/list-contact-types.html",
+            "title": "List Contact Types"
+          }
+        ],
+        "people/list-contact-types.html#examples": [],
+        "people/list-contact-types.html#list-contact-types_1": [],
+        "people/list-people-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/search",
+            "source_url": "https://developer.copper.com/people/list-people-search.html",
+            "title": "List People (Search)"
+          }
+        ],
+        "people/list-people-search.html#request-body": [],
+        "people/list-people-search.html#examples": [],
+        "people/list-people-search.html#people-search": [],
+        "people/list-people-search.html#search-by-state": [],
+        "people/list-people-search.html#search-by-postal-code": [],
+        "people/list-people-search.html#search-by-followed": [],
+        "people/list-people-search.html#search-by-tags": [],
+        "people/list-people-search.html#search-by-socials": [],
+        "people/list-people-search.html#search-by-date-added": [],
+        "people/list-people-search.html#search-by-opportunity-ids": [],
+        "people/list-people-search.html#search-by-custom-multi-select-dropdown": [],
+        "people/list-people-search.html#search-by-city": [],
+        "people/list-people-search.html#search-by-interaction-count": [],
+        "people/list-people-search.html#search-by-assignee-id": [],
+        "people/list-people-search.html#search-by-full-name": [],
+        "people/list-people-search.html#search-by-phone-number": [],
+        "people/list-people-search.html#search-by-country": [],
+        "people/list-people-search.html#search-by-last-interaction-date": [],
+        "people/list-people-search.html#search-by-contact-type": [],
+        "people/list-people-search.html#search-by-company-id": [],
+        "people/list-people-search.html#list-people-in-groups-of-200": [],
+        "people/list-people-search.html#search-by-custom-date-field": [],
+        "people/list-people-search.html#search-by-custom-multi-select-dropdown-set-to-empty": [],
+        "people/overview.html": [],
+        "people/overview.html#person-properties": [],
+        "people/see-a-persons-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/{person_id}/activities",
+            "source_url": "https://developer.copper.com/people/see-a-persons-activities.html",
+            "title": "See a Person's Activities"
+          }
+        ],
+        "people/see-a-persons-activities.html#request-body": [],
+        "people/see-a-persons-activities.html#example-requests": [],
+        "people/see-a-persons-activities.html#person-activities": [],
+        "people/update-a-person.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/people/{person_id}",
+            "source_url": "https://developer.copper.com/people/update-a-person.html",
+            "title": "Update a Person"
+          }
+        ],
+        "people/update-a-person.html#request-body": [],
+        "people/update-a-person.html#example-requests": [],
+        "people/update-a-person.html#person-update": [],
+        "projects/create-a-new-project.html": [
+          {
+            "method": "POST",
+            "path": "/v1/projects",
+            "source_url": "https://developer.copper.com/projects/create-a-new-project.html",
+            "title": "Create a New Project"
+          }
+        ],
+        "projects/create-a-new-project.html#body": [],
+        "projects/create-a-new-project.html#example-requests": [],
+        "projects/create-a-new-project.html#new-project": [],
+        "projects/delete-a-project.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/projects/{project_id}",
+            "source_url": "https://developer.copper.com/projects/delete-a-project.html",
+            "title": "Delete a Project"
+          }
+        ],
+        "projects/delete-a-project.html#example-requests": [],
+        "projects/delete-a-project.html#delete-project": [],
+        "projects/fetch-a-project-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/projects/{project_id}",
+            "source_url": "https://developer.copper.com/projects/fetch-a-project-by-id.html",
+            "title": "Fetch a Project by ID"
+          }
+        ],
+        "projects/fetch-a-project-by-id.html#get-project": [],
+        "projects/list-projects-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/projects/search",
+            "source_url": "https://developer.copper.com/projects/list-projects-search.html",
+            "title": "List Projects (Search)"
+          }
+        ],
+        "projects/list-projects-search.html#body": [],
+        "projects/list-projects-search.html#example-requests": [],
+        "projects/list-projects-search.html#list-projects-in-groups-of-200": [],
+        "projects/list-projects-search.html#search-by-assignee-ids": [],
+        "projects/list-projects-search.html#projects-search": [],
+        "projects/list-projects-search.html#search-by-tags": [],
+        "projects/list-projects-search.html#search-by-statuses": [],
+        "projects/list-projects-search.html#search-by-custom-multi-select-dropdown-set-to-empty": [],
+        "projects/list-projects-search.html#search-by-custom-date-field": [],
+        "projects/list-projects-search.html#search-by-custom-multi-select-dropdown": [],
+        "projects/overview.html": [],
+        "projects/update-a-project.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/projects/{project_id}",
+            "source_url": "https://developer.copper.com/projects/update-a-project.html",
+            "title": "Update a Project"
+          }
+        ],
+        "projects/update-a-project.html#body": [],
+        "projects/update-a-project.html#example-requests": [],
+        "projects/update-a-project.html#update-project": [],
+        "related-items/overview.html": [],
+        "related-items/overview.html#notes": [],
+        "related-items/relate-an-existing-record-to-an-entity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/{entity}/{entity_id}/related",
+            "source_url": "https://developer.copper.com/related-items/relate-an-existing-record-to-an-entity.html",
+            "title": "Relate an existing record to an Entity"
+          }
+        ],
+        "related-items/relate-an-existing-record-to-an-entity.html#request-body": [],
+        "related-items/relate-an-existing-record-to-an-entity.html#example-requests": [],
+        "related-items/relate-an-existing-record-to-an-entity.html#relate-opportunity-to-person": [],
+        "related-items/remove-relationship-between-record-and-entity.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/{entity}/{entity_id}/related",
+            "source_url": "https://developer.copper.com/related-items/remove-relationship-between-record-and-entity.html",
+            "title": "Remove relationship between record and Entity"
+          }
+        ],
+        "related-items/remove-relationship-between-record-and-entity.html#request-body": [],
+        "related-items/remove-relationship-between-record-and-entity.html#example-requests": [],
+        "related-items/remove-relationship-between-record-and-entity.html#remove-relationship-between-person-and-opportunity": [],
+        "related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity}/{entity_id}/related/{related_entity_name}",
+            "source_url": "https://developer.copper.com/related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html",
+            "title": "View all records of a given Entity Type related to an Entity"
+          }
+        ],
+        "related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html#example-requests": [],
+        "related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html#related-opportunities-to-person": [],
+        "related-items/view-all-records-related-to-an-entity.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity}/{entity_id}/related/",
+            "source_url": "https://developer.copper.com/related-items/view-all-records-related-to-an-entity.html",
+            "title": "View all records related to an Entity"
+          }
+        ],
+        "related-items/view-all-records-related-to-an-entity.html#example-requests": [],
+        "related-items/view-all-records-related-to-an-entity.html#all-related-rcords": [],
+        "tags/list-tags.html": [
+          {
+            "method": "GET",
+            "path": "/v1/tags",
+            "source_url": "https://developer.copper.com/tags/list-tags.html",
+            "title": "List Tags"
+          }
+        ],
+        "tags/list-tags.html#parameters": [],
+        "tags/list-tags.html#example": [],
+        "tags/list-tags.html#list-of-tags": [],
+        "tags/list-tags.html#list-of-tags-tag_names_onlytrue": [],
+        "tags/overview.html": [],
+        "tasks/create-a-new-task.html": [
+          {
+            "method": "POST",
+            "path": "/v1/tasks",
+            "source_url": "https://developer.copper.com/tasks/create-a-new-task.html",
+            "title": "Create a New Task"
+          }
+        ],
+        "tasks/create-a-new-task.html#request-body": [],
+        "tasks/create-a-new-task.html#example-requests": [],
+        "tasks/create-a-new-task.html#create-task": [],
+        "tasks/delete-a-task.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/tasks/{task_id}",
+            "source_url": "https://developer.copper.com/tasks/delete-a-task.html",
+            "title": "Delete a Task"
+          }
+        ],
+        "tasks/delete-a-task.html#example-requests": [],
+        "tasks/delete-a-task.html#delete-task": [],
+        "tasks/fetch-a-task-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/tasks/{task_id}",
+            "source_url": "https://developer.copper.com/tasks/fetch-a-task-by-id.html",
+            "title": "Fetch a Task by ID"
+          }
+        ],
+        "tasks/fetch-a-task-by-id.html#example-requests": [],
+        "tasks/fetch-a-task-by-id.html#get-task": [],
+        "tasks/list-tasks-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/tasks/search",
+            "source_url": "https://developer.copper.com/tasks/list-tasks-search.html",
+            "title": "List Tasks (Search)"
+          }
+        ],
+        "tasks/list-tasks-search.html#request-body": [],
+        "tasks/list-tasks-search.html#example-requests": [],
+        "tasks/list-tasks-search.html#tasks-search": [],
+        "tasks/list-tasks-search.html#list-tasks-in-groups-of-200": [],
+        "tasks/list-tasks-search.html#search-by-assignee-ids": [],
+        "tasks/list-tasks-search.html#search-by-tags": [],
+        "tasks/list-tasks-search.html#search-by-followed": [],
+        "tasks/list-tasks-search.html#search-by-project-ids": [],
+        "tasks/list-tasks-search.html#search-by-opportunity-ids": [],
+        "tasks/list-tasks-search.html#search-by-statuses": [],
+        "tasks/list-tasks-search.html#search-by-due-date": [],
+        "tasks/list-tasks-search.html#search-by-custom-date-field": [],
+        "tasks/list-tasks-search.html#search-by-multi-select-dropdown": [],
+        "tasks/list-tasks-search.html#search-by-multi-select-dropdown-set-to-empty": [],
+        "tasks/overview.html": [],
+        "tasks/overview.html#task-properties": [],
+        "tasks/update-a-task.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/tasks/{task_id}",
+            "source_url": "https://developer.copper.com/tasks/update-a-task.html",
+            "title": "Update a Task"
+          }
+        ],
+        "tasks/update-a-task.html#request-body": [],
+        "tasks/update-a-task.html#example-requests": [],
+        "tasks/update-a-task.html#update-task": [],
+        "webhooks/create-new-subscription.html": [
+          {
+            "method": "POST",
+            "path": "/v1/webhooks",
+            "source_url": "https://developer.copper.com/webhooks/create-new-subscription.html",
+            "title": "Create new subscription"
+          }
+        ],
+        "webhooks/create-new-subscription.html#parameters": [],
+        "webhooks/create-new-subscription.html#request-body": [],
+        "webhooks/create-new-subscription.html#example-requests": [],
+        "webhooks/create-new-subscription.html#create-subscription": [],
+        "webhooks/delete-subscription-unsubscribe.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/webhooks/{webhook_id}",
+            "source_url": "https://developer.copper.com/webhooks/delete-subscription-unsubscribe.html",
+            "title": "Delete subscription (unsubscribe)"
+          }
+        ],
+        "webhooks/delete-subscription-unsubscribe.html#example-requests": [],
+        "webhooks/delete-subscription-unsubscribe.html#delete-webhook": [],
+        "webhooks/list-all-subscriptions.html": [
+          {
+            "method": "GET",
+            "path": "/v1/webhooks",
+            "source_url": "https://developer.copper.com/webhooks/list-all-subscriptions.html",
+            "title": "List all subscriptions"
+          }
+        ],
+        "webhooks/list-all-subscriptions.html#example-requests": [],
+        "webhooks/list-all-subscriptions.html#list-all-subscriptions_1": [],
+        "webhooks/notification-example.html": [],
+        "webhooks/notification-example.html#request-body-template": [],
+        "webhooks/notification-example.html#request-body-with-non-computed-custom-fields-default": [],
+        "webhooks/notification-example.html#request-body-with-computed-custom-field-values": [],
+        "webhooks/overview.html": [],
+        "webhooks/overview.html#webhook-concepts": [],
+        "webhooks/overview.html#event-types": [],
+        "webhooks/overview.html#entity-types": [],
+        "webhooks/overview.html#technical-considerations": [],
+        "webhooks/overview.html#subscription-count": [],
+        "webhooks/overview.html#rate-limits": [],
+        "webhooks/overview.html#multi-event-notifications": [],
+        "webhooks/overview.html#retries": [],
+        "webhooks/overview.html#https-only": [],
+        "webhooks/overview.html#webhook-properties": [],
+        "webhooks/update-a-subscription.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/webhooks/{subscription_id}",
+            "source_url": "https://developer.copper.com/webhooks/update-a-subscription.html",
+            "title": "Update a subscription"
+          }
+        ],
+        "webhooks/update-a-subscription.html#parameters": [],
+        "webhooks/update-a-subscription.html#request-body": [],
+        "webhooks/update-a-subscription.html#example-requests": [],
+        "webhooks/update-a-subscription.html#update-a-subscription_1": [],
+        "webhooks/view-subscription-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/webhooks{webhook_id}",
+            "source_url": "https://developer.copper.com/webhooks/view-subscription-by-id.html",
+            "title": "View subscription by ID"
+          }
+        ],
+        "webhooks/view-subscription-by-id.html#example-requests": [],
+        "webhooks/view-subscription-by-id.html#see-webhook-by-id": []
+      },
+      "index_url": "https://developer.copper.com/search/search_index.json",
+      "documents_total": 637,
+      "index_bytes": 643109,
+      "index_sha256": "5174f8c907d9c6d579146bd23b09283e8d8ccedaa2353e1cafc997e8e31454a9",
+      "documents_retrieved": 637,
+      "operations_found": 89,
+      "operation_counts": {
+        "GET": 32,
+        "POST": 35,
+        "PUT": 11,
+        "PATCH": 0,
+        "DELETE": 11
+      },
+      "completed_operations": [
+        {
+          "method": "GET",
+          "path": "/v1/account",
+          "source_url": "https://developer.copper.com/account-and-users/fetch-account-details.html",
+          "title": "Fetch Account Details"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/users/me",
+          "source_url": "https://developer.copper.com/account-and-users/fetch-api-user.html",
+          "title": "Fetch API User"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/users/{user_id}",
+          "source_url": "https://developer.copper.com/account-and-users/fetch-user-by-id.html",
+          "title": "Fetch User by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/users/search",
+          "source_url": "https://developer.copper.com/account-and-users/list-users.html",
+          "title": "List Users"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/activities/bulk_create",
+          "source_url": "https://developer.copper.com/activities/bulk-create-activities.html",
+          "title": "Bulk Create Activities"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/activities",
+          "source_url": "https://developer.copper.com/activities/create-a-new-activity.html",
+          "title": "Create a New Activity"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/activities/{activity_id}",
+          "source_url": "https://developer.copper.com/activities/delete-an-activity.html",
+          "title": "Delete an Activity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/activities/{activity_id}",
+          "source_url": "https://developer.copper.com/activities/fetch-an-activity-by-id.html",
+          "title": "Fetch an Activity by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/activities/search",
+          "source_url": "https://developer.copper.com/activities/list-activities-search.html",
+          "title": "List Activities (Search)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/activity_types",
+          "source_url": "https://developer.copper.com/activities/list-activity-types.html",
+          "title": "List Activity Types"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/activities/{activity_id}",
+          "source_url": "https://developer.copper.com/activities/update-an-activity.html",
+          "title": "Update an Activity"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/bulk_create",
+          "source_url": "https://developer.copper.com/companies/bulk-company-create.html",
+          "title": "Bulk Create Companies"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/bulk_update",
+          "source_url": "https://developer.copper.com/companies/bulk-company-update.html",
+          "title": "Bulk Update Companies"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies",
+          "source_url": "https://developer.copper.com/companies/create-a-new-company.html",
+          "title": "Create a New Company"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/companies/{company_id}",
+          "source_url": "https://developer.copper.com/companies/delete-a-company.html",
+          "title": "Delete a Company"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/companies/{company_id}",
+          "source_url": "https://developer.copper.com/companies/fetch-a-company-by-id.html",
+          "title": "Fetch a Company by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/search",
+          "source_url": "https://developer.copper.com/companies/list-companies-search.html",
+          "title": "List Companies (Search)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/contact_types",
+          "source_url": "https://developer.copper.com/companies/list-contact-types.html",
+          "title": "List Contact Types"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/{company_id}/activities",
+          "source_url": "https://developer.copper.com/companies/see-a-companys-activities.html",
+          "title": "See a Company's Activities"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/companies/{company_id}",
+          "source_url": "https://developer.copper.com/companies/update-a-company.html",
+          "title": "Update a Company"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/related_links",
+          "source_url": "https://developer.copper.com/custom-fields/connect-fields/create-a-connection.html",
+          "title": "Create a connection"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/related_links/{connection_id}",
+          "source_url": "https://developer.copper.com/custom-fields/connect-fields/delete-a-connection.html",
+          "title": "Delete a connection"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/related_links",
+          "source_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html",
+          "title": "List the connections on specified entity for a specific custom-field-definition-id"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/custom_activity_types",
+          "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-activity-type.html",
+          "title": "Create a New Custom Activity Type"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/custom_field_definitions",
+          "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-field-definition.html",
+          "title": "Create a new custom field definition"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/delete-a-custom-field-definition.html",
+          "title": "Delete a Custom Field Definition"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/fetch-a-custom-field-definition.html",
+          "title": "Fetch a Custom Field Definition"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/get-custom-activity-type.html",
+          "title": "Get Custom Activity Type"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_activity_types",
+          "source_url": "https://developer.copper.com/custom-fields/general/list-all-custom-activity-types.html",
+          "title": "List All Custom Activity Types"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_field_definitions",
+          "source_url": "https://developer.copper.com/custom-fields/general/list-custom-field-definitions.html",
+          "title": "List Custom Field Definitions"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/{entity_name_in_plural}/search",
+          "source_url": "https://developer.copper.com/custom-fields/general/search-entity-leads-people-etc-by-custom-field.html",
+          "title": "Search Entity (Leads, People, etc) by Custom Field"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-activity-type.html",
+          "title": "Update an Existing Custom Activity Type"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-field-definition.html",
+          "title": "Update an existing custom field definition"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/field_layouts/by_entity/{entity_name_in_plural}",
+          "source_url": "https://developer.copper.com/field-layouts/list-field-layout-by-entity-type.html",
+          "title": "List Field Layout by Entity Type"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity_type}/{entity_id}/files/{file_id}",
+          "source_url": "https://developer.copper.com/file-upload/get-metadata-of-a-specific-attached-file.html",
+          "title": "Get metadata of a specific attached file"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity_type}/{entity_id}/files/s3_signed_url",
+          "source_url": "https://developer.copper.com/file-upload/get-signed-s3-url.html",
+          "title": "Get signed S3 URL"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity_type}/{entity_id}/files",
+          "source_url": "https://developer.copper.com/file-upload/list-attached-files-of-an-entity-record.html",
+          "title": "List attached files of an entity record"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/{entity_type}/{entity_id}/files",
+          "source_url": "https://developer.copper.com/file-upload/relate-the-uploaded-file-to-a-specific-entity.html",
+          "title": "Relate the uploaded file to a specific entity"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/bulk_create",
+          "source_url": "https://developer.copper.com/leads/bulk-create-leads.html",
+          "title": "Bulk Create Leads"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/bulk_update",
+          "source_url": "https://developer.copper.com/leads/bulk-update-leads.html",
+          "title": "Bulk Update Leads"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/{leadconvert_id}/convert",
+          "source_url": "https://developer.copper.com/leads/convert-a-lead.html",
+          "title": "Convert a Lead"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads",
+          "source_url": "https://developer.copper.com/leads/create-a-new-lead.html",
+          "title": "Create a New Lead"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/leads/{lead_id}",
+          "source_url": "https://developer.copper.com/leads/delete-a-lead.html",
+          "title": "Delete a Lead"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/leads/{lead_id}",
+          "source_url": "https://developer.copper.com/leads/fetch-a-lead-by-id.html",
+          "title": "Fetch a Lead by ID"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/customer_sources",
+          "source_url": "https://developer.copper.com/leads/list-customer-sources.html",
+          "title": "List Customer Sources"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/lead_statuses",
+          "source_url": "https://developer.copper.com/leads/list-lead-statuses.html",
+          "title": "List Lead Statuses"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/search",
+          "source_url": "https://developer.copper.com/leads/list-leads-search.html",
+          "title": "List Leads (Search)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/{lead_id}/activities",
+          "source_url": "https://developer.copper.com/leads/see-a-leads-activities.html",
+          "title": "See a Lead's Activities"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/leads/{lead_id}",
+          "source_url": "https://developer.copper.com/leads/update-a-lead.html",
+          "title": "Update a Lead"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/leads/upsert",
+          "source_url": "https://developer.copper.com/leads/upsert-a-lead-by-custom-field.html",
+          "title": "UPSERT a Lead (by custom field)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/opportunities/bulk_create",
+          "source_url": "https://developer.copper.com/opportunities/bulk-create-opportunities.html",
+          "title": "Bulk Create Opportunities"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/opportunities",
+          "source_url": "https://developer.copper.com/opportunities/create-a-new-opportunity.html",
+          "title": "Create a New Opportunity"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/opportunities/{opportunity_id}",
+          "source_url": "https://developer.copper.com/opportunities/delete-an-opportunity.html",
+          "title": "Delete an Opportunity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/opportunities/{opportunity_id}",
+          "source_url": "https://developer.copper.com/opportunities/fetch-an-opportunity-by-id.html",
+          "title": "Fetch an Opportunity by ID"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/loss_reasons",
+          "source_url": "https://developer.copper.com/opportunities/list-loss-reasons.html",
+          "title": "List Loss Reasons"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/opportunities/search",
+          "source_url": "https://developer.copper.com/opportunities/list-opportunities-search.html",
+          "title": "List Opportunities (Search)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/pipeline_stages",
+          "source_url": "https://developer.copper.com/opportunities/list-pipeline-stages.html#list-pipeline-stages",
+          "title": "List Pipeline Stages"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/pipelines",
+          "source_url": "https://developer.copper.com/opportunities/list-pipelines.html#list-pipelines",
+          "title": "List Pipelines"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/pipeline_stages/pipeline/{pipeline_id}",
+          "source_url": "https://developer.copper.com/opportunities/list-stages-in-a-pipeline.html",
+          "title": "List Stages in a Pipeline"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/opportunities/{opportunity_id}",
+          "source_url": "https://developer.copper.com/opportunities/update-an-opportunity.html",
+          "title": "Update an Opportunity"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/bulk_create",
+          "source_url": "https://developer.copper.com/people/bulk-create-people.html",
+          "title": "Bulk Create People"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/bulk_update",
+          "source_url": "https://developer.copper.com/people/bulk-update-people.html",
+          "title": "Bulk Update People"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people",
+          "source_url": "https://developer.copper.com/people/create-a-new-person.html",
+          "title": "Create a New Person"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/people/{person_id}",
+          "source_url": "https://developer.copper.com/people/delete-a-person.html",
+          "title": "Delete a Person"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/fetch_by_email",
+          "source_url": "https://developer.copper.com/people/fetch-a-person-by-email.html",
+          "title": "Fetch a Person by Email"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/people/{person_id}",
+          "source_url": "https://developer.copper.com/people/fetch-a-person-by-id.html",
+          "title": "Fetch a Person by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/search",
+          "source_url": "https://developer.copper.com/people/list-people-search.html",
+          "title": "List People (Search)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/{person_id}/activities",
+          "source_url": "https://developer.copper.com/people/see-a-persons-activities.html",
+          "title": "See a Person's Activities"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/people/{person_id}",
+          "source_url": "https://developer.copper.com/people/update-a-person.html",
+          "title": "Update a Person"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/projects",
+          "source_url": "https://developer.copper.com/projects/create-a-new-project.html",
+          "title": "Create a New Project"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/projects/{project_id}",
+          "source_url": "https://developer.copper.com/projects/delete-a-project.html",
+          "title": "Delete a Project"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/projects/{project_id}",
+          "source_url": "https://developer.copper.com/projects/fetch-a-project-by-id.html",
+          "title": "Fetch a Project by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/projects/search",
+          "source_url": "https://developer.copper.com/projects/list-projects-search.html",
+          "title": "List Projects (Search)"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/projects/{project_id}",
+          "source_url": "https://developer.copper.com/projects/update-a-project.html",
+          "title": "Update a Project"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/{entity}/{entity_id}/related",
+          "source_url": "https://developer.copper.com/related-items/relate-an-existing-record-to-an-entity.html",
+          "title": "Relate an existing record to an Entity"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/{entity}/{entity_id}/related",
+          "source_url": "https://developer.copper.com/related-items/remove-relationship-between-record-and-entity.html",
+          "title": "Remove relationship between record and Entity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity}/{entity_id}/related/{related_entity_name}",
+          "source_url": "https://developer.copper.com/related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html",
+          "title": "View all records of a given Entity Type related to an Entity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity}/{entity_id}/related/",
+          "source_url": "https://developer.copper.com/related-items/view-all-records-related-to-an-entity.html",
+          "title": "View all records related to an Entity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/tags",
+          "source_url": "https://developer.copper.com/tags/list-tags.html",
+          "title": "List Tags"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/tasks",
+          "source_url": "https://developer.copper.com/tasks/create-a-new-task.html",
+          "title": "Create a New Task"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/tasks/{task_id}",
+          "source_url": "https://developer.copper.com/tasks/delete-a-task.html",
+          "title": "Delete a Task"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/tasks/{task_id}",
+          "source_url": "https://developer.copper.com/tasks/fetch-a-task-by-id.html",
+          "title": "Fetch a Task by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/tasks/search",
+          "source_url": "https://developer.copper.com/tasks/list-tasks-search.html",
+          "title": "List Tasks (Search)"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/tasks/{task_id}",
+          "source_url": "https://developer.copper.com/tasks/update-a-task.html",
+          "title": "Update a Task"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/webhooks",
+          "source_url": "https://developer.copper.com/webhooks/create-new-subscription.html",
+          "title": "Create new subscription"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/webhooks/{webhook_id}",
+          "source_url": "https://developer.copper.com/webhooks/delete-subscription-unsubscribe.html",
+          "title": "Delete subscription (unsubscribe)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/webhooks",
+          "source_url": "https://developer.copper.com/webhooks/list-all-subscriptions.html",
+          "title": "List all subscriptions"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/webhooks/{subscription_id}",
+          "source_url": "https://developer.copper.com/webhooks/update-a-subscription.html",
+          "title": "Update a subscription"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/webhooks{webhook_id}",
+          "source_url": "https://developer.copper.com/webhooks/view-subscription-by-id.html",
+          "title": "View subscription by ID"
+        }
+      ],
+      "resume_strategy": null
     },
     "freshdesk": {
       "state": "complete",

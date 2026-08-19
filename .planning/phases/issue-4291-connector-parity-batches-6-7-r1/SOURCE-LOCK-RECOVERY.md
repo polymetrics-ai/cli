@@ -33,6 +33,8 @@ For each slice, the source-lock count, API-surface rows, and disposition rows re
 
 Freshdesk’s complete rendered-reference pass is also green: all 171 endpoint sections in the provider’s single 3.2MB reference normalize to **170** unique HTTP method/path operations (78 GET, 39 POST, 30 PUT, 22 DELETE, 1 PATCH), replacing the legacy 10-row boundary. Its full source lock, API surface, and disposition ledger reconcile at 170 rows.
 
+Copper’s provider-published MkDocs `search_index.json` contains its complete **637-document** rendered reference corpus. The persisted, resumable parse completed all 637 documents and found **89** unique declaration-form REST operations (32 GET, 35 POST, 11 PUT, 11 DELETE), replacing the legacy five synthetic `HOOK` labels. Its five ETL streams are now bound to the provider-documented `POST /v1/<resource>/search` operations, with exact routing evidence in `internal/connectors/native/copper/streams.go:5-25`; no source operation is enabled without a runnable command or typed write action.
+
 ## Remaining full-batch audit
 
 All 20 owned connectors are in the recovery audit—not only the eight whose initial counts were visibly implausible. Each will receive a comprehensive provider-surface review: source lock, API surface, and every disposition row are regenerated from the authoritative source when the legacy source understates it. ServiceNow is dynamic-schema: its fixed platform surface must be pinned separately from its instance-dependent schema basis. A connector whose complete source proves the legacy count correct is an explicit no-change result, with source count and confidence basis recorded. A small number alone will never be presented as complete coverage.

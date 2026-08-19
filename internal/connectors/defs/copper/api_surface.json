@@ -1,42 +1,1331 @@
 {
-  "api": "Copper legacy connector hook surface",
+  "api": "Copper Developer API public reference",
   "docs": "https://developer.copper.com/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Tier-2 quarantine migration for the legacy copper connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/copper, which delegates to internal/connectors/copper until the human-gated wave 6 cutover.",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-reference inventory generated from every declaration-form endpoint in the cited 637-document rendered reference (89 unique HTTP operations). The five native ETL stream bindings are derived from internal/connectors/native/copper/streams.go:5-25, which routes each named resource through POST /<resource>/search.",
+  "artifacts": [
+    {
+      "id": "copper-rendered-reference-2026-08-19",
+      "url": "https://developer.copper.com/search/search_index.json",
+      "retrieved_at": "2026-08-19",
+      "sha256": "5174f8c907d9c6d579146bd23b09283e8d8ccedaa2353e1cafc997e8e31454a9"
+    }
+  ],
   "endpoints": [
     {
-      "method": "HOOK",
-      "path": "internal/connectors/copper people read path",
-      "covered_by": {
-        "stream": "people"
+      "method": "DELETE",
+      "path": "/v1/{entity}/{entity_id}/related",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/related-items/remove-relationship-between-record-and-entity.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/copper companies read path",
+      "method": "DELETE",
+      "path": "/v1/activities/{activity_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/activities/delete-an-activity.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/companies/{company_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/delete-a-company.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/delete-a-custom-field-definition.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/leads/{lead_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/delete-a-lead.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/opportunities/{opportunity_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/delete-an-opportunity.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/people/{person_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/delete-a-person.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/projects/{project_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/projects/delete-a-project.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/related_links/{connection_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/connect-fields/delete-a-connection.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tasks/{task_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/tasks/delete-a-task.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/webhooks/delete-subscription-unsubscribe.html"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{entity_type}/{entity_id}/files",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/file-upload/list-attached-files-of-an-entity-record.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{entity_type}/{entity_id}/files/{file_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/file-upload/get-metadata-of-a-specific-attached-file.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{entity_type}/{entity_id}/files/s3_signed_url",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/file-upload/get-signed-s3-url.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{entity}/{entity_id}/related/",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/related-items/view-all-records-related-to-an-entity.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{entity}/{entity_id}/related/{related_entity_name}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/account",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/account-and-users/fetch-account-details.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/activities/{activity_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/activities/fetch-an-activity-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/activity_types",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/activities/list-activity-types.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies/{company_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/fetch-a-company-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contact_types",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/list-contact-types.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_activity_types",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/list-all-custom-activity-types.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/get-custom-activity-type.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_field_definitions",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/list-custom-field-definitions.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/fetch-a-custom-field-definition.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customer_sources",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/list-customer-sources.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/field_layouts/by_entity/{entity_name_in_plural}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/field-layouts/list-field-layout-by-entity-type.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lead_statuses",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/list-lead-statuses.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/leads/{lead_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/fetch-a-lead-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/loss_reasons",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/list-loss-reasons.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/opportunities/{opportunity_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/fetch-an-opportunity-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/people/{person_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/fetch-a-person-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pipeline_stages",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/list-pipeline-stages.html#list-pipeline-stages"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pipeline_stages/pipeline/{pipeline_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/list-stages-in-a-pipeline.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pipelines",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/list-pipelines.html#list-pipelines"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/projects/{project_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/projects/fetch-a-project-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/related_links",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tags",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/tags/list-tags.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tasks/{task_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/tasks/fetch-a-task-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/{user_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/account-and-users/fetch-user-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/me",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/account-and-users/fetch-api-user.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/webhooks/list-all-subscriptions.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/webhooks/view-subscription-by-id.html"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{entity_name_in_plural}/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/search-entity-leads-people-etc-by-custom-field.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{entity_type}/{entity_id}/files",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/file-upload/relate-the-uploaded-file-to-a-specific-entity.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{entity}/{entity_id}/related",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/related-items/relate-an-existing-record-to-an-entity.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/activities",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/activities/create-a-new-activity.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/activities/bulk_create",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/activities/bulk-create-activities.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/activities/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/activities/list-activities-search.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/create-a-new-company.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/{company_id}/activities",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/see-a-companys-activities.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/bulk_create",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/bulk-company-create.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/bulk_update",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/bulk-company-update.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/list-companies-search.html"
+      },
       "covered_by": {
         "stream": "companies"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/copper opportunities read path",
-      "covered_by": {
-        "stream": "opportunities"
+      "method": "POST",
+      "path": "/v1/custom_activity_types",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-activity-type.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/copper leads read path",
+      "method": "POST",
+      "path": "/v1/custom_field_definitions",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-field-definition.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/leads",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/create-a-new-lead.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/leads/{lead_id}/activities",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/see-a-leads-activities.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/leads/{leadconvert_id}/convert",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/convert-a-lead.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/leads/bulk_create",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/bulk-create-leads.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/leads/bulk_update",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/bulk-update-leads.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/leads/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/list-leads-search.html"
+      },
       "covered_by": {
         "stream": "leads"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/copper tasks read path",
+      "method": "POST",
+      "path": "/v1/opportunities",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/create-a-new-opportunity.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/opportunities/bulk_create",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/bulk-create-opportunities.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/opportunities/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/list-opportunities-search.html"
+      },
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/people",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/create-a-new-person.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/people/{person_id}/activities",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/see-a-persons-activities.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/people/bulk_create",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/bulk-create-people.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/people/bulk_update",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/bulk-update-people.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/people/fetch_by_email",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/fetch-a-person-by-email.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/people/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/list-people-search.html"
+      },
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/projects",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/projects/create-a-new-project.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/projects/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/projects/list-projects-search.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/related_links",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/connect-fields/create-a-connection.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tasks",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/tasks/create-a-new-task.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tasks/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/tasks/list-tasks-search.html"
+      },
       "covered_by": {
         "stream": "tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/users/search",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/account-and-users/list-users.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/webhooks/create-new-subscription.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/activities/{activity_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/activities/update-an-activity.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/companies/{company_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/companies/update-a-company.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-activity-type.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-field-definition.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/leads/{lead_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/update-a-lead.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/leads/upsert",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/leads/upsert-a-lead-by-custom-field.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/opportunities/{opportunity_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/opportunities/update-an-opportunity.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/people/{person_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/people/update-a-person.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/projects/{project_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/projects/update-a-project.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tasks/{task_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/tasks/update-a-task.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/webhooks/{subscription_id}",
+      "provenance": {
+        "artifact": "copper-rendered-reference-2026-08-19",
+        "source_url": "https://developer.copper.com/webhooks/update-a-subscription.html"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]
