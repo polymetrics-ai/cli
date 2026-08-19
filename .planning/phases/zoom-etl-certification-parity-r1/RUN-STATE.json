@@ -1,0 +1,14 @@
+{
+  "issue": 4266,
+  "phase": "zoom-etl-certification-parity-r1",
+  "canonical_state": "code_review_complete",
+  "mode": "inline_manual_gsd_fallback",
+  "reason": "canonical connector delivery contract forbids role spawning",
+  "certification": {
+    "state": "implemented_pending_certification",
+    "scope_gate": "expected HALT capability/zoom/missing",
+    "owner": "firstmate central scope lane",
+    "decision_date": "2026-08-19",
+    "integration_eligible": false
+  }
+}
