@@ -97,6 +97,15 @@ go test -timeout 20m ./internal/cli
 # PASS (1184.608s)
 ```
 
+The subsequent GitHub `Verify` run `32274541836` supplied one further red
+projection check: `internal/connectors/bundleregistry` loaded 553 definitions
+but its historical assertion still expected 552. The fixed focused check is:
+
+```text
+go test -timeout 20m ./internal/connectors/bundleregistry
+# PASS
+```
+
 After rebasing the committed branch onto the latest `origin/main`, the final
 pre-push run passed again:
 
