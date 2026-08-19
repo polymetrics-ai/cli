@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "opportunities",
+      "postings",
+      "users",
+      "requisitions",
+      "stages",
+      "deleted_applications",
+      "archive_reasons",
+      "audit_events",
+      "disposition_stages",
+      "feedback_templates",
+      "deleted_opportunities",
+      "deleted_postings",
+      "form_templates",
+      "requisition_fields",
+      "sources",
+      "applications",
+      "opportunity_feedback",
+      "opportunity_interviews",
+      "opportunity_notes",
+      "opportunity_offers",
+      "opportunity_file_actions",
+      "opportunity_panels",
+      "opportunity_forms",
+      "opportunity_referrals",
+      "posting_users"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport_static",
+      "run_id": "lever-hiring_source_definition_v1"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_typed_destination"
+    },
+    "eligible_actions": [
+      "deactivate_user",
+      "reactivate_user"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_typed_destination_static",
+      "run_id": "lever-hiring_reactivate_user_full_append_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "mode": "full_append",
+        "strategy": "append",
+        "action": "reactivate_user"
+      }
+    ],
+    "source_bindings": [
+      {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "postings"
+        ],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {
+              "input": "user",
+              "field": "user"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

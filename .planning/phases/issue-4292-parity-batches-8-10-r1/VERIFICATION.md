@@ -44,6 +44,19 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Third five-connector declaration increment
+
+- [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check coda clickup-api calendly greenhouse lever-hiring` failed before declarations with `coda: source transport declaration missing`.
+- [x] Green: wrote only connector-owned `sync_transport.json` declarations
+  for Coda, ClickUp, Calendly, Greenhouse, and Lever Hiring; each existing
+  typed action has an eligibility and direct-CLI-binding disposition in the
+  regenerated 30-row ledger.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check coda clickup-api calendly greenhouse lever-hiring`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+
 ## Source-first map checks
 
 - [x] Red: initial maps rejected because their locks lacked complete provider

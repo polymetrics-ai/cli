@@ -10842,7 +10842,7 @@
             "columns",
             "rows"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -10961,10 +10961,10 @@
             "space_tags",
             "webhooks"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_task",
           "exact_record_driven_actions": [
             "create_task",
@@ -11385,10 +11385,10 @@
             "activity_log_entries",
             "invitees"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_share",
           "exact_record_driven_actions": [
             "create_share"
@@ -11576,10 +11576,10 @@
             "future_job_permissions",
             "user_roles"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "add_application_to_candidate_prospect",
           "exact_record_driven_actions": [
             "delete_application",
@@ -12703,10 +12703,10 @@
             "opportunity_referrals",
             "posting_users"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "reactivate_user",
           "exact_record_driven_actions": [
             "deactivate_user",

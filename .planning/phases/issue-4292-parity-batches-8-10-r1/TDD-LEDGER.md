@@ -66,6 +66,21 @@
   pass. Generic App/CLI dispatch and multi-action selection remain foundation
   dependencies, recorded rather than claimed as deployed.
 
+### Seven-surface declaration proof — third increment
+
+- **Red:** `node traces/reconcile-seven-surfaces.mjs --check coda
+  clickup-api calendly greenhouse lever-hiring` failed with `coda: source
+  transport declaration missing` before connector-owned declarations existed.
+- **Green:** generated source declarations for Coda, ClickUp, Calendly,
+  Greenhouse, and Lever Hiring. Existing exact actions in ClickUp, Calendly,
+  Greenhouse, and Lever are all named in `eligible_actions`; Coda's semantic
+  exclusions name missing source-record fields, without manufacturing a
+  destination. The per-action ledger also marks absent direct CLI bindings as
+  `declaration-pending-cli-binding`, preserving the outstanding reachability
+  work rather than treating it as a safety exclusion.
+- The focused checker, `connectorgen validate`, and `surface-sync --check`
+  pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:
