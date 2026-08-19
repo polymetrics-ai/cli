@@ -14,7 +14,7 @@
 | --- | --- | --- |
 | Every Batch 4 normalized documented endpoint has one map row | live | A local inventory assertion compares the method/path multiset in each Batch 4 `api_surface.json` with its source lock and disposition map; removing a row makes the assertion fail. |
 | Every Batch 5 normalized documented endpoint has one map row | live | The same assertion compares each Batch 5 bundle; it detects duplicate and missing rows. |
-| Row vocabulary distinguishes unauthored work from engine incapability | live | The assertion rejects any `foundation-gap` rejection without engine file/line evidence and minimal change, and checks unauthored rows use `declaration-pending`. |
+| Row vocabulary distinguishes unauthored work from engine incapability | live | The assertion rejects any endpoint-level `foundation-gap` without engine file/line evidence and minimal change, checks unauthored rows use `declaration-pending`, and verifies that reverse-ETL is only an eligibility attribute carrying the verified generic typed-destination limitation. |
 | Existing connector definitions remain valid and synchronized | live | `connectorgen validate` and `surface-sync --check` parse the real affected bundles and report no drift. |
 | No credentialed provider operation is performed | fake | This is a documentation-only mapping lane; locks are public descriptions retrieved without credentials, while all provider behavior remains unexercised. |
 
@@ -30,8 +30,9 @@
 1. `foundation-gap` means the current engine refuses the documented shape. It must name the refusal file and line plus the smallest viable engine change. Missing operation contracts, commands, or CLI surfaces are `declaration-pending`, never foundation gaps.
 2. `requires-elevated-scope` is enabled with source/runtime scope metadata; it is never a rejection or disabled state.
 3. Every DELETE is represented. A delete requested by this issue is not `unsafe-to-exercise` merely because it mutates data.
-4. Source maps reproduce the batch-1 shape: `method`, `path`, `parity_class`, `api_surface`, `source`, `state`, `foundation`, `rejection`, and `declaration`. Existing normalized `api_surface.json` endpoint inventory is the connector-local crosswalk; each lock records its public documentation source and exact endpoint inventory.
-5. No provider credential, tenant discovery, API request, or write is used. Salesforce tenant-defined object/field dependencies remain named runtime metadata, not discovered facts.
+4. PR #4286's merged `docs/sync-transport-definition.md` is the only transport contract. ETL is connector-neutral where a bundle can truthfully supply the declarative source contract; absence of a connector-owned `sync_transport.json` is `declaration-pending`, never the retired #4093 gap. A typed write action is an enabled `direct_write` endpoint, including DELETE. Reverse ETL is an eligibility attribute on that direct-write declaration, and is a real shared `foundation-gap` (`generic-typed-destination-executor`): `internal/app/issue_label_warehouse_transport.go:85-95` still registers and enforces only the GitHub issue-label destination. Its minimal change is: `register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies`. Do not invent a transport-binding action or descriptor.
+5. Source maps reproduce the batch-1 shape: `method`, `path`, `parity_class`, `api_surface`, `source`, `state`, `foundation`, `rejection`, and `declaration`. Existing normalized `api_surface.json` endpoint inventory is the connector-local crosswalk; each lock records its public documentation source and exact endpoint inventory.
+6. No provider credential, tenant discovery, API request, or write is used. Salesforce tenant-defined object/field dependencies remain named runtime metadata, not discovered facts.
 
 ## TDD Delivery Plan
 
@@ -41,11 +42,11 @@ Before materialization, every target lacked both `sources/<connector>-operation-
 
 ### Green — Batch 4
 
-Pin public description evidence and materialize the ten Batch 4 locks/maps from their normalized provider inventories. Preserve every `covered_by` binding; classify streams as `etl`, typed write bindings as `reverse_etl`, bounded operation bindings as direct read/write, and documented binary endpoints as binary read/write. A missing terminal declaration is pending, not a gap. Commit only the Batch 4 source directories after its assertions and connector generation gates pass.
+Pin public description evidence and materialize the ten Batch 4 locks/maps from their normalized provider inventories. Preserve every `covered_by` binding; classify streams as `etl`, typed write bindings as enabled `direct_write`, other bounded operation bindings as direct read/write, and documented binary endpoints as binary read/write. Assess ETL against the connector-neutral source contract; a missing descriptor/conformance claim is pending. Record reverse-ETL eligibility beneath every typed direct-write action, with the verified generic typed-destination foundation gap and never a fabricated action binding. Commit only the Batch 4 source directories after its assertions and connector generation gates pass.
 
 ### Green — Batch 5
 
-Repeat the same source-lock and full-inventory materialization for Batch 5, including GraphQL/native-hook inventory facts without inventing GraphQL documents or tenant schemas. Commit only the Batch 5 source directories after its assertions and connector generation gates pass.
+Repeat the same source-lock and full-inventory materialization for Batch 5, including GraphQL/native-hook inventory facts without inventing GraphQL documents or tenant schemas. TikTok Marketing and eBay Fulfillment are browser-source failures in this environment (TikTok: `ERR_SSL_PROTOCOL_ERROR`; eBay: official error page/403), so their locks explicitly record `skipped: no-public-api-description` with exact browser evidence; their existing normalized endpoint inventory is still mapped without inventing a provider pin. Commit only the Batch 5 source directories after its assertions and connector generation gates pass.
 
 ### Refactor / verification
 
@@ -64,4 +65,3 @@ Review generated JSON for deterministic ordering and no source data invented bey
 2. Batch 4 source locks/maps and green assertions.
 3. Batch 5 source locks/maps and green assertions.
 4. Verification/review evidence and any review-fix checkpoint.
-

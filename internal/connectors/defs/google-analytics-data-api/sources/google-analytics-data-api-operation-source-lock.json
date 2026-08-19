@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "connector": "google-analytics-data-api",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+    "requested_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog",
+    "sha256": "a9d2cce4db664d07375486e2b7cdd14ab90aa1f32d8cf99b3f4f93be2c0d986f",
+    "bytes": 329482,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "d9c174e93b034d6dd8e4da712b20d0c7aa44d84b2d912b2d6777903f884b6727",
+    "bytes": 1503,
+    "source_operation_count": 5
+  },
+  "rest": {
+    "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog?hl=ja",
+    "sha256": "a9d2cce4db664d07375486e2b7cdd14ab90aa1f32d8cf99b3f4f93be2c0d986f",
+    "bytes": 329482,
+    "operation_counts": [
+      {
+        "key": "HOOK",
+        "count": 5
+      }
+    ],
+    "operations": [
+      {
+        "id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-1",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-website-overview-read-path-2",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api website_overview read path",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-website-overview-read-path-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-3",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-devices-read-path-4",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api devices read path",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-devices-read-path-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "google-analytics-data-api.api_surface.hook-internal-connectors-google-analytics-data-api-pages-read-path-5",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api pages read path",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-pages-read-path-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      }
+    ]
+  }
+}

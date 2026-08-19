@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "connector": "quickbooks",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
+    "requested_url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
+    "sha256": "f1cbefa0d3b3697a390bb3a33c64616c7ad853a9e7fe626a3118e45b2fe8c1ec",
+    "bytes": 1235759,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "a2029819bc22bb7fad831da2fc208500b6e3f53ede5ec1e115be32d88074aa1b",
+    "bytes": 3362,
+    "source_operation_count": 11
+  },
+  "rest": {
+    "source_url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
+    "sha256": "f1cbefa0d3b3697a390bb3a33c64616c7ad853a9e7fe626a3118e45b2fe8c1ec",
+    "bytes": 1235759,
+    "operation_counts": [
+      {
+        "key": "GET",
+        "count": 9
+      },
+      {
+        "key": "POST",
+        "count": 2
+      }
+    ],
+    "operations": [
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-query-query-select-from-customer-startposition-n-maxresults-size-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/query?query=SELECT * FROM Customer STARTPOSITION <n> MAXRESULTS <size>",
+        "operation_id": "get-v3-company-realmid-query-query-select-from-customer-startposition-n-maxresults-size-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "api_surface_index": 0
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-query-query-select-from-invoice-startposition-n-maxresults-size-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/query?query=SELECT * FROM Invoice STARTPOSITION <n> MAXRESULTS <size>",
+        "operation_id": "get-v3-company-realmid-query-query-select-from-invoice-startposition-n-maxresults-size-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "api_surface_index": 1
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-query-query-select-from-payment-startposition-n-maxresults-size-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/query?query=SELECT * FROM Payment STARTPOSITION <n> MAXRESULTS <size>",
+        "operation_id": "get-v3-company-realmid-query-query-select-from-payment-startposition-n-maxresults-size-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "api_surface_index": 2
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-query-query-select-from-account-startposition-n-maxresults-size-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/query?query=SELECT * FROM Account STARTPOSITION <n> MAXRESULTS <size>",
+        "operation_id": "get-v3-company-realmid-query-query-select-from-account-startposition-n-maxresults-size-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "api_surface_index": 3
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-query-query-select-from-vendor-startposition-n-maxresults-size-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/query?query=SELECT * FROM Vendor STARTPOSITION <n> MAXRESULTS <size>",
+        "operation_id": "get-v3-company-realmid-query-query-select-from-vendor-startposition-n-maxresults-size-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "api_surface_index": 4
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-query-query-select-from-bill-estimate-item-timeactivity-journalentry-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/query?query=SELECT * FROM Bill|Estimate|Item|TimeActivity|JournalEntry ...",
+        "operation_id": "get-v3-company-realmid-query-query-select-from-bill-estimate-item-timeactivity-journalentry-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "api_surface_index": 5
+      },
+      {
+        "id": "quickbooks.api_surface.post-v3-company-realmid-batch-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/company/{realmId}/batch",
+        "operation_id": "post-v3-company-realmid-batch-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "api_surface_index": 6
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-cdc-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/cdc",
+        "operation_id": "get-v3-company-realmid-cdc-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "api_surface_index": 7
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-reports-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/reports/*",
+        "operation_id": "get-v3-company-realmid-reports-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "api_surface_index": 8
+      },
+      {
+        "id": "quickbooks.api_surface.post-v3-company-realmid-upload-10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/company/{realmId}/upload",
+        "operation_id": "post-v3-company-realmid-upload-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "api_surface_index": 9
+      },
+      {
+        "id": "quickbooks.api_surface.get-v3-company-realmid-companyinfo-realmid-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/company/{realmId}/companyinfo/{realmId}",
+        "operation_id": "get-v3-company-realmid-companyinfo-realmid-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "api_surface_index": 10
+      }
+    ]
+  }
+}
