@@ -130,6 +130,9 @@ func requireClosedBoundedStructuredRESTBody(operation string, node map[string]an
 	if depth > maxStructuredRESTBodyDepth {
 		return fmt.Errorf("operation %q %s exceeds structured body depth limit %d", operation, path, maxStructuredRESTBodyDepth)
 	}
+	if structuredRESTBodyNodeMayAcceptObjectOrArray(node) && !structuredRESTBodyNodeHasExplicitType(node) {
+		return fmt.Errorf("operation %q %s may accept objects or arrays without an explicit type", operation, path)
+	}
 	if isObjectType(node) {
 		if closed, ok := node["additionalProperties"].(bool); !ok || closed {
 			return fmt.Errorf("operation %q %s is an object and must declare additionalProperties: false", operation, path)
@@ -147,8 +150,14 @@ func requireClosedBoundedStructuredRESTBody(operation string, node map[string]an
 		if maxItems > maxStructuredRESTBodyItems {
 			return fmt.Errorf("operation %q %s maxItems %.0f exceeds structured body limit %d", operation, path, maxItems, maxStructuredRESTBodyItems)
 		}
-	}
-	if items, ok := node["items"].(map[string]any); ok {
+		rawItems, ok := node["items"]
+		if !ok {
+			return fmt.Errorf("operation %q %s declares an array without an items schema", operation, path)
+		}
+		items, ok := rawItems.(map[string]any)
+		if !ok || len(items) == 0 {
+			return fmt.Errorf("operation %q %s declares an array with an empty items schema", operation, path)
+		}
 		if err := requireClosedBoundedStructuredRESTBody(operation, items, path+"/items", depth+1, state); err != nil {
 			return err
 		}
@@ -171,6 +180,46 @@ func requireClosedBoundedStructuredRESTBody(operation string, node map[string]an
 		}
 	}
 	return nil
+}
+
+func structuredRESTBodyNodeMayAcceptObjectOrArray(node map[string]any) bool {
+	if enum, ok := node["enum"].([]any); ok && len(enum) > 0 {
+		for _, value := range enum {
+			if isStructuredJSONBodyValue(value) {
+				return true
+			}
+		}
+		return false
+	}
+
+	switch types := node["type"].(type) {
+	case string:
+		return types == "object" || types == "array"
+	case []any:
+		if len(types) == 0 {
+			return true
+		}
+		for _, value := range types {
+			typeName, ok := value.(string)
+			if !ok || typeName == "object" || typeName == "array" {
+				return true
+			}
+		}
+		return false
+	default:
+		return true
+	}
+}
+
+func structuredRESTBodyNodeHasExplicitType(node map[string]any) bool {
+	switch types := node["type"].(type) {
+	case string:
+		return types != ""
+	case []any:
+		return len(types) > 0
+	default:
+		return false
+	}
 }
 
 func isStructuredJSONBodyValue(value any) bool {

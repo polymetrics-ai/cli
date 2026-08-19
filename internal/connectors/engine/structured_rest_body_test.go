@@ -123,6 +123,16 @@ func structuredRESTBodyRequest() connectors.OperationDirectWriteRequest {
 	}
 }
 
+func structuredRESTBodySchemaWithTarget(targetSchema string) json.RawMessage {
+	return json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"properties": {
+			"targets": ` + targetSchema + `
+		}
+	}`)
+}
+
 func TestOperationDirectWriteStructuredRESTBodyIsExactAndPreviewBound(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -263,6 +273,67 @@ func TestOperationDirectWriteStructuredRESTBodyRejectsInvalidInputBeforeIO(t *te
 			}
 			if calls != 0 {
 				t.Fatalf("invalid request reached transport; calls = %d, want 0", calls)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteStructuredRESTBodyRejectsUnconstrainedArrayDeclarationsBeforeIO(t *testing.T) {
+	tests := []struct {
+		name         string
+		targetSchema string
+		value        any
+		wantErr      string
+	}{
+		{
+			name:         "missing item schema",
+			targetSchema: `{"type":"array","maxItems":1}`,
+			value: []any{map[string]any{
+				"undeclared": map[string]any{"nested": []any{}},
+			}},
+			wantErr: "items schema",
+		},
+		{
+			name:         "empty item schema",
+			targetSchema: `{"type":"array","maxItems":1,"items":{}}`,
+			value: []any{map[string]any{
+				"undeclared": map[string]any{"nested": []any{}},
+			}},
+			wantErr: "items schema",
+		},
+		{
+			name:         "untyped nested item descendant",
+			targetSchema: `{"type":"array","maxItems":1,"items":{"type":"object","additionalProperties":false,"properties":{"payload":{}}}}`,
+			value: []any{map[string]any{
+				"payload": map[string]any{"undeclared": map[string]any{"nested": []any{}}},
+			}},
+			wantErr: "explicit type",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				calls++
+			}))
+			t.Cleanup(server.Close)
+
+			bundle := structuredRESTBodyBundle(server.URL)
+			rest := *bundle.Operations[0].REST
+			rest.BodySchema = structuredRESTBodySchemaWithTarget(test.targetSchema)
+			bundle.Operations[0].REST = &rest
+			request := structuredRESTBodyRequest()
+			request.Body = map[string]any{
+				"targets": test.value,
+			}
+
+			_, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+			if err == nil || !strings.Contains(err.Error(), test.wantErr) {
+				t.Fatalf("OperationDirectWrite error = %v, want %q", err, test.wantErr)
+			}
+			if calls != 0 {
+				t.Fatalf("unconstrained declaration reached transport; calls = %d, want 0", calls)
 			}
 		})
 	}
