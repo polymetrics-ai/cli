@@ -1,0 +1,18 @@
+{
+  "phase": "cli-certification-foundation-g1g2g6-r1",
+  "status": "rebased_local_verification_passed_pending_ci",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-certification-foundation-g1g2g6-r1",
+  "delivery_mode": "direct_pr_against_integration_base",
+  "manual_gsd_fallback": true,
+  "scope": ["G1", "G2", "G6", "delete-write-action"],
+  "excluded": ["G3-G5", "G7-G14", "certificationallowlist.go", "global-status-refresh"],
+  "verification": {
+    "classification_and_evidence_tests": "passed",
+    "github_sweep_byte_drift": "passed",
+    "github_live_read_proof": "passed after rebase; HTTP 200; evidence github-direct_read_sweep_repo_read_file-github-1787097821338-6301903bc006.json",
+    "repository_gates": "passed",
+    "manual_code_review": "clean",
+    "pr_base_api_readback": "integration/4015-mvp-flat-r1"
+  }
+}
