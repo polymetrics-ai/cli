@@ -197,3 +197,23 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
   generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
   not claimed.
+
+## Chargebee connector-owned destination increment — 2026-08-20
+
+- **RED:** Chargebee had 32 source-locked streams and 36 exact typed actions but no source or
+  destination transport declaration. Its other 331 mutations lack connector-owned typed actions and
+  had been incorrectly assigned a generic destination foundation gap.
+- **GREEN:** `sync_transport.json` declares all 32 sources and the exact
+  `customers(id) → update_customer` typed-destination proof, including keyed delivery, durable
+  acknowledgement, all three mode strategies, and fixture/dry conformance. All 36 typed actions
+  explicitly carry eligibility: `update_customer` is the bound proof and the other 35 await #4304
+  closed exact-action selection. The remaining mutations are correctly `declaration-pending`;
+  finance and destructive safety remain approval metadata. No credentials or provider calls were used.
+- **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1` passed.
+- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
+  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
+  not claimed.

@@ -25,13 +25,13 @@ provider-live certification. The machine-readable source is
 | gorgias | complete | 114 | 41 / 42 | 61 / 68 | 1 / 4 | 1 (App dispatch pending) | 1 / 1 | 18 | 94 |
 | service-now | dynamic templates | 6 | 0 / 1 | 2 / 4 | 0 / 3 | 0 | 0 / 0 | 1 | 0 |
 | chatwoot | complete | 148 | 32 / 57 | 60 / 84 | 1 / 7 | 1 (App dispatch pending) | 0 / 0 | 18 | 100 |
-| chargebee | complete | 527 | 0 / 128 | 36 / 367 | 0 / 32 | 0 | 0 / 0 | 0 | 0 |
+| chargebee | complete | 527 | 0 / 128 | 36 / 367 | 1 / 32 | 1 (App dispatch pending) | 0 / 0 | 0 | 0 |
 | square | complete | 334 | 0 / 117 | 0 / 213 | 0 / 4 | 0 | 0 / 0 | 27 | 0 |
 | braintree | unproven | 73 | 0 / 18 | 0 / 45 | 0 / 10 | 0 | 0 / 0 | 6 | 0 |
 
-Totals after the Zoho Bigin increment: 3,932 documented operations; 1,465 direct reads with 123 exact
-command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, six source
-transports, six typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
+Totals after the Chargebee increment: 3,932 documented operations; 1,465 direct reads with 123 exact
+command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, seven source
+transports, seven typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
 deletes, and zero provider-live certifications.
 
 Help Scout still has a binary-ledger classification defect. Gorgias now maps its
@@ -85,3 +85,10 @@ Zoho Bigin declares all 13 streams and a fixture/dry `records(id) → delete_rec
 six typed actions have explicit eligibility states (one bound and five pending closed action
 selection); the selected DELETE remains confirmation- and approval-governed, not omitted for its
 destructive kind. Persisted App/CLI destination dispatch remains #4304 work.
+
+## Increment — Chargebee declarative destination proof
+
+Chargebee declares all 32 streams and one fixture/dry `customers(id) → update_customer` proof.
+All 36 typed actions have explicit eligibility states (one bound and 35 pending closed action
+selection); financial/destructive safety remains approval metadata. Persisted App/CLI destination
+dispatch remains #4304 work.
