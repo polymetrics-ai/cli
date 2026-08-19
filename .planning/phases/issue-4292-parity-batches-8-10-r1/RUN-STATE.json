@@ -6,8 +6,8 @@
   "base_branch": "main",
   "working_branch": "fm/cli-map-batch8910-r1",
   "batches": {
-    "8": "validated; pending commit",
-    "9": "pending",
+    "8": "committed and pushed",
+    "9": "validated; pending commit",
     "10": "pending"
   },
   "live_provider_calls": false,

@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "connector": "hibob",
+  "source_lock": "sources/hibob-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/hibob-operation-source-lock.json",
+      "source_id": "hibob.rest.get-v1-profiles-api-surface-1",
+      "source_url": "https://apidocs.hibob.com/",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "hibob.rest.get-v1-profiles-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/profiles",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/profiles",
+          "operation": null,
+          "covered_by": {
+            "stream": "profiles"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "profiles"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/hibob-operation-source-lock.json",
+      "source_id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+      "source_url": "https://apidocs.hibob.com/",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/company/named-lists",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/company/named-lists",
+          "operation": null,
+          "covered_by": {
+            "stream": "named_lists"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "named_lists"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/hibob-operation-source-lock.json",
+      "source_id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+      "source_url": "https://apidocs.hibob.com/",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/company/people/fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/company/people/fields",
+          "operation": null,
+          "covered_by": {
+            "stream": "company_lists"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "company_lists"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/hibob-operation-source-lock.json",
+      "source_id": "hibob.rest.get-v1-timeoff-api-surface-4",
+      "source_url": "https://apidocs.hibob.com/",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "hibob.rest.get-v1-timeoff-api-surface-4",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/timeoff/*",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/timeoff/*",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "time-off approval/request workflows are outside this bundle's HR profile, named-list, and people-field read scope"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/hibob-operation-source-lock.json",
+      "source_id": "hibob.rest.get-v1-docs-api-surface-5",
+      "source_url": "https://apidocs.hibob.com/",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "hibob.rest.get-v1-docs-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/docs/*",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/docs/*",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "employee document endpoints expose file/document resources rather than the structured HR records modeled by this bundle"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/hibob-operation-source-lock.json",
+      "source_id": "hibob.rest.put-v1-people-id-api-surface-6",
+      "source_url": "https://apidocs.hibob.com/",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "hibob.rest.put-v1-people-id-api-surface-6",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v1/people/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v1/people/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "employee-profile mutation is not enabled for this read-only HR source bundle and has no reverse-ETL action contract here"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,2559 @@
+{
+  "schema_version": 1,
+  "connector": "lever-hiring",
+  "source_lock": "sources/lever-hiring-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-applications-application-api-surface-1",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-applications-application-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/applications/{application}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/applications/{application}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-application"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-applications-api-surface-2",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-applications-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/applications",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/applications",
+          "operation": null,
+          "covered_by": {
+            "stream": "applications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "applications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-applications-deleted-api-surface-3",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "lever-hiring.rest.get-applications-deleted-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/deleted",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/deleted",
+          "operation": null,
+          "covered_by": {
+            "stream": "deleted_applications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "deleted_applications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-archive-reasons-archive-reason-api-surface-4",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "lever-hiring.rest.get-archive-reasons-archive-reason-api-surface-4",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/archive_reasons/{archive_reason}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/archive_reasons/{archive_reason}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-archive-reason"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-archive-reasons-api-surface-5",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "lever-hiring.rest.get-archive-reasons-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/archive_reasons",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/archive_reasons",
+          "operation": null,
+          "covered_by": {
+            "stream": "archive_reasons"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "archive_reasons"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-audit-events-api-surface-6",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "lever-hiring.rest.get-audit-events-api-surface-6",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/audit_events",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/audit_events",
+          "operation": null,
+          "covered_by": {
+            "stream": "audit_events"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "audit_events"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-contacts-contact-api-surface-7",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "lever-hiring.rest.get-contacts-contact-api-surface-7",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/contacts/{contact}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/contacts/{contact}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-contact"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-contacts-contact-api-surface-8",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "lever-hiring.rest.put-contacts-contact-api-surface-8",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/contacts/{contact}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/contacts/{contact}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-disposition-stages-api-surface-9",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "lever-hiring.rest.get-disposition-stages-api-surface-9",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/disposition_stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/disposition_stages",
+          "operation": null,
+          "covered_by": {
+            "stream": "disposition_stages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "disposition_stages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-v1-eeo-responses-pii-api-surface-10",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "lever-hiring.rest.get-v1-eeo-responses-pii-api-surface-10",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/eeo/responses/pii",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/eeo/responses/pii",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-eeo-responses-with-pii"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-feedback-feedback-api-surface-11",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-feedback-feedback-api-surface-11",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-feedback-form"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-feedback-api-surface-12",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-feedback-api-surface-12",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/feedback",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/feedback",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_feedback"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_feedback"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-feedback-api-surface-13",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-feedback-api-surface-13",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/feedback",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/feedback",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-opportunities-opportunity-feedback-feedback-api-surface-14",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "lever-hiring.rest.put-opportunities-opportunity-feedback-feedback-api-surface-14",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_feedback"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_feedback"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-opportunities-opportunity-feedback-feedback-api-surface-15",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "lever-hiring.rest.delete-opportunities-opportunity-feedback-feedback-api-surface-15",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_feedback"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_feedback"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-feedback-templates-feedback-template-api-surface-16",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[15]",
+      "operation_id": "lever-hiring.rest.get-feedback-templates-feedback-template-api-surface-16",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/feedback_templates/{feedback_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/feedback_templates/{feedback_template}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-feedback-template"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-feedback-templates-api-surface-17",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[16]",
+      "operation_id": "lever-hiring.rest.get-feedback-templates-api-surface-17",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/feedback_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/feedback_templates",
+          "operation": null,
+          "covered_by": {
+            "stream": "feedback_templates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "feedback_templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-feedback-templates-api-surface-18",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[17]",
+      "operation_id": "lever-hiring.rest.post-feedback-templates-api-surface-18",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/feedback_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/feedback_templates",
+          "operation": null,
+          "covered_by": {
+            "write": "create_feedback_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_feedback_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-feedback-templates-feedback-template-api-surface-19",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[18]",
+      "operation_id": "lever-hiring.rest.put-feedback-templates-feedback-template-api-surface-19",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/feedback_templates/{feedback_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/feedback_templates/{feedback_template}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_feedback_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_feedback_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-feedback-templates-feedback-template-api-surface-20",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[19]",
+      "operation_id": "lever-hiring.rest.delete-feedback-templates-feedback-template-api-surface-20",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/feedback_templates/{feedback_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/feedback_templates/{feedback_template}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_feedback_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_feedback_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-files-api-surface-21",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[20]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-files-api-surface-21",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/files",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/files",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-files-file-api-surface-22",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[21]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-files-file-api-surface-22",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files/{file}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files/{file}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-files-api-surface-23",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[22]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-files-api-surface-23",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-files-file-download-api-surface-24",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[23]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-files-file-download-api-surface-24",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files/{file}/download",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files/{file}/download",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-opportunities-opportunity-files-file-api-surface-25",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[24]",
+      "operation_id": "lever-hiring.rest.delete-opportunities-opportunity-files-file-api-surface-25",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/files/{file}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/files/{file}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-interviews-interview-api-surface-26",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[25]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-interviews-interview-api-surface-26",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/interviews/{interview}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-interview"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-interviews-api-surface-27",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[26]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-interviews-api-surface-27",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/interviews",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_interviews"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_interviews"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-interviews-api-surface-28",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[27]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-interviews-api-surface-28",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/interviews",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-opportunities-opportunity-interviews-interview-api-surface-29",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[28]",
+      "operation_id": "lever-hiring.rest.put-opportunities-opportunity-interviews-interview-api-surface-29",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/interviews/{interview}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-opportunities-opportunity-interviews-interview-api-surface-30",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[29]",
+      "operation_id": "lever-hiring.rest.delete-opportunities-opportunity-interviews-interview-api-surface-30",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/interviews/{interview}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-notes-note-api-surface-31",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[30]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-notes-note-api-surface-31",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/notes/{note}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/notes/{note}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-note"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-notes-api-surface-32",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[31]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-notes-api-surface-32",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/notes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/notes",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_notes"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_notes"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-notes-api-surface-33",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[32]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-notes-api-surface-33",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/notes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/notes",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-opportunities-opportunity-notes-noteid-api-surface-34",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[33]",
+      "operation_id": "lever-hiring.rest.delete-opportunities-opportunity-notes-noteid-api-surface-34",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/notes/{noteId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/notes/{noteId}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_note"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_note"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-opportunities-opportunity-notes-note-api-surface-35",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[34]",
+      "operation_id": "lever-hiring.rest.put-opportunities-opportunity-notes-note-api-surface-35",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/notes/{note}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/notes/{note}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-offers-api-surface-36",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[35]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-offers-api-surface-36",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/offers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/offers",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_offers"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_offers"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-offers-offer-download-api-surface-37",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[36]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-offers-offer-download-api-surface-37",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/offers/{offer}/download",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/offers/{offer}/download",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-api-surface-38",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[37]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-api-surface-38",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-opportunity"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-api-surface-39",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[38]",
+      "operation_id": "lever-hiring.rest.get-opportunities-api-surface-39",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunities"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunities"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-deleted-api-surface-40",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[39]",
+      "operation_id": "lever-hiring.rest.get-opportunities-deleted-api-surface-40",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/deleted",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/deleted",
+          "operation": null,
+          "covered_by": {
+            "stream": "deleted_opportunities"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "deleted_opportunities"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-file-actions-api-surface-41",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[40]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-file-actions-api-surface-41",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/file_actions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/file_actions",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_file_actions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_file_actions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-api-surface-42",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[41]",
+      "operation_id": "lever-hiring.rest.post-opportunities-api-surface-42",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-opportunities-opportunity-stage-api-surface-43",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[42]",
+      "operation_id": "lever-hiring.rest.put-opportunities-opportunity-stage-api-surface-43",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/stage",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/stage",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-opportunities-opportunity-archived-api-surface-44",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[43]",
+      "operation_id": "lever-hiring.rest.put-opportunities-opportunity-archived-api-surface-44",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/archived",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/archived",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-addlinks-api-surface-45",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[44]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-addlinks-api-surface-45",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addLinks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addLinks",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-removelinks-api-surface-46",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[45]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-removelinks-api-surface-46",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeLinks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeLinks",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-addtags-api-surface-47",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[46]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-addtags-api-surface-47",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addTags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addTags",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-removetags-api-surface-48",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[47]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-removetags-api-surface-48",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeTags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeTags",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-addsources-api-surface-49",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[48]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-addsources-api-surface-49",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addSources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addSources",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-removesources-api-surface-50",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[49]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-removesources-api-surface-50",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeSources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeSources",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-panels-panel-api-surface-51",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[50]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-panels-panel-api-surface-51",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/panels/{panel}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-panel"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-panels-api-surface-52",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[51]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-panels-api-surface-52",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/panels",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/panels",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_panels"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_panels"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-panels-api-surface-53",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[52]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-panels-api-surface-53",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/panels",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/panels",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-opportunities-opportunity-panels-panel-api-surface-54",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[53]",
+      "operation_id": "lever-hiring.rest.put-opportunities-opportunity-panels-panel-api-surface-54",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/panels/{panel}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-opportunities-opportunity-panels-panel-api-surface-55",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[54]",
+      "operation_id": "lever-hiring.rest.delete-opportunities-opportunity-panels-panel-api-surface-55",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/panels/{panel}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-postings-posting-api-surface-56",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[55]",
+      "operation_id": "lever-hiring.rest.get-postings-posting-api-surface-56",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings/{posting}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings/{posting}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-posting"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-postings-api-surface-57",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[56]",
+      "operation_id": "lever-hiring.rest.get-postings-api-surface-57",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings",
+          "operation": null,
+          "covered_by": {
+            "stream": "postings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "postings"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-postings-deleted-api-surface-58",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[57]",
+      "operation_id": "lever-hiring.rest.get-postings-deleted-api-surface-58",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings/deleted",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings/deleted",
+          "operation": null,
+          "covered_by": {
+            "stream": "deleted_postings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "deleted_postings"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-postings-api-surface-59",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[58]",
+      "operation_id": "lever-hiring.rest.post-postings-api-surface-59",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/postings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/postings",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-postings-posting-api-surface-60",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[59]",
+      "operation_id": "lever-hiring.rest.post-postings-posting-api-surface-60",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/postings/{posting}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/postings/{posting}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-postings-posting-apply-api-surface-61",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[60]",
+      "operation_id": "lever-hiring.rest.get-postings-posting-apply-api-surface-61",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings/{posting}/apply",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings/{posting}/apply",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-posting-application-questions"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-postings-posting-users-api-surface-62",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[61]",
+      "operation_id": "lever-hiring.rest.get-postings-posting-users-api-surface-62",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings/{posting}/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings/{posting}/users",
+          "operation": null,
+          "covered_by": {
+            "stream": "posting_users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "posting_users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-postings-posting-apply-api-surface-63",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[62]",
+      "operation_id": "lever-hiring.rest.post-postings-posting-apply-api-surface-63",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/postings/{posting}/apply",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/postings/{posting}/apply",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-forms-form-api-surface-64",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[63]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-forms-form-api-surface-64",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/forms/{form}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/forms/{form}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-profile-form"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-forms-api-surface-65",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[64]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-forms-api-surface-65",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/forms",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/forms",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_forms"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_forms"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-opportunities-opportunity-forms-api-surface-66",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[65]",
+      "operation_id": "lever-hiring.rest.post-opportunities-opportunity-forms-api-surface-66",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/forms",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/forms",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-form-templates-form-template-api-surface-67",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[66]",
+      "operation_id": "lever-hiring.rest.get-form-templates-form-template-api-surface-67",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/form_templates/{form_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/form_templates/{form_template}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-profile-form-template"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-form-templates-api-surface-68",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[67]",
+      "operation_id": "lever-hiring.rest.get-form-templates-api-surface-68",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/form_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/form_templates",
+          "operation": null,
+          "covered_by": {
+            "stream": "form_templates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "form_templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-form-templates-api-surface-69",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[68]",
+      "operation_id": "lever-hiring.rest.post-form-templates-api-surface-69",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/form_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/form_templates",
+          "operation": null,
+          "covered_by": {
+            "write": "create_form_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_form_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-form-templates-form-template-api-surface-70",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[69]",
+      "operation_id": "lever-hiring.rest.put-form-templates-form-template-api-surface-70",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/form_templates/{form_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/form_templates/{form_template}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_form_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_form_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-form-templates-form-template-api-surface-71",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[70]",
+      "operation_id": "lever-hiring.rest.delete-form-templates-form-template-api-surface-71",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/form_templates/{form_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/form_templates/{form_template}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_form_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_form_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-referrals-referral-api-surface-72",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[71]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-referrals-referral-api-surface-72",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/referrals/{referral}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/referrals/{referral}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-referral"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-referrals-api-surface-73",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[72]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-referrals-api-surface-73",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/referrals",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/referrals",
+          "operation": null,
+          "covered_by": {
+            "stream": "opportunity_referrals"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_referrals"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-requisitions-requisition-api-surface-74",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[73]",
+      "operation_id": "lever-hiring.rest.get-requisitions-requisition-api-surface-74",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisitions/{requisition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisitions/{requisition}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-requisition"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-requisitions-api-surface-75",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[74]",
+      "operation_id": "lever-hiring.rest.get-requisitions-api-surface-75",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisitions",
+          "operation": null,
+          "covered_by": {
+            "stream": "requisitions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "requisitions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-requisitions-api-surface-76",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[75]",
+      "operation_id": "lever-hiring.rest.post-requisitions-api-surface-76",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/requisitions",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-requisitions-requisition-api-surface-77",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[76]",
+      "operation_id": "lever-hiring.rest.put-requisitions-requisition-api-surface-77",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/requisitions/{requisition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/requisitions/{requisition}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-requisitions-requisition-api-surface-78",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[77]",
+      "operation_id": "lever-hiring.rest.delete-requisitions-requisition-api-surface-78",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/requisitions/{requisition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/requisitions/{requisition}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_requisition"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-requisition-fields-requisition-field-api-surface-79",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[78]",
+      "operation_id": "lever-hiring.rest.get-requisition-fields-requisition-field-api-surface-79",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisition_fields/{requisition_field}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisition_fields/{requisition_field}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-requisition-field"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-requisition-fields-api-surface-80",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[79]",
+      "operation_id": "lever-hiring.rest.get-requisition-fields-api-surface-80",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisition_fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisition_fields",
+          "operation": null,
+          "covered_by": {
+            "stream": "requisition_fields"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "requisition_fields"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-requisition-fields-api-surface-81",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[80]",
+      "operation_id": "lever-hiring.rest.post-requisition-fields-api-surface-81",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/requisition_fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/requisition_fields",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-requisition-fields-requisition-field-api-surface-82",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[81]",
+      "operation_id": "lever-hiring.rest.put-requisition-fields-requisition-field-api-surface-82",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/requisition_fields/{requisition_field}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/requisition_fields/{requisition_field}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-requisition-fields-requisition-field-options-api-surface-83",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[82]",
+      "operation_id": "lever-hiring.rest.post-requisition-fields-requisition-field-options-api-surface-83",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/requisition_fields/{requisition_field}/options",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-requisition-fields-requisition-field-options-api-surface-84",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[83]",
+      "operation_id": "lever-hiring.rest.put-requisition-fields-requisition-field-options-api-surface-84",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/requisition_fields/{requisition_field}/options",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-requisition-fields-requisition-field-options-api-surface-85",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[84]",
+      "operation_id": "lever-hiring.rest.delete-requisition-fields-requisition-field-options-api-surface-85",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/requisition_fields/{requisition_field}/options",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_requisition_field_options"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_requisition_field_options"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-requisition-fields-requisition-field-api-surface-86",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[85]",
+      "operation_id": "lever-hiring.rest.delete-requisition-fields-requisition-field-api-surface-86",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/requisition_fields/{requisition_field}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/requisition_fields/{requisition_field}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_requisition_field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_requisition_field"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-resumes-resume-api-surface-87",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[86]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-resumes-resume-api-surface-87",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes/{resume}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes/{resume}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-resumes-api-surface-88",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[87]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-resumes-api-surface-88",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-opportunities-opportunity-resumes-resume-download-api-surface-89",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[88]",
+      "operation_id": "lever-hiring.rest.get-opportunities-opportunity-resumes-resume-download-api-surface-89",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes/{resume}/download",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes/{resume}/download",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-sources-api-surface-90",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[89]",
+      "operation_id": "lever-hiring.rest.get-sources-api-surface-90",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/sources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/sources",
+          "operation": null,
+          "covered_by": {
+            "stream": "sources"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "sources"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-stages-stage-api-surface-91",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[90]",
+      "operation_id": "lever-hiring.rest.get-stages-stage-api-surface-91",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/stages/{stage}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/stages/{stage}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-stage"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-stages-api-surface-92",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[91]",
+      "operation_id": "lever-hiring.rest.get-stages-api-surface-92",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/stages",
+          "operation": null,
+          "covered_by": {
+            "stream": "stages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "stages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-surveys-diversity-posting-api-surface-93",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[92]",
+      "operation_id": "lever-hiring.rest.get-surveys-diversity-posting-api-surface-93",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/surveys/diversity/{posting}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/surveys/diversity/{posting}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-diversity-survey"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-tags-api-surface-94",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[93]",
+      "operation_id": "lever-hiring.rest.get-tags-api-surface-94",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/tags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/tags",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct list-all-tags"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-uploads-api-surface-95",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[94]",
+      "operation_id": "lever-hiring.rest.post-uploads-api-surface-95",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/uploads",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/uploads",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-users-user-api-surface-96",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[95]",
+      "operation_id": "lever-hiring.rest.get-users-user-api-surface-96",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/{user}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/{user}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-user"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-users-api-surface-97",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[96]",
+      "operation_id": "lever-hiring.rest.get-users-api-surface-97",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users",
+          "operation": null,
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-users-api-surface-98",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[97]",
+      "operation_id": "lever-hiring.rest.post-users-api-surface-98",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-users-user-api-surface-99",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[98]",
+      "operation_id": "lever-hiring.rest.put-users-user-api-surface-99",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/users/{user}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/users/{user}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-users-user-deactivate-api-surface-100",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[99]",
+      "operation_id": "lever-hiring.rest.post-users-user-deactivate-api-surface-100",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users/{user}/deactivate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users/{user}/deactivate",
+          "operation": null,
+          "covered_by": {
+            "write": "deactivate_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "deactivate_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-users-user-reactivate-api-surface-101",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[100]",
+      "operation_id": "lever-hiring.rest.post-users-user-reactivate-api-surface-101",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users/{user}/reactivate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users/{user}/reactivate",
+          "operation": null,
+          "covered_by": {
+            "write": "reactivate_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "reactivate_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-webhooks-api-surface-102",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[101]",
+      "operation_id": "lever-hiring.rest.get-webhooks-api-surface-102",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/webhooks",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.post-webhooks-api-surface-103",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[102]",
+      "operation_id": "lever-hiring.rest.post-webhooks-api-surface-103",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhooks",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.put-webhooks-api-surface-104",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[103]",
+      "operation_id": "lever-hiring.rest.put-webhooks-api-surface-104",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/webhooks/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/webhooks/",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.delete-webhooks-webhookid-api-surface-105",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[104]",
+      "operation_id": "lever-hiring.rest.delete-webhooks-webhookid-api-surface-105",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/webhooks/{webhookId}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rest.get-v1-eeo-responses-api-surface-106",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "source_location": "api_surface.json:endpoints[105]",
+      "operation_id": "lever-hiring.rest.get-v1-eeo-responses-api-surface-106",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/eeo/responses",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/eeo/responses",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

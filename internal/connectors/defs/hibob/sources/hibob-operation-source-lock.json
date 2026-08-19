@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "connector": "hibob",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://apidocs.hibob.com/",
+    "requested_url": "https://apidocs.hibob.com/",
+    "sha256": "a253db257b6f58cc325a8cdde495bbf4a665c49d1484f0052f3664576262c3cf",
+    "bytes": 298245,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "GET": 5,
+      "PUT": 1
+    },
+    "operations": [
+      {
+        "id": "hibob.rest.get-v1-profiles-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/profiles",
+        "operation_id": "hibob.rest.get-v1-profiles-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/company/named-lists",
+        "operation_id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/company/people/fields",
+        "operation_id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "hibob.rest.get-v1-timeoff-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/timeoff/*",
+        "operation_id": "hibob.rest.get-v1-timeoff-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "hibob.rest.get-v1-docs-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/docs/*",
+        "operation_id": "hibob.rest.get-v1-docs-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "hibob.rest.put-v1-people-id-api-surface-6",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/people/{id}",
+        "operation_id": "hibob.rest.put-v1-people-id-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      }
+    ]
+  }
+}

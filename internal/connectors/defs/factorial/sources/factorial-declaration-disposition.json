@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "connector": "factorial",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_basis": {
+    "source_lock": "sources/factorial-operation-source-lock.json",
+    "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+    "source_sha256": "0fa521ea4159139078dd7455035c50039e5d2b297ca9ec9179bdc65d1639376c",
+    "source_bytes": 125104,
+    "source_operation_count": 6
+  },
+  "summary": {
+    "api_surface_rows": 6,
+    "exact_source_rows": 6,
+    "declared_operations": 6,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 83.33,
+    "disabled_operations": 1,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 1
+      },
+      {
+        "key": "direct_write",
+        "count": 0
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 1
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-factorial",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/factorial/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-factorial",
+      "sync-transport-source-definition-factorial"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-factorial",
+        "count": 1
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/employees/employees",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/employees/employees",
+        "operation": null,
+        "covered_by": {
+          "stream": "employees"
+        }
+      },
+      "source": {
+        "source_lock": "sources/factorial-operation-source-lock.json",
+        "source_id": "factorial.rest.get-employees-employees-api-surface-1",
+        "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "factorial.rest.get-employees-employees-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/factorial/streams.json: existing stream \"employees\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"employees\" binds the pinned source contract",
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/teams",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/teams/teams",
+        "operation": null,
+        "covered_by": {
+          "stream": "teams"
+        }
+      },
+      "source": {
+        "source_lock": "sources/factorial-operation-source-lock.json",
+        "source_id": "factorial.rest.get-teams-teams-api-surface-2",
+        "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "factorial.rest.get-teams-teams-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/factorial/streams.json: existing stream \"teams\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"teams\" binds the pinned source contract",
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/leaves",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/timeoff/leaves",
+        "operation": null,
+        "covered_by": {
+          "stream": "leaves"
+        }
+      },
+      "source": {
+        "source_lock": "sources/factorial-operation-source-lock.json",
+        "source_id": "factorial.rest.get-timeoff-leaves-api-surface-3",
+        "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "factorial.rest.get-timeoff-leaves-api-surface-3",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/factorial/streams.json: existing stream \"leaves\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"leaves\" binds the pinned source contract",
+        "stream": "leaves"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff/leave_types",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/timeoff/leave_types",
+        "operation": null,
+        "covered_by": {
+          "stream": "leave_types"
+        }
+      },
+      "source": {
+        "source_lock": "sources/factorial-operation-source-lock.json",
+        "source_id": "factorial.rest.get-timeoff-leave-types-api-surface-4",
+        "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "factorial.rest.get-timeoff-leave-types-api-surface-4",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/factorial/streams.json: existing stream \"leave_types\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"leave_types\" binds the pinned source contract",
+        "stream": "leave_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations/locations",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/locations/locations",
+        "operation": null,
+        "covered_by": {
+          "stream": "locations"
+        }
+      },
+      "source": {
+        "source_lock": "sources/factorial-operation-source-lock.json",
+        "source_id": "factorial.rest.get-locations-locations-api-surface-5",
+        "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "factorial.rest.get-locations-locations-api-surface-5",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/factorial/streams.json: existing stream \"locations\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"locations\" binds the pinned source contract",
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api_public/credentials",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api_public/credentials",
+        "operation": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "used only as the check request; not a syncable object stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/factorial-operation-source-lock.json",
+        "source_id": "factorial.rest.get-api-public-credentials-api-surface-6",
+        "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "factorial.rest.get-api-public-credentials-api-surface-6",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-factorial",
+          "evidence": "internal/connectors/defs/factorial/api_surface.json:endpoints[5]; api_surface.json:endpoints[5].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/factorial/api_surface.json:endpoints[5]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-factorial",
+        "contract": null
+      }
+    }
+  ]
+}

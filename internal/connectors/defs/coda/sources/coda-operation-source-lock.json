@@ -1,0 +1,429 @@
+{
+  "schema_version": 2,
+  "connector": "coda",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://docs.superhuman.com/developers/apis/v1",
+    "requested_url": "https://coda.io/developers/apis/v1",
+    "sha256": "518447497848a3eb79affaf3d04ff85979da75fbe13dc2380b3e01d8dba79720",
+    "bytes": 2568946,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 7,
+      "GET": 24,
+      "PATCH": 3,
+      "POST": 8,
+      "PUT": 3
+    },
+    "operations": [
+      {
+        "id": "coda.rest.get-docs-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs",
+        "operation_id": "coda.rest.get-docs-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "coda.rest.post-docs-api-surface-2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs",
+        "operation_id": "coda.rest.post-docs-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}",
+        "operation_id": "coda.rest.get-docs-docid-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "coda.rest.delete-docs-docid-api-surface-4",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/{docId}",
+        "operation_id": "coda.rest.delete-docs-docid-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "coda.rest.patch-docs-docid-api-surface-5",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/docs/{docId}",
+        "operation_id": "coda.rest.patch-docs-docid-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/acl/metadata",
+        "operation_id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/acl/permissions",
+        "operation_id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/{docId}/acl/permissions",
+        "operation_id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/{docId}/acl/permissions/{permissionId}",
+        "operation_id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/acl/principals/search",
+        "operation_id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/acl/settings",
+        "operation_id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/docs/{docId}/acl/settings",
+        "operation_id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-controls-api-surface-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/controls",
+        "operation_id": "coda.rest.get-docs-docid-controls-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/controls/{controlIdOrName}",
+        "operation_id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-domains-api-surface-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/${docId}/domains",
+        "operation_id": "coda.rest.get-docs-docid-domains-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "coda.rest.post-docs-docid-domains-api-surface-16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/${docId}/domains",
+        "operation_id": "coda.rest.post-docs-docid-domains-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/{docId}/domains/{customDocDomain}",
+        "operation_id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/docs/{docId}/domains/{customDocDomain}",
+        "operation_id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-formulas-api-surface-19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/formulas",
+        "operation_id": "coda.rest.get-docs-docid-formulas-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+        "operation_id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/{docId}/hooks/automation/{ruleId}",
+        "operation_id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-pages-api-surface-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/pages",
+        "operation_id": "coda.rest.get-docs-docid-pages-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "coda.rest.post-docs-docid-pages-api-surface-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/{docId}/pages",
+        "operation_id": "coda.rest.post-docs-docid-pages-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/pages/{pageIdOrName}",
+        "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/docs/{docId}/pages/{pageIdOrName}",
+        "operation_id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/{docId}/pages/{pageIdOrName}",
+        "operation_id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+        "operation_id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+        "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "coda.rest.put-docs-docid-publish-api-surface-29",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/docs/{docId}/publish",
+        "operation_id": "coda.rest.put-docs-docid-publish-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "coda.rest.delete-docs-docid-publish-api-surface-30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/{docId}/publish",
+        "operation_id": "coda.rest.delete-docs-docid-publish-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-tables-api-surface-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/tables",
+        "operation_id": "coda.rest.get-docs-docid-tables-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+        "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+        "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+        "operation_id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+        "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
+        "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "coda.rest.get-categories-api-surface-42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/categories",
+        "operation_id": "coda.rest.get-categories-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/mutationStatus/{requestId}",
+        "operation_id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "coda.rest.get-resolvebrowserlink-api-surface-44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/resolveBrowserLink",
+        "operation_id": "coda.rest.get-resolvebrowserlink-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "coda.rest.get-whoami-api-surface-45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/whoami",
+        "operation_id": "coda.rest.get-whoami-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      }
+    ]
+  }
+}

@@ -1,0 +1,2026 @@
+{
+  "schema_version": 1,
+  "connector": "coda",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_basis": {
+    "source_lock": "sources/coda-operation-source-lock.json",
+    "source_url": "https://docs.superhuman.com/developers/apis/v1",
+    "source_sha256": "518447497848a3eb79affaf3d04ff85979da75fbe13dc2380b3e01d8dba79720",
+    "source_bytes": 2568946,
+    "source_operation_count": 45
+  },
+  "summary": {
+    "api_surface_rows": 45,
+    "exact_source_rows": 45,
+    "declared_operations": 45,
+    "declared_percent": 100,
+    "enabled_operations": 15,
+    "enabled_percent": 33.33,
+    "disabled_operations": 30,
+    "documented_deletes": 7,
+    "enabled_deletes": 3,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 17
+      },
+      {
+        "key": "direct_write",
+        "count": 20
+      },
+      {
+        "key": "etl",
+        "count": 7
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 1
+      }
+    ],
+    "stream_bindings": 7,
+    "writes_actions": 8,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 20,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 30
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-coda",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/coda/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-coda",
+      "sync-transport-source-definition-coda"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-coda",
+        "count": 30
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/docs",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs",
+        "operation": null,
+        "covered_by": {
+          "stream": "docs"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-api-surface-1",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "coda.rest.get-docs-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/streams.json: existing stream \"docs\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"docs\" binds the pinned source contract",
+        "stream": "docs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "creates a brand-new doc (optionally copying an existing one); doc-lifecycle management is a workspace-admin action outside this connector's per-doc data-sync scope, and duplicating an arbitrary sourceDoc has no bounded blast radius to express as a plain row/page mutation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-api-surface-2",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "coda.rest.post-docs-api-surface-2",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[1]; api_surface.json:endpoints[1].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[1]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-doc detail is a strict subset of the docs stream's per-record shape already returned by GET /docs; no additional fields worth a dedicated stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-api-surface-3",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "coda.rest.get-docs-docid-api-surface-3",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[2]; api_surface.json:endpoints[2].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[2]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/docs/{docId}",
+        "operation": null,
+        "excluded": {
+          "category": "destructive_admin",
+          "reason": "irreversibly deletes an entire doc and everything in it; far outside the bounded per-row/per-page mutation surface this connector exposes"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.delete-docs-docid-api-surface-4",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "coda.rest.delete-docs-docid-api-surface-4",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[3]; api_surface.json:endpoints[3].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[3]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/docs/{docId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/docs/{docId}",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "renames/re-icons the doc itself; doc-level metadata management, not doc-scoped data sync"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.patch-docs-docid-api-surface-5",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "coda.rest.patch-docs-docid-api-surface-5",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[4]; api_surface.json:endpoints[4].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[4]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/metadata",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/metadata",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "sharing/ACL metadata is workspace-permission surface, not doc content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[5]; api_surface.json:endpoints[5].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[5]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/permissions",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/permissions",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "lists who has access to the doc; permission/sharing management is out of scope for a content connector"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[6]; api_surface.json:endpoints[6].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[6]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/acl/permissions",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs/{docId}/acl/permissions",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "grants doc access to a principal; access-control mutation, not content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[7]; api_surface.json:endpoints[7].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[7]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/acl/permissions/{permissionId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/acl/permissions/{permissionId}",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "revokes doc access; access-control mutation, not content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[8]; api_surface.json:endpoints[8].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[8]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/principals/search",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/principals/search",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "searches workspace principals for sharing purposes; identity/directory surface, not doc content"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[9]; api_surface.json:endpoints[9].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[9]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/settings",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/settings",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "doc-level sharing default settings; access-control configuration, not content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[10]; api_surface.json:endpoints[10].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[10]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/docs/{docId}/acl/settings",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/docs/{docId}/acl/settings",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "mutates doc-level sharing defaults; access-control configuration, not content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[11]; api_surface.json:endpoints[11].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[11]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/controls",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/controls",
+        "operation": null,
+        "covered_by": {
+          "stream": "controls"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-controls-api-surface-13",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": "coda.rest.get-docs-docid-controls-api-surface-13",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/streams.json: existing stream \"controls\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"controls\" binds the pinned source contract",
+        "stream": "controls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/controls/{controlIdOrName}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/controls/{controlIdOrName}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-control detail is a strict subset of the controls stream's per-record shape already returned by GET /docs/{docId}/controls"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[13]; api_surface.json:endpoints[13].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[13]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/${docId}/domains",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/${docId}/domains",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "lists custom domains bound to the doc; workspace/domain-administration surface, not doc content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-domains-api-surface-15",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": "coda.rest.get-docs-docid-domains-api-surface-15",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[14]; api_surface.json:endpoints[14].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[14]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/${docId}/domains",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs/${docId}/domains",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "binds a custom domain to the doc; domain-administration mutation, not content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-docid-domains-api-surface-16",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": "coda.rest.post-docs-docid-domains-api-surface-16",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[15]; api_surface.json:endpoints[15].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[15]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/domains/{customDocDomain}",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "unbinds a custom domain; domain-administration mutation, not content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[16]; api_surface.json:endpoints[16].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[16]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/docs/{docId}/domains/{customDocDomain}",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "updates a custom domain binding; domain-administration mutation, not content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[17]; api_surface.json:endpoints[17].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[17]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/formulas",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/formulas",
+        "operation": null,
+        "covered_by": {
+          "stream": "formulas"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-formulas-api-surface-19",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": "coda.rest.get-docs-docid-formulas-api-surface-19",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/streams.json: existing stream \"formulas\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"formulas\" binds the pinned source contract",
+        "stream": "formulas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-formula detail is a strict subset of the formulas stream's per-record shape already returned by GET /docs/{docId}/formulas"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[19]; api_surface.json:endpoints[19].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[19]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/hooks/automation/{ruleId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs/{docId}/hooks/automation/{ruleId}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "triggers a doc-authored automation rule by webhook; the rule's own logic (which may itself write anywhere in the doc) is opaque to this connector and has no bounded, declarable request/response shape beyond a bare trigger POST with no standard body contract"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[20]; api_surface.json:endpoints[20].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[20]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/pages",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/pages",
+        "operation": null,
+        "covered_by": {
+          "stream": "pages"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-pages-api-surface-22",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": "coda.rest.get-docs-docid-pages-api-surface-22",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/streams.json: existing stream \"pages\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"pages\" binds the pinned source contract",
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/pages",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs/{docId}/pages",
+        "operation": null,
+        "covered_by": {
+          "write": "create_page"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-docid-pages-api-surface-23",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[22]",
+        "operation_id": "coda.rest.post-docs-docid-pages-api-surface-23",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"create_page\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_page"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_page\" binds the pinned source contract",
+        "write": "create_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/pages/{pageIdOrName}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-page detail is a strict subset of the pages stream's per-record shape already returned by GET /docs/{docId}/pages"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[23]; api_surface.json:endpoints[23].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[23]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/docs/{docId}/pages/{pageIdOrName}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_page"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"update_page\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_page"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_page\" binds the pinned source contract",
+        "write": "update_page"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/pages/{pageIdOrName}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_page"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"delete_page\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_page"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_page\" binds the pinned source contract",
+        "write": "delete_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+      "parity_class": "binary_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+        "operation": null,
+        "excluded": {
+          "category": "binary_payload",
+          "reason": "begins an async export of page content to HTML/Markdown; the result is a downloadable blob fetched via a follow-up polling request, not a declarative JSON record read or write"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[26]; api_surface.json:endpoints[26].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[26]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+        "operation": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "polls the status/download link of an in-flight content export job (see the export POST above); job-status polling, not a data resource"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[27]; api_surface.json:endpoints[27].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[27]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/docs/{docId}/publish",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/docs/{docId}/publish",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "publishes the doc (or changes its publish settings) to a public/discoverable URL; a workspace-publishing action, not per-record content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.put-docs-docid-publish-api-surface-29",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[28]",
+        "operation_id": "coda.rest.put-docs-docid-publish-api-surface-29",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[28]; api_surface.json:endpoints[28].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[28]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/publish",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/publish",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "unpublishes the doc; a workspace-publishing action, not per-record content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.delete-docs-docid-publish-api-surface-30",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[29]",
+        "operation_id": "coda.rest.delete-docs-docid-publish-api-surface-30",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[29]; api_surface.json:endpoints[29].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[29]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables",
+        "operation": null,
+        "covered_by": {
+          "stream": "tables"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-tables-api-surface-31",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[30]",
+        "operation_id": "coda.rest.get-docs-docid-tables-api-surface-31",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/streams.json: existing stream \"tables\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"tables\" binds the pinned source contract",
+        "stream": "tables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-table detail is a strict subset of the tables stream's per-record shape already returned by GET /docs/{docId}/tables"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[31]",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[31]; api_surface.json:endpoints[31].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[31]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
+        "operation": null,
+        "covered_by": {
+          "stream": "columns"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[32]",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/streams.json: existing stream \"columns\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"columns\" binds the pinned source contract",
+        "stream": "columns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-column detail is a strict subset of the columns stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/columns"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[33]",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[33]; api_surface.json:endpoints[33].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[33]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+        "operation": null,
+        "covered_by": {
+          "stream": "rows"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[34]",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/streams.json: existing stream \"rows\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"rows\" binds the pinned source contract",
+        "stream": "rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+        "operation": null,
+        "covered_by": {
+          "write": "upsert_rows"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[35]",
+        "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"upsert_rows\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "upsert_rows"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"upsert_rows\" binds the pinned source contract",
+        "write": "upsert_rows"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_rows"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[36]",
+        "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"delete_rows\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_rows"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_rows\" binds the pinned source contract",
+        "write": "delete_rows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-row detail is a strict subset of the rows stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/rows"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[37]",
+        "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[37]; api_surface.json:endpoints[37].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[37]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_row"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[38]",
+        "operation_id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"update_row\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_row"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_row\" binds the pinned source contract",
+        "write": "update_row"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_row"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[39]",
+        "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"delete_row\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_row"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_row\" binds the pinned source contract",
+        "write": "delete_row"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
+        "operation": null,
+        "covered_by": {
+          "write": "push_button"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[40]",
+        "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/coda/writes.json: typed write action \"push_button\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "push_button"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"push_button\" binds the pinned source contract",
+        "write": "push_button"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/categories",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "lists Coda doc-gallery publish categories (e.g. \"Product\", \"Sales\"); a fixed lookup enum for the publishing UI, not workspace/doc content data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-categories-api-surface-42",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[41]",
+        "operation_id": "coda.rest.get-categories-api-surface-42",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[41]; api_surface.json:endpoints[41].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[41]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutationStatus/{requestId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/mutationStatus/{requestId}",
+        "operation": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "polls the completion status of an async mutation request id (rows/pages writes here return 202 immediately); status polling, not a data resource, and this connector's write actions do not themselves poll for completion (matching every other async-202 write action bundle in this migration)"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[42]",
+        "operation_id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[42]; api_surface.json:endpoints[42].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[42]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resolveBrowserLink",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/resolveBrowserLink",
+        "operation": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "resolves a coda.io browser URL to its API resource id/type; a URL-resolution utility, not a data resource"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-resolvebrowserlink-api-surface-44",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[43]",
+        "operation_id": "coda.rest.get-resolvebrowserlink-api-surface-44",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[43]; api_surface.json:endpoints[43].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[43]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/whoami",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/whoami",
+        "operation": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "returns the authenticated user's own identity/token metadata; auth introspection, not workspace/doc content"
+        }
+      },
+      "source": {
+        "source_lock": "sources/coda-operation-source-lock.json",
+        "source_id": "coda.rest.get-whoami-api-surface-45",
+        "source_url": "https://docs.superhuman.com/developers/apis/v1",
+        "source_location": "api_surface.json:endpoints[44]",
+        "operation_id": "coda.rest.get-whoami-api-surface-45",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-coda",
+          "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[44]; api_surface.json:endpoints[44].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/coda/api_surface.json:endpoints[44]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-coda",
+        "contract": null
+      }
+    }
+  ]
+}

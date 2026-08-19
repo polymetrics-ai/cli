@@ -1,0 +1,2140 @@
+{
+  "schema_version": 1,
+  "connector": "workable",
+  "source_lock": "sources/workable-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-api-surface-1",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs",
+          "operation": null,
+          "covered_by": {
+            "stream": "jobs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "jobs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-candidates-api-surface-2",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "workable.rest.get-spi-v3-candidates-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/candidates",
+          "operation": null,
+          "covered_by": {
+            "stream": "candidates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-members-api-surface-3",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "workable.rest.get-spi-v3-members-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/members",
+          "operation": null,
+          "covered_by": {
+            "stream": "members"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "members"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-accounts-api-surface-4",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "workable.rest.get-spi-v3-accounts-api-surface-4",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/accounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/accounts",
+          "operation": null,
+          "covered_by": {
+            "stream": "accounts"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "accounts"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-accounts-subdomain-api-surface-5",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "workable.rest.get-spi-v3-accounts-subdomain-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/accounts/{subdomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/accounts/{subdomain}",
+          "operation": null,
+          "covered_by": {
+            "stream": "account"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "account"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-collaboration-permissions-api-surface-6",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "workable.rest.get-spi-v3-collaboration-permissions-api-surface-6",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/collaboration_permissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/collaboration_permissions",
+          "operation": null,
+          "covered_by": {
+            "stream": "collaboration_permissions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "collaboration_permissions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-departments-api-surface-7",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "workable.rest.get-spi-v3-departments-api-surface-7",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/departments",
+          "operation": null,
+          "covered_by": {
+            "stream": "departments"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "departments"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-disqualification-reasons-api-surface-8",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "workable.rest.get-spi-v3-disqualification-reasons-api-surface-8",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/disqualification_reasons",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/disqualification_reasons",
+          "operation": null,
+          "covered_by": {
+            "stream": "disqualification_reasons"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "disqualification_reasons"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-legal-entities-api-surface-9",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "workable.rest.get-spi-v3-legal-entities-api-surface-9",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/legal_entities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/legal_entities",
+          "operation": null,
+          "covered_by": {
+            "stream": "legal_entities"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "legal_entities"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-permission-sets-api-surface-10",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "workable.rest.get-spi-v3-permission-sets-api-surface-10",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/permission_sets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/permission_sets",
+          "operation": null,
+          "covered_by": {
+            "stream": "permission_sets"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "permission_sets"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-recruiters-api-surface-11",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "workable.rest.get-spi-v3-recruiters-api-surface-11",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/recruiters",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/recruiters",
+          "operation": null,
+          "covered_by": {
+            "stream": "recruiters"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "recruiters"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-stages-api-surface-12",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "workable.rest.get-spi-v3-stages-api-surface-12",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/stages",
+          "operation": null,
+          "covered_by": {
+            "stream": "stages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "stages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-subscriptions-api-surface-13",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "workable.rest.get-spi-v3-subscriptions-api-surface-13",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/subscriptions",
+          "operation": null,
+          "covered_by": {
+            "stream": "subscriptions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "subscriptions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-employee-fields-api-surface-14",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "workable.rest.get-spi-v3-employee-fields-api-surface-14",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/employee_fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/employee_fields",
+          "operation": null,
+          "covered_by": {
+            "stream": "employee_fields"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "employee_fields"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-employees-orgchart-api-surface-15",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "workable.rest.get-spi-v3-employees-orgchart-api-surface-15",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/employees/orgchart",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/employees/orgchart",
+          "operation": null,
+          "covered_by": {
+            "stream": "employees_orgchart"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "employees_orgchart"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-employees-api-surface-16",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[15]",
+      "operation_id": "workable.rest.get-spi-v3-employees-api-surface-16",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/employees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/employees",
+          "operation": null,
+          "covered_by": {
+            "stream": "employees"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "employees"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-employees-id-api-surface-17",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[16]",
+      "operation_id": "workable.rest.get-spi-v3-employees-id-api-surface-17",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/employees/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/employees/{id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "employee"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "employee"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-employees-id-documents-api-surface-18",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[17]",
+      "operation_id": "workable.rest.get-spi-v3-employees-id-documents-api-surface-18",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/employees/{id}/documents",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/employees/{id}/documents",
+          "operation": null,
+          "covered_by": {
+            "stream": "employee_documents"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "employee_documents"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-review-cycles-templates-api-surface-19",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[18]",
+      "operation_id": "workable.rest.get-spi-v3-review-cycles-templates-api-surface-19",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/review-cycles/templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/review-cycles/templates",
+          "operation": null,
+          "covered_by": {
+            "stream": "review_templates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "review_templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-review-cycles-templates-id-api-surface-20",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[19]",
+      "operation_id": "workable.rest.get-spi-v3-review-cycles-templates-id-api-surface-20",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/review-cycles/templates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/review-cycles/templates/{id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "review_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "review_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-time-tracking-time-entries-api-surface-21",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[20]",
+      "operation_id": "workable.rest.get-spi-v3-time-tracking-time-entries-api-surface-21",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/time-tracking/time-entries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/time-tracking/time-entries",
+          "operation": null,
+          "covered_by": {
+            "stream": "time_entries"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "time_entries"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-timeoff-balances-api-surface-22",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[21]",
+      "operation_id": "workable.rest.get-spi-v3-timeoff-balances-api-surface-22",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/timeoff/balances",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/timeoff/balances",
+          "operation": null,
+          "covered_by": {
+            "stream": "timeoff_balances"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "timeoff_balances"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-timeoff-categories-api-surface-23",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[22]",
+      "operation_id": "workable.rest.get-spi-v3-timeoff-categories-api-surface-23",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/timeoff/categories",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/timeoff/categories",
+          "operation": null,
+          "covered_by": {
+            "stream": "timeoff_categories"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "timeoff_categories"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-timeoff-requests-api-surface-24",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[23]",
+      "operation_id": "workable.rest.get-spi-v3-timeoff-requests-api-surface-24",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/timeoff/requests",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/timeoff/requests",
+          "operation": null,
+          "covered_by": {
+            "stream": "timeoff_requests"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "timeoff_requests"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-work-schedules-api-surface-25",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[24]",
+      "operation_id": "workable.rest.get-spi-v3-work-schedules-api-surface-25",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/work_schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/work_schedules",
+          "operation": null,
+          "covered_by": {
+            "stream": "work_schedules"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "work_schedules"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-candidates-id-activities-api-surface-26",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[25]",
+      "operation_id": "workable.rest.get-spi-v3-candidates-id-activities-api-surface-26",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/activities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/candidates/{id}/activities",
+          "operation": null,
+          "covered_by": {
+            "stream": "candidate_activities"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_activities"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-candidates-id-files-api-surface-27",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[26]",
+      "operation_id": "workable.rest.get-spi-v3-candidates-id-files-api-surface-27",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/files",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/candidates/{id}/files",
+          "operation": null,
+          "covered_by": {
+            "stream": "candidate_files"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_files"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-candidates-id-offer-api-surface-28",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[27]",
+      "operation_id": "workable.rest.get-spi-v3-candidates-id-offer-api-surface-28",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/offer",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/candidates/{id}/offer",
+          "operation": null,
+          "covered_by": {
+            "stream": "candidate_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_offer"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-custom-attributes-api-surface-29",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[28]",
+      "operation_id": "workable.rest.get-spi-v3-custom-attributes-api-surface-29",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/custom_attributes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/custom_attributes",
+          "operation": null,
+          "covered_by": {
+            "stream": "custom_attributes"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "custom_attributes"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-events-api-surface-30",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[29]",
+      "operation_id": "workable.rest.get-spi-v3-events-api-surface-30",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/events",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/events",
+          "operation": null,
+          "covered_by": {
+            "stream": "events"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "events"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-events-id-api-surface-31",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[30]",
+      "operation_id": "workable.rest.get-spi-v3-events-id-api-surface-31",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/events/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/events/{id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "event"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "event"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-activities-api-surface-32",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[31]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-activities-api-surface-32",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/activities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}/activities",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_activities"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_activities"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-custom-attributes-api-surface-33",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[32]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-custom-attributes-api-surface-33",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_custom_attributes"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_custom_attributes"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-members-api-surface-34",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[33]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-members-api-surface-34",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}/members",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_members"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_members"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-questions-api-surface-35",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[34]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-questions-api-surface-35",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/questions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}/questions",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_questions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_questions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-stages-api-surface-36",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[35]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-stages-api-surface-36",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}/stages",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_stages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_stages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-api-surface-37",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[36]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-api-surface-37",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}",
+          "operation": null,
+          "covered_by": {
+            "stream": "job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-application-form-api-surface-38",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[37]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-application-form-api-surface-38",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/application_form",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}/application_form",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_application_form"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_application_form"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-jobs-shortcode-recruiters-api-surface-39",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[38]",
+      "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-recruiters-api-surface-39",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/recruiters",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/jobs/{shortcode}/recruiters",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_recruiters"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_recruiters"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-requisitions-api-surface-40",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[39]",
+      "operation_id": "workable.rest.get-spi-v3-requisitions-api-surface-40",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/requisitions",
+          "operation": null,
+          "covered_by": {
+            "stream": "requisitions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "requisitions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-requisitions-code-api-surface-41",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[40]",
+      "operation_id": "workable.rest.get-spi-v3-requisitions-code-api-surface-41",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/requisitions/{code}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/requisitions/{code}",
+          "operation": null,
+          "covered_by": {
+            "stream": "requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "requisition"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-spi-v3-offers-id-api-surface-42",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[41]",
+      "operation_id": "workable.rest.get-spi-v3-offers-id-api-surface-42",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/spi/v3/offers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/spi/v3/offers/{id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "offer"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.get-api-accounts-subdomain-api-surface-43",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[42]",
+      "operation_id": "workable.rest.get-api-accounts-subdomain-api-surface-43",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/accounts/{subdomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/accounts/{subdomain}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "Public careers-site jobs are served from Workable public API rather than the configured SPI v3 base URL and duplicate the authenticated jobs data surface."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-departments-api-surface-44",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[43]",
+      "operation_id": "workable.rest.post-spi-v3-departments-api-surface-44",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/departments",
+          "operation": null,
+          "covered_by": {
+            "write": "create_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.put-spi-v3-departments-api-surface-45",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[44]",
+      "operation_id": "workable.rest.put-spi-v3-departments-api-surface-45",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/spi/v3/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/spi/v3/departments",
+          "operation": null,
+          "covered_by": {
+            "write": "update_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-departments-id-merge-api-surface-46",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[45]",
+      "operation_id": "workable.rest.post-spi-v3-departments-id-merge-api-surface-46",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/departments/{id}/merge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/departments/{id}/merge",
+          "operation": null,
+          "covered_by": {
+            "write": "merge_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "merge_department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.delete-spi-v3-departments-id-api-surface-47",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[46]",
+      "operation_id": "workable.rest.delete-spi-v3-departments-id-api-surface-47",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/spi/v3/departments/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/spi/v3/departments/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-members-invite-api-surface-48",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[47]",
+      "operation_id": "workable.rest.post-spi-v3-members-invite-api-surface-48",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/members/invite",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/members/invite",
+          "operation": null,
+          "covered_by": {
+            "write": "invite_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "invite_member"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.put-spi-v3-members-api-surface-49",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[48]",
+      "operation_id": "workable.rest.put-spi-v3-members-api-surface-49",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/spi/v3/members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/spi/v3/members",
+          "operation": null,
+          "covered_by": {
+            "write": "update_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_member"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.delete-spi-v3-members-id-api-surface-50",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[49]",
+      "operation_id": "workable.rest.delete-spi-v3-members-id-api-surface-50",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/spi/v3/members/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/spi/v3/members/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "deactivate_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "deactivate_member"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-members-id-enable-api-surface-51",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[50]",
+      "operation_id": "workable.rest.post-spi-v3-members-id-enable-api-surface-51",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/members/{id}/enable",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/members/{id}/enable",
+          "operation": null,
+          "covered_by": {
+            "write": "enable_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "enable_member"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-subscriptions-api-surface-52",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[51]",
+      "operation_id": "workable.rest.post-spi-v3-subscriptions-api-surface-52",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/subscriptions",
+          "operation": null,
+          "covered_by": {
+            "write": "create_subscription"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_subscription"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.delete-spi-v3-subscriptions-id-api-surface-53",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[52]",
+      "operation_id": "workable.rest.delete-spi-v3-subscriptions-id-api-surface-53",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/spi/v3/subscriptions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/spi/v3/subscriptions/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_subscription"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_subscription"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-employees-api-surface-54",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[53]",
+      "operation_id": "workable.rest.post-spi-v3-employees-api-surface-54",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/employees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/employees",
+          "operation": null,
+          "covered_by": {
+            "write": "create_employee"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_employee"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-employees-id-api-surface-55",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[54]",
+      "operation_id": "workable.rest.patch-spi-v3-employees-id-api-surface-55",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/employees/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/employees/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_employee"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_employee"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-employees-id-documents-api-surface-56",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[55]",
+      "operation_id": "workable.rest.post-spi-v3-employees-id-documents-api-surface-56",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/employees/{id}/documents",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/employees/{id}/documents",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "Document upload is multipart/binary and outside the declarative JSON write dialect."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-review-cycles-templates-api-surface-57",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[56]",
+      "operation_id": "workable.rest.post-spi-v3-review-cycles-templates-api-surface-57",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/review-cycles/templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/review-cycles/templates",
+          "operation": null,
+          "covered_by": {
+            "write": "create_review_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_review_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-time-tracking-time-entries-api-surface-58",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[57]",
+      "operation_id": "workable.rest.post-spi-v3-time-tracking-time-entries-api-surface-58",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/time-entries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/time-tracking/time-entries",
+          "operation": null,
+          "covered_by": {
+            "write": "bulk_create_time_entries"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "bulk_create_time_entries"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-time-tracking-employees-id-time-entries-api-surface-59",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[58]",
+      "operation_id": "workable.rest.post-spi-v3-time-tracking-employees-id-time-entries-api-surface-59",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+          "operation": null,
+          "covered_by": {
+            "write": "create_time_entry"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_time_entry"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-60",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[59]",
+      "operation_id": "workable.rest.patch-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-60",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_time_entry"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_time_entry"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.delete-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-61",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[60]",
+      "operation_id": "workable.rest.delete-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-61",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+          "operation": null,
+          "covered_by": {
+            "write": "archive_time_entry"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "archive_time_entry"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-timeoff-approvals-key-api-surface-62",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[61]",
+      "operation_id": "workable.rest.patch-spi-v3-timeoff-approvals-key-api-surface-62",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/timeoff/approvals/{key}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/timeoff/approvals/{key}",
+          "operation": null,
+          "covered_by": {
+            "write": "decide_timeoff_approval"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "decide_timeoff_approval"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-timeoff-requests-api-surface-63",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[62]",
+      "operation_id": "workable.rest.post-spi-v3-timeoff-requests-api-surface-63",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/timeoff/requests",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/timeoff/requests",
+          "operation": null,
+          "covered_by": {
+            "write": "create_timeoff_request"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_timeoff_request"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-candidates-id-update-custom-attribute-value-api-surface-64",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[63]",
+      "operation_id": "workable.rest.patch-spi-v3-candidates-id-update-custom-attribute-value-api-surface-64",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
+          "operation": null,
+          "covered_by": {
+            "write": "update_candidate_custom_attribute"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_candidate_custom_attribute"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-candidates-id-comments-api-surface-65",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[64]",
+      "operation_id": "workable.rest.post-spi-v3-candidates-id-comments-api-surface-65",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/comments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/candidates/{id}/comments",
+          "operation": null,
+          "covered_by": {
+            "write": "comment_on_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "comment_on_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-candidates-id-copy-api-surface-66",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[65]",
+      "operation_id": "workable.rest.post-spi-v3-candidates-id-copy-api-surface-66",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/copy",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/candidates/{id}/copy",
+          "operation": null,
+          "covered_by": {
+            "write": "copy_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "copy_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-candidates-id-disqualify-api-surface-67",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[66]",
+      "operation_id": "workable.rest.post-spi-v3-candidates-id-disqualify-api-surface-67",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/disqualify",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/candidates/{id}/disqualify",
+          "operation": null,
+          "covered_by": {
+            "write": "disqualify_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "disqualify_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-jobs-shortcode-candidates-api-surface-68",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[67]",
+      "operation_id": "workable.rest.post-spi-v3-jobs-shortcode-candidates-api-surface-68",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/jobs/{shortcode}/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/jobs/{shortcode}/candidates",
+          "operation": null,
+          "covered_by": {
+            "write": "create_job_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_job_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-candidates-id-move-api-surface-69",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[68]",
+      "operation_id": "workable.rest.post-spi-v3-candidates-id-move-api-surface-69",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/move",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/candidates/{id}/move",
+          "operation": null,
+          "covered_by": {
+            "write": "move_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "move_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-candidates-id-relocate-api-surface-70",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[69]",
+      "operation_id": "workable.rest.post-spi-v3-candidates-id-relocate-api-surface-70",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/relocate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/candidates/{id}/relocate",
+          "operation": null,
+          "covered_by": {
+            "write": "relocate_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "relocate_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-candidates-id-revert-api-surface-71",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[70]",
+      "operation_id": "workable.rest.post-spi-v3-candidates-id-revert-api-surface-71",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/revert",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/candidates/{id}/revert",
+          "operation": null,
+          "covered_by": {
+            "write": "revert_candidate_disqualification"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "revert_candidate_disqualification"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.put-spi-v3-candidates-id-tags-api-surface-72",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[71]",
+      "operation_id": "workable.rest.put-spi-v3-candidates-id-tags-api-surface-72",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/tags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/spi/v3/candidates/{id}/tags",
+          "operation": null,
+          "covered_by": {
+            "write": "update_candidate_tags"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_candidate_tags"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-candidates-id-ratings-api-surface-73",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[72]",
+      "operation_id": "workable.rest.post-spi-v3-candidates-id-ratings-api-surface-73",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/ratings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/candidates/{id}/ratings",
+          "operation": null,
+          "covered_by": {
+            "write": "rate_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "rate_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.put-spi-v3-candidates-id-ratings-api-surface-74",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[73]",
+      "operation_id": "workable.rest.put-spi-v3-candidates-id-ratings-api-surface-74",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/ratings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/spi/v3/candidates/{id}/ratings",
+          "operation": null,
+          "covered_by": {
+            "write": "update_candidate_rating"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_candidate_rating"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-candidates-id-api-surface-75",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[74]",
+      "operation_id": "workable.rest.patch-spi-v3-candidates-id-api-surface-75",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/candidates/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-offers-id-approve-api-surface-76",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[75]",
+      "operation_id": "workable.rest.patch-spi-v3-offers-id-approve-api-surface-76",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/approve",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/offers/{id}/approve",
+          "operation": null,
+          "covered_by": {
+            "write": "approve_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "approve_offer"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-offers-id-reject-api-surface-77",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[76]",
+      "operation_id": "workable.rest.patch-spi-v3-offers-id-reject-api-surface-77",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/reject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/offers/{id}/reject",
+          "operation": null,
+          "covered_by": {
+            "write": "reject_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "reject_offer"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-requisitions-api-surface-78",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[77]",
+      "operation_id": "workable.rest.post-spi-v3-requisitions-api-surface-78",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/requisitions",
+          "operation": null,
+          "covered_by": {
+            "write": "create_requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_requisition"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-requisitions-id-api-surface-79",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[78]",
+      "operation_id": "workable.rest.patch-spi-v3-requisitions-id-api-surface-79",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/requisitions/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_requisition"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-requisitions-code-approve-api-surface-80",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[79]",
+      "operation_id": "workable.rest.patch-spi-v3-requisitions-code-approve-api-surface-80",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/approve",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/requisitions/{code}/approve",
+          "operation": null,
+          "covered_by": {
+            "write": "approve_requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "approve_requisition"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.patch-spi-v3-requisitions-code-reject-api-surface-81",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[80]",
+      "operation_id": "workable.rest.patch-spi-v3-requisitions-code-reject-api-surface-81",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/reject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/spi/v3/requisitions/{code}/reject",
+          "operation": null,
+          "covered_by": {
+            "write": "reject_requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "reject_requisition"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rest.post-spi-v3-talent-pool-stage-candidates-api-surface-82",
+      "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+      "source_location": "api_surface.json:endpoints[81]",
+      "operation_id": "workable.rest.post-spi-v3-talent-pool-stage-candidates-api-surface-82",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/spi/v3/talent_pool/{stage}/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/spi/v3/talent_pool/{stage}/candidates",
+          "operation": null,
+          "covered_by": {
+            "write": "create_talent_pool_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_talent_pool_candidate"
+        }
+      }
+    }
+  ]
+}

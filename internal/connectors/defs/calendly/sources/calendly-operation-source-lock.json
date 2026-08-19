@@ -1,0 +1,337 @@
+{
+  "schema_version": 2,
+  "connector": "calendly",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://developer.calendly.com/api-docs",
+    "requested_url": "https://developer.calendly.com/api-docs",
+    "sha256": "fd940783940c2cae6e7fe9b7e6feb96cb465cdbcb9940b2b5977efa6e59bcf74",
+    "bytes": 298140,
+    "content_type": "text/html",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 3,
+      "GET": 25,
+      "POST": 7
+    },
+    "operations": [
+      {
+        "id": "calendly.rest.get-scheduled-events-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events",
+        "operation_id": "calendly.rest.get-scheduled-events-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "calendly.rest.post-scheduled-events-uuid-cancellation-api-surface-2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scheduled_events/{uuid}/cancellation",
+        "operation_id": "calendly.rest.post-scheduled-events-uuid-cancellation-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "calendly.rest.get-event-types-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_types",
+        "operation_id": "calendly.rest.get-event-types-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "calendly.rest.get-organization-memberships-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization_memberships",
+        "operation_id": "calendly.rest.get-organization-memberships-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "calendly.rest.delete-organization-memberships-uuid-api-surface-5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organization_memberships/{uuid}",
+        "operation_id": "calendly.rest.delete-organization-memberships-uuid-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "calendly.rest.get-groups-api-surface-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups",
+        "operation_id": "calendly.rest.get-groups-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "calendly.rest.get-users-me-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/me",
+        "operation_id": "calendly.rest.get-users-me-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "calendly.rest.get-routing-forms-api-surface-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_forms",
+        "operation_id": "calendly.rest.get-routing-forms-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "calendly.rest.get-routing-form-submissions-api-surface-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_form_submissions",
+        "operation_id": "calendly.rest.get-routing-form-submissions-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "calendly.rest.get-webhook-subscriptions-api-surface-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook_subscriptions",
+        "operation_id": "calendly.rest.get-webhook-subscriptions-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "calendly.rest.post-webhook-subscriptions-api-surface-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhook_subscriptions",
+        "operation_id": "calendly.rest.post-webhook-subscriptions-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "calendly.rest.delete-webhook-subscriptions-uuid-api-surface-12",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/webhook_subscriptions/{uuid}",
+        "operation_id": "calendly.rest.delete-webhook-subscriptions-uuid-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "calendly.rest.get-user-availability-schedules-api-surface-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_availability_schedules",
+        "operation_id": "calendly.rest.get-user-availability-schedules-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "calendly.rest.get-group-relationships-api-surface-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/group_relationships",
+        "operation_id": "calendly.rest.get-group-relationships-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "calendly.rest.get-activity-log-entries-api-surface-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity_log_entries",
+        "operation_id": "calendly.rest.get-activity-log-entries-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "calendly.rest.get-scheduled-events-event-uuid-invitees-api-surface-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events/{event_uuid}/invitees",
+        "operation_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "calendly.rest.post-invitees-api-surface-17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/invitees",
+        "operation_id": "calendly.rest.post-invitees-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "calendly.rest.post-organizations-uuid-invitations-api-surface-18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organizations/{uuid}/invitations",
+        "operation_id": "calendly.rest.post-organizations-uuid-invitations-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "calendly.rest.post-one-off-event-types-api-surface-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/one_off_event_types",
+        "operation_id": "calendly.rest.post-one-off-event-types-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "calendly.rest.post-shares-api-surface-20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shares",
+        "operation_id": "calendly.rest.post-shares-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "calendly.rest.get-scheduled-events-uuid-api-surface-21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events/{uuid}",
+        "operation_id": "calendly.rest.get-scheduled-events-uuid-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "calendly.rest.get-event-types-uuid-api-surface-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_types/{uuid}",
+        "operation_id": "calendly.rest.get-event-types-uuid-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "calendly.rest.get-organization-memberships-uuid-api-surface-23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization_memberships/{uuid}",
+        "operation_id": "calendly.rest.get-organization-memberships-uuid-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "calendly.rest.get-webhook-subscriptions-uuid-api-surface-24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook_subscriptions/{uuid}",
+        "operation_id": "calendly.rest.get-webhook-subscriptions-uuid-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "calendly.rest.get-user-availability-schedules-uuid-api-surface-25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_availability_schedules/{uuid}",
+        "operation_id": "calendly.rest.get-user-availability-schedules-uuid-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "calendly.rest.get-routing-forms-uuid-api-surface-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_forms/{uuid}",
+        "operation_id": "calendly.rest.get-routing-forms-uuid-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "calendly.rest.get-routing-form-submissions-uuid-api-surface-27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/routing_form_submissions/{uuid}",
+        "operation_id": "calendly.rest.get-routing-form-submissions-uuid-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "calendly.rest.get-scheduled-events-event-uuid-invitees-invitee-uuid-api-surface-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
+        "operation_id": "calendly.rest.get-scheduled-events-event-uuid-invitees-invitee-uuid-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "calendly.rest.get-users-uuid-api-surface-29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{uuid}",
+        "operation_id": "calendly.rest.get-users-uuid-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "calendly.rest.get-event-type-available-times-api-surface-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event_type_available_times",
+        "operation_id": "calendly.rest.get-event-type-available-times-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "calendly.rest.get-user-busy-times-api-surface-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_busy_times",
+        "operation_id": "calendly.rest.get-user-busy-times-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "calendly.rest.get-organizations-uuid-invitations-api-surface-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{uuid}/invitations",
+        "operation_id": "calendly.rest.get-organizations-uuid-invitations-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "calendly.rest.get-organizations-org-uuid-invitations-invitation-uuid-api-surface-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
+        "operation_id": "calendly.rest.get-organizations-org-uuid-invitations-invitation-uuid-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "calendly.rest.delete-organizations-org-uuid-invitations-invitation-uuid-api-surface-34",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}",
+        "operation_id": "calendly.rest.delete-organizations-org-uuid-invitations-invitation-uuid-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "calendly.rest.post-data-compliance-deletion-invitees-api-surface-35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/data_compliance/deletion/invitees",
+        "operation_id": "calendly.rest.post-data-compliance-deletion-invitees-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      }
+    ]
+  }
+}

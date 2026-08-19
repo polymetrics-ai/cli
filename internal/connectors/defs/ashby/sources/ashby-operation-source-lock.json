@@ -1,0 +1,1929 @@
+{
+  "schema_version": 2,
+  "connector": "ashby",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://developers.ashbyhq.com/",
+    "requested_url": "https://developers.ashbyhq.com/",
+    "sha256": "dbc8928d56dd9218508ea24d0312555fb632f051f4f3179c0ff9264a22bca212",
+    "bytes": 204812,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "POST": 185,
+      "WEBHOOK": 27
+    },
+    "operations": [
+      {
+        "id": "ashby.rest.post-candidate-list-api-surface-1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.list",
+        "operation_id": "ashby.rest.post-candidate-list-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "ashby.rest.post-job-list-api-surface-2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job.list",
+        "operation_id": "ashby.rest.post-job-list-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "ashby.rest.post-application-list-api-surface-3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.list",
+        "operation_id": "ashby.rest.post-application-list-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "ashby.rest.post-user-list-api-surface-4",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.list",
+        "operation_id": "ashby.rest.post-user-list-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "ashby.rest.post-apikey-info-api-surface-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/apiKey.info",
+        "operation_id": "ashby.rest.post-apikey-info-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "ashby.rest.post-auditlog-list-api-surface-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/auditLog.list",
+        "operation_id": "ashby.rest.post-auditlog-list-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "ashby.rest.post-application-create-api-surface-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.create",
+        "operation_id": "ashby.rest.post-application-create-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "ashby.rest.post-application-update-api-surface-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.update",
+        "operation_id": "ashby.rest.post-application-update-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "ashby.rest.post-application-delete-api-surface-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.delete",
+        "operation_id": "ashby.rest.post-application-delete-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "ashby.rest.post-application-info-api-surface-10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.info",
+        "operation_id": "ashby.rest.post-application-info-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "ashby.rest.post-application-addhiringteammember-api-surface-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.addHiringTeamMember",
+        "operation_id": "ashby.rest.post-application-addhiringteammember-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "ashby.rest.post-application-removehiringteammember-api-surface-12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.removeHiringTeamMember",
+        "operation_id": "ashby.rest.post-application-removehiringteammember-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "ashby.rest.post-applicationhiringteamrole-list-api-surface-13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applicationHiringTeamRole.list",
+        "operation_id": "ashby.rest.post-applicationhiringteamrole-list-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "ashby.rest.post-application-change-stage-api-surface-14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.change_stage",
+        "operation_id": "ashby.rest.post-application-change-stage-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "ashby.rest.post-application-changestage-api-surface-15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.changeStage",
+        "operation_id": "ashby.rest.post-application-changestage-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "ashby.rest.post-application-change-source-api-surface-16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.change_source",
+        "operation_id": "ashby.rest.post-application-change-source-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "ashby.rest.post-application-changesource-api-surface-17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.changeSource",
+        "operation_id": "ashby.rest.post-application-changesource-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "ashby.rest.post-application-transfer-api-surface-18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.transfer",
+        "operation_id": "ashby.rest.post-application-transfer-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "ashby.rest.post-application-updatehistory-api-surface-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.updateHistory",
+        "operation_id": "ashby.rest.post-application-updatehistory-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "ashby.rest.post-application-listhistory-api-surface-20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.listHistory",
+        "operation_id": "ashby.rest.post-application-listhistory-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "ashby.rest.post-application-listcriteriaevaluations-api-surface-21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/application.listCriteriaEvaluations",
+        "operation_id": "ashby.rest.post-application-listcriteriaevaluations-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "ashby.rest.post-applicationfeedback-list-api-surface-22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applicationFeedback.list",
+        "operation_id": "ashby.rest.post-applicationfeedback-list-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "ashby.rest.post-applicationfeedback-submit-api-surface-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applicationFeedback.submit",
+        "operation_id": "ashby.rest.post-applicationfeedback-submit-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "ashby.rest.post-applicationfeedbackrequest-create-api-surface-24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applicationFeedbackRequest.create",
+        "operation_id": "ashby.rest.post-applicationfeedbackrequest-create-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "ashby.rest.post-applicationform-submit-api-surface-25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applicationForm.submit",
+        "operation_id": "ashby.rest.post-applicationform-submit-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "ashby.rest.post-approvaldefinition-update-api-surface-26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/approvalDefinition.update",
+        "operation_id": "ashby.rest.post-approvaldefinition-update-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-search-api-surface-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.search",
+        "operation_id": "ashby.rest.post-candidate-search-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-info-api-surface-28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.info",
+        "operation_id": "ashby.rest.post-candidate-info-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-create-api-surface-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.create",
+        "operation_id": "ashby.rest.post-candidate-create-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-uploadresume-api-surface-30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.uploadResume",
+        "operation_id": "ashby.rest.post-candidate-uploadresume-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-uploadfile-api-surface-31",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.uploadFile",
+        "operation_id": "ashby.rest.post-candidate-uploadfile-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-update-api-surface-32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.update",
+        "operation_id": "ashby.rest.post-candidate-update-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-createnote-api-surface-33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.createNote",
+        "operation_id": "ashby.rest.post-candidate-createnote-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-listclientinfo-api-surface-34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.listClientInfo",
+        "operation_id": "ashby.rest.post-candidate-listclientinfo-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-listfraudchecks-api-surface-35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.listFraudChecks",
+        "operation_id": "ashby.rest.post-candidate-listfraudchecks-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-setfraudstatus-api-surface-36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.setFraudStatus",
+        "operation_id": "ashby.rest.post-candidate-setfraudstatus-api-surface-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-listnotes-api-surface-37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.listNotes",
+        "operation_id": "ashby.rest.post-candidate-listnotes-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-anonymize-api-surface-38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.anonymize",
+        "operation_id": "ashby.rest.post-candidate-anonymize-api-surface-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-removeproject-api-surface-39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.removeProject",
+        "operation_id": "ashby.rest.post-candidate-removeproject-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-addproject-api-surface-40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.addProject",
+        "operation_id": "ashby.rest.post-candidate-addproject-api-surface-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-addemailmessage-api-surface-41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.addEmailMessage",
+        "operation_id": "ashby.rest.post-candidate-addemailmessage-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-addtag-api-surface-42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.addTag",
+        "operation_id": "ashby.rest.post-candidate-addtag-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-removetag-api-surface-43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.removeTag",
+        "operation_id": "ashby.rest.post-candidate-removetag-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-listprojects-api-surface-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.listProjects",
+        "operation_id": "ashby.rest.post-candidate-listprojects-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "ashby.rest.post-candidate-pushtohris-api-surface-45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidate.pushToHris",
+        "operation_id": "ashby.rest.post-candidate-pushtohris-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      },
+      {
+        "id": "ashby.rest.post-candidatetag-create-api-surface-46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidateTag.create",
+        "operation_id": "ashby.rest.post-candidatetag-create-api-surface-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]"
+      },
+      {
+        "id": "ashby.rest.post-candidatetag-archive-api-surface-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidateTag.archive",
+        "operation_id": "ashby.rest.post-candidatetag-archive-api-surface-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]"
+      },
+      {
+        "id": "ashby.rest.post-candidatetag-list-api-surface-48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidateTag.list",
+        "operation_id": "ashby.rest.post-candidatetag-list-api-surface-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]"
+      },
+      {
+        "id": "ashby.rest.post-communicationtemplate-list-api-surface-49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/communicationTemplate.list",
+        "operation_id": "ashby.rest.post-communicationtemplate-list-api-surface-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]"
+      },
+      {
+        "id": "ashby.rest.post-feedbackformdefinition-list-api-surface-50",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/feedbackFormDefinition.list",
+        "operation_id": "ashby.rest.post-feedbackformdefinition-list-api-surface-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]"
+      },
+      {
+        "id": "ashby.rest.post-feedbackformdefinition-info-api-surface-51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/feedbackFormDefinition.info",
+        "operation_id": "ashby.rest.post-feedbackformdefinition-info-api-surface-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]"
+      },
+      {
+        "id": "ashby.rest.post-jobposting-list-api-surface-52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobPosting.list",
+        "operation_id": "ashby.rest.post-jobposting-list-api-surface-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]"
+      },
+      {
+        "id": "ashby.rest.post-jobposting-info-api-surface-53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobPosting.info",
+        "operation_id": "ashby.rest.post-jobposting-info-api-surface-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]"
+      },
+      {
+        "id": "ashby.rest.post-jobposting-updatecompensation-api-surface-54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobPosting.updateCompensation",
+        "operation_id": "ashby.rest.post-jobposting-updatecompensation-api-surface-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]"
+      },
+      {
+        "id": "ashby.rest.post-jobposting-update-api-surface-55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobPosting.update",
+        "operation_id": "ashby.rest.post-jobposting-update-api-surface-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]"
+      },
+      {
+        "id": "ashby.rest.post-jobposting-setstatus-api-surface-56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobPosting.setStatus",
+        "operation_id": "ashby.rest.post-jobposting-setstatus-api-surface-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]"
+      },
+      {
+        "id": "ashby.rest.post-job-info-api-surface-57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job.info",
+        "operation_id": "ashby.rest.post-job-info-api-surface-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]"
+      },
+      {
+        "id": "ashby.rest.post-job-create-api-surface-58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job.create",
+        "operation_id": "ashby.rest.post-job-create-api-surface-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]"
+      },
+      {
+        "id": "ashby.rest.post-job-update-api-surface-59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job.update",
+        "operation_id": "ashby.rest.post-job-update-api-surface-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]"
+      },
+      {
+        "id": "ashby.rest.post-job-updatecompensation-api-surface-60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job.updateCompensation",
+        "operation_id": "ashby.rest.post-job-updatecompensation-api-surface-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]"
+      },
+      {
+        "id": "ashby.rest.post-job-search-api-surface-61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job.search",
+        "operation_id": "ashby.rest.post-job-search-api-surface-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]"
+      },
+      {
+        "id": "ashby.rest.post-job-setstatus-api-surface-62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/job.setStatus",
+        "operation_id": "ashby.rest.post-job-setstatus-api-surface-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]"
+      },
+      {
+        "id": "ashby.rest.post-jobboard-list-api-surface-63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobBoard.list",
+        "operation_id": "ashby.rest.post-jobboard-list-api-surface-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]"
+      },
+      {
+        "id": "ashby.rest.post-jobinterviewplan-info-api-surface-64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobInterviewPlan.info",
+        "operation_id": "ashby.rest.post-jobinterviewplan-info-api-surface-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]"
+      },
+      {
+        "id": "ashby.rest.post-jobtemplate-list-api-surface-65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobTemplate.list",
+        "operation_id": "ashby.rest.post-jobtemplate-list-api-surface-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]"
+      },
+      {
+        "id": "ashby.rest.post-department-archive-api-surface-66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/department.archive",
+        "operation_id": "ashby.rest.post-department-archive-api-surface-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]"
+      },
+      {
+        "id": "ashby.rest.post-department-restore-api-surface-67",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/department.restore",
+        "operation_id": "ashby.rest.post-department-restore-api-surface-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]"
+      },
+      {
+        "id": "ashby.rest.post-department-create-api-surface-68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/department.create",
+        "operation_id": "ashby.rest.post-department-create-api-surface-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]"
+      },
+      {
+        "id": "ashby.rest.post-department-info-api-surface-69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/department.info",
+        "operation_id": "ashby.rest.post-department-info-api-surface-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]"
+      },
+      {
+        "id": "ashby.rest.post-department-list-api-surface-70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/department.list",
+        "operation_id": "ashby.rest.post-department-list-api-surface-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]"
+      },
+      {
+        "id": "ashby.rest.post-department-move-api-surface-71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/department.move",
+        "operation_id": "ashby.rest.post-department-move-api-surface-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]"
+      },
+      {
+        "id": "ashby.rest.post-department-update-api-surface-72",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/department.update",
+        "operation_id": "ashby.rest.post-department-update-api-surface-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]"
+      },
+      {
+        "id": "ashby.rest.post-location-archive-api-surface-73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.archive",
+        "operation_id": "ashby.rest.post-location-archive-api-surface-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]"
+      },
+      {
+        "id": "ashby.rest.post-location-create-api-surface-74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.create",
+        "operation_id": "ashby.rest.post-location-create-api-surface-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]"
+      },
+      {
+        "id": "ashby.rest.post-location-restore-api-surface-75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.restore",
+        "operation_id": "ashby.rest.post-location-restore-api-surface-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]"
+      },
+      {
+        "id": "ashby.rest.post-location-list-api-surface-76",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.list",
+        "operation_id": "ashby.rest.post-location-list-api-surface-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]"
+      },
+      {
+        "id": "ashby.rest.post-location-info-api-surface-77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.info",
+        "operation_id": "ashby.rest.post-location-info-api-surface-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]"
+      },
+      {
+        "id": "ashby.rest.post-location-move-api-surface-78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.move",
+        "operation_id": "ashby.rest.post-location-move-api-surface-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]"
+      },
+      {
+        "id": "ashby.rest.post-location-updateaddress-api-surface-79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.updateAddress",
+        "operation_id": "ashby.rest.post-location-updateaddress-api-surface-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]"
+      },
+      {
+        "id": "ashby.rest.post-location-updatename-api-surface-80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.updateName",
+        "operation_id": "ashby.rest.post-location-updatename-api-surface-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]"
+      },
+      {
+        "id": "ashby.rest.post-location-updateworkplacetype-api-surface-81",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.updateWorkplaceType",
+        "operation_id": "ashby.rest.post-location-updateworkplacetype-api-surface-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]"
+      },
+      {
+        "id": "ashby.rest.post-location-updateexternalname-api-surface-82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/location.updateExternalName",
+        "operation_id": "ashby.rest.post-location-updateexternalname-api-surface-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]"
+      },
+      {
+        "id": "ashby.rest.post-interviewplan-list-api-surface-83",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewPlan.list",
+        "operation_id": "ashby.rest.post-interviewplan-list-api-surface-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]"
+      },
+      {
+        "id": "ashby.rest.post-interviewstage-list-api-surface-84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewStage.list",
+        "operation_id": "ashby.rest.post-interviewstage-list-api-surface-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]"
+      },
+      {
+        "id": "ashby.rest.post-interviewstagegroup-list-api-surface-85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewStageGroup.list",
+        "operation_id": "ashby.rest.post-interviewstagegroup-list-api-surface-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]"
+      },
+      {
+        "id": "ashby.rest.post-notetakertranscript-info-api-surface-86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/notetakerTranscript.info",
+        "operation_id": "ashby.rest.post-notetakertranscript-info-api-surface-86",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]"
+      },
+      {
+        "id": "ashby.rest.post-offer-approve-api-surface-87",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.approve",
+        "operation_id": "ashby.rest.post-offer-approve-api-surface-87",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]"
+      },
+      {
+        "id": "ashby.rest.post-offer-create-api-surface-88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.create",
+        "operation_id": "ashby.rest.post-offer-create-api-surface-88",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]"
+      },
+      {
+        "id": "ashby.rest.post-offer-list-api-surface-89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.list",
+        "operation_id": "ashby.rest.post-offer-list-api-surface-89",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]"
+      },
+      {
+        "id": "ashby.rest.post-offer-info-api-surface-90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.info",
+        "operation_id": "ashby.rest.post-offer-info-api-surface-90",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]"
+      },
+      {
+        "id": "ashby.rest.post-offer-start-api-surface-91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.start",
+        "operation_id": "ashby.rest.post-offer-start-api-surface-91",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]"
+      },
+      {
+        "id": "ashby.rest.post-offer-startapprovalprocess-api-surface-92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.startApprovalProcess",
+        "operation_id": "ashby.rest.post-offer-startapprovalprocess-api-surface-92",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]"
+      },
+      {
+        "id": "ashby.rest.post-offer-update-api-surface-93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.update",
+        "operation_id": "ashby.rest.post-offer-update-api-surface-93",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]"
+      },
+      {
+        "id": "ashby.rest.post-offer-setstatus-api-surface-94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.setStatus",
+        "operation_id": "ashby.rest.post-offer-setstatus-api-surface-94",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]"
+      },
+      {
+        "id": "ashby.rest.post-offer-setdecidedat-api-surface-95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offer.setDecidedAt",
+        "operation_id": "ashby.rest.post-offer-setdecidedat-api-surface-95",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]"
+      },
+      {
+        "id": "ashby.rest.post-offerprocess-start-api-surface-96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offerProcess.start",
+        "operation_id": "ashby.rest.post-offerprocess-start-api-surface-96",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]"
+      },
+      {
+        "id": "ashby.rest.post-opening-info-api-surface-97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.info",
+        "operation_id": "ashby.rest.post-opening-info-api-surface-97",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]"
+      },
+      {
+        "id": "ashby.rest.post-opening-create-api-surface-98",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.create",
+        "operation_id": "ashby.rest.post-opening-create-api-surface-98",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]"
+      },
+      {
+        "id": "ashby.rest.post-opening-update-api-surface-99",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.update",
+        "operation_id": "ashby.rest.post-opening-update-api-surface-99",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]"
+      },
+      {
+        "id": "ashby.rest.post-opening-setarchived-api-surface-100",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.setArchived",
+        "operation_id": "ashby.rest.post-opening-setarchived-api-surface-100",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]"
+      },
+      {
+        "id": "ashby.rest.post-opening-setopeningstate-api-surface-101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.setOpeningState",
+        "operation_id": "ashby.rest.post-opening-setopeningstate-api-surface-101",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]"
+      },
+      {
+        "id": "ashby.rest.post-opening-addjob-api-surface-102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.addJob",
+        "operation_id": "ashby.rest.post-opening-addjob-api-surface-102",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]"
+      },
+      {
+        "id": "ashby.rest.post-opening-removejob-api-surface-103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.removeJob",
+        "operation_id": "ashby.rest.post-opening-removejob-api-surface-103",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]"
+      },
+      {
+        "id": "ashby.rest.post-opening-addlocation-api-surface-104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.addLocation",
+        "operation_id": "ashby.rest.post-opening-addlocation-api-surface-104",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]"
+      },
+      {
+        "id": "ashby.rest.post-opening-removelocation-api-surface-105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.removeLocation",
+        "operation_id": "ashby.rest.post-opening-removelocation-api-surface-105",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]"
+      },
+      {
+        "id": "ashby.rest.post-opening-list-api-surface-106",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.list",
+        "operation_id": "ashby.rest.post-opening-list-api-surface-106",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]"
+      },
+      {
+        "id": "ashby.rest.post-opening-search-api-surface-107",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opening.search",
+        "operation_id": "ashby.rest.post-opening-search-api-surface-107",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]"
+      },
+      {
+        "id": "ashby.rest.post-project-info-api-surface-108",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project.info",
+        "operation_id": "ashby.rest.post-project-info-api-surface-108",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]"
+      },
+      {
+        "id": "ashby.rest.post-project-list-api-surface-109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project.list",
+        "operation_id": "ashby.rest.post-project-list-api-surface-109",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]"
+      },
+      {
+        "id": "ashby.rest.post-project-search-api-surface-110",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project.search",
+        "operation_id": "ashby.rest.post-project-search-api-surface-110",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]"
+      },
+      {
+        "id": "ashby.rest.post-source-list-api-surface-111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/source.list",
+        "operation_id": "ashby.rest.post-source-list-api-surface-111",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]"
+      },
+      {
+        "id": "ashby.rest.post-sourcetrackinglink-list-api-surface-112",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sourceTrackingLink.list",
+        "operation_id": "ashby.rest.post-sourcetrackinglink-list-api-surface-112",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]"
+      },
+      {
+        "id": "ashby.rest.post-archivereason-list-api-surface-113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/archiveReason.list",
+        "operation_id": "ashby.rest.post-archivereason-list-api-surface-113",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]"
+      },
+      {
+        "id": "ashby.rest.post-brand-list-api-surface-114",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/brand.list",
+        "operation_id": "ashby.rest.post-brand-list-api-surface-114",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]"
+      },
+      {
+        "id": "ashby.rest.post-customfield-list-api-surface-115",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customField.list",
+        "operation_id": "ashby.rest.post-customfield-list-api-surface-115",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]"
+      },
+      {
+        "id": "ashby.rest.post-customfield-create-api-surface-116",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customField.create",
+        "operation_id": "ashby.rest.post-customfield-create-api-surface-116",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]"
+      },
+      {
+        "id": "ashby.rest.post-customfield-setvalue-api-surface-117",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customField.setValue",
+        "operation_id": "ashby.rest.post-customfield-setvalue-api-surface-117",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]"
+      },
+      {
+        "id": "ashby.rest.post-customfield-info-api-surface-118",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customField.info",
+        "operation_id": "ashby.rest.post-customfield-info-api-surface-118",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]"
+      },
+      {
+        "id": "ashby.rest.post-customfield-setvalues-api-surface-119",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customField.setValues",
+        "operation_id": "ashby.rest.post-customfield-setvalues-api-surface-119",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]"
+      },
+      {
+        "id": "ashby.rest.post-customfield-updateselectablevalues-api-surface-120",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customField.updateSelectableValues",
+        "operation_id": "ashby.rest.post-customfield-updateselectablevalues-api-surface-120",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]"
+      },
+      {
+        "id": "ashby.rest.post-assessment-update-api-surface-121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/assessment.update",
+        "operation_id": "ashby.rest.post-assessment-update-api-surface-121",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]"
+      },
+      {
+        "id": "ashby.rest.post-assessment-addcompletedtocandidate-api-surface-122",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/assessment.addCompletedToCandidate",
+        "operation_id": "ashby.rest.post-assessment-addcompletedtocandidate-api-surface-122",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]"
+      },
+      {
+        "id": "ashby.rest.post-hiringteam-addmember-api-surface-123",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiringTeam.addMember",
+        "operation_id": "ashby.rest.post-hiringteam-addmember-api-surface-123",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]"
+      },
+      {
+        "id": "ashby.rest.post-hiringteam-removemember-api-surface-124",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiringTeam.removeMember",
+        "operation_id": "ashby.rest.post-hiringteam-removemember-api-surface-124",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]"
+      },
+      {
+        "id": "ashby.rest.post-hiringteamrole-list-api-surface-125",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/hiringTeamRole.list",
+        "operation_id": "ashby.rest.post-hiringteamrole-list-api-surface-125",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]"
+      },
+      {
+        "id": "ashby.rest.post-user-info-api-surface-126",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.info",
+        "operation_id": "ashby.rest.post-user-info-api-surface-126",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]"
+      },
+      {
+        "id": "ashby.rest.post-user-search-api-surface-127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.search",
+        "operation_id": "ashby.rest.post-user-search-api-surface-127",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]"
+      },
+      {
+        "id": "ashby.rest.post-user-interviewersettings-api-surface-128",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.interviewerSettings",
+        "operation_id": "ashby.rest.post-user-interviewersettings-api-surface-128",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]"
+      },
+      {
+        "id": "ashby.rest.post-user-updateinterviewersettings-api-surface-129",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.updateInterviewerSettings",
+        "operation_id": "ashby.rest.post-user-updateinterviewersettings-api-surface-129",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]"
+      },
+      {
+        "id": "ashby.rest.post-user-createinterviewerpause-api-surface-130",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.createInterviewerPause",
+        "operation_id": "ashby.rest.post-user-createinterviewerpause-api-surface-130",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]"
+      },
+      {
+        "id": "ashby.rest.post-user-listinterviewerpauses-api-surface-131",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.listInterviewerPauses",
+        "operation_id": "ashby.rest.post-user-listinterviewerpauses-api-surface-131",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]"
+      },
+      {
+        "id": "ashby.rest.post-user-deleteinterviewerpause-api-surface-132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.deleteInterviewerPause",
+        "operation_id": "ashby.rest.post-user-deleteinterviewerpause-api-surface-132",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]"
+      },
+      {
+        "id": "ashby.rest.post-user-setcustomfieldvalue-api-surface-133",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.setCustomFieldValue",
+        "operation_id": "ashby.rest.post-user-setcustomfieldvalue-api-surface-133",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]"
+      },
+      {
+        "id": "ashby.rest.post-user-setcustomfieldvalues-api-surface-134",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/user.setCustomFieldValues",
+        "operation_id": "ashby.rest.post-user-setcustomfieldvalues-api-surface-134",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]"
+      },
+      {
+        "id": "ashby.rest.post-referral-create-api-surface-135",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/referral.create",
+        "operation_id": "ashby.rest.post-referral-create-api-surface-135",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]"
+      },
+      {
+        "id": "ashby.rest.post-referralform-info-api-surface-136",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/referralForm.info",
+        "operation_id": "ashby.rest.post-referralform-info-api-surface-136",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]"
+      },
+      {
+        "id": "ashby.rest.post-emailsender-list-api-surface-137",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/emailSender.list",
+        "operation_id": "ashby.rest.post-emailsender-list-api-surface-137",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]"
+      },
+      {
+        "id": "ashby.rest.post-sequence-add-api-surface-138",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence.add",
+        "operation_id": "ashby.rest.post-sequence-add-api-surface-138",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]"
+      },
+      {
+        "id": "ashby.rest.post-sequence-cancel-api-surface-139",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence.cancel",
+        "operation_id": "ashby.rest.post-sequence-cancel-api-surface-139",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]"
+      },
+      {
+        "id": "ashby.rest.post-sequence-discard-api-surface-140",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence.discard",
+        "operation_id": "ashby.rest.post-sequence-discard-api-surface-140",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]"
+      },
+      {
+        "id": "ashby.rest.post-sequence-info-api-surface-141",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence.info",
+        "operation_id": "ashby.rest.post-sequence-info-api-surface-141",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]"
+      },
+      {
+        "id": "ashby.rest.post-sequence-list-api-surface-142",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence.list",
+        "operation_id": "ashby.rest.post-sequence-list-api-surface-142",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]"
+      },
+      {
+        "id": "ashby.rest.post-sequence-updatestage-api-surface-143",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence.updateStage",
+        "operation_id": "ashby.rest.post-sequence-updatestage-api-surface-143",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]"
+      },
+      {
+        "id": "ashby.rest.post-sequence-start-api-surface-144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence.start",
+        "operation_id": "ashby.rest.post-sequence-start-api-surface-144",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]"
+      },
+      {
+        "id": "ashby.rest.post-sequencetemplate-info-api-surface-145",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequenceTemplate.info",
+        "operation_id": "ashby.rest.post-sequencetemplate-info-api-surface-145",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]"
+      },
+      {
+        "id": "ashby.rest.post-sequencetemplate-list-api-surface-146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequenceTemplate.list",
+        "operation_id": "ashby.rest.post-sequencetemplate-list-api-surface-146",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]"
+      },
+      {
+        "id": "ashby.rest.post-interviewschedule-list-api-surface-147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewSchedule.list",
+        "operation_id": "ashby.rest.post-interviewschedule-list-api-surface-147",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]"
+      },
+      {
+        "id": "ashby.rest.post-interviewschedule-create-api-surface-148",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewSchedule.create",
+        "operation_id": "ashby.rest.post-interviewschedule-create-api-surface-148",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]"
+      },
+      {
+        "id": "ashby.rest.post-interviewschedule-update-api-surface-149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewSchedule.update",
+        "operation_id": "ashby.rest.post-interviewschedule-update-api-surface-149",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]"
+      },
+      {
+        "id": "ashby.rest.post-interviewschedule-cancel-api-surface-150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewSchedule.cancel",
+        "operation_id": "ashby.rest.post-interviewschedule-cancel-api-surface-150",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]"
+      },
+      {
+        "id": "ashby.rest.post-takehomeassignment-list-api-surface-151",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/takeHomeAssignment.list",
+        "operation_id": "ashby.rest.post-takehomeassignment-list-api-surface-151",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]"
+      },
+      {
+        "id": "ashby.rest.post-takehomeassignment-info-api-surface-152",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/takeHomeAssignment.info",
+        "operation_id": "ashby.rest.post-takehomeassignment-info-api-surface-152",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]"
+      },
+      {
+        "id": "ashby.rest.post-interviewevent-list-api-surface-153",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewEvent.list",
+        "operation_id": "ashby.rest.post-interviewevent-list-api-surface-153",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]"
+      },
+      {
+        "id": "ashby.rest.post-interviewbriefing-info-api-surface-154",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewBriefing.info",
+        "operation_id": "ashby.rest.post-interviewbriefing-info-api-surface-154",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]"
+      },
+      {
+        "id": "ashby.rest.post-interview-info-api-surface-155",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interview.info",
+        "operation_id": "ashby.rest.post-interview-info-api-surface-155",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]"
+      },
+      {
+        "id": "ashby.rest.post-interview-list-api-surface-156",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interview.list",
+        "operation_id": "ashby.rest.post-interview-list-api-surface-156",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]"
+      },
+      {
+        "id": "ashby.rest.post-interviewstage-info-api-surface-157",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewStage.info",
+        "operation_id": "ashby.rest.post-interviewstage-info-api-surface-157",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]"
+      },
+      {
+        "id": "ashby.rest.post-file-createfileuploadhandle-api-surface-158",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/file.createFileUploadHandle",
+        "operation_id": "ashby.rest.post-file-createfileuploadhandle-api-surface-158",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]"
+      },
+      {
+        "id": "ashby.rest.post-file-info-api-surface-159",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/file.info",
+        "operation_id": "ashby.rest.post-file-info-api-surface-159",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]"
+      },
+      {
+        "id": "ashby.rest.post-surveyformdefinition-info-api-surface-160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/surveyFormDefinition.info",
+        "operation_id": "ashby.rest.post-surveyformdefinition-info-api-surface-160",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[159]"
+      },
+      {
+        "id": "ashby.rest.post-surveyformdefinition-list-api-surface-161",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/surveyFormDefinition.list",
+        "operation_id": "ashby.rest.post-surveyformdefinition-list-api-surface-161",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[160]"
+      },
+      {
+        "id": "ashby.rest.post-surveyrequest-create-api-surface-162",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/surveyRequest.create",
+        "operation_id": "ashby.rest.post-surveyrequest-create-api-surface-162",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[161]"
+      },
+      {
+        "id": "ashby.rest.post-surveyrequest-list-api-surface-163",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/surveyRequest.list",
+        "operation_id": "ashby.rest.post-surveyrequest-list-api-surface-163",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[162]"
+      },
+      {
+        "id": "ashby.rest.post-surveysubmission-create-api-surface-164",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/surveySubmission.create",
+        "operation_id": "ashby.rest.post-surveysubmission-create-api-surface-164",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[163]"
+      },
+      {
+        "id": "ashby.rest.post-surveysubmission-list-api-surface-165",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/surveySubmission.list",
+        "operation_id": "ashby.rest.post-surveysubmission-list-api-surface-165",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[164]"
+      },
+      {
+        "id": "ashby.rest.post-webhook-create-api-surface-166",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhook.create",
+        "operation_id": "ashby.rest.post-webhook-create-api-surface-166",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[165]"
+      },
+      {
+        "id": "ashby.rest.post-webhook-info-api-surface-167",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhook.info",
+        "operation_id": "ashby.rest.post-webhook-info-api-surface-167",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[166]"
+      },
+      {
+        "id": "ashby.rest.post-webhook-update-api-surface-168",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhook.update",
+        "operation_id": "ashby.rest.post-webhook-update-api-surface-168",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[167]"
+      },
+      {
+        "id": "ashby.rest.post-webhook-delete-api-surface-169",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhook.delete",
+        "operation_id": "ashby.rest.post-webhook-delete-api-surface-169",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[168]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-list-api-surface-170",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.list",
+        "operation_id": "ashby.rest.post-interviewerpool-list-api-surface-170",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[169]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-info-api-surface-171",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.info",
+        "operation_id": "ashby.rest.post-interviewerpool-info-api-surface-171",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[170]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-archive-api-surface-172",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.archive",
+        "operation_id": "ashby.rest.post-interviewerpool-archive-api-surface-172",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[171]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-restore-api-surface-173",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.restore",
+        "operation_id": "ashby.rest.post-interviewerpool-restore-api-surface-173",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[172]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-create-api-surface-174",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.create",
+        "operation_id": "ashby.rest.post-interviewerpool-create-api-surface-174",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[173]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-update-api-surface-175",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.update",
+        "operation_id": "ashby.rest.post-interviewerpool-update-api-surface-175",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[174]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-adduser-api-surface-176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.addUser",
+        "operation_id": "ashby.rest.post-interviewerpool-adduser-api-surface-176",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[175]"
+      },
+      {
+        "id": "ashby.rest.post-interviewerpool-removeuser-api-surface-177",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/interviewerPool.removeUser",
+        "operation_id": "ashby.rest.post-interviewerpool-removeuser-api-surface-177",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[176]"
+      },
+      {
+        "id": "ashby.rest.post-closereason-list-api-surface-178",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/closeReason.list",
+        "operation_id": "ashby.rest.post-closereason-list-api-surface-178",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[177]"
+      },
+      {
+        "id": "ashby.rest.post-report-generate-api-surface-179",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/report.generate",
+        "operation_id": "ashby.rest.post-report-generate-api-surface-179",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[178]"
+      },
+      {
+        "id": "ashby.rest.post-report-synchronous-api-surface-180",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/report.synchronous",
+        "operation_id": "ashby.rest.post-report-synchronous-api-surface-180",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[179]"
+      },
+      {
+        "id": "ashby.rest.post-approval-list-api-surface-181",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/approval.list",
+        "operation_id": "ashby.rest.post-approval-list-api-surface-181",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[180]"
+      },
+      {
+        "id": "ashby.rest.post-assessment-list-api-surface-182",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/assessment.list",
+        "operation_id": "ashby.rest.post-assessment-list-api-surface-182",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[181]"
+      },
+      {
+        "id": "ashby.rest.post-assessment-start-api-surface-183",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/assessment.start",
+        "operation_id": "ashby.rest.post-assessment-start-api-surface-183",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[182]"
+      },
+      {
+        "id": "ashby.rest.post-assessment-cancel-api-surface-184",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/assessment.cancel",
+        "operation_id": "ashby.rest.post-assessment-cancel-api-surface-184",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[183]"
+      },
+      {
+        "id": "ashby.rest.post-customfields-fetch-api-surface-185",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customFields.fetch",
+        "operation_id": "ashby.rest.post-customfields-fetch-api-surface-185",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[184]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-applicationsubmit-api-surface-186",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:applicationSubmit",
+        "operation_id": "ashby.rest.webhook-webhook-applicationsubmit-api-surface-186",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[185]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-applicationupdate-api-surface-187",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:applicationUpdate",
+        "operation_id": "ashby.rest.webhook-webhook-applicationupdate-api-surface-187",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[186]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-candidatehire-api-surface-188",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:candidateHire",
+        "operation_id": "ashby.rest.webhook-webhook-candidatehire-api-surface-188",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[187]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-candidatestagechange-api-surface-189",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:candidateStageChange",
+        "operation_id": "ashby.rest.webhook-webhook-candidatestagechange-api-surface-189",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[188]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-candidatedelete-api-surface-190",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:candidateDelete",
+        "operation_id": "ashby.rest.webhook-webhook-candidatedelete-api-surface-190",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[189]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-candidatemerge-api-surface-191",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:candidateMerge",
+        "operation_id": "ashby.rest.webhook-webhook-candidatemerge-api-surface-191",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[190]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-interviewplantransition-api-surface-192",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:interviewPlanTransition",
+        "operation_id": "ashby.rest.webhook-webhook-interviewplantransition-api-surface-192",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[191]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-interviewschedulecreate-api-surface-193",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:interviewScheduleCreate",
+        "operation_id": "ashby.rest.webhook-webhook-interviewschedulecreate-api-surface-193",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[192]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-interviewscheduleupdate-api-surface-194",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:interviewScheduleUpdate",
+        "operation_id": "ashby.rest.webhook-webhook-interviewscheduleupdate-api-surface-194",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[193]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-jobcreate-api-surface-195",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:jobCreate",
+        "operation_id": "ashby.rest.webhook-webhook-jobcreate-api-surface-195",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[194]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-jobupdate-api-surface-196",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:jobUpdate",
+        "operation_id": "ashby.rest.webhook-webhook-jobupdate-api-surface-196",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[195]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-jobpostingdelete-api-surface-197",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:jobPostingDelete",
+        "operation_id": "ashby.rest.webhook-webhook-jobpostingdelete-api-surface-197",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[196]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-jobpostingupdate-api-surface-198",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:jobPostingUpdate",
+        "operation_id": "ashby.rest.webhook-webhook-jobpostingupdate-api-surface-198",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[197]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-jobpostingpublish-api-surface-199",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:jobPostingPublish",
+        "operation_id": "ashby.rest.webhook-webhook-jobpostingpublish-api-surface-199",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[198]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-jobpostingunpublish-api-surface-200",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:jobPostingUnpublish",
+        "operation_id": "ashby.rest.webhook-webhook-jobpostingunpublish-api-surface-200",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[199]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-offercreate-api-surface-201",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:offerCreate",
+        "operation_id": "ashby.rest.webhook-webhook-offercreate-api-surface-201",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[200]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-offerdelete-api-surface-202",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:offerDelete",
+        "operation_id": "ashby.rest.webhook-webhook-offerdelete-api-surface-202",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[201]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-offerupdate-api-surface-203",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:offerUpdate",
+        "operation_id": "ashby.rest.webhook-webhook-offerupdate-api-surface-203",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[202]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-openingcreate-api-surface-204",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:openingCreate",
+        "operation_id": "ashby.rest.webhook-webhook-openingcreate-api-surface-204",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[203]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-pushtohris-api-surface-205",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:pushToHRIS",
+        "operation_id": "ashby.rest.webhook-webhook-pushtohris-api-surface-205",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[204]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-ping-api-surface-206",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:ping",
+        "operation_id": "ashby.rest.webhook-webhook-ping-api-surface-206",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[205]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-signaturerequestupdate-api-surface-207",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:signatureRequestUpdate",
+        "operation_id": "ashby.rest.webhook-webhook-signaturerequestupdate-api-surface-207",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[206]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-surveysubmit-api-surface-208",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:surveySubmit",
+        "operation_id": "ashby.rest.webhook-webhook-surveysubmit-api-surface-208",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[207]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-takehomeassignmentassigned-api-surface-209",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:takeHomeAssignmentAssigned",
+        "operation_id": "ashby.rest.webhook-webhook-takehomeassignmentassigned-api-surface-209",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[208]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-takehomeassignmentcancelled-api-surface-210",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:takeHomeAssignmentCancelled",
+        "operation_id": "ashby.rest.webhook-webhook-takehomeassignmentcancelled-api-surface-210",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[209]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-takehomeassignmentcompleted-api-surface-211",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:takeHomeAssignmentCompleted",
+        "operation_id": "ashby.rest.webhook-webhook-takehomeassignmentcompleted-api-surface-211",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[210]"
+      },
+      {
+        "id": "ashby.rest.webhook-webhook-takehomeassignmentsubmitted-api-surface-212",
+        "protocol": "rest",
+        "method": "WEBHOOK",
+        "path": "webhook:takeHomeAssignmentSubmitted",
+        "operation_id": "ashby.rest.webhook-webhook-takehomeassignmentsubmitted-api-surface-212",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[211]"
+      }
+    ]
+  }
+}

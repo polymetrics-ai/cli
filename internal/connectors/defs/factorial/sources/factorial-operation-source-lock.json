@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "connector": "factorial",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+    "requested_url": "https://apidoc.factorialhr.com/",
+    "sha256": "0fa521ea4159139078dd7455035c50039e5d2b297ca9ec9179bdc65d1639376c",
+    "bytes": 125104,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "GET": 6
+    },
+    "operations": [
+      {
+        "id": "factorial.rest.get-employees-employees-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/employees/employees",
+        "operation_id": "factorial.rest.get-employees-employees-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "factorial.rest.get-teams-teams-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/teams",
+        "operation_id": "factorial.rest.get-teams-teams-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "factorial.rest.get-timeoff-leaves-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/leaves",
+        "operation_id": "factorial.rest.get-timeoff-leaves-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "factorial.rest.get-timeoff-leave-types-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timeoff/leave_types",
+        "operation_id": "factorial.rest.get-timeoff-leave-types-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "factorial.rest.get-locations-locations-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/locations/locations",
+        "operation_id": "factorial.rest.get-locations-locations-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "factorial.rest.get-api-public-credentials-api-surface-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api_public/credentials",
+        "operation_id": "factorial.rest.get-api-public-credentials-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      }
+    ]
+  }
+}

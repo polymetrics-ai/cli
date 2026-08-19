@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "connector": "factorial",
+  "source_lock": "sources/factorial-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/factorial-operation-source-lock.json",
+      "source_id": "factorial.rest.get-employees-employees-api-surface-1",
+      "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "factorial.rest.get-employees-employees-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/employees/employees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/employees/employees",
+          "operation": null,
+          "covered_by": {
+            "stream": "employees"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "employees"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/factorial-operation-source-lock.json",
+      "source_id": "factorial.rest.get-teams-teams-api-surface-2",
+      "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "factorial.rest.get-teams-teams-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/teams/teams",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/teams/teams",
+          "operation": null,
+          "covered_by": {
+            "stream": "teams"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "teams"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/factorial-operation-source-lock.json",
+      "source_id": "factorial.rest.get-timeoff-leaves-api-surface-3",
+      "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "factorial.rest.get-timeoff-leaves-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/timeoff/leaves",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/timeoff/leaves",
+          "operation": null,
+          "covered_by": {
+            "stream": "leaves"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "leaves"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/factorial-operation-source-lock.json",
+      "source_id": "factorial.rest.get-timeoff-leave-types-api-surface-4",
+      "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "factorial.rest.get-timeoff-leave-types-api-surface-4",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/timeoff/leave_types",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/timeoff/leave_types",
+          "operation": null,
+          "covered_by": {
+            "stream": "leave_types"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "leave_types"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/factorial-operation-source-lock.json",
+      "source_id": "factorial.rest.get-locations-locations-api-surface-5",
+      "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "factorial.rest.get-locations-locations-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/locations/locations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/locations/locations",
+          "operation": null,
+          "covered_by": {
+            "stream": "locations"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "locations"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/factorial-operation-source-lock.json",
+      "source_id": "factorial.rest.get-api-public-credentials-api-surface-6",
+      "source_url": "https://apidoc.factorialhr.com/docs/getting-started",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "factorial.rest.get-api-public-credentials-api-surface-6",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api_public/credentials",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api_public/credentials",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "used only as the check request; not a syncable object stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

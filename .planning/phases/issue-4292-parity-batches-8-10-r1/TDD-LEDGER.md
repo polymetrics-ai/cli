@@ -27,13 +27,21 @@
 - Batch 8: all ten `connectorgen validate ... --json` commands passed with
   zero findings/warnings; `surface-sync internal/connectors/defs --check`
   passed with 552 scanned and zero corrections.
-- Pending: repeat for batch 9 and batch 10.
+- Batch 9: the pre-generation file-presence assertion failed for all thirty
+  required artifacts, then generation and
+  `verify-parity-maps.mjs 9` passed for all ten connectors.
+- Batch 9: all ten `connectorgen validate ... --json` commands passed with
+  zero findings/warnings; `surface-sync internal/connectors/defs --check`
+  again passed with 552 scanned and zero corrections.
+- Pending: repeat for batch 10.
 
 ## Refactor / review
 
 - Batch 8: integrity assertions reviewed the source lock, crosswalk, and
   ledger together; all direct writes retain only the reverse-ETL eligibility
   foundation gap and no row is primarily classified `reverse_etl`.
+- Batch 9: the same assertions passed, including DELETE coverage and the
+  direct-write/reverse-ETL separation for all ten connector inventories.
 - Pending: inspect all final JSON ledgers for false engine-gap claims,
   invented contracts, source location drift, delete coverage, and transport
   correction compliance.

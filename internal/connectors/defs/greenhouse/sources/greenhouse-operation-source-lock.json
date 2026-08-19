@@ -1,0 +1,1266 @@
+{
+  "schema_version": 2,
+  "connector": "greenhouse",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://developers.greenhouse.io/users/sign_in",
+    "requested_url": "https://developers.greenhouse.io/harvest.html",
+    "sha256": "3f8f5a042334d1983963124a17c7ad6dd5fb4159d22376c6d837f4d45510898e",
+    "bytes": 40260,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 14,
+      "GET": 69,
+      "PATCH": 19,
+      "POST": 28,
+      "PUT": 8
+    },
+    "operations": [
+      {
+        "id": "greenhouse.rest.get-candidates-candidate-id-activity-feed-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/candidates/{candidate_id}/activity_feed",
+        "operation_id": "greenhouse.rest.get-candidates-candidate-id-activity-feed-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications",
+        "operation_id": "greenhouse.rest.get-applications-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-application-id-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications/{application_id}",
+        "operation_id": "greenhouse.rest.get-applications-application-id-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "greenhouse.rest.delete-applications-application-id-api-surface-4",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/applications/{application_id}",
+        "operation_id": "greenhouse.rest.delete-applications-application-id-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "greenhouse.rest.post-candidates-candidate-id-applications-api-surface-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidates/{candidate_id}/applications",
+        "operation_id": "greenhouse.rest.post-candidates-candidate-id-applications-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "greenhouse.rest.patch-applications-application-id-api-surface-6",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/applications/{application_id}",
+        "operation_id": "greenhouse.rest.patch-applications-application-id-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "greenhouse.rest.post-applications-application-id-advance-api-surface-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/{application_id}/advance",
+        "operation_id": "greenhouse.rest.post-applications-application-id-advance-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "greenhouse.rest.post-applications-application-id-transfer-to-job-api-surface-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/{application_id}/transfer_to_job",
+        "operation_id": "greenhouse.rest.post-applications-application-id-transfer-to-job-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "greenhouse.rest.post-applications-application-id-move-api-surface-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/{application_id}/move",
+        "operation_id": "greenhouse.rest.post-applications-application-id-move-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "greenhouse.rest.patch-applications-application-id-convert-prospect-api-surface-10",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/applications/{application_id}/convert_prospect",
+        "operation_id": "greenhouse.rest.patch-applications-application-id-convert-prospect-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "greenhouse.rest.post-applications-application-id-attachments-api-surface-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/{application_id}/attachments",
+        "operation_id": "greenhouse.rest.post-applications-application-id-attachments-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "greenhouse.rest.post-applications-application-id-hire-api-surface-12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/{application_id}/hire",
+        "operation_id": "greenhouse.rest.post-applications-application-id-hire-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "greenhouse.rest.post-applications-application-id-reject-api-surface-13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/{application_id}/reject",
+        "operation_id": "greenhouse.rest.post-applications-application-id-reject-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "greenhouse.rest.patch-applications-application-id-reject-api-surface-14",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/applications/{application_id}/reject",
+        "operation_id": "greenhouse.rest.patch-applications-application-id-reject-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "greenhouse.rest.post-applications-application-id-unreject-api-surface-15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/applications/{application_id}/unreject",
+        "operation_id": "greenhouse.rest.post-applications-application-id-unreject-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-approval-flows-api-surface-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}/approval_flows",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-approval-flows-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "greenhouse.rest.get-approval-flows-approval-flow-id-api-surface-17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/approval_flows/{approval_flow_id}",
+        "operation_id": "greenhouse.rest.get-approval-flows-approval-flow-id-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "greenhouse.rest.post-approval-flows-approval-flow-id-request-approvals-api-surface-18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/approval_flows/{approval_flow_id}/request_approvals",
+        "operation_id": "greenhouse.rest.post-approval-flows-approval-flow-id-request-approvals-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "greenhouse.rest.get-users-user-id-pending-approvals-api-surface-19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_id}/pending_approvals",
+        "operation_id": "greenhouse.rest.get-users-user-id-pending-approvals-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "greenhouse.rest.put-approver-groups-approver-group-id-replace-approvers-api-surface-20",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/approver_groups/{approver_group_id}/replace_approvers",
+        "operation_id": "greenhouse.rest.put-approver-groups-approver-group-id-replace-approvers-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "greenhouse.rest.put-jobs-job-id-approval-flows-api-surface-21",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/jobs/{job_id}/approval_flows",
+        "operation_id": "greenhouse.rest.put-jobs-job-id-approval-flows-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "greenhouse.rest.get-candidates-api-surface-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/candidates",
+        "operation_id": "greenhouse.rest.get-candidates-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "greenhouse.rest.get-candidates-candidate-id-api-surface-23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/candidates/{candidate_id}",
+        "operation_id": "greenhouse.rest.get-candidates-candidate-id-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "greenhouse.rest.delete-candidates-candidate-id-api-surface-24",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/candidates/{candidate_id}",
+        "operation_id": "greenhouse.rest.delete-candidates-candidate-id-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "greenhouse.rest.patch-candidates-candidate-id-api-surface-25",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/candidates/{candidate_id}",
+        "operation_id": "greenhouse.rest.patch-candidates-candidate-id-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "greenhouse.rest.post-candidates-candidate-id-attachments-api-surface-26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidates/{candidate_id}/attachments",
+        "operation_id": "greenhouse.rest.post-candidates-candidate-id-attachments-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "greenhouse.rest.post-candidates-api-surface-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidates",
+        "operation_id": "greenhouse.rest.post-candidates-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-notes-api-surface-28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidates/{candidate_id}/activity_feed/notes",
+        "operation_id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-notes-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-emails-api-surface-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidates/{candidate_id}/activity_feed/emails",
+        "operation_id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-emails-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "greenhouse.rest.post-candidates-candidate-id-educations-api-surface-30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidates/{candidate_id}/educations",
+        "operation_id": "greenhouse.rest.post-candidates-candidate-id-educations-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "greenhouse.rest.delete-candidates-candidate-id-educations-education-id-api-surface-31",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/candidates/{candidate_id}/educations/{education_id}",
+        "operation_id": "greenhouse.rest.delete-candidates-candidate-id-educations-education-id-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "greenhouse.rest.post-candidates-candidate-id-employments-api-surface-32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/candidates/{candidate_id}/employments",
+        "operation_id": "greenhouse.rest.post-candidates-candidate-id-employments-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "greenhouse.rest.delete-candidates-candidate-id-employments-employment-id-api-surface-33",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/candidates/{candidate_id}/employments/{employment_id}",
+        "operation_id": "greenhouse.rest.delete-candidates-candidate-id-employments-employment-id-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "greenhouse.rest.post-prospects-api-surface-34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/prospects",
+        "operation_id": "greenhouse.rest.post-prospects-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "greenhouse.rest.put-candidates-candidate-id-anonymize-fields-field-names-api-surface-35",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/candidates/{candidate_id}/anonymize?fields={field_names}",
+        "operation_id": "greenhouse.rest.put-candidates-candidate-id-anonymize-fields-field-names-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "greenhouse.rest.put-candidates-merge-api-surface-36",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/candidates/merge",
+        "operation_id": "greenhouse.rest.put-candidates-merge-api-surface-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "greenhouse.rest.get-close-reasons-api-surface-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/close_reasons",
+        "operation_id": "greenhouse.rest.get-close-reasons-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "greenhouse.rest.get-custom-fields-field-type-api-surface-38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_fields/{field_type}",
+        "operation_id": "greenhouse.rest.get-custom-fields-field-type-api-surface-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "greenhouse.rest.get-custom-field-custom-field-id-api-surface-39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/{custom_field_id}",
+        "operation_id": "greenhouse.rest.get-custom-field-custom-field-id-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "greenhouse.rest.post-custom-fields-api-surface-40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_fields",
+        "operation_id": "greenhouse.rest.post-custom-fields-api-surface-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "greenhouse.rest.patch-custom-fields-custom-field-id-api-surface-41",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/custom_fields/{custom_field_id}",
+        "operation_id": "greenhouse.rest.patch-custom-fields-custom-field-id-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "greenhouse.rest.delete-custom-fields-custom-field-id-api-surface-42",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_fields/{custom_field_id}",
+        "operation_id": "greenhouse.rest.delete-custom-fields-custom-field-id-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "greenhouse.rest.get-custom-field-custom-field-id-custom-field-options-api-surface-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/{custom_field_id}/custom_field_options",
+        "operation_id": "greenhouse.rest.get-custom-field-custom-field-id-custom-field-options-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "greenhouse.rest.post-custom-field-custom-field-id-custom-field-options-api-surface-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/{custom_field_id}/custom_field_options",
+        "operation_id": "greenhouse.rest.post-custom-field-custom-field-id-custom-field-options-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "greenhouse.rest.patch-custom-field-custom-field-id-custom-field-options-api-surface-45",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/custom_field/{custom_field_id}/custom_field_options",
+        "operation_id": "greenhouse.rest.patch-custom-field-custom-field-id-custom-field-options-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      },
+      {
+        "id": "greenhouse.rest.delete-custom-field-custom-field-id-custom-field-options-api-surface-46",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/{custom_field_id}/custom_field_options",
+        "operation_id": "greenhouse.rest.delete-custom-field-custom-field-id-custom-field-options-api-surface-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-question-sets-api-surface-47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/question_sets",
+        "operation_id": "greenhouse.rest.get-demographics-question-sets-api-surface-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-api-surface-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/question_sets/{demographic_question_set_id}",
+        "operation_id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-api-surface-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-questions-api-surface-49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/questions",
+        "operation_id": "greenhouse.rest.get-demographics-questions-api-surface-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-questions-api-surface-50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/question_sets/{demographic_question_set_id}/questions",
+        "operation_id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-questions-api-surface-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-questions-demographic-question-id-api-surface-51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/questions/{demographic_question_id}",
+        "operation_id": "greenhouse.rest.get-demographics-questions-demographic-question-id-api-surface-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-answer-options-api-surface-52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/answer_options",
+        "operation_id": "greenhouse.rest.get-demographics-answer-options-api-surface-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-questions-demographic-question-id-answer-options-api-surface-53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/questions/{demographic_question_id}/answer_options",
+        "operation_id": "greenhouse.rest.get-demographics-questions-demographic-question-id-answer-options-api-surface-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-answer-options-demographic-answer-option-id-api-surface-54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/answer_options/{demographic_answer_option_id}",
+        "operation_id": "greenhouse.rest.get-demographics-answer-options-demographic-answer-option-id-api-surface-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-answers-api-surface-55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/answers",
+        "operation_id": "greenhouse.rest.get-demographics-answers-api-surface-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-application-id-demographics-answers-api-surface-56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications/{application_id}/demographics/answers",
+        "operation_id": "greenhouse.rest.get-applications-application-id-demographics-answers-api-surface-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]"
+      },
+      {
+        "id": "greenhouse.rest.get-demographics-answers-demographic-answer-id-api-surface-57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/demographics/answers/{demographic_answer_id}",
+        "operation_id": "greenhouse.rest.get-demographics-answers-demographic-answer-id-api-surface-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]"
+      },
+      {
+        "id": "greenhouse.rest.get-departments-api-surface-58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/departments",
+        "operation_id": "greenhouse.rest.get-departments-api-surface-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]"
+      },
+      {
+        "id": "greenhouse.rest.get-departments-department-id-api-surface-59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/departments/{department_id}",
+        "operation_id": "greenhouse.rest.get-departments-department-id-api-surface-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]"
+      },
+      {
+        "id": "greenhouse.rest.patch-departments-department-id-api-surface-60",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/departments/{department_id}",
+        "operation_id": "greenhouse.rest.patch-departments-department-id-api-surface-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]"
+      },
+      {
+        "id": "greenhouse.rest.post-departments-api-surface-61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/departments",
+        "operation_id": "greenhouse.rest.post-departments-api-surface-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]"
+      },
+      {
+        "id": "greenhouse.rest.get-degrees-api-surface-62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/degrees",
+        "operation_id": "greenhouse.rest.get-degrees-api-surface-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]"
+      },
+      {
+        "id": "greenhouse.rest.get-disciplines-api-surface-63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/disciplines",
+        "operation_id": "greenhouse.rest.get-disciplines-api-surface-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]"
+      },
+      {
+        "id": "greenhouse.rest.get-schools-api-surface-64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/schools",
+        "operation_id": "greenhouse.rest.get-schools-api-surface-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]"
+      },
+      {
+        "id": "greenhouse.rest.get-eeoc-api-surface-65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/eeoc",
+        "operation_id": "greenhouse.rest.get-eeoc-api-surface-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-application-id-eeoc-api-surface-66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications/{application_id}/eeoc",
+        "operation_id": "greenhouse.rest.get-applications-application-id-eeoc-api-surface-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]"
+      },
+      {
+        "id": "greenhouse.rest.get-email-templates-api-surface-67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email_templates",
+        "operation_id": "greenhouse.rest.get-email-templates-api-surface-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]"
+      },
+      {
+        "id": "greenhouse.rest.get-email-templates-email-template-id-api-surface-68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email_templates/{email_template_id}",
+        "operation_id": "greenhouse.rest.get-email-templates-email-template-id-api-surface-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-openings-api-surface-69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}/openings",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-openings-api-surface-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-openings-opening-id-api-surface-70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}/openings/{opening_id}",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-openings-opening-id-api-surface-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]"
+      },
+      {
+        "id": "greenhouse.rest.delete-jobs-job-id-openings-api-surface-71",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/jobs/{job_id}/openings",
+        "operation_id": "greenhouse.rest.delete-jobs-job-id-openings-api-surface-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]"
+      },
+      {
+        "id": "greenhouse.rest.patch-jobs-job-id-openings-opening-id-api-surface-72",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/jobs/{job_id}/openings/{opening_id}",
+        "operation_id": "greenhouse.rest.patch-jobs-job-id-openings-opening-id-api-surface-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]"
+      },
+      {
+        "id": "greenhouse.rest.post-jobs-job-id-openings-api-surface-73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobs/{job_id}/openings",
+        "operation_id": "greenhouse.rest.post-jobs-job-id-openings-api-surface-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]"
+      },
+      {
+        "id": "greenhouse.rest.get-job-posts-api-surface-74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job_posts",
+        "operation_id": "greenhouse.rest.get-job-posts-api-surface-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]"
+      },
+      {
+        "id": "greenhouse.rest.get-job-posts-job-post-id-api-surface-75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job_posts/{job_post_id}",
+        "operation_id": "greenhouse.rest.get-job-posts-job-post-id-api-surface-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-job-posts-api-surface-76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}/job_posts",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-job-posts-api-surface-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-job-post-api-surface-77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}/job_post",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-job-post-api-surface-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]"
+      },
+      {
+        "id": "greenhouse.rest.get-job-posts-job-post-id-custom-locations-api-surface-78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job_posts/{job_post_id}/custom_locations",
+        "operation_id": "greenhouse.rest.get-job-posts-job-post-id-custom-locations-api-surface-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]"
+      },
+      {
+        "id": "greenhouse.rest.get-job-stages-api-surface-79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job_stages",
+        "operation_id": "greenhouse.rest.get-job-stages-api-surface-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-stages-api-surface-80",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}/stages",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-stages-api-surface-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]"
+      },
+      {
+        "id": "greenhouse.rest.get-job-stages-job-stage-id-api-surface-81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/job_stages/{job_stage_id}",
+        "operation_id": "greenhouse.rest.get-job-stages-job-stage-id-api-surface-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-api-surface-82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs",
+        "operation_id": "greenhouse.rest.get-jobs-api-surface-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-api-surface-83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-api-surface-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]"
+      },
+      {
+        "id": "greenhouse.rest.patch-jobs-job-id-api-surface-84",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/jobs/{job_id}",
+        "operation_id": "greenhouse.rest.patch-jobs-job-id-api-surface-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]"
+      },
+      {
+        "id": "greenhouse.rest.post-jobs-api-surface-85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobs",
+        "operation_id": "greenhouse.rest.post-jobs-api-surface-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]"
+      },
+      {
+        "id": "greenhouse.rest.get-jobs-job-id-hiring-team-api-surface-86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_id}/hiring_team",
+        "operation_id": "greenhouse.rest.get-jobs-job-id-hiring-team-api-surface-86",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]"
+      },
+      {
+        "id": "greenhouse.rest.put-jobs-job-id-hiring-team-api-surface-87",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/jobs/{job_id}/hiring_team",
+        "operation_id": "greenhouse.rest.put-jobs-job-id-hiring-team-api-surface-87",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]"
+      },
+      {
+        "id": "greenhouse.rest.post-jobs-job-id-hiring-team-api-surface-88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/jobs/{job_id}/hiring_team",
+        "operation_id": "greenhouse.rest.post-jobs-job-id-hiring-team-api-surface-88",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]"
+      },
+      {
+        "id": "greenhouse.rest.delete-jobs-job-id-hiring-team-api-surface-89",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/jobs/{job_id}/hiring_team",
+        "operation_id": "greenhouse.rest.delete-jobs-job-id-hiring-team-api-surface-89",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]"
+      },
+      {
+        "id": "greenhouse.rest.get-offers-api-surface-90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/offers",
+        "operation_id": "greenhouse.rest.get-offers-api-surface-90",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-application-id-offers-api-surface-91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications/{application_id}/offers",
+        "operation_id": "greenhouse.rest.get-applications-application-id-offers-api-surface-91",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-application-id-offers-current-offer-api-surface-92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications/{application_id}/offers/current_offer",
+        "operation_id": "greenhouse.rest.get-applications-application-id-offers-current-offer-api-surface-92",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]"
+      },
+      {
+        "id": "greenhouse.rest.get-offers-offer-id-api-surface-93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/offers/{offer_id}",
+        "operation_id": "greenhouse.rest.get-offers-offer-id-api-surface-93",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]"
+      },
+      {
+        "id": "greenhouse.rest.patch-applications-application-id-offers-current-offer-api-surface-94",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/applications/{application_id}/offers/current_offer",
+        "operation_id": "greenhouse.rest.patch-applications-application-id-offers-current-offer-api-surface-94",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]"
+      },
+      {
+        "id": "greenhouse.rest.get-offices-api-surface-95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/offices",
+        "operation_id": "greenhouse.rest.get-offices-api-surface-95",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]"
+      },
+      {
+        "id": "greenhouse.rest.get-offices-office-id-api-surface-96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/offices/{office_id}",
+        "operation_id": "greenhouse.rest.get-offices-office-id-api-surface-96",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]"
+      },
+      {
+        "id": "greenhouse.rest.patch-offices-office-id-api-surface-97",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/offices/{office_id}",
+        "operation_id": "greenhouse.rest.patch-offices-office-id-api-surface-97",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]"
+      },
+      {
+        "id": "greenhouse.rest.post-offices-api-surface-98",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/offices",
+        "operation_id": "greenhouse.rest.post-offices-api-surface-98",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]"
+      },
+      {
+        "id": "greenhouse.rest.get-prospect-pools-api-surface-99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/prospect_pools",
+        "operation_id": "greenhouse.rest.get-prospect-pools-api-surface-99",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]"
+      },
+      {
+        "id": "greenhouse.rest.get-prospect-pools-prospect-pool-id-api-surface-100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/prospect_pools/{prospect_pool_id}",
+        "operation_id": "greenhouse.rest.get-prospect-pools-prospect-pool-id-api-surface-100",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]"
+      },
+      {
+        "id": "greenhouse.rest.get-rejection-reasons-api-surface-101",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/rejection_reasons",
+        "operation_id": "greenhouse.rest.get-rejection-reasons-api-surface-101",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]"
+      },
+      {
+        "id": "greenhouse.rest.get-scheduled-interviews-api-surface-102",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_interviews",
+        "operation_id": "greenhouse.rest.get-scheduled-interviews-api-surface-102",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-application-id-scheduled-interviews-api-surface-103",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications/{application_id}/scheduled_interviews",
+        "operation_id": "greenhouse.rest.get-applications-application-id-scheduled-interviews-api-surface-103",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]"
+      },
+      {
+        "id": "greenhouse.rest.get-scheduled-interviews-scheduled-interview-id-api-surface-104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_interviews/{scheduled_interview_id}",
+        "operation_id": "greenhouse.rest.get-scheduled-interviews-scheduled-interview-id-api-surface-104",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]"
+      },
+      {
+        "id": "greenhouse.rest.post-scheduled-interviews-api-surface-105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scheduled_interviews",
+        "operation_id": "greenhouse.rest.post-scheduled-interviews-api-surface-105",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]"
+      },
+      {
+        "id": "greenhouse.rest.patch-scheduled-interviews-scheduled-interview-id-api-surface-106",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/scheduled_interviews/{scheduled_interview_id}",
+        "operation_id": "greenhouse.rest.patch-scheduled-interviews-scheduled-interview-id-api-surface-106",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]"
+      },
+      {
+        "id": "greenhouse.rest.delete-scheduled-interviews-scheduled-interview-id-api-surface-107",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/scheduled_interviews/{scheduled_interview_id}",
+        "operation_id": "greenhouse.rest.delete-scheduled-interviews-scheduled-interview-id-api-surface-107",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]"
+      },
+      {
+        "id": "greenhouse.rest.get-scorecards-api-surface-108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scorecards",
+        "operation_id": "greenhouse.rest.get-scorecards-api-surface-108",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]"
+      },
+      {
+        "id": "greenhouse.rest.get-applications-application-id-scorecards-api-surface-109",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/applications/{application_id}/scorecards",
+        "operation_id": "greenhouse.rest.get-applications-application-id-scorecards-api-surface-109",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]"
+      },
+      {
+        "id": "greenhouse.rest.get-scorecards-scorecard-id-api-surface-110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scorecards/{scorecard_id}",
+        "operation_id": "greenhouse.rest.get-scorecards-scorecard-id-api-surface-110",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]"
+      },
+      {
+        "id": "greenhouse.rest.get-sources-api-surface-111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sources",
+        "operation_id": "greenhouse.rest.get-sources-api-surface-111",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]"
+      },
+      {
+        "id": "greenhouse.rest.get-tags-candidate-api-surface-112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tags/candidate",
+        "operation_id": "greenhouse.rest.get-tags-candidate-api-surface-112",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]"
+      },
+      {
+        "id": "greenhouse.rest.post-tags-candidate-api-surface-113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tags/candidate",
+        "operation_id": "greenhouse.rest.post-tags-candidate-api-surface-113",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]"
+      },
+      {
+        "id": "greenhouse.rest.get-candidates-candidate-id-tags-api-surface-114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/candidates/{candidate_id}/tags",
+        "operation_id": "greenhouse.rest.get-candidates-candidate-id-tags-api-surface-114",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]"
+      },
+      {
+        "id": "greenhouse.rest.delete-candidates-candidate-id-tags-tag-id-api-surface-115",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/candidates/{candidate_id}/tags/{tag_id}",
+        "operation_id": "greenhouse.rest.delete-candidates-candidate-id-tags-tag-id-api-surface-115",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]"
+      },
+      {
+        "id": "greenhouse.rest.put-candidates-candidate-id-tags-tag-id-api-surface-116",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/candidates/{candidate_id}/tags/{tag_id}",
+        "operation_id": "greenhouse.rest.put-candidates-candidate-id-tags-tag-id-api-surface-116",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]"
+      },
+      {
+        "id": "greenhouse.rest.get-tracking-links-token-api-surface-117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tracking_links/{token}",
+        "operation_id": "greenhouse.rest.get-tracking-links-token-api-surface-117",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]"
+      },
+      {
+        "id": "greenhouse.rest.get-users-api-surface-118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users",
+        "operation_id": "greenhouse.rest.get-users-api-surface-118",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]"
+      },
+      {
+        "id": "greenhouse.rest.get-users-user-id-api-surface-119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_id}",
+        "operation_id": "greenhouse.rest.get-users-user-id-api-surface-119",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]"
+      },
+      {
+        "id": "greenhouse.rest.patch-users-permission-level-api-surface-120",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/users/permission_level",
+        "operation_id": "greenhouse.rest.patch-users-permission-level-api-surface-120",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]"
+      },
+      {
+        "id": "greenhouse.rest.post-users-api-surface-121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users",
+        "operation_id": "greenhouse.rest.post-users-api-surface-121",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]"
+      },
+      {
+        "id": "greenhouse.rest.post-users-user-id-email-addresses-api-surface-122",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/{user_id}/email_addresses",
+        "operation_id": "greenhouse.rest.post-users-user-id-email-addresses-api-surface-122",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]"
+      },
+      {
+        "id": "greenhouse.rest.get-users-user-id-permissions-jobs-api-surface-123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_id}/permissions/jobs",
+        "operation_id": "greenhouse.rest.get-users-user-id-permissions-jobs-api-surface-123",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]"
+      },
+      {
+        "id": "greenhouse.rest.delete-users-user-id-permissions-jobs-api-surface-124",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{user_id}/permissions/jobs",
+        "operation_id": "greenhouse.rest.delete-users-user-id-permissions-jobs-api-surface-124",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]"
+      },
+      {
+        "id": "greenhouse.rest.put-users-user-id-permissions-jobs-api-surface-125",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users/{user_id}/permissions/jobs",
+        "operation_id": "greenhouse.rest.put-users-user-id-permissions-jobs-api-surface-125",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]"
+      },
+      {
+        "id": "greenhouse.rest.get-users-user-id-permissions-future-jobs-api-surface-126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_id}/permissions/future_jobs",
+        "operation_id": "greenhouse.rest.get-users-user-id-permissions-future-jobs-api-surface-126",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]"
+      },
+      {
+        "id": "greenhouse.rest.delete-users-user-id-permissions-future-jobs-api-surface-127",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{user_id}/permissions/future_jobs",
+        "operation_id": "greenhouse.rest.delete-users-user-id-permissions-future-jobs-api-surface-127",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]"
+      },
+      {
+        "id": "greenhouse.rest.put-users-user-id-permissions-future-jobs-api-surface-128",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users/{user_id}/permissions/future_jobs",
+        "operation_id": "greenhouse.rest.put-users-user-id-permissions-future-jobs-api-surface-128",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]"
+      },
+      {
+        "id": "greenhouse.rest.get-user-roles-api-surface-129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_roles",
+        "operation_id": "greenhouse.rest.get-user-roles-api-surface-129",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]"
+      },
+      {
+        "id": "greenhouse.rest.delete-tags-candidate-tag-id-api-surface-130",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tags/candidate/{tag_id}",
+        "operation_id": "greenhouse.rest.delete-tags-candidate-tag-id-api-surface-130",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]"
+      },
+      {
+        "id": "greenhouse.rest.delete-v2-jobs-job-id-openings-api-surface-131",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/jobs/{job_id}/openings",
+        "operation_id": "greenhouse.rest.delete-v2-jobs-job-id-openings-api-surface-131",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]"
+      },
+      {
+        "id": "greenhouse.rest.patch-v2-job-posts-job-post-id-api-surface-132",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/job_posts/{job_post_id}",
+        "operation_id": "greenhouse.rest.patch-v2-job-posts-job-post-id-api-surface-132",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]"
+      },
+      {
+        "id": "greenhouse.rest.patch-v2-job-posts-job-post-id-status-api-surface-133",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/job_posts/{job_post_id}/status",
+        "operation_id": "greenhouse.rest.patch-v2-job-posts-job-post-id-status-api-surface-133",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]"
+      },
+      {
+        "id": "greenhouse.rest.patch-v2-scheduled-interviews-scheduled-interview-id-api-surface-134",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/scheduled_interviews/{scheduled_interview_id}",
+        "operation_id": "greenhouse.rest.patch-v2-scheduled-interviews-scheduled-interview-id-api-surface-134",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]"
+      },
+      {
+        "id": "greenhouse.rest.patch-v2-users-api-surface-135",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/users/",
+        "operation_id": "greenhouse.rest.patch-v2-users-api-surface-135",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]"
+      },
+      {
+        "id": "greenhouse.rest.patch-v2-users-disable-api-surface-136",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/users/disable",
+        "operation_id": "greenhouse.rest.patch-v2-users-disable-api-surface-136",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]"
+      },
+      {
+        "id": "greenhouse.rest.patch-v2-users-enable-api-surface-137",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/users/enable",
+        "operation_id": "greenhouse.rest.patch-v2-users-enable-api-surface-137",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]"
+      },
+      {
+        "id": "greenhouse.rest.post-v2-scheduled-interviews-api-surface-138",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/scheduled_interviews",
+        "operation_id": "greenhouse.rest.post-v2-scheduled-interviews-api-surface-138",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]"
+      }
+    ]
+  }
+}

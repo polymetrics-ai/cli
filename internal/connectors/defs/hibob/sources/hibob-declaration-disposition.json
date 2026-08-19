@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "connector": "hibob",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_basis": {
+    "source_lock": "sources/hibob-operation-source-lock.json",
+    "source_url": "https://apidocs.hibob.com/",
+    "source_sha256": "a253db257b6f58cc325a8cdde495bbf4a665c49d1484f0052f3664576262c3cf",
+    "source_bytes": 298245,
+    "source_operation_count": 6
+  },
+  "summary": {
+    "api_surface_rows": 6,
+    "exact_source_rows": 6,
+    "declared_operations": 6,
+    "declared_percent": 100,
+    "enabled_operations": 3,
+    "enabled_percent": 50,
+    "disabled_operations": 3,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 2
+      },
+      {
+        "key": "direct_write",
+        "count": 1
+      },
+      {
+        "key": "etl",
+        "count": 3
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 3,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 1,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 3
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-hibob",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/hibob/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-hibob",
+      "sync-transport-source-definition-hibob"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-hibob",
+        "count": 3
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/v1/profiles",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/profiles",
+        "operation": null,
+        "covered_by": {
+          "stream": "profiles"
+        }
+      },
+      "source": {
+        "source_lock": "sources/hibob-operation-source-lock.json",
+        "source_id": "hibob.rest.get-v1-profiles-api-surface-1",
+        "source_url": "https://apidocs.hibob.com/",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "hibob.rest.get-v1-profiles-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/hibob/streams.json: existing stream \"profiles\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"profiles\" binds the pinned source contract",
+        "stream": "profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/company/named-lists",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/company/named-lists",
+        "operation": null,
+        "covered_by": {
+          "stream": "named_lists"
+        }
+      },
+      "source": {
+        "source_lock": "sources/hibob-operation-source-lock.json",
+        "source_id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+        "source_url": "https://apidocs.hibob.com/",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "hibob.rest.get-v1-company-named-lists-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/hibob/streams.json: existing stream \"named_lists\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"named_lists\" binds the pinned source contract",
+        "stream": "named_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/company/people/fields",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/company/people/fields",
+        "operation": null,
+        "covered_by": {
+          "stream": "company_lists"
+        }
+      },
+      "source": {
+        "source_lock": "sources/hibob-operation-source-lock.json",
+        "source_id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+        "source_url": "https://apidocs.hibob.com/",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "hibob.rest.get-v1-company-people-fields-api-surface-3",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/hibob/streams.json: existing stream \"company_lists\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"company_lists\" binds the pinned source contract",
+        "stream": "company_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/timeoff/*",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/timeoff/*",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "time-off approval/request workflows are outside this bundle's HR profile, named-list, and people-field read scope"
+        }
+      },
+      "source": {
+        "source_lock": "sources/hibob-operation-source-lock.json",
+        "source_id": "hibob.rest.get-v1-timeoff-api-surface-4",
+        "source_url": "https://apidocs.hibob.com/",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "hibob.rest.get-v1-timeoff-api-surface-4",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-hibob",
+          "evidence": "internal/connectors/defs/hibob/api_surface.json:endpoints[3]; api_surface.json:endpoints[3].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/hibob/api_surface.json:endpoints[3]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-hibob",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/*",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/docs/*",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "employee document endpoints expose file/document resources rather than the structured HR records modeled by this bundle"
+        }
+      },
+      "source": {
+        "source_lock": "sources/hibob-operation-source-lock.json",
+        "source_id": "hibob.rest.get-v1-docs-api-surface-5",
+        "source_url": "https://apidocs.hibob.com/",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "hibob.rest.get-v1-docs-api-surface-5",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-hibob",
+          "evidence": "internal/connectors/defs/hibob/api_surface.json:endpoints[4]; api_surface.json:endpoints[4].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/hibob/api_surface.json:endpoints[4]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-hibob",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/people/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/v1/people/{id}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "employee-profile mutation is not enabled for this read-only HR source bundle and has no reverse-ETL action contract here"
+        }
+      },
+      "source": {
+        "source_lock": "sources/hibob-operation-source-lock.json",
+        "source_id": "hibob.rest.put-v1-people-id-api-surface-6",
+        "source_url": "https://apidocs.hibob.com/",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "hibob.rest.put-v1-people-id-api-surface-6",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-hibob",
+          "evidence": "internal/connectors/defs/hibob/api_surface.json:endpoints[5]; api_surface.json:endpoints[5].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/hibob/api_surface.json:endpoints[5]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-hibob",
+        "contract": null
+      }
+    }
+  ]
+}

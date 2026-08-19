@@ -1,0 +1,3552 @@
+{
+  "schema_version": 1,
+  "connector": "greenhouse",
+  "source_lock": "sources/greenhouse-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-candidates-candidate-id-activity-feed-api-surface-1",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "greenhouse.rest.get-candidates-candidate-id-activity-feed-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates/{candidate_id}/activity_feed",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates/{candidate_id}/activity_feed",
+          "operation": null,
+          "covered_by": {
+            "stream": "activity_feed"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "activity_feed"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-api-surface-2",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "greenhouse.rest.get-applications-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications",
+          "operation": null,
+          "covered_by": {
+            "stream": "applications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "applications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-application-id-api-surface-3",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "greenhouse.rest.get-applications-application-id-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/{application_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/{application_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-applications-application-id-api-surface-4",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "greenhouse.rest.delete-applications-application-id-api-surface-4",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/applications/{application_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/applications/{application_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-candidates-candidate-id-applications-api-surface-5",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "greenhouse.rest.post-candidates-candidate-id-applications-api-surface-5",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/applications",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{candidate_id}/applications",
+          "operation": null,
+          "covered_by": {
+            "write": "add_application_to_candidate_prospect"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_application_to_candidate_prospect"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-applications-application-id-api-surface-6",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "greenhouse.rest.patch-applications-application-id-api-surface-6",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/applications/{application_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/applications/{application_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-applications-application-id-advance-api-surface-7",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "greenhouse.rest.post-applications-application-id-advance-api-surface-7",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applications/{application_id}/advance",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applications/{application_id}/advance",
+          "operation": null,
+          "covered_by": {
+            "write": "advance_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "advance_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-applications-application-id-transfer-to-job-api-surface-8",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "greenhouse.rest.post-applications-application-id-transfer-to-job-api-surface-8",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applications/{application_id}/transfer_to_job",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applications/{application_id}/transfer_to_job",
+          "operation": null,
+          "covered_by": {
+            "write": "move_application_different_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "move_application_different_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-applications-application-id-move-api-surface-9",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "greenhouse.rest.post-applications-application-id-move-api-surface-9",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applications/{application_id}/move",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applications/{application_id}/move",
+          "operation": null,
+          "covered_by": {
+            "write": "move_application_same_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "move_application_same_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-applications-application-id-convert-prospect-api-surface-10",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "greenhouse.rest.patch-applications-application-id-convert-prospect-api-surface-10",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/applications/{application_id}/convert_prospect",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/applications/{application_id}/convert_prospect",
+          "operation": null,
+          "covered_by": {
+            "write": "convert_prospect_to_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "convert_prospect_to_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-applications-application-id-attachments-api-surface-11",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "greenhouse.rest.post-applications-application-id-attachments-api-surface-11",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applications/{application_id}/attachments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applications/{application_id}/attachments",
+          "operation": null,
+          "covered_by": {
+            "write": "add_attachment_to_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_attachment_to_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-applications-application-id-hire-api-surface-12",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "greenhouse.rest.post-applications-application-id-hire-api-surface-12",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applications/{application_id}/hire",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applications/{application_id}/hire",
+          "operation": null,
+          "covered_by": {
+            "write": "hire_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "hire_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-applications-application-id-reject-api-surface-13",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "greenhouse.rest.post-applications-application-id-reject-api-surface-13",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applications/{application_id}/reject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applications/{application_id}/reject",
+          "operation": null,
+          "covered_by": {
+            "write": "reject_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "reject_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-applications-application-id-reject-api-surface-14",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "greenhouse.rest.patch-applications-application-id-reject-api-surface-14",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/applications/{application_id}/reject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/applications/{application_id}/reject",
+          "operation": null,
+          "covered_by": {
+            "write": "update_rejection_reason"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_rejection_reason"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-applications-application-id-unreject-api-surface-15",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "greenhouse.rest.post-applications-application-id-unreject-api-surface-15",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applications/{application_id}/unreject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applications/{application_id}/unreject",
+          "operation": null,
+          "covered_by": {
+            "write": "unreject_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "unreject_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-approval-flows-api-surface-16",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[15]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-approval-flows-api-surface-16",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}/approval_flows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}/approval_flows",
+          "operation": null,
+          "covered_by": {
+            "stream": "approvals_for_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "approvals_for_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-approval-flows-approval-flow-id-api-surface-17",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[16]",
+      "operation_id": "greenhouse.rest.get-approval-flows-approval-flow-id-api-surface-17",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/approval_flows/{approval_flow_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/approval_flows/{approval_flow_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "approval_flow"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "approval_flow"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-approval-flows-approval-flow-id-request-approvals-api-surface-18",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[17]",
+      "operation_id": "greenhouse.rest.post-approval-flows-approval-flow-id-request-approvals-api-surface-18",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/approval_flows/{approval_flow_id}/request_approvals",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/approval_flows/{approval_flow_id}/request_approvals",
+          "operation": null,
+          "covered_by": {
+            "write": "request_approvals"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "request_approvals"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-users-user-id-pending-approvals-api-surface-19",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[18]",
+      "operation_id": "greenhouse.rest.get-users-user-id-pending-approvals-api-surface-19",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/{user_id}/pending_approvals",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/{user_id}/pending_approvals",
+          "operation": null,
+          "covered_by": {
+            "stream": "pending_approvals_for_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "pending_approvals_for_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-approver-groups-approver-group-id-replace-approvers-api-surface-20",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[19]",
+      "operation_id": "greenhouse.rest.put-approver-groups-approver-group-id-replace-approvers-api-surface-20",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/approver_groups/{approver_group_id}/replace_approvers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/approver_groups/{approver_group_id}/replace_approvers",
+          "operation": null,
+          "covered_by": {
+            "write": "replace_an_approver_in_an_approver_group"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "replace_an_approver_in_an_approver_group"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-jobs-job-id-approval-flows-api-surface-21",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[20]",
+      "operation_id": "greenhouse.rest.put-jobs-job-id-approval-flows-api-surface-21",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/jobs/{job_id}/approval_flows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/jobs/{job_id}/approval_flows",
+          "operation": null,
+          "covered_by": {
+            "write": "create_or_replace_an_approval_flow"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_or_replace_an_approval_flow"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-candidates-api-surface-22",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[21]",
+      "operation_id": "greenhouse.rest.get-candidates-api-surface-22",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates",
+          "operation": null,
+          "covered_by": {
+            "stream": "candidates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-candidates-candidate-id-api-surface-23",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[22]",
+      "operation_id": "greenhouse.rest.get-candidates-candidate-id-api-surface-23",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates/{candidate_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates/{candidate_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-candidates-candidate-id-api-surface-24",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[23]",
+      "operation_id": "greenhouse.rest.delete-candidates-candidate-id-api-surface-24",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/candidates/{candidate_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-candidates-candidate-id-api-surface-25",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[24]",
+      "operation_id": "greenhouse.rest.patch-candidates-candidate-id-api-surface-25",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/candidates/{candidate_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/candidates/{candidate_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "edit_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "edit_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-candidates-candidate-id-attachments-api-surface-26",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[25]",
+      "operation_id": "greenhouse.rest.post-candidates-candidate-id-attachments-api-surface-26",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/attachments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{candidate_id}/attachments",
+          "operation": null,
+          "covered_by": {
+            "write": "add_attachment"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_attachment"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-candidates-api-surface-27",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[26]",
+      "operation_id": "greenhouse.rest.post-candidates-api-surface-27",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates",
+          "operation": null,
+          "covered_by": {
+            "write": "add_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-notes-api-surface-28",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[27]",
+      "operation_id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-notes-api-surface-28",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/activity_feed/notes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{candidate_id}/activity_feed/notes",
+          "operation": null,
+          "covered_by": {
+            "write": "add_note"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_note"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-emails-api-surface-29",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[28]",
+      "operation_id": "greenhouse.rest.post-candidates-candidate-id-activity-feed-emails-api-surface-29",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/activity_feed/emails",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{candidate_id}/activity_feed/emails",
+          "operation": null,
+          "covered_by": {
+            "write": "add_e_mail_note"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_e_mail_note"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-candidates-candidate-id-educations-api-surface-30",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[29]",
+      "operation_id": "greenhouse.rest.post-candidates-candidate-id-educations-api-surface-30",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/educations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{candidate_id}/educations",
+          "operation": null,
+          "covered_by": {
+            "write": "add_education"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_education"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-candidates-candidate-id-educations-education-id-api-surface-31",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[30]",
+      "operation_id": "greenhouse.rest.delete-candidates-candidate-id-educations-education-id-api-surface-31",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}/educations/{education_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/candidates/{candidate_id}/educations/{education_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_education_from_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_education_from_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-candidates-candidate-id-employments-api-surface-32",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[31]",
+      "operation_id": "greenhouse.rest.post-candidates-candidate-id-employments-api-surface-32",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/employments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{candidate_id}/employments",
+          "operation": null,
+          "covered_by": {
+            "write": "add_employment"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_employment"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-candidates-candidate-id-employments-employment-id-api-surface-33",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[32]",
+      "operation_id": "greenhouse.rest.delete-candidates-candidate-id-employments-employment-id-api-surface-33",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}/employments/{employment_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/candidates/{candidate_id}/employments/{employment_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_employment_from_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_employment_from_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-prospects-api-surface-34",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[33]",
+      "operation_id": "greenhouse.rest.post-prospects-api-surface-34",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/prospects",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/prospects",
+          "operation": null,
+          "covered_by": {
+            "write": "add_prospect"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_prospect"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-candidates-candidate-id-anonymize-fields-field-names-api-surface-35",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[34]",
+      "operation_id": "greenhouse.rest.put-candidates-candidate-id-anonymize-fields-field-names-api-surface-35",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/candidates/{candidate_id}/anonymize?fields={field_names}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/candidates/{candidate_id}/anonymize?fields={field_names}",
+          "operation": null,
+          "covered_by": {
+            "write": "anonymize_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "anonymize_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-candidates-merge-api-surface-36",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[35]",
+      "operation_id": "greenhouse.rest.put-candidates-merge-api-surface-36",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/candidates/merge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/candidates/merge",
+          "operation": null,
+          "covered_by": {
+            "write": "merge_candidates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "merge_candidates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-close-reasons-api-surface-37",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[36]",
+      "operation_id": "greenhouse.rest.get-close-reasons-api-surface-37",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/close_reasons",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/close_reasons",
+          "operation": null,
+          "covered_by": {
+            "stream": "close_reasons"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "close_reasons"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-custom-fields-field-type-api-surface-38",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[37]",
+      "operation_id": "greenhouse.rest.get-custom-fields-field-type-api-surface-38",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/custom_fields/{field_type}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/custom_fields/{field_type}",
+          "operation": null,
+          "covered_by": {
+            "stream": "custom_fields"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "custom_fields"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-custom-field-custom-field-id-api-surface-39",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[38]",
+      "operation_id": "greenhouse.rest.get-custom-field-custom-field-id-api-surface-39",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/custom_field/{custom_field_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/custom_field/{custom_field_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "custom_field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "custom_field"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-custom-fields-api-surface-40",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[39]",
+      "operation_id": "greenhouse.rest.post-custom-fields-api-surface-40",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/custom_fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/custom_fields",
+          "operation": null,
+          "covered_by": {
+            "write": "create_custom_field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_custom_field"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-custom-fields-custom-field-id-api-surface-41",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[40]",
+      "operation_id": "greenhouse.rest.patch-custom-fields-custom-field-id-api-surface-41",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/custom_fields/{custom_field_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/custom_fields/{custom_field_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_custom_field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_custom_field"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-custom-fields-custom-field-id-api-surface-42",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[41]",
+      "operation_id": "greenhouse.rest.delete-custom-fields-custom-field-id-api-surface-42",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/custom_fields/{custom_field_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/custom_fields/{custom_field_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_custom_field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_custom_field"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-custom-field-custom-field-id-custom-field-options-api-surface-43",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[42]",
+      "operation_id": "greenhouse.rest.get-custom-field-custom-field-id-custom-field-options-api-surface-43",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/custom_field/{custom_field_id}/custom_field_options",
+          "operation": null,
+          "covered_by": {
+            "stream": "custom_field_options"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "custom_field_options"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-custom-field-custom-field-id-custom-field-options-api-surface-44",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[43]",
+      "operation_id": "greenhouse.rest.post-custom-field-custom-field-id-custom-field-options-api-surface-44",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/custom_field/{custom_field_id}/custom_field_options",
+          "operation": null,
+          "covered_by": {
+            "write": "create_custom_field_options"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_custom_field_options"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-custom-field-custom-field-id-custom-field-options-api-surface-45",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[44]",
+      "operation_id": "greenhouse.rest.patch-custom-field-custom-field-id-custom-field-options-api-surface-45",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/custom_field/{custom_field_id}/custom_field_options",
+          "operation": null,
+          "covered_by": {
+            "write": "update_custom_field_options"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_custom_field_options"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-custom-field-custom-field-id-custom-field-options-api-surface-46",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[45]",
+      "operation_id": "greenhouse.rest.delete-custom-field-custom-field-id-custom-field-options-api-surface-46",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/custom_field/{custom_field_id}/custom_field_options",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_custom_field_options"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_custom_field_options"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-question-sets-api-surface-47",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[46]",
+      "operation_id": "greenhouse.rest.get-demographics-question-sets-api-surface-47",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/question_sets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/question_sets",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_question_sets"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_question_sets"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-api-surface-48",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[47]",
+      "operation_id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-api-surface-48",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/question_sets/{demographic_question_set_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/question_sets/{demographic_question_set_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_question_set"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_question_set"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-questions-api-surface-49",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[48]",
+      "operation_id": "greenhouse.rest.get-demographics-questions-api-surface-49",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/questions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/questions",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_questions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_questions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-questions-api-surface-50",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[49]",
+      "operation_id": "greenhouse.rest.get-demographics-question-sets-demographic-question-set-id-questions-api-surface-50",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/question_sets/{demographic_question_set_id}/questions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/question_sets/{demographic_question_set_id}/questions",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_questions_for_demographic_question_set"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_questions_for_demographic_question_set"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-questions-demographic-question-id-api-surface-51",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[50]",
+      "operation_id": "greenhouse.rest.get-demographics-questions-demographic-question-id-api-surface-51",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/questions/{demographic_question_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/questions/{demographic_question_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_question"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_question"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-answer-options-api-surface-52",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[51]",
+      "operation_id": "greenhouse.rest.get-demographics-answer-options-api-surface-52",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/answer_options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/answer_options",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_answer_options"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_answer_options"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-questions-demographic-question-id-answer-options-api-surface-53",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[52]",
+      "operation_id": "greenhouse.rest.get-demographics-questions-demographic-question-id-answer-options-api-surface-53",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/questions/{demographic_question_id}/answer_options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/questions/{demographic_question_id}/answer_options",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_answer_options_for_demographic_question"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_answer_options_for_demographic_question"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-answer-options-demographic-answer-option-id-api-surface-54",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[53]",
+      "operation_id": "greenhouse.rest.get-demographics-answer-options-demographic-answer-option-id-api-surface-54",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/answer_options/{demographic_answer_option_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/answer_options/{demographic_answer_option_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_answer_option"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_answer_option"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-answers-api-surface-55",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[54]",
+      "operation_id": "greenhouse.rest.get-demographics-answers-api-surface-55",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/answers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/answers",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_answers"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_answers"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-application-id-demographics-answers-api-surface-56",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[55]",
+      "operation_id": "greenhouse.rest.get-applications-application-id-demographics-answers-api-surface-56",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/{application_id}/demographics/answers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/{application_id}/demographics/answers",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_answers_for_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_answers_for_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-demographics-answers-demographic-answer-id-api-surface-57",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[56]",
+      "operation_id": "greenhouse.rest.get-demographics-answers-demographic-answer-id-api-surface-57",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/demographics/answers/{demographic_answer_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/demographics/answers/{demographic_answer_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "demographic_answer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "demographic_answer"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-departments-api-surface-58",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[57]",
+      "operation_id": "greenhouse.rest.get-departments-api-surface-58",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/departments",
+          "operation": null,
+          "covered_by": {
+            "stream": "departments"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "departments"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-departments-department-id-api-surface-59",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[58]",
+      "operation_id": "greenhouse.rest.get-departments-department-id-api-surface-59",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/departments/{department_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/departments/{department_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-departments-department-id-api-surface-60",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[59]",
+      "operation_id": "greenhouse.rest.patch-departments-department-id-api-surface-60",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/departments/{department_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/departments/{department_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "edit_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "edit_department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-departments-api-surface-61",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[60]",
+      "operation_id": "greenhouse.rest.post-departments-api-surface-61",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/departments",
+          "operation": null,
+          "covered_by": {
+            "write": "add_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-degrees-api-surface-62",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[61]",
+      "operation_id": "greenhouse.rest.get-degrees-api-surface-62",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/degrees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/degrees",
+          "operation": null,
+          "covered_by": {
+            "stream": "degrees"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "degrees"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-disciplines-api-surface-63",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[62]",
+      "operation_id": "greenhouse.rest.get-disciplines-api-surface-63",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/disciplines",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/disciplines",
+          "operation": null,
+          "covered_by": {
+            "stream": "disciplines"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "disciplines"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-schools-api-surface-64",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[63]",
+      "operation_id": "greenhouse.rest.get-schools-api-surface-64",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/schools",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/schools",
+          "operation": null,
+          "covered_by": {
+            "stream": "schools"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "schools"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-eeoc-api-surface-65",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[64]",
+      "operation_id": "greenhouse.rest.get-eeoc-api-surface-65",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/eeoc",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/eeoc",
+          "operation": null,
+          "covered_by": {
+            "stream": "eeoc"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "eeoc"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-application-id-eeoc-api-surface-66",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[65]",
+      "operation_id": "greenhouse.rest.get-applications-application-id-eeoc-api-surface-66",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/{application_id}/eeoc",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/{application_id}/eeoc",
+          "operation": null,
+          "covered_by": {
+            "stream": "eeoc_data_for_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "eeoc_data_for_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-email-templates-api-surface-67",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[66]",
+      "operation_id": "greenhouse.rest.get-email-templates-api-surface-67",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/email_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/email_templates",
+          "operation": null,
+          "covered_by": {
+            "stream": "email_templates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "email_templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-email-templates-email-template-id-api-surface-68",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[67]",
+      "operation_id": "greenhouse.rest.get-email-templates-email-template-id-api-surface-68",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/email_templates/{email_template_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/email_templates/{email_template_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "email_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "email_template"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-openings-api-surface-69",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[68]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-openings-api-surface-69",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}/openings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}/openings",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_openings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_openings"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-openings-opening-id-api-surface-70",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[69]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-openings-opening-id-api-surface-70",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}/openings/{opening_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}/openings/{opening_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "opening_for_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opening_for_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-jobs-job-id-openings-api-surface-71",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[70]",
+      "operation_id": "greenhouse.rest.delete-jobs-job-id-openings-api-surface-71",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/jobs/{job_id}/openings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/jobs/{job_id}/openings",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-jobs-job-id-openings-opening-id-api-surface-72",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[71]",
+      "operation_id": "greenhouse.rest.patch-jobs-job-id-openings-opening-id-api-surface-72",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/jobs/{job_id}/openings/{opening_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/jobs/{job_id}/openings/{opening_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "edit_openings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "edit_openings"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-jobs-job-id-openings-api-surface-73",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[72]",
+      "operation_id": "greenhouse.rest.post-jobs-job-id-openings-api-surface-73",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobs/{job_id}/openings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobs/{job_id}/openings",
+          "operation": null,
+          "covered_by": {
+            "write": "create_new_openings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_new_openings"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-job-posts-api-surface-74",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[73]",
+      "operation_id": "greenhouse.rest.get-job-posts-api-surface-74",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/job_posts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/job_posts",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_posts"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_posts"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-job-posts-job-post-id-api-surface-75",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[74]",
+      "operation_id": "greenhouse.rest.get-job-posts-job-post-id-api-surface-75",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/job_posts/{job_post_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/job_posts/{job_post_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_post"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_post"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-job-posts-api-surface-76",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[75]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-job-posts-api-surface-76",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}/job_posts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}/job_posts",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_posts_for_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_posts_for_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-job-post-api-surface-77",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[76]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-job-post-api-surface-77",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}/job_post",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}/job_post",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_post_for_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_post_for_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-job-posts-job-post-id-custom-locations-api-surface-78",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[77]",
+      "operation_id": "greenhouse.rest.get-job-posts-job-post-id-custom-locations-api-surface-78",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/job_posts/{job_post_id}/custom_locations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/job_posts/{job_post_id}/custom_locations",
+          "operation": null,
+          "covered_by": {
+            "stream": "custom_locations_for_job_post"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "custom_locations_for_job_post"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-job-stages-api-surface-79",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[78]",
+      "operation_id": "greenhouse.rest.get-job-stages-api-surface-79",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/job_stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/job_stages",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_stages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_stages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-stages-api-surface-80",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[79]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-stages-api-surface-80",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}/stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}/stages",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_stages_for_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_stages_for_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-job-stages-job-stage-id-api-surface-81",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[80]",
+      "operation_id": "greenhouse.rest.get-job-stages-job-stage-id-api-surface-81",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/job_stages/{job_stage_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/job_stages/{job_stage_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_stage"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_stage"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-api-surface-82",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[81]",
+      "operation_id": "greenhouse.rest.get-jobs-api-surface-82",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs",
+          "operation": null,
+          "covered_by": {
+            "stream": "jobs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "jobs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-api-surface-83",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[82]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-api-surface-83",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-jobs-job-id-api-surface-84",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[83]",
+      "operation_id": "greenhouse.rest.patch-jobs-job-id-api-surface-84",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/jobs/{job_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/jobs/{job_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-jobs-api-surface-85",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[84]",
+      "operation_id": "greenhouse.rest.post-jobs-api-surface-85",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobs",
+          "operation": null,
+          "covered_by": {
+            "write": "create_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-jobs-job-id-hiring-team-api-surface-86",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[85]",
+      "operation_id": "greenhouse.rest.get-jobs-job-id-hiring-team-api-surface-86",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{job_id}/hiring_team",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{job_id}/hiring_team",
+          "operation": null,
+          "covered_by": {
+            "stream": "hiring_team"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "hiring_team"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-jobs-job-id-hiring-team-api-surface-87",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[86]",
+      "operation_id": "greenhouse.rest.put-jobs-job-id-hiring-team-api-surface-87",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/jobs/{job_id}/hiring_team",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/jobs/{job_id}/hiring_team",
+          "operation": null,
+          "covered_by": {
+            "write": "replace_hiring_team"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "replace_hiring_team"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-jobs-job-id-hiring-team-api-surface-88",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[87]",
+      "operation_id": "greenhouse.rest.post-jobs-job-id-hiring-team-api-surface-88",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobs/{job_id}/hiring_team",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobs/{job_id}/hiring_team",
+          "operation": null,
+          "covered_by": {
+            "write": "add_hiring_team_members"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_hiring_team_members"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-jobs-job-id-hiring-team-api-surface-89",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[88]",
+      "operation_id": "greenhouse.rest.delete-jobs-job-id-hiring-team-api-surface-89",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/jobs/{job_id}/hiring_team",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/jobs/{job_id}/hiring_team",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_hiring_team_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_hiring_team_member"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-offers-api-surface-90",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[89]",
+      "operation_id": "greenhouse.rest.get-offers-api-surface-90",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/offers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/offers",
+          "operation": null,
+          "covered_by": {
+            "stream": "offers"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "offers"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-application-id-offers-api-surface-91",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[90]",
+      "operation_id": "greenhouse.rest.get-applications-application-id-offers-api-surface-91",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/{application_id}/offers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/{application_id}/offers",
+          "operation": null,
+          "covered_by": {
+            "stream": "offers_for_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "offers_for_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-application-id-offers-current-offer-api-surface-92",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[91]",
+      "operation_id": "greenhouse.rest.get-applications-application-id-offers-current-offer-api-surface-92",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/{application_id}/offers/current_offer",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/{application_id}/offers/current_offer",
+          "operation": null,
+          "covered_by": {
+            "stream": "current_offer_for_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "current_offer_for_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-offers-offer-id-api-surface-93",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[92]",
+      "operation_id": "greenhouse.rest.get-offers-offer-id-api-surface-93",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/offers/{offer_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/offers/{offer_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "offer"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-applications-application-id-offers-current-offer-api-surface-94",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[93]",
+      "operation_id": "greenhouse.rest.patch-applications-application-id-offers-current-offer-api-surface-94",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/applications/{application_id}/offers/current_offer",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/applications/{application_id}/offers/current_offer",
+          "operation": null,
+          "covered_by": {
+            "write": "update_current_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_current_offer"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-offices-api-surface-95",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[94]",
+      "operation_id": "greenhouse.rest.get-offices-api-surface-95",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/offices",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/offices",
+          "operation": null,
+          "covered_by": {
+            "stream": "offices"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "offices"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-offices-office-id-api-surface-96",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[95]",
+      "operation_id": "greenhouse.rest.get-offices-office-id-api-surface-96",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/offices/{office_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/offices/{office_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "office"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "office"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-offices-office-id-api-surface-97",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[96]",
+      "operation_id": "greenhouse.rest.patch-offices-office-id-api-surface-97",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/offices/{office_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/offices/{office_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "edit_office"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "edit_office"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-offices-api-surface-98",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[97]",
+      "operation_id": "greenhouse.rest.post-offices-api-surface-98",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offices",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offices",
+          "operation": null,
+          "covered_by": {
+            "write": "add_office"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_office"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-prospect-pools-api-surface-99",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[98]",
+      "operation_id": "greenhouse.rest.get-prospect-pools-api-surface-99",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/prospect_pools",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/prospect_pools",
+          "operation": null,
+          "covered_by": {
+            "stream": "prospect_pools"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "prospect_pools"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-prospect-pools-prospect-pool-id-api-surface-100",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[99]",
+      "operation_id": "greenhouse.rest.get-prospect-pools-prospect-pool-id-api-surface-100",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/prospect_pools/{prospect_pool_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/prospect_pools/{prospect_pool_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "prospect_pool"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "prospect_pool"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-rejection-reasons-api-surface-101",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[100]",
+      "operation_id": "greenhouse.rest.get-rejection-reasons-api-surface-101",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/rejection_reasons",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/rejection_reasons",
+          "operation": null,
+          "covered_by": {
+            "stream": "rejection_reasons"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "rejection_reasons"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-scheduled-interviews-api-surface-102",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[101]",
+      "operation_id": "greenhouse.rest.get-scheduled-interviews-api-surface-102",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scheduled_interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scheduled_interviews",
+          "operation": null,
+          "covered_by": {
+            "stream": "scheduled_interviews"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "scheduled_interviews"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-application-id-scheduled-interviews-api-surface-103",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[102]",
+      "operation_id": "greenhouse.rest.get-applications-application-id-scheduled-interviews-api-surface-103",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/{application_id}/scheduled_interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/{application_id}/scheduled_interviews",
+          "operation": null,
+          "covered_by": {
+            "stream": "scheduled_interviews_for_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "scheduled_interviews_for_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-scheduled-interviews-scheduled-interview-id-api-surface-104",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[103]",
+      "operation_id": "greenhouse.rest.get-scheduled-interviews-scheduled-interview-id-api-surface-104",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scheduled_interviews/{scheduled_interview_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scheduled_interviews/{scheduled_interview_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "scheduled_interview"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "scheduled_interview"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-scheduled-interviews-api-surface-105",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[104]",
+      "operation_id": "greenhouse.rest.post-scheduled-interviews-api-surface-105",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/scheduled_interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/scheduled_interviews",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-scheduled-interviews-scheduled-interview-id-api-surface-106",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[105]",
+      "operation_id": "greenhouse.rest.patch-scheduled-interviews-scheduled-interview-id-api-surface-106",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/scheduled_interviews/{scheduled_interview_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/scheduled_interviews/{scheduled_interview_id}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-scheduled-interviews-scheduled-interview-id-api-surface-107",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[106]",
+      "operation_id": "greenhouse.rest.delete-scheduled-interviews-scheduled-interview-id-api-surface-107",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/scheduled_interviews/{scheduled_interview_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/scheduled_interviews/{scheduled_interview_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_scheduled_interview"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_scheduled_interview"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-scorecards-api-surface-108",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[107]",
+      "operation_id": "greenhouse.rest.get-scorecards-api-surface-108",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scorecards",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scorecards",
+          "operation": null,
+          "covered_by": {
+            "stream": "scorecards"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "scorecards"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-applications-application-id-scorecards-api-surface-109",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[108]",
+      "operation_id": "greenhouse.rest.get-applications-application-id-scorecards-api-surface-109",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/{application_id}/scorecards",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/{application_id}/scorecards",
+          "operation": null,
+          "covered_by": {
+            "stream": "scorecards_for_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "scorecards_for_application"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-scorecards-scorecard-id-api-surface-110",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[109]",
+      "operation_id": "greenhouse.rest.get-scorecards-scorecard-id-api-surface-110",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scorecards/{scorecard_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scorecards/{scorecard_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "scorecard"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "scorecard"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-sources-api-surface-111",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[110]",
+      "operation_id": "greenhouse.rest.get-sources-api-surface-111",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/sources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/sources",
+          "operation": null,
+          "covered_by": {
+            "stream": "sources"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "sources"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-tags-candidate-api-surface-112",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[111]",
+      "operation_id": "greenhouse.rest.get-tags-candidate-api-surface-112",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/tags/candidate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/tags/candidate",
+          "operation": null,
+          "covered_by": {
+            "stream": "candidate_tags"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_tags"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-tags-candidate-api-surface-113",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[112]",
+      "operation_id": "greenhouse.rest.post-tags-candidate-api-surface-113",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/tags/candidate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/tags/candidate",
+          "operation": null,
+          "covered_by": {
+            "write": "add_candidate_tag"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_candidate_tag"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-candidates-candidate-id-tags-api-surface-114",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[113]",
+      "operation_id": "greenhouse.rest.get-candidates-candidate-id-tags-api-surface-114",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates/{candidate_id}/tags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates/{candidate_id}/tags",
+          "operation": null,
+          "covered_by": {
+            "stream": "tags_applied_to_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "tags_applied_to_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-candidates-candidate-id-tags-tag-id-api-surface-115",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[114]",
+      "operation_id": "greenhouse.rest.delete-candidates-candidate-id-tags-tag-id-api-surface-115",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}/tags/{tag_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/candidates/{candidate_id}/tags/{tag_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_tag_from_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_tag_from_candidate"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-candidates-candidate-id-tags-tag-id-api-surface-116",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[115]",
+      "operation_id": "greenhouse.rest.put-candidates-candidate-id-tags-tag-id-api-surface-116",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/candidates/{candidate_id}/tags/{tag_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/candidates/{candidate_id}/tags/{tag_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "add_a_candidate_tag"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_a_candidate_tag"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-tracking-links-token-api-surface-117",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[116]",
+      "operation_id": "greenhouse.rest.get-tracking-links-token-api-surface-117",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/tracking_links/{token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/tracking_links/{token}",
+          "operation": null,
+          "covered_by": {
+            "stream": "tracking_link_data_for_token"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "tracking_link_data_for_token"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-users-api-surface-118",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[117]",
+      "operation_id": "greenhouse.rest.get-users-api-surface-118",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users",
+          "operation": null,
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-users-user-id-api-surface-119",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[118]",
+      "operation_id": "greenhouse.rest.get-users-user-id-api-surface-119",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/{user_id}",
+          "operation": null,
+          "covered_by": {
+            "stream": "user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-users-permission-level-api-surface-120",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[119]",
+      "operation_id": "greenhouse.rest.patch-users-permission-level-api-surface-120",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/users/permission_level",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/users/permission_level",
+          "operation": null,
+          "covered_by": {
+            "write": "change_user_permission_level"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "change_user_permission_level"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-users-api-surface-121",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[120]",
+      "operation_id": "greenhouse.rest.post-users-api-surface-121",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users",
+          "operation": null,
+          "covered_by": {
+            "write": "add_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-users-user-id-email-addresses-api-surface-122",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[121]",
+      "operation_id": "greenhouse.rest.post-users-user-id-email-addresses-api-surface-122",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users/{user_id}/email_addresses",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users/{user_id}/email_addresses",
+          "operation": null,
+          "covered_by": {
+            "write": "add_e_mail_address_to_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_e_mail_address_to_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-users-user-id-permissions-jobs-api-surface-123",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[122]",
+      "operation_id": "greenhouse.rest.get-users-user-id-permissions-jobs-api-surface-123",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/{user_id}/permissions/jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/{user_id}/permissions/jobs",
+          "operation": null,
+          "covered_by": {
+            "stream": "job_permissions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_permissions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-users-user-id-permissions-jobs-api-surface-124",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[123]",
+      "operation_id": "greenhouse.rest.delete-users-user-id-permissions-jobs-api-surface-124",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/users/{user_id}/permissions/jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/users/{user_id}/permissions/jobs",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_a_job_permission"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_a_job_permission"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-users-user-id-permissions-jobs-api-surface-125",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[124]",
+      "operation_id": "greenhouse.rest.put-users-user-id-permissions-jobs-api-surface-125",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/users/{user_id}/permissions/jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/users/{user_id}/permissions/jobs",
+          "operation": null,
+          "covered_by": {
+            "write": "add_a_job_permission"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_a_job_permission"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-users-user-id-permissions-future-jobs-api-surface-126",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[125]",
+      "operation_id": "greenhouse.rest.get-users-user-id-permissions-future-jobs-api-surface-126",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/{user_id}/permissions/future_jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/{user_id}/permissions/future_jobs",
+          "operation": null,
+          "covered_by": {
+            "stream": "future_job_permissions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "future_job_permissions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-users-user-id-permissions-future-jobs-api-surface-127",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[126]",
+      "operation_id": "greenhouse.rest.delete-users-user-id-permissions-future-jobs-api-surface-127",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/users/{user_id}/permissions/future_jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/users/{user_id}/permissions/future_jobs",
+          "operation": null,
+          "covered_by": {
+            "write": "remove_a_future_job_permission"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "remove_a_future_job_permission"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.put-users-user-id-permissions-future-jobs-api-surface-128",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[127]",
+      "operation_id": "greenhouse.rest.put-users-user-id-permissions-future-jobs-api-surface-128",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/users/{user_id}/permissions/future_jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/users/{user_id}/permissions/future_jobs",
+          "operation": null,
+          "covered_by": {
+            "write": "add_a_future_job_permission"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "add_a_future_job_permission"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.get-user-roles-api-surface-129",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[128]",
+      "operation_id": "greenhouse.rest.get-user-roles-api-surface-129",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/user_roles",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/user_roles",
+          "operation": null,
+          "covered_by": {
+            "stream": "user_roles"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "user_roles"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-tags-candidate-tag-id-api-surface-130",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[129]",
+      "operation_id": "greenhouse.rest.delete-tags-candidate-tag-id-api-surface-130",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/tags/candidate/{tag_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/tags/candidate/{tag_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "destroy_candidate_tag"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "destroy_candidate_tag"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.delete-v2-jobs-job-id-openings-api-surface-131",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[130]",
+      "operation_id": "greenhouse.rest.delete-v2-jobs-job-id-openings-api-surface-131",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v2/jobs/{job_id}/openings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v2/jobs/{job_id}/openings",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-v2-job-posts-job-post-id-api-surface-132",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[131]",
+      "operation_id": "greenhouse.rest.patch-v2-job-posts-job-post-id-api-surface-132",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v2/job_posts/{job_post_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/job_posts/{job_post_id}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-v2-job-posts-job-post-id-status-api-surface-133",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[132]",
+      "operation_id": "greenhouse.rest.patch-v2-job-posts-job-post-id-status-api-surface-133",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v2/job_posts/{job_post_id}/status",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/job_posts/{job_post_id}/status",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-v2-scheduled-interviews-scheduled-interview-id-api-surface-134",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[133]",
+      "operation_id": "greenhouse.rest.patch-v2-scheduled-interviews-scheduled-interview-id-api-surface-134",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v2/scheduled_interviews/{scheduled_interview_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/scheduled_interviews/{scheduled_interview_id}",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-v2-users-api-surface-135",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[134]",
+      "operation_id": "greenhouse.rest.patch-v2-users-api-surface-135",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v2/users/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/users/",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-v2-users-disable-api-surface-136",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[135]",
+      "operation_id": "greenhouse.rest.patch-v2-users-disable-api-surface-136",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v2/users/disable",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/users/disable",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.patch-v2-users-enable-api-surface-137",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[136]",
+      "operation_id": "greenhouse.rest.patch-v2-users-enable-api-surface-137",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v2/users/enable",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/users/enable",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/greenhouse-operation-source-lock.json",
+      "source_id": "greenhouse.rest.post-v2-scheduled-interviews-api-surface-138",
+      "source_url": "https://developers.greenhouse.io/users/sign_in",
+      "source_location": "api_surface.json:endpoints[137]",
+      "operation_id": "greenhouse.rest.post-v2-scheduled-interviews-api-surface-138",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/scheduled_interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/scheduled_interviews",
+          "operation": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

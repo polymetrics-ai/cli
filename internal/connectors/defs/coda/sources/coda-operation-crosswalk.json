@@ -1,0 +1,1178 @@
+{
+  "schema_version": 1,
+  "connector": "coda",
+  "source_lock": "sources/coda-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-api-surface-1",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "coda.rest.get-docs-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs",
+          "operation": null,
+          "covered_by": {
+            "stream": "docs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "docs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-api-surface-2",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "coda.rest.post-docs-api-surface-2",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creates a brand-new doc (optionally copying an existing one); doc-lifecycle management is a workspace-admin action outside this connector's per-doc data-sync scope, and duplicating an arbitrary sourceDoc has no bounded blast radius to express as a plain row/page mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-api-surface-3",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "coda.rest.get-docs-docid-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-doc detail is a strict subset of the docs stream's per-record shape already returned by GET /docs; no additional fields worth a dedicated stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.delete-docs-docid-api-surface-4",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "coda.rest.delete-docs-docid-api-surface-4",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}",
+          "operation": null,
+          "excluded": {
+            "category": "destructive_admin",
+            "reason": "irreversibly deletes an entire doc and everything in it; far outside the bounded per-row/per-page mutation surface this connector exposes"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.patch-docs-docid-api-surface-5",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "coda.rest.patch-docs-docid-api-surface-5",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/docs/{docId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/docs/{docId}",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "renames/re-icons the doc itself; doc-level metadata management, not doc-scoped data sync"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "coda.rest.get-docs-docid-acl-metadata-api-surface-6",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/acl/metadata",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/metadata",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "sharing/ACL metadata is workspace-permission surface, not doc content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "coda.rest.get-docs-docid-acl-permissions-api-surface-7",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/acl/permissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/permissions",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "lists who has access to the doc; permission/sharing management is out of scope for a content connector"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "coda.rest.post-docs-docid-acl-permissions-api-surface-8",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/acl/permissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/acl/permissions",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "grants doc access to a principal; access-control mutation, not content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "coda.rest.delete-docs-docid-acl-permissions-permissionid-api-surface-9",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/acl/permissions/{permissionId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/acl/permissions/{permissionId}",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "revokes doc access; access-control mutation, not content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "coda.rest.get-docs-docid-acl-principals-search-api-surface-10",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/acl/principals/search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/principals/search",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "searches workspace principals for sharing purposes; identity/directory surface, not doc content"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "coda.rest.get-docs-docid-acl-settings-api-surface-11",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/acl/settings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/settings",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "doc-level sharing default settings; access-control configuration, not content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "coda.rest.patch-docs-docid-acl-settings-api-surface-12",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/docs/{docId}/acl/settings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/docs/{docId}/acl/settings",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "mutates doc-level sharing defaults; access-control configuration, not content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-controls-api-surface-13",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "coda.rest.get-docs-docid-controls-api-surface-13",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/controls",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/controls",
+          "operation": null,
+          "covered_by": {
+            "stream": "controls"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "controls"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "coda.rest.get-docs-docid-controls-controlidorname-api-surface-14",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/controls/{controlIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/controls/{controlIdOrName}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-control detail is a strict subset of the controls stream's per-record shape already returned by GET /docs/{docId}/controls"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-domains-api-surface-15",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "coda.rest.get-docs-docid-domains-api-surface-15",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/${docId}/domains",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/${docId}/domains",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "lists custom domains bound to the doc; workspace/domain-administration surface, not doc content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-docid-domains-api-surface-16",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[15]",
+      "operation_id": "coda.rest.post-docs-docid-domains-api-surface-16",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/${docId}/domains",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/${docId}/domains",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "binds a custom domain to the doc; domain-administration mutation, not content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[16]",
+      "operation_id": "coda.rest.delete-docs-docid-domains-customdocdomain-api-surface-17",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/domains/{customDocDomain}",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "unbinds a custom domain; domain-administration mutation, not content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[17]",
+      "operation_id": "coda.rest.patch-docs-docid-domains-customdocdomain-api-surface-18",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/docs/{docId}/domains/{customDocDomain}",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "updates a custom domain binding; domain-administration mutation, not content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-formulas-api-surface-19",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[18]",
+      "operation_id": "coda.rest.get-docs-docid-formulas-api-surface-19",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/formulas",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/formulas",
+          "operation": null,
+          "covered_by": {
+            "stream": "formulas"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "formulas"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[19]",
+      "operation_id": "coda.rest.get-docs-docid-formulas-formulaidorname-api-surface-20",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-formula detail is a strict subset of the formulas stream's per-record shape already returned by GET /docs/{docId}/formulas"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[20]",
+      "operation_id": "coda.rest.post-docs-docid-hooks-automation-ruleid-api-surface-21",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/hooks/automation/{ruleId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/hooks/automation/{ruleId}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "triggers a doc-authored automation rule by webhook; the rule's own logic (which may itself write anywhere in the doc) is opaque to this connector and has no bounded, declarable request/response shape beyond a bare trigger POST with no standard body contract"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-pages-api-surface-22",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[21]",
+      "operation_id": "coda.rest.get-docs-docid-pages-api-surface-22",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/pages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/pages",
+          "operation": null,
+          "covered_by": {
+            "stream": "pages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "pages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-docid-pages-api-surface-23",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[22]",
+      "operation_id": "coda.rest.post-docs-docid-pages-api-surface-23",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/pages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/pages",
+          "operation": null,
+          "covered_by": {
+            "write": "create_page"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_page"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[23]",
+      "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-api-surface-24",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/pages/{pageIdOrName}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-page detail is a strict subset of the pages stream's per-record shape already returned by GET /docs/{docId}/pages"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[24]",
+      "operation_id": "coda.rest.put-docs-docid-pages-pageidorname-api-surface-25",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/docs/{docId}/pages/{pageIdOrName}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_page"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_page"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[25]",
+      "operation_id": "coda.rest.delete-docs-docid-pages-pageidorname-api-surface-26",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/pages/{pageIdOrName}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_page"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_page"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[26]",
+      "operation_id": "coda.rest.post-docs-docid-pages-pageidorname-export-api-surface-27",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "begins an async export of page content to HTML/Markdown; the result is a downloadable blob fetched via a follow-up polling request, not a declarative JSON record read or write"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[27]",
+      "operation_id": "coda.rest.get-docs-docid-pages-pageidorname-export-requestid-api-surface-28",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "polls the status/download link of an in-flight content export job (see the export POST above); job-status polling, not a data resource"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.put-docs-docid-publish-api-surface-29",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[28]",
+      "operation_id": "coda.rest.put-docs-docid-publish-api-surface-29",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/docs/{docId}/publish",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/docs/{docId}/publish",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "publishes the doc (or changes its publish settings) to a public/discoverable URL; a workspace-publishing action, not per-record content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.delete-docs-docid-publish-api-surface-30",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[29]",
+      "operation_id": "coda.rest.delete-docs-docid-publish-api-surface-30",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/publish",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/publish",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "unpublishes the doc; a workspace-publishing action, not per-record content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-tables-api-surface-31",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[30]",
+      "operation_id": "coda.rest.get-docs-docid-tables-api-surface-31",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables",
+          "operation": null,
+          "covered_by": {
+            "stream": "tables"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "tables"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[31]",
+      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-api-surface-32",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-table detail is a strict subset of the tables stream's per-record shape already returned by GET /docs/{docId}/tables"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[32]",
+      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-api-surface-33",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
+          "operation": null,
+          "covered_by": {
+            "stream": "columns"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "columns"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[33]",
+      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-columns-columnidorname-api-surface-34",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-column detail is a strict subset of the columns stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/columns"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[34]",
+      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-api-surface-35",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+          "operation": null,
+          "covered_by": {
+            "stream": "rows"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "rows"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[35]",
+      "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-api-surface-36",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+          "operation": null,
+          "covered_by": {
+            "write": "upsert_rows"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "upsert_rows"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[36]",
+      "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-api-surface-37",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_rows"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_rows"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[37]",
+      "operation_id": "coda.rest.get-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-38",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-row detail is a strict subset of the rows stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/rows"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[38]",
+      "operation_id": "coda.rest.put-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-39",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_row"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_row"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[39]",
+      "operation_id": "coda.rest.delete-docs-docid-tables-tableidorname-rows-rowidorname-api-surface-40",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_row"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_row"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[40]",
+      "operation_id": "coda.rest.post-docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname-api-surface-41",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
+          "operation": null,
+          "covered_by": {
+            "write": "push_button"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "push_button"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-categories-api-surface-42",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[41]",
+      "operation_id": "coda.rest.get-categories-api-surface-42",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/categories",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/categories",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "lists Coda doc-gallery publish categories (e.g. \"Product\", \"Sales\"); a fixed lookup enum for the publishing UI, not workspace/doc content data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[42]",
+      "operation_id": "coda.rest.get-mutationstatus-requestid-api-surface-43",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/mutationStatus/{requestId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/mutationStatus/{requestId}",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "polls the completion status of an async mutation request id (rows/pages writes here return 202 immediately); status polling, not a data resource, and this connector's write actions do not themselves poll for completion (matching every other async-202 write action bundle in this migration)"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-resolvebrowserlink-api-surface-44",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[43]",
+      "operation_id": "coda.rest.get-resolvebrowserlink-api-surface-44",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/resolveBrowserLink",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/resolveBrowserLink",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "resolves a coda.io browser URL to its API resource id/type; a URL-resolution utility, not a data resource"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/coda-operation-source-lock.json",
+      "source_id": "coda.rest.get-whoami-api-surface-45",
+      "source_url": "https://docs.superhuman.com/developers/apis/v1",
+      "source_location": "api_surface.json:endpoints[44]",
+      "operation_id": "coda.rest.get-whoami-api-surface-45",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/whoami",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/whoami",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "returns the authenticated user's own identity/token metadata; auth introspection, not workspace/doc content"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

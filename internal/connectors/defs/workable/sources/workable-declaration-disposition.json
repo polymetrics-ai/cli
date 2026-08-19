@@ -1,0 +1,3164 @@
+{
+  "schema_version": 1,
+  "connector": "workable",
+  "generated_at": "2026-08-19T15:30:48.422Z",
+  "source_basis": {
+    "source_lock": "sources/workable-operation-source-lock.json",
+    "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+    "source_sha256": "f0379d0b6df8464aea0686a0ef545eea6e8a13ef700c34bcb19cc1deba7cb5d6",
+    "source_bytes": 228134,
+    "source_operation_count": 82
+  },
+  "summary": {
+    "api_surface_rows": 82,
+    "exact_source_rows": 82,
+    "declared_operations": 82,
+    "declared_percent": 100,
+    "enabled_operations": 80,
+    "enabled_percent": 97.56,
+    "disabled_operations": 2,
+    "documented_deletes": 4,
+    "enabled_deletes": 4,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 1
+      },
+      {
+        "key": "direct_write",
+        "count": 38
+      },
+      {
+        "key": "etl",
+        "count": 42
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 1
+      }
+    ],
+    "stream_bindings": 42,
+    "writes_actions": 38,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 38,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 2
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-workable",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/workable/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-workable",
+      "sync-transport-source-definition-workable"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-workable",
+        "count": 2
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs",
+        "operation": null,
+        "covered_by": {
+          "stream": "jobs"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-api-surface-1",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"jobs\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"jobs\" binds the pinned source contract",
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/candidates",
+        "operation": null,
+        "covered_by": {
+          "stream": "candidates"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-candidates-api-surface-2",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "workable.rest.get-spi-v3-candidates-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"candidates\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"candidates\" binds the pinned source contract",
+        "stream": "candidates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/members",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/members",
+        "operation": null,
+        "covered_by": {
+          "stream": "members"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-members-api-surface-3",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "workable.rest.get-spi-v3-members-api-surface-3",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"members\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"members\" binds the pinned source contract",
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/accounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/accounts",
+        "operation": null,
+        "covered_by": {
+          "stream": "accounts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-accounts-api-surface-4",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "workable.rest.get-spi-v3-accounts-api-surface-4",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"accounts\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"accounts\" binds the pinned source contract",
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/accounts/{subdomain}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/accounts/{subdomain}",
+        "operation": null,
+        "covered_by": {
+          "stream": "account"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-accounts-subdomain-api-surface-5",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "workable.rest.get-spi-v3-accounts-subdomain-api-surface-5",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"account\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"account\" binds the pinned source contract",
+        "stream": "account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/collaboration_permissions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/collaboration_permissions",
+        "operation": null,
+        "covered_by": {
+          "stream": "collaboration_permissions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-collaboration-permissions-api-surface-6",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "workable.rest.get-spi-v3-collaboration-permissions-api-surface-6",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"collaboration_permissions\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"collaboration_permissions\" binds the pinned source contract",
+        "stream": "collaboration_permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/departments",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/departments",
+        "operation": null,
+        "covered_by": {
+          "stream": "departments"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-departments-api-surface-7",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "workable.rest.get-spi-v3-departments-api-surface-7",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"departments\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"departments\" binds the pinned source contract",
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/disqualification_reasons",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/disqualification_reasons",
+        "operation": null,
+        "covered_by": {
+          "stream": "disqualification_reasons"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-disqualification-reasons-api-surface-8",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": "workable.rest.get-spi-v3-disqualification-reasons-api-surface-8",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"disqualification_reasons\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"disqualification_reasons\" binds the pinned source contract",
+        "stream": "disqualification_reasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/legal_entities",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/legal_entities",
+        "operation": null,
+        "covered_by": {
+          "stream": "legal_entities"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-legal-entities-api-surface-9",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": "workable.rest.get-spi-v3-legal-entities-api-surface-9",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"legal_entities\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"legal_entities\" binds the pinned source contract",
+        "stream": "legal_entities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/permission_sets",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/permission_sets",
+        "operation": null,
+        "covered_by": {
+          "stream": "permission_sets"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-permission-sets-api-surface-10",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": "workable.rest.get-spi-v3-permission-sets-api-surface-10",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"permission_sets\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"permission_sets\" binds the pinned source contract",
+        "stream": "permission_sets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/recruiters",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/recruiters",
+        "operation": null,
+        "covered_by": {
+          "stream": "recruiters"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-recruiters-api-surface-11",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": "workable.rest.get-spi-v3-recruiters-api-surface-11",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"recruiters\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"recruiters\" binds the pinned source contract",
+        "stream": "recruiters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/stages",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/stages",
+        "operation": null,
+        "covered_by": {
+          "stream": "stages"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-stages-api-surface-12",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": "workable.rest.get-spi-v3-stages-api-surface-12",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"stages\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"stages\" binds the pinned source contract",
+        "stream": "stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/subscriptions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/subscriptions",
+        "operation": null,
+        "covered_by": {
+          "stream": "subscriptions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-subscriptions-api-surface-13",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": "workable.rest.get-spi-v3-subscriptions-api-surface-13",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"subscriptions\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"subscriptions\" binds the pinned source contract",
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employee_fields",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/employee_fields",
+        "operation": null,
+        "covered_by": {
+          "stream": "employee_fields"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-employee-fields-api-surface-14",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": "workable.rest.get-spi-v3-employee-fields-api-surface-14",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"employee_fields\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"employee_fields\" binds the pinned source contract",
+        "stream": "employee_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees/orgchart",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/employees/orgchart",
+        "operation": null,
+        "covered_by": {
+          "stream": "employees_orgchart"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-employees-orgchart-api-surface-15",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": "workable.rest.get-spi-v3-employees-orgchart-api-surface-15",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"employees_orgchart\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"employees_orgchart\" binds the pinned source contract",
+        "stream": "employees_orgchart"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/employees",
+        "operation": null,
+        "covered_by": {
+          "stream": "employees"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-employees-api-surface-16",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": "workable.rest.get-spi-v3-employees-api-surface-16",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"employees\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"employees\" binds the pinned source contract",
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees/{id}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/employees/{id}",
+        "operation": null,
+        "covered_by": {
+          "stream": "employee"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-employees-id-api-surface-17",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": "workable.rest.get-spi-v3-employees-id-api-surface-17",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"employee\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"employee\" binds the pinned source contract",
+        "stream": "employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees/{id}/documents",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/employees/{id}/documents",
+        "operation": null,
+        "covered_by": {
+          "stream": "employee_documents"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-employees-id-documents-api-surface-18",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": "workable.rest.get-spi-v3-employees-id-documents-api-surface-18",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"employee_documents\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"employee_documents\" binds the pinned source contract",
+        "stream": "employee_documents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/review-cycles/templates",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/review-cycles/templates",
+        "operation": null,
+        "covered_by": {
+          "stream": "review_templates"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-review-cycles-templates-api-surface-19",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": "workable.rest.get-spi-v3-review-cycles-templates-api-surface-19",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"review_templates\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"review_templates\" binds the pinned source contract",
+        "stream": "review_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/review-cycles/templates/{id}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/review-cycles/templates/{id}",
+        "operation": null,
+        "covered_by": {
+          "stream": "review_template"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-review-cycles-templates-id-api-surface-20",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": "workable.rest.get-spi-v3-review-cycles-templates-id-api-surface-20",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"review_template\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"review_template\" binds the pinned source contract",
+        "stream": "review_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/time-tracking/time-entries",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/time-tracking/time-entries",
+        "operation": null,
+        "covered_by": {
+          "stream": "time_entries"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-time-tracking-time-entries-api-surface-21",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": "workable.rest.get-spi-v3-time-tracking-time-entries-api-surface-21",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"time_entries\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"time_entries\" binds the pinned source contract",
+        "stream": "time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/timeoff/balances",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/timeoff/balances",
+        "operation": null,
+        "covered_by": {
+          "stream": "timeoff_balances"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-timeoff-balances-api-surface-22",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": "workable.rest.get-spi-v3-timeoff-balances-api-surface-22",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"timeoff_balances\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"timeoff_balances\" binds the pinned source contract",
+        "stream": "timeoff_balances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/timeoff/categories",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/timeoff/categories",
+        "operation": null,
+        "covered_by": {
+          "stream": "timeoff_categories"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-timeoff-categories-api-surface-23",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[22]",
+        "operation_id": "workable.rest.get-spi-v3-timeoff-categories-api-surface-23",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"timeoff_categories\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"timeoff_categories\" binds the pinned source contract",
+        "stream": "timeoff_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/timeoff/requests",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/timeoff/requests",
+        "operation": null,
+        "covered_by": {
+          "stream": "timeoff_requests"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-timeoff-requests-api-surface-24",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": "workable.rest.get-spi-v3-timeoff-requests-api-surface-24",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"timeoff_requests\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"timeoff_requests\" binds the pinned source contract",
+        "stream": "timeoff_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/work_schedules",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/work_schedules",
+        "operation": null,
+        "covered_by": {
+          "stream": "work_schedules"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-work-schedules-api-surface-25",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": "workable.rest.get-spi-v3-work-schedules-api-surface-25",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"work_schedules\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"work_schedules\" binds the pinned source contract",
+        "stream": "work_schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/activities",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/candidates/{id}/activities",
+        "operation": null,
+        "covered_by": {
+          "stream": "candidate_activities"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-candidates-id-activities-api-surface-26",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": "workable.rest.get-spi-v3-candidates-id-activities-api-surface-26",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"candidate_activities\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"candidate_activities\" binds the pinned source contract",
+        "stream": "candidate_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/files",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/candidates/{id}/files",
+        "operation": null,
+        "covered_by": {
+          "stream": "candidate_files"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-candidates-id-files-api-surface-27",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": "workable.rest.get-spi-v3-candidates-id-files-api-surface-27",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"candidate_files\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"candidate_files\" binds the pinned source contract",
+        "stream": "candidate_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/offer",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/candidates/{id}/offer",
+        "operation": null,
+        "covered_by": {
+          "stream": "candidate_offer"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-candidates-id-offer-api-surface-28",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": "workable.rest.get-spi-v3-candidates-id-offer-api-surface-28",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"candidate_offer\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"candidate_offer\" binds the pinned source contract",
+        "stream": "candidate_offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/custom_attributes",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/custom_attributes",
+        "operation": null,
+        "covered_by": {
+          "stream": "custom_attributes"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-custom-attributes-api-surface-29",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[28]",
+        "operation_id": "workable.rest.get-spi-v3-custom-attributes-api-surface-29",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"custom_attributes\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"custom_attributes\" binds the pinned source contract",
+        "stream": "custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/events",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/events",
+        "operation": null,
+        "covered_by": {
+          "stream": "events"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-events-api-surface-30",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[29]",
+        "operation_id": "workable.rest.get-spi-v3-events-api-surface-30",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"events\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"events\" binds the pinned source contract",
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/events/{id}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/events/{id}",
+        "operation": null,
+        "covered_by": {
+          "stream": "event"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-events-id-api-surface-31",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[30]",
+        "operation_id": "workable.rest.get-spi-v3-events-id-api-surface-31",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"event\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"event\" binds the pinned source contract",
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/activities",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/activities",
+        "operation": null,
+        "covered_by": {
+          "stream": "job_activities"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-activities-api-surface-32",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[31]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-activities-api-surface-32",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job_activities\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job_activities\" binds the pinned source contract",
+        "stream": "job_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
+        "operation": null,
+        "covered_by": {
+          "stream": "job_custom_attributes"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-custom-attributes-api-surface-33",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[32]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-custom-attributes-api-surface-33",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job_custom_attributes\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job_custom_attributes\" binds the pinned source contract",
+        "stream": "job_custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/members",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/members",
+        "operation": null,
+        "covered_by": {
+          "stream": "job_members"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-members-api-surface-34",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[33]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-members-api-surface-34",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job_members\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job_members\" binds the pinned source contract",
+        "stream": "job_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/questions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/questions",
+        "operation": null,
+        "covered_by": {
+          "stream": "job_questions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-questions-api-surface-35",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[34]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-questions-api-surface-35",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job_questions\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job_questions\" binds the pinned source contract",
+        "stream": "job_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/stages",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/stages",
+        "operation": null,
+        "covered_by": {
+          "stream": "job_stages"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-stages-api-surface-36",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[35]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-stages-api-surface-36",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job_stages\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job_stages\" binds the pinned source contract",
+        "stream": "job_stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}",
+        "operation": null,
+        "covered_by": {
+          "stream": "job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-api-surface-37",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[36]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-api-surface-37",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job\" binds the pinned source contract",
+        "stream": "job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/application_form",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/application_form",
+        "operation": null,
+        "covered_by": {
+          "stream": "job_application_form"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-application-form-api-surface-38",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[37]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-application-form-api-surface-38",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job_application_form\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job_application_form\" binds the pinned source contract",
+        "stream": "job_application_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/recruiters",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/recruiters",
+        "operation": null,
+        "covered_by": {
+          "stream": "job_recruiters"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-jobs-shortcode-recruiters-api-surface-39",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[38]",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-recruiters-api-surface-39",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"job_recruiters\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"job_recruiters\" binds the pinned source contract",
+        "stream": "job_recruiters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/requisitions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/requisitions",
+        "operation": null,
+        "covered_by": {
+          "stream": "requisitions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-requisitions-api-surface-40",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[39]",
+        "operation_id": "workable.rest.get-spi-v3-requisitions-api-surface-40",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"requisitions\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"requisitions\" binds the pinned source contract",
+        "stream": "requisitions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/requisitions/{code}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/requisitions/{code}",
+        "operation": null,
+        "covered_by": {
+          "stream": "requisition"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-requisitions-code-api-surface-41",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[40]",
+        "operation_id": "workable.rest.get-spi-v3-requisitions-code-api-surface-41",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"requisition\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"requisition\" binds the pinned source contract",
+        "stream": "requisition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/offers/{id}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/spi/v3/offers/{id}",
+        "operation": null,
+        "covered_by": {
+          "stream": "offer"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-spi-v3-offers-id-api-surface-42",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[41]",
+        "operation_id": "workable.rest.get-spi-v3-offers-id-api-surface-42",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/streams.json: existing stream \"offer\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"offer\" binds the pinned source contract",
+        "stream": "offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts/{subdomain}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/accounts/{subdomain}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "Public careers-site jobs are served from Workable public API rather than the configured SPI v3 base URL and duplicate the authenticated jobs data surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.get-api-accounts-subdomain-api-surface-43",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[42]",
+        "operation_id": "workable.rest.get-api-accounts-subdomain-api-surface-43",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-workable",
+          "evidence": "internal/connectors/defs/workable/api_surface.json:endpoints[42]; api_surface.json:endpoints[42].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/workable/api_surface.json:endpoints[42]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-workable",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/departments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/departments",
+        "operation": null,
+        "covered_by": {
+          "write": "create_department"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-departments-api-surface-44",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[43]",
+        "operation_id": "workable.rest.post-spi-v3-departments-api-surface-44",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_department\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_department"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_department\" binds the pinned source contract",
+        "write": "create_department"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/departments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/spi/v3/departments",
+        "operation": null,
+        "covered_by": {
+          "write": "update_department"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.put-spi-v3-departments-api-surface-45",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[44]",
+        "operation_id": "workable.rest.put-spi-v3-departments-api-surface-45",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_department\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_department"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_department\" binds the pinned source contract",
+        "write": "update_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/departments/{id}/merge",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/departments/{id}/merge",
+        "operation": null,
+        "covered_by": {
+          "write": "merge_department"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-departments-id-merge-api-surface-46",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[45]",
+        "operation_id": "workable.rest.post-spi-v3-departments-id-merge-api-surface-46",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"merge_department\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "merge_department"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"merge_department\" binds the pinned source contract",
+        "write": "merge_department"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/departments/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/spi/v3/departments/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_department"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.delete-spi-v3-departments-id-api-surface-47",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[46]",
+        "operation_id": "workable.rest.delete-spi-v3-departments-id-api-surface-47",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"delete_department\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_department"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_department\" binds the pinned source contract",
+        "write": "delete_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/members/invite",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/members/invite",
+        "operation": null,
+        "covered_by": {
+          "write": "invite_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-members-invite-api-surface-48",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[47]",
+        "operation_id": "workable.rest.post-spi-v3-members-invite-api-surface-48",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"invite_member\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "invite_member"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"invite_member\" binds the pinned source contract",
+        "write": "invite_member"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/members",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/spi/v3/members",
+        "operation": null,
+        "covered_by": {
+          "write": "update_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.put-spi-v3-members-api-surface-49",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[48]",
+        "operation_id": "workable.rest.put-spi-v3-members-api-surface-49",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_member\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_member"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_member\" binds the pinned source contract",
+        "write": "update_member"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/members/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/spi/v3/members/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "deactivate_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.delete-spi-v3-members-id-api-surface-50",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[49]",
+        "operation_id": "workable.rest.delete-spi-v3-members-id-api-surface-50",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"deactivate_member\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "deactivate_member"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"deactivate_member\" binds the pinned source contract",
+        "write": "deactivate_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/members/{id}/enable",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/members/{id}/enable",
+        "operation": null,
+        "covered_by": {
+          "write": "enable_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-members-id-enable-api-surface-51",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[50]",
+        "operation_id": "workable.rest.post-spi-v3-members-id-enable-api-surface-51",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"enable_member\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "enable_member"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"enable_member\" binds the pinned source contract",
+        "write": "enable_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/subscriptions",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/subscriptions",
+        "operation": null,
+        "covered_by": {
+          "write": "create_subscription"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-subscriptions-api-surface-52",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[51]",
+        "operation_id": "workable.rest.post-spi-v3-subscriptions-api-surface-52",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_subscription\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_subscription"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_subscription\" binds the pinned source contract",
+        "write": "create_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/subscriptions/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/spi/v3/subscriptions/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_subscription"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.delete-spi-v3-subscriptions-id-api-surface-53",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[52]",
+        "operation_id": "workable.rest.delete-spi-v3-subscriptions-id-api-surface-53",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"delete_subscription\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_subscription"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_subscription\" binds the pinned source contract",
+        "write": "delete_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/employees",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/employees",
+        "operation": null,
+        "covered_by": {
+          "write": "create_employee"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-employees-api-surface-54",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[53]",
+        "operation_id": "workable.rest.post-spi-v3-employees-api-surface-54",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_employee\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_employee"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_employee\" binds the pinned source contract",
+        "write": "create_employee"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/employees/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/employees/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_employee"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-employees-id-api-surface-55",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[54]",
+        "operation_id": "workable.rest.patch-spi-v3-employees-id-api-surface-55",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_employee\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_employee"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_employee\" binds the pinned source contract",
+        "write": "update_employee"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/employees/{id}/documents",
+      "parity_class": "binary_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/employees/{id}/documents",
+        "operation": null,
+        "excluded": {
+          "category": "binary_payload",
+          "reason": "Document upload is multipart/binary and outside the declarative JSON write dialect."
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-employees-id-documents-api-surface-56",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[55]",
+        "operation_id": "workable.rest.post-spi-v3-employees-id-documents-api-surface-56",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-workable",
+          "evidence": "internal/connectors/defs/workable/api_surface.json:endpoints[55]; api_surface.json:endpoints[55].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/workable/api_surface.json:endpoints[55]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-workable",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/review-cycles/templates",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/review-cycles/templates",
+        "operation": null,
+        "covered_by": {
+          "write": "create_review_template"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-review-cycles-templates-api-surface-57",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[56]",
+        "operation_id": "workable.rest.post-spi-v3-review-cycles-templates-api-surface-57",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_review_template\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_review_template"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_review_template\" binds the pinned source contract",
+        "write": "create_review_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/time-entries",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/time-tracking/time-entries",
+        "operation": null,
+        "covered_by": {
+          "write": "bulk_create_time_entries"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-time-tracking-time-entries-api-surface-58",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[57]",
+        "operation_id": "workable.rest.post-spi-v3-time-tracking-time-entries-api-surface-58",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"bulk_create_time_entries\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "bulk_create_time_entries"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"bulk_create_time_entries\" binds the pinned source contract",
+        "write": "bulk_create_time_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+        "operation": null,
+        "covered_by": {
+          "write": "create_time_entry"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-time-tracking-employees-id-time-entries-api-surface-59",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[58]",
+        "operation_id": "workable.rest.post-spi-v3-time-tracking-employees-id-time-entries-api-surface-59",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_time_entry\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_time_entry"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_time_entry\" binds the pinned source contract",
+        "write": "create_time_entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_time_entry"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-60",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[59]",
+        "operation_id": "workable.rest.patch-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-60",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_time_entry\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_time_entry"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_time_entry\" binds the pinned source contract",
+        "write": "update_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+        "operation": null,
+        "covered_by": {
+          "write": "archive_time_entry"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.delete-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-61",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[60]",
+        "operation_id": "workable.rest.delete-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-61",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"archive_time_entry\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "archive_time_entry"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"archive_time_entry\" binds the pinned source contract",
+        "write": "archive_time_entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/timeoff/approvals/{key}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/timeoff/approvals/{key}",
+        "operation": null,
+        "covered_by": {
+          "write": "decide_timeoff_approval"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-timeoff-approvals-key-api-surface-62",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[61]",
+        "operation_id": "workable.rest.patch-spi-v3-timeoff-approvals-key-api-surface-62",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"decide_timeoff_approval\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "decide_timeoff_approval"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"decide_timeoff_approval\" binds the pinned source contract",
+        "write": "decide_timeoff_approval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/timeoff/requests",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/timeoff/requests",
+        "operation": null,
+        "covered_by": {
+          "write": "create_timeoff_request"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-timeoff-requests-api-surface-63",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[62]",
+        "operation_id": "workable.rest.post-spi-v3-timeoff-requests-api-surface-63",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_timeoff_request\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_timeoff_request"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_timeoff_request\" binds the pinned source contract",
+        "write": "create_timeoff_request"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
+        "operation": null,
+        "covered_by": {
+          "write": "update_candidate_custom_attribute"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-candidates-id-update-custom-attribute-value-api-surface-64",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[63]",
+        "operation_id": "workable.rest.patch-spi-v3-candidates-id-update-custom-attribute-value-api-surface-64",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_candidate_custom_attribute\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_candidate_custom_attribute"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_candidate_custom_attribute\" binds the pinned source contract",
+        "write": "update_candidate_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/comments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/comments",
+        "operation": null,
+        "covered_by": {
+          "write": "comment_on_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-candidates-id-comments-api-surface-65",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[64]",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-comments-api-surface-65",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"comment_on_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "comment_on_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"comment_on_candidate\" binds the pinned source contract",
+        "write": "comment_on_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/copy",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/copy",
+        "operation": null,
+        "covered_by": {
+          "write": "copy_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-candidates-id-copy-api-surface-66",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[65]",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-copy-api-surface-66",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"copy_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "copy_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"copy_candidate\" binds the pinned source contract",
+        "write": "copy_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/disqualify",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/disqualify",
+        "operation": null,
+        "covered_by": {
+          "write": "disqualify_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-candidates-id-disqualify-api-surface-67",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[66]",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-disqualify-api-surface-67",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"disqualify_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "disqualify_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"disqualify_candidate\" binds the pinned source contract",
+        "write": "disqualify_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/jobs/{shortcode}/candidates",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/jobs/{shortcode}/candidates",
+        "operation": null,
+        "covered_by": {
+          "write": "create_job_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-jobs-shortcode-candidates-api-surface-68",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[67]",
+        "operation_id": "workable.rest.post-spi-v3-jobs-shortcode-candidates-api-surface-68",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_job_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_job_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_job_candidate\" binds the pinned source contract",
+        "write": "create_job_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/move",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/move",
+        "operation": null,
+        "covered_by": {
+          "write": "move_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-candidates-id-move-api-surface-69",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[68]",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-move-api-surface-69",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"move_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "move_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"move_candidate\" binds the pinned source contract",
+        "write": "move_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/relocate",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/relocate",
+        "operation": null,
+        "covered_by": {
+          "write": "relocate_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-candidates-id-relocate-api-surface-70",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[69]",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-relocate-api-surface-70",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"relocate_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "relocate_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"relocate_candidate\" binds the pinned source contract",
+        "write": "relocate_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/revert",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/revert",
+        "operation": null,
+        "covered_by": {
+          "write": "revert_candidate_disqualification"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-candidates-id-revert-api-surface-71",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[70]",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-revert-api-surface-71",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"revert_candidate_disqualification\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "revert_candidate_disqualification"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"revert_candidate_disqualification\" binds the pinned source contract",
+        "write": "revert_candidate_disqualification"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/spi/v3/candidates/{id}/tags",
+        "operation": null,
+        "covered_by": {
+          "write": "update_candidate_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.put-spi-v3-candidates-id-tags-api-surface-72",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[71]",
+        "operation_id": "workable.rest.put-spi-v3-candidates-id-tags-api-surface-72",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_candidate_tags\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_candidate_tags"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_candidate_tags\" binds the pinned source contract",
+        "write": "update_candidate_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/ratings",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/ratings",
+        "operation": null,
+        "covered_by": {
+          "write": "rate_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-candidates-id-ratings-api-surface-73",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[72]",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-ratings-api-surface-73",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"rate_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "rate_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"rate_candidate\" binds the pinned source contract",
+        "write": "rate_candidate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/ratings",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/spi/v3/candidates/{id}/ratings",
+        "operation": null,
+        "covered_by": {
+          "write": "update_candidate_rating"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.put-spi-v3-candidates-id-ratings-api-surface-74",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[73]",
+        "operation_id": "workable.rest.put-spi-v3-candidates-id-ratings-api-surface-74",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_candidate_rating\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_candidate_rating"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_candidate_rating\" binds the pinned source contract",
+        "write": "update_candidate_rating"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/candidates/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-candidates-id-api-surface-75",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[74]",
+        "operation_id": "workable.rest.patch-spi-v3-candidates-id-api-surface-75",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_candidate\" binds the pinned source contract",
+        "write": "update_candidate"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/approve",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/offers/{id}/approve",
+        "operation": null,
+        "covered_by": {
+          "write": "approve_offer"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-offers-id-approve-api-surface-76",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[75]",
+        "operation_id": "workable.rest.patch-spi-v3-offers-id-approve-api-surface-76",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"approve_offer\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "approve_offer"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"approve_offer\" binds the pinned source contract",
+        "write": "approve_offer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/reject",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/offers/{id}/reject",
+        "operation": null,
+        "covered_by": {
+          "write": "reject_offer"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-offers-id-reject-api-surface-77",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[76]",
+        "operation_id": "workable.rest.patch-spi-v3-offers-id-reject-api-surface-77",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"reject_offer\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "reject_offer"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"reject_offer\" binds the pinned source contract",
+        "write": "reject_offer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/requisitions",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/requisitions",
+        "operation": null,
+        "covered_by": {
+          "write": "create_requisition"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-requisitions-api-surface-78",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[77]",
+        "operation_id": "workable.rest.post-spi-v3-requisitions-api-surface-78",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_requisition\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_requisition"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_requisition\" binds the pinned source contract",
+        "write": "create_requisition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/requisitions/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_requisition"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-requisitions-id-api-surface-79",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[78]",
+        "operation_id": "workable.rest.patch-spi-v3-requisitions-id-api-surface-79",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"update_requisition\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_requisition"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_requisition\" binds the pinned source contract",
+        "write": "update_requisition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/approve",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/requisitions/{code}/approve",
+        "operation": null,
+        "covered_by": {
+          "write": "approve_requisition"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-requisitions-code-approve-api-surface-80",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[79]",
+        "operation_id": "workable.rest.patch-spi-v3-requisitions-code-approve-api-surface-80",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"approve_requisition\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "approve_requisition"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"approve_requisition\" binds the pinned source contract",
+        "write": "approve_requisition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/reject",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/spi/v3/requisitions/{code}/reject",
+        "operation": null,
+        "covered_by": {
+          "write": "reject_requisition"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.patch-spi-v3-requisitions-code-reject-api-surface-81",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[80]",
+        "operation_id": "workable.rest.patch-spi-v3-requisitions-code-reject-api-surface-81",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"reject_requisition\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "reject_requisition"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"reject_requisition\" binds the pinned source contract",
+        "write": "reject_requisition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/talent_pool/{stage}/candidates",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/spi/v3/talent_pool/{stage}/candidates",
+        "operation": null,
+        "covered_by": {
+          "write": "create_talent_pool_candidate"
+        }
+      },
+      "source": {
+        "source_lock": "sources/workable-operation-source-lock.json",
+        "source_id": "workable.rest.post-spi-v3-talent-pool-stage-candidates-api-surface-82",
+        "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+        "source_location": "api_surface.json:endpoints[81]",
+        "operation_id": "workable.rest.post-spi-v3-talent-pool-stage-candidates-api-surface-82",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/workable/writes.json: typed write action \"create_talent_pool_candidate\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_talent_pool_candidate"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_talent_pool_candidate\" binds the pinned source contract",
+        "write": "create_talent_pool_candidate"
+      }
+    }
+  ]
+}

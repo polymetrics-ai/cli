@@ -1,0 +1,762 @@
+{
+  "schema_version": 2,
+  "connector": "workable",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://workable.readme.io/reference/generate-an-access-token",
+    "requested_url": "https://workable.readme.io/reference",
+    "sha256": "f0379d0b6df8464aea0686a0ef545eea6e8a13ef700c34bcb19cc1deba7cb5d6",
+    "bytes": 228134,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 4,
+      "GET": 43,
+      "PATCH": 10,
+      "POST": 21,
+      "PUT": 4
+    },
+    "operations": [
+      {
+        "id": "workable.rest.get-spi-v3-jobs-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs",
+        "operation_id": "workable.rest.get-spi-v3-jobs-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-candidates-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/candidates",
+        "operation_id": "workable.rest.get-spi-v3-candidates-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-members-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/members",
+        "operation_id": "workable.rest.get-spi-v3-members-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-accounts-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/accounts",
+        "operation_id": "workable.rest.get-spi-v3-accounts-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-accounts-subdomain-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/accounts/{subdomain}",
+        "operation_id": "workable.rest.get-spi-v3-accounts-subdomain-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-collaboration-permissions-api-surface-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/collaboration_permissions",
+        "operation_id": "workable.rest.get-spi-v3-collaboration-permissions-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-departments-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/departments",
+        "operation_id": "workable.rest.get-spi-v3-departments-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-disqualification-reasons-api-surface-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/disqualification_reasons",
+        "operation_id": "workable.rest.get-spi-v3-disqualification-reasons-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-legal-entities-api-surface-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/legal_entities",
+        "operation_id": "workable.rest.get-spi-v3-legal-entities-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-permission-sets-api-surface-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/permission_sets",
+        "operation_id": "workable.rest.get-spi-v3-permission-sets-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-recruiters-api-surface-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/recruiters",
+        "operation_id": "workable.rest.get-spi-v3-recruiters-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-stages-api-surface-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/stages",
+        "operation_id": "workable.rest.get-spi-v3-stages-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-subscriptions-api-surface-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/subscriptions",
+        "operation_id": "workable.rest.get-spi-v3-subscriptions-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-employee-fields-api-surface-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/employee_fields",
+        "operation_id": "workable.rest.get-spi-v3-employee-fields-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-employees-orgchart-api-surface-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/employees/orgchart",
+        "operation_id": "workable.rest.get-spi-v3-employees-orgchart-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-employees-api-surface-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/employees",
+        "operation_id": "workable.rest.get-spi-v3-employees-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-employees-id-api-surface-17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/employees/{id}",
+        "operation_id": "workable.rest.get-spi-v3-employees-id-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-employees-id-documents-api-surface-18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/employees/{id}/documents",
+        "operation_id": "workable.rest.get-spi-v3-employees-id-documents-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-review-cycles-templates-api-surface-19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/review-cycles/templates",
+        "operation_id": "workable.rest.get-spi-v3-review-cycles-templates-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-review-cycles-templates-id-api-surface-20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/review-cycles/templates/{id}",
+        "operation_id": "workable.rest.get-spi-v3-review-cycles-templates-id-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-time-tracking-time-entries-api-surface-21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/time-tracking/time-entries",
+        "operation_id": "workable.rest.get-spi-v3-time-tracking-time-entries-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-timeoff-balances-api-surface-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/timeoff/balances",
+        "operation_id": "workable.rest.get-spi-v3-timeoff-balances-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-timeoff-categories-api-surface-23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/timeoff/categories",
+        "operation_id": "workable.rest.get-spi-v3-timeoff-categories-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-timeoff-requests-api-surface-24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/timeoff/requests",
+        "operation_id": "workable.rest.get-spi-v3-timeoff-requests-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-work-schedules-api-surface-25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/work_schedules",
+        "operation_id": "workable.rest.get-spi-v3-work-schedules-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-candidates-id-activities-api-surface-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/candidates/{id}/activities",
+        "operation_id": "workable.rest.get-spi-v3-candidates-id-activities-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-candidates-id-files-api-surface-27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/candidates/{id}/files",
+        "operation_id": "workable.rest.get-spi-v3-candidates-id-files-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-candidates-id-offer-api-surface-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/candidates/{id}/offer",
+        "operation_id": "workable.rest.get-spi-v3-candidates-id-offer-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-custom-attributes-api-surface-29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/custom_attributes",
+        "operation_id": "workable.rest.get-spi-v3-custom-attributes-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-events-api-surface-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/events",
+        "operation_id": "workable.rest.get-spi-v3-events-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-events-id-api-surface-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/events/{id}",
+        "operation_id": "workable.rest.get-spi-v3-events-id-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-activities-api-surface-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/activities",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-activities-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-custom-attributes-api-surface-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-custom-attributes-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-members-api-surface-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/members",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-members-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-questions-api-surface-35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/questions",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-questions-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-stages-api-surface-36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/stages",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-stages-api-surface-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-api-surface-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-application-form-api-surface-38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/application_form",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-application-form-api-surface-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-jobs-shortcode-recruiters-api-surface-39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/jobs/{shortcode}/recruiters",
+        "operation_id": "workable.rest.get-spi-v3-jobs-shortcode-recruiters-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-requisitions-api-surface-40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/requisitions",
+        "operation_id": "workable.rest.get-spi-v3-requisitions-api-surface-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-requisitions-code-api-surface-41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/requisitions/{code}",
+        "operation_id": "workable.rest.get-spi-v3-requisitions-code-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "workable.rest.get-spi-v3-offers-id-api-surface-42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spi/v3/offers/{id}",
+        "operation_id": "workable.rest.get-spi-v3-offers-id-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "workable.rest.get-api-accounts-subdomain-api-surface-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/accounts/{subdomain}",
+        "operation_id": "workable.rest.get-api-accounts-subdomain-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-departments-api-surface-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/departments",
+        "operation_id": "workable.rest.post-spi-v3-departments-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "workable.rest.put-spi-v3-departments-api-surface-45",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/spi/v3/departments",
+        "operation_id": "workable.rest.put-spi-v3-departments-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-departments-id-merge-api-surface-46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/departments/{id}/merge",
+        "operation_id": "workable.rest.post-spi-v3-departments-id-merge-api-surface-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]"
+      },
+      {
+        "id": "workable.rest.delete-spi-v3-departments-id-api-surface-47",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spi/v3/departments/{id}",
+        "operation_id": "workable.rest.delete-spi-v3-departments-id-api-surface-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-members-invite-api-surface-48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/members/invite",
+        "operation_id": "workable.rest.post-spi-v3-members-invite-api-surface-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]"
+      },
+      {
+        "id": "workable.rest.put-spi-v3-members-api-surface-49",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/spi/v3/members",
+        "operation_id": "workable.rest.put-spi-v3-members-api-surface-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]"
+      },
+      {
+        "id": "workable.rest.delete-spi-v3-members-id-api-surface-50",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spi/v3/members/{id}",
+        "operation_id": "workable.rest.delete-spi-v3-members-id-api-surface-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-members-id-enable-api-surface-51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/members/{id}/enable",
+        "operation_id": "workable.rest.post-spi-v3-members-id-enable-api-surface-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-subscriptions-api-surface-52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/subscriptions",
+        "operation_id": "workable.rest.post-spi-v3-subscriptions-api-surface-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]"
+      },
+      {
+        "id": "workable.rest.delete-spi-v3-subscriptions-id-api-surface-53",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spi/v3/subscriptions/{id}",
+        "operation_id": "workable.rest.delete-spi-v3-subscriptions-id-api-surface-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-employees-api-surface-54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/employees",
+        "operation_id": "workable.rest.post-spi-v3-employees-api-surface-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-employees-id-api-surface-55",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/employees/{id}",
+        "operation_id": "workable.rest.patch-spi-v3-employees-id-api-surface-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-employees-id-documents-api-surface-56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/employees/{id}/documents",
+        "operation_id": "workable.rest.post-spi-v3-employees-id-documents-api-surface-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-review-cycles-templates-api-surface-57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/review-cycles/templates",
+        "operation_id": "workable.rest.post-spi-v3-review-cycles-templates-api-surface-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-time-tracking-time-entries-api-surface-58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/time-tracking/time-entries",
+        "operation_id": "workable.rest.post-spi-v3-time-tracking-time-entries-api-surface-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-time-tracking-employees-id-time-entries-api-surface-59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+        "operation_id": "workable.rest.post-spi-v3-time-tracking-employees-id-time-entries-api-surface-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-60",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+        "operation_id": "workable.rest.patch-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]"
+      },
+      {
+        "id": "workable.rest.delete-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-61",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+        "operation_id": "workable.rest.delete-spi-v3-time-tracking-employees-id-time-entries-uuid-api-surface-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-timeoff-approvals-key-api-surface-62",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/timeoff/approvals/{key}",
+        "operation_id": "workable.rest.patch-spi-v3-timeoff-approvals-key-api-surface-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-timeoff-requests-api-surface-63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/timeoff/requests",
+        "operation_id": "workable.rest.post-spi-v3-timeoff-requests-api-surface-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-candidates-id-update-custom-attribute-value-api-surface-64",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
+        "operation_id": "workable.rest.patch-spi-v3-candidates-id-update-custom-attribute-value-api-surface-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-candidates-id-comments-api-surface-65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/comments",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-comments-api-surface-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-candidates-id-copy-api-surface-66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/copy",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-copy-api-surface-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-candidates-id-disqualify-api-surface-67",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/disqualify",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-disqualify-api-surface-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-jobs-shortcode-candidates-api-surface-68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/jobs/{shortcode}/candidates",
+        "operation_id": "workable.rest.post-spi-v3-jobs-shortcode-candidates-api-surface-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-candidates-id-move-api-surface-69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/move",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-move-api-surface-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-candidates-id-relocate-api-surface-70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/relocate",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-relocate-api-surface-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-candidates-id-revert-api-surface-71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/revert",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-revert-api-surface-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]"
+      },
+      {
+        "id": "workable.rest.put-spi-v3-candidates-id-tags-api-surface-72",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/spi/v3/candidates/{id}/tags",
+        "operation_id": "workable.rest.put-spi-v3-candidates-id-tags-api-surface-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-candidates-id-ratings-api-surface-73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/candidates/{id}/ratings",
+        "operation_id": "workable.rest.post-spi-v3-candidates-id-ratings-api-surface-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]"
+      },
+      {
+        "id": "workable.rest.put-spi-v3-candidates-id-ratings-api-surface-74",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/spi/v3/candidates/{id}/ratings",
+        "operation_id": "workable.rest.put-spi-v3-candidates-id-ratings-api-surface-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-candidates-id-api-surface-75",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/candidates/{id}",
+        "operation_id": "workable.rest.patch-spi-v3-candidates-id-api-surface-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-offers-id-approve-api-surface-76",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/offers/{id}/approve",
+        "operation_id": "workable.rest.patch-spi-v3-offers-id-approve-api-surface-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-offers-id-reject-api-surface-77",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/offers/{id}/reject",
+        "operation_id": "workable.rest.patch-spi-v3-offers-id-reject-api-surface-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-requisitions-api-surface-78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/requisitions",
+        "operation_id": "workable.rest.post-spi-v3-requisitions-api-surface-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-requisitions-id-api-surface-79",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/requisitions/{id}",
+        "operation_id": "workable.rest.patch-spi-v3-requisitions-id-api-surface-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-requisitions-code-approve-api-surface-80",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/requisitions/{code}/approve",
+        "operation_id": "workable.rest.patch-spi-v3-requisitions-code-approve-api-surface-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]"
+      },
+      {
+        "id": "workable.rest.patch-spi-v3-requisitions-code-reject-api-surface-81",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spi/v3/requisitions/{code}/reject",
+        "operation_id": "workable.rest.patch-spi-v3-requisitions-code-reject-api-surface-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]"
+      },
+      {
+        "id": "workable.rest.post-spi-v3-talent-pool-stage-candidates-api-surface-82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spi/v3/talent_pool/{stage}/candidates",
+        "operation_id": "workable.rest.post-spi-v3-talent-pool-stage-candidates-api-surface-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]"
+      }
+    ]
+  }
+}

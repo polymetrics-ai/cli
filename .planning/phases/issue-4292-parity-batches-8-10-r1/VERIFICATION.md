@@ -45,4 +45,18 @@
   `552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)`.
 
 Final scoped Go tests, repository generated checks, boundary capture, and
-review run after batches 9 and 10 are complete.
+review run remain pending until Batch 10 is complete.
+
+### Batch 9 source artifacts
+
+- PASS — pre-generation presence assertion failed as expected for all thirty
+  Batch 9 source artifact paths.
+- PASS — `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/generate-parity-maps.mjs 9`
+  and `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/verify-parity-maps.mjs 9`
+  generated and verified coda, clickup-api, calendly, greenhouse, lever-hiring,
+  ashby, workable, recruitee, hibob, and factorial.
+- PASS — `go run ./cmd/connectorgen validate internal/connectors/defs/<connector> --json`
+  for each Batch 9 connector: each result reported `connectors_checked: 1`,
+  `findings: null`, and `warnings: null`.
+- PASS — `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check`:
+  `552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)`.

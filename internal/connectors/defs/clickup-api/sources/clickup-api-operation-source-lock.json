@@ -1,0 +1,1572 @@
+{
+  "schema_version": 2,
+  "connector": "clickup-api",
+  "captured_at": "2026-08-19T15:30:48.422Z",
+  "rest": {
+    "source_url": "https://developer.clickup.com/reference/getaccesstoken",
+    "requested_url": "https://developer.clickup.com/reference",
+    "sha256": "24ee2afae67cff61a90057ba3012e0266b57b4f3496d9ffc67b850424e15e3a1",
+    "bytes": 1047337,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 29,
+      "GET": 68,
+      "PATCH": 2,
+      "POST": 53,
+      "PUT": 20
+    },
+    "operations": [
+      {
+        "id": "clickup-api.rest.get-v2-team-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team",
+        "operation_id": "clickup-api.rest.get-v2-team-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-space-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/space",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-space-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-space-space-id-folder-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/space/{space_id}/folder",
+        "operation_id": "clickup-api.rest.get-v2-space-space-id-folder-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-space-space-id-list-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/space/{space_id}/list",
+        "operation_id": "clickup-api.rest.get-v2-space-space-id-list-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-task-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/task",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-task-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-goal-api-surface-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/goal",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-goal-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-space-space-id-tag-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/space/{space_id}/tag",
+        "operation_id": "clickup-api.rest.get-v2-space-space-id-tag-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-webhook-api-surface-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/webhook",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-webhook-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-folder-folder-id-list-api-surface-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}/list",
+        "operation_id": "clickup-api.rest.get-v2-folder-folder-id-list-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-list-list-id-task-api-surface-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/list/{list_id}/task",
+        "operation_id": "clickup-api.rest.get-v2-list-list-id-task-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-task-task-id-api-surface-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/task/{task_id}",
+        "operation_id": "clickup-api.rest.get-v2-task-task-id-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-task-filtered-team-tasks-api-surface-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/task/filtered_team_tasks",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-task-filtered-team-tasks-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-folder-folder-id-api-surface-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}",
+        "operation_id": "clickup-api.rest.get-v2-folder-folder-id-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-space-space-id-api-surface-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/space/{space_id}",
+        "operation_id": "clickup-api.rest.get-v2-space-space-id-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-list-list-id-api-surface-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/list/{list_id}",
+        "operation_id": "clickup-api.rest.get-v2-list-list-id-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-goal-goal-id-api-surface-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/goal/{goal_id}",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-goal-goal-id-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-user-api-surface-17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/user",
+        "operation_id": "clickup-api.rest.get-v2-user-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-oauth-token-api-surface-18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/oauth/token",
+        "operation_id": "clickup-api.rest.get-v2-oauth-token-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-list-list-id-task-api-surface-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/list/{list_id}/task",
+        "operation_id": "clickup-api.rest.post-v2-list-list-id-task-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-task-task-id-api-surface-20",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/task/{task_id}",
+        "operation_id": "clickup-api.rest.put-v2-task-task-id-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-task-task-id-api-surface-21",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}",
+        "operation_id": "clickup-api.rest.delete-v2-task-task-id-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-comment-api-surface-22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/comment",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-comment-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-tag-tag-name-api-surface-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/tag/{tag_name}",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-tag-tag-name-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-task-task-id-tag-tag-name-api-surface-24",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/tag/{tag_name}",
+        "operation_id": "clickup-api.rest.delete-v2-task-task-id-tag-tag-name-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-field-field-id-api-surface-25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/field/{field_id}",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-field-field-id-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-goal-api-surface-26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/goal",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-goal-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-space-space-id-folder-api-surface-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/space/{space_id}/folder",
+        "operation_id": "clickup-api.rest.post-v2-space-space-id-folder-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-folder-folder-id-api-surface-28",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/folder/{folder_id}",
+        "operation_id": "clickup-api.rest.put-v2-folder-folder-id-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-folder-folder-id-api-surface-29",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/folder/{folder_id}",
+        "operation_id": "clickup-api.rest.delete-v2-folder-folder-id-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-folder-folder-id-list-api-surface-30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/folder/{folder_id}/list",
+        "operation_id": "clickup-api.rest.post-v2-folder-folder-id-list-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-list-list-id-api-surface-31",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/list/{list_id}",
+        "operation_id": "clickup-api.rest.put-v2-list-list-id-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-list-list-id-api-surface-32",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/list/{list_id}",
+        "operation_id": "clickup-api.rest.delete-v2-list-list-id-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-space-api-surface-33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/space",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-space-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-space-space-id-api-surface-34",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/space/{space_id}",
+        "operation_id": "clickup-api.rest.put-v2-space-space-id-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-space-space-id-api-surface-35",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/space/{space_id}",
+        "operation_id": "clickup-api.rest.delete-v2-space-space-id-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-webhook-api-surface-36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/webhook",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-webhook-api-surface-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-webhook-webhook-id-api-surface-37",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/webhook/{webhook_id}",
+        "operation_id": "clickup-api.rest.put-v2-webhook-webhook-id-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-webhook-webhook-id-api-surface-38",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/webhook/{webhook_id}",
+        "operation_id": "clickup-api.rest.delete-v2-webhook-webhook-id-api-surface-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-attachment-api-surface-39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/attachment",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-attachment-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-attachment-api-surface-40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/attachment",
+        "operation_id": "clickup-api.rest.post-v2-attachment-api-surface-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-attachment-api-surface-41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/attachment",
+        "operation_id": "clickup-api.rest.get-v2-attachment-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-list-list-id-comment-api-surface-42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/list/{list_id}/comment",
+        "operation_id": "clickup-api.rest.get-v2-list-list-id-comment-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-task-task-id-comment-api-surface-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/task/{task_id}/comment",
+        "operation_id": "clickup-api.rest.get-v2-task-task-id-comment-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-view-view-id-comment-api-surface-44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/view/{view_id}/comment",
+        "operation_id": "clickup-api.rest.get-v2-view-view-id-comment-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-comment-comment-id-reply-api-surface-45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/comment/{comment_id}/reply",
+        "operation_id": "clickup-api.rest.get-v2-comment-comment-id-reply-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-list-list-id-comment-api-surface-46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/list/{list_id}/comment",
+        "operation_id": "clickup-api.rest.post-v2-list-list-id-comment-api-surface-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-view-view-id-comment-api-surface-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/view/{view_id}/comment",
+        "operation_id": "clickup-api.rest.post-v2-view-view-id-comment-api-surface-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-comment-comment-id-reply-api-surface-48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/comment/{comment_id}/reply",
+        "operation_id": "clickup-api.rest.post-v2-comment-comment-id-reply-api-surface-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-comment-comment-id-api-surface-49",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/comment/{comment_id}",
+        "operation_id": "clickup-api.rest.put-v2-comment-comment-id-api-surface-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-comment-comment-id-api-surface-50",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/comment/{comment_id}",
+        "operation_id": "clickup-api.rest.delete-v2-comment-comment-id-api-surface-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-list-list-id-field-api-surface-51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/list/{list_id}/field",
+        "operation_id": "clickup-api.rest.get-v2-list-list-id-field-api-surface-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-folder-folder-id-field-api-surface-52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}/field",
+        "operation_id": "clickup-api.rest.get-v2-folder-folder-id-field-api-surface-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-space-space-id-field-api-surface-53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/space/{space_id}/field",
+        "operation_id": "clickup-api.rest.get-v2-space-space-id-field-api-surface-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-field-api-surface-54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/field",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-field-api-surface-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-task-task-id-field-field-id-api-surface-55",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/field/{field_id}",
+        "operation_id": "clickup-api.rest.delete-v2-task-task-id-field-field-id-api-surface-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-custom-item-api-surface-56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/custom_item",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-custom-item-api-surface-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-space-space-id-folder-template-template-id-api-surface-57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/space/{space_id}/folder_template/{template_id}",
+        "operation_id": "clickup-api.rest.post-v2-space-space-id-folder-template-template-id-api-surface-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-folder-folder-id-list-template-template-id-api-surface-58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/folder/{folder_id}/list_template/{template_id}",
+        "operation_id": "clickup-api.rest.post-v2-folder-folder-id-list-template-template-id-api-surface-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-space-space-id-list-template-template-id-api-surface-59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/space/{space_id}/list_template/{template_id}",
+        "operation_id": "clickup-api.rest.post-v2-space-space-id-list-template-template-id-api-surface-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-list-list-id-tasktemplate-template-id-api-surface-60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/list/{list_id}/taskTemplate/{template_id}",
+        "operation_id": "clickup-api.rest.post-v2-list-list-id-tasktemplate-template-id-api-surface-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-tasktemplate-api-surface-61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/taskTemplate",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-tasktemplate-api-surface-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-foldertemplate-api-surface-62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/folderTemplate",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-foldertemplate-api-surface-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-listtemplate-api-surface-63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/listTemplate",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-listtemplate-api-surface-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-goal-goal-id-key-result-api-surface-64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/goal/{goal_id}/key_result",
+        "operation_id": "clickup-api.rest.post-v2-goal-goal-id-key-result-api-surface-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-key-result-key-result-id-api-surface-65",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/key_result/{key_result_id}",
+        "operation_id": "clickup-api.rest.put-v2-key-result-key-result-id-api-surface-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-key-result-key-result-id-api-surface-66",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/key_result/{key_result_id}",
+        "operation_id": "clickup-api.rest.delete-v2-key-result-key-result-id-api-surface-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-goal-goal-id-api-surface-67",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/goal/{goal_id}",
+        "operation_id": "clickup-api.rest.put-v2-goal-goal-id-api-surface-67",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-goal-goal-id-api-surface-68",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/goal/{goal_id}",
+        "operation_id": "clickup-api.rest.delete-v2-goal-goal-id-api-surface-68",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-list-list-id-task-task-id-api-surface-69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/list/{list_id}/task/{task_id}",
+        "operation_id": "clickup-api.rest.post-v2-list-list-id-task-task-id-api-surface-69",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-list-list-id-task-task-id-api-surface-70",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/list/{list_id}/task/{task_id}",
+        "operation_id": "clickup-api.rest.delete-v2-list-list-id-task-task-id-api-surface-70",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-list-list-id-member-api-surface-71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/list/{list_id}/member",
+        "operation_id": "clickup-api.rest.get-v2-list-list-id-member-api-surface-71",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-task-task-id-member-api-surface-72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/task/{task_id}/member",
+        "operation_id": "clickup-api.rest.get-v2-task-task-id-member-api-surface-72",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-customroles-api-surface-73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/customroles",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-customroles-api-surface-73",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-shared-api-surface-74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/shared",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-shared-api-surface-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-space-space-id-tag-api-surface-75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/space/{space_id}/tag",
+        "operation_id": "clickup-api.rest.post-v2-space-space-id-tag-api-surface-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-space-space-id-tag-tag-name-api-surface-76",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/space/{space_id}/tag/{tag_name}",
+        "operation_id": "clickup-api.rest.put-v2-space-space-id-tag-tag-name-api-surface-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-space-space-id-tag-tag-name-api-surface-77",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/space/{space_id}/tag/{tag_name}",
+        "operation_id": "clickup-api.rest.delete-v2-space-space-id-tag-tag-name-api-surface-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-checklist-api-surface-78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/checklist",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-checklist-api-surface-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-checklist-checklist-id-checklist-item-api-surface-79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/checklist/{checklist_id}/checklist_item",
+        "operation_id": "clickup-api.rest.post-v2-checklist-checklist-id-checklist-item-api-surface-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-checklist-checklist-id-api-surface-80",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/checklist/{checklist_id}",
+        "operation_id": "clickup-api.rest.put-v2-checklist-checklist-id-api-surface-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-checklist-checklist-id-api-surface-81",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/checklist/{checklist_id}",
+        "operation_id": "clickup-api.rest.delete-v2-checklist-checklist-id-api-surface-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-checklist-checklist-id-checklist-item-checklist-item-id-api-surface-82",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}",
+        "operation_id": "clickup-api.rest.put-v2-checklist-checklist-id-checklist-item-checklist-item-id-api-surface-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-checklist-checklist-id-checklist-item-checklist-item-id-api-surface-83",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}",
+        "operation_id": "clickup-api.rest.delete-v2-checklist-checklist-id-checklist-item-checklist-item-id-api-surface-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-dependency-api-surface-84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/dependency",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-dependency-api-surface-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-task-task-id-dependency-api-surface-85",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/dependency",
+        "operation_id": "clickup-api.rest.delete-v2-task-task-id-dependency-api-surface-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-link-links-to-api-surface-86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/link/{links_to}",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-link-links-to-api-surface-86",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-task-task-id-link-links-to-api-surface-87",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/link/{links_to}",
+        "operation_id": "clickup-api.rest.delete-v2-task-task-id-link-links-to-api-surface-87",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-task-task-id-time-in-status-api-surface-88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/task/{task_id}/time_in_status",
+        "operation_id": "clickup-api.rest.get-v2-task-task-id-time-in-status-api-surface-88",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-task-bulk-time-in-status-api-surface-89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/task/bulk_time_in_status",
+        "operation_id": "clickup-api.rest.get-v2-task-bulk-time-in-status-api-surface-89",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-merge-api-surface-90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/merge",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-merge-api-surface-90",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-list-list-id-api-surface-91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/list/{list_id}",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-list-list-id-api-surface-91",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-time-estimate-api-surface-92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/time_estimate",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-time-estimate-api-surface-92",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-time-estimate-bulk-api-surface-93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/time_estimate/bulk",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-time-estimate-bulk-api-surface-93",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-task-task-id-time-api-surface-94",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/time",
+        "operation_id": "clickup-api.rest.delete-v2-task-task-id-time-api-surface-94",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[93]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-task-task-id-time-api-surface-95",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/task/{task_id}/time",
+        "operation_id": "clickup-api.rest.put-v2-task-task-id-time-api-surface-95",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[94]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-task-task-id-time-api-surface-96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/task/{task_id}/time",
+        "operation_id": "clickup-api.rest.get-v2-task-task-id-time-api-surface-96",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[95]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-time-api-surface-97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/time",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-time-api-surface-97",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[96]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-time-entries-tags-api-surface-98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-time-entries-tags-api-surface-98",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-time-entries-tags-api-surface-99",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-time-entries-tags-api-surface-99",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-team-team-id-time-entries-tags-api-surface-100",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "operation_id": "clickup-api.rest.put-v2-team-team-id-time-entries-tags-api-surface-100",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-team-team-id-time-entries-tags-api-surface-101",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "operation_id": "clickup-api.rest.delete-v2-team-team-id-time-entries-tags-api-surface-101",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-time-entries-api-surface-102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-time-entries-api-surface-102",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-team-team-id-time-entries-timer-id-api-surface-103",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}",
+        "operation_id": "clickup-api.rest.delete-v2-team-team-id-time-entries-timer-id-api-surface-103",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-time-entries-current-api-surface-104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/current",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-time-entries-current-api-surface-104",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-time-entries-timer-id-api-surface-105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-time-entries-timer-id-api-surface-105",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-time-entries-api-surface-106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-time-entries-api-surface-106",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-time-entries-timer-id-history-api-surface-107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}/history",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-time-entries-timer-id-history-api-surface-107",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-time-entries-start-api-surface-108",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries/start",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-time-entries-start-api-surface-108",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-time-entries-stop-api-surface-109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries/stop",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-time-entries-stop-api-surface-109",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-team-team-id-time-entries-timer-id-api-surface-110",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}",
+        "operation_id": "clickup-api.rest.put-v2-team-team-id-time-entries-timer-id-api-surface-110",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-group-api-surface-111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/group",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-group-api-surface-111",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-group-group-id-api-surface-112",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/group/{group_id}",
+        "operation_id": "clickup-api.rest.delete-v2-group-group-id-api-surface-112",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-group-api-surface-113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/group",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-group-api-surface-113",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-group-group-id-api-surface-114",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/group/{group_id}",
+        "operation_id": "clickup-api.rest.put-v2-group-group-id-api-surface-114",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-user-user-id-api-surface-115",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/user/{user_id}",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-user-user-id-api-surface-115",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-team-team-id-user-user-id-api-surface-116",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/user/{user_id}",
+        "operation_id": "clickup-api.rest.put-v2-team-team-id-user-user-id-api-surface-116",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-user-api-surface-117",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/user",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-user-api-surface-117",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-team-team-id-user-user-id-api-surface-118",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/user/{user_id}",
+        "operation_id": "clickup-api.rest.delete-v2-team-team-id-user-user-id-api-surface-118",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-guest-guest-id-api-surface-119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-guest-guest-id-api-surface-119",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-team-team-id-guest-guest-id-api-surface-120",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.put-v2-team-team-id-guest-guest-id-api-surface-120",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-guest-api-surface-121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/guest",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-guest-api-surface-121",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-team-team-id-guest-guest-id-api-surface-122",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.delete-v2-team-team-id-guest-guest-id-api-surface-122",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-folder-folder-id-guest-guest-id-api-surface-123",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/folder/{folder_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.post-v2-folder-folder-id-guest-guest-id-api-surface-123",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-folder-folder-id-guest-guest-id-api-surface-124",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/folder/{folder_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.delete-v2-folder-folder-id-guest-guest-id-api-surface-124",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-list-list-id-guest-guest-id-api-surface-125",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/list/{list_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.post-v2-list-list-id-guest-guest-id-api-surface-125",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-list-list-id-guest-guest-id-api-surface-126",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/list/{list_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.delete-v2-list-list-id-guest-guest-id-api-surface-126",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-task-task-id-guest-guest-id-api-surface-127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/task/{task_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.post-v2-task-task-id-guest-guest-id-api-surface-127",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-task-task-id-guest-guest-id-api-surface-128",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/guest/{guest_id}",
+        "operation_id": "clickup-api.rest.delete-v2-task-task-id-guest-guest-id-api-surface-128",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-plan-api-surface-129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/plan",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-plan-api-surface-129",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-seats-api-surface-130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/seats",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-seats-api-surface-130",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-object-type-object-id-acl-api-surface-131",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/{object_type}/{object_id}/acl",
+        "operation_id": "clickup-api.rest.put-v2-object-type-object-id-acl-api-surface-131",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-folder-folder-id-view-api-surface-132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/folder/{folder_id}/view",
+        "operation_id": "clickup-api.rest.post-v2-folder-folder-id-view-api-surface-132",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-list-list-id-view-api-surface-133",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/list/{list_id}/view",
+        "operation_id": "clickup-api.rest.post-v2-list-list-id-view-api-surface-133",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-space-space-id-view-api-surface-134",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/space/{space_id}/view",
+        "operation_id": "clickup-api.rest.post-v2-space-space-id-view-api-surface-134",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-view-api-surface-135",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/view",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-view-api-surface-135",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-view-view-id-api-surface-136",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/view/{view_id}",
+        "operation_id": "clickup-api.rest.delete-v2-view-view-id-api-surface-136",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-folder-folder-id-view-api-surface-137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}/view",
+        "operation_id": "clickup-api.rest.get-v2-folder-folder-id-view-api-surface-137",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-list-list-id-view-api-surface-138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/list/{list_id}/view",
+        "operation_id": "clickup-api.rest.get-v2-list-list-id-view-api-surface-138",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-space-space-id-view-api-surface-139",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/space/{space_id}/view",
+        "operation_id": "clickup-api.rest.get-v2-space-space-id-view-api-surface-139",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-team-team-id-view-api-surface-140",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team/{team_id}/view",
+        "operation_id": "clickup-api.rest.get-v2-team-team-id-view-api-surface-140",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-view-view-id-api-surface-141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/view/{view_id}",
+        "operation_id": "clickup-api.rest.get-v2-view-view-id-api-surface-141",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-view-view-id-task-api-surface-142",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/view/{view_id}/task",
+        "operation_id": "clickup-api.rest.get-v2-view-view-id-task-api-surface-142",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]"
+      },
+      {
+        "id": "clickup-api.rest.put-v2-view-view-id-api-surface-143",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/view/{view_id}",
+        "operation_id": "clickup-api.rest.put-v2-view-view-id-api-surface-143",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-team-team-id-auditlogs-api-surface-144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/team/{team_id}/auditlogs",
+        "operation_id": "clickup-api.rest.post-v2-team-team-id-auditlogs-api-surface-144",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-workspaces-workspace-id-channels-api-surface-145",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/channels",
+        "operation_id": "clickup-api.rest.post-v2-workspaces-workspace-id-channels-api-surface-145",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-workspaces-workspace-id-channels-channel-id-messages-api-surface-146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/messages",
+        "operation_id": "clickup-api.rest.post-v2-workspaces-workspace-id-channels-channel-id-messages-api-surface-146",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-workspaces-workspace-id-messages-message-id-reactions-api-surface-147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions",
+        "operation_id": "clickup-api.rest.post-v2-workspaces-workspace-id-messages-message-id-reactions-api-surface-147",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-workspaces-workspace-id-direct-messages-api-surface-148",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/direct_messages",
+        "operation_id": "clickup-api.rest.post-v2-workspaces-workspace-id-direct-messages-api-surface-148",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-workspaces-workspace-id-channels-location-api-surface-149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/channels/location",
+        "operation_id": "clickup-api.rest.post-v2-workspaces-workspace-id-channels-location-api-surface-149",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]"
+      },
+      {
+        "id": "clickup-api.rest.post-v2-workspaces-workspace-id-messages-message-id-replies-api-surface-150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/replies",
+        "operation_id": "clickup-api.rest.post-v2-workspaces-workspace-id-messages-message-id-replies-api-surface-150",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-workspaces-workspace-id-channels-channel-id-api-surface-151",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}",
+        "operation_id": "clickup-api.rest.delete-v2-workspaces-workspace-id-channels-channel-id-api-surface-151",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-workspaces-workspace-id-messages-message-id-api-surface-152",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}",
+        "operation_id": "clickup-api.rest.delete-v2-workspaces-workspace-id-messages-message-id-api-surface-152",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]"
+      },
+      {
+        "id": "clickup-api.rest.delete-v2-workspaces-workspace-id-messages-message-id-reactions-reaction-api-surface-153",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions/{reaction}",
+        "operation_id": "clickup-api.rest.delete-v2-workspaces-workspace-id-messages-message-id-reactions-reaction-api-surface-153",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-api-surface-154",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-api-surface-154",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-followers-api-surface-155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/followers",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-followers-api-surface-155",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-members-api-surface-156",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/members",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-members-api-surface-156",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-api-surface-157",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-api-surface-157",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-messages-message-id-reactions-api-surface-158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-messages-message-id-reactions-api-surface-158",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-messages-message-id-replies-api-surface-159",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/replies",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-messages-message-id-replies-api-surface-159",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-messages-api-surface-160",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/messages",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-channels-channel-id-messages-api-surface-160",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[159]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-messages-message-id-tagged-users-api-surface-161",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/tagged_users",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-messages-message-id-tagged-users-api-surface-161",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[160]"
+      },
+      {
+        "id": "clickup-api.rest.get-v2-workspaces-workspace-id-subtypes-api-surface-162",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/subtypes",
+        "operation_id": "clickup-api.rest.get-v2-workspaces-workspace-id-subtypes-api-surface-162",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[161]"
+      },
+      {
+        "id": "clickup-api.rest.patch-v2-workspaces-workspace-id-messages-message-id-api-surface-163",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}",
+        "operation_id": "clickup-api.rest.patch-v2-workspaces-workspace-id-messages-message-id-api-surface-163",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[162]"
+      },
+      {
+        "id": "clickup-api.rest.patch-v2-workspaces-workspace-id-channels-channel-id-api-surface-164",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}",
+        "operation_id": "clickup-api.rest.patch-v2-workspaces-workspace-id-channels-channel-id-api-surface-164",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[163]"
+      },
+      {
+        "id": "clickup-api.rest.post-v3-workspaces-workspace-id-docs-api-surface-165",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/workspaces/{workspace_id}/docs",
+        "operation_id": "clickup-api.rest.post-v3-workspaces-workspace-id-docs-api-surface-165",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[164]"
+      },
+      {
+        "id": "clickup-api.rest.post-v3-workspaces-workspace-id-docs-doc-id-pages-api-surface-166",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages",
+        "operation_id": "clickup-api.rest.post-v3-workspaces-workspace-id-docs-doc-id-pages-api-surface-166",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[165]"
+      },
+      {
+        "id": "clickup-api.rest.put-v3-workspaces-workspace-id-docs-doc-id-pages-page-id-api-surface-167",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}",
+        "operation_id": "clickup-api.rest.put-v3-workspaces-workspace-id-docs-doc-id-pages-page-id-api-surface-167",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[166]"
+      },
+      {
+        "id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-pagelisting-api-surface-168",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pageListing",
+        "operation_id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-pagelisting-api-surface-168",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[167]"
+      },
+      {
+        "id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-pages-api-surface-169",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages",
+        "operation_id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-pages-api-surface-169",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[168]"
+      },
+      {
+        "id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-api-surface-170",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}",
+        "operation_id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-api-surface-170",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[169]"
+      },
+      {
+        "id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-pages-page-id-api-surface-171",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}",
+        "operation_id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-doc-id-pages-page-id-api-surface-171",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[170]"
+      },
+      {
+        "id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-api-surface-172",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs",
+        "operation_id": "clickup-api.rest.get-v3-workspaces-workspace-id-docs-api-surface-172",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[171]"
+      }
+    ]
+  }
+}
