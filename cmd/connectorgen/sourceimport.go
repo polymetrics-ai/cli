@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"net"
 	"net/http"
 	"os"
@@ -39,28 +40,31 @@ source-lock refresh; this command never accepts a replacement URL, method,
 path, header, body, credential, or generic request input.`
 
 const (
-	defaultSourceImportArtifactBytes  = int64(16 << 20)
-	defaultSourceImportSchemaBytes    = int64(1 << 20)
-	defaultSourceImportOperations     = 10_000
-	defaultSourceImportReferences     = 50_000
-	defaultSourceImportReferenceDepth = 32
+	defaultSourceImportArtifactBytes   = int64(16 << 20)
+	defaultSourceImportSchemaBytes     = int64(1 << 20)
+	defaultSourceImportDescriptorBytes = int64(32 << 20)
+	defaultSourceImportOperations      = 10_000
+	defaultSourceImportReferences      = 50_000
+	defaultSourceImportReferenceDepth  = 32
 )
 
 type sourceImportLimits struct {
-	MaxArtifactBytes  int64
-	MaxSchemaBytes    int64
-	MaxOperations     int
-	MaxReferences     int
-	MaxReferenceDepth int
+	MaxArtifactBytes           int64
+	MaxSchemaBytes             int64
+	MaxResolvedDescriptorBytes int64
+	MaxOperations              int
+	MaxReferences              int
+	MaxReferenceDepth          int
 }
 
 func defaultSourceImportLimits() sourceImportLimits {
 	return sourceImportLimits{
-		MaxArtifactBytes:  defaultSourceImportArtifactBytes,
-		MaxSchemaBytes:    defaultSourceImportSchemaBytes,
-		MaxOperations:     defaultSourceImportOperations,
-		MaxReferences:     defaultSourceImportReferences,
-		MaxReferenceDepth: defaultSourceImportReferenceDepth,
+		MaxArtifactBytes:           defaultSourceImportArtifactBytes,
+		MaxSchemaBytes:             defaultSourceImportSchemaBytes,
+		MaxResolvedDescriptorBytes: defaultSourceImportDescriptorBytes,
+		MaxOperations:              defaultSourceImportOperations,
+		MaxReferences:              defaultSourceImportReferences,
+		MaxReferenceDepth:          defaultSourceImportReferenceDepth,
 	}
 }
 
@@ -86,9 +90,31 @@ type sourceImportSource struct {
 }
 
 type sourceParameterDescriptor struct {
-	Name     string `json:"name"`
-	Required bool   `json:"required"`
-	Schema   any    `json:"schema"`
+	Name     string                        `json:"name"`
+	Required bool                          `json:"required"`
+	Schema   any                           `json:"schema,omitempty"`
+	Content  any                           `json:"content,omitempty"`
+	Wire     sourceParameterWireDescriptor `json:"wire"`
+}
+
+type sourceContractGap struct {
+	Foundation string `json:"foundation"`
+	Location   string `json:"location"`
+	Reason     string `json:"reason"`
+}
+
+type sourceRuntimeReachability struct {
+	MergeBlocked bool                `json:"merge_blocked"`
+	Gaps         []sourceContractGap `json:"gaps,omitempty"`
+}
+
+type sourceParameterWireDescriptor struct {
+	Style            string              `json:"style,omitempty"`
+	Explode          *bool               `json:"explode,omitempty"`
+	AllowReserved    *bool               `json:"allow_reserved,omitempty"`
+	AllowEmptyValue  *bool               `json:"allow_empty_value,omitempty"`
+	CollectionFormat string              `json:"collection_format,omitempty"`
+	Gaps             []sourceContractGap `json:"gaps,omitempty"`
 }
 
 type sourceRequestBodyDescriptor struct {
@@ -105,8 +131,14 @@ type sourceRequestDescriptor struct {
 }
 
 type sourceResponseDescriptor struct {
-	Status      string `json:"status"`
-	Declaration any    `json:"declaration"`
+	Status      string                          `json:"status"`
+	Declaration any                             `json:"declaration"`
+	Media       []sourceResponseMediaDescriptor `json:"media"`
+}
+
+type sourceResponseMediaDescriptor struct {
+	MediaType string            `json:"media_type"`
+	Class     sourceOutputClass `json:"class"`
 }
 
 type sourceOutputClass string
@@ -119,8 +151,15 @@ const (
 )
 
 type sourceOutputDescriptor struct {
-	Class      sourceOutputClass `json:"class"`
-	MediaTypes []string          `json:"media_types"`
+	Class      sourceOutputClass     `json:"class,omitempty"`
+	MediaTypes []string              `json:"media_types,omitempty"`
+	Success    []sourceOutputVariant `json:"success"`
+}
+
+type sourceOutputVariant struct {
+	Status    string            `json:"status"`
+	MediaType string            `json:"media_type,omitempty"`
+	Class     sourceOutputClass `json:"class"`
 }
 
 type sourceByteLimits struct {
@@ -159,11 +198,52 @@ type sourceOperationDescriptor struct {
 	Pagination          any                        `json:"pagination,omitempty"`
 	ByteLimits          sourceByteLimits           `json:"byte_limits"`
 	AuthScopes          sourceAuthDescriptor       `json:"auth_scopes"`
+	Servers             sourceServerOverrides      `json:"servers"`
+	Runtime             sourceRuntimeReachability  `json:"runtime"`
+}
+
+type sourceServerLayer struct {
+	Declared bool `json:"declared"`
+	Servers  any  `json:"servers,omitempty"`
+}
+
+type sourceServerOverrides struct {
+	Root       sourceServerLayer   `json:"root"`
+	PathItem   sourceServerLayer   `json:"path_item"`
+	Operation  sourceServerLayer   `json:"operation"`
+	Precedence []string            `json:"precedence"`
+	Gaps       []sourceContractGap `json:"gaps,omitempty"`
+}
+
+type sourceInboundEventDescriptor struct {
+	Connector      string                    `json:"connector"`
+	SourceID       string                    `json:"source_id"`
+	ParentSourceID string                    `json:"parent_source_id,omitempty"`
+	Kind           string                    `json:"kind"`
+	Name           string                    `json:"name"`
+	Source         sourceImportSource        `json:"source"`
+	Declaration    any                       `json:"declaration"`
+	Runtime        sourceRuntimeReachability `json:"runtime"`
+}
+
+type sourceExtensionDescriptor struct {
+	Location string `json:"location"`
+	Value    any    `json:"value"`
+}
+
+type sourceImportResult struct {
+	Operations    []sourceOperationDescriptor    `json:"operations"`
+	InboundEvents []sourceInboundEventDescriptor `json:"inbound_events,omitempty"`
+	Extensions    []sourceExtensionDescriptor    `json:"extensions,omitempty"`
 }
 
 type sourceImportDescriptorDocument struct {
-	SchemaVersion int                         `json:"schema_version"`
-	Operations    []sourceOperationDescriptor `json:"operations"`
+	SchemaVersion int                            `json:"schema_version"`
+	Operations    []sourceOperationDescriptor    `json:"operations"`
+	InboundEvents []sourceInboundEventDescriptor `json:"inbound_events,omitempty"`
+	Extensions    []sourceExtensionDescriptor    `json:"extensions,omitempty"`
+	MergeBlocked  bool                           `json:"merge_blocked"`
+	Gaps          []sourceContractGap            `json:"gaps,omitempty"`
 }
 
 type sourceImportFetcher interface {
@@ -178,11 +258,7 @@ func (f sourceImportFetchFunc) Fetch(ctx context.Context, sourceURL string) ([]b
 
 func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLock, error) {
 	var lock sourceImportLock
-	decoder := json.NewDecoder(bytes.NewReader(raw))
-	if err := decoder.Decode(&lock); err != nil {
-		return sourceImportLock{}, fmt.Errorf("parse source lock: %w", err)
-	}
-	if err := sourceJSONEOF(decoder); err != nil {
+	if err := decodeSourceJSON(raw, &lock); err != nil {
 		return sourceImportLock{}, fmt.Errorf("parse source lock: %w", err)
 	}
 	if lock.SchemaVersion <= 0 {
@@ -233,88 +309,170 @@ func validateSourceImportArtifact(artifact sourceImportArtifact) error {
 }
 
 func importSourceLocks(ctx context.Context, locks []sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits) ([]sourceOperationDescriptor, error) {
+	result, err := importSourceLockResults(ctx, locks, fetcher, limits)
+	if err != nil {
+		return nil, err
+	}
+	return result.Operations, nil
+}
+
+func importSourceLockResults(ctx context.Context, locks []sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits) (sourceImportResult, error) {
 	if fetcher == nil {
-		return nil, fmt.Errorf("source importer has no fetcher")
+		return sourceImportResult{}, fmt.Errorf("source importer has no fetcher")
 	}
 	if err := validateSourceImportLimits(limits); err != nil {
-		return nil, err
+		return sourceImportResult{}, err
 	}
 	orderedLocks := append([]sourceImportLock(nil), locks...)
 	sort.Slice(orderedLocks, func(i, j int) bool { return orderedLocks[i].Connector < orderedLocks[j].Connector })
 	seenConnectors := map[string]bool{}
-	var descriptors []sourceOperationDescriptor
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{}}
+	budget := sourceImportBudget{limit: sourceResolvedDescriptorLimit(limits)}
 	for _, lock := range orderedLocks {
 		if seenConnectors[lock.Connector] {
-			return nil, fmt.Errorf("duplicate source-lock connector %q", lock.Connector)
+			return sourceImportResult{}, fmt.Errorf("duplicate source-lock connector %q", lock.Connector)
 		}
 		seenConnectors[lock.Connector] = true
-		imported, err := importSourceLock(ctx, lock, fetcher, limits)
+		imported, err := importSourceLockResultWithBudget(ctx, lock, fetcher, limits, &budget)
 		if err != nil {
-			return nil, err
+			return sourceImportResult{}, err
 		}
-		descriptors = append(descriptors, imported...)
+		if len(result.Operations)+len(imported.Operations) > limits.MaxOperations {
+			return sourceImportResult{}, fmt.Errorf("operation count limit exceeded")
+		}
+		if len(result.InboundEvents)+len(imported.InboundEvents) > limits.MaxOperations {
+			return sourceImportResult{}, fmt.Errorf("inbound event count limit exceeded")
+		}
+		result.Operations = append(result.Operations, imported.Operations...)
+		result.InboundEvents = append(result.InboundEvents, imported.InboundEvents...)
+		result.Extensions = append(result.Extensions, imported.Extensions...)
 	}
-	sortSourceOperationDescriptors(descriptors)
+	sortSourceOperationDescriptors(result.Operations)
+	sortSourceInboundEventDescriptors(result.InboundEvents)
+	sortSourceExtensions(result.Extensions)
 	seen := map[string]bool{}
-	for _, descriptor := range descriptors {
+	for _, descriptor := range result.Operations {
 		key := descriptor.Connector + "\x00" + descriptor.SourceID
 		if seen[key] {
-			return nil, fmt.Errorf("duplicate source identity %q for connector %q", descriptor.SourceID, descriptor.Connector)
+			return sourceImportResult{}, fmt.Errorf("duplicate source identity %q for connector %q", descriptor.SourceID, descriptor.Connector)
 		}
 		seen[key] = true
 	}
-	return descriptors, nil
+	seenEvents := map[string]bool{}
+	for _, event := range result.InboundEvents {
+		key := event.Connector + "\x00" + event.SourceID
+		if seenEvents[key] {
+			return sourceImportResult{}, fmt.Errorf("duplicate inbound event identity %q for connector %q", event.SourceID, event.Connector)
+		}
+		seenEvents[key] = true
+	}
+	return result, nil
 }
 
 func validateSourceImportLimits(limits sourceImportLimits) error {
-	if limits.MaxArtifactBytes <= 0 || limits.MaxSchemaBytes <= 0 || limits.MaxOperations <= 0 || limits.MaxReferences <= 0 || limits.MaxReferenceDepth <= 0 {
+	if limits.MaxArtifactBytes <= 0 || limits.MaxSchemaBytes <= 0 || limits.MaxOperations <= 0 || limits.MaxReferences <= 0 || limits.MaxReferenceDepth <= 0 || limits.MaxResolvedDescriptorBytes < 0 {
 		return fmt.Errorf("source import limits must all be positive")
 	}
 	return nil
 }
 
 func importSourceLock(ctx context.Context, lock sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits) ([]sourceOperationDescriptor, error) {
-	if err := validateSourceImportLimits(limits); err != nil {
+	result, err := importSourceLockResult(ctx, lock, fetcher, limits)
+	if err != nil {
 		return nil, err
+	}
+	return result.Operations, nil
+}
+
+func importSourceLockResult(ctx context.Context, lock sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits) (sourceImportResult, error) {
+	budget := sourceImportBudget{limit: sourceResolvedDescriptorLimit(limits)}
+	return importSourceLockResultWithBudget(ctx, lock, fetcher, limits, &budget)
+}
+
+func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
+	if err := validateSourceImportLimits(limits); err != nil {
+		return sourceImportResult{}, err
+	}
+	if fetcher == nil {
+		return sourceImportResult{}, fmt.Errorf("source importer has no fetcher")
+	}
+	if budget == nil {
+		return sourceImportResult{}, fmt.Errorf("source importer has no descriptor budget")
+	}
+	if lock.SchemaVersion <= 0 {
+		return sourceImportResult{}, fmt.Errorf("source lock has invalid schema version")
 	}
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
-		return nil, err
+		return sourceImportResult{}, err
 	}
 	if err := validateSourceImportArtifact(lock.Rest); err != nil {
-		return nil, err
+		return sourceImportResult{}, err
 	}
 	if lock.Rest.Bytes > limits.MaxArtifactBytes {
-		return nil, fmt.Errorf("artifact byte limit exceeded by source lock")
+		return sourceImportResult{}, fmt.Errorf("artifact byte limit exceeded by source lock")
 	}
 	raw, err := fetcher.Fetch(ctx, lock.Rest.SourceURL)
 	if err != nil {
-		return nil, fmt.Errorf("fetch locked source artifact: %w", err)
+		return sourceImportResult{}, fmt.Errorf("fetch locked source artifact: %w", err)
 	}
 	if int64(len(raw)) > limits.MaxArtifactBytes {
-		return nil, fmt.Errorf("artifact byte limit exceeded")
+		return sourceImportResult{}, fmt.Errorf("artifact byte limit exceeded")
 	}
 	actualDigest := sha256.Sum256(raw)
 	if int64(len(raw)) != lock.Rest.Bytes || !strings.EqualFold(hex.EncodeToString(actualDigest[:]), lock.Rest.SHA256) {
-		return nil, fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
+		return sourceImportResult{}, fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
 	}
 	doc, version, err := parseSourceImportDocument(raw)
 	if err != nil {
-		return nil, err
+		return sourceImportResult{}, err
 	}
 	resolver := sourceReferenceResolver{root: doc, limits: limits}
-	descriptors, err := importSourceDocument(lock, doc, version, &resolver, limits)
+	result, err := importSourceDocumentResult(lock, doc, version, &resolver, limits, budget)
 	if err != nil {
-		return nil, err
+		return sourceImportResult{}, err
 	}
-	sortSourceOperationDescriptors(descriptors)
+	sortSourceOperationDescriptors(result.Operations)
+	sortSourceInboundEventDescriptors(result.InboundEvents)
+	sortSourceExtensions(result.Extensions)
 	seen := map[string]bool{}
-	for _, descriptor := range descriptors {
+	for _, descriptor := range result.Operations {
 		if seen[descriptor.SourceID] {
-			return nil, fmt.Errorf("duplicate source identity %q", descriptor.SourceID)
+			return sourceImportResult{}, fmt.Errorf("duplicate source identity %q", descriptor.SourceID)
 		}
 		seen[descriptor.SourceID] = true
 	}
-	return descriptors, nil
+	seenEvents := map[string]bool{}
+	for _, event := range result.InboundEvents {
+		if seenEvents[event.SourceID] {
+			return sourceImportResult{}, fmt.Errorf("duplicate inbound event identity %q", event.SourceID)
+		}
+		seenEvents[event.SourceID] = true
+	}
+	return result, nil
+}
+
+func sourceResolvedDescriptorLimit(limits sourceImportLimits) int64 {
+	if limits.MaxResolvedDescriptorBytes > 0 {
+		return limits.MaxResolvedDescriptorBytes
+	}
+	return defaultSourceImportDescriptorBytes
+}
+
+type sourceImportBudget struct {
+	limit int64
+	used  int64
+}
+
+func (budget *sourceImportBudget) add(value any, label string) error {
+	raw, err := sourceMarshalCompact(value)
+	if err != nil {
+		return fmt.Errorf("encode %s descriptor: %w", label, err)
+	}
+	if int64(len(raw)) > budget.limit || budget.used > budget.limit-int64(len(raw)) {
+		return fmt.Errorf("resolved descriptor byte limit exceeded while retaining %s", label)
+	}
+	budget.used += int64(len(raw))
+	return nil
 }
 
 func sortSourceOperationDescriptors(descriptors []sourceOperationDescriptor) {
@@ -360,13 +518,74 @@ func parseSourceImportDocument(raw []byte) (map[string]any, string, error) {
 	return nil, "", fmt.Errorf("unsupported source artifact form: require OpenAPI 3 or Swagger 2")
 }
 
-func decodeSourceJSON(raw []byte, target *any) error {
+func decodeSourceJSON(raw []byte, target any) error {
+	validator := json.NewDecoder(bytes.NewReader(raw))
+	validator.UseNumber()
+	if err := validateSourceJSONValue(validator, ""); err != nil {
+		return err
+	}
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.UseNumber()
 	if err := decoder.Decode(target); err != nil {
 		return err
 	}
 	return sourceJSONEOF(decoder)
+}
+
+func validateSourceJSONValue(decoder *json.Decoder, pointer string) error {
+	token, err := decoder.Token()
+	if err != nil {
+		return err
+	}
+	delimiter, isDelimiter := token.(json.Delim)
+	if !isDelimiter {
+		return nil
+	}
+	switch delimiter {
+	case '{':
+		seen := map[string]bool{}
+		for decoder.More() {
+			rawKey, err := decoder.Token()
+			if err != nil {
+				return err
+			}
+			key, ok := rawKey.(string)
+			if !ok {
+				return fmt.Errorf("JSON object key at %s is not a string", pointer)
+			}
+			childPointer := sourceJSONPointer(pointer, key)
+			if seen[key] {
+				return fmt.Errorf("duplicate JSON object member at %s", childPointer)
+			}
+			seen[key] = true
+			if err := validateSourceJSONValue(decoder, childPointer); err != nil {
+				return err
+			}
+		}
+		closing, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		if closing != json.Delim('}') {
+			return fmt.Errorf("JSON object at %s is not closed", pointer)
+		}
+	case '[':
+		for index := 0; decoder.More(); index++ {
+			if err := validateSourceJSONValue(decoder, sourceJSONPointer(pointer, strconv.Itoa(index))); err != nil {
+				return err
+			}
+		}
+		closing, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		if closing != json.Delim(']') {
+			return fmt.Errorf("JSON array at %s is not closed", pointer)
+		}
+	default:
+		return fmt.Errorf("unexpected JSON delimiter %q at %s", delimiter, pointer)
+	}
+	return nil
 }
 
 func sourceJSONEOF(decoder *json.Decoder) error {
@@ -381,19 +600,69 @@ func sourceJSONEOF(decoder *json.Decoder) error {
 	return err
 }
 
-func decodeSourceYAML(raw []byte, target *any) error {
+func decodeSourceYAML(raw []byte, target any) error {
 	decoder := yaml.NewDecoder(bytes.NewReader(raw))
-	if err := decoder.Decode(target); err != nil {
+	var document yaml.Node
+	if err := decoder.Decode(&document); err != nil {
 		return err
 	}
-	var trailing any
+	if err := validateSourceYAMLNode(&document, ""); err != nil {
+		return err
+	}
+	var trailing yaml.Node
 	if err := decoder.Decode(&trailing); err != io.EOF {
 		if err != nil {
 			return err
 		}
 		return fmt.Errorf("multiple YAML documents are unsupported")
 	}
+	return document.Decode(target)
+}
+
+func validateSourceYAMLNode(node *yaml.Node, pointer string) error {
+	if node == nil {
+		return fmt.Errorf("YAML source artifact is empty")
+	}
+	switch node.Kind {
+	case yaml.DocumentNode:
+		if len(node.Content) != 1 {
+			return fmt.Errorf("YAML source artifact has no single document root")
+		}
+		return validateSourceYAMLNode(node.Content[0], pointer)
+	case yaml.MappingNode:
+		seen := map[string]bool{}
+		for index := 0; index < len(node.Content); index += 2 {
+			if index+1 >= len(node.Content) {
+				return fmt.Errorf("YAML mapping at %s has an incomplete entry", pointer)
+			}
+			key := node.Content[index]
+			if key.Kind != yaml.ScalarNode {
+				return fmt.Errorf("YAML mapping key at %s must be a string", pointer)
+			}
+			childPointer := sourceJSONPointer(pointer, key.Value)
+			if seen[key.Value] {
+				return fmt.Errorf("duplicate YAML mapping key at %s", childPointer)
+			}
+			seen[key.Value] = true
+			if err := validateSourceYAMLNode(node.Content[index+1], childPointer); err != nil {
+				return err
+			}
+		}
+	case yaml.SequenceNode:
+		for index, child := range node.Content {
+			if err := validateSourceYAMLNode(child, sourceJSONPointer(pointer, strconv.Itoa(index))); err != nil {
+				return err
+			}
+		}
+	case yaml.AliasNode:
+		return fmt.Errorf("YAML aliases are unsupported at %s", pointer)
+	}
 	return nil
+}
+
+func sourceJSONPointer(parent, segment string) string {
+	segment = strings.ReplaceAll(strings.ReplaceAll(segment, "~", "~0"), "/", "~1")
+	return parent + "/" + segment
 }
 
 func normalizeSourceYAML(value any) any {
@@ -428,115 +697,575 @@ type sourceReferenceResolver struct {
 }
 
 func (r *sourceReferenceResolver) resolve(value any) (any, error) {
-	return r.resolveAt(value, nil, 0)
+	return sourceCloneLiteral(value), nil
 }
 
-func (r *sourceReferenceResolver) resolveAt(value any, stack map[string]bool, depth int) (any, error) {
-	if depth > r.limits.MaxReferenceDepth {
-		return nil, fmt.Errorf("reference depth limit exceeded")
+func (r *sourceReferenceResolver) resolvePathItem(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("path item must be an object")
 	}
-	switch typed := value.(type) {
-	case map[string]any:
-		if rawRef, ok := typed["$ref"]; ok {
-			if len(typed) != 1 {
-				return nil, fmt.Errorf("ambiguous reference with sibling fields")
-			}
-			ref, ok := rawRef.(string)
-			if !ok || !strings.HasPrefix(ref, "#/") {
-				return nil, fmt.Errorf("external reference %q is unsupported", rawRef)
-			}
-			r.references++
-			if r.references > r.limits.MaxReferences {
-				return nil, fmt.Errorf("reference count limit exceeded")
-			}
-			if stack != nil && stack[ref] {
-				return nil, fmt.Errorf("reference cycle at %q", ref)
-			}
-			target, err := sourcePointer(r.root, ref)
-			if err != nil {
-				return nil, err
-			}
-			if stack == nil {
-				stack = map[string]bool{}
-			} else {
-				stack = copySourceRefStack(stack)
-			}
-			stack[ref] = true
-			return r.resolveAt(target, stack, depth+1)
-		}
-		out := make(map[string]any, len(typed))
-		for _, key := range sortedSourceMapKeys(typed) {
-			child, err := r.resolveAt(typed[key], stack, depth)
-			if err != nil {
-				return nil, err
-			}
-			out[key] = child
-		}
-		return out, nil
-	case []any:
-		out := make([]any, len(typed))
-		for i, child := range typed {
-			resolved, err := r.resolveAt(child, stack, depth)
-			if err != nil {
-				return nil, err
-			}
-			out[i] = resolved
-		}
-		return out, nil
-	default:
-		return value, nil
+	target, reference, next, hasReference, err := r.referenceTarget(object, "path item", stack, depth, false)
+	if err != nil {
+		return nil, err
 	}
+	if hasReference {
+		resolved, err := r.resolvePathItem(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		return sourceMergeReferenceObject(resolved, reference), nil
+	}
+	return sourceCloneMap(object), nil
 }
 
-func copySourceRefStack(in map[string]bool) map[string]bool {
-	out := make(map[string]bool, len(in)+1)
-	for key, value := range in {
-		out[key] = value
+func (r *sourceReferenceResolver) resolveInboundPathItem(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	pathItem, err := r.resolvePathItem(value, stack, depth)
+	if err != nil {
+		return nil, err
+	}
+	out := sourceCloneMap(pathItem)
+	if parameters, exists := pathItem["parameters"]; exists {
+		items, ok := parameters.([]any)
+		if !ok {
+			return nil, fmt.Errorf("path item parameters must be an array")
+		}
+		resolvedItems := make([]any, len(items))
+		for index, item := range items {
+			resolved, err := r.resolveParameter(item, nil, 0)
+			if err != nil {
+				return nil, err
+			}
+			resolvedItems[index] = resolved
+		}
+		out["parameters"] = resolvedItems
+	}
+	for _, method := range sourceHTTPMethods {
+		rawOperation, exists := pathItem[method]
+		if !exists {
+			continue
+		}
+		operation, ok := rawOperation.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("inbound %s operation must be an object", method)
+		}
+		resolvedOperation := sourceCloneMap(operation)
+		if parameters, exists := operation["parameters"]; exists {
+			items, ok := parameters.([]any)
+			if !ok {
+				return nil, fmt.Errorf("inbound %s parameters must be an array", method)
+			}
+			resolvedItems := make([]any, len(items))
+			for index, item := range items {
+				resolved, err := r.resolveParameter(item, nil, 0)
+				if err != nil {
+					return nil, err
+				}
+				resolvedItems[index] = resolved
+			}
+			resolvedOperation["parameters"] = resolvedItems
+		}
+		if requestBody, exists := operation["requestBody"]; exists {
+			resolved, err := r.resolveRequestBody(requestBody, nil, 0)
+			if err != nil {
+				return nil, err
+			}
+			resolvedOperation["requestBody"] = resolved
+		}
+		if responses, exists := operation["responses"]; exists {
+			responseMap, ok := responses.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("inbound %s responses must be an object", method)
+			}
+			resolvedResponses := make(map[string]any, len(responseMap))
+			for _, status := range sortedSourceMapKeys(responseMap) {
+				resolved, err := r.resolveResponse(responseMap[status], nil, 0)
+				if err != nil {
+					return nil, err
+				}
+				resolvedResponses[status] = resolved
+			}
+			resolvedOperation["responses"] = resolvedResponses
+		}
+		if callbacks, exists := operation["callbacks"]; exists {
+			callbackMap, ok := callbacks.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("inbound %s callbacks must be an object", method)
+			}
+			resolvedCallbacks := make(map[string]any, len(callbackMap))
+			for _, name := range sortedSourceMapKeys(callbackMap) {
+				resolved, err := r.resolveCallback(callbackMap[name], nil, 0)
+				if err != nil {
+					return nil, err
+				}
+				resolvedCallbacks[name] = resolved
+			}
+			resolvedOperation["callbacks"] = resolvedCallbacks
+		}
+		out[method] = resolvedOperation
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveParameter(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("parameter must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, "parameter", stack, depth, false)
+	if err != nil {
+		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveParameter(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		object = sourceMergeReferenceObject(resolved, reference)
+	}
+	out := sourceCloneMap(object)
+	if schema, exists := object["schema"]; exists {
+		resolved, err := r.resolveSchema(schema, nil, 0)
+		if err != nil {
+			return nil, err
+		}
+		out["schema"] = resolved
+	}
+	if content, exists := object["content"]; exists {
+		resolved, err := r.resolveContent(content)
+		if err != nil {
+			return nil, err
+		}
+		out["content"] = resolved
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveRequestBody(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("request body must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, "request body", stack, depth, false)
+	if err != nil {
+		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveRequestBody(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		object = sourceMergeReferenceObject(resolved, reference)
+	}
+	out := sourceCloneMap(object)
+	if content, exists := object["content"]; exists {
+		resolved, err := r.resolveContent(content)
+		if err != nil {
+			return nil, err
+		}
+		out["content"] = resolved
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveResponse(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("response must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, "response", stack, depth, false)
+	if err != nil {
+		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveResponse(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		object = sourceMergeReferenceObject(resolved, reference)
+	}
+	out := sourceCloneMap(object)
+	if schema, exists := object["schema"]; exists {
+		resolved, err := r.resolveSchema(schema, nil, 0)
+		if err != nil {
+			return nil, err
+		}
+		out["schema"] = resolved
+	}
+	if content, exists := object["content"]; exists {
+		resolved, err := r.resolveContent(content)
+		if err != nil {
+			return nil, err
+		}
+		out["content"] = resolved
+	}
+	if headers, exists := object["headers"]; exists {
+		headerMap, ok := headers.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("response headers must be an object")
+		}
+		resolvedHeaders := make(map[string]any, len(headerMap))
+		for _, name := range sortedSourceMapKeys(headerMap) {
+			resolved, err := r.resolveHeader(headerMap[name], nil, 0)
+			if err != nil {
+				return nil, fmt.Errorf("header %q: %w", name, err)
+			}
+			resolvedHeaders[name] = resolved
+		}
+		out["headers"] = resolvedHeaders
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveHeader(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("header must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, "header", stack, depth, false)
+	if err != nil {
+		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveHeader(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		object = sourceMergeReferenceObject(resolved, reference)
+	}
+	out := sourceCloneMap(object)
+	if schema, exists := object["schema"]; exists {
+		resolved, err := r.resolveSchema(schema, nil, 0)
+		if err != nil {
+			return nil, err
+		}
+		out["schema"] = resolved
+	}
+	if content, exists := object["content"]; exists {
+		resolved, err := r.resolveContent(content)
+		if err != nil {
+			return nil, err
+		}
+		out["content"] = resolved
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveContent(value any) (any, error) {
+	content, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("content must be an object")
+	}
+	out := make(map[string]any, len(content))
+	for _, mediaType := range sortedSourceMapKeys(content) {
+		media, ok := content[mediaType].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("content media %q must be an object", mediaType)
+		}
+		resolvedMedia := sourceCloneMap(media)
+		if schema, exists := media["schema"]; exists {
+			resolved, err := r.resolveSchema(schema, nil, 0)
+			if err != nil {
+				return nil, fmt.Errorf("content media %q schema: %w", mediaType, err)
+			}
+			resolvedMedia["schema"] = resolved
+		}
+		out[mediaType] = resolvedMedia
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool, depth int) (any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return sourceCloneLiteral(value), nil
+	}
+	if err := sourceRejectDynamicSchemaKeywords(object); err != nil {
+		return nil, err
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, "schema", stack, depth, true)
+	if err != nil {
+		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveSchema(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		targetObject, ok := resolved.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("schema reference does not resolve to an object")
+		}
+		object = sourceMergeReferenceObject(targetObject, reference)
+	}
+	out := sourceCloneMap(object)
+	for _, key := range []string{"properties", "patternProperties", "dependentSchemas", "$defs", "definitions"} {
+		if raw, exists := object[key]; exists {
+			children, ok := raw.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("schema %s must be an object", key)
+			}
+			resolvedChildren := make(map[string]any, len(children))
+			for _, name := range sortedSourceMapKeys(children) {
+				resolved, err := r.resolveSchema(children[name], stack, depth)
+				if err != nil {
+					return nil, err
+				}
+				resolvedChildren[name] = resolved
+			}
+			out[key] = resolvedChildren
+		}
+	}
+	for _, key := range []string{"items", "additionalProperties", "contains", "not", "if", "then", "else", "propertyNames", "unevaluatedProperties"} {
+		if raw, exists := object[key]; exists {
+			if _, isObject := raw.(map[string]any); isObject {
+				resolved, err := r.resolveSchema(raw, stack, depth)
+				if err != nil {
+					return nil, err
+				}
+				out[key] = resolved
+			}
+		}
+	}
+	for _, key := range []string{"allOf", "anyOf", "oneOf", "prefixItems"} {
+		if raw, exists := object[key]; exists {
+			items, ok := raw.([]any)
+			if !ok {
+				return nil, fmt.Errorf("schema %s must be an array", key)
+			}
+			resolvedItems := make([]any, len(items))
+			for index, item := range items {
+				resolved, err := r.resolveSchema(item, stack, depth)
+				if err != nil {
+					return nil, err
+				}
+				resolvedItems[index] = resolved
+			}
+			out[key] = resolvedItems
+		}
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveCallback(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("callback must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, "callback", stack, depth, false)
+	if err != nil {
+		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveCallback(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		object = sourceMergeReferenceObject(resolved, reference)
+	}
+	out := sourceCloneMap(object)
+	for _, expression := range sortedSourceMapKeys(object) {
+		if strings.HasPrefix(expression, "x-") {
+			continue
+		}
+		pathItem, err := r.resolveInboundPathItem(object[expression], nil, 0)
+		if err != nil {
+			return nil, fmt.Errorf("callback expression %q: %w", expression, err)
+		}
+		out[expression] = pathItem
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) referenceTarget(object map[string]any, position string, stack map[string]bool, depth int, schema bool) (any, map[string]any, map[string]bool, bool, error) {
+	rawRef, hasReference := object["$ref"]
+	if !hasReference {
+		return nil, object, stack, false, nil
+	}
+	if depth >= r.limits.MaxReferenceDepth {
+		return nil, nil, nil, false, fmt.Errorf("reference depth limit exceeded")
+	}
+	if !schema {
+		for key := range object {
+			if key != "$ref" && key != "summary" && key != "description" && !strings.HasPrefix(key, "x-") {
+				return nil, nil, nil, false, fmt.Errorf("ambiguous %s reference with sibling field %q", position, key)
+			}
+		}
+	}
+	ref, ok := rawRef.(string)
+	if !ok || (ref != "#" && !strings.HasPrefix(ref, "#/")) {
+		return nil, nil, nil, false, fmt.Errorf("external reference %q is unsupported", rawRef)
+	}
+	r.references++
+	if r.references > r.limits.MaxReferences {
+		return nil, nil, nil, false, fmt.Errorf("reference count limit exceeded")
+	}
+	if stack != nil && stack[ref] {
+		return nil, nil, nil, false, fmt.Errorf("reference cycle at %q", ref)
+	}
+	target, err := sourcePointer(r.root, ref)
+	if err != nil {
+		return nil, nil, nil, false, err
+	}
+	next := make(map[string]bool, len(stack)+1)
+	for item := range stack {
+		next[item] = true
+	}
+	next[ref] = true
+	return target, object, next, true, nil
+}
+
+func sourceMergeReferenceObject(target, reference map[string]any) map[string]any {
+	out := sourceCloneMap(target)
+	for _, key := range sortedSourceMapKeys(reference) {
+		if key != "$ref" {
+			out[key] = sourceCloneLiteral(reference[key])
+		}
 	}
 	return out
 }
 
+func sourceCloneMap(value map[string]any) map[string]any {
+	out := make(map[string]any, len(value))
+	for _, key := range sortedSourceMapKeys(value) {
+		out[key] = sourceCloneLiteral(value[key])
+	}
+	return out
+}
+
+func sourceCloneLiteral(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return sourceCloneMap(typed)
+	case []any:
+		out := make([]any, len(typed))
+		for index, item := range typed {
+			out[index] = sourceCloneLiteral(item)
+		}
+		return out
+	default:
+		return value
+	}
+}
+
 func sourcePointer(root map[string]any, ref string) (any, error) {
+	if ref == "#" {
+		return root, nil
+	}
 	var current any = root
 	for _, segment := range strings.Split(strings.TrimPrefix(ref, "#/"), "/") {
 		segment = strings.ReplaceAll(strings.ReplaceAll(segment, "~1", "/"), "~0", "~")
-		object, ok := current.(map[string]any)
-		if !ok {
+		switch typed := current.(type) {
+		case map[string]any:
+			var exists bool
+			current, exists = typed[segment]
+			if !exists {
+				return nil, fmt.Errorf("unresolved reference %q", ref)
+			}
+		case []any:
+			index, err := strconv.Atoi(segment)
+			if err != nil || index < 0 || index >= len(typed) {
+				return nil, fmt.Errorf("unresolved reference %q", ref)
+			}
+			current = typed[index]
+		default:
 			return nil, fmt.Errorf("reference %q does not resolve to an object member", ref)
-		}
-		var exists bool
-		current, exists = object[segment]
-		if !exists {
-			return nil, fmt.Errorf("unresolved reference %q", ref)
 		}
 	}
 	return current, nil
 }
 
 func importSourceDocument(lock sourceImportLock, doc map[string]any, version string, resolver *sourceReferenceResolver, limits sourceImportLimits) ([]sourceOperationDescriptor, error) {
-	paths, ok := doc["paths"].(map[string]any)
-	if !ok {
-		return nil, fmt.Errorf("source artifact has no paths object")
+	budget := sourceImportBudget{limit: sourceResolvedDescriptorLimit(limits)}
+	result, err := importSourceDocumentResult(lock, doc, version, resolver, limits, &budget)
+	if err != nil {
+		return nil, err
 	}
-	var descriptors []sourceOperationDescriptor
+	return result.Operations, nil
+}
+
+func importSourceDocumentResult(lock sourceImportLock, doc map[string]any, version string, resolver *sourceReferenceResolver, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
+	if budget == nil {
+		return sourceImportResult{}, fmt.Errorf("source importer has no descriptor budget")
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{}}
+	rootServers, err := sourceServerLayerFrom(doc)
+	if err != nil {
+		return sourceImportResult{}, fmt.Errorf("root servers: %w", err)
+	}
+	webhooks, err := sourceWebhookEvents(lock, doc, resolver)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
+	for _, event := range webhooks {
+		if len(result.InboundEvents) >= limits.MaxOperations {
+			return sourceImportResult{}, fmt.Errorf("inbound event count limit exceeded")
+		}
+		if err := budget.add(event, "inbound event"); err != nil {
+			return sourceImportResult{}, err
+		}
+		result.InboundEvents = append(result.InboundEvents, event)
+	}
+	rawPaths, declaredPaths := doc["paths"]
+	if !declaredPaths {
+		if len(result.InboundEvents) == 0 {
+			return sourceImportResult{}, fmt.Errorf("source artifact has no paths object")
+		}
+		sortSourceInboundEventDescriptors(result.InboundEvents)
+		return result, nil
+	}
+	paths, ok := rawPaths.(map[string]any)
+	if !ok {
+		return sourceImportResult{}, fmt.Errorf("source artifact paths must be an object")
+	}
 	for _, path := range sortedSourceMapKeys(paths) {
+		if strings.HasPrefix(path, "x-") {
+			extension := sourceExtensionDescriptor{Location: fmt.Sprintf("paths[%q]", path), Value: sourceCloneLiteral(paths[path])}
+			if err := budget.add(extension, "extension"); err != nil {
+				return sourceImportResult{}, err
+			}
+			result.Extensions = append(result.Extensions, extension)
+			continue
+		}
 		if err := validateSourceImportPath(path); err != nil {
-			return nil, fmt.Errorf("path %q is not a connector-relative path template", path)
+			return sourceImportResult{}, fmt.Errorf("path %q is not a connector-relative path template", path)
 		}
-		resolvedPathItem, err := resolver.resolve(paths[path])
+		pathItem, err := resolver.resolvePathItem(paths[path], nil, 0)
 		if err != nil {
-			return nil, fmt.Errorf("path %q: %w", path, err)
+			return sourceImportResult{}, fmt.Errorf("path %q: %w", path, err)
 		}
-		pathItem, ok := resolvedPathItem.(map[string]any)
-		if !ok {
-			return nil, fmt.Errorf("path %q must be an object", path)
+		pathServers, err := sourceServerLayerFrom(pathItem)
+		if err != nil {
+			return sourceImportResult{}, fmt.Errorf("path %q servers: %w", path, err)
 		}
-		if _, hasCallbacks := pathItem["callbacks"]; hasCallbacks {
-			return nil, fmt.Errorf("callback-only route %q is unsupported", path)
+		for _, key := range sortedSourceMapKeys(pathItem) {
+			if !strings.HasPrefix(key, "x-") {
+				continue
+			}
+			extension := sourceExtensionDescriptor{Location: fmt.Sprintf("paths[%q].%s", path, key), Value: sourceCloneLiteral(pathItem[key])}
+			if err := budget.add(extension, "extension"); err != nil {
+				return sourceImportResult{}, err
+			}
+			result.Extensions = append(result.Extensions, extension)
+		}
+		if rawCallbacks, hasCallbacks := pathItem["callbacks"]; hasCallbacks {
+			events, err := sourceCallbackEvents(lock, "", fmt.Sprintf("paths[%q].callbacks", path), rawCallbacks, resolver)
+			if err != nil {
+				return sourceImportResult{}, err
+			}
+			for _, event := range events {
+				if len(result.InboundEvents) >= limits.MaxOperations {
+					return sourceImportResult{}, fmt.Errorf("inbound event count limit exceeded")
+				}
+				if err := budget.add(event, "inbound event"); err != nil {
+					return sourceImportResult{}, err
+				}
+				result.InboundEvents = append(result.InboundEvents, event)
+			}
 		}
 		pathParameters, err := sourceParameterValues(pathItem["parameters"], resolver, version)
 		if err != nil {
-			return nil, fmt.Errorf("path %q parameters: %w", path, err)
+			return sourceImportResult{}, fmt.Errorf("path %q parameters: %w", path, err)
 		}
 		for _, method := range sourceHTTPMethods {
 			rawOperation, ok := pathItem[method]
@@ -545,25 +1274,43 @@ func importSourceDocument(lock sourceImportLock, doc map[string]any, version str
 			}
 			operation, ok := rawOperation.(map[string]any)
 			if !ok {
-				return nil, fmt.Errorf("operation %s %s must be an object", method, path)
+				return sourceImportResult{}, fmt.Errorf("operation %s %s must be an object", method, path)
 			}
-			if _, hasCallbacks := operation["callbacks"]; hasCallbacks {
-				return nil, fmt.Errorf("callback-only route %s %s is unsupported", method, path)
-			}
-			descriptor, err := importSourceOperation(lock, doc, version, resolver, path, method, pathParameters, operation, limits)
+			descriptor, err := importSourceOperation(lock, doc, version, resolver, path, method, pathParameters, rootServers, pathServers, operation, limits)
 			if err != nil {
-				return nil, err
+				return sourceImportResult{}, err
 			}
-			descriptors = append(descriptors, descriptor)
-			if len(descriptors) > limits.MaxOperations {
-				return nil, fmt.Errorf("operation count limit exceeded")
+			if len(result.Operations) >= limits.MaxOperations {
+				return sourceImportResult{}, fmt.Errorf("operation count limit exceeded")
+			}
+			if err := budget.add(descriptor, "operation"); err != nil {
+				return sourceImportResult{}, err
+			}
+			result.Operations = append(result.Operations, descriptor)
+			if rawCallbacks, hasCallbacks := operation["callbacks"]; hasCallbacks {
+				events, err := sourceCallbackEvents(lock, descriptor.SourceID, fmt.Sprintf("paths[%q].%s.callbacks", path, method), rawCallbacks, resolver)
+				if err != nil {
+					return sourceImportResult{}, err
+				}
+				for _, event := range events {
+					if len(result.InboundEvents) >= limits.MaxOperations {
+						return sourceImportResult{}, fmt.Errorf("inbound event count limit exceeded")
+					}
+					if err := budget.add(event, "inbound event"); err != nil {
+						return sourceImportResult{}, err
+					}
+					result.InboundEvents = append(result.InboundEvents, event)
+				}
 			}
 		}
 	}
-	if len(descriptors) == 0 {
-		return nil, fmt.Errorf("source artifact has no provider operations")
+	if len(result.Operations) == 0 && len(result.InboundEvents) == 0 {
+		return sourceImportResult{}, fmt.Errorf("source artifact has no provider operations or inbound events")
 	}
-	return descriptors, nil
+	sortSourceOperationDescriptors(result.Operations)
+	sortSourceInboundEventDescriptors(result.InboundEvents)
+	sortSourceExtensions(result.Extensions)
+	return result, nil
 }
 
 var sourceHTTPMethods = []string{"delete", "get", "head", "options", "patch", "post", "put", "trace"}
@@ -575,7 +1322,7 @@ func validateSourceImportPath(path string) error {
 	return nil
 }
 
-func importSourceOperation(lock sourceImportLock, doc map[string]any, version string, resolver *sourceReferenceResolver, path, method string, pathParameters []sourceParameterValue, operation map[string]any, limits sourceImportLimits) (sourceOperationDescriptor, error) {
+func importSourceOperation(lock sourceImportLock, doc map[string]any, version string, resolver *sourceReferenceResolver, path, method string, pathParameters []sourceParameterValue, rootServers, pathServers sourceServerLayer, operation map[string]any, limits sourceImportLimits) (sourceOperationDescriptor, error) {
 	location := fmt.Sprintf("paths[%q].%s", path, method)
 	operationParameters, err := sourceParameterValues(operation["parameters"], resolver, version)
 	if err != nil {
@@ -585,11 +1332,11 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, version st
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s request: %w", location, err)
 	}
-	responses, mediaTypes, err := sourceResponses(operation, doc, version, resolver, limits)
+	responses, _, err := sourceResponses(operation, doc, version, resolver, limits)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s responses: %w", location, err)
 	}
-	outputClass, err := sourceOutputClassFor(method, mediaTypes)
+	output, err := sourceOutputForResponses(method, responses)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s output: %w", location, err)
 	}
@@ -610,6 +1357,21 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, version st
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s auth scopes: %w", location, err)
 	}
+	operationServers, err := sourceServerLayerFrom(operation)
+	if err != nil {
+		return sourceOperationDescriptor{}, fmt.Errorf("%s servers: %w", location, err)
+	}
+	servers := sourceServerOverrides{
+		Root:       rootServers,
+		PathItem:   pathServers,
+		Operation:  operationServers,
+		Precedence: []string{"operation", "path_item", "root"},
+	}
+	if rootServers.Declared || pathServers.Declared || operationServers.Declared {
+		servers.Gaps = []sourceContractGap{sourceContractGapFor("cli-operation-route-override-foundation-r1", location+".servers", "provider-declared server routing requires runtime route-override support")}
+	}
+	runtimeGaps := append(sourceRequestGaps(request), servers.Gaps...)
+	runtime := sourceRuntimeReachability{MergeBlocked: len(runtimeGaps) > 0, Gaps: runtimeGaps}
 	return sourceOperationDescriptor{
 		Connector:           lock.Connector,
 		SourceID:            sourceID,
@@ -619,10 +1381,12 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, version st
 		Path:                path,
 		Request:             request,
 		Responses:           responses,
-		Output:              sourceOutputDescriptor{Class: outputClass, MediaTypes: mediaTypes},
+		Output:              output,
 		Pagination:          pagination,
 		ByteLimits:          byteLimits,
 		AuthScopes:          authScopes,
+		Servers:             servers,
+		Runtime:             runtime,
 	}, nil
 }
 
@@ -631,6 +1395,8 @@ type sourceParameterValue struct {
 	In       string
 	Required bool
 	Schema   any
+	Content  any
+	Wire     sourceParameterWireDescriptor
 }
 
 func sourceParameterValues(raw any, resolver *sourceReferenceResolver, version string) ([]sourceParameterValue, error) {
@@ -643,13 +1409,9 @@ func sourceParameterValues(raw any, resolver *sourceReferenceResolver, version s
 	}
 	values := make([]sourceParameterValue, 0, len(items))
 	for _, item := range items {
-		resolved, err := resolver.resolve(item)
+		parameter, err := resolver.resolveParameter(item, nil, 0)
 		if err != nil {
 			return nil, err
-		}
-		parameter, ok := resolved.(map[string]any)
-		if !ok {
-			return nil, fmt.Errorf("parameter must be an object")
 		}
 		name, _ := parameter["name"].(string)
 		in, _ := parameter["in"].(string)
@@ -657,40 +1419,64 @@ func sourceParameterValues(raw any, resolver *sourceReferenceResolver, version s
 		if name == "" || name != strings.TrimSpace(name) || !allowedLocation {
 			return nil, fmt.Errorf("parameter %q has unsupported location %q", name, in)
 		}
-		schema, err := sourceParameterSchema(parameter, version)
+		schema, content, err := sourceParameterRepresentation(parameter, version)
 		if err != nil {
 			return nil, fmt.Errorf("parameter %q: %w", name, err)
 		}
-		resolvedSchema, err := resolver.resolve(schema)
-		if err != nil {
-			return nil, fmt.Errorf("parameter %q schema: %w", name, err)
+		var resolvedSchema any
+		if schema != nil {
+			resolvedSchema, err = resolver.resolveSchema(schema, nil, 0)
+			if err != nil {
+				return nil, fmt.Errorf("parameter %q schema: %w", name, err)
+			}
 		}
-		values = append(values, sourceParameterValue{Name: name, In: in, Required: sourceBool(parameter["required"]), Schema: resolvedSchema})
+		wire, err := sourceParameterWire(parameter, version, in)
+		if err != nil {
+			return nil, fmt.Errorf("parameter %q: %w", name, err)
+		}
+		if content != nil {
+			wire.Gaps = append(wire.Gaps, sourceContractGapFor("cli-parameter-serialization-foundation-r1", "parameter "+name, "content-based parameter serialization requires runtime serialization support"))
+		}
+		values = append(values, sourceParameterValue{Name: name, In: in, Required: sourceBool(parameter["required"]), Schema: resolvedSchema, Content: sourceCloneLiteral(content), Wire: wire})
 	}
 	return values, nil
 }
 
 func sourceParameterSchema(parameter map[string]any, version string) (any, error) {
-	if version == "openapi3" {
-		schema, ok := parameter["schema"]
-		if !ok {
-			return nil, fmt.Errorf("missing schema")
-		}
-		return schema, nil
+	schema, content, err := sourceParameterRepresentation(parameter, version)
+	if err != nil {
+		return nil, err
 	}
+	if content != nil {
+		return nil, fmt.Errorf("uses content rather than schema")
+	}
+	return schema, nil
+}
+
+func sourceParameterRepresentation(parameter map[string]any, version string) (any, any, error) {
 	if schema, ok := parameter["schema"]; ok {
-		return schema, nil
+		return schema, nil, nil
+	}
+	if version == "openapi3" {
+		if content, ok := parameter["content"]; ok {
+			return nil, content, nil
+		}
+		return nil, nil, fmt.Errorf("missing schema or content")
+	}
+	excluded := map[string]bool{
+		"name": true, "in": true, "description": true, "required": true, "collectionFormat": true,
+		"allowEmptyValue": true, "allowReserved": true, "style": true, "explode": true,
 	}
 	schema := map[string]any{}
-	for _, key := range []string{"type", "format", "enum", "items", "maximum", "minimum", "maxLength", "maxItems", "maxProperties", "properties", "additionalProperties", "required"} {
-		if value, ok := parameter[key]; ok {
-			schema[key] = value
+	for _, key := range sortedSourceMapKeys(parameter) {
+		if !excluded[key] {
+			schema[key] = sourceCloneLiteral(parameter[key])
 		}
 	}
 	if len(schema) == 0 {
-		return nil, fmt.Errorf("missing schema")
+		return nil, nil, fmt.Errorf("missing schema")
 	}
-	return schema, nil
+	return schema, nil, nil
 }
 
 func sourceRequestDescriptorFrom(path string, pathParameters, operationParameters []sourceParameterValue, operation, doc map[string]any, version string, resolver *sourceReferenceResolver, limits sourceImportLimits) (sourceRequestDescriptor, error) {
@@ -705,10 +1491,12 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 			bodyParameters = append(bodyParameters, parameter)
 			continue
 		}
-		if err := validateBoundedRequestSchema(parameter.Schema, limits, 0); err != nil {
-			return sourceRequestDescriptor{}, fmt.Errorf("parameter %q: %w", parameter.Name, err)
+		if parameter.Content == nil {
+			if err := validateBoundedRequestSchema(parameter.Schema, limits, 0); err != nil {
+				return sourceRequestDescriptor{}, fmt.Errorf("parameter %q: %w", parameter.Name, err)
+			}
 		}
-		descriptor := sourceParameterDescriptor{Name: parameter.Name, Required: parameter.Required, Schema: parameter.Schema}
+		descriptor := sourceParameterDescriptor{Name: parameter.Name, Required: parameter.Required, Schema: parameter.Schema, Content: parameter.Content, Wire: parameter.Wire}
 		switch parameter.In {
 		case "path":
 			request.Path = append(request.Path, descriptor)
@@ -750,13 +1538,9 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 	if !ok {
 		return request, nil
 	}
-	resolvedBody, err := resolver.resolve(rawBody)
+	body, err := resolver.resolveRequestBody(rawBody, nil, 0)
 	if err != nil {
 		return sourceRequestDescriptor{}, err
-	}
-	body, ok := resolvedBody.(map[string]any)
-	if !ok {
-		return sourceRequestDescriptor{}, fmt.Errorf("request body must be an object")
 	}
 	content, ok := body["content"].(map[string]any)
 	if !ok || len(content) != 1 {
@@ -774,14 +1558,10 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 	if !ok {
 		return sourceRequestDescriptor{}, fmt.Errorf("request body is missing schema")
 	}
-	resolvedSchema, err := resolver.resolve(schema)
-	if err != nil {
+	if err := validateBoundedRequestSchema(schema, limits, 0); err != nil {
 		return sourceRequestDescriptor{}, err
 	}
-	if err := validateBoundedRequestSchema(resolvedSchema, limits, 0); err != nil {
-		return sourceRequestDescriptor{}, err
-	}
-	request.Body = &sourceRequestBodyDescriptor{Required: sourceBool(body["required"]), Schema: resolvedSchema}
+	request.Body = &sourceRequestBodyDescriptor{Required: sourceBool(body["required"]), Schema: schema}
 	request.MediaType = mediaType
 	return request, nil
 }
@@ -904,11 +1684,91 @@ func sourceSwaggerRequestMediaType(operation, doc map[string]any) (string, error
 	return mediaTypes[0], nil
 }
 
+func sourceParameterWire(parameter map[string]any, version, location string) (sourceParameterWireDescriptor, error) {
+	wire := sourceParameterWireDescriptor{Gaps: []sourceContractGap{}}
+	if raw, exists := parameter["style"]; exists {
+		style, ok := raw.(string)
+		if !ok || style == "" || style != strings.TrimSpace(style) {
+			return sourceParameterWireDescriptor{}, fmt.Errorf("style must be a non-empty string")
+		}
+		wire.Style = style
+	}
+	if raw, exists := parameter["explode"]; exists {
+		value, ok := raw.(bool)
+		if !ok {
+			return sourceParameterWireDescriptor{}, fmt.Errorf("explode must be a boolean")
+		}
+		wire.Explode = &value
+	}
+	if raw, exists := parameter["allowReserved"]; exists {
+		value, ok := raw.(bool)
+		if !ok {
+			return sourceParameterWireDescriptor{}, fmt.Errorf("allowReserved must be a boolean")
+		}
+		wire.AllowReserved = &value
+	}
+	if raw, exists := parameter["allowEmptyValue"]; exists {
+		value, ok := raw.(bool)
+		if !ok {
+			return sourceParameterWireDescriptor{}, fmt.Errorf("allowEmptyValue must be a boolean")
+		}
+		wire.AllowEmptyValue = &value
+	}
+	if raw, exists := parameter["collectionFormat"]; exists {
+		format, ok := raw.(string)
+		if !ok || format == "" || format != strings.TrimSpace(format) {
+			return sourceParameterWireDescriptor{}, fmt.Errorf("collectionFormat must be a non-empty string")
+		}
+		wire.CollectionFormat = format
+	}
+	if version == "openapi3" {
+		supportedStyle := wire.Style == "" || wire.Style == "form" || wire.Style == "simple"
+		if !supportedStyle {
+			wire.Gaps = append(wire.Gaps, sourceContractGapFor("cli-parameter-serialization-foundation-r1", "parameter serialization", fmt.Sprintf("%s parameter style %q requires runtime serialization support", location, wire.Style)))
+		}
+	}
+	if version == "swagger2" && wire.CollectionFormat != "" && wire.CollectionFormat != "csv" {
+		wire.Gaps = append(wire.Gaps, sourceContractGapFor("cli-parameter-serialization-foundation-r1", "parameter serialization", fmt.Sprintf("%s parameter collectionFormat %q requires runtime serialization support", location, wire.CollectionFormat)))
+	}
+	return wire, nil
+}
+
+func sourceRequestGaps(request sourceRequestDescriptor) []sourceContractGap {
+	var gaps []sourceContractGap
+	for _, group := range [][]sourceParameterDescriptor{request.Path, request.Query, request.Header} {
+		for _, parameter := range group {
+			gaps = append(gaps, parameter.Wire.Gaps...)
+		}
+	}
+	return sourceSortedGaps(gaps)
+}
+
+func sourceContractGapFor(foundation, location, reason string) sourceContractGap {
+	return sourceContractGap{Foundation: foundation, Location: location, Reason: reason}
+}
+
+func sourceSortedGaps(gaps []sourceContractGap) []sourceContractGap {
+	if len(gaps) == 0 {
+		return nil
+	}
+	out := append([]sourceContractGap(nil), gaps...)
+	sort.Slice(out, func(i, j int) bool {
+		if out[i].Foundation != out[j].Foundation {
+			return out[i].Foundation < out[j].Foundation
+		}
+		if out[i].Location != out[j].Location {
+			return out[i].Location < out[j].Location
+		}
+		return out[i].Reason < out[j].Reason
+	})
+	return out
+}
+
 func validateBoundedRequestSchema(schema any, limits sourceImportLimits, depth int) error {
 	if depth > limits.MaxReferenceDepth {
 		return fmt.Errorf("schema depth limit exceeded")
 	}
-	raw, err := json.Marshal(schema)
+	raw, err := sourceMarshalCompact(schema)
 	if err != nil {
 		return fmt.Errorf("encode request schema: %w", err)
 	}
@@ -919,14 +1779,21 @@ func validateBoundedRequestSchema(schema any, limits sourceImportLimits, depth i
 	if !ok {
 		return fmt.Errorf("unbounded request schema must be an object")
 	}
+	if err := sourceRejectDynamicSchemaKeywords(object); err != nil {
+		return err
+	}
 	for _, composition := range []string{"oneOf", "anyOf", "allOf", "not"} {
 		if _, exists := object[composition]; exists {
 			return fmt.Errorf("ambiguous request schema uses %s", composition)
 		}
 	}
+	finiteEnum, err := sourceFiniteEnum(object)
+	if err != nil {
+		return err
+	}
 	typeName, _ := object["type"].(string)
 	if typeName == "" {
-		if enum, ok := object["enum"].([]any); ok && len(enum) > 0 {
+		if finiteEnum {
 			return nil
 		}
 		return fmt.Errorf("unbounded request schema has no type")
@@ -935,25 +1802,26 @@ func validateBoundedRequestSchema(schema any, limits sourceImportLimits, depth i
 	case "boolean", "null":
 		return nil
 	case "string":
-		if sourcePositiveInteger(object["maxLength"]) <= 0 {
-			return fmt.Errorf("unbounded request schema string has no maxLength")
+		if err := sourceValidateLengthBounds(object, finiteEnum); err != nil {
+			return err
 		}
 	case "integer", "number":
-		if _, hasMinimum := object["minimum"]; !hasMinimum {
-			return fmt.Errorf("unbounded request schema number has no minimum")
-		}
-		if _, hasMaximum := object["maximum"]; !hasMaximum {
-			return fmt.Errorf("unbounded request schema number has no maximum")
+		if err := sourceValidateNumericBounds(object, !finiteEnum); err != nil {
+			return err
 		}
 	case "array":
-		if sourcePositiveInteger(object["maxItems"]) <= 0 {
-			return fmt.Errorf("unbounded request schema array has no maxItems")
+		if err := sourceValidateArrayBounds(object, finiteEnum); err != nil {
+			return err
 		}
-		items, exists := object["items"]
-		if !exists {
-			return fmt.Errorf("unbounded request schema array has no items")
+		if !finiteEnum {
+			items, exists := object["items"]
+			if !exists {
+				return fmt.Errorf("unbounded request schema array has no items")
+			}
+			if err := validateBoundedRequestSchema(items, limits, depth+1); err != nil {
+				return err
+			}
 		}
-		return validateBoundedRequestSchema(items, limits, depth+1)
 	case "object":
 		additional, exists := object["additionalProperties"]
 		if !exists || additional != false {
@@ -983,6 +1851,221 @@ func validateBoundedRequestSchema(schema any, limits sourceImportLimits, depth i
 	return nil
 }
 
+func sourceRejectDynamicSchemaKeywords(object map[string]any) error {
+	for _, keyword := range []string{"$dynamicRef", "$dynamicAnchor", "$recursiveRef", "$recursiveAnchor"} {
+		if _, exists := object[keyword]; exists {
+			return fmt.Errorf("cli-openapi-dynamic-ref-foundation-r1: request schema uses %s", keyword)
+		}
+	}
+	return nil
+}
+
+func sourceFiniteEnum(object map[string]any) (bool, error) {
+	raw, exists := object["enum"]
+	if !exists {
+		return false, nil
+	}
+	values, ok := raw.([]any)
+	if !ok || len(values) == 0 {
+		return false, fmt.Errorf("request schema enum must be a non-empty array")
+	}
+	for _, value := range values {
+		if !sourceFiniteSchemaLiteral(value) {
+			return false, fmt.Errorf("request schema enum contains a non-finite value")
+		}
+	}
+	return true, nil
+}
+
+func sourceFiniteSchemaLiteral(value any) bool {
+	switch typed := value.(type) {
+	case float64:
+		return !math.IsNaN(typed) && !math.IsInf(typed, 0)
+	case json.Number:
+		_, ok := sourceFiniteNumber(typed)
+		return ok
+	case []any:
+		for _, item := range typed {
+			if !sourceFiniteSchemaLiteral(item) {
+				return false
+			}
+		}
+	case map[string]any:
+		for _, key := range sortedSourceMapKeys(typed) {
+			if !sourceFiniteSchemaLiteral(typed[key]) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func sourceValidateLengthBounds(object map[string]any, finiteEnum bool) error {
+	minimum, hasMinimum, err := sourceOptionalNonNegativeInteger(object, "minLength")
+	if err != nil {
+		return err
+	}
+	maximum, hasMaximum, err := sourceOptionalNonNegativeInteger(object, "maxLength")
+	if err != nil {
+		return err
+	}
+	if hasMinimum && hasMaximum && minimum > maximum {
+		return fmt.Errorf("contradictory request schema string length bounds")
+	}
+	if !finiteEnum && !hasMaximum {
+		return fmt.Errorf("unbounded request schema string has no maxLength")
+	}
+	return nil
+}
+
+func sourceValidateArrayBounds(object map[string]any, finiteEnum bool) error {
+	minimum, hasMinimum, err := sourceOptionalNonNegativeInteger(object, "minItems")
+	if err != nil {
+		return err
+	}
+	maximum, hasMaximum, err := sourceOptionalNonNegativeInteger(object, "maxItems")
+	if err != nil {
+		return err
+	}
+	if hasMinimum && hasMaximum && minimum > maximum {
+		return fmt.Errorf("contradictory request schema array item bounds")
+	}
+	if !finiteEnum && !hasMaximum {
+		return fmt.Errorf("unbounded request schema array has no maxItems")
+	}
+	return nil
+}
+
+type sourceNumericBound struct {
+	value     float64
+	inclusive bool
+	present   bool
+}
+
+func sourceValidateNumericBounds(object map[string]any, requireBoth bool) error {
+	lower, err := sourceNumericBoundFor(object, "minimum", "exclusiveMinimum", true)
+	if err != nil {
+		return err
+	}
+	upper, err := sourceNumericBoundFor(object, "maximum", "exclusiveMaximum", false)
+	if err != nil {
+		return err
+	}
+	if requireBoth && !lower.present {
+		return fmt.Errorf("unbounded request schema number has no minimum")
+	}
+	if requireBoth && !upper.present {
+		return fmt.Errorf("unbounded request schema number has no maximum")
+	}
+	if lower.present && upper.present && (lower.value > upper.value || (lower.value == upper.value && (!lower.inclusive || !upper.inclusive))) {
+		return fmt.Errorf("contradictory request schema numeric bounds")
+	}
+	return nil
+}
+
+func sourceNumericBoundFor(object map[string]any, inclusiveKey, exclusiveKey string, lower bool) (sourceNumericBound, error) {
+	bound := sourceNumericBound{inclusive: true}
+	if raw, exists := object[inclusiveKey]; exists {
+		value, ok := sourceFiniteNumber(raw)
+		if !ok {
+			return sourceNumericBound{}, fmt.Errorf("request schema %s must be a finite number", inclusiveKey)
+		}
+		bound = sourceNumericBound{value: value, inclusive: true, present: true}
+	}
+	rawExclusive, exists := object[exclusiveKey]
+	if !exists {
+		return bound, nil
+	}
+	if flag, isFlag := rawExclusive.(bool); isFlag {
+		if flag {
+			if !bound.present {
+				return sourceNumericBound{}, fmt.Errorf("request schema %s requires %s", exclusiveKey, inclusiveKey)
+			}
+			bound.inclusive = false
+		}
+		return bound, nil
+	}
+	exclusive, ok := sourceFiniteNumber(rawExclusive)
+	if !ok {
+		return sourceNumericBound{}, fmt.Errorf("request schema %s must be a finite number or boolean", exclusiveKey)
+	}
+	if !bound.present || (lower && exclusive > bound.value) || (!lower && exclusive < bound.value) {
+		return sourceNumericBound{value: exclusive, inclusive: false, present: true}, nil
+	}
+	if exclusive == bound.value {
+		bound.inclusive = false
+	}
+	return bound, nil
+}
+
+func sourceOptionalNonNegativeInteger(object map[string]any, key string) (int64, bool, error) {
+	raw, exists := object[key]
+	if !exists {
+		return 0, false, nil
+	}
+	value, ok := sourceNonNegativeInteger(raw)
+	if !ok {
+		return 0, false, fmt.Errorf("request schema %s must be a non-negative integer", key)
+	}
+	return value, true, nil
+}
+
+func sourceNonNegativeInteger(value any) (int64, bool) {
+	switch typed := value.(type) {
+	case json.Number:
+		integer, err := typed.Int64()
+		return integer, err == nil && integer >= 0
+	case float64:
+		if math.IsNaN(typed) || math.IsInf(typed, 0) || typed < 0 || typed > math.MaxInt64 || math.Trunc(typed) != typed {
+			return 0, false
+		}
+		return int64(typed), true
+	case int:
+		return int64(typed), typed >= 0
+	case int64:
+		return typed, typed >= 0
+	case uint:
+		if uint64(typed) > math.MaxInt64 {
+			return 0, false
+		}
+		return int64(typed), true
+	case uint64:
+		if typed > math.MaxInt64 {
+			return 0, false
+		}
+		return int64(typed), true
+	default:
+		return 0, false
+	}
+}
+
+func sourceFiniteNumber(value any) (float64, bool) {
+	var number float64
+	switch typed := value.(type) {
+	case json.Number:
+		parsed, err := strconv.ParseFloat(string(typed), 64)
+		if err != nil {
+			return 0, false
+		}
+		number = parsed
+	case float64:
+		number = typed
+	case float32:
+		number = float64(typed)
+	case int:
+		number = float64(typed)
+	case int64:
+		number = float64(typed)
+	case uint:
+		number = float64(typed)
+	case uint64:
+		number = float64(typed)
+	default:
+		return 0, false
+	}
+	return number, !math.IsNaN(number) && !math.IsInf(number, 0)
+}
+
 func sourceResponses(operation, doc map[string]any, version string, resolver *sourceReferenceResolver, limits sourceImportLimits) ([]sourceResponseDescriptor, []string, error) {
 	rawResponses, ok := operation["responses"].(map[string]any)
 	if !ok || len(rawResponses) == 0 {
@@ -990,40 +2073,39 @@ func sourceResponses(operation, doc map[string]any, version string, resolver *so
 	}
 	responses := make([]sourceResponseDescriptor, 0, len(rawResponses))
 	mediaSet := map[string]bool{}
+	var swaggerProduces []string
+	if version == "swagger2" {
+		produces, declared := operation["produces"]
+		if !declared {
+			produces, declared = doc["produces"]
+		}
+		if declared {
+			var err error
+			swaggerProduces, err = sourceStringArray(produces, "Swagger produces")
+			if err != nil {
+				return nil, nil, err
+			}
+		}
+	}
 	for _, status := range sortedSourceMapKeys(rawResponses) {
-		resolved, err := resolver.resolve(rawResponses[status])
+		resolved, err := resolver.resolveResponse(rawResponses[status], nil, 0)
 		if err != nil {
 			return nil, nil, err
 		}
-		encoded, err := json.Marshal(resolved)
+		encoded, err := sourceMarshalCompact(resolved)
 		if err != nil {
 			return nil, nil, fmt.Errorf("encode response %q: %w", status, err)
 		}
 		if int64(len(encoded)) > limits.MaxSchemaBytes {
 			return nil, nil, fmt.Errorf("schema byte limit exceeded for response %q", status)
 		}
-		responses = append(responses, sourceResponseDescriptor{Status: status, Declaration: resolved})
-		if response, ok := resolved.(map[string]any); ok {
-			if content, ok := response["content"].(map[string]any); ok {
-				for mediaType := range content {
-					mediaSet[mediaType] = true
-				}
-			}
+		media, err := sourceResponseMedia(resolved, swaggerProduces)
+		if err != nil {
+			return nil, nil, fmt.Errorf("response %q: %w", status, err)
 		}
-	}
-	if version == "swagger2" && len(mediaSet) == 0 {
-		produces, declared := operation["produces"]
-		if !declared {
-			produces, declared = doc["produces"]
-		}
-		if declared {
-			mediaTypes, err := sourceStringArray(produces, "Swagger produces")
-			if err != nil {
-				return nil, nil, err
-			}
-			for _, mediaType := range mediaTypes {
-				mediaSet[mediaType] = true
-			}
+		responses = append(responses, sourceResponseDescriptor{Status: status, Declaration: resolved, Media: media})
+		for _, item := range media {
+			mediaSet[item.MediaType] = true
 		}
 	}
 	mediaTypes := make([]string, 0, len(mediaSet))
@@ -1034,21 +2116,96 @@ func sourceResponses(operation, doc map[string]any, version string, resolver *so
 	return responses, mediaTypes, nil
 }
 
+func sourceResponseMedia(response map[string]any, fallback []string) ([]sourceResponseMediaDescriptor, error) {
+	mediaSet := map[string]bool{}
+	if content, exists := response["content"]; exists {
+		contentMap, ok := content.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("response content must be an object")
+		}
+		for mediaType := range contentMap {
+			mediaSet[mediaType] = true
+		}
+	}
+	if len(mediaSet) == 0 {
+		for _, mediaType := range fallback {
+			mediaSet[mediaType] = true
+		}
+	}
+	mediaTypes := make([]string, 0, len(mediaSet))
+	for mediaType := range mediaSet {
+		mediaTypes = append(mediaTypes, mediaType)
+	}
+	sort.Strings(mediaTypes)
+	media := make([]sourceResponseMediaDescriptor, 0, len(mediaTypes))
+	for _, mediaType := range mediaTypes {
+		class, err := sourceOutputClassForMediaType(mediaType)
+		if err != nil {
+			return nil, err
+		}
+		media = append(media, sourceResponseMediaDescriptor{MediaType: mediaType, Class: class})
+	}
+	return media, nil
+}
+
+func sourceOutputForResponses(method string, responses []sourceResponseDescriptor) (sourceOutputDescriptor, error) {
+	output := sourceOutputDescriptor{Success: []sourceOutputVariant{}}
+	mediaSet := map[string]bool{}
+	classSet := map[sourceOutputClass]bool{}
+	for _, response := range responses {
+		if !sourceSuccessfulResponseStatus(response.Status) {
+			continue
+		}
+		if method == "head" || len(response.Media) == 0 {
+			output.Success = append(output.Success, sourceOutputVariant{Status: response.Status, Class: sourceOutputStatus})
+			classSet[sourceOutputStatus] = true
+			continue
+		}
+		for _, media := range response.Media {
+			output.Success = append(output.Success, sourceOutputVariant{Status: response.Status, MediaType: media.MediaType, Class: media.Class})
+			mediaSet[media.MediaType] = true
+			classSet[media.Class] = true
+		}
+	}
+	if len(output.Success) == 0 {
+		output.Class = sourceOutputStatus
+		return output, nil
+	}
+	sort.Slice(output.Success, func(i, j int) bool {
+		if output.Success[i].Status != output.Success[j].Status {
+			return output.Success[i].Status < output.Success[j].Status
+		}
+		return output.Success[i].MediaType < output.Success[j].MediaType
+	})
+	if len(classSet) == 1 {
+		for class := range classSet {
+			output.Class = class
+		}
+	}
+	for mediaType := range mediaSet {
+		output.MediaTypes = append(output.MediaTypes, mediaType)
+	}
+	sort.Strings(output.MediaTypes)
+	return output, nil
+}
+
+func sourceSuccessfulResponseStatus(status string) bool {
+	if strings.EqualFold(status, "2XX") {
+		return true
+	}
+	code, err := strconv.Atoi(status)
+	return err == nil && code >= 200 && code < 300
+}
+
 func sourceOutputClassFor(method string, mediaTypes []string) (sourceOutputClass, error) {
 	if method == "head" || len(mediaTypes) == 0 {
 		return sourceOutputStatus, nil
 	}
 	var class sourceOutputClass
 	for _, mediaType := range mediaTypes {
-		normalizedMediaType := strings.ToLower(strings.TrimSpace(strings.Split(mediaType, ";")[0]))
-		if normalizedMediaType == "" {
-			return "", fmt.Errorf("response output media type is empty")
-		}
-		mediaClass := sourceOutputBinary
-		if sourceJSONMediaType(mediaType) {
-			mediaClass = sourceOutputJSON
-		} else if strings.HasPrefix(normalizedMediaType, "text/") {
-			mediaClass = sourceOutputText
+		mediaClass, err := sourceOutputClassForMediaType(mediaType)
+		if err != nil {
+			return "", err
 		}
 		if class != "" && class != mediaClass {
 			return "", fmt.Errorf("ambiguous response output media types")
@@ -1056,6 +2213,20 @@ func sourceOutputClassFor(method string, mediaTypes []string) (sourceOutputClass
 		class = mediaClass
 	}
 	return class, nil
+}
+
+func sourceOutputClassForMediaType(mediaType string) (sourceOutputClass, error) {
+	normalizedMediaType := strings.ToLower(strings.TrimSpace(strings.Split(mediaType, ";")[0]))
+	if normalizedMediaType == "" {
+		return "", fmt.Errorf("response output media type is empty")
+	}
+	if sourceJSONMediaType(mediaType) {
+		return sourceOutputJSON, nil
+	}
+	if strings.HasPrefix(normalizedMediaType, "text/") {
+		return sourceOutputText, nil
+	}
+	return sourceOutputBinary, nil
 }
 
 func sourcePagination(operation map[string]any, resolver *sourceReferenceResolver) (any, error) {
@@ -1073,6 +2244,122 @@ func sourcePagination(operation map[string]any, resolver *sourceReferenceResolve
 		return nil, fmt.Errorf("ambiguous pagination metadata")
 	}
 	return resolver.resolve(operation[keys[0]])
+}
+
+func sourceServerLayerFrom(object map[string]any) (sourceServerLayer, error) {
+	raw, declared := object["servers"]
+	if !declared {
+		return sourceServerLayer{}, nil
+	}
+	servers, ok := raw.([]any)
+	if !ok {
+		return sourceServerLayer{}, fmt.Errorf("servers must be an array")
+	}
+	return sourceServerLayer{Declared: true, Servers: sourceCloneLiteral(servers)}, nil
+}
+
+func sourceWebhookEvents(lock sourceImportLock, doc map[string]any, resolver *sourceReferenceResolver) ([]sourceInboundEventDescriptor, error) {
+	raw, declared := doc["webhooks"]
+	if !declared {
+		return nil, nil
+	}
+	webhooks, ok := raw.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("webhooks must be an object")
+	}
+	events := make([]sourceInboundEventDescriptor, 0, len(webhooks))
+	for _, name := range sortedSourceMapKeys(webhooks) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if name == "" || name != strings.TrimSpace(name) {
+			return nil, fmt.Errorf("webhook has an invalid name")
+		}
+		declaration, err := resolver.resolveInboundPathItem(webhooks[name], nil, 0)
+		if err != nil {
+			return nil, fmt.Errorf("webhook %q: %w", name, err)
+		}
+		location := fmt.Sprintf("webhooks[%q]", name)
+		gap := sourceContractGapFor("cli-webhook-event-surface-foundation-r1", location, "provider inbound event requires webhook event-surface support")
+		events = append(events, sourceInboundEventDescriptor{
+			Connector:   lock.Connector,
+			SourceID:    fmt.Sprintf("%s.inbound.webhook.%s", lock.Connector, name),
+			Kind:        "webhook",
+			Name:        name,
+			Source:      sourceImportSource{URL: lock.Rest.SourceURL, SHA256: strings.ToLower(lock.Rest.SHA256), Bytes: lock.Rest.Bytes, Location: location},
+			Declaration: declaration,
+			Runtime:     sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{gap}},
+		})
+	}
+	sortSourceInboundEventDescriptors(events)
+	return events, nil
+}
+
+func sourceCallbackEvents(lock sourceImportLock, parentSourceID, location string, raw any, resolver *sourceReferenceResolver) ([]sourceInboundEventDescriptor, error) {
+	callbacks, ok := raw.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("callbacks must be an object")
+	}
+	events := make([]sourceInboundEventDescriptor, 0, len(callbacks))
+	for _, name := range sortedSourceMapKeys(callbacks) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if name == "" || name != strings.TrimSpace(name) {
+			return nil, fmt.Errorf("callback has an invalid name")
+		}
+		declaration, err := resolver.resolveCallback(callbacks[name], nil, 0)
+		if err != nil {
+			return nil, fmt.Errorf("callback %q: %w", name, err)
+		}
+		eventLocation := fmt.Sprintf("%s[%q]", location, name)
+		identity := parentSourceID
+		if identity == "" {
+			identity = eventLocation
+		}
+		gap := sourceContractGapFor("cli-webhook-event-surface-foundation-r1", eventLocation, "provider callback requires webhook event-surface support")
+		events = append(events, sourceInboundEventDescriptor{
+			Connector:      lock.Connector,
+			SourceID:       fmt.Sprintf("%s.inbound.callback.%s.%s", lock.Connector, identity, name),
+			ParentSourceID: parentSourceID,
+			Kind:           "callback",
+			Name:           name,
+			Source:         sourceImportSource{URL: lock.Rest.SourceURL, SHA256: strings.ToLower(lock.Rest.SHA256), Bytes: lock.Rest.Bytes, Location: eventLocation},
+			Declaration:    declaration,
+			Runtime:        sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{gap}},
+		})
+	}
+	sortSourceInboundEventDescriptors(events)
+	return events, nil
+}
+
+func sortSourceInboundEventDescriptors(events []sourceInboundEventDescriptor) {
+	sort.Slice(events, func(i, j int) bool {
+		if events[i].Connector != events[j].Connector {
+			return events[i].Connector < events[j].Connector
+		}
+		if events[i].Kind != events[j].Kind {
+			return events[i].Kind < events[j].Kind
+		}
+		if events[i].Source.Location != events[j].Source.Location {
+			return events[i].Source.Location < events[j].Source.Location
+		}
+		return events[i].SourceID < events[j].SourceID
+	})
+}
+
+func sortSourceExtensions(extensions []sourceExtensionDescriptor) {
+	sort.Slice(extensions, func(i, j int) bool { return extensions[i].Location < extensions[j].Location })
+}
+
+func sourceMarshalCompact(value any) ([]byte, error) {
+	var buffer bytes.Buffer
+	encoder := json.NewEncoder(&buffer)
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(value); err != nil {
+		return nil, err
+	}
+	return bytes.TrimSuffix(buffer.Bytes(), []byte("\n")), nil
 }
 
 func sourceOperationByteLimits(operation map[string]any) (sourceByteLimits, error) {
@@ -1152,27 +2439,11 @@ func sourceJSONMediaType(mediaType string) bool {
 }
 
 func sourcePositiveInteger(value any) int64 {
-	switch typed := value.(type) {
-	case json.Number:
-		integer, err := typed.Int64()
-		if err == nil {
-			return integer
-		}
-	case float64:
-		if typed == float64(int64(typed)) {
-			return int64(typed)
-		}
-	case int:
-		return int64(typed)
-	case int64:
-		return typed
-	case string:
-		integer, err := strconv.ParseInt(typed, 10, 64)
-		if err == nil {
-			return integer
-		}
+	integer, ok := sourceNonNegativeInteger(value)
+	if !ok || integer <= 0 {
+		return 0
 	}
-	return 0
+	return integer
 }
 
 func sourceBool(value any) bool {
@@ -1207,13 +2478,39 @@ func sortedSourceMapKeys(values map[string]any) []string {
 }
 
 func marshalSourceImportDescriptors(descriptors []sourceOperationDescriptor) ([]byte, error) {
-	copyDescriptors := append([]sourceOperationDescriptor(nil), descriptors...)
-	sortSourceOperationDescriptors(copyDescriptors)
+	return marshalSourceImportResult(sourceImportResult{Operations: descriptors})
+}
+
+func marshalSourceImportResult(result sourceImportResult) ([]byte, error) {
+	copyResult := sourceImportResult{
+		Operations:    append([]sourceOperationDescriptor(nil), result.Operations...),
+		InboundEvents: append([]sourceInboundEventDescriptor(nil), result.InboundEvents...),
+		Extensions:    append([]sourceExtensionDescriptor(nil), result.Extensions...),
+	}
+	sortSourceOperationDescriptors(copyResult.Operations)
+	sortSourceInboundEventDescriptors(copyResult.InboundEvents)
+	sortSourceExtensions(copyResult.Extensions)
+	var gaps []sourceContractGap
+	for _, operation := range copyResult.Operations {
+		gaps = append(gaps, operation.Runtime.Gaps...)
+	}
+	for _, event := range copyResult.InboundEvents {
+		gaps = append(gaps, event.Runtime.Gaps...)
+	}
+	gaps = sourceSortedGaps(gaps)
+	document := sourceImportDescriptorDocument{
+		SchemaVersion: 1,
+		Operations:    copyResult.Operations,
+		InboundEvents: copyResult.InboundEvents,
+		Extensions:    copyResult.Extensions,
+		MergeBlocked:  len(gaps) > 0,
+		Gaps:          gaps,
+	}
 	var buffer bytes.Buffer
 	encoder := json.NewEncoder(&buffer)
 	encoder.SetEscapeHTML(false)
 	encoder.SetIndent("", "  ")
-	if err := encoder.Encode(sourceImportDescriptorDocument{SchemaVersion: 1, Operations: copyDescriptors}); err != nil {
+	if err := encoder.Encode(document); err != nil {
 		return nil, err
 	}
 	return buffer.Bytes(), nil
@@ -1248,12 +2545,12 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
 	}
-	descriptors, err := importSourceLock(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
 	if err != nil {
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
 	}
-	raw, err := marshalSourceImportDescriptors(descriptors)
+	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)
 		return 1
@@ -1264,14 +2561,14 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 			logln(stderr, "connectorgen source-import: descriptor output has drifted; rerun without --check after source-lock verification")
 			return 1
 		}
-		logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s) verified", opts.Connector, len(descriptors)))
+		logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) verified", opts.Connector, len(result.Operations), len(result.InboundEvents)))
 		return 0
 	}
 	if err := os.WriteFile(opts.Output, raw, 0o644); err != nil {
 		logln(stderr, "connectorgen source-import: write descriptors:", err)
 		return 1
 	}
-	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s) imported", opts.Connector, len(descriptors)))
+	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported", opts.Connector, len(result.Operations), len(result.InboundEvents)))
 	return 0
 }
 

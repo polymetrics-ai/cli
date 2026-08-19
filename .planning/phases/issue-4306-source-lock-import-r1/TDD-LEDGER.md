@@ -16,7 +16,7 @@
 ## Cycle 3 — bounded reference and request contracts
 
 - **Red:** isolated fixture tests required named failure modes for references, request contracts, identity, callbacks, source drift, and bounds.
-- **Green:** external, unresolved, cyclic, sibling-ambiguous, over-depth, and over-count references; duplicate identities; callback routes; unbounded/dynamic request bodies; unsupported XML encoding; oversized artifact/schema; and operation-count excess all fail before descriptor emission.
+- **Green:** external, unresolved, cyclic, over-depth, and over-count references; duplicate identities; unbounded/dynamic request bodies; unsupported XML encoding; oversized artifact/schema; and operation-count excess all fail before descriptor emission; source-locked callback and webhook routes are retained as explicitly merge-blocked inbound events.
 - **Refactor:** the local JSON Pointer resolver owns bounded ref traversal and canonical map copying, avoiding a second schema walker with different safety rules.
 
 ## Cycle 4 — closed adoption command and documentation
@@ -24,3 +24,9 @@
 - **Red:** `source-import` was an unknown command and migration conventions had no adoption contract.
 - **Green:** help documents connector/defs/output/check only; it exposes none of `--url`, `--method`, `--path`, `--header`, `--body`, or `--credential`. Command/check-mode tests prove owned-lock resolution and descriptor drift detection; migration guidance records lock refresh and preservation constraints.
 - **Refactor:** standard and connector-qualified `--help` both render the same closed command contract. Inline GSD code review found no remaining correctness, safety, or documentation findings.
+
+## Cycle 5 — review hardening parity
+
+- **Red:** review cases exposed duplicate JSON/YAML object members, grammar-blind `$ref` resolution, silently dropped inbound route metadata, lossy parameter serialization, dynamic references, semantic bound errors, reference amplification, and mixed success/error media collapse.
+- **Green:** the parser now reports duplicate-member JSON Pointers; scoped OpenAPI resolvers preserve literal `$ref` fields and legal 3.1 siblings; inbound events, route servers, extensions, and parameter wire metadata are canonical merge-blocked evidence; dynamic references fail with a named foundation; finite enums and actual finite bounds are evaluated semantically; aggregate descriptor bytes are bounded; response status/media variants remain independent.
+- **Refactor:** document-level source-import results keep operation descriptors compatible while making inbound events and extensions explicit, and a shared compact-size budget bounds every retained result before append.

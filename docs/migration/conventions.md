@@ -1530,3 +1530,13 @@ they are unusual, privileged, paid-tier, destructive, or sensitive-looking.
 Any later runtime masking must leave field presence explicit. Batches may then
 materialize only contracts their closed runtime supports, preserving existing
 credential and write-plan/preview/approval policies.
+
+Source import also retains OpenAPI route metadata that later declaration
+generators do not yet execute: provider `servers` layers, parameter wire
+serialization, callbacks, webhooks, and `x-` path metadata. Those records are
+emitted canonically with a named `merge_blocked` foundation gap rather than
+being dropped, rewritten, or made executable. A descriptor with such a gap is
+source evidence only; adopt it after the named runtime foundation is available.
+Dynamic reference vocabularies remain rejected, while every response status and
+media pair stays present so a binary success and a JSON error can be materialized
+without collapsing either contract.

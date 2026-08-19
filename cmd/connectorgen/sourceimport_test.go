@@ -108,7 +108,6 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 		{name: "cyclic reference", artifact: "cyclic-ref.json", want: "reference cycle", limits: baseLimits},
 		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
-		{name: "callback route", artifact: "callback-route.json", want: "callback-only route", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
 		{name: "missing additional properties", artifact: "missing-additional-properties.json", want: "dynamic additionalProperties", limits: baseLimits},
 		{name: "unsupported encoding", artifact: "unsupported-encoding.json", want: "unsupported request encoding", limits: baseLimits},
@@ -348,6 +347,160 @@ func TestSourceImportRejectsSourcesDirectoryEscapingConnectorBundle(t *testing.T
 	}
 }
 
+func TestSourceImportRejectsDuplicateJSONAndYAMLMembersWithPointers(t *testing.T) {
+	t.Parallel()
+	lock := []byte(`{"schema_version":1,"connector":"alpha","connector":"beta","rest":{"source_url":"https://fixtures.polymetrics.invalid/openapi.json","sha256":"0000000000000000000000000000000000000000000000000000000000000000","bytes":1}}`)
+	if _, err := parseSourceImportLock(lock, "alpha"); err == nil || !strings.Contains(err.Error(), "/connector") {
+		t.Fatalf("duplicate lock error = %v", err)
+	}
+	jsonArtifact := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}},"get":{"responses":{"204":{"description":"again"}}}}}}`)
+	if _, _, err := parseSourceImportDocument(jsonArtifact); err == nil || !strings.Contains(err.Error(), "/paths/~1items/get") {
+		t.Fatalf("duplicate artifact error = %v", err)
+	}
+	yamlArtifact := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  /items:\n    get: {responses: {'200': {description: ok}}}\n    get: {responses: {'204': {description: again}}}\n")
+	if _, _, err := parseSourceImportDocument(yamlArtifact); err == nil || !strings.Contains(err.Error(), "/paths/~1items/get") {
+		t.Fatalf("duplicate YAML artifact error = %v", err)
+	}
+}
+
+func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original","content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{"$ref":{"type":"string","maxLength":8},"example":{"type":"string","maxLength":8}}}}}}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
+	result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+	if len(result.Operations) != 1 {
+		t.Fatalf("operation count = %d", len(result.Operations))
+	}
+	response := descriptorResponse(t, result.Operations[0], "200")
+	declaration, ok := response.Declaration.(map[string]any)
+	if !ok || declaration["description"] != "override" {
+		t.Fatalf("resolved reference sibling = %#v", response.Declaration)
+	}
+	content := declaration["content"].(map[string]any)
+	schema := content["application/json"].(map[string]any)["schema"].(map[string]any)
+	properties := schema["properties"].(map[string]any)
+	if _, exists := properties["$ref"]; !exists {
+		t.Fatalf("literal property named $ref was lost: %#v", properties)
+	}
+}
+
+func TestSourceImportPreservesInboundEventsAndExtensionsAsMergeBlocked(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"invoice.created":{"post":{"responses":{"200":{"description":"ok"}}}}},"paths":{"x-provider-metadata":{"tier":"test"},"/deliver":{"x-route-metadata":{"owner":"provider"},"post":{"operationId":"deliver","callbacks":{"notify":{"{$request.body#/callback_url}":{"post":{"responses":{"202":{"description":"accepted"}}}}}},"responses":{"202":{"description":"accepted"}}}}}}`)
+	result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+	if len(result.Operations) != 1 || len(result.InboundEvents) != 2 || len(result.Extensions) != 2 {
+		t.Fatalf("result = %#v", result)
+	}
+	for _, event := range result.InboundEvents {
+		if !event.Runtime.MergeBlocked || len(event.Runtime.Gaps) != 1 || event.Runtime.Gaps[0].Foundation != "cli-webhook-event-surface-foundation-r1" {
+			t.Fatalf("event runtime = %#v", event.Runtime)
+		}
+	}
+	encoded, err := marshalSourceImportResult(result)
+	if err != nil || !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), "cli-webhook-event-surface-foundation-r1") {
+		t.Fatalf("event descriptor output = %s, %v", encoded, err)
+	}
+	callbackOnly := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"only":{"post":{"responses":{"200":{"description":"ok"}}}}}}`)
+	callbackResult := importInlineSourceResult(t, callbackOnly, defaultSourceImportLimits())
+	if len(callbackResult.Operations) != 0 || len(callbackResult.InboundEvents) != 1 {
+		t.Fatalf("callback-only result = %#v", callbackResult)
+	}
+	externalInbound := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"only":{"post":{"responses":{"200":{"content":{"application/json":{"schema":{"$ref":"https://example.invalid/schema.json"}}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inbound-external.json", externalInbound)
+	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return externalInbound, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "external reference") {
+		t.Fatalf("inbound external reference error = %v", err)
+	}
+}
+
+func TestSourceImportPreservesServerOverridesAndParameterWireContracts(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"servers":[{"url":"https://{region}.example.invalid/v1","variables":{"region":{"default":"us","enum":["us","eu"]}}}],"paths":{"/items":{"servers":[{"url":"https://path.example.invalid"}],"get":{"operationId":"items","servers":[{"url":"https://operation.example.invalid/{version}","variables":{"version":{"default":"v2"}}}],"parameters":[{"name":"filter","in":"query","style":"deepObject","explode":true,"allowReserved":true,"schema":{"type":"object","additionalProperties":false,"properties":{"tag":{"type":"string","pattern":"^[a-z]+$","maxLength":20}}}}],"responses":{"200":{"description":"ok"}}}}}}`)
+	result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+	descriptor := result.Operations[0]
+	if !descriptor.Servers.Root.Declared || !descriptor.Servers.PathItem.Declared || !descriptor.Servers.Operation.Declared || !descriptor.Runtime.MergeBlocked {
+		t.Fatalf("server routing = %#v", descriptor)
+	}
+	if len(descriptor.Servers.Gaps) != 1 || descriptor.Servers.Gaps[0].Foundation != "cli-operation-route-override-foundation-r1" {
+		t.Fatalf("server gap = %#v", descriptor.Servers.Gaps)
+	}
+	parameter := descriptor.Request.Query[0]
+	if parameter.Wire.Style != "deepObject" || parameter.Wire.Explode == nil || !*parameter.Wire.Explode || parameter.Wire.AllowReserved == nil || !*parameter.Wire.AllowReserved || len(parameter.Wire.Gaps) != 1 {
+		t.Fatalf("wire contract = %#v", parameter.Wire)
+	}
+	schema := parameter.Schema.(map[string]any)
+	if schema["properties"].(map[string]any)["tag"].(map[string]any)["pattern"] != "^[a-z]+$" {
+		t.Fatalf("parameter schema constraints = %#v", schema)
+	}
+	swagger := []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"parameters":[{"name":"tag","in":"query","type":"string","pattern":"^[a-z]+$","maxLength":20,"collectionFormat":"pipes"}],"responses":{"200":{"description":"ok"}}}}}}`)
+	swaggerResult := importInlineSourceResult(t, swagger, defaultSourceImportLimits())
+	swaggerParameter := swaggerResult.Operations[0].Request.Query[0]
+	if swaggerParameter.Wire.CollectionFormat != "pipes" || len(swaggerParameter.Wire.Gaps) != 1 || swaggerParameter.Schema.(map[string]any)["pattern"] != "^[a-z]+$" {
+		t.Fatalf("Swagger wire contract = %#v", swaggerParameter)
+	}
+}
+
+func TestSourceImportRejectsDynamicAndInvalidBoundedRequestContracts(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name    string
+		schema  string
+		wantErr string
+	}{
+		{name: "dynamic reference", schema: `{"$dynamicRef":"#node","type":"string","maxLength":8}`, wantErr: "cli-openapi-dynamic-ref-foundation-r1"},
+		{name: "dynamic anchor", schema: `{"$dynamicAnchor":"node","type":"string","maxLength":8}`, wantErr: "cli-openapi-dynamic-ref-foundation-r1"},
+		{name: "null numeric bounds", schema: `{"type":"number","minimum":null,"maximum":null}`, wantErr: "finite number"},
+		{name: "contradictory numeric bounds", schema: `{"type":"number","minimum":4,"maximum":3}`, wantErr: "contradictory request schema numeric bounds"},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":` + tc.schema + `}}},"responses":{"200":{"description":"ok"}}}}}}`)
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/bounds.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("import error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+	enum := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"string","enum":["asc","desc"]}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	result := importInlineSourceResult(t, enum, defaultSourceImportLimits())
+	if result.Operations[0].Request.Body == nil {
+		t.Fatal("finite enum request body was not imported")
+	}
+}
+
+func TestSourceImportBoundsAggregateResolvedDescriptorsAndKeepsMixedResponseMedia(t *testing.T) {
+	t.Parallel()
+	largeDescription := strings.Repeat("x", 6000)
+	amplified := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"large":{"description":"` + largeDescription + `"}}},"paths":{"/one":{"get":{"responses":{"200":{"$ref":"#/components/responses/large"}}}},"/two":{"get":{"responses":{"200":{"$ref":"#/components/responses/large"}}}}}}`)
+	limits := defaultSourceImportLimits()
+	limits.MaxResolvedDescriptorBytes = 10000
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/amplified.json", amplified)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return amplified, nil }), limits)
+	if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit") {
+		t.Fatalf("amplification error = %v", err)
+	}
+	mixed := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/archive":{"get":{"responses":{"200":{"description":"archive","content":{"application/zip":{"schema":{"type":"string"}}}},"403":{"description":"denied","content":{"application/json":{"schema":{"type":"object","properties":{"error":{"type":"string"}}}}}}}}}}}`)
+	result := importInlineSourceResult(t, mixed, defaultSourceImportLimits())
+	operation := result.Operations[0]
+	if len(operation.Output.Success) != 1 || operation.Output.Success[0].Status != "200" || operation.Output.Success[0].Class != sourceOutputBinary {
+		t.Fatalf("success output = %#v", operation.Output)
+	}
+	response403 := descriptorResponse(t, operation, "403")
+	if len(response403.Media) != 1 || response403.Media[0].MediaType != "application/json" || response403.Media[0].Class != sourceOutputJSON {
+		t.Fatalf("error response media = %#v", response403)
+	}
+}
+
+func importInlineSourceResult(t *testing.T, raw []byte, limits sourceImportLimits) sourceImportResult {
+	t.Helper()
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-openapi.json", raw)
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	if err != nil {
+		t.Fatalf("import inline source: %v", err)
+	}
+	return result
+}
+
 func loadSourceImportFixtureLock(t *testing.T, connector string) sourceImportLock {
 	t.Helper()
 	raw := loadSourceImportFixture(t, filepath.Join(connector, connector+"-operation-source-lock.json"))
@@ -384,7 +537,7 @@ func loadSourceImportFixture(t *testing.T, name string) []byte {
 
 func sourceImportFixtureLock(connector, sourceURL string, raw []byte) sourceImportLock {
 	digest := sha256.Sum256(raw)
-	return sourceImportLock{Connector: connector, Rest: sourceImportArtifact{SourceURL: sourceURL, SHA256: hex.EncodeToString(digest[:]), Bytes: int64(len(raw))}}
+	return sourceImportLock{SchemaVersion: 1, Connector: connector, Rest: sourceImportArtifact{SourceURL: sourceURL, SHA256: hex.EncodeToString(digest[:]), Bytes: int64(len(raw))}}
 }
 
 func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, status string) sourceResponseDescriptor {
