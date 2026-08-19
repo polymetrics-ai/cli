@@ -2,7 +2,7 @@
 
 Reads Segment workspace, source, and destination metadata through the Segment Public API.
 
-Readable streams: `workspaces`, `sources`, `destinations`.
+Readable streams: `workspace`, `sources`, `destinations`.
 
 This connector is read-only; no write actions are declared.
 
@@ -28,21 +28,27 @@ Authentication behavior:
 
 Requests use the configured `base_url` value after applying defaults.
 
-Connection checks call GET `/workspaces`.
+Connection checks call GET `/`.
 
 ## Streams notes
 
-Default pagination: page-number pagination; page parameter `page`; size parameter `page_size`;
-starts at 1; page size 100.
+Default pagination for collection streams: page-number pagination; page parameter `page`; size
+parameter `page_size`; starts at 1; page size 100. The singleton workspace stream does not paginate.
 
-- `workspaces`: GET `/workspaces` - records path `workspaces`; page-number pagination; page
-  parameter `page`; size parameter `page_size`; starts at 1; page size 100; emits passthrough
-  records.
+- `workspace`: GET `/` - the token-scoped singleton workspace from records path `data.workspace`;
+  does not paginate; emits one passthrough record.
 - `sources`: GET `/sources` - records path `sources`; page-number pagination; page parameter `page`;
   size parameter `page_size`; starts at 1; page size 100; emits passthrough records.
 - `destinations`: GET `/destinations` - records path `destinations`; page-number pagination; page
   parameter `page`; size parameter `page_size`; starts at 1; page size 100; emits passthrough
   records.
+
+## Provider-shape migration
+
+The legacy `workspaces` list stream at GET `/workspaces` was **REMOVED**: it is not present in the
+provider's authoritative OpenAPI. Segment Public API tokens are scoped to one workspace, which the
+documented singleton GET `/` returns as `data.workspace`. This is a user-visible connector behavior
+change; use the `workspace` stream instead.
 
 ## Write actions & risks
 

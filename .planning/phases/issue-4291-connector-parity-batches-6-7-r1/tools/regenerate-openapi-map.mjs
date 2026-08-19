@@ -17,6 +17,14 @@ const gap = {
   minimal_change: 'register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies',
 };
 const configs = {
+  'close-com': {
+    sourceURL: 'https://api.close.com/api/openapi.json',
+    artifact: 'close-api-openapi-3.1.0-2026-08-19',
+    api: 'Close API OpenAPI 3.1.0',
+    info: 'Close API v1 public OpenAPI specification',
+    docs: 'https://developer.close.com/api/overview',
+    serverPath: '',
+  },
   outreach: {
     sourceURL: 'https://api.outreach.io/api/v2/schema/openapi.json',
     artifact: 'outreach-openapi-3.0.3-2026-08-19',
@@ -64,6 +72,36 @@ const configs = {
     info: 'Chatwoot application, platform, client, and CSAT APIs',
     docs: 'https://developers.chatwoot.com/api-reference',
   },
+  chargebee: {
+    sourceURL: 'https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json',
+    artifact: 'chargebee-sdk-openapi-3.1.0-2026-08-19',
+    api: 'Chargebee API v2 public SDK OpenAPI 3.1.0',
+    info: 'Chargebee API v2 public OpenAPI specification used to generate the official client libraries',
+    docs: 'https://github.com/chargebee/openapi/blob/main/spec/chargebee_sdk_spec.json',
+    serverPath: '/v2',
+  },
+  segment: {
+    sourceURL: 'https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js',
+    artifact: 'segment-public-api-redoc-openapi-3.0.3-2026-08-19',
+    api: 'Segment Public API OpenAPI 3.0.3',
+    info: 'Segment Public API 73.2.0 OpenAPI specification emitted by the provider documentation',
+    docs: 'https://docs.segmentapis.com/',
+    parser: 'redoc-state',
+    authoritativeBindings: [
+      { method: 'GET', path: '/', covered_by: { stream: 'workspace' } },
+    ],
+    legacyDeclarationRemovals: [
+      {
+        kind: 'stream',
+        name: 'workspaces',
+        method: 'GET',
+        path: '/workspaces',
+        state: 'REMOVED',
+        reason: "not present in the provider's authoritative OpenAPI",
+        replacement: { name: 'workspace', method: 'GET', path: '/' },
+      },
+    ],
+  },
 };
 const config = configs[connector];
 if (!config) throw new Error(`unsupported connector ${connector}; add an authoritative-source config`);
@@ -71,7 +109,16 @@ const base = `internal/connectors/defs/${connector}`;
 const response = await fetch(config.sourceURL);
 const bytes = Buffer.from(await response.arrayBuffer());
 if (!response.ok) throw new Error(`HTTP ${response.status} ${config.sourceURL}`);
-const document = JSON.parse(bytes.toString('utf8'));
+const parseRedocState = artifact => {
+  const prefix = 'const __redoc_state = JSON.parse(';
+  const suffix = ');';
+  const source = artifact.toString('utf8');
+  if (!source.startsWith(prefix) || !source.endsWith(suffix)) throw new Error(`${config.sourceURL} is not a Redoc state artifact`);
+  const state = JSON.parse(JSON.parse(source.slice(prefix.length, -suffix.length)));
+  if (!state?.definition?.data) throw new Error(`${config.sourceURL} has no embedded OpenAPI definition`);
+  return state.definition.data;
+};
+const document = config.parser === 'redoc-state' ? parseRedocState(bytes) : JSON.parse(bytes.toString('utf8'));
 if (!document.paths || (!document.openapi && !document.swagger)) throw new Error(`${config.sourceURL} is not an OpenAPI document`);
 const sourceHash = createHash('sha256').update(bytes).digest('hex');
 const supplementArtifacts = await Promise.all((config.supplements ?? []).map(async supplement => {
@@ -83,7 +130,7 @@ const supplementArtifacts = await Promise.all((config.supplements ?? []).map(asy
 const methodOrder = { delete: 0, get: 1, post: 2, put: 3, patch: 4 };
 const methods = Object.keys(methodOrder);
 const declaredServer = document.servers?.[0]?.url;
-const serverPath = declaredServer && /^https?:\/\//.test(declaredServer) ? new URL(declaredServer).pathname.replace(/\/$/, '') : '';
+const serverPath = config.serverPath ?? (declaredServer && /^https?:\/\//.test(declaredServer) ? new URL(declaredServer).pathname.replace(/\/$/, '') : '');
 const surfacePath = path => serverPath && serverPath !== '/' && !path.startsWith(serverPath + '/') ? `${serverPath}${path}` : path;
 const sourceOperations = Object.entries(document.paths).flatMap(([path, item]) => methods
   .filter(method => item?.[method] && typeof item[method] === 'object')
@@ -110,6 +157,10 @@ const validCoverage = endpoint => {
   if (coverage.direct_read && commandsByPath.has(coverage.direct_read)) return { direct_read: coverage.direct_read };
   return null;
 };
+const authoritativeCoverage = new Map((config.authoritativeBindings ?? []).map(binding => [
+  `${binding.method} ${binding.path}`,
+  validCoverage({ covered_by: binding.covered_by }),
+]));
 const sluggify = value => value.replace(/[^a-zA-Z0-9]+/g, ' ').trim().split(/\s+/).map(part => part[0]?.toUpperCase() + part.slice(1)).join('');
 const operationCounts = Object.fromEntries(methods.filter(method => sourceOperations.some(operation => operation.method === method.toUpperCase()))
   .map(method => [method.toUpperCase(), sourceOperations.filter(operation => operation.method === method.toUpperCase()).length]));
@@ -128,6 +179,7 @@ const sourceLock = {
   counts: { rest: sourceOperations.length, graphql_query: 0, graphql_mutation: 0, total: sourceOperations.length },
   operations_found: { rest: sourceOperations.length, graphql_query: 0, graphql_mutation: 0, total: sourceOperations.length },
   coverage_confidence: coverage,
+  ...(config.legacyDeclarationRemovals?.length ? { legacy_declaration_removals: config.legacyDeclarationRemovals } : {}),
 };
 const isMutation = method => method !== 'GET';
 const operationSpec = operation => {
@@ -136,7 +188,7 @@ const operationSpec = operation => {
   return { model: 'direct_read', status: 'blocked', risk: 'medium', blocked_by_default: true, reason: 'Documented provider read has no connector-owned bounded operation contract and runnable command binding.' };
 };
 const rows = sourceOperations.map((operation, index) => {
-  const preserved = validCoverage(oldByKey.get(`${operation.method} ${operation.path}`));
+  const preserved = authoritativeCoverage.get(`${operation.method} ${operation.path}`) ?? validCoverage(oldByKey.get(`${operation.method} ${operation.path}`));
   const parityClass = preserved?.stream ? 'etl' : isMutation(operation.method) ? 'direct_write' : 'direct_read';
   const endpoint = { method: operation.method, path: operation.path, provenance: { artifact: operation.source_url === config.sourceURL ? config.artifact : `${connector}-rendered-dynamic-supplement-1-2026-08-19`, source_url: operation.source_url } };
   if (preserved) endpoint.covered_by = preserved; else endpoint.operation = operationSpec(operation);
@@ -180,13 +232,15 @@ const disposition = {
     runnable_cli_surface_commands: commands.length, typed_write_actions: writes.length, endpoint_bound_cli_commands: endpointBoundCommands, endpoint_bound_typed_write_actions: endpointBoundWrites,
   },
   ledger_dispositions: ledger, source_only_dispositions: [],
+  ...(config.legacyDeclarationRemovals?.length ? { legacy_declaration_removals: config.legacyDeclarationRemovals } : {}),
   notes: [
     `Complete six-class source-locked map regenerated from the provider OpenAPI ${document.openapi ?? document.swagger} document; every ${sourceOperations.length} pinned operation has exactly one primary parity class.`,
     'An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.',
     'Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.',
+    ...(config.legacyDeclarationRemovals ?? []).map(removal => `Legacy ${removal.kind} ${removal.name} (${removal.method} ${removal.path}) is ${removal.state}: ${removal.reason}.`),
   ],
 };
 writeJSON(`${base}/sources/${connector}-operation-source-lock.json`, sourceLock);
-writeJSON(`${base}/api_surface.json`, { api: config.api, docs: config.docs, reviewed_at: '2026-08-19', operation_ledger_version: 2, scope: `Complete provider-reference inventory generated from every operation in the cited OpenAPI ${document.openapi ?? document.swagger} document${config.supplements?.length ? ' plus its fixed generic dynamic-resource routes from the cited rendered provider reference' : ''} (${sourceOperations.length} HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.`, artifacts: [{ id: config.artifact, url: config.sourceURL, retrieved_at: '2026-08-19', sha256: sourceHash }, ...supplementArtifacts.map((supplement, index) => ({ id: `${connector}-rendered-dynamic-supplement-${index + 1}-2026-08-19`, url: supplement.source_url, retrieved_at: '2026-08-19', sha256: supplement.sha256 }))], endpoints: rows.map(row => row.endpoint) });
+writeJSON(`${base}/api_surface.json`, { api: config.api, docs: config.docs, reviewed_at: '2026-08-19', operation_ledger_version: 2, scope: `Complete provider-reference inventory generated from every operation in the cited OpenAPI ${document.openapi ?? document.swagger} document${config.supplements?.length ? ' plus its fixed generic dynamic-resource routes from the cited rendered provider reference' : ''} (${sourceOperations.length} HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.${config.legacyDeclarationRemovals?.length ? ' Legacy declarations absent from the authoritative source are explicitly recorded as REMOVED in the source lock and disposition ledger.' : ''}`, artifacts: [{ id: config.artifact, url: config.sourceURL, retrieved_at: '2026-08-19', sha256: sourceHash }, ...supplementArtifacts.map((supplement, index) => ({ id: `${connector}-rendered-dynamic-supplement-${index + 1}-2026-08-19`, url: supplement.source_url, retrieved_at: '2026-08-19', sha256: supplement.sha256 }))], endpoints: rows.map(row => row.endpoint) });
 writeJSON(`${base}/sources/${connector}-declaration-disposition.json`, disposition);
 console.log(`${connector}: ${sourceOperations.length} source rows; enabled=${enabled}, writes=${endpointBoundWrites}, commands=${endpointBoundCommands}`);
