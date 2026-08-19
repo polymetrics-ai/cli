@@ -1,0 +1,12 @@
+{
+  "tagline": "Run Recharge's declared typed write actions.",
+  "usage": "pm recharge <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": []
+    }
+  ],
+  "commands": []
+}

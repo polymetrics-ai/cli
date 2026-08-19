@@ -29,10 +29,10 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 10 | auth0 | 469 | 192 | 270 | 0/0 | 7 | update_user | 7 | 6/2/8 |
 | 10 | okta | 734 | 6 | 444 | 0/0 | 284 | create_api_v1_behaviors | 47 | 105/324/429 |
 | 10 | firehydrant | 373 | 13 | 204 | 0/0 | 205 | create_connection | 25 | 0/244/244 |
-| 10 | adobe-commerce-magento | dynamic | 0 | 0 | 0/0 | 10 | update_product | 4 | 0/0/0 |
+| 10 | adobe-commerce-magento | dynamic | 0 | 0 | 0/0 | 10 | update_product | 4 | 0/4/4 |
 | 10 | commercetools | 821 | 463 | 355 | 0/0 | 3 | — | 0 | 0/0/0 |
 | 10 | recharge | 123 | 44 | 76 | 0/0 | 3 | — | 0 | 0/0/0 |
-| 10 | docuseal | 23 | 3 | 16 | 0/0 | 4 | archive_submission | 5 | 9/0/9 |
+| 10 | docuseal | 23 | 3 | 16 | 0/0 | 4 | archive_submission | 5 | 10/0/10 |
 | 10 | eventbrite | skipped | 0 | 0 | 0/0 | 5 | — | 0 | 0/0/0 |
 
 Each typed write action has a machine-readable `reverse_etl_eligibility` disposition and `direct_write_cli_status` in `SEVEN-SURFACE-LEDGER.json`. `partial-blocked` has a directly invokable CLI path plus an exact closed-contract blocker; `declaration-pending-cli-binding` is an unfinished reachability obligation, not a safety exclusion. When more than one action is structurally representable, the declaration lists every eligible action but the current closed destination multiplicity selects one action per mode; unselected actions are explicitly pending the foundation's multi-action selection capability. Semantic exclusions name the exact record-schema incompatibility and remain subject to direct CLI reachability.

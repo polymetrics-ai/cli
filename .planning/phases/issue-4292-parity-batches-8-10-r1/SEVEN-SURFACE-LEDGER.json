@@ -32847,8 +32847,14 @@
             {
               "action": "update_product",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update product apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /products/{sku} disagrees with covered api_surface path /rest/V1/products/{sku}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "products",
@@ -32866,8 +32872,14 @@
             {
               "action": "create_category",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create category apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /categories disagrees with covered api_surface path /rest/V1/categories."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "categories",
@@ -32890,8 +32902,14 @@
             {
               "action": "update_category",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update category apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /categories/{id} disagrees with covered api_surface path /rest/V1/categories/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "products",
@@ -32909,8 +32927,14 @@
             {
               "action": "cancel_order",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "cancel order apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /orders/{entity_id}/cancel disagrees with covered api_surface path /rest/V1/orders/{id}/cancel."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "orders",
@@ -32928,9 +32952,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 0,
+          "declared_commands": 4,
           "implemented_commands": 0,
-          "partial_commands": 0
+          "partial_commands": 4
         }
       }
     },
@@ -33038,8 +33062,13 @@
             {
               "action": "create_submission",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create submission apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: template_id, submitters"
@@ -33168,8 +33197,8 @@
           ]
         },
         "cli": {
-          "declared_commands": 9,
-          "implemented_commands": 9,
+          "declared_commands": 10,
+          "implemented_commands": 10,
           "partial_commands": 0
         }
       }

@@ -185,6 +185,25 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Sixth five-connector typed-write CLI increment
+
+- [x] Red: Adobe Commerce and DocuSeal's ten existing typed actions lacked
+  reconciled commands; Commercetools, Recharge, and Eventbrite are source-only
+  because their bundles have no typed action.
+- [x] Green: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --write-cli adobe-commerce-magento commercetools recharge docuseal eventbrite`
+  creates all ten action commands (Adobe Commerce 0/4 implemented/partial;
+  DocuSeal 6/0), without inventing source-only commands.
+- [x] The all-30 ledger reports 1,591 typed actions, 342 implemented commands,
+  1,249 precise partial commands, and zero
+  `declaration-pending-cli-binding` actions.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check adobe-commerce-magento commercetools recharge docuseal eventbrite`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+- [x] `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
+
 ## Source-first map checks
 
 - [x] Red: initial maps rejected because their locks lacked complete provider

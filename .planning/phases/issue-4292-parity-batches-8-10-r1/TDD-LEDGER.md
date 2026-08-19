@@ -206,6 +206,19 @@
   The focused trace, bundle validation, surface synchronization, and uncached
   all-implemented runtime-preflight sweep pass.
 
+### Typed-write CLI proof — sixth increment
+
+- **Red:** the final five bundles still left Adobe Commerce's four and
+  DocuSeal's six existing typed actions without a reconciled command; the
+  Commercetools, Recharge, and Eventbrite bundles have no existing typed
+  actions and must remain source-only.
+- **Green:** all ten existing actions receive connector command contracts:
+  Adobe Commerce's four preserve exact partial reasons and DocuSeal's six pass
+  runtime preflight as implemented. The all-30 ledger now has 1,591 typed
+  actions and zero `declaration-pending-cli-binding` rows (342 implemented,
+  1,249 precise partials). The focused trace, bundle validation, surface sync,
+  and uncached runtime-preflight sweep pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:
