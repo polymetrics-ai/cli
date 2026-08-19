@@ -1,0 +1,23 @@
+{
+  "connector": "zoom",
+  "entries": [
+    {
+      "id": "zoom-rest-write-api-coverage",
+      "reason": "foundation-gap",
+      "affected_operations": "61 retained rest_write operations, including 18 DELETE operations",
+      "evidence": "connectorgen validate rejects covered_by.operations for a rest_write with 'must be a fixed GraphQL operation'; covered_by.write/writes instead requires a writes.json action, but direct-write operations intentionally have no such action.",
+      "smallest_change": "Add an explicit SurfaceCoverage field for operation-backed REST direct writes in internal/connectors/engine/bundle.go:679-721 and teach cmd/connectorgen/validate.go:696-721 to validate it against rest_write operation IDs and matching implemented direct_write commands.",
+      "recoverable": true,
+      "recovery": "Land the foundation coverage projection and validator support; do not create synthetic reverse-ETL write actions."
+    },
+    {
+      "id": "zoom-upload-policy-schema",
+      "reason": "foundation-gap",
+      "affected_operations": "zoom.upload_task_file, zoom.upload_workforce_historical_queue_metrics, zoom.upload_workforce_forecast_staffing, zoom.upload_clip_file, zoom.upload_clip_multipart_part, zoom.initiate_clip_multipart_upload, zoom.complete_clip_multipart_upload, zoom.upload_clip_temporary_file",
+      "evidence": "post-foundation bundle validation rejects legacy rest.redirect, multipart.parts[].allowed_file_extensions, and rest.base64_upload fields.",
+      "smallest_change": "Add declared, bounded REST-operation redirect and upload media-policy schema with a matching executor/certification path; retain no caller-controlled redirect or file-type escape hatch.",
+      "recoverable": true,
+      "recovery": "Land the bounded schema/executor capability, then re-author and fixture each upload."
+    }
+  ]
+}

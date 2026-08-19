@@ -1,0 +1,510 @@
+{
+  "connector": "zoom",
+  "reason_vocabulary": [
+    "provider-does-not-expose",
+    "requires-paid-tier",
+    "requires-elevated-scope",
+    "foundation-gap",
+    "schema-incompatible",
+    "unsafe-to-exercise",
+    "needs-human-decision"
+  ],
+  "entries": [
+    {
+      "connector": "zoom",
+      "operation": "zoom.send_chatbot_message",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.edit_chatbot_message",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_chatbot_message",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_chatbot_link_unfurl",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_scim2_group",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_scim2_group",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_scim2_group",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_scim2_user",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_scim2_user",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_scim2_user",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.deactivate_scim2_user",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_virtual_agent_article",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_virtual_agent_article",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_virtual_agent_article",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_virtual_agent_sync_request",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.decrypt_customer_managed_key_archival",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_auto_dialer_call_list",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_auto_dialer_call_list",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_auto_dialer_call_list",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_auto_dialer_prospect",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_auto_dialer_prospects_batch",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_auto_dialer_prospects_batch",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_auto_dialer_prospect",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_auto_dialer_prospect",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.add_task_assignees",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.remove_task_assignee",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.add_task_collaborators",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.remove_task_collaborator",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.add_task_comment",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_task_comment",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.submit_task_import",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_task",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_task",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_task",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.upload_workforce_historical_agent_status",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_workforce_historical_agent_status",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_workforce_organizational_group",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_workforce_organizational_group",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_workforce_organizational_group",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.set_clips_starred",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.share_clip_collaborators",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.remove_clip_collaborator",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_clip_comment",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_clip",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_clip",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_clip_chapters",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.duplicate_clip",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_clip_share_settings",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.transfer_clips_partial",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.transfer_clips_full",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_crc_managed_room_account_setting",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_crc_api_connector",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_crc_api_connector",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_crc_api_connector",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_crc_api_connector_private_key",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_crc_managed_room",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_crc_managed_room",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_crc_managed_room",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.create_crc_room_template",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.delete_crc_room_template",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "zoom.update_crc_room_template",
+      "reason": "foundation-gap",
+      "evidence": "connectorgen validate rejects every operation-backed rest_write endpoint because post-foundation api_surface coverage supports write actions or GraphQL operations, not rest_write operation IDs.",
+      "recoverable": true,
+      "recovery": "Pending firstmate foundation lane: explicit REST direct-write endpoint coverage in SurfaceCoverage and connectorgen validation."
+    },
+    {
+      "connector": "zoom",
+      "operation": "eight upload/multipart operations listed in foundation-gaps.json",
+      "reason": "schema-incompatible",
+      "evidence": "Load-bearing legacy rest.redirect, multipart.parts[].allowed_file_extensions, or rest.base64_upload has no post-foundation equivalent.",
+      "recoverable": true,
+      "recovery": "Pending bounded upload/redirect schema and executor foundation capability."
+    }
+  ]
+}
