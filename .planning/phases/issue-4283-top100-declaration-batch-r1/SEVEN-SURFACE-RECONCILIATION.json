@@ -3599,5 +3599,92 @@
       "connector-local command generation and installed-binary proof"
     ],
     "captain_decision": "disabled-command target rejected"
+  },
+  "pre_merge_gate": {
+    "effective": "captain-hard-pre-merge-gate-2026-08-20",
+    "state": "blocked-unpublished-foundations",
+    "merge_ready": false,
+    "decision": "No connector or connector batch is merge-ready until every provider-defined operation satisfies this gate. Aggregate parity, source mapping, a disabled placeholder, or an untested generated surface cannot substitute for per-operation proof.",
+    "canonical_operation_ledger": {
+      "execution_ledger": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json",
+      "source_crosswalk": "internal/connectors/defs/<connector>/sources/<connector>-operation-crosswalk.json",
+      "capability_audit": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-CAPABILITY-AUDIT.json",
+      "requirement": "Each source-locked provider operation has a stable source identity and a two-way trace: pinned provider source to canonical ledger to generated CLI and website representation, and each generated representation back to the same source identity."
+    },
+    "six_surface_contract": {
+      "etl": {
+        "ledger_surface": "etl",
+        "requirement": "Represent only provider operations semantically applicable to extraction and preserve stream/request/output evidence."
+      },
+      "reverse_etl": {
+        "ledger_surface": "reverse_etl",
+        "requirement": "Represent only record-driven typed provider writes with exact action selection, input fields, apply strategy, acknowledgement, delivery facts, and the existing approval lifecycle."
+      },
+      "direct_read": {
+        "ledger_surface": "direct_read",
+        "requirement": "Represent fixed provider reads with declared typed inputs, pagination/output semantics, and generated command reachability."
+      },
+      "direct_write": {
+        "ledger_surface": "direct_write",
+        "requirement": "Represent fixed provider writes with declared typed inputs, approval/confirmation policy, preserved result contract, and generated command reachability."
+      },
+      "binary_download": {
+        "ledger_surface": "binary_read",
+        "requirement": "Represent fixed binary or text retrieval with exact media type, output target, byte limit, redirect policy, and preserved file manifest/output facts."
+      },
+      "binary_upload": {
+        "ledger_surface": "binary_write",
+        "requirement": "Represent fixed binary or multipart provider mutation with declared file/media schema, bounded bytes, approval policy, and preserved acknowledgement/output facts."
+      }
+    },
+    "per_operation_acceptance": [
+      "pinned public source lock and provider-documentation two-way trace",
+      "canonical ledger row with only semantically applicable surfaces",
+      "runtime-enabled declaration and generated installed-CLI command for every applicable surface",
+      "per-operation fixture or conformance evidence proving typed inputs, request construction, and output preservation",
+      "generated CLI help/manual and website entry derived from the same canonical ledger with zero drift",
+      "no silent omissions: every source operation is either represented on each applicable surface or has an evidence-cited provider-defined N/A disposition"
+    ],
+    "na_disposition": {
+      "allowed_only_when": "The provider contract proves the operation has no semantic capability for the named surface.",
+      "required_evidence": [
+        "source location",
+        "provider-documentation explanation",
+        "canonical ledger N/A record"
+      ],
+      "not_allowed": [
+        "elevated scope",
+        "paid tier",
+        "destructive behavior",
+        "safety concern",
+        "uncommon use",
+        "missing live credential"
+      ]
+    },
+    "runtime_and_drift_proof": {
+      "runtime": "Fixture/conformance evidence is required per operation and must exercise the real declaration executor, preserve declared output, and reject invalid typed input before provider I/O.",
+      "cli": "The installed generated command must be reachable; no-credential preflight may prove dispatchability but is not provider-live certification.",
+      "website": "Generated website connector data and command documentation must be derived from the same ledger and pass an exact drift check.",
+      "certification": "Provider-live certification is distinct from fixture/conformance proof and is never inferred from generated files or no-credential preflight."
+    },
+    "live_certification_policy": {
+      "mandatory_provider_live_connectors": [
+        "zoom",
+        "twenty",
+        "gong"
+      ],
+      "mandatory_evidence": "Authorized live-credential certification with the provider-specific accepted record; fixture, replay, or generated evidence does not satisfy this requirement.",
+      "other_connectors": "Do not claim provider-live certification without credentials and accepted provider-live evidence; record pending instead.",
+      "current_pr_scope": "PR #4294 excludes zoom, twenty, and gong. This gate records their program-level mandatory live-certification policy without authorizing credentials or live calls in this lane."
+    },
+    "current_blockers": [
+      "F0 hash-matched provider source import",
+      "F2 closed typed operation headers",
+      "F4 bounded binary, multipart, status, and text operation runtime",
+      "GitHub issue #4305 declaration-bound structured bodies",
+      "final PR #4304 persisted App/CLI dispatch and action-scoped source binding",
+      "per-operation fixture/conformance, generated CLI/website projection, and exact drift proof after the foundations publish"
+    ],
+    "unblock_condition": "Remain paused until the named foundations publish. Then update every affected operation and surface with the required proof before any merge-ready assertion."
   }
 }

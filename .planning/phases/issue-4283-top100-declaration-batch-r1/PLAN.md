@@ -409,3 +409,22 @@ contracts, add closed typed headers, compose #4305 structured bodies, add
 bounded binary/status/text paths, then prove #4304 App/CLI destination dispatch
 and action-scoped source mapping. No caller-selected URL, verb, header, body,
 arbitrary JSON, or generic transport is acceptable.
+
+## Captain hard pre-merge gate — 2026-08-20
+
+The `SEVEN-SURFACE-RECONCILIATION.json#pre_merge_gate` is the authoritative
+merge gate and currently reports `merge_ready: false`. It requires a
+source-locked, provider-documentation two-way trace for every operation through
+the canonical ledger, runtime declaration, generated CLI command, and generated
+website representation. ETL, reverse ETL, direct read, direct write, binary
+download, and binary upload are separate semantic surfaces. An `N/A`
+disposition requires provider evidence that the surface is semantically absent;
+it cannot be justified by privilege, cost, destructive effect, safety concern,
+or missing credentials.
+
+Each applicable operation must retain fixture/conformance and output-preserving
+runtime evidence plus exact generated CLI/help/manual/website drift proof. Zoom,
+Twenty, and Gong require authorized provider-live certification in their own
+lanes. This PR remains non-live and must not claim any provider-live result
+without credentials and accepted evidence. Implementation remains paused until
+F0, F2/F4, #4305, and the final #4304 heads publish.

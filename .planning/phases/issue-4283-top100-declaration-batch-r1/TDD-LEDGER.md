@@ -485,3 +485,29 @@ destination-dispatch, and connector-batch slices. Each promoted command must
 use an exact source operation, fixed method/path, declared input schemas,
 bounded values, existing policy, and real provider I/O. No raw/generic
 transport or caller-selected metadata is introduced.
+
+## Captain hard pre-merge gate — 2026-08-20
+
+### Red
+
+The reconciliation aggregate can show a source count, a declared command
+count, and action eligibility without proving that every provider operation is
+runtime-enabled, generated-CLI reachable, website-derived from the same ledger,
+and covered by the semantically applicable ETL, reverse-ETL, direct-read,
+direct-write, binary-download, and binary-upload surfaces.
+
+### Green design
+
+`SEVEN-SURFACE-RECONCILIATION.json#pre_merge_gate` now makes completion a
+per-operation two-way source/ledger/CLI/website trace. It requires fixture or
+conformance evidence, output preservation, zero silent omissions, and exact
+generated-surface drift checks. `N/A` is restricted to provider-evidenced lack
+of semantic capability; risk, scope, cost, and absent credentials are runtime
+policy concerns. Zoom, Twenty, and Gong retain their authorized provider-live
+certification requirement; no other connector is called live-certified without
+credentialed accepted evidence.
+
+### Refactor / pause
+
+No connector implementation or provider I/O is introduced. The branch stays
+paused until F0, F2/F4, #4305, and final #4304 dispatch heads publish.

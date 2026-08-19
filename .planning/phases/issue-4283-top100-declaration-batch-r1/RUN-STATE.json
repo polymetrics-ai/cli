@@ -2,8 +2,8 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "reconciliation-executable-foundation-slices-defined",
-  "delivery_mode": "connector-local declarations; non-live certification only; stacked on PR-4304",
+  "state": "paused-hard-pre-merge-gate-unpublished-foundations",
+  "delivery_mode": "connector-local declarations; paused on unpublished shared foundations; no provider credentials or live I/O in this lane",
   "connectors": [
     "dockerhub",
     "gitlab",
@@ -17,6 +17,11 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Captain rejected disabled command placeholders. Dispatch the closed executable-operation slices in EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md: hash-match source artifacts; materialize fixed REST contracts; add declared header binding; integrate #4305 structured bodies; add bounded binary/status/text paths; then merge/prove #4304 persisted App/CLI dispatch and action-scoped source mapping. Do not use provider credentials or provider I/O in this lane.",
-  "updated_at": "2026-08-20T00:00:00Z"
+  "next": "Remain paused. Do not call PR #4294 or any connector/batch merge-ready until every provider operation is source-locked and two-way traced, mapped to semantically applicable ETL/reverse-ETL/direct-read/direct-write/binary-download/binary-upload surfaces, runtime-enabled, generated-CLI reachable, and generated-website represented with per-operation fixture/conformance, output-preservation, and exact drift proof. Provider-only N/A requires provider evidence. Wait for F0, F2/F4, #4305, and final #4304. Zoom, Twenty, and Gong require authorized live certification in their own lanes; no other provider is live-certified without credentials and accepted evidence.",
+  "updated_at": "2026-08-20T00:00:00Z",
+  "pre_merge_gate": {
+    "state": "blocked-unpublished-foundations",
+    "ledger": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json#pre_merge_gate",
+    "merge_ready": false
+  }
 }

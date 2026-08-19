@@ -1697,7 +1697,7 @@
     }
   ],
   "reconciliation": {
-  "at": "2026-08-19T19:59:12Z",
+    "at": "2026-08-19T19:59:12Z",
     "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json",
     "summary": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.md",
     "scope": "The existing ten PR #4294 connector directories only; excludes the obsolete top-100 expansion.",
@@ -1718,6 +1718,30 @@
       "vercel": "projects -> update_project"
     },
     "non_live_certification": "focused connector validation and installed command preflight reached missing --credential without provider I/O; provider-live certification remains pending.",
-    "resume_pointer": "Dispatch F0–F5 from EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md, beginning with #4305 structured body coordination and hash-matched source contract import. Before final push, merge the newest origin/fm/cli-reverse-etl-destination-r1, prove its SHA is an ancestor, then exercise the installed App/CLI reverse-ETL dispatch path."
+    "resume_pointer": "Paused by captain hard pre-merge gate. Do not resume connector implementation until F0, F2/F4, #4305, and final #4304 heads publish; then complete the per-operation six-surface, runtime, generated-CLI, website, and drift evidence before any merge-ready assertion.",
+    "pre_merge_gate": {
+      "state": "blocked-unpublished-foundations",
+      "merge_ready": false,
+      "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json#pre_merge_gate",
+      "operation_rule": "Every provider-defined operation must be source-locked, two-way traced, canonical-ledger mapped, runtime-enabled, generated-CLI reachable, and generated-website represented from the same ledger for each semantically applicable surface.",
+      "surfaces": [
+        "etl",
+        "reverse_etl",
+        "direct_read",
+        "direct_write",
+        "binary_download",
+        "binary_upload"
+      ],
+      "na_rule": "N/A requires provider evidence of no semantic capability; scope, tier, destructive behavior, safety concern, or lack of credentials is not N/A.",
+      "proof_rule": "Per-operation fixture/conformance, output preservation, zero omissions, and exact CLI/website drift proof are mandatory.",
+      "provider_live_policy": "Zoom, Twenty, and Gong require authorized provider-live certification in their own lanes; all other connectors remain pending unless credentials and accepted live evidence exist.",
+      "blockers": [
+        "F0",
+        "F2",
+        "F4",
+        "#4305",
+        "final #4304 dispatch"
+      ]
+    }
   }
 }

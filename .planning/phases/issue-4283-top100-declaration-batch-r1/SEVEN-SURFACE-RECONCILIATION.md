@@ -53,3 +53,33 @@ typed declared headers; #4305 structured bodies; bounded binary/multipart,
 status, and text paths; #4304 App/CLI destination dispatch and action-scoped
 mapping; then connector-local command/binary proof. No caller-selected URL,
 verb, header, body, arbitrary JSON, or generic provider transport is proposed.
+
+## Captain hard pre-merge gate — blocked
+
+No connector or batch may be called merge-ready while the gate in
+`SEVEN-SURFACE-RECONCILIATION.json#pre_merge_gate` is blocked. For every
+provider-defined operation, the canonical ledger must prove a two-way trace
+between the pinned provider source, the ledger row, the generated installed
+CLI command, and generated website representation. Aggregate counts and a
+placeholder command are not evidence of completion.
+
+| Surface | Ledger name | Per-operation requirement |
+| --- | --- | --- |
+| ETL | `etl` | Extraction semantics, preserved stream/request/output evidence |
+| Reverse ETL | `reverse_etl` | Exact typed action/source mapping, strategy, acknowledgement, delivery, approval |
+| Direct read | `direct_read` | Fixed typed read, pagination/output semantics, generated command |
+| Direct write | `direct_write` | Fixed typed mutation, confirmation/approval, preserved result |
+| Binary download | `binary_read` | Fixed media/output target, byte and redirect bounds, file manifest/output facts |
+| Binary upload | `binary_write` | Fixed multipart/binary schema, bounded bytes, approval and acknowledgement |
+
+Only a provider-evidenced absence of a semantic capability permits `N/A` for a
+surface. Scope, cost, destructive behavior, safety, rarity, and missing
+credentials never do. Each applicable surface needs runtime fixture/conformance
+evidence, output-preservation proof, and exact CLI/help/manual/website drift
+checks derived from the same ledger; silent omissions fail the gate.
+
+Zoom, Twenty, and Gong additionally require authorized provider-live
+certification in their own lanes. This PR does not include those connectors and
+does not authorize credentials; all other connectors remain live-certification
+`pending` unless accepted credentialed evidence exists. The current PR remains
+paused on F0, F2/F4, #4305, and the final #4304 dispatch heads.

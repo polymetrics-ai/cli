@@ -259,3 +259,19 @@
 - [x] `git diff --check` — clean. This correction changes planning/audit
   artifacts only; it deliberately makes no engine, command, generated-artifact,
   credential, or provider-I/O claim.
+
+## Captain hard pre-merge gate (2026-08-20)
+
+- [x] The canonical execution ledger records `merge_ready: false` and a
+  blocked per-operation two-way source/ledger/generated-CLI/generated-website
+  proof contract for ETL, reverse ETL, direct read, direct write, binary
+  download, and binary upload.
+- [ ] Every provider operation has the required source lock, semantic-surface
+  mapping or provider-evidenced `N/A`, runtime fixture/conformance proof,
+  output-preservation proof, and exact generated CLI/website drift proof.
+- [ ] F0 source import, F2/F4 operation runtime, #4305 structured bodies, and
+  the final #4304 persisted App/CLI dispatch/action-selection heads are
+  published and integrated.
+- [ ] Zoom, Twenty, and Gong have their separately authorized provider-live
+  certification evidence. No other connector is claimed provider-live
+  certified without credentials and accepted evidence.
