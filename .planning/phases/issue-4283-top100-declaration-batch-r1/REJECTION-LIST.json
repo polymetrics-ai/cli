@@ -37457,6 +37457,176 @@
       "evidence": "newer documented version of the same deployments list resource; this bundle intentionally keeps GET /v6/deployments (Vercel's versioned endpoints remain independently supported side-by-side) for exact parity with the original legacy connector's endpoint choice, same record shape either version",
       "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
       "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available."
+    },
+    {
+      "connector": "dockerhub",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "gitlab",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "jira",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "vercel",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "notion",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "stripe",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "bitbucket",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "circleci",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "sentry",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
+    },
+    {
+      "connector": "asana",
+      "parity_class": "sync_transport",
+      "operation": {
+        "kind": "sync_transport",
+        "roles": [
+          "source_transport",
+          "destination_transport"
+        ]
+      },
+      "reason": "foundation-gap",
+      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "foundation_issue": 4093
     }
   ]
 }

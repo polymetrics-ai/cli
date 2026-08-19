@@ -38,9 +38,24 @@
         "operation_ledger_entries": 189
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/asana/certification-sweep.json",
@@ -58,7 +73,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -105,9 +121,24 @@
         "operation_ledger_entries": 134
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/bitbucket/certification-sweep.json",
@@ -125,7 +156,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -172,9 +204,24 @@
         "operation_ledger_entries": 0
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/circleci/certification-sweep.json",
@@ -190,7 +237,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -239,9 +287,24 @@
         "operation_ledger_entries": 0
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/dockerhub/certification-sweep.json",
@@ -257,7 +320,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -302,9 +366,24 @@
         "operation_ledger_entries": 0
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/gitlab/certification-sweep.json",
@@ -320,7 +399,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -363,9 +443,24 @@
         "operation_ledger_entries": 25
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/jira/certification-sweep.json",
@@ -382,7 +477,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -429,9 +525,24 @@
         "operation_ledger_entries": 19
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/notion/certification-sweep.json",
@@ -449,7 +560,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -497,9 +609,24 @@
         "operation_ledger_entries": 0
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/sentry/certification-sweep.json",
@@ -515,7 +642,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -557,9 +685,24 @@
         "operation_ledger_entries": 0
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/stripe/certification-sweep.json",
@@ -575,7 +718,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",
@@ -624,9 +768,24 @@
         "operation_ledger_entries": 0
       },
       "sync_transport": {
-        "state": "disabled",
-        "reason": "foundation-gap",
-        "evidence": "#4093: definition-owned generic declarative API source/destination executors are not registered; no transport descriptor is emitted."
+        "state": "blocked",
+        "source_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "destination_transport": {
+          "state": "blocked",
+          "reason": "foundation-gap"
+        },
+        "reason": "No registered connector-neutral declarative API source/destination transport contract exists for this bundle.",
+        "evidence": [
+          "internal/synctransport/definition_composition.go:145-168",
+          "internal/app/issue_label_warehouse_transport.go:54-103",
+          "internal/app/issue_label_warehouse_transport.go:322-368",
+          "internal/connectors/certify/stages_transport_internal_test.go:89"
+        ],
+        "foundation_issue": 4093,
+        "recoverable": true
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/vercel/certification-sweep.json",
@@ -642,7 +801,8 @@
         "api-surface",
         "operations",
         "writes",
-        "non-live-certification-sweep"
+        "non-live-certification-sweep",
+        "sync-transport-blocked-foundation-gap"
       ],
       "state": "declarations_complete_non_live_certification_pending",
       "timestamp": "2026-08-19T11:37:51Z",

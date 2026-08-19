@@ -20,4 +20,6 @@ All ten were chosen from the ranked daily-use shortlist because they expose a re
 
 Each bundle now has a pinned source-lock plus `operations.json`, `writes.json`, and a generated `certification-sweep.json`. The current engine has no safely registered generic declarative API source/destination transport, so no `sync_transport.json` was fabricated; see `FOUNDATION-GAPS.md` and #4093.
 
+Transport parity is intentionally **blocked, recoverable, and recorded for all ten**: the ten dedicated `sync_transport` rejection entries carry `reason: foundation-gap`, `recoverable: true`, and the minimum safe recovery. See `TRANSPORT-GAP.md` before selecting increment 2.
+
 The JSON progress ledger, exact per-operation rejection list, and foundation-gap reason index are adjacent to this summary.

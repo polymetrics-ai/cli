@@ -21,3 +21,9 @@ Keep the source lock declarative and connector-local. Do not add a generator, de
 `connectorgen validate`, `surface-sync --check`, structural runtime preflight, and fixture replay are green evidence only for declarations. Provider credential and live cleanup evidence is deliberately absent and recorded as `pending`.
 
 Observed non-live green result: each selected bundle's `certification-sweep.json` was generated then byte-checked with `connectorgen certification-sweep --connector <name> --check`. The sweep performs no provider request.
+
+### Transport parity follow-up
+
+**Red:** all ten selected bundles lack `sync_transport.json`; copying GitHub's declaration would name its exact evidence and issue-label destination actions without a source-derived contract.
+
+**Green:** `REJECTION-LIST.json` has one `sync_transport`/`foundation-gap` entry with `recoverable: true` for every selected connector, and `TRANSPORT-GAP.md` cites the factory/evidence admission code and its smallest safe recovery. No invalid descriptor is introduced.
