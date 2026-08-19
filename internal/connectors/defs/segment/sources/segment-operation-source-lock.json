@@ -1,0 +1,1907 @@
+{
+  "schema_version": 2,
+  "connector": "segment",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://docs.segmentapis.com/tag/Getting-Started",
+    "sha256": "9ab57c3a7708f914b193afcd26e5b49ab4a93e4401e5d178eb88ef26540b64d6",
+    "bytes": 19270,
+    "openapi": "public-provider-description",
+    "info_version": "Segment Public API (https://docs.segmentapis.com/tag/Getting-Started)",
+    "operation_counts": {
+      "DELETE": 27,
+      "GET": 90,
+      "PATCH": 22,
+      "POST": 42,
+      "PUT": 7
+    },
+    "operations": [
+      {
+        "id": "segment.rest.get.Workspaces0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdAudiencesAudienceIdDestinationConnectionsConnectionIdActivations1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesIdSchedules2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdAudiencesIdSchedules3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.WarehousesWarehouseIdConnectedSourcesSourceId4",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.WarehousesWarehouseIdConnectedSourcesSourceId5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesAudienceIdDestinationConnections6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdAudiencesAudienceIdDestinationConnections7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SourcesSourceIdLabels8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sources/{sourceId}/labels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.put.SourcesSourceIdLabels9",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/sources/{sourceId}/labels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.UsersUserIdPermissions10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/{userId}/permissions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.put.UsersUserIdPermissions11",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users/{userId}/permissions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.GroupsUserGroupIdPermissions12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/groups/{userGroupId}/permissions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.put.GroupsUserGroupIdPermissions13",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/groups/{userGroupId}/permissions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.TrackingPlansTrackingPlanIdSources14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tracking-plans/{trackingPlanId}/sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.TrackingPlansTrackingPlanIdSources15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tracking-plans/{trackingPlanId}/sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.TrackingPlansTrackingPlanIdSources16",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tracking-plans/{trackingPlanId}/sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.GroupsUserGroupIdUsers17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups/{userGroupId}/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.GroupsUserGroupIdUsers18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/groups/{userGroupId}/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdMessagingSubscriptionsBatch19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/messaging-subscriptions/batch",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.ReverseEtlModelsModelIdSyncsSyncIdCancel20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reverse-etl-models/{modelId}/syncs/{syncId}/cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiences21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdAudiences22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/audiences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdAudiencesPreviews23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/audiences/previews",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.RegulationsCloudsourcesSourceId24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/regulations/cloudsources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdComputedTraits25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/computed-traits",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdComputedTraits26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/computed-traits",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.DbtModelSyncsTrigger27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/dbt-model-syncs/trigger",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Destinations28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/destinations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Destinations29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/destinations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DestinationsDestinationIdSubscriptions30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/destinations/{destinationId}/subscriptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.DestinationsDestinationIdSubscriptions31",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/destinations/{destinationId}/subscriptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.CustomerInsightsDownload32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customer-insights/download",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DestinationDestinationIdFilters33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/destination/{destinationId}/filters",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.DestinationDestinationIdFilters34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/destination/{destinationId}/filters",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Filters35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/filters",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Filters36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/filters",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Functions37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/functions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Functions38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/functions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.FunctionsFunctionIdDeploy39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/functions/{functionId}/deploy",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.InsertFunctionInstances40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insert-function-instances",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.InsertFunctionInstances41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/insert-function-instances",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Invites42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/invites",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Invites43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/invites",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.Invites44",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/invites",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Labels45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/labels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Labels46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/labels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SourcesSourceIdLivePluginsCreate47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sources/{sourceId}/live-plugins/create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdProfilesWarehouses48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/profiles-warehouses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdProfilesWarehouses49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/profiles-warehouses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.ReverseEtlSyncs50",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reverse-etl-syncs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.ReverseEtlModels51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reverse-etl-models",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.ReverseEtlModels52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reverse-etl-models",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Sources53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Sources54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.RegulationsSourcesSourceId55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/regulations/sources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.RegulationsSourcesSourceId56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/regulations/sources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.TrackingPlans57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tracking-plans",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.TrackingPlans58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tracking-plans",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Transformations59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/transformations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Transformations60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/transformations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Groups61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Groups62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.WarehousesValidation63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/warehouses/validation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Warehouses64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Warehouses65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/warehouses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Regulations66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/regulations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.Regulations67",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/regulations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SourcesSourceIdWritekey68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sources/{sourceId}/writekey",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DestinationsDestinationId69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/destinations/{destinationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.DestinationsDestinationId70",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/destinations/{destinationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.DestinationsDestinationId71",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/destinations/{destinationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.FiltersId72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/filters/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.FiltersId73",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/filters/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.FiltersId74",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/filters/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.FunctionsFunctionId75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/functions/{functionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.FunctionsFunctionId76",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/functions/{functionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.FunctionsFunctionId77",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/functions/{functionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.InsertFunctionInstancesInstanceId78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/insert-function-instances/{instanceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.InsertFunctionInstancesInstanceId79",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/insert-function-instances/{instanceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.InsertFunctionInstancesInstanceId80",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/insert-function-instances/{instanceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.LabelsKeyValue81",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/labels/{key}/{value}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SourcesSourceIdLivePluginsDeleteCode82",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sources/{sourceId}/live-plugins/delete-code",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.ReverseEtlModelsModelId83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reverse-etl-models/{modelId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.ReverseEtlModelsModelId84",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/reverse-etl-models/{modelId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.ReverseEtlModelsModelId85",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/reverse-etl-models/{modelId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SourcesSourceId86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SourcesSourceId87",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/sources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SourcesSourceId88",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sources/{sourceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.TrackingPlansTrackingPlanId89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tracking-plans/{trackingPlanId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.TrackingPlansTrackingPlanId90",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/tracking-plans/{trackingPlanId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.TrackingPlansTrackingPlanId91",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tracking-plans/{trackingPlanId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.TransformationsTransformationId92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/transformations/{transformationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.TransformationsTransformationId93",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/transformations/{transformationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.TransformationsTransformationId94",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/transformations/{transformationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.GroupsUserGroupId95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups/{userGroupId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.GroupsUserGroupId96",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/groups/{userGroupId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.GroupsUserGroupId97",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/groups/{userGroupId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Users98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.Users99",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.WarehousesWarehouseId100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.WarehousesWarehouseId101",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/warehouses/{warehouseId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.WarehousesWarehouseId102",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/warehouses/{warehouseId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Echo103",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/echo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.SpacesSpaceIdAudiencesAudienceIdRuns104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/runs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesAudienceIdActivationsId105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SpacesSpaceIdAudiencesAudienceIdActivationsId106",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SpacesSpaceIdAudiencesAudienceIdActivationsId107",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.WarehousesWarehouseIdAdvancedSyncSchedule108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.put.WarehousesWarehouseIdAdvancedSyncSchedule109",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesId110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SpacesSpaceIdAudiencesId111",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spaces/{spaceId}/audiences/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SpacesSpaceIdAudiencesId112",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spaces/{spaceId}/audiences/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesPreviewsId113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/previews/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesIdSchedulesScheduleId114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SpacesSpaceIdAudiencesIdSchedulesScheduleId115",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SpacesSpaceIdAudiencesIdSchedulesScheduleId116",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdComputedTraitsId117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/computed-traits/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SpacesSpaceIdComputedTraitsId118",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spaces/{spaceId}/computed-traits/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SpacesSpaceIdComputedTraitsId119",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spaces/{spaceId}/computed-traits/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.WarehousesWarehouseIdConnectionState120",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}/connection-state",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.UsageApiCallsSourcesDaily121",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/usage/api-calls/sources/daily",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.UsageMtuSourcesDaily122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/usage/mtu/sources/daily",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.UsageApiCallsDaily123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/usage/api-calls/daily",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.UsageMtuDaily124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/usage/mtu/daily",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.CatalogDestinationsDestinationMetadataId125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/destinations/{destinationMetadataId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.CatalogDestinations126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/destinations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DeliveryOverviewFailedDelivery127",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/delivery-overview/failed-delivery",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DeliveryOverviewSuccessfulDelivery128",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/delivery-overview/successful-delivery",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.EventsVolume129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/events/volume",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DeliveryOverviewFilteredAtDestination130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/delivery-overview/filtered-at-destination",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DeliveryOverviewFilteredAtSource131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/delivery-overview/filtered-at-source",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DestinationDestinationIdFiltersFilterId132",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/destination/{destinationId}/filters/{filterId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.DestinationDestinationIdFiltersFilterId133",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/destination/{destinationId}/filters/{filterId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.DestinationDestinationIdFiltersFilterId134",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/destination/{destinationId}/filters/{filterId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.FunctionsFunctionIdVersionsVersionId135",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/functions/{functionId}/versions/{versionId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DeliveryOverviewFailedOnIngest136",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/delivery-overview/failed-on-ingest",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DeliveryOverviewSuccessfullyReceived137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/delivery-overview/successfully-received",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SourcesSourceIdLivePluginsLatest138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sources/{sourceId}/live-plugins/latest",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.RegulationsRegulateId139",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/regulations/{regulateId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.ReverseEtlModelsModelIdSyncsSyncId140",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reverse-etl-models/{modelId}/syncs/{syncId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.CatalogSourcesSourceMetadataId141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/sources/{sourceMetadataId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.CatalogSources142",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceId143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DestinationsDestinationIdSubscriptionsId144",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/destinations/{destinationId}/subscriptions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.DestinationsDestinationIdSubscriptionsId145",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/destinations/{destinationId}/subscriptions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.DestinationsDestinationIdSubscriptionsId146",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/destinations/{destinationId}/subscriptions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.UsersUserId147",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{userId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.CatalogWarehousesWarehouseMetadataId148",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/warehouses/{warehouseMetadataId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.CatalogWarehouses149",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalog/warehouses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.root150",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesAudienceIdActivations151",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/activations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudiencesIdAudienceReferences152",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audiences/{id}/audience-references",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.AuditEvents153",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/audit-events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SourcesSourceIdConnectedDestinations154",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sources/{sourceId}/connected-destinations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.WarehousesWarehouseIdConnectedSources155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}/connected-sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SourcesSourceIdConnectedWarehouses156",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sources/{sourceId}/connected-warehouses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.DestinationsDestinationIdDeliveryMetrics157",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/destinations/{destinationId}/delivery-metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.FunctionsFunctionIdVersions158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/functions/{functionId}/versions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.FunctionsFunctionIdVersions159",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/functions/{functionId}/versions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[159]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.GroupsUserGroupIdInvites160",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups/{userGroupId}/invites",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[160]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.ReverseEtlModelsModelIdSubscriptionIdSubscriptionIdSyncs161",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reverse-etl-models/{modelId}/subscriptionId/{subscriptionId}/syncs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[161]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Roles162",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/roles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[162]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.TrackingPlansTrackingPlanIdRules163",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tracking-plans/{trackingPlanId}/rules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[163]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.put.TrackingPlansTrackingPlanIdRules164",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/tracking-plans/{trackingPlanId}/rules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[164]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.TrackingPlansTrackingPlanIdRules165",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/tracking-plans/{trackingPlanId}/rules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[165]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.TrackingPlansTrackingPlanIdRules166",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tracking-plans/{trackingPlanId}/rules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[166]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SourcesSourceIdSettings167",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sources/{sourceId}/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[167]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SourcesSourceIdSettings168",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/sources/{sourceId}/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[168]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.WarehousesWarehouseIdConnectedSourcesSourceIdSelectiveSyncs169",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/selective-syncs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[169]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdProfilesWarehousesWarehouseIdSelectiveSyncs170",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[170]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SpacesSpaceIdProfilesWarehousesWarehouseIdSelectiveSyncs171",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[171]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Spaces172",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[172]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.SpacesSpaceIdAudienceTypeAudienceTypeSupportedDestinations173",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/spaces/{spaceId}/audienceType/{audienceType}/supported-destinations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[173]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.Suppressions174",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/suppressions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[174]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.WarehousesWarehouseIdSyncs175",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}/syncs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[175]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.WarehousesWarehouseIdConnectedSourcesSourceIdSyncs176",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/syncs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[176]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.get.UsersUserIdGroups177",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{userId}/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[177]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.post.DestinationFiltersPreview178",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/destination/filters/preview",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[178]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SpacesSpaceIdAudiencesAudienceIdDestinationConnectionsDestinationId179",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[179]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SpacesSpaceIdAudiencesAudienceIdDestinationConnectionsDestinationId180",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[180]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.SpacesSpaceIdProfilesWarehousesWarehouseId181",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[181]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SpacesSpaceIdProfilesWarehousesWarehouseId182",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[182]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.put.GroupUserGroupIdUsers183",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/group/{userGroupId}/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[183]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.GroupUserGroupIdUsers184",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/group/{userGroupId}/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[184]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.delete.SourcesSourceIdWritekeyWriteKey185",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sources/{sourceId}/writekey/{writeKey}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[185]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.put.SpacesSpaceIdMessagingSubscriptions186",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/spaces/{spaceId}/messaging-subscriptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[186]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      },
+      {
+        "id": "segment.rest.patch.WarehousesWarehouseIdSelectiveSync187",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/warehouses/{warehouseId}/selective-sync",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[187]",
+        "source_url": "https://docs.segmentapis.com/tag/Getting-Started"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 188,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 188
+  }
+}

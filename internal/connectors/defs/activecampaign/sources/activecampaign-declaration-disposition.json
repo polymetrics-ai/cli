@@ -1,0 +1,2703 @@
+{
+  "schema_version": 1,
+  "connector": "activecampaign",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/activecampaign-operation-source-lock.json",
+    "source_url": "https://developers.activecampaign.com/reference/overview",
+    "source_sha256": "86cdfce88bd187d6e99e4c0b4f93ed60b0793858aedfcd747d6b61d62adfa18c",
+    "source_bytes": 712806,
+    "source_operation_count": 61
+  },
+  "summary": {
+    "api_surface_rows": 61,
+    "exact_source_rows": 61,
+    "declared_operations": 61,
+    "declared_percent": 100,
+    "enabled_operations": 11,
+    "enabled_percent": 18.03,
+    "disabled_operations": 50,
+    "documented_deletes": 9,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 22
+      },
+      {
+        "key": "direct_write",
+        "count": 28
+      },
+      {
+        "key": "etl",
+        "count": 11
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 11,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 50
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-activecampaign",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/activecampaign/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-activecampaign",
+      "sync-transport-source-definition-activecampaign"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-activecampaign",
+        "count": 50
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/api/3/contacts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/contacts",
+        "operation": null,
+        "covered_by": {
+          "stream": "contacts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Contacts0",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "contacts"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "contacts"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/contacts/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/contacts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3ContactsId1",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-contact detail subsumed by the contacts list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-contact detail subsumed by the contacts list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/contacts",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/contacts",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Contacts2",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: ActiveCampaign's contact-create body is a nested envelope ({\"contact\": {...fieldValues...}}); the dialect's write body construction always sends record fields flat at the top level with no envelope-wrapping mechanism, so a correct create_contact action cannot be expressed declaratively without silently diverging from the real wire shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: ActiveCampaign's contact-create body is a nested envelope ({\"contact\": {...fieldValues...}}); the dialect's write body construction always sends record fields flat at the top level with no envelope-wrapping mechanism, so a correct create_contact action cannot be expressed declaratively without silently diverging from the real wire shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/contacts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/contacts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.put.Api3ContactsId3",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: contact update shares the same nested contact-envelope body shape as create; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: contact update shares the same nested contact-envelope body shape as create; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/contacts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/contacts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3ContactsId4",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes a contact and its associated activity history",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes a contact and its associated activity history"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/contact/sync",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/contact/sync",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3ContactSync5",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: the upsert-by-email sync endpoint shares the same nested {\"contact\": {...}} envelope body shape as create/update",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: the upsert-by-email sync endpoint shares the same nested {\"contact\": {...}} envelope body shape as create/update"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/contacts/{id}/contactAutomations",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/contacts/{id}/contactAutomations",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3ContactsIdContactAutomations6",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "per-contact automation-membership sub-resource with no top-level list endpoint of its own; would require per-contact fan_out this pass does not scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-contact automation-membership sub-resource with no top-level list endpoint of its own; would require per-contact fan_out this pass does not scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/contacts/{id}/contactTags",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/contacts/{id}/contactTags",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3ContactsIdContactTags7",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "per-contact tag-membership sub-resource with no top-level list endpoint of its own; same per-parent fan_out reasoning as contactAutomations",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-contact tag-membership sub-resource with no top-level list endpoint of its own; same per-parent fan_out reasoning as contactAutomations"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/contactTags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/contactTags",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3ContactTags8",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: applying a tag to a contact wraps the body in a nested {\"contactTag\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: applying a tag to a contact wraps the body in a nested {\"contactTag\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/contactTags/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/contactTags/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3ContactTagsId9",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "removes a tag assignment from a contact",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "removes a tag assignment from a contact"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/lists",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/lists",
+        "operation": null,
+        "covered_by": {
+          "stream": "lists"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Lists10",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[10] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "lists"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "lists"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/lists/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/lists/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3ListsId11",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-list detail subsumed by the lists list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-list detail subsumed by the lists list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/lists",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/lists",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Lists12",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: list-create body is a nested {\"list\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: list-create body is a nested {\"list\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/lists/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/lists/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.put.Api3ListsId13",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: list update shares the same nested envelope shape as create",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: list update shares the same nested envelope shape as create"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/lists/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/lists/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3ListsId14",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes a list and its subscriber associations",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes a list and its subscriber associations"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/deals",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/deals",
+        "operation": null,
+        "covered_by": {
+          "stream": "deals"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Deals15",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[15] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "deals"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "deals"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/deals/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/deals/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3DealsId16",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-deal detail subsumed by the deals list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-deal detail subsumed by the deals list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/deals",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/deals",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Deals17",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: ActiveCampaign's deal-create body is a nested envelope ({\"deal\": {...fields...}}); not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: ActiveCampaign's deal-create body is a nested envelope ({\"deal\": {...fields...}}); not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/deals/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/deals/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.put.Api3DealsId18",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: deal update shares the same nested deal-envelope body shape as create",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: deal update shares the same nested deal-envelope body shape as create"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/deals/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/deals/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3DealsId19",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes a deal and its pipeline history",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes a deal and its pipeline history"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/deals/{id}/notes",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/deals/{id}/notes",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3DealsIdNotes20",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "per-deal notes sub-resource with no top-level list endpoint of its own; would require per-deal fan_out this pass does not scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-deal notes sub-resource with no top-level list endpoint of its own; would require per-deal fan_out this pass does not scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/notes",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/notes",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Notes21",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: note-create body is a nested {\"note\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: note-create body is a nested {\"note\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/campaigns",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/campaigns",
+        "operation": null,
+        "covered_by": {
+          "stream": "campaigns"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Campaigns22",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[22]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[22] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "campaigns"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "campaigns"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/campaigns/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/campaigns/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3CampaignsId23",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-campaign detail subsumed by the campaigns list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-campaign detail subsumed by the campaigns list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/campaigns",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/campaigns",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Campaigns24",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: campaign-create body is a nested {\"campaign\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: campaign-create body is a nested {\"campaign\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/campaigns/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/campaigns/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3CampaignsId25",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes a campaign, including sent-campaign performance history",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes a campaign, including sent-campaign performance history"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/tags",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/tags",
+        "operation": null,
+        "covered_by": {
+          "stream": "tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Tags26",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[26] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "tags"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "tags"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/tags/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/tags/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3TagsId27",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-tag detail subsumed by the tags list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-tag detail subsumed by the tags list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/tags",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Tags28",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[28]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: tag-create body is a nested {\"tag\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: tag-create body is a nested {\"tag\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/tags/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/tags/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.put.Api3TagsId29",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[29]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: tag update shares the same nested envelope shape as create",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: tag update shares the same nested envelope shape as create"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/tags/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/tags/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3TagsId30",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[30]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes a tag and removes it from every contact it was applied to",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes a tag and removes it from every contact it was applied to"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/automations",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/automations",
+        "operation": null,
+        "covered_by": {
+          "stream": "automations"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Automations31",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[31]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[31] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "automations"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "automations"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/automations/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/automations/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3AutomationsId32",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[32]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-automation detail subsumed by the automations list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-automation detail subsumed by the automations list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/automations/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/automations/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3AutomationsId33",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[33]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes an automation and removes every contact currently enrolled in it",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes an automation and removes every contact currently enrolled in it"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/fields",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/fields",
+        "operation": null,
+        "covered_by": {
+          "stream": "fields"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Fields34",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[34]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[34] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "fields"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "fields"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/fields/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/fields/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3FieldsId35",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[35]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-custom-field detail subsumed by the fields list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-custom-field detail subsumed by the fields list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/fields",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/fields",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Fields36",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[36]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: custom-field-create body is a nested {\"field\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: custom-field-create body is a nested {\"field\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/fieldValues",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/fieldValues",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3FieldValues37",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[37]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "per-contact custom-field-value collection with no useful top-level unfiltered list endpoint; would require per-contact fan_out this pass does not scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-contact custom-field-value collection with no useful top-level unfiltered list endpoint; would require per-contact fan_out this pass does not scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/fieldValues",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/fieldValues",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3FieldValues38",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[38]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: field-value-create body is a nested {\"fieldValue\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: field-value-create body is a nested {\"fieldValue\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/accounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/accounts",
+        "operation": null,
+        "covered_by": {
+          "stream": "accounts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Accounts39",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[39]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[39] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "accounts"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "accounts"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/accounts/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/accounts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3AccountsId40",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[40]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-account detail subsumed by the accounts list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-account detail subsumed by the accounts list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/accounts",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/accounts",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Accounts41",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[41]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: account-create body is a nested {\"account\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: account-create body is a nested {\"account\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/accounts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/accounts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.put.Api3AccountsId42",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[42]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: account update shares the same nested envelope shape as create",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: account update shares the same nested envelope shape as create"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/accounts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/accounts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3AccountsId43",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[43]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes an account and its contact/deal associations",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes an account and its contact/deal associations"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/users",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/users",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Users44",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[44]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[44] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "users"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "users"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/users/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/users/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3UsersId45",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[45]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-user detail subsumed by the users list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-user detail subsumed by the users list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/dealStages",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/dealStages",
+        "operation": null,
+        "covered_by": {
+          "stream": "deal_stages"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3DealStages46",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[46]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[46] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "deal_stages"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "deal_stages"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/dealStages/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/dealStages/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3DealStagesId47",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[47]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-deal-stage detail subsumed by the deal_stages list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-deal-stage detail subsumed by the deal_stages list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/dealGroups",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/dealGroups",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3DealGroups48",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[48]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "deal pipeline (group) container objects; deal_stages already surfaces each stage's parent group id, and pipelines are a low-cardinality admin-configuration list rarely needed independently of stages",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "deal pipeline (group) container objects; deal_stages already surfaces each stage's parent group id, and pipelines are a low-cardinality admin-configuration list rarely needed independently of stages"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/dealTasks",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/dealTasks",
+        "operation": null,
+        "covered_by": {
+          "stream": "deal_tasks"
+        }
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3DealTasks49",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[49]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[49] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "deal_tasks"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "deal_tasks"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/dealTasks/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/dealTasks/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3DealTasksId50",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[50]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "single-deal-task detail subsumed by the deal_tasks list stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-deal-task detail subsumed by the deal_tasks list stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/dealTasks",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/dealTasks",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3DealTasks51",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[51]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: deal-task-create body is a nested {\"dealTask\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: deal-task-create body is a nested {\"dealTask\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/dealTasks/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/dealTasks/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.delete.Api3DealTasksId52",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[52]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "permanently deletes a scheduled deal task",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permanently deletes a scheduled deal task"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/import/bulk_import",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/import/bulk_import",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3ImportBulkImport53",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[53]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "asynchronous CSV/bulk-file contact import job; a batch-file upload workflow, not a per-record declarative write",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "asynchronous CSV/bulk-file contact import job; a batch-file upload workflow, not a per-record declarative write"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/importBulk/{batchId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/importBulk/{batchId}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3ImportBulkBatchId54",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[54]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "bulk-import job status polling; tied to the deferred bulk-import feature above",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "bulk-import job status polling; tied to the deferred bulk-import feature above"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/webhooks",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/webhooks",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.post.Api3Webhooks55",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[55]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "ENGINE_GAP: webhook-create body is a nested {\"webhook\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ENGINE_GAP: webhook-create body is a nested {\"webhook\": {...}} envelope; not expressible without an envelope-wrapping write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/webhooks",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/webhooks",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Webhooks56",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[56]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "operator-configured webhook-subscription list, not customer-facing CRM catalog data; low value as a sync stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "operator-configured webhook-subscription list, not customer-facing CRM catalog data; low value as a sync stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/segments",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/segments",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Segments57",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[57]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "saved-segment definitions are a niche admin-configuration list with a large, deeply nested JSON-structure surface; deferred pending real demand",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "saved-segment definitions are a niche admin-configuration list with a large, deeply nested JSON-structure surface; deferred pending real demand"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/connections",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/connections",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3Connections58",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[58]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "third-party e-commerce connection metadata (Shopify/WooCommerce link records), not core CRM catalog data",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "third-party e-commerce connection metadata (Shopify/WooCommerce link records), not core CRM catalog data"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/ecomOrders",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/ecomOrders",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3EcomOrders59",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[59]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "e-commerce order sync data requires a configured storefront connection (see /connections above); deferred alongside it",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "e-commerce order sync data requires a configured storefront connection (see /connections above); deferred alongside it"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/ecomOrderProducts",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/ecomOrderProducts",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/activecampaign-operation-source-lock.json",
+        "source_id": "activecampaign.rest.get.Api3EcomOrderProducts60",
+        "source_url": "https://developers.activecampaign.com/reference/overview",
+        "source_location": "api_surface.json:endpoints[60]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-activecampaign",
+          "evidence": "e-commerce order line-item data; deferred alongside ecomOrders",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "e-commerce order line-item data; deferred alongside ecomOrders"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-activecampaign",
+        "contract": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,540 @@
+{
+  "schema_version": 1,
+  "connector": "square",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/square-operation-source-lock.json",
+    "source_url": "https://developer.squareup.com/reference/square",
+    "source_sha256": "c26241012f6e52630b305ff3373d7238ade4fcc3513ef333d66401d22b9d1ad2",
+    "source_bytes": 99891,
+    "source_operation_count": 11
+  },
+  "summary": {
+    "api_surface_rows": 11,
+    "exact_source_rows": 11,
+    "declared_operations": 11,
+    "declared_percent": 100,
+    "enabled_operations": 4,
+    "enabled_percent": 36.36,
+    "disabled_operations": 7,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 5
+      },
+      {
+        "key": "direct_write",
+        "count": 2
+      },
+      {
+        "key": "etl",
+        "count": 4
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 7
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-square",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/square/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-square",
+      "sync-transport-source-definition-square"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-square",
+        "count": 7
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/v2/payments",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/payments",
+        "operation": null,
+        "covered_by": {
+          "stream": "payments"
+        }
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2Payments0",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "payments"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "payments"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/refunds",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/refunds",
+        "operation": null,
+        "covered_by": {
+          "stream": "refunds"
+        }
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2Refunds1",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "refunds"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "refunds"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/customers",
+        "operation": null,
+        "covered_by": {
+          "stream": "customers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2Customers2",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "customers"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "customers"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/locations",
+        "operation": null,
+        "covered_by": {
+          "stream": "locations"
+        }
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2Locations3",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "locations"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "locations"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/orders",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2Orders4",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-square",
+          "evidence": "/v2/orders is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "/v2/orders is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-square",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/list",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/catalog/list",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2CatalogList5",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-square",
+          "evidence": "/v2/catalog/list is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "/v2/catalog/list is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-square",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/invoices",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2Invoices6",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-square",
+          "evidence": "/v2/invoices is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "/v2/invoices is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-square",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/team-members",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2TeamMembers7",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-square",
+          "evidence": "/v2/team-members is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "/v2/team-members is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-square",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/disputes",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.get.V2Disputes8",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-square",
+          "evidence": "/v2/disputes is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "/v2/disputes is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-square",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/payments",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.post.V2Payments9",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-square",
+          "evidence": "Legacy connector is read-only",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "Legacy connector is read-only"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-square",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/customers",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/square-operation-source-lock.json",
+        "source_id": "square.rest.post.V2Customers10",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-square",
+          "evidence": "Legacy connector is read-only",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "Legacy connector is read-only"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-square",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    }
+  ]
+}

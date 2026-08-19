@@ -1,0 +1,636 @@
+{
+  "schema_version": 2,
+  "connector": "activecampaign",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.activecampaign.com/reference/overview",
+    "sha256": "86cdfce88bd187d6e99e4c0b4f93ed60b0793858aedfcd747d6b61d62adfa18c",
+    "bytes": 712806,
+    "openapi": "public-provider-description",
+    "info_version": "ActiveCampaign API v3 (https://<account>.api-us1.com/api/3)",
+    "operation_counts": {
+      "DELETE": 9,
+      "GET": 33,
+      "POST": 14,
+      "PUT": 5
+    },
+    "operations": [
+      {
+        "id": "activecampaign.rest.get.Api3Contacts0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3ContactsId1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/contacts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Contacts2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.put.Api3ContactsId3",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/contacts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3ContactsId4",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/contacts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3ContactSync5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/contact/sync",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3ContactsIdContactAutomations6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/contacts/{id}/contactAutomations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3ContactsIdContactTags7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/contacts/{id}/contactTags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3ContactTags8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/contactTags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3ContactTagsId9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/contactTags/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Lists10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/lists",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3ListsId11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/lists/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Lists12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/lists",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.put.Api3ListsId13",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/lists/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3ListsId14",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/lists/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Deals15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/deals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3DealsId16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/deals/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Deals17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/deals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.put.Api3DealsId18",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/deals/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3DealsId19",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/deals/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3DealsIdNotes20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/deals/{id}/notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Notes21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Campaigns22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/campaigns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3CampaignsId23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/campaigns/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Campaigns24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/campaigns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3CampaignsId25",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/campaigns/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Tags26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3TagsId27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/tags/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Tags28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.put.Api3TagsId29",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/tags/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3TagsId30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/tags/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Automations31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/automations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3AutomationsId32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/automations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3AutomationsId33",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/automations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Fields34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3FieldsId35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/fields/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Fields36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3FieldValues37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/fieldValues",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3FieldValues38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/fieldValues",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Accounts39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3AccountsId40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/accounts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Accounts41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.put.Api3AccountsId42",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/accounts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3AccountsId43",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/accounts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Users44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3UsersId45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3DealStages46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/dealStages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3DealStagesId47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/dealStages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3DealGroups48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/dealGroups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3DealTasks49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/dealTasks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3DealTasksId50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/dealTasks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3DealTasks51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/dealTasks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.delete.Api3DealTasksId52",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/dealTasks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3ImportBulkImport53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/import/bulk_import",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3ImportBulkBatchId54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/importBulk/{batchId}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.post.Api3Webhooks55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Webhooks56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Segments57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/segments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3Connections58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/connections",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3EcomOrders59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/ecomOrders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      },
+      {
+        "id": "activecampaign.rest.get.Api3EcomOrderProducts60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/ecomOrderProducts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "source_url": "https://developers.activecampaign.com/reference/overview"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 61,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 61
+  }
+}

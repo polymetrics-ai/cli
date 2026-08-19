@@ -1,0 +1,1053 @@
+{
+  "schema_version": 1,
+  "connector": "service-now",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/service-now-operation-source-lock.json",
+    "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+    "source_sha256": "60ad2905fa8b60a90606880d590128f2bf2010e2d7eb5a8d7b3e630d46d543f5",
+    "source_bytes": 8404,
+    "source_operation_count": 22
+  },
+  "summary": {
+    "api_surface_rows": 22,
+    "exact_source_rows": 22,
+    "declared_operations": 22,
+    "declared_percent": 100,
+    "enabled_operations": 9,
+    "enabled_percent": 40.91,
+    "disabled_operations": 13,
+    "documented_deletes": 3,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 6
+      },
+      {
+        "key": "direct_write",
+        "count": 13
+      },
+      {
+        "key": "etl",
+        "count": 3
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 3,
+    "writes_actions": 6,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 13
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-service-now",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/service-now/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-service-now",
+      "sync-transport-source-definition-service-now"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-service-now",
+        "count": 13
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/api/now/table/incident",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/table/incident",
+        "operation": null,
+        "covered_by": {
+          "stream": "incidents"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowTableIncident0",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "incidents"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "incidents"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/table/sys_user",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowTableSysUser1",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "users"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "users"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/table/sys_user_group",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user_group",
+        "operation": null,
+        "covered_by": {
+          "stream": "groups"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowTableSysUserGroup2",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "groups"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "groups"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/table/incident/{sys_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/table/incident/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowTableIncidentSysId3",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "single-record detail fetch for a resource the incidents stream (GET /api/now/table/incident) already lists in full; no additional field is reachable only through this endpoint",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-record detail fetch for a resource the incidents stream (GET /api/now/table/incident) already lists in full; no additional field is reachable only through this endpoint"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/table/sys_user/{sys_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowTableSysUserSysId4",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "single-record detail fetch for a resource the users stream (GET /api/now/table/sys_user) already lists in full",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-record detail fetch for a resource the users stream (GET /api/now/table/sys_user) already lists in full"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/table/sys_user_group/{sys_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user_group/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowTableSysUserGroupSysId5",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "single-record detail fetch for a resource the groups stream (GET /api/now/table/sys_user_group) already lists in full",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-record detail fetch for a resource the groups stream (GET /api/now/table/sys_user_group) already lists in full"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/now/table/incident",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/now/table/incident",
+        "operation": null,
+        "covered_by": {
+          "write": "create_incident"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.post.ApiNowTableIncident6",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[6] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_incident"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_incident"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/now/table/sys_user",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/now/table/sys_user",
+        "operation": null,
+        "covered_by": {
+          "write": "create_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.post.ApiNowTableSysUser7",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[7] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_user"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_user"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/now/table/sys_user_group",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/now/table/sys_user_group",
+        "operation": null,
+        "covered_by": {
+          "write": "create_group"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.post.ApiNowTableSysUserGroup8",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[8] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_group"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_group"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/now/table/incident/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/api/now/table/incident/{sys_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_incident"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.patch.ApiNowTableIncidentSysId9",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[9] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_incident"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_incident"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/now/table/sys_user/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/api/now/table/sys_user/{sys_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.patch.ApiNowTableSysUserSysId10",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[10] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_user"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_user"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/now/table/sys_user_group/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/api/now/table/sys_user_group/{sys_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_group"
+        }
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.patch.ApiNowTableSysUserGroupSysId11",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[11] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_group"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_group"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/now/table/incident/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/now/table/incident/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.put.ApiNowTableIncidentSysId12",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "ServiceNow's Table API documents PUT and PATCH as functionally identical on this resource (both modify only the fields present in the request body, unlike standard REST PUT's whole-resource replace semantics) — update_incident (PATCH) already covers this exact capability; declaring both would send byte-identical requests for any accepted input",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "ServiceNow's Table API documents PUT and PATCH as functionally identical on this resource (both modify only the fields present in the request body, unlike standard REST PUT's whole-resource replace semantics) — update_incident (PATCH) already covers this exact capability; declaring both would send byte-identical requests for any accepted input"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/now/table/sys_user/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/now/table/sys_user/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.put.ApiNowTableSysUserSysId13",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "same PUT/PATCH functional-identity reasoning as incident; update_user (PATCH) already covers it",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "same PUT/PATCH functional-identity reasoning as incident; update_user (PATCH) already covers it"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/now/table/sys_user_group/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/now/table/sys_user_group/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.put.ApiNowTableSysUserGroupSysId14",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "same PUT/PATCH functional-identity reasoning as incident; update_group (PATCH) already covers it",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "same PUT/PATCH functional-identity reasoning as incident; update_group (PATCH) already covers it"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/now/table/incident/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/now/table/incident/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.delete.ApiNowTableIncidentSysId15",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "a hard, unrecoverable delete of an incident record gated by ServiceNow's own delete ACL; legacy exposed zero mutation capability (Capabilities{Write:false}) and this expansion's write additions are scoped to the reversible/low-risk create+update surface, not destructive deletes",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "a hard, unrecoverable delete of an incident record gated by ServiceNow's own delete ACL; legacy exposed zero mutation capability (Capabilities{Write:false}) and this expansion's write additions are scoped to the reversible/low-risk create+update surface, not destructive deletes"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/now/table/sys_user/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/now/table/sys_user/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.delete.ApiNowTableSysUserSysId16",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "a hard, unrecoverable delete of a user account record gated by ServiceNow's own delete ACL; deleting a sys_user row can cascade-orphan every record that references it (assigned incidents, group membership, approvals) and is normally performed only through ServiceNow's own admin UI, not an unattended API mutation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "a hard, unrecoverable delete of a user account record gated by ServiceNow's own delete ACL; deleting a sys_user row can cascade-orphan every record that references it (assigned incidents, group membership, approvals) and is normally performed only through ServiceNow's own admin UI, not an unattended API mutation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/now/table/sys_user_group/{sys_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/now/table/sys_user_group/{sys_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.delete.ApiNowTableSysUserGroupSysId17",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "a hard, unrecoverable delete of a group record gated by ServiceNow's own delete ACL; deleting a group can orphan every membership/assignment rule that references it",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "a hard, unrecoverable delete of a group record gated by ServiceNow's own delete ACL; deleting a group can orphan every membership/assignment rule that references it"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/table/sys_user_grmember",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user_grmember",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowTableSysUserGrmember18",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "group-membership join table not implemented by legacy and not one of this migration's 3 legacy-parity tables; a future capability expansion could add it as a 4th table following the identical stream+write shape used here",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "group-membership join table not implemented by legacy and not one of this migration's 3 legacy-parity tables; a future capability expansion could add it as a 4th table following the identical stream+write shape used here"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/stats/{tableName}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/stats/{tableName}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowStatsTableName19",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "the separate Aggregate API (COUNT/SUM/AVG/MIN/MAX over a table) is a distinct API surface from the Table API this connector targets; not implemented by legacy",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "the separate Aggregate API (COUNT/SUM/AVG/MIN/MAX over a table) is a distinct API surface from the Table API this connector targets; not implemented by legacy"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/now/import/{importSetTableName}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/now/import/{importSetTableName}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.post.ApiNowImportImportSetTableName20",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "the separate Import Set API for staged bulk loads is a distinct API surface from the Table API this connector targets; not implemented by legacy",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "the separate Import Set API for staged bulk loads is a distinct API surface from the Table API this connector targets; not implemented by legacy"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/now/attachment",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/now/attachment",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/service-now-operation-source-lock.json",
+        "source_id": "service-now.rest.get.ApiNowAttachment21",
+        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-service-now",
+          "evidence": "the separate Attachment API returns/accepts binary file payloads (multipart upload, raw byte download), not JSON table rows; the engine's declarative HTTP dialect has no multipart/binary-body primitive",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "the separate Attachment API returns/accepts binary file payloads (multipart upload, raw byte download), not JSON table rows; the engine's declarative HTTP dialect has no multipart/binary-body primitive"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "contract": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,1166 @@
+{
+  "schema_version": 2,
+  "connector": "gorgias",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+    "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+    "bytes": 852105,
+    "openapi": "public-provider-description",
+    "info_version": "Gorgias REST API (OpenAPI 3.1.0)",
+    "operation_counts": {
+      "DELETE": 18,
+      "GET": 46,
+      "POST": 23,
+      "PUT": 27
+    },
+    "operations": [
+      {
+        "id": "gorgias.rest.get.ApiAccount0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/account",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiAccountSettings1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/account/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiAccountSettings2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/account/settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiAccountSettingsId3",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/account/settings/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiCustomFields4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/custom-fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiCustomFields5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/custom-fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiCustomFields6",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/custom-fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiCustomFieldsId7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/custom-fields/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiCustomFieldsId8",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/custom-fields/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiCustomers9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiCustomers10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiCustomers11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiCustomersMerge12",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/customers/merge",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiCustomersCustomerIdCustomFields13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/customers/{customer_id}/custom-fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiCustomersCustomerIdCustomFields14",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/custom-fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiCustomersCustomerIdCustomFieldsId15",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/customers/{customer_id}/custom-fields/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiCustomersCustomerIdCustomFieldsId16",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/custom-fields/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-value"
+      },
+      {
+        "id": "gorgias.rest.put.ApiCustomersCustomerIdData17",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/data",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiCustomersId18",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/customers/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiCustomersId19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/customers/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiCustomersId20",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/customers/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiEvents21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiEventsId22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/events/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiIntegrations23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/integrations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiIntegrations24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/integrations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiIntegrationsId25",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/integrations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiIntegrationsId26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/integrations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiIntegrationsId27",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/integrations/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiJobs28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/jobs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiJobs29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/jobs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiJobsId30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/jobs/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiJobsId31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/jobs/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiJobsId32",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/jobs/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiMacros33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/macros",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiMacros34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/macros",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiMacrosArchive35",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/macros/archive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiMacrosUnarchive36",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/macros/unarchive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiMacrosId37",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/macros/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiMacrosId38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/macros/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiMacrosId39",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/macros/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiMessages40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiMetricCards41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/metric-cards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiMetricCardsSlug42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/metric-cards/{slug}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiMetricCardsSlugFeedback43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/metric-cards/{slug}/feedback",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiPhoneVoiceCallEvents44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/phone/voice-call-events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiPhoneVoiceCallEventsId45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/phone/voice-call-events/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiPhoneVoiceCallRecordings46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/phone/voice-call-recordings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiPhoneVoiceCallRecordingsId47",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/phone/voice-call-recordings/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiPhoneVoiceCallRecordingsId48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/phone/voice-call-recordings/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiPhoneVoiceCalls49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/phone/voice-calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiPhoneVoiceCallsId50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/phone/voice-calls/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiReportingStats51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/reporting/stats",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "source_url": "https://developers.gorgias.com/reference/get-statistic"
+      },
+      {
+        "id": "gorgias.rest.get.ApiRules52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/rules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiRules53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/rules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiRulesPriorities54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/rules/priorities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiRulesId55",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/rules/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiRulesId56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/rules/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiRulesId57",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/rules/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiSatisfactionSurveys58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/satisfaction-surveys",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiSatisfactionSurveys59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/satisfaction-surveys",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiSatisfactionSurveysId60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/satisfaction-surveys/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiSatisfactionSurveysId61",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/satisfaction-surveys/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiSearch62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiStatsName63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/stats/{name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiStatsNameDownload64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/stats/{name}/download",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiTags65",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTags66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiTags67",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTagsDestinationTagIdMerge68",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/tags/{destination_tag_id}/merge",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiTagsId69",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/tags/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTagsId70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tags/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTagsId71",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/tags/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTeams72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiTeams73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiTeamsId74",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/teams/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTeamsId75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTeamsId76",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/teams/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTickets77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tickets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiTickets78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/tickets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiTicketsId79",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/tickets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTicketsId80",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tickets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTicketsId81",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/tickets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTicketsTicketIdCustomFields82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/custom-fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTicketsTicketIdCustomFields83",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/custom-fields",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiTicketsTicketIdCustomFieldsId84",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTicketsTicketIdCustomFieldsId85",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-field"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTicketsTicketIdMessages86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/messages",
+        "operation_id": null,
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[86]",
+        "source_url": "https://developers.gorgias.com/reference/list-ticket-messages"
+      },
+      {
+        "id": "gorgias.rest.post.ApiTicketsTicketIdMessages87",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/tickets/{ticket_id}/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiTicketsTicketIdMessagesId88",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/tickets/{ticket_id}/messages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTicketsTicketIdMessagesId89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/messages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTicketsTicketIdMessagesId90",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/messages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiTicketsTicketIdTags91",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiTicketsTicketIdTags92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiTicketsTicketIdTags93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiTicketsTicketIdTags94",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiUpload95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/upload",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiUsers96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiUsers97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiUsersId98",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiUsersId99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiUsersId100",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiViews101",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/views",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiViews102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/views",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiViewsId103",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/views/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiViewsId104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/views/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiViewsId105",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/views/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiViewsViewIdItems106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/views/{view_id}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiViewsViewIdItems107",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/views/{view_id}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "source_url": "https://developers.gorgias.com/reference/update-view-items"
+      },
+      {
+        "id": "gorgias.rest.get.ApiWidgets108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/widgets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.post.ApiWidgets109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/widgets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.delete.ApiWidgetsId110",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/widgets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiWidgetsId111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/widgets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.put.ApiWidgetsId112",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/widgets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      {
+        "id": "gorgias.rest.get.ApiFileTypeDownloadDomainHashResourceName113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 114,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 114
+  }
+}

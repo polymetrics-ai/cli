@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "connector": "iterable",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/iterable-operation-source-lock.json",
+    "source_url": "https://api.iterable.com/api/docs",
+    "source_sha256": "ddaf65b1d512365ca9f546936745598a8f45d148063e705c852753944e03fb20",
+    "source_bytes": 71998,
+    "source_operation_count": 4
+  },
+  "summary": {
+    "api_surface_rows": 4,
+    "exact_source_rows": 4,
+    "declared_operations": 4,
+    "declared_percent": 100,
+    "enabled_operations": 3,
+    "enabled_percent": 75,
+    "disabled_operations": 1,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 0
+      },
+      {
+        "key": "direct_write",
+        "count": 1
+      },
+      {
+        "key": "etl",
+        "count": 3
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 3,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 1
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-iterable",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/iterable/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-iterable",
+      "sync-transport-source-definition-iterable"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-iterable",
+        "count": 1
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/lists",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/lists",
+        "operation": null,
+        "covered_by": {
+          "stream": "lists"
+        }
+      },
+      "source": {
+        "source_lock": "sources/iterable-operation-source-lock.json",
+        "source_id": "iterable.rest.get.Lists0",
+        "source_url": "https://api.iterable.com/api/docs",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "lists"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "lists"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/campaigns",
+        "operation": null,
+        "covered_by": {
+          "stream": "campaigns"
+        }
+      },
+      "source": {
+        "source_lock": "sources/iterable-operation-source-lock.json",
+        "source_id": "iterable.rest.get.Campaigns1",
+        "source_url": "https://api.iterable.com/api/docs",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "campaigns"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "campaigns"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/templates",
+        "operation": null,
+        "covered_by": {
+          "stream": "templates"
+        }
+      },
+      "source": {
+        "source_lock": "sources/iterable-operation-source-lock.json",
+        "source_id": "iterable.rest.get.Templates2",
+        "source_url": "https://api.iterable.com/api/docs",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "templates"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "templates"
+        }
+      }
+    },
+    {
+      "method": "*",
+      "path": "/*",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "*",
+        "path": "/*",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/iterable-operation-source-lock.json",
+        "source_id": "iterable.rest._.root3",
+        "source_url": "https://api.iterable.com/api/docs",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-iterable",
+          "evidence": "Legacy iterable connector only implements lists/campaigns/templates reads",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "Legacy iterable connector only implements lists/campaigns/templates reads"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-iterable",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    }
+  ]
+}

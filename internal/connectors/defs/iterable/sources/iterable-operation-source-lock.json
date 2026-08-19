@@ -1,0 +1,64 @@
+{
+  "schema_version": 2,
+  "connector": "iterable",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://api.iterable.com/api/docs",
+    "sha256": "ddaf65b1d512365ca9f546936745598a8f45d148063e705c852753944e03fb20",
+    "bytes": 71998,
+    "openapi": "public-provider-description",
+    "info_version": "Iterable REST API (https://api.iterable.com/api)",
+    "operation_counts": {
+      "*": 1,
+      "GET": 3
+    },
+    "operations": [
+      {
+        "id": "iterable.rest.get.Lists0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lists",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://api.iterable.com/api/docs"
+      },
+      {
+        "id": "iterable.rest.get.Campaigns1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://api.iterable.com/api/docs"
+      },
+      {
+        "id": "iterable.rest.get.Templates2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/templates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://api.iterable.com/api/docs"
+      },
+      {
+        "id": "iterable.rest._.root3",
+        "protocol": "rest",
+        "method": "*",
+        "path": "/*",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://api.iterable.com/api/docs"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 4,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 4
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "schema_version": 2,
+  "connector": "square",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developer.squareup.com/reference/square",
+    "sha256": "c26241012f6e52630b305ff3373d7238ade4fcc3513ef333d66401d22b9d1ad2",
+    "bytes": 99891,
+    "openapi": "public-provider-description",
+    "info_version": "Square Connect v2 API (https://connect.squareup.com/v2)",
+    "operation_counts": {
+      "GET": 9,
+      "POST": 2
+    },
+    "operations": [
+      {
+        "id": "square.rest.get.V2Payments0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2Refunds1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/refunds",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2Customers2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2Locations3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2Orders4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2CatalogList5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/catalog/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2Invoices6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2TeamMembers7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/team-members",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.get.V2Disputes8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/disputes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.post.V2Payments9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      },
+      {
+        "id": "square.rest.post.V2Customers10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://developer.squareup.com/reference/square"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 11,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 11
+  }
+}

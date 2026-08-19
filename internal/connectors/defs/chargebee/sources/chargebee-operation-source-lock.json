@@ -1,0 +1,4304 @@
+{
+  "schema_version": 2,
+  "connector": "chargebee",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://apidocs.chargebee.com/docs/api",
+    "sha256": "e94e5599bca410b8aa3ff94d94605ec24c7532c52db64dfb59477850fc318464",
+    "bytes": 121185,
+    "openapi": "public-provider-description",
+    "info_version": "Chargebee API v2, Product Catalog 2.0 (https://{site}.chargebee.com/api/v2)",
+    "operation_counts": {
+      "GET": 134,
+      "POST": 294
+    },
+    "operations": [
+      {
+        "id": "chargebee.rest.get.V2Addresses0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/addresses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Addresses1",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/addresses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Alerts2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/alerts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Alerts3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/alerts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Plans4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/plans",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2AlertsAlertId5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/alerts/{alert-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2AlertsAlertId6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/alerts/{alert-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2AlertsAlertIdAlertStatuses7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/alerts/{alert-id}/alert_statuses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2AlertsAlertIdDelete8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/alerts/{alert-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2AttachedItemsAttachedItemId9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/attached_items/{attached-item-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2AttachedItemsAttachedItemId10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/attached_items/{attached-item-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2AttachedItemsAttachedItemIdDelete11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/attached_items/{attached-item-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2BatchUsageEvents12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/batch/usage_events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2BusinessEntitiesTransfers13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/business_entities/transfers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2BusinessEntitiesTransfers14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/business_entities/transfers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CardsCustomerId15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cards/{customer-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Comments16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/comments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Comments17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/comments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CommentsCommentId18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/comments/{comment-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CommentsCommentIdDelete19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/comments/{comment-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Configurations20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/configurations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CouponCodes21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/coupon_codes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CouponCodesCouponCodeCode22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/coupon_codes/{coupon-code-code}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponCodesCouponCodeCodeArchive23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupon_codes/{coupon-code-code}/archive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CouponSets24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/coupon_sets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponSets25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupon_sets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CouponSetsCouponSetId26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/coupon_sets/{coupon-set-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponSetsCouponSetIdAddCouponCodes27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupon_sets/{coupon-set-id}/add_coupon_codes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponSetsCouponSetIdDelete28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupon_sets/{coupon-set-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponSetsCouponSetIdDeleteUnusedCouponCodes29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupon_sets/{coupon-set-id}/delete_unused_coupon_codes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponSetsCouponSetIdUpdate30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupon_sets/{coupon-set-id}/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Coupons31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/coupons",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponsCopy32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupons/copy",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponsCreateForItems33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupons/create_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CouponsCouponId34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/coupons/{coupon-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponsCouponIdDelete35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupons/{coupon-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponsCouponIdUnarchive36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupons/{coupon-id}/unarchive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CouponsCouponIdUpdateForItems37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/coupons/{coupon-id}/update_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CreditNotes38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/credit_notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotes39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesImportCreditNote40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/import_credit_note",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CreditNotesCreditNoteId41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/credit_notes/{credit-note-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdDelete42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CreditNotesCreditNoteIdDownloadEinvoice43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/credit_notes/{credit-note-id}/download_einvoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdPdf44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/pdf",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdRecordRefund45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/record_refund",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdRefund46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/refund",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdRemoveTaxWithheldRefund47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/remove_tax_withheld_refund",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdResendEinvoice48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/resend_einvoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdSendEinvoice49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/send_einvoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CreditNotesCreditNoteIdVoid50",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/credit_notes/{credit-note-id}/void",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CsvTaxRules51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/csv_tax_rules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Currencies52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/currencies",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CurrenciesList53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/currencies/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CurrenciesSiteCurrencyId54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/currencies/{site-currency-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CurrenciesSiteCurrencyId55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/currencies/{site-currency-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CurrenciesSiteCurrencyIdAddSchedule56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/currencies/{site-currency-id}/add_schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CurrenciesSiteCurrencyIdRemoveSchedule57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/currencies/{site-currency-id}/remove_schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomFieldConfigs58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/custom_field_configs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomFieldConfigsRetrieve59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/custom_field_configs/retrieve",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Customers60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Customers61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersMerge62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/merge",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersMove63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/move",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomersCustomerId64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerId65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdAddContact66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/add_contact",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdAssignPaymentRole67",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/assign_payment_role",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdChangeBillingDate68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/change_billing_date",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdClearPersonalData69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/clear_personal_data",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdCollectPayment70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/collect_payment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomersCustomerIdContacts71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer-id}/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdCopyCard72",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/copy_card",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdCreateSubscriptionForItemsEstimate73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/create_subscription_for_items_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdCreateSubscriptionQuoteForItems74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/create_subscription_quote_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdCreditCard75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/credit_card",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomersCustomerIdCustomerEntitlements76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer-id}/customer_entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdDelete77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdDeleteCard78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/delete_card",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdDeleteContact79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/delete_contact",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdDeleteRelationship80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/delete_relationship",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomersCustomerIdHierarchy81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer-id}/hierarchy",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomersCustomerIdHierarchyDetail82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer-id}/hierarchy_detail",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdImportForItems83",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/import_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomersCustomerIdPaymentVouchers84",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer-id}/payment_vouchers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdRecordExcessPayment85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/record_excess_payment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdRelationships86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/relationships",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdSubscriptionForItems87",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/subscription_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdSwitchGateway88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/switch_gateway",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2CustomersCustomerIdUpcomingInvoicesEstimate89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/customers/{customer-id}/upcoming_invoices_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdUpdateBillingInfo90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/update_billing_info",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdUpdateContact91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/update_contact",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdUpdateHierarchySettings92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/update_hierarchy_settings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2CustomersCustomerIdUpdatePaymentMethod93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/customers/{customer-id}/update_payment_method",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2DifferentialPrices94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/differential_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2DifferentialPricesDifferentialPriceId95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/differential_prices/{differential-price-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2DifferentialPricesDifferentialPriceId96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/differential_prices/{differential-price-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2DifferentialPricesDifferentialPriceIdDelete97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/differential_prices/{differential-price-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Entitlements98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Entitlements99",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2EstimatesCreateInvoiceForItems100",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/estimates/create_invoice_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2EstimatesCreateSubscriptionForItems101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/estimates/create_subscription_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2EstimatesGiftSubscriptionForItems102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/estimates/gift_subscription_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2EstimatesPaymentSchedules103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/estimates/payment_schedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2EstimatesUpdateSubscriptionForItems104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/estimates/update_subscription_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Events105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2EventsEventId106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/events/{event-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsAttachedItems107",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/attached_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsCoupons108",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/coupons",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsCreditNotes109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/credit_notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsCustomers110",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsDeferredRevenue111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/deferred_revenue",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsDifferentialPrices112",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/differential_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsInvoices113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsItemFamilies114",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/item_families",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsItemPrices115",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/item_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsItems116",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsOrders117",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsPriceVariants118",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/price_variants",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsRevenueRecognition119",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/revenue_recognition",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsSubscriptions120",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/subscriptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ExportsTransactions121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/exports/transactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ExportsExportId122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/exports/{export-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Features123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/features",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Features124",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/features",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2FeaturesFeatureId125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/features/{feature-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2FeaturesFeatureId126",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/features/{feature-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2FeaturesFeatureIdActivateCommand127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/features/{feature-id}/activate_command",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2FeaturesFeatureIdArchiveCommand128",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/features/{feature-id}/archive_command",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2FeaturesFeatureIdDelete129",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/features/{feature-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2FeaturesFeatureIdItemEntitlements130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/features/{feature-id}/item_entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2FeaturesFeatureIdItemEntitlements131",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/features/{feature-id}/item_entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2FeaturesFeatureIdReactivateCommand132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/features/{feature-id}/reactivate_command",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2FullExportsStatus133",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/full_exports/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Gifts134",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/gifts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2GiftsCreateForItems135",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gifts/create_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2GiftsGiftId136",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/gifts/{gift-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2GiftsGiftIdCancel137",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gifts/{gift-id}/cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2GiftsGiftIdClaim138",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gifts/{gift-id}/claim",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2GiftsGiftIdUpdateGift139",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/gifts/{gift-id}/update_gift",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2GrantBlocks140",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/grant_blocks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2HostedPages141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/hosted_pages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesAcceptQuote142",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/accept_quote",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesCheckoutExistingForItems143",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/checkout_existing_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesCheckoutGiftForItems144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/checkout_gift_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesCheckoutNewForItems145",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/checkout_new_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesCheckoutOneTimeForItems146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/checkout_one_time_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesClaimGift147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/claim_gift",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesCollectNow148",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/collect_now",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesEvents149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesExtendSubscription150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/extend_subscription",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesManagePaymentSources151",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/manage_payment_sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesPreCancel152",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/pre_cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesRetrieveAgreementPdf153",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/retrieve_agreement_pdf",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesViewVoucher154",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/view_voucher",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2HostedPagesHostedPageId155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/hosted_pages/{hosted-page-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2HostedPagesHostedPageIdAcknowledge156",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/hosted_pages/{hosted-page-id}/acknowledge",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InAppSubscriptionsInAppSubscriptionAppIdImportReceipt157",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/import_receipt",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InAppSubscriptionsInAppSubscriptionAppIdImportSubscription158",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/import_subscription",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InAppSubscriptionsInAppSubscriptionAppIdProcessPurchaseCommand159",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/process_purchase_command",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[159]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InAppSubscriptionsInAppSubscriptionAppIdRetrieve160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/in_app_subscriptions/{in-app-subscription-app-id}/retrieve",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[160]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Invoices161",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[161]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesCreateForChargeItemsAndCharges162",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/create_for_charge_items_and_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[162]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesImportInvoice163",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/import_invoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[163]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2InvoicesPaymentReferenceNumbers164",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices/payment_reference_numbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[164]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2InvoicesInvoiceId165",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices/{invoice-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[165]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdAddCharge166",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/add_charge",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[166]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdAddChargeItem167",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/add_charge_item",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[167]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdApplyCredits168",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/apply_credits",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[168]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdApplyPaymentScheduleScheme169",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/apply_payment_schedule_scheme",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[169]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdApplyPayments170",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/apply_payments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[170]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdClose171",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/close",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[171]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdCollectPayment172",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/collect_payment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[172]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdDelete173",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[173]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdDeleteLineItems174",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/delete_line_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[174]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2InvoicesInvoiceIdDownloadEinvoice175",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices/{invoice-id}/download_einvoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[175]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdPauseDunning176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/pause_dunning",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[176]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2InvoicesInvoiceIdPaymentSchedules177",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices/{invoice-id}/payment_schedules",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[177]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2InvoicesInvoiceIdPaymentVouchers178",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices/{invoice-id}/payment_vouchers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[178]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2InvoicesInvoiceIdPayments179",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/invoices/{invoice-id}/payments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[179]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdPdf180",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/pdf",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[180]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdRecordPayment181",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/record_payment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[181]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdRecordRefund182",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/record_refund",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[182]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdRecordTaxWithheld183",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/record_tax_withheld",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[183]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdRefund184",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/refund",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[184]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdRemoveCreditNote185",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/remove_credit_note",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[185]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdRemovePayment186",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/remove_payment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[186]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdRemoveTaxWithheld187",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/remove_tax_withheld",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[187]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdResendEinvoice188",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/resend_einvoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[188]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdResumeDunning189",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/resume_dunning",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[189]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdSendEinvoice190",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/send_einvoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[190]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdStopDunning191",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/stop_dunning",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[191]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdSyncUsages192",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/sync_usages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[192]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdUpdateDetails193",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/update_details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[193]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdVoid194",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/void",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[194]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2InvoicesInvoiceIdWriteOff195",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invoices/{invoice-id}/write_off",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[195]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemFamilies196",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/item_families",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[196]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemFamilies197",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/item_families",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[197]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemFamiliesItemFamilyId198",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/item_families/{item-family-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[198]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemFamiliesItemFamilyId199",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/item_families/{item-family-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[199]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemFamiliesItemFamilyIdDelete200",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/item_families/{item-family-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[200]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemPrices201",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/item_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[201]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemPrices202",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/item_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[202]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemPricesItemPriceId203",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/item_prices/{item-price-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[203]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemPricesItemPriceId204",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/item_prices/{item-price-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[204]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemPricesItemPriceIdApplicableItemPrices205",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/item_prices/{item-price-id}/applicable_item_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[205]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemPricesItemPriceIdApplicableItems206",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/item_prices/{item-price-id}/applicable_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[206]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemPricesItemPriceIdDelete207",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/item_prices/{item-price-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[207]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemPricesItemPriceIdDifferentialPrices208",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/item_prices/{item-price-id}/differential_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[208]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Items209",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[209]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Items210",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[210]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemsItemId211",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/items/{item-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[211]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemsItemId212",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/items/{item-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[212]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemsItemIdAttachedItems213",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/items/{item-id}/attached_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[213]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemsItemIdAttachedItems214",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/items/{item-id}/attached_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[214]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemsItemIdDelete215",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/items/{item-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[215]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ItemsItemIdItemEntitlements216",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/items/{item-id}/item_entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[216]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ItemsItemIdItemEntitlements217",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/items/{item-id}/item_entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[217]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2LedgerAccountBalances218",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/ledger_account_balances",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[218]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2LedgerOperations219",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/ledger_operations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[219]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2LedgerOperationsAuthorize220",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/ledger_operations/authorize",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[220]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2LedgerOperationsCapture221",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/ledger_operations/capture",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[221]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2LedgerOperationsCaptureAuthorization222",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/ledger_operations/capture_authorization",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[222]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2LedgerOperationsReleaseAuthorization223",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/ledger_operations/release_authorization",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[223]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2LedgerOperationsLedgerOperationId224",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/ledger_operations/{ledger-operation-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[224]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2NonSubscriptionsNonSubscriptionAppIdOneTimePurchase225",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/non_subscriptions/{non-subscription-app-id}/one_time_purchase",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[225]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OfferEvents226",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/offer_events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[226]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OfferFulfillments227",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/offer_fulfillments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[227]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OfferFulfillmentsOfferFulfillmentId228",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/offer_fulfillments/{offer-fulfillment-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[228]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OfferFulfillmentsOfferFulfillmentId229",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/offer_fulfillments/{offer-fulfillment-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[229]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OmnichannelOneTimeOrders230",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/omnichannel_one_time_orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[230]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OmnichannelOneTimeOrdersOmnichannelOneTimeOrderId231",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/omnichannel_one_time_orders/{omnichannel-one-time-order-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[231]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OmnichannelSubscriptionItemsOmnichannelSubscriptionItemIdScheduledChanges232",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/omnichannel_subscription_items/{omnichannel-subscription-item-id}/scheduled_changes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[232]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OmnichannelSubscriptions233",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/omnichannel_subscriptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[233]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OmnichannelSubscriptionsOmnichannelSubscriptionId234",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/omnichannel_subscriptions/{omnichannel-subscription-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[234]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OmnichannelSubscriptionsOmnichannelSubscriptionIdMove235",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/omnichannel_subscriptions/{omnichannel-subscription-id}/move",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[235]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OmnichannelSubscriptionsOmnichannelSubscriptionIdOmnichannelTransactions236",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/omnichannel_subscriptions/{omnichannel-subscription-id}/omnichannel_transactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[236]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Orders237",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[237]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Orders238",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[238]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersImportOrder239",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/import_order",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[239]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2OrdersOrderId240",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orders/{order-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[240]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersOrderId241",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[241]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersOrderIdAssignOrderNumber242",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order-id}/assign_order_number",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[242]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersOrderIdCancel243",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order-id}/cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[243]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersOrderIdCreateRefundableCreditNote244",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order-id}/create_refundable_credit_note",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[244]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersOrderIdDelete245",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[245]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersOrderIdReopen246",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order-id}/reopen",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[246]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2OrdersOrderIdResend247",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orders/{order-id}/resend",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[247]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentIntents248",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_intents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[248]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PaymentIntentsPaymentIntentId249",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payment_intents/{payment-intent-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[249]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentIntentsPaymentIntentId250",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_intents/{payment-intent-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[250]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentScheduleSchemes251",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_schedule_schemes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[251]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PaymentScheduleSchemesPaymentScheduleSchemeId252",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payment_schedule_schemes/{payment-schedule-scheme-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[252]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentScheduleSchemesPaymentScheduleSchemeIdDelete253",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_schedule_schemes/{payment-schedule-scheme-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[253]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PaymentSources254",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payment_sources",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[254]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCreateBankAccount255",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/create_bank_account",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[255]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCreateCard256",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/create_card",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[256]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCreateUsingPaymentIntent257",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/create_using_payment_intent",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[257]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCreateUsingPermanentToken258",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/create_using_permanent_token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[258]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCreateUsingTempToken259",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/create_using_temp_token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[259]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCreateUsingToken260",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/create_using_token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[260]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCreateVoucherPaymentSource261",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/create_voucher_payment_source",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[261]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PaymentSourcesCustPaymentSourceId262",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payment_sources/{cust-payment-source-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[262]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCustPaymentSourceIdDelete263",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/{cust-payment-source-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[263]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCustPaymentSourceIdDeleteLocal264",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/{cust-payment-source-id}/delete_local",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[264]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCustPaymentSourceIdExportPaymentSource265",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/{cust-payment-source-id}/export_payment_source",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[265]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCustPaymentSourceIdSwitchGatewayAccount266",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/{cust-payment-source-id}/switch_gateway_account",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[266]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCustPaymentSourceIdUpdateBankAccount267",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/{cust-payment-source-id}/update_bank_account",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[267]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCustPaymentSourceIdUpdateCard268",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/{cust-payment-source-id}/update_card",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[268]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentSourcesCustPaymentSourceIdVerifyBankAccount269",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_sources/{cust-payment-source-id}/verify_bank_account",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[269]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PaymentVouchers270",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/payment_vouchers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[270]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PaymentVouchersPaymentVoucherId271",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/payment_vouchers/{payment-voucher-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[271]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationItemFamilies272",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migration_item_families",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[272]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItemFamilies273",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_item_families",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[273]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationItemFamiliesPc2MigrationItemFamilyId274",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migration_item_families/{pc2-migration-item-family-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[274]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItemFamiliesPc2MigrationItemFamilyId275",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_item_families/{pc2-migration-item-family-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[275]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItemFamiliesPc2MigrationItemFamilyIdDelete276",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_item_families/{pc2-migration-item-family-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[276]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationItemPrices277",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migration_item_prices",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[277]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationItemPricesPc2MigrationItemPriceId278",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migration_item_prices/{pc2-migration-item-price-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[278]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItemPricesPc2MigrationItemPriceId279",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_item_prices/{pc2-migration-item-price-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[279]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItemPricesPc2MigrationItemPriceIdDelete280",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_item_prices/{pc2-migration-item-price-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[280]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationItems281",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migration_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[281]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItems282",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[282]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationItemsApplicableItems283",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migration_items/applicable_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[283]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationItemsPc2MigrationItemId284",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migration_items/{pc2-migration-item-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[284]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItemsPc2MigrationItemId285",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_items/{pc2-migration-item-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[285]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationItemsPc2MigrationItemIdDelete286",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migration_items/{pc2-migration-item-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[286]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2Migrations287",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migrations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[287]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Pc2MigrationsPc2MigrationId288",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/pc2_migrations/{pc2-migration-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[288]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationsPc2MigrationIdContactSupport289",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migrations/{pc2-migration-id}/contact_support",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[289]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Pc2MigrationsPc2MigrationIdInitiate290",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pc2_migrations/{pc2-migration-id}/initiate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[290]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PersonalizedOffers291",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/personalized_offers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[291]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PortalSessions292",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/portal_sessions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[292]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PortalSessionsPortalSessionId293",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/portal_sessions/{portal-session-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[293]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PortalSessionsPortalSessionIdActivate294",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/portal_sessions/{portal-session-id}/activate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[294]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PortalSessionsPortalSessionIdLogout295",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/portal_sessions/{portal-session-id}/logout",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[295]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PriceVariants296",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/price_variants",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[296]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PriceVariants297",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/price_variants",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[297]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PriceVariantsPriceVariantId298",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/price_variants/{price-variant-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[298]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PriceVariantsPriceVariantId299",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/price_variants/{price-variant-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[299]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PriceVariantsPriceVariantIdDelete300",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/price_variants/{price-variant-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[300]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PricingPageSessionsCreateForExistingSubscription301",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pricing_page_sessions/create_for_existing_subscription",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[301]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PricingPageSessionsCreateForNewSubscription302",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/pricing_page_sessions/create_for_new_subscription",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[302]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Products303",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/products",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[303]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Products304",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/products",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[304]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ProductsProductId305",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/products/{product-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[305]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ProductsProductId306",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/products/{product-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[306]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ProductsProductIdDelete307",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/products/{product-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[307]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ProductsProductIdUpdateOptions308",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/products/{product-id}/update_options",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[308]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ProductsProductIdVariants309",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/products/{product-id}/variants",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[309]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2ProductsProductIdVariants310",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/products/{product-id}/variants",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[310]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PromotionalCredits311",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/promotional_credits",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[311]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PromotionalCreditsAdd312",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/promotional_credits/add",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[312]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PromotionalCreditsDeduct313",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/promotional_credits/deduct",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[313]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PromotionalCreditsSet314",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/promotional_credits/set",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[314]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2PromotionalCreditsAccountCreditId315",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/promotional_credits/{account-credit-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[315]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PromotionalGrants316",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/promotional_grants",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[316]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2Purchases317",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/purchases",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[317]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2PurchasesEstimate318",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/purchases/estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[318]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Quotes319",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/quotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[319]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesCreateForChargeItemsAndCharges320",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/create_for_charge_items_and_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[320]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesUpdateSubscriptionQuoteForItems321",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/update_subscription_quote_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[321]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2QuotesQuoteId322",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/quotes/{quote-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[322]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdConvert323",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/convert",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[323]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdDelete324",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[324]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdEditCreateSubscriptionQuoteForItems325",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/edit_create_subscription_quote_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[325]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdEditForChargeItemsAndCharges326",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/edit_for_charge_items_and_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[326]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdEditUpdateSubscriptionQuoteForItems327",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/edit_update_subscription_quote_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[327]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdExtendExpiryDate328",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/extend_expiry_date",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[328]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdPdf329",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/pdf",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[329]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2QuotesQuoteIdQuoteLineGroups330",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/quotes/{quote-id}/quote_line_groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[330]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2QuotesQuoteIdUpdateStatus331",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/quotes/{quote-id}/update_status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[331]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Ramps332",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/ramps",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[332]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2RampsRampId333",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/ramps/{ramp-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[333]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2RampsRampIdDelete334",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/ramps/{ramp-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[334]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2RampsRampIdUpdate335",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/ramps/{ramp-id}/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[335]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2RecordedPurchases336",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/recorded_purchases",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[336]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2RecordedPurchasesRecordedPurchaseId337",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/recorded_purchases/{recorded-purchase-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[337]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2ResourceMigrationsRetrieveLatest338",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/resource_migrations/retrieve_latest",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[338]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2RulesRuleId339",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/rules/{rule-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[339]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SiteMigrationDetails340",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/site_migration_details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[340]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SitePcMetaRecords341",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/site_pc_meta_records",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[341]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Subscriptions342",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[342]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionId343",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[343]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdAddChargeAtTermEnd344",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/add_charge_at_term_end",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[344]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdAdvanceInvoiceEstimate345",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/advance_invoice_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[345]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdAlertStatuses346",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/alert_statuses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[346]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdApplicableAlerts347",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/applicable_alerts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[347]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdCancelForItems348",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/cancel_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[348]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdCancelSubscriptionForItemsEstimate349",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/cancel_subscription_for_items_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[349]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdChangeTermEnd350",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/change_term_end",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[350]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdChangeTermEndEstimate351",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/change_term_end_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[351]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdChargeFutureRenewals352",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/charge_future_renewals",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[352]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdContractTerms353",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/contract_terms",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[353]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdCreateRamp354",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/create_ramp",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[354]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdDelete355",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[355]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdDeleteUsage356",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/delete_usage",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[356]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdDiscounts357",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/discounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[357]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdEditAdvanceInvoiceSchedule358",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/edit_advance_invoice_schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[358]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdEntitlementOverrides359",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/entitlement_overrides",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[359]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdEntitlementOverrides360",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/entitlement_overrides",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[360]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdImportContractTerm361",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/import_contract_term",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[361]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdImportUnbilledCharges362",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/import_unbilled_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[362]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdMove363",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/move",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[363]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdOverrideBillingProfile364",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/override_billing_profile",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[364]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdPause365",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/pause",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[365]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdPauseSubscriptionEstimate366",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/pause_subscription_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[366]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdReactivate367",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/reactivate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[367]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRegenerateInvoice368",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/regenerate_invoice",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[368]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRegenerateInvoiceEstimate369",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/regenerate_invoice_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[369]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRemoveAdvanceInvoiceSchedule370",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/remove_advance_invoice_schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[370]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRemoveCoupons371",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/remove_coupons",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[371]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRemoveScheduledCancellation372",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_cancellation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[372]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRemoveScheduledChanges373",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_changes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[373]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRemoveScheduledPause374",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_pause",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[374]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdRemoveScheduledResumption375",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/remove_scheduled_resumption",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[375]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdRenewalEstimate376",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/renewal_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[376]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdResume377",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/resume",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[377]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdResumeSubscriptionEstimate378",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/resume_subscription_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[378]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdRetrieveAdvanceInvoiceSchedule379",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/retrieve_advance_invoice_schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[379]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdRetrieveWithScheduledChanges380",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/retrieve_with_scheduled_changes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[380]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdScheduledChanges381",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/scheduled_changes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[381]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdSubscriptionEntitlements382",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/subscription_entitlements",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[382]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdSubscriptionEntitlementsSetAvailability383",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/subscription_entitlements/set_availability",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[383]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdUpdateForItems384",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/update_for_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[384]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdUpdateScheduledChanges385",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/update_scheduled_changes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[385]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdUsageCharges386",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/usage_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[386]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdUsageSummary387",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/usage_summary",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[387]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2SubscriptionsSubscriptionIdUsages388",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/subscriptions/{subscription-id}/usages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[388]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2SubscriptionsSubscriptionIdUsages389",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscriptions/{subscription-id}/usages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[389]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2TimeMachinesTimeMachineName390",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/time_machines/{time-machine-name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[390]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TimeMachinesTimeMachineNameStartAfresh391",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/time_machines/{time-machine-name}/start_afresh",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[391]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TimeMachinesTimeMachineNameTravelForward392",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/time_machines/{time-machine-name}/travel_forward",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[392]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TokensCreateForCard393",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/tokens/create_for_card",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[393]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TokensCreateUsingTempToken394",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/tokens/create_using_temp_token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[394]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2TokensCbTokenId395",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/tokens/{cb-token-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[395]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Transactions396",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/transactions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[396]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TransactionsCreateAuthorization397",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transactions/create_authorization",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[397]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2TransactionsTransactionId398",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/transactions/{transaction-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[398]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TransactionsTransactionIdDeleteOfflineTransaction399",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transactions/{transaction-id}/delete_offline_transaction",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[399]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TransactionsTransactionIdReconcile400",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transactions/{transaction-id}/reconcile",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[400]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TransactionsTransactionIdRecordRefund401",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transactions/{transaction-id}/record_refund",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[401]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TransactionsTransactionIdRefund402",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transactions/{transaction-id}/refund",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[402]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2TransactionsTransactionIdVoid403",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/transactions/{transaction-id}/void",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[403]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2UnbilledCharges404",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/unbilled_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[404]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2UnbilledCharges405",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/unbilled_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[405]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2UnbilledChargesInvoiceNowEstimate406",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/unbilled_charges/invoice_now_estimate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[406]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2UnbilledChargesInvoiceUnbilledCharges407",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/unbilled_charges/invoice_unbilled_charges",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[407]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2UnbilledChargesUnbilledChargeIdDelete408",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/unbilled_charges/{unbilled-charge-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[408]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2UsageEvents409",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/usage_events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[409]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2UsageFilesUploadUrl410",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/usage_files/upload_url",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[410]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2UsageFilesUsageFileIdProcessingStatus411",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/usage_files/{usage-file-id}/processing_status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[411]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2Usages412",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/usages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[412]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2UsagesPdf413",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/usages/pdf",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[413]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2VariantsProductVariantId414",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/variants/{product-variant-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[414]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2VariantsProductVariantId415",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/variants/{product-variant-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[415]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2VariantsProductVariantIdDelete416",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/variants/{product-variant-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[416]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2VirtualBankAccounts417",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/virtual_bank_accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[417]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2VirtualBankAccounts418",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/virtual_bank_accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[418]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2VirtualBankAccountsCreateUsingPermanentToken419",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/virtual_bank_accounts/create_using_permanent_token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[419]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2VirtualBankAccountsVirtualBankAccountId420",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/virtual_bank_accounts/{virtual-bank-account-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[420]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2VirtualBankAccountsVirtualBankAccountIdDelete421",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/virtual_bank_accounts/{virtual-bank-account-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[421]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2VirtualBankAccountsVirtualBankAccountIdDeleteLocal422",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/virtual_bank_accounts/{virtual-bank-account-id}/delete_local",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[422]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2WebhookEndpoints423",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/webhook_endpoints",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[423]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2WebhookEndpoints424",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/webhook_endpoints",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[424]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.get.V2WebhookEndpointsWebhookEndpointId425",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/webhook_endpoints/{webhook-endpoint-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[425]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2WebhookEndpointsWebhookEndpointId426",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/webhook_endpoints/{webhook-endpoint-id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[426]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      },
+      {
+        "id": "chargebee.rest.post.V2WebhookEndpointsWebhookEndpointIdDelete427",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/webhook_endpoints/{webhook-endpoint-id}/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[427]",
+        "source_url": "https://apidocs.chargebee.com/docs/api"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 428,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 428
+  }
+}
