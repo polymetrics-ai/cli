@@ -268,6 +268,10 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 21 stream-backed endpoint group(s), 29 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  duplicate_of=17, non_data_endpoint=2, out_of_scope=17, requires_elevated_scope=9.
+- The current fixture-backed 21-stream transport and `content_blocks(content_block_id) →
+  update_content_block` destination proof are declared in `sync_transport.json`; it has keyed
+  delivery, durable acknowledgement, and all closed modes. #4304 persisted App/CLI dispatch remains
+  pending. The provider inventory itself remains unproven and is not represented as complete.
+- Every declared typed action has an explicit eligibility disposition: the bound content-block action
+  or closed exact-action-selection pending. Message/campaign/canvas destructive confirmations and
+  privileged scope remain execution metadata, never omission reasons.

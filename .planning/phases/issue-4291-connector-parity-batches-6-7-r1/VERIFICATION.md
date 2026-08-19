@@ -235,3 +235,21 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   -count=1` passed.
 - **PENDING FOUNDATION:** persisted App/CLI generic-destination dispatch remains #4304 work; this
   connector claims fixture/dry proof only, never application-level reverse-ETL deployment.
+
+## Braze connector-owned destination increment — 2026-08-20
+
+- **RED:** Braze had 21 fixture streams and 29 exact typed actions without source/destination
+  declaration. Its provider inventory remains explicitly unproven, so this increment cannot claim
+  complete provider coverage.
+- **GREEN:** `sync_transport.json` declares the existing streams and exact
+  `content_blocks(content_block_id) → update_content_block` proof with keyed delivery, durable
+  acknowledgement, closed strategies, and fixture/dry conformance. All 29 typed actions carry an
+  eligibility disposition (one bound; 28 pending #4304 closed action selection). No credentials or
+  provider calls were used.
+- **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1` passed.
+- **PENDING:** #4304 App/CLI dispatch and Braze provider-inventory recovery are independent open
+  requirements; this declaration makes neither a false deployment nor a completeness claim.

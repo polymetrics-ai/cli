@@ -14,7 +14,7 @@ provider-live certification. The machine-readable source is
 | copper | complete | 89 | 0 / 32 | 0 / 52 | 0 / 5 | 0 | 0 / 0 | 11 | 0 |
 | zoho-bigin | complete | 75 | 0 / 26 | 6 / 43 | 1 / 13 | 1 (App dispatch pending) | 0 / 0 | 11 | 0 |
 | klaviyo | complete | 345 | 0 / 198 | 0 / 141 | 0 / 6 | 0 | 0 / 0 | 30 | 0 |
-| braze | unproven | 95 | 0 / 21 | 29 / 53 | 0 / 21 | 0 | 0 / 0 | 4 | 0 |
+| braze | unproven | 95 | 0 / 21 | 29 / 53 | 1 / 21 | 1 (App dispatch pending) | 0 / 0 | 4 | 0 |
 | customer-io | complete | 166 | 0 / 82 | 10 / 68 | 1 / 16 | 1 (App dispatch pending) | 0 / 0 | 14 | 0 |
 | intercom | complete | 231 | 0 / 103 | 0 / 123 | 0 / 5 | 0 | 0 / 0 | 31 | 0 |
 | freshdesk | complete | 170 | 0 / 73 | 0 / 92 | 0 / 5 | 0 | 0 / 0 | 22 | 0 |
@@ -29,9 +29,9 @@ provider-live certification. The machine-readable source is
 | square | complete | 334 | 0 / 117 | 0 / 213 | 0 / 4 | 0 | 0 / 0 | 27 | 0 |
 | braintree | unproven | 73 | 0 / 18 | 0 / 45 | 0 / 10 | 0 | 0 / 0 | 6 | 0 |
 
-Totals after the ServiceNow increment: 3,932 documented operations; 1,465 direct reads with 123 exact
-command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, eight source
-transports, eight typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
+Totals after the Braze increment: 3,932 documented operations; 1,465 direct reads with 123 exact
+command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, nine source
+transports, nine typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
 deletes, and zero provider-live certifications.
 
 Help Scout still has a binary-ledger classification defect. Gorgias now maps its
@@ -100,3 +100,10 @@ fixture-backed sources and `incidents(sys_id) → update_incident` proof. A sepa
 eligibility ledger accounts for every table-specific typed action without inventing customer table
 schemas; one is bound and five await closed action selection. Persisted App/CLI dispatch remains
 #4304 work.
+
+## Increment — Braze declarative destination proof
+
+Braze declares its current 21 fixture-backed streams and `content_blocks(content_block_id) →
+update_content_block` proof, with all 29 typed actions explicitly eligible (one bound, 28 pending
+selection). Its source inventory remains unproven pending public recovery; no completeness claim is
+made. #4304 App/CLI dispatch remains pending.
