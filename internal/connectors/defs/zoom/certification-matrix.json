@@ -437,7 +437,8 @@
       "id": "operation:rest_status",
       "category": "operation",
       "name": "rest_status",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_status)"
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_status)",
+      "executor_source": "internal/connectors/engine/status_check.go:OperationStatusCheck"
     },
     {
       "id": "operation:rest_write",
@@ -456,7 +457,8 @@
       "id": "operation:text_export",
       "category": "operation",
       "name": "text_export",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=text_export)"
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=text_export)",
+      "executor_source": "internal/connectors/engine/binary_read.go:OperationBinaryDownload"
     },
     {
       "id": "operation:xml_export",

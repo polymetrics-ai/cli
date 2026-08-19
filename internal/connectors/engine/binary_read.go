@@ -96,7 +96,7 @@ type BinaryDownloadResult struct {
 //     (safety.ValidateLocalWritePath) cannot;
 //   - extract_archives is refused outright.
 //
-// pmcert:executes binary_download
+// pmcert:executes binary_download,text_export
 func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRequest, h Hooks) (BinaryDownloadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return BinaryDownloadResult{}, err
