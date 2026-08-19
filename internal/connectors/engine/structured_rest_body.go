@@ -102,6 +102,19 @@ func operationStructuredJSONContentType(op OperationSpec) (string, string, error
 }
 
 func structuredRESTBodySchema(op OperationSpec) (map[string]any, error) {
+	compiled, err := compileStructuredRESTBodySchema(op)
+	if err != nil {
+		return nil, err
+	}
+	return compiled.root, nil
+}
+
+type structuredRESTBodySchemaCompilation struct {
+	root   map[string]any
+	schema *Schema
+}
+
+func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchemaCompilation, error) {
 	if op.REST == nil || len(op.REST.BodySchema) == 0 {
 		return nil, fmt.Errorf("operation %q structured JSON body requires body_schema", op.ID)
 	}
@@ -109,17 +122,28 @@ func structuredRESTBodySchema(op OperationSpec) (map[string]any, error) {
 	if err := json.Unmarshal(op.REST.BodySchema, &root); err != nil {
 		return nil, fmt.Errorf("operation %q body_schema is not an object: %w", op.ID, err)
 	}
+	if root == nil {
+		return nil, fmt.Errorf("operation %q body_schema must be an object", op.ID)
+	}
+	if err := normalizeStructuredRESTBodySchemaNode(op.ID, root, "body_schema"); err != nil {
+		return nil, err
+	}
 	if !isObjectType(root) {
 		return nil, fmt.Errorf("operation %q body_schema must be an object", op.ID)
 	}
-	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+	normalized, err := json.Marshal(root)
+	if err != nil {
+		return nil, fmt.Errorf("operation %q body_schema: normalize: %w", op.ID, err)
+	}
+	sch, err := compileStructuredRESTBodySchemaDocument(normalized)
+	if err != nil {
 		return nil, fmt.Errorf("operation %q body_schema: %w", op.ID, err)
 	}
 	state := structuredRESTBodySchemaState{}
 	if err := requireClosedBoundedStructuredRESTBody(op.ID, root, "body_schema", 1, &state); err != nil {
 		return nil, err
 	}
-	return root, nil
+	return &structuredRESTBodySchemaCompilation{root: root, schema: sch}, nil
 }
 
 type structuredRESTBodySchemaState struct {
@@ -131,7 +155,7 @@ func requireClosedBoundedStructuredRESTBody(operation string, node map[string]an
 		return fmt.Errorf("operation %q %s exceeds structured body depth limit %d", operation, path, maxStructuredRESTBodyDepth)
 	}
 	if structuredRESTBodyNodeMayAcceptObjectOrArray(node) && !structuredRESTBodyNodeHasExplicitType(node) {
-		return fmt.Errorf("operation %q %s may accept objects or arrays without an explicit type", operation, path)
+		return structuredRESTBodyFoundationGap(operation, path, "may accept objects or arrays; declare an explicit type")
 	}
 	if isObjectType(node) {
 		if closed, ok := node["additionalProperties"].(bool); !ok || closed {
@@ -150,16 +174,37 @@ func requireClosedBoundedStructuredRESTBody(operation string, node map[string]an
 		if maxItems > maxStructuredRESTBodyItems {
 			return fmt.Errorf("operation %q %s maxItems %.0f exceeds structured body limit %d", operation, path, maxItems, maxStructuredRESTBodyItems)
 		}
-		rawItems, ok := node["items"]
-		if !ok {
+		rawItems, hasItems := node["items"]
+		rawPrefixItems, hasPrefixItems := node["prefixItems"]
+		if !hasItems && !hasPrefixItems {
 			return fmt.Errorf("operation %q %s declares an array without an items schema", operation, path)
 		}
-		items, ok := rawItems.(map[string]any)
-		if !ok || len(items) == 0 {
-			return fmt.Errorf("operation %q %s declares an array with an empty items schema", operation, path)
+		if hasItems {
+			items, ok := rawItems.(map[string]any)
+			if !ok || len(items) == 0 {
+				return fmt.Errorf("operation %q %s declares an array with an empty items schema", operation, path)
+			}
+			if err := requireClosedBoundedStructuredRESTBody(operation, items, path+"/items", depth+1, state); err != nil {
+				return err
+			}
 		}
-		if err := requireClosedBoundedStructuredRESTBody(operation, items, path+"/items", depth+1, state); err != nil {
-			return err
+		if hasPrefixItems {
+			prefixItems, ok := rawPrefixItems.([]any)
+			if !ok || len(prefixItems) == 0 {
+				return fmt.Errorf("operation %q %s declares an array with an empty prefixItems schema", operation, path)
+			}
+			for index, rawPrefixItem := range prefixItems {
+				prefixItem, ok := rawPrefixItem.(map[string]any)
+				if !ok || len(prefixItem) == 0 {
+					return fmt.Errorf("operation %q %s/prefixItems/%d must be a non-empty schema object", operation, path, index)
+				}
+				if err := requireClosedBoundedStructuredRESTBody(operation, prefixItem, fmt.Sprintf("%s/prefixItems/%d", path, index), depth+1, state); err != nil {
+					return err
+				}
+			}
+			if !hasItems && maxItems > float64(len(prefixItems)) {
+				return structuredRESTBodyFoundationGap(operation, path, "prefixItems does not constrain every allowed array item; declare an items schema for remaining items")
+			}
 		}
 	}
 	properties, ok := node["properties"].(map[string]any)
@@ -180,6 +225,120 @@ func requireClosedBoundedStructuredRESTBody(operation string, node map[string]an
 		}
 	}
 	return nil
+}
+
+func normalizeStructuredRESTBodySchemaNode(operation string, node map[string]any, path string) error {
+	types, hasExplicitType, err := structuredRESTBodyExplicitTypes(operation, path, node)
+	if err != nil {
+		return err
+	}
+	_, hasProperties := node["properties"]
+	_, hasAdditionalProperties := node["additionalProperties"]
+	_, hasItems := node["items"]
+	_, hasPrefixItems := node["prefixItems"]
+	hasObjectStructure := hasProperties || hasAdditionalProperties
+	hasArrayStructure := hasItems || hasPrefixItems
+
+	if !hasExplicitType {
+		switch {
+		case hasObjectStructure && hasArrayStructure:
+			return structuredRESTBodyFoundationGap(operation, path, "has both object and array structure without an explicit type")
+		case hasObjectStructure:
+			node["type"] = "object"
+		case hasArrayStructure:
+			node["type"] = "array"
+		}
+	} else {
+		if hasObjectStructure && !structuredRESTBodyTypeAllows(types, "object") {
+			return structuredRESTBodyFoundationGap(operation, path, "object structure conflicts with its explicit type")
+		}
+		if hasArrayStructure && !structuredRESTBodyTypeAllows(types, "array") {
+			return structuredRESTBodyFoundationGap(operation, path, "array structure conflicts with its explicit type")
+		}
+	}
+
+	if hasProperties {
+		properties, ok := node["properties"].(map[string]any)
+		if !ok {
+			return structuredRESTBodyFoundationGap(operation, path, "properties must be an object of schema objects")
+		}
+		for _, name := range sortedMapKeys(properties) {
+			child, ok := properties[name].(map[string]any)
+			if !ok {
+				return structuredRESTBodyFoundationGap(operation, path+"/"+name, "must be a schema object")
+			}
+			if err := normalizeStructuredRESTBodySchemaNode(operation, child, path+"/"+name); err != nil {
+				return err
+			}
+		}
+	}
+	if hasItems {
+		items, ok := node["items"].(map[string]any)
+		if !ok {
+			return structuredRESTBodyFoundationGap(operation, path+"/items", "must be a schema object")
+		}
+		if err := normalizeStructuredRESTBodySchemaNode(operation, items, path+"/items"); err != nil {
+			return err
+		}
+	}
+	if hasPrefixItems {
+		prefixItems, ok := node["prefixItems"].([]any)
+		if !ok {
+			return structuredRESTBodyFoundationGap(operation, path+"/prefixItems", "must be an array of schema objects")
+		}
+		for index, rawPrefixItem := range prefixItems {
+			prefixItem, ok := rawPrefixItem.(map[string]any)
+			if !ok {
+				return structuredRESTBodyFoundationGap(operation, fmt.Sprintf("%s/prefixItems/%d", path, index), "must be a schema object")
+			}
+			if err := normalizeStructuredRESTBodySchemaNode(operation, prefixItem, fmt.Sprintf("%s/prefixItems/%d", path, index)); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func structuredRESTBodyExplicitTypes(operation string, path string, node map[string]any) ([]string, bool, error) {
+	raw, ok := node["type"]
+	if !ok {
+		return nil, false, nil
+	}
+	switch types := raw.(type) {
+	case string:
+		if types == "" {
+			return nil, false, structuredRESTBodyFoundationGap(operation, path, "type must be a non-empty JSON type")
+		}
+		return []string{types}, true, nil
+	case []any:
+		if len(types) == 0 {
+			return nil, false, structuredRESTBodyFoundationGap(operation, path, "type must be a non-empty JSON type list")
+		}
+		declared := make([]string, 0, len(types))
+		for _, rawType := range types {
+			typeName, ok := rawType.(string)
+			if !ok || typeName == "" {
+				return nil, false, structuredRESTBodyFoundationGap(operation, path, "type must contain only non-empty JSON type names")
+			}
+			declared = append(declared, typeName)
+		}
+		return declared, true, nil
+	default:
+		return nil, false, structuredRESTBodyFoundationGap(operation, path, "type must be a JSON type name or list")
+	}
+}
+
+func structuredRESTBodyTypeAllows(types []string, want string) bool {
+	for _, declared := range types {
+		if declared == want {
+			return true
+		}
+	}
+	return false
+}
+
+func structuredRESTBodyFoundationGap(operation string, path string, detail string) error {
+	return fmt.Errorf("operation %q %s has a structured-body foundation gap: %s", operation, path, detail)
 }
 
 func structuredRESTBodyNodeMayAcceptObjectOrArray(node map[string]any) bool {
