@@ -3,122 +3,1737 @@
   "connector": "freshdesk",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://developers.freshdesk.com/api/#change_log",
+    "source_url": "https://developers.freshdesk.com/api/",
+    "source_kind": "complete_rendered_reference",
+    "source_document_count": 1,
     "sha256": "e70f8e31ed12141e248ddd06e753bb951c95da3a4ec16af3763b8d9363ab7e29",
     "bytes": 3228889,
-    "openapi": "public-provider-description",
-    "info_version": "Freshdesk REST API v2",
+    "openapi": "rendered-reference",
+    "info_version": "Freshdesk REST API v2 public reference",
     "operation_counts": {
-      "GET": 9,
-      "POST": 1
+      "DELETE": 22,
+      "GET": 78,
+      "PATCH": 1,
+      "POST": 39,
+      "PUT": 30
     },
     "operations": [
       {
-        "id": "freshdesk.rest.get.Tickets0",
+        "id": "freshdesk.rest.delete.delete_admin_group",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/tickets",
-        "operation_id": null,
+        "method": "DELETE",
+        "path": "/admin/groups/{id}",
+        "operation_id": "delete_admin_group",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#delete_admin_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.Contacts1",
+        "id": "freshdesk.rest.delete.delete_skill",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/contacts",
-        "operation_id": null,
+        "method": "DELETE",
+        "path": "/admin/skills/{id}",
+        "operation_id": "delete_skill",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#delete_skill .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.Companies2",
+        "id": "freshdesk.rest.delete.delete_ticket_field",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/companies",
-        "operation_id": null,
+        "method": "DELETE",
+        "path": "/admin/ticket_fields/{id}",
+        "operation_id": "delete_ticket_field",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#delete_ticket_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.Agents3",
+        "id": "freshdesk.rest.delete.delete_section",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+        "operation_id": "delete_section",
+        "deprecated": false,
+        "source_location": "div#delete_section .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_agent",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/agents/{id}",
+        "operation_id": "delete_agent",
+        "deprecated": false,
+        "source_location": "div#delete_agent .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_an_attachment",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/attachments/{id}",
+        "operation_id": "delete_an_attachment",
+        "deprecated": false,
+        "source_location": "div#delete_an_attachment .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_an_automation_rule",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/automations/{automation_type_id}/rules/{id}",
+        "operation_id": "delete_an_automation_rule",
+        "deprecated": false,
+        "source_location": "div#delete_an_automation_rule .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_message_for_thread",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/collaboration/messages/{id}",
+        "operation_id": "delete_message_for_thread",
+        "deprecated": false,
+        "source_location": "div#delete_message_for_thread .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_a_thread",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/collaboration/threads/{id}",
+        "operation_id": "delete_a_thread",
+        "deprecated": false,
+        "source_location": "div#delete_a_thread .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_company",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/companies/{id}",
+        "operation_id": "delete_company",
+        "deprecated": false,
+        "source_location": "div#delete_company .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_company_field",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/company_field/{id}",
+        "operation_id": "delete_company_field",
+        "deprecated": false,
+        "source_location": "div#delete_company_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_contact_field",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/contact_field/{id}",
+        "operation_id": "delete_contact_field",
+        "deprecated": false,
+        "source_location": "div#delete_contact_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_contact",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/contacts/{id}",
+        "operation_id": "delete_contact",
+        "deprecated": false,
+        "source_location": "div#delete_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.hard_delete_contact",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/contacts/{id}/hard_delete",
+        "operation_id": "hard_delete_contact",
+        "deprecated": false,
+        "source_location": "div#hard_delete_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_conversation",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/conversations/{id}",
+        "operation_id": "delete_conversation",
+        "deprecated": false,
+        "source_location": "div#delete_conversation .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_a_custom_object_record",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_objects/schemas/schema-id/records/{record-id}",
+        "operation_id": "delete_a_custom_object_record",
+        "deprecated": false,
+        "source_location": "div#delete_a_custom_object_record .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_email_mailbox",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/email/mailboxes/{id}",
+        "operation_id": "delete_email_mailbox",
+        "deprecated": false,
+        "source_location": "div#delete_email_mailbox .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_group",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/groups/{id}",
+        "operation_id": "delete_group",
+        "deprecated": false,
+        "source_location": "div#delete_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_ticket_form_field",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ticket-forms/{form-id}/fields/{field-id}",
+        "operation_id": "delete_ticket_form_field",
+        "deprecated": false,
+        "source_location": "div#delete_ticket_form_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_ticket_form",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ticket-forms/{id}",
+        "operation_id": "delete_ticket_form",
+        "deprecated": false,
+        "source_location": "div#delete_ticket_form .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_a_ticket",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tickets/{id}",
+        "operation_id": "delete_a_ticket",
+        "deprecated": false,
+        "source_location": "div#delete_a_ticket .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.delete.delete_time_entry",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/time_entries/{id}",
+        "operation_id": "delete_time_entry",
+        "deprecated": false,
+        "source_location": "div#delete_time_entry .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_account",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/account",
+        "operation_id": "view_account",
+        "deprecated": false,
+        "source_location": "div#view_account .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_admin_groups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/groups",
+        "operation_id": "list_all_admin_groups",
+        "deprecated": false,
+        "source_location": "div#list_all_admin_groups .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_admin_group",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/groups/{id}",
+        "operation_id": "view_admin_group",
+        "deprecated": false,
+        "source_location": "div#view_admin_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_agents_in_a_group",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/groups/{id}/agents",
+        "operation_id": "list_all_agents_in_a_group",
+        "deprecated": false,
+        "source_location": "div#list_all_agents_in_a_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_skills",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/skills/",
+        "operation_id": "list_all_skills",
+        "deprecated": false,
+        "source_location": "div#list_all_skills .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.skill_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/skills/{id}",
+        "operation_id": "skill_attributes",
+        "deprecated": false,
+        "source_location": "div#skill_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.ticket_fields_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/ticket_fields",
+        "operation_id": "ticket_fields_attributes",
+        "deprecated": false,
+        "source_location": "div#ticket_fields_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_ticket_field",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/ticket_fields/{id}",
+        "operation_id": "view_ticket_field",
+        "deprecated": false,
+        "source_location": "div#view_ticket_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.section_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/ticket_fields/{id}/sections",
+        "operation_id": "section_attributes",
+        "deprecated": false,
+        "source_location": "div#section_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_specific_section",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+        "operation_id": "list_specific_section",
+        "deprecated": false,
+        "source_location": "div#list_specific_section .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_agents_availability",
         "protocol": "rest",
         "method": "GET",
         "path": "/agents",
-        "operation_id": null,
+        "operation_id": "list_all_agents_availability",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#list_all_agents_availability .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.Groups4",
+        "id": "freshdesk.rest.get.agent_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/agents/{id}",
+        "operation_id": "agent_attributes",
+        "deprecated": false,
+        "source_location": "div#agent_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_agent_availability",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/agents/{id}/availability",
+        "operation_id": "view_agent_availability",
+        "deprecated": false,
+        "source_location": "div#view_agent_availability .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.search_agents",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/agents/autocomplete",
+        "operation_id": "search_agents",
+        "deprecated": false,
+        "source_location": "div#search_agents .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.me",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/agents/me",
+        "operation_id": "me",
+        "deprecated": false,
+        "source_location": "div#me .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_automation_rules",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{automation_type_id}/rules",
+        "operation_id": "list_all_automation_rules",
+        "deprecated": false,
+        "source_location": "div#list_all_automation_rules .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_an_automation_rule",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/automations/{automation_type_id}/rules/{id}",
+        "operation_id": "view_an_automation_rule",
+        "deprecated": false,
+        "source_location": "div#view_an_automation_rule .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_business_hours",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/business_hours",
+        "operation_id": "list_all_business_hours",
+        "deprecated": false,
+        "source_location": "div#list_all_business_hours .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.business_hour_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/business_hours/{id}",
+        "operation_id": "business_hour_attributes",
+        "deprecated": false,
+        "source_location": "div#business_hour_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_canned_response_folders",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canned_response_folders",
+        "operation_id": "list_all_canned_response_folders",
+        "deprecated": false,
+        "source_location": "div#list_all_canned_response_folders .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_canned_response_folders",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canned_response_folders/{id}",
+        "operation_id": "view_canned_response_folders",
+        "deprecated": false,
+        "source_location": "div#view_canned_response_folders .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.get_details_of_canned_responses_in_folders",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canned_response_folders/{id}/responses",
+        "operation_id": "get_details_of_canned_responses_in_folders",
+        "deprecated": false,
+        "source_location": "div#get_details_of_canned_responses_in_folders .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_canned_response",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canned_responses/{id}",
+        "operation_id": "view_canned_response",
+        "deprecated": false,
+        "source_location": "div#view_canned_response .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.retrieve_outbound_message",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/channels/outbound-messages/{message-id}",
+        "operation_id": "retrieve_outbound_message",
+        "deprecated": false,
+        "source_location": "div#retrieve_outbound_message .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.get_message_for_thread",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/collaboration/messages/{id}",
+        "operation_id": "get_message_for_thread",
+        "deprecated": false,
+        "source_location": "div#get_message_for_thread .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.get_quoted_text",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/collaboration/messages/{id}/generate-quote",
+        "operation_id": "get_quoted_text",
+        "deprecated": false,
+        "source_location": "div#get_quoted_text .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.get_a_thread",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/collaboration/threads/{id}",
+        "operation_id": "get_a_thread",
+        "deprecated": false,
+        "source_location": "div#get_a_thread .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_companies",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/companies",
+        "operation_id": "list_all_companies",
+        "deprecated": false,
+        "source_location": "div#list_all_companies .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_company",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/companies/{id}",
+        "operation_id": "view_company",
+        "deprecated": false,
+        "source_location": "div#view_company .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.search_companies",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/companies/autocomplete",
+        "operation_id": "search_companies",
+        "deprecated": false,
+        "source_location": "div#search_companies .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.import_company",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/companies/imports",
+        "operation_id": "import_company",
+        "deprecated": false,
+        "source_location": "div#import_company .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.company_fields",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company_fields",
+        "operation_id": "company_fields",
+        "deprecated": false,
+        "source_location": "div#company_fields .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_company_field",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/company_fields/{id}",
+        "operation_id": "view_company_field",
+        "deprecated": false,
+        "source_location": "div#view_company_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.contact_fields",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contact_fields",
+        "operation_id": "contact_fields",
+        "deprecated": false,
+        "source_location": "div#contact_fields .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_contact_field",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contact_fields/{id}",
+        "operation_id": "view_contact_field",
+        "deprecated": false,
+        "source_location": "div#view_contact_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_contacts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts",
+        "operation_id": "list_all_contacts",
+        "deprecated": false,
+        "source_location": "div#list_all_contacts .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_contact",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts/{id}",
+        "operation_id": "view_contact",
+        "deprecated": false,
+        "source_location": "div#view_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.search_contacts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts/autocomplete",
+        "operation_id": "search_contacts",
+        "deprecated": false,
+        "source_location": "div#search_contacts .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.import_contact",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts/imports",
+        "operation_id": "import_contact",
+        "deprecated": false,
+        "source_location": "div#import_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.custom_objects_response_folder",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_objects/schemas",
+        "operation_id": "custom_objects_response_folder",
+        "deprecated": false,
+        "source_location": "div#custom_objects_response_folder .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.retrieve_specific_custom_object",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_objects/schemas/{schema-id}",
+        "operation_id": "retrieve_specific_custom_object",
+        "deprecated": false,
+        "source_location": "div#retrieve_specific_custom_object .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.retrieve_a_custom_object_record",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_objects/schemas/{schema-id}/records/{record-id}",
+        "operation_id": "retrieve_a_custom_object_record",
+        "deprecated": false,
+        "source_location": "div#retrieve_a_custom_object_record .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.filter_records_of_custom_objects",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_objects/schemas/schema_id/records",
+        "operation_id": "filter_records_of_custom_objects",
+        "deprecated": false,
+        "source_location": "div#filter_records_of_custom_objects .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.retrieve_the_count_of_records_custom_objects",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_objects/schemas/schema_id/records/count",
+        "operation_id": "retrieve_the_count_of_records_custom_objects",
+        "deprecated": false,
+        "source_location": "div#retrieve_the_count_of_records_custom_objects .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.retrieve_all_the_records_of_a_custom_object",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_objects/schemas/schema-id/records",
+        "operation_id": "retrieve_all_the_records_of_a_custom_object",
+        "deprecated": false,
+        "source_location": "div#retrieve_all_the_records_of_a_custom_object .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.csat_content",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customer-satisfaction/surveys",
+        "operation_id": "csat_content",
+        "deprecated": false,
+        "source_location": "div#csat_content .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_survey_responses",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customer-satisfaction/surveys/{survey_id}/responses",
+        "operation_id": "view_survey_responses",
+        "deprecated": false,
+        "source_location": "div#view_survey_responses .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_email_configs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email_configs",
+        "operation_id": "list_all_email_configs",
+        "deprecated": false,
+        "source_location": "div#list_all_email_configs .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.email_configs_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email_configs/{id}",
+        "operation_id": "email_configs_attributes",
+        "deprecated": false,
+        "source_location": "div#email_configs_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_email_mailboxes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email/mailboxes",
+        "operation_id": "list_all_email_mailboxes",
+        "deprecated": false,
+        "source_location": "div#list_all_email_mailboxes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_email_mailbox",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email/mailboxes/{id}",
+        "operation_id": "view_email_mailbox",
+        "deprecated": false,
+        "source_location": "div#view_email_mailbox .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_mailbox_settings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email/settings",
+        "operation_id": "view_mailbox_settings",
+        "deprecated": false,
+        "source_location": "div#view_mailbox_settings .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_groups",
         "protocol": "rest",
         "method": "GET",
         "path": "/groups",
-        "operation_id": null,
+        "operation_id": "list_all_groups",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#list_all_groups .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.TicketsIdConversations5",
+        "id": "freshdesk.rest.get.view_group",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups/{id}",
+        "operation_id": "view_group",
+        "deprecated": false,
+        "source_location": "div#view_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_job",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{id}",
+        "operation_id": "view_job",
+        "deprecated": false,
+        "source_location": "div#view_job .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_automatic_bcc_emails",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/notifications/email/bcc",
+        "operation_id": "view_automatic_bcc_emails",
+        "deprecated": false,
+        "source_location": "div#view_automatic_bcc_emails .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_products",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products",
+        "operation_id": "list_all_products",
+        "deprecated": false,
+        "source_location": "div#list_all_products .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.products_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/products/{id}",
+        "operation_id": "products_attributes",
+        "deprecated": false,
+        "source_location": "div#products_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_roles",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/roles",
+        "operation_id": "list_all_roles",
+        "deprecated": false,
+        "source_location": "div#list_all_roles .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.update_skill",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/roles/{id}",
+        "operation_id": "update_skill",
+        "deprecated": false,
+        "source_location": "div#update_skill .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.scenario_automation_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scenario_automations.json",
+        "operation_id": "scenario_automation_attributes",
+        "deprecated": false,
+        "source_location": "div#scenario_automation_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.filter_companies",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/search/companies",
+        "operation_id": "filter_companies",
+        "deprecated": false,
+        "source_location": "div#filter_companies .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.filter_contacts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/search/contacts",
+        "operation_id": "filter_contacts",
+        "deprecated": false,
+        "source_location": "div#filter_contacts .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.filter_tickets",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/search/tickets",
+        "operation_id": "filter_tickets",
+        "deprecated": false,
+        "source_location": "div#filter_tickets .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.settings_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/settings/helpdesk",
+        "operation_id": "settings_attributes",
+        "deprecated": false,
+        "source_location": "div#settings_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_sla_policies",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sla_policies",
+        "operation_id": "list_all_sla_policies",
+        "deprecated": false,
+        "source_location": "div#list_all_sla_policies .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.legacy_csat_content",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/surveys",
+        "operation_id": "legacy_csat_content",
+        "deprecated": false,
+        "source_location": "div#legacy_csat_content .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_all_satisfaction_ratings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/surveys/satisfaction_ratings",
+        "operation_id": "view_all_satisfaction_ratings",
+        "deprecated": false,
+        "source_location": "div#view_all_satisfaction_ratings .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_ticket_fields",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ticket_fields",
+        "operation_id": "list_all_ticket_fields",
+        "deprecated": false,
+        "source_location": "div#list_all_ticket_fields .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.ticket_forms_attributes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ticket-forms",
+        "operation_id": "ticket_forms_attributes",
+        "deprecated": false,
+        "source_location": "div#ticket_forms_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.clone_ticket_form",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ticket-forms/{form-id}/fields/{field-id}",
+        "operation_id": "clone_ticket_form",
+        "deprecated": false,
+        "source_location": "div#clone_ticket_form .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_ticket_form",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ticket-forms/{id}",
+        "operation_id": "view_ticket_form",
+        "deprecated": false,
+        "source_location": "div#view_ticket_form .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_tickets",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tickets",
+        "operation_id": "list_all_tickets",
+        "deprecated": false,
+        "source_location": "div#list_all_tickets .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.view_a_ticket",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tickets/{id}",
+        "operation_id": "view_a_ticket",
+        "deprecated": false,
+        "source_location": "div#view_a_ticket .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.get.list_all_ticket_notes",
         "protocol": "rest",
         "method": "GET",
         "path": "/tickets/{id}/conversations",
-        "operation_id": null,
+        "operation_id": "list_all_ticket_notes",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#list_all_ticket_notes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.TicketsIdTimeEntries6",
+        "id": "freshdesk.rest.get.list_all_ticket_timeentries",
         "protocol": "rest",
         "method": "GET",
         "path": "/tickets/{id}/time_entries",
-        "operation_id": null,
+        "operation_id": "list_all_ticket_timeentries",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#list_all_ticket_timeentries .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.SolutionsCategories7",
+        "id": "freshdesk.rest.get.view_ticket_satisfaction_ratings",
         "protocol": "rest",
         "method": "GET",
-        "path": "/solutions/categories",
-        "operation_id": null,
+        "path": "/tickets/{ticket_id}/satisfaction_ratings",
+        "operation_id": "view_ticket_satisfaction_ratings",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#view_ticket_satisfaction_ratings .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.get.CannedResponseFolders8",
+        "id": "freshdesk.rest.get.list_all_time_entries",
         "protocol": "rest",
         "method": "GET",
-        "path": "/canned-response-folders",
-        "operation_id": null,
+        "path": "/time_entries",
+        "operation_id": "list_all_time_entries",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#list_all_time_entries .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       },
       {
-        "id": "freshdesk.rest.post.Tickets9",
+        "id": "freshdesk.rest.patch.add_or_remove_agent_in_a_group",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/admin/groups/{id}/agents",
+        "operation_id": "add_or_remove_agent_in_a_group",
+        "deprecated": false,
+        "source_location": "div#add_or_remove_agent_in_a_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.generate_export",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/account/export",
+        "operation_id": "generate_export",
+        "deprecated": false,
+        "source_location": "div#generate_export .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.admin_groups_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin/groups",
+        "operation_id": "admin_groups_attributes",
+        "deprecated": false,
+        "source_location": "div#admin_groups_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_skill",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin/skills",
+        "operation_id": "create_skill",
+        "deprecated": false,
+        "source_location": "div#create_skill .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_ticket_field",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin/ticket_fields",
+        "operation_id": "create_ticket_field",
+        "deprecated": false,
+        "source_location": "div#create_ticket_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_section",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin/ticket_fields/{id}/sections",
+        "operation_id": "create_section",
+        "deprecated": false,
+        "source_location": "div#create_section .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_agent",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/agents/",
+        "operation_id": "create_agent",
+        "deprecated": false,
+        "source_location": "div#create_agent .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_multiple_agents",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/agents/bulk",
+        "operation_id": "create_multiple_agents",
+        "deprecated": false,
+        "source_location": "div#create_multiple_agents .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_an_automation_rule",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/automations/{automation_type_id}/rules",
+        "operation_id": "create_an_automation_rule",
+        "deprecated": false,
+        "source_location": "div#create_an_automation_rule .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_canned_response_folder",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/canned_response_folder",
+        "operation_id": "create_canned_response_folder",
+        "deprecated": false,
+        "source_location": "div#create_canned_response_folder .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.error_descriptions",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/canned_responses",
+        "operation_id": "error_descriptions",
+        "deprecated": false,
+        "source_location": "div#error_descriptions .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.bulk_create_canned_responses",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/canned_responses/bulk",
+        "operation_id": "bulk_create_canned_responses",
+        "deprecated": false,
+        "source_location": "div#bulk_create_canned_responses .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.outbound_message_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/channels/outbound-messages",
+        "operation_id": "outbound_message_attributes",
+        "deprecated": false,
+        "source_location": "div#outbound_message_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.thread_message_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/collaboration/messages",
+        "operation_id": "thread_message_attributes",
+        "deprecated": false,
+        "source_location": "div#thread_message_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.thread_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/collaboration/threads",
+        "operation_id": "thread_attributes",
+        "deprecated": false,
+        "source_location": "div#thread_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post._omni_channel_group",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/companies",
+        "operation_id": "_omni_channel_group",
+        "deprecated": false,
+        "source_location": "div#_omni_channel_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.export_company",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/companies/export",
+        "operation_id": "export_company",
+        "deprecated": false,
+        "source_location": "div#export_company .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_company_field",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/company_fields",
+        "operation_id": "create_company_field",
+        "deprecated": false,
+        "source_location": "div#create_company_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_contact_field",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/contact_fields",
+        "operation_id": "create_contact_field",
+        "deprecated": false,
+        "source_location": "div#create_contact_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.omnichannel_activity",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/contact-activities",
+        "operation_id": "omnichannel_activity",
+        "deprecated": false,
+        "source_location": "div#omnichannel_activity .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.contact_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/contacts",
+        "operation_id": "contact_attributes",
+        "deprecated": false,
+        "source_location": "div#contact_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.export_contact",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/contacts/export",
+        "operation_id": "export_contact",
+        "deprecated": false,
+        "source_location": "div#export_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.merge_contact",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/contacts/merge",
+        "operation_id": "merge_contact",
+        "deprecated": false,
+        "source_location": "div#merge_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_a_new_custom_object_record",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_objects/schemas/schema-id/records/",
+        "operation_id": "create_a_new_custom_object_record",
+        "deprecated": false,
+        "source_location": "div#create_a_new_custom_object_record .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_survey_responses",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customer-satisfaction/surveys/{survey_id}/responses",
+        "operation_id": "create_survey_responses",
+        "deprecated": false,
+        "source_location": "div#create_survey_responses .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.email_mailboxes_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/email/mailboxes",
+        "operation_id": "email_mailboxes_attributes",
+        "deprecated": false,
+        "source_location": "div#email_mailboxes_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.groups_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/groups",
+        "operation_id": "groups_attributes",
+        "deprecated": false,
+        "source_location": "div#groups_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.sla_policy_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sla_policies",
+        "operation_id": "sla_policy_attributes",
+        "deprecated": false,
+        "source_location": "div#sla_policy_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_ticket_form",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ticket-forms",
+        "operation_id": "create_ticket_form",
+        "deprecated": false,
+        "source_location": "div#create_ticket_form .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.update_ticket_form_field",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ticket-forms/{form-id}/fields/{field-id}",
+        "operation_id": "update_ticket_form_field",
+        "deprecated": false,
+        "source_location": "div#update_ticket_form_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.intro",
         "protocol": "rest",
         "method": "POST",
         "path": "/tickets",
-        "operation_id": null,
+        "operation_id": "intro",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]",
-        "source_url": "https://developers.freshdesk.com/api/#change_log"
+        "source_location": "div#intro .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.forward_tickets",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/{id}/forward",
+        "operation_id": "forward_tickets",
+        "deprecated": false,
+        "source_location": "div#forward_tickets .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.note_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/{id}/reply",
+        "operation_id": "note_attributes",
+        "deprecated": false,
+        "source_location": "div#note_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.reply_to_forward",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/{id}/reply_to_forward",
+        "operation_id": "reply_to_forward",
+        "deprecated": false,
+        "source_location": "div#reply_to_forward .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.add_note_to_a_ticket",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/{ticket_id}/notes",
+        "operation_id": "add_note_to_a_ticket",
+        "deprecated": false,
+        "source_location": "div#add_note_to_a_ticket .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.satisfaction_rating_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/{ticket_id}/satisfaction_ratings",
+        "operation_id": "satisfaction_rating_attributes",
+        "deprecated": false,
+        "source_location": "div#satisfaction_rating_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.time_entries_attributes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/{ticket_id}/time_entries",
+        "operation_id": "time_entries_attributes",
+        "deprecated": false,
+        "source_location": "div#time_entries_attributes .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.bulk_delete_tickets",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/bulk_delete",
+        "operation_id": "bulk_delete_tickets",
+        "deprecated": false,
+        "source_location": "div#bulk_delete_tickets .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.bulk_update_tickets",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/bulk_update",
+        "operation_id": "bulk_update_tickets",
+        "deprecated": false,
+        "source_location": "div#bulk_update_tickets .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.post.create_outbound_email",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets/outbound_email",
+        "operation_id": "create_outbound_email",
+        "deprecated": false,
+        "source_location": "div#create_outbound_email .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_admin_group",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/admin/groups/{id}",
+        "operation_id": "update_admin_group",
+        "deprecated": false,
+        "source_location": "div#update_admin_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_ticket_field",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/admin/ticket_fields/{id}",
+        "operation_id": "update_ticket_field",
+        "deprecated": false,
+        "source_location": "div#update_ticket_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_section",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+        "operation_id": "update_section",
+        "deprecated": false,
+        "source_location": "div#update_section .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_agent",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/agents/{id}",
+        "operation_id": "update_agent",
+        "deprecated": false,
+        "source_location": "div#update_agent .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_agent_availability",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/agents/{id}/availability",
+        "operation_id": "update_agent_availability",
+        "deprecated": false,
+        "source_location": "div#update_agent_availability .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_an_automation_rule",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/automations/{automation_type_id}/rules/{id}",
+        "operation_id": "update_an_automation_rule",
+        "deprecated": false,
+        "source_location": "div#update_an_automation_rule .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_canned_response_folder",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/canned_response_folder/{id}",
+        "operation_id": "update_canned_response_folder",
+        "deprecated": false,
+        "source_location": "div#update_canned_response_folder .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_canned_response",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/canned_responses/{id}",
+        "operation_id": "update_canned_response",
+        "deprecated": false,
+        "source_location": "div#update_canned_response .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_message_for_thread",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/collaboration/messages/{id}",
+        "operation_id": "update_message_for_thread",
+        "deprecated": false,
+        "source_location": "div#update_message_for_thread .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_a_thread",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/collaboration/threads/{id}",
+        "operation_id": "update_a_thread",
+        "deprecated": false,
+        "source_location": "div#update_a_thread .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_company",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/companies/{id}",
+        "operation_id": "update_company",
+        "deprecated": false,
+        "source_location": "div#update_company .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_company_field",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/company_field/{id}",
+        "operation_id": "update_company_field",
+        "deprecated": false,
+        "source_location": "div#update_company_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_contact_field",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/contact_fields/{id}",
+        "operation_id": "update_contact_field",
+        "deprecated": false,
+        "source_location": "div#update_contact_field .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_contact",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/contacts/{id}",
+        "operation_id": "update_contact",
+        "deprecated": false,
+        "source_location": "div#update_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.make_agent",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/contacts/{id}/make_agent",
+        "operation_id": "make_agent",
+        "deprecated": false,
+        "source_location": "div#make_agent .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.restore_contact",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/contacts/{id}/restore",
+        "operation_id": "restore_contact",
+        "deprecated": false,
+        "source_location": "div#restore_contact .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.send_invite",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/contacts/{id}/send_invite",
+        "operation_id": "send_invite",
+        "deprecated": false,
+        "source_location": "div#send_invite .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_conversation",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/conversations/{id}",
+        "operation_id": "update_conversation",
+        "deprecated": false,
+        "source_location": "div#update_conversation .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_a_custom_object_record",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_objects/schemas/schema-id/records/{record-id}",
+        "operation_id": "update_a_custom_object_record",
+        "deprecated": false,
+        "source_location": "div#update_a_custom_object_record .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_email_mailbox",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/email/mailboxes/{id}",
+        "operation_id": "update_email_mailbox",
+        "deprecated": false,
+        "source_location": "div#update_email_mailbox .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_mailbox_settings",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/email/settings",
+        "operation_id": "update_mailbox_settings",
+        "deprecated": false,
+        "source_location": "div#update_mailbox_settings .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_group",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/groups/{id}",
+        "operation_id": "update_group",
+        "deprecated": false,
+        "source_location": "div#update_group .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_automatic_bcc_emails",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/notifications/email/bcc",
+        "operation_id": "update_automatic_bcc_emails",
+        "deprecated": false,
+        "source_location": "div#update_automatic_bcc_emails .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_sla_policy",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/sla_policies/{id}",
+        "operation_id": "update_sla_policy",
+        "deprecated": false,
+        "source_location": "div#update_sla_policy .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_ticket_form",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ticket-forms/{id}",
+        "operation_id": "update_ticket_form",
+        "deprecated": false,
+        "source_location": "div#update_ticket_form .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_ticket",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/tickets/{id}",
+        "operation_id": "update_ticket",
+        "deprecated": false,
+        "source_location": "div#update_ticket .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.restore_a_ticket",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/tickets/{id}/restore",
+        "operation_id": "restore_a_ticket",
+        "deprecated": false,
+        "source_location": "div#restore_a_ticket .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.ticket_merge",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/tickets/merge",
+        "operation_id": "ticket_merge",
+        "deprecated": false,
+        "source_location": "div#ticket_merge .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.update_time_entry",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/time_entries/{id}",
+        "operation_id": "update_time_entry",
+        "deprecated": false,
+        "source_location": "div#update_time_entry .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      {
+        "id": "freshdesk.rest.put.toggle_time_entry",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/time_entries/{time_entry_id}/toggle_timer",
+        "operation_id": "toggle_time_entry",
+        "deprecated": false,
+        "source_location": "div#toggle_time_entry .api-url",
+        "source_url": "https://developers.freshdesk.com/api/"
       }
     ]
   },
   "counts": {
-    "rest": 10,
+    "rest": 170,
     "graphql_query": 0,
     "graphql_mutation": 0,
-    "total": 10
+    "total": 170
+  },
+  "operations_found": {
+    "rest": 170,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 170
+  },
+  "coverage_confidence": {
+    "level": "complete_rendered_reference",
+    "basis": "Parsed every endpoint section from the provider’s single 3.2MB rendered Freshdesk API reference. The document exposes 171 sections that normalize to 170 unique HTTP method/path operations after query examples are removed."
   }
 }

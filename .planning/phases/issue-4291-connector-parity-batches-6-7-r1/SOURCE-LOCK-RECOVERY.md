@@ -19,6 +19,20 @@ The prior twelve `api_surface.json` crosswalk rows were discarded. The regenerat
 
 Salesloft's regenerated six-class breakdown is 115 direct reads, 91 direct writes (including all 18 deletes), and 5 ETL stream operations. Every direct write records reverse-ETL only as an attribute, with `generic-typed-destination-executor` as its destination-executor foundation gap; none is classified as reverse ETL.
 
-## Remaining suspect connectors
+## Official-spec slices
 
-`copper`, `freshdesk`, `intercom`, `iterable`, `klaviyo`, `square`, and `service-now` remain in the recovery queue. Each will receive a comprehensive provider-surface remap: source lock, API surface, and every disposition row are regenerated from the authoritative source rather than preserving the legacy API-surface boundary. ServiceNow is dynamic-schema: its fixed platform surface must be pinned separately from its instance-dependent schema basis. Any source that genuinely has a small complete surface will carry the source's exact count plus an explicit confidence/basis; a small number alone will never be presented as complete coverage.
+The same complete-remap invariant is now green for these provider-published machine-readable specifications:
+
+| Connector | Legacy rows | Recovered provider operations | Exact source |
+| --- | ---: | ---: | --- |
+| Iterable | 4 | **148** | `https://api.iterable.com/api-docs` (Swagger 2.0) |
+| Klaviyo | 9 | **345** | `https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json` (OpenAPI 3.0.2 full GA specification) |
+| Intercom | 10 | **231** | `https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml` (OpenAPI 3.0.1) |
+
+For each slice, the source-lock count, API-surface rows, and disposition rows reconcile exactly; `declared_percent` was removed. Existing stream coverage was retained only where its method/path occurs in the authoritative artifact, and no source operation was reported enabled without a runnable CLI command or typed write action.
+
+Freshdesk’s complete rendered-reference pass is also green: all 171 endpoint sections in the provider’s single 3.2MB reference normalize to **170** unique HTTP method/path operations (78 GET, 39 POST, 30 PUT, 22 DELETE, 1 PATCH), replacing the legacy 10-row boundary. Its full source lock, API surface, and disposition ledger reconcile at 170 rows.
+
+## Remaining full-batch audit
+
+All 20 owned connectors are in the recovery audit—not only the eight whose initial counts were visibly implausible. Each will receive a comprehensive provider-surface review: source lock, API surface, and every disposition row are regenerated from the authoritative source when the legacy source understates it. ServiceNow is dynamic-schema: its fixed platform surface must be pinned separately from its instance-dependent schema basis. A connector whose complete source proves the legacy count correct is an explicit no-change result, with source count and confidence basis recorded. A small number alone will never be presented as complete coverage.

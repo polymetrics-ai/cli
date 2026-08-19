@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-19T00:00:00Z",
+  "crawls": {
+    "salesloft": {
+      "state": "complete",
+      "reference_root": "https://developers.salesloft.com/docs/api/",
+      "discovery_url": "https://developers.salesloft.com/sitemap.xml",
+      "documents_total": 315,
+      "documents_retrieved": 315,
+      "operations_found": 211,
+      "coverage_confidence": "complete_rendered_reference"
+    },
+    "square": {
+      "state": "partial_rate_limited",
+      "reference_root": "https://developer.squareup.com/reference/square",
+      "groups_total": 40,
+      "groups_retrieved": 16,
+      "operations_found": null,
+      "coverage_confidence": "partial",
+      "resume_strategy": "The first concurrent probe did not persist page bodies or parsed operations. Rehydrate every group through tools/square-reference-crawl.mjs, which persists each successful page before moving on; do not calculate or record a settled source-lock count until all root-discovered groups are retrieved and de-duplicated.",
+      "group_pages": {},
+      "completed_groups": [
+        "/reference/square/apple-pay-api",
+        "/reference/square/bank-accounts-api",
+        "/reference/square/booking-custom-attributes-api",
+        "/reference/square/bookings-api",
+        "/reference/square/cards-api",
+        "/reference/square/cash-drawers-api",
+        "/reference/square/catalog-api",
+        "/reference/square/channels-api",
+        "/reference/square/checkout-api",
+        "/reference/square/customer-custom-attributes-api",
+        "/reference/square/customer-groups-api",
+        "/reference/square/customer-segments-api",
+        "/reference/square/devices-api",
+        "/reference/square/events-api",
+        "/reference/square/gift-card-activities-api",
+        "/reference/square/gift-cards-api"
+      ],
+      "last_error": "HTTP 429 while retrieving /reference/square/invoices-api; no partial group or partial operation count is promoted into api_surface.json or a source lock."
+    },
+    "copper": {
+      "state": "not_started",
+      "reference_root": "https://developer.copper.com/",
+      "expected_documents": 637,
+      "coverage_confidence": "none"
+    },
+    "freshdesk": {
+      "state": "complete",
+      "reference_root": "https://developers.freshdesk.com/api/",
+      "reference_bytes_hint": 3228889,
+      "documents_total": 1,
+      "documents_retrieved": 1,
+      "operations_found": 170,
+      "coverage_confidence": "complete_rendered_reference",
+      "basis": "Parsed all 171 endpoint sections in the provider's single 3.2MB rendered reference, which normalize to 170 unique HTTP method/path operations after provider query examples are removed."
+    }
+  }
+}

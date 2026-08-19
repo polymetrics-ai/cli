@@ -33,7 +33,7 @@
 3. **RED — batch 7 source-lock and ledger invariants:** prove the ten locks/ledgers are absent and the invariant checker cannot pass.
 4. **GREEN — batch 7 map:** materialize the remaining ten maps and repeat the real invariant check.
 5. **REFACTOR / review:** inspect generated JSON for source provenance and reason vocabulary, then run the repository gates without widening scope beyond these definitions and the issue evidence.
-6. **SOURCE-LOCK RECOVERY — captain defect 2026-08-19:** hold PR #4296. Replace the incomplete public-documentation pins for `copper`, `freshdesk`, `intercom`, `iterable`, `klaviyo`, `salesloft`, `square`, and `service-now` with each provider's complete machine-readable specification or complete rendered reference. Record `counts.total` plus per-method counts, replace self-referential `declared_percent` with `operations_found` and `coverage_confidence`/basis, and regenerate the documented-operation ledger from the corrected denominator before requesting any PR progress.
+6. **SOURCE-LOCK RECOVERY — captain defect 2026-08-19:** hold PR #4296. Audit all 20 owned connectors against each provider's complete machine-readable specification, complete rendered reference, or explicit dynamic-instance basis. Replace every incomplete public-documentation pin; record `counts.total` plus per-method counts, replace self-referential `declared_percent` with `operations_found` and `coverage_confidence`/basis, and regenerate the API surface plus every documented-operation ledger row from the corrected denominator before requesting any PR progress. Record every connector's old/new count and basis, including a verified no-change result.
 
 ## Commit checkpoints
 

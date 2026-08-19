@@ -1,82 +1,3461 @@
 {
-  "api": "Intercom REST API (https://api.intercom.io)",
-  "docs": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, companies, conversations, admins, tags); write/mutation endpoints and any additional list resources are out of scope outside this connector's current declared surface",
+  "api": "Intercom API",
+  "docs": "https://developers.intercom.com/docs/references/rest-api/api.intercom.io",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-artifact inventory generated from the cited official machine-readable specification (231 documented HTTP operations). Existing executable bindings are retained only when their method/path matches the provider artifact; every other operation is explicitly blocked pending a connector-owned declaration.",
+  "artifacts": [
+    {
+      "id": "intercom-openapi-2026-08-19",
+      "url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+      "retrieved_at": "2026-08-19",
+      "sha256": "3416de271f1a9243cdd725dad91ee4d07f4fe520338d26558fe4804ecb8e5afe"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/contacts",
-      "covered_by": {
-        "stream": "contacts"
+      "method": "DELETE",
+      "path": "/ai/content_import_sources/{source_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
-      "method": "GET",
-      "path": "/companies",
-      "covered_by": {
-        "stream": "companies"
+      "method": "DELETE",
+      "path": "/ai/external_pages/{page_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
-      "method": "GET",
-      "path": "/conversations",
-      "covered_by": {
-        "stream": "conversations"
+      "method": "DELETE",
+      "path": "/articles/{article_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/articles/{article_id}/tags/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/audiences/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{company_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/companies/{company_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/tags/{tag_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/content_snippets/{content_snippet_id}/tags/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/content_snippets/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/customers/{contact_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/tags/{tag_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/attributes/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/attributes/{id}/options/{option_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/data_connectors/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/help_center/collections/{collection_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/help_center/help_centers/{help_center_id}/redirects/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/internal_articles/{internal_article_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/internal_articles/{internal_article_id}/tags/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/news/news_items/{news_item_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/office_hours_schedules/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{tag_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/linked_conversations/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/tags/{tag_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "GET",
       "path": "/admins",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
       "covered_by": {
         "stream": "admins"
       }
     },
     {
       "method": "GET",
-      "path": "/tags",
+      "path": "/admins/{admin_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins/activity_log_event_types",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins/activity_logs",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/content_import_sources",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/content_import_sources/{source_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/external_pages",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/external_pages/{page_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}/versions",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}/versions/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{id}/draft",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/away_status_reasons",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/brands",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/brands/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}/recording",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}/transcript",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
       "covered_by": {
-        "stream": "tags"
+        "stream": "companies"
       }
     },
     {
-      "method": "POST",
+      "method": "GET",
+      "path": "/companies/{company_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/contacts",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/notes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/segments",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/scroll",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/contacts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "covered_by": {
+        "stream": "contacts"
       }
     },
     {
-      "method": "PUT",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "method": "GET",
+      "path": "/contacts/{contact_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
-      "method": "POST",
-      "path": "/conversations/{id}/reply",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "method": "GET",
+      "path": "/contacts/{contact_id}/companies",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
-      "method": "DELETE",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "destructive contact deletion, not a syncable read"
+      "method": "GET",
+      "path": "/contacts/{contact_id}/notes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/segments",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/subscriptions",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/banners",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/merge_history",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/find_by_external_id/{external_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_snippets",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_snippets/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{id}/handling_events",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{id}/side_conversations",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/attributes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/attributes/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/deleted",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_attributes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors/{data_connector_id}/execution_results",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors/{data_connector_id}/execution_results/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/content/data/{job_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/reporting_data/{job_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emails",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emails/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/content/data/{job_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/reporting_data/{job_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/reporting_data/get_datasets",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/workflows/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/collect/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/conversation/{conversation_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/external_id/{external_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/phone_number/{phone_number}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/collections",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/collections/{collection_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers/{help_center_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers/{help_center_id}/redirects",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers/{help_center_id}/redirects/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles/{internal_article_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ip_allowlist",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/status/{job_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
       "path": "/me",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "identical account-identity info to /admins; check uses /admins instead"
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/status",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/whatsapp/status",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/news_items",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/news_items/{news_item_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds/{newsfeed_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds/{newsfeed_id}/items",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notes/{note_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/{segment_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription_types",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/metrics",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_states",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_types",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_types/{ticket_type_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitors",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/data_connectors/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admins/activity_logs/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/content_import_sources",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/external_pages",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{article_id}/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{id}/draft/publish",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/audiences",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calls/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{company_id}/notes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/list",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/archive",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/block",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/companies",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/notes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/subscriptions",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/unarchive",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{id}/banners/{view_id}/dismiss",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content_snippets",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content_snippets/{content_snippet_id}/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content/bulk_actions",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/convert",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/customers",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/parts",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/reply",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{id}/merge",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/attributes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/attributes/{id}/options",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/redact",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_attributes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_connectors",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/summaries",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/cancel/{job_identifier}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/content/data",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/reporting_data/enqueue",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin_voice/register",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin/csat",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin/reply",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin/start",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/help_center/collections",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/help_center/help_centers/{help_center_id}/redirects",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/internal_articles",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/internal_articles/{internal_article_id}/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/news/news_items",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/office_hours_schedules",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/phone_call_redirects",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_types",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_types/{ticket_type_id}/attributes",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/change_type",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/linked_conversations",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/reply",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/enqueue",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/search",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/visitors/convert",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admins/{admin_id}/away",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/content_import_sources/{source_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/external_pages/{page_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/articles/{article_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/articles/{id}/draft",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/audiences/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{company_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/content_snippets/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/{conversation_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/attributes/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/attributes/{id}/options/{option_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/data_attributes/{data_attribute_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/help_center/collections/{collection_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/internal_articles/{internal_article_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ip_allowlist",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/news/news_items/{news_item_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/office_hours_schedules/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ticket_types/{ticket_type_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ticket_types/{ticket_type_id}/attributes/{attribute_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/visitors",
+      "provenance": {
+        "artifact": "intercom-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]
