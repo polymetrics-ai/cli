@@ -1,0 +1,26 @@
+{
+  "status": 200,
+  "body": {
+    "transcripts": [
+      {
+        "engagement_id": "fixture-va-engagement",
+        "channel": "Chat Agent",
+        "messages": [
+          {
+            "sender": "Consumer",
+            "text": "fixture transcript text",
+            "kb_articles": [
+              {
+                "title": "Fixture Virtual Agent article",
+                "url": "https://fixture.invalid/virtual-agent/article"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "next_page_token": "fixture-va-page-token",
+    "page_size": 10,
+    "token": "fixture-va-response-token"
+  }
+}

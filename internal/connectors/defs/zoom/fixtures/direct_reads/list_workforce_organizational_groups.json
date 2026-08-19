@@ -1,0 +1,16 @@
+{
+  "status": 200,
+  "body": {
+    "organizational_groups": [
+      {
+        "org_group_id": "fixture-wfm-org-group",
+        "name": "Fixture Workforce Management organizational group",
+        "description": "Fixture Workforce Management organizational group description",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ],
+    "next_page_token": "fixture-wfm-org-page",
+    "total_records": 1
+  }
+}

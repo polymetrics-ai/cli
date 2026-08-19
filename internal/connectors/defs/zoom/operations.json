@@ -1,0 +1,2247 @@
+{
+  "operations": [
+    {
+      "id": "zoom.list_meeting_participants_qos_summary",
+      "kind": "rest_read",
+      "summary": "List meeting participants QoS Summary",
+      "description": "Bounded Zoom read for GET /v2/metrics/meetings/{meetingId}/participants/qos_summary; returns quality-of-service metrics for a past meeting's participants.",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_webinar_participants_qos_summary",
+      "kind": "rest_read",
+      "summary": "List webinar participants QoS Summary",
+      "description": "Bounded Zoom read for GET /v2/metrics/webinars/{webinarId}/participants/qos_summary; returns quality-of-service metrics for a live or past webinar's participants.",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_session_users_qos_summary",
+      "kind": "rest_read",
+      "summary": "List session users QoS Summary",
+      "description": "Bounded Zoom read for GET /v2/videosdk/sessions/{sessionId}/users/qos_summary; returns quality-of-service metrics for a past Video SDK session's users.",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_ai_companion_conversation_archives",
+      "kind": "rest_read",
+      "summary": "Get AI Companion conversation archives",
+      "description": "Bounded Zoom read for GET /v2/aic/users/{userId}/conversation_archive; returns AI Companion conversation archive metadata and download URLs for a user.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-companion.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aic/users/{userId}/conversation_archive",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_my_notes",
+      "kind": "rest_read",
+      "summary": "List my notes",
+      "description": "Bounded Zoom read for GET /v2/my_notes/notes; returns the authenticated user's My Notes.",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/my_notes/notes",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_my_notes_content",
+      "kind": "rest_read",
+      "summary": "Get My Notes content and transcript",
+      "description": "Bounded Zoom read for GET /v2/my_notes/notes/{noteId}/content; returns a note's metadata, manual/AI-generated content, and optionally its meeting transcript.",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/my_notes/notes/{noteId}/content",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_clinical_notes",
+      "kind": "rest_read",
+      "summary": "List clinical notes",
+      "description": "Bounded Zoom read for GET /v2/clinical_notes/notes; returns clinical notes filtered by owner and/or meeting.",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "note_content",
+          "patient_id",
+          "provider_id",
+          "appointment_id",
+          "note_owner_user_id",
+          "note_last_modified_user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/clinical_notes/notes",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_clinical_note",
+      "kind": "rest_read",
+      "summary": "Get a Clinical Note",
+      "description": "Bounded Zoom read for GET /v2/clinical_notes/notes/{noteId}; returns a single clinical note.",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "note_content",
+          "patient_id",
+          "provider_id",
+          "appointment_id",
+          "note_owner_user_id",
+          "note_last_modified_user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/clinical_notes/notes/{noteId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_quality_management_automated_evaluations",
+      "kind": "rest_read",
+      "summary": "List automated evaluations",
+      "description": "Bounded Zoom read for GET /v2/qm/automated_evaluations; returns Quality Management automated evaluations.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/automated_evaluations",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_quality_management_evaluations",
+      "kind": "rest_read",
+      "summary": "List evaluations",
+      "description": "Bounded Zoom read for GET /v2/qm/evaluation; returns manually completed Quality Management evaluations.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/evaluation",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_quality_management_evaluation",
+      "kind": "rest_read",
+      "summary": "View evaluation detail",
+      "description": "Bounded Zoom read for GET /v2/qm/evaluation/{evaluationId}; returns one Quality Management evaluation.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/evaluation/{evaluationId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_quality_management_interactions",
+      "kind": "rest_read",
+      "summary": "List interactions",
+      "description": "Bounded Zoom read for GET /v2/qm/interactions; returns Quality Management interactions.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/interactions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_quality_management_interaction",
+      "kind": "rest_read",
+      "summary": "View interaction detail",
+      "description": "Bounded Zoom read for GET /v2/qm/interactions/{interactionId}; returns one Quality Management interaction.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/interactions/{interactionId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_cobrowse_live_sessions",
+      "kind": "rest_read",
+      "summary": "List live Cobrowse SDK sessions",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/live_sessions; returns live Cobrowse SDK sessions for an optional monthly date range.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/live_sessions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_cobrowse_past_sessions",
+      "kind": "rest_read",
+      "summary": "List past Cobrowse SDK sessions",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/past_sessions; returns past Cobrowse SDK sessions for an optional monthly date range.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/past_sessions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_cobrowse_session",
+      "kind": "rest_read",
+      "summary": "Get Cobrowse SDK session details",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/sessions/{sessionId}; returns one live or past Cobrowse SDK session.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/sessions/{sessionId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_cobrowse_session_users",
+      "kind": "rest_read",
+      "summary": "List Cobrowse SDK session users",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/sessions/{sessionId}/users; returns users from one live or past Cobrowse SDK session.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_scim2_groups",
+      "kind": "rest_read",
+      "summary": "List SCIM2 groups",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Groups. Group identifiers, display names, aliases, and membership values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "displayName",
+          "emailAlias",
+          "id",
+          "members",
+          "value",
+          "display",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Groups",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_scim2_group",
+      "kind": "rest_read",
+      "summary": "Get a SCIM2 group",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Groups/{groupId}. Group identifiers, display names, aliases, and membership values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "displayName",
+          "emailAlias",
+          "id",
+          "members",
+          "value",
+          "display",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Groups/{groupId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_scim2_users",
+      "kind": "rest_read",
+      "summary": "List SCIM2 users",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Users. User, contact, organization, and SCIM extension values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "active",
+          "costCenter",
+          "department",
+          "displayName",
+          "emails",
+          "employeeNumber",
+          "groups",
+          "id",
+          "locale",
+          "manager",
+          "name",
+          "organization",
+          "phoneNumbers",
+          "roles",
+          "title",
+          "userName",
+          "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Users",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_scim2_user",
+      "kind": "rest_read",
+      "summary": "Get a SCIM2 user",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Users/{userId}. User, contact, organization, and SCIM extension values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "active",
+          "costCenter",
+          "department",
+          "displayName",
+          "emails",
+          "employeeNumber",
+          "groups",
+          "id",
+          "locale",
+          "manager",
+          "name",
+          "organization",
+          "phoneNumbers",
+          "roles",
+          "title",
+          "userName",
+          "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Users/{userId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_articles",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent knowledge base articles",
+      "description": "Bounded Zoom Virtual Agent read for GET /v2/km/kbs/{kbId}/articles. Knowledge-base and article values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:read:km_kbs",
+        "zva:read:km_article",
+        "zva:read:km_article:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "category",
+          "content",
+          "external_id",
+          "id",
+          "kb_id",
+          "title",
+          "url"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/km/kbs/{kbId}/articles",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_virtual_agent_article",
+      "kind": "rest_read",
+      "summary": "Get a Virtual Agent knowledge base article",
+      "description": "Bounded Zoom Virtual Agent read for GET /v2/km/kbs/{kbId}/articles/{articleId}. Knowledge-base and article values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:read:km_kbs",
+        "zva:read:km_article",
+        "zva:read:km_article:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "category",
+          "content",
+          "external_id",
+          "id",
+          "kb_id",
+          "title",
+          "url"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_virtual_agent_sync",
+      "kind": "rest_read",
+      "summary": "Get a Virtual Agent knowledge base sync",
+      "description": "Bounded Zoom Virtual Agent read for GET /v2/km/kbs/{kbId}/sync/{syncId}. Knowledge-base, sync, and error detail values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:read:km_kbs",
+        "zva:read:km_kb:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "error_message",
+          "kb_id",
+          "sync_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/km/kbs/{kbId}/sync/{syncId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_engagements",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent engagements",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/engagements. Engagement, consumer, agent, article, and conversation data are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_engagements:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "agent_id",
+          "agent_name",
+          "agents",
+          "article_answer",
+          "article_id",
+          "article_title",
+          "article_url",
+          "articles",
+          "bot_id",
+          "bot_name",
+          "campaign_name",
+          "consumer",
+          "consumer_id",
+          "engagement_id",
+          "escalation_reason",
+          "global_variables",
+          "intent_id",
+          "intent_name",
+          "intent_summary",
+          "kb_articles",
+          "launch_url",
+          "query_details",
+          "query_id",
+          "query_summary",
+          "query_text",
+          "topic_name",
+          "user_phone_number"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/engagements",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_engagement_query_details",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent engagement query details",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/engagements/query_details. Engagement, agent, bot, article, query, intent, and knowledge-base values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_queries:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "agent_id",
+          "agent_name",
+          "agent_session_id",
+          "article_answer",
+          "article_id",
+          "article_title",
+          "article_url",
+          "articles",
+          "bot_id",
+          "bot_name",
+          "bot_session_id",
+          "engagement_id",
+          "group_id",
+          "group_name",
+          "intent_id",
+          "intent_name",
+          "kb_details",
+          "query_details",
+          "query_id",
+          "query_text",
+          "topic_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/engagements/query_details",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_engagement_variable_details",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent engagement variable details",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/engagements/variables. Engagement, variable, group, and submitted values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_variables:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "engagement_id",
+          "group_id",
+          "group_name",
+          "name",
+          "value",
+          "variable_details",
+          "variable_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/engagements/variables",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_surveys",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent surveys",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/surveys. Consumer, engagement, survey, question, and answer values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_surveys:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "answer",
+          "consumer",
+          "engagement_id",
+          "question",
+          "results",
+          "survey_id",
+          "survey_name",
+          "virtual_agent"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/surveys",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_transcripts",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent transcripts",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/transcripts. Engagement, message, article, and transcript content are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_transcripts:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "engagement_id",
+          "kb_articles",
+          "messages",
+          "text",
+          "title",
+          "url"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/transcripts",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_operation_logs",
+      "kind": "rest_read",
+      "summary": "List AI Management operation logs",
+      "description": "Bounded Zoom AI Management report read for GET /v2/ai_studio/reports/operation_logs. Account, business, operator, resource, filter, and detail values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_operation_logs:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "action_filter_key",
+          "ai_studio_operation_id",
+          "business_id",
+          "category_filter_key",
+          "detail",
+          "operator_id",
+          "operator_info",
+          "resource_id",
+          "subaction"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/ai_studio/reports/operation_logs",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_auto_dialer_call_history",
+      "kind": "rest_read",
+      "summary": "Get Auto Dialer call history by ID",
+      "description": "Bounded Zoom Auto Dialer read for GET /v2/dialer/call-histories/{callHistoryId}. Call, prospect, contact, and communication data are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:call_history:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "account_name",
+          "amd_result",
+          "auto_disposition",
+          "call_duration",
+          "call_history_id",
+          "call_id",
+          "call_list_deleted",
+          "call_list_id",
+          "call_list_name",
+          "call_note",
+          "called_number",
+          "calling_number",
+          "company",
+          "complete_called_number",
+          "contact_id",
+          "create_time",
+          "dialer_status",
+          "dialer_sub_status",
+          "disposition",
+          "disposition_deleted",
+          "email",
+          "email_addresses",
+          "external_id",
+          "id",
+          "meeting_id",
+          "name",
+          "phone",
+          "phone_numbers",
+          "primary_name",
+          "processing_analysis",
+          "prospect_id",
+          "secondary_name",
+          "start_time",
+          "transcript",
+          "type",
+          "user_id",
+          "user_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/call-histories/{callHistoryId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_auto_dialer_call_history",
+      "kind": "rest_read",
+      "summary": "Get Auto Dialer call history",
+      "description": "Bounded Zoom Auto Dialer read for GET /v2/dialer/call-history. The provider artifact declares response-only paging values, so no query or paging input is exposed.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:call_history:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "call_history",
+          "call_history_id",
+          "call_id",
+          "call_list_id",
+          "call_note",
+          "contact_id",
+          "email",
+          "email_addresses",
+          "external_id",
+          "id",
+          "meeting_id",
+          "name",
+          "phone",
+          "phone_numbers",
+          "primary_name",
+          "prospect_id",
+          "user_id",
+          "user_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/call-history",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_auto_dialer_report_call_history",
+      "kind": "rest_read",
+      "summary": "Get Auto Dialer report call history",
+      "description": "Bounded Zoom Auto Dialer report read for GET /v2/dialer/reports/call-history. Call, prospect, contact, and report identifiers are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:reports:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "call_history",
+          "call_history_id",
+          "call_id",
+          "call_list_id",
+          "call_note",
+          "contact_id",
+          "email",
+          "email_addresses",
+          "external_id",
+          "id",
+          "meeting_id",
+          "name",
+          "phone",
+          "phone_numbers",
+          "primary_name",
+          "prospect_id",
+          "seller_id",
+          "seller_name",
+          "user_id",
+          "user_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/reports/call-history",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_auto_dialer_seller_productivity_report",
+      "kind": "rest_read",
+      "summary": "Get Auto Dialer seller productivity report",
+      "description": "Bounded Zoom Auto Dialer report read for GET /v2/dialer/reports/seller-productivity. Seller, account, and report details are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:reports:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "email",
+          "filters",
+          "id",
+          "name",
+          "phone",
+          "rep_email",
+          "rep_name",
+          "reps",
+          "seller_id",
+          "seller_name",
+          "team_id",
+          "team_name",
+          "user_id",
+          "user_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/reports/seller-productivity",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_auto_dialer_call_lists",
+      "kind": "rest_read",
+      "summary": "List Auto Dialer call lists",
+      "description": "Bounded Zoom Auto Dialer read for GET /v2/dialer/call-lists. Call-list names, assignees, and identifiers are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:call_lists:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "assigned_to_user_email",
+          "assigned_to_user_id",
+          "call_list",
+          "call_list_id",
+          "call_lists",
+          "create_time",
+          "description",
+          "email",
+          "id",
+          "import_from",
+          "name",
+          "owner_email",
+          "owner_user_id",
+          "prospect_type",
+          "user_id",
+          "user_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/call-lists",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_auto_dialer_call_list",
+      "kind": "rest_read",
+      "summary": "Get Auto Dialer call list by ID",
+      "description": "Bounded Zoom Auto Dialer read for GET /v2/dialer/call-lists/{callListId}. Call-list names, assignees, and identifiers are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:call_lists:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "assigned_to_user_email",
+          "assigned_to_user_id",
+          "call_list",
+          "call_list_id",
+          "call_lists",
+          "create_time",
+          "description",
+          "email",
+          "id",
+          "import_from",
+          "name",
+          "owner_email",
+          "owner_user_id",
+          "prospect_type",
+          "user_id",
+          "user_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/call-lists/{callListId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_auto_dialer_call_list_prospects",
+      "kind": "rest_read",
+      "summary": "List Auto Dialer call-list prospects",
+      "description": "Bounded Zoom Auto Dialer read for GET /v2/dialer/call-lists/{callListId}/prospects. Prospect, contact, company, and communication values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:prospects:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "annual_revenue",
+          "assignee_user_id",
+          "call_list_id",
+          "company",
+          "company_description",
+          "company_linkedIn_url",
+          "company_url",
+          "custom_fields",
+          "department",
+          "description",
+          "email",
+          "email_addresses",
+          "external_id",
+          "id",
+          "industry",
+          "lead_linkedIn_url",
+          "lead_rating",
+          "lead_source",
+          "lead_status",
+          "linkedIn_url",
+          "mailing_city",
+          "mailing_country",
+          "mailing_state",
+          "mailing_street",
+          "mailing_zip_code",
+          "name",
+          "number",
+          "number_of_employees",
+          "phone",
+          "phone_numbers",
+          "primary_name",
+          "primary_phone",
+          "prospect_id",
+          "prospects",
+          "secondary_name",
+          "title",
+          "topic"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/call-lists/{callListId}/prospects",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_auto_dialer_prospect",
+      "kind": "rest_read",
+      "summary": "Get an Auto Dialer prospect by ID",
+      "description": "Bounded Zoom Auto Dialer read for GET /v2/dialer/prospects/{prospectId}. Prospect, contact, company, and communication values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "dialer:read:admin",
+        "zoom_auto_dialer:read:prospects:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "annual_revenue",
+          "assignee_user_id",
+          "call_list_id",
+          "company",
+          "company_description",
+          "company_linkedIn_url",
+          "company_url",
+          "create_time",
+          "custom_fields",
+          "department",
+          "description",
+          "dialer_status",
+          "dialer_sub_status",
+          "email",
+          "email_addresses",
+          "email_domain",
+          "external_id",
+          "id",
+          "import_from",
+          "industry",
+          "lead_linkedIn_url",
+          "lead_rating",
+          "lead_source",
+          "lead_status",
+          "linkedIn_url",
+          "mailing_city",
+          "mailing_country",
+          "mailing_state",
+          "mailing_street",
+          "mailing_zip_code",
+          "modify_time",
+          "name",
+          "number",
+          "number_of_employees",
+          "phone",
+          "phone_numbers",
+          "primary_name",
+          "primary_phone",
+          "prospect_id",
+          "prospect_type",
+          "secondary_name",
+          "title",
+          "topic",
+          "type"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dialer/prospects/{prospectId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_task_assignees",
+      "kind": "rest_read",
+      "summary": "List assignees of a task",
+      "description": "Bounded Zoom Tasks assignee read. Task and user values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "tasks_assignee:read",
+        "tasks_assignee:read:admin",
+        "tasks:read:assignees",
+        "tasks:read:assignees:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "assignees",
+          "avatar",
+          "display_name",
+          "email",
+          "task_id",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tasks/items/{taskId}/assignees",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_task_collaborators",
+      "kind": "rest_read",
+      "summary": "List collaborators of a task",
+      "description": "Bounded Zoom Tasks collaborator read. Task and user values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "tasks_collaborator:read",
+        "tasks_collaborator:read:admin",
+        "tasks:read:list_collaborators",
+        "tasks:read:list_collaborators:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "avatar",
+          "collaborators",
+          "display_name",
+          "email",
+          "task_id",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tasks/items/{taskId}/collaborators",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_task_comments",
+      "kind": "rest_read",
+      "summary": "List comments on a task",
+      "description": "Bounded Zoom Tasks comment read. Comment, mention, task, and paging response values are redacted.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "tasks_comment:read",
+        "tasks_comment:read:admin",
+        "tasks:read:comments",
+        "tasks:read:comments:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "attributes",
+          "avatar",
+          "comment_id",
+          "comments",
+          "content",
+          "content_text",
+          "display_name",
+          "email",
+          "link",
+          "mention",
+          "next_page_token",
+          "task_id",
+          "text",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tasks/items/{taskId}/comments",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_task_import",
+      "kind": "rest_read",
+      "summary": "Get a Zoom Tasks import job",
+      "description": "Bounded Zoom Tasks import-job status read. Job, project, source record, and warning data are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "tasks:read",
+        "tasks:read:admin",
+        "tasks:read:import",
+        "tasks:read:import:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "error",
+          "failed_task_details",
+          "file_id",
+          "import_id",
+          "project_id",
+          "project_link",
+          "project_name",
+          "record_id",
+          "title",
+          "unmapped_users",
+          "warnings"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tasks/imports/{importId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_tasks",
+      "kind": "rest_read",
+      "summary": "List Zoom Tasks items",
+      "description": "Bounded Zoom Tasks item read. Task, participant, attachment, meeting, and response paging values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "tasks:read",
+        "tasks:read:admin",
+        "tasks:read:list_tasks",
+        "tasks:read:list_tasks:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "associated_meeting",
+          "assignees",
+          "attachment_id",
+          "avatar",
+          "collaborators",
+          "description",
+          "display_name",
+          "download_url",
+          "email",
+          "file_name",
+          "friendly_task_id",
+          "link",
+          "next_page_token",
+          "task_id",
+          "tasks",
+          "tasks_attachments",
+          "title",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tasks/items",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_task",
+      "kind": "rest_read",
+      "summary": "Get a Zoom Task",
+      "description": "Bounded Zoom Tasks detail read. Task, participant, attachment, meeting, and source values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "tasks:read",
+        "tasks:read:admin",
+        "tasks:read:task",
+        "tasks:read:task:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "associated_meeting",
+          "assignees",
+          "attachment_id",
+          "avatar",
+          "collaborators",
+          "description",
+          "display_name",
+          "download_url",
+          "email",
+          "file_name",
+          "friendly_task_id",
+          "link",
+          "source_type",
+          "task_id",
+          "tasks_attachments",
+          "title",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tasks/items/{taskId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_filter_groups",
+      "kind": "rest_read",
+      "summary": "List Workforce Management filter groups",
+      "description": "Bounded Zoom Workforce Management filter-group read with redacted identifiers and names.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:list_filter_groups:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "filter_group_id",
+          "filter_groups",
+          "name",
+          "next_page_token",
+          "total_records"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/filter-groups",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_forecasts",
+      "kind": "rest_read",
+      "summary": "List Workforce Management forecasts",
+      "description": "Bounded Zoom Workforce Management forecast read with redacted forecast and scheduling data.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:admin",
+        "workforce_management:read:forecasts:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "description",
+          "forecast_id",
+          "forecast_name",
+          "forecasts",
+          "name",
+          "next_page_token",
+          "scheduling_group_id",
+          "total_records"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/forecasts",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_workforce_forecast_scheduling_group",
+      "kind": "rest_read",
+      "summary": "Get a Workforce Management forecast scheduling group",
+      "description": "Bounded Zoom Workforce Management forecast scheduling-group read with redacted interval data.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:admin",
+        "workforce_management:read:forecasts:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "forecast_id",
+          "forecast_intervals",
+          "scheduling_group_id",
+          "start_time",
+          "end_time",
+          "required_staffing"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_workforce_historical_queue_metrics_import",
+      "kind": "rest_read",
+      "summary": "Get Workforce Management historical queue metrics import metadata",
+      "description": "Bounded Zoom Workforce Management historical queue metrics import-metadata read.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:admin",
+        "workforce_management:read:queue_metrics:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "create_time",
+          "file_name",
+          "import_id",
+          "imported_by",
+          "row_processed",
+          "timezone",
+          "total_rows"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/imports/{importId}/historical-queue-metrics",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_organizational_groups",
+      "kind": "rest_read",
+      "summary": "List Workforce Management organizational groups",
+      "description": "Bounded Zoom Workforce Management organizational-group read with redacted group data.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:admin",
+        "workforce_management:read:organizational_groups:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "created_at",
+          "description",
+          "name",
+          "next_page_token",
+          "org_group_id",
+          "organizational_groups",
+          "total_records",
+          "updated_at"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/organizational-groups",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_workforce_organizational_group",
+      "kind": "rest_read",
+      "summary": "Get a Workforce Management organizational group",
+      "description": "Bounded Zoom Workforce Management organizational-group detail read.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:admin",
+        "workforce_management:read:organizational_groups:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "created_at",
+          "description",
+          "name",
+          "org_group_id",
+          "scheduling_group_ids",
+          "updated_at"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_adherence_agents",
+      "kind": "rest_read",
+      "summary": "List Workforce Management adherence agents",
+      "description": "Bounded Zoom Workforce Management adherence-agent report read with redacted schedule and user values.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:list_adherence_agents:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "activity_id",
+          "activity_name",
+          "agents",
+          "display_name",
+          "end_time",
+          "next_page_token",
+          "schedule_activities",
+          "shifts",
+          "start_time",
+          "timezone",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/reports/adherence/agents",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_report_schedule_agents",
+      "kind": "rest_read",
+      "summary": "List Workforce Management report schedule agents",
+      "description": "Bounded Zoom Workforce Management report schedule-agent read with redacted user and activity values.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:list_schedule_agents:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "activities",
+          "activity_name",
+          "display_name",
+          "end_time",
+          "next_page_token",
+          "schedule_activity_id",
+          "scheduling_group_name",
+          "start_time",
+          "timezone",
+          "user_email",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/reports/schedules/agents",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_schedule_agents",
+      "kind": "rest_read",
+      "summary": "List Workforce Management schedule agents",
+      "description": "Bounded Zoom Workforce Management schedule-agent read with redacted user and activity values.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:list_schedule_agents:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "activities",
+          "activity_name",
+          "display_name",
+          "employee_id",
+          "end_time",
+          "next_page_token",
+          "schedule_activity_id",
+          "scheduling_group_name",
+          "start_time",
+          "timezone",
+          "user_email",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/schedules/agents",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_scheduling_groups",
+      "kind": "rest_read",
+      "summary": "List Workforce Management scheduling groups",
+      "description": "Bounded Zoom Workforce Management scheduling-group read with redacted identifiers and names.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:list_scheduling_groups:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "name",
+          "next_page_token",
+          "scheduling_group_id",
+          "scheduling_groups",
+          "total_records"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/scheduling-groups",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_workforce_users",
+      "kind": "rest_read",
+      "summary": "List Workforce Management users",
+      "description": "Bounded Zoom Workforce Management user read with redacted identifiers, names, and email addresses.",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "workforce_management:read:list_users:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "created_at",
+          "display_name",
+          "email",
+          "next_page_token",
+          "total_records",
+          "updated_at",
+          "user_id",
+          "users"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workforce-management/users",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_clips",
+      "kind": "rest_read",
+      "summary": "List all Clips",
+      "description": "Bounded Zoom Clips list read at the documented fixed endpoint. The provider artifact exposes paging values only in the response, so this command declares no paging input.",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "clips:read",
+        "clips:read:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "clip_id",
+          "created_date",
+          "description",
+          "modified_date",
+          "next_page_token",
+          "owner_id",
+          "passcode",
+          "share_link",
+          "share_link_settings",
+          "thumbnail_link",
+          "title"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/clips",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_clip_collaborators",
+      "kind": "rest_read",
+      "summary": "Get Clip collaborators",
+      "description": "Bounded sensitive read of the collaborators associated with one Zoom Clip. Provider paging fields are response-only.",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "clips:read",
+        "clips:read:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "avatar",
+          "channel_id",
+          "clip_id",
+          "display_name",
+          "email",
+          "next_page_token",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/clips/{clipId}/collaborators",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_clip_comments",
+      "kind": "rest_read",
+      "summary": "List Clip comments",
+      "description": "Bounded sensitive read of comments for one Zoom Clip. Provider paging fields are response-only.",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "clips:read",
+        "clips:read:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "avatar",
+          "clip_id",
+          "comment_id",
+          "content",
+          "display_name",
+          "email",
+          "mentions",
+          "next_page_token",
+          "parent_node_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/clips/{clipId}/comments",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_clip",
+      "kind": "rest_read",
+      "summary": "Get a Clip",
+      "description": "Bounded sensitive read of one Zoom Clip's metadata and sharing state.",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "clips:read",
+        "clips:read:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "clip_id",
+          "created_date",
+          "description",
+          "modified_date",
+          "owner_id",
+          "passcode",
+          "share_link",
+          "share_link_settings",
+          "thumbnail_link",
+          "title"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/clips/{clipId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_clip_chapters",
+      "kind": "rest_read",
+      "summary": "Get Clip chapters",
+      "description": "Bounded sensitive read of a Clip's chapter list and generation state.",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "clips:read:chapters",
+        "clips:read:chapters:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "chapters",
+          "clip_id",
+          "start_time",
+          "summary",
+          "title"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/clips/{clipId}/chapters",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_clip_transfer",
+      "kind": "rest_read",
+      "summary": "Get Clip transfer status",
+      "description": "Bounded sensitive read of one asynchronous Clip ownership-transfer task.",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "clips:read:transfer_task_status:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "clip_id_list",
+          "source_owner_user_id",
+          "target_owner_user_id",
+          "task_id",
+          "transfer_type"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/clips/transfers/{taskId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_crc_managed_room_account_setting",
+      "kind": "rest_read",
+      "summary": "Get CRC managed room account setting",
+      "description": "Bounded Zoom CRC read for the managed Cisco or Polycom account setting; account and connector values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "crc_account:read:admin",
+        "crc:read:rooms_account_settings:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "connector_id",
+          "connector_log_level",
+          "firmware_key",
+          "ip_address",
+          "time_server",
+          "time_zone"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/managed_rooms/account_setting",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_crc_api_connectors",
+      "kind": "rest_read",
+      "summary": "List CRC API Connectors",
+      "description": "Bounded Zoom CRC read for enhanced API connectors; connector identifiers and managed-network values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "apiconnector:read:admin",
+        "crc:read:list_apiconnectors:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "connector_id",
+          "description",
+          "managed_rooms",
+          "networks",
+          "private_key"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/api_connectors",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_crc_api_connector",
+      "kind": "rest_read",
+      "summary": "Get a CRC API Connector",
+      "description": "Bounded Zoom CRC read for one enhanced API Connector; identifiers and network details are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "apiconnector:read:admin",
+        "crc:read:apiconnector:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "connector_id",
+          "description",
+          "managed_rooms",
+          "networks",
+          "private_key"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/api_connectors/{connectorId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_crc_api_connector_private_key",
+      "kind": "rest_read",
+      "summary": "Get a CRC API Connector private key",
+      "description": "Bounded Zoom CRC read for one enhanced API Connector private key. The key is always redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "apiconnector:read:admin",
+        "crc:read:apiconnector_private_key:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "connector_id",
+          "private_key"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/api_connectors/{connectorId}/private_key",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_crc_managed_rooms",
+      "kind": "rest_read",
+      "summary": "List CRC managed rooms",
+      "description": "Bounded Zoom CRC read for managed Cisco or Polycom rooms; room and network values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "crc_rooms:read:admin",
+        "crc:read:list_rooms:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "auth_password",
+          "auth_username",
+          "connector_id",
+          "device_id",
+          "device_password",
+          "device_username",
+          "firmware_key",
+          "ip_address",
+          "name",
+          "room_host_key",
+          "serial_number",
+          "template_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/managed_rooms",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_crc_managed_room",
+      "kind": "rest_read",
+      "summary": "Get a CRC managed room",
+      "description": "Bounded Zoom CRC read for one managed Cisco or Polycom room; room and credential-like values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "crc_rooms:read:admin",
+        "crc:read:room:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "auth_password",
+          "auth_username",
+          "connector_id",
+          "device_id",
+          "device_password",
+          "device_username",
+          "firmware_key",
+          "ip_address",
+          "name",
+          "room_host_key",
+          "serial_number",
+          "template_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/managed_rooms/{deviceId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_crc_participant_identifier_code",
+      "kind": "rest_read",
+      "summary": "Get a CRC participant identifier code",
+      "description": "Bounded Zoom CRC read for the participant identifier code used to authenticate CRC meetings; all identifier values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "crc:read:admin",
+        "crc:master",
+        "crc:read:participant_identifier_code:admin",
+        "crc:read:participant_identifier_code:master"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "meeting_id",
+          "participant_identifier_code",
+          "participant_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/participant_identifier_code",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_crc_room_templates",
+      "kind": "rest_read",
+      "summary": "List CRC room templates",
+      "description": "Bounded Zoom CRC read for Cisco or Polycom room templates; template and deployment values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "crc_rooms:read:admin",
+        "crc:read:list_rooms_templates:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "device_type",
+          "name",
+          "template_id",
+          "time_server",
+          "time_zone"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/room_templates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_crc_room_template",
+      "kind": "rest_read",
+      "summary": "Get a CRC room template",
+      "description": "Bounded Zoom CRC read for one Cisco or Polycom room template; template and deployment values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "crc_rooms:read:admin",
+        "crc:read:rooms_template:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "device_type",
+          "name",
+          "template_id",
+          "time_server",
+          "time_zone"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/crc/room_templates/{templateId}",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

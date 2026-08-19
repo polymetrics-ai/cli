@@ -1,0 +1,17 @@
+{
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "account_id": "fixture-account",
+        "agent_info": {
+          "display_name": "fixture-agent-name",
+          "user_id": "fixture-agent-user"
+        },
+        "id": "fixture-automated-evaluation",
+        "status": "COMPLETED"
+      }
+    ],
+    "next_page_token": "fixture-page-token"
+  }
+}

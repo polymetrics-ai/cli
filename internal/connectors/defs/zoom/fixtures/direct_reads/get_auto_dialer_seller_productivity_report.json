@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "body": {
+    "seller_id": "fixture-ad-seller",
+    "seller_name": "Fixture Auto Dialer seller",
+    "email": "fixture.seller@example.invalid",
+    "token": "fixture-ad-response-token"
+  }
+}

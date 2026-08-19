@@ -1,11 +1,11 @@
 # Overview
 
-Reads Zoom users, meetings, and webinars through the Zoom REST API.
+Reads Zoom users, meetings, webinars, and 70 bounded module-specific direct-read routes through the Zoom REST API.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
-`2026-08-03T14-58-19-06-00`. Wave 1 exposes only the three existing stream-backed reads:
-`pm zoom users list`, `pm zoom meetings list`, and `pm zoom webinars list`.
+`2026-08-03T14-58-19-06-00`. The existing stream-backed reads remain `pm zoom users list`,
+`pm zoom meetings list`, and `pm zoom webinars list`; Wave 2 adds the reviewed direct-read cohort.
 
 No Zoom write action is implemented in this slice. The remaining provider operations stay explicitly
 disposed in `api_surface.json`; the ledger is not a claim that those operations are executable.
@@ -61,10 +61,29 @@ Default pagination is cursor pagination: send `next_page_token` and take the nex
   and `updated_at`; emits passthrough records. Provider reference:
   https://developers.zoom.us/docs/api/meetings.md.
 
+## Direct reads
+
+The 70 `direct_read` commands are bounded to one declared provider request and use the
+`json_redacted` output policy. Their command groups are `qss`, `ai-companion`, `my-notes`,
+`healthcare`, `quality-management`, `cobrowse-sdk`, `scim2`, `virtual-agent`, `auto-dialer`,
+`tasks`, `workforce-management`, `clips`, and `crc`; run `pm zoom --help` or a group help command
+to inspect the exact required path flags and provider citations.
+
+All 70 commands pass connector preflight and 52 sanitized response fixtures execute through the
+real operation runner. This is fixture proof, not a live-certification claim: Zoom remains outside
+the centrally owned certification scope and no credential is resolved by these checks.
+
+Zoom's SCIM2 provider routes use the bare `https://api.zoom.us` origin while the ordinary API base
+defaults to `https://api.zoom.us/v2`. Until separately approved operation-specific base-origin
+support exists, invoke a SCIM2 direct-read command with `--config base_url=https://api.zoom.us`.
+That setting is command-local; do not reuse it for the existing stream commands.
+
 ## Write actions & risks
 
-This Wave 1 connector surface is read-only. Read behavior: external Zoom API read of user,
-meeting, and webinar data.
+This Wave 2 connector surface remains read-only. Read behavior includes external Zoom API reads of
+user, meeting, webinar, Quality of Service, AI Companion, My Notes, Healthcare, Quality
+Management, Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips,
+and Conference Room Connector data.
 
 The provider inventory records 1,032 documented writes, but none is a declared Zoom write action.
 The 997 write operations classified as implementable now remain blocked on connector-local typed
@@ -77,10 +96,9 @@ destructive operations additionally require the typed confirmation gate.
 
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes).
-- Executable today: 3 stream-backed GET operations (`users`, `meetings`, `webinars`).
-- Pending connector-local delivery: 1,839 operations (842 reads and 997 writes) have no shared
-  foundation blocker, but still need bounded Zoom-specific contracts, schemas, safety evidence, and
-  fixtures before they can become commands.
+- Executable today: 3 stream-backed GET operations plus 70 bounded direct-read GET operations.
+- Pending connector-local delivery: 1,769 operations remain ledger-blocked and need bounded
+  Zoom-specific contracts, schemas, safety evidence, and fixtures before they can become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one
   Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the
   corresponding product/account capability.

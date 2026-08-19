@@ -866,14 +866,8 @@
     {
       "method": "GET",
       "path": "/v2/aic/users/{userId}/conversation_archive",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-companion.md",
-        "notes": "classification=implementable_now; provider_module=ai-companion; operation_title=Get AI Companion conversation archives; provider_server=https://api.zoom.us/v2; provider_path=/aic/users/{userId}/conversation_archive; artifact=https://developers.zoom.us/docs/api/ai-companion.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-companion conversation-archive get"
       }
     },
     {
@@ -1165,66 +1159,36 @@
     {
       "method": "GET",
       "path": "/v2/dialer/call-histories/{callHistoryId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get call history by ID; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-histories/{callHistoryId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-histories get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/call-history",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Call History; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-history; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-history list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/reports/call-history",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Report Call History; provider_server=https://api.zoom.us/v2; provider_path=/dialer/reports/call-history; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer reports call-history list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/reports/seller-productivity",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Seller Productivity Report; provider_server=https://api.zoom.us/v2; provider_path=/dialer/reports/seller-productivity; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer reports seller-productivity get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/call-lists",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=List Call Lists; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-lists list"
       }
     },
     {
@@ -1243,14 +1207,8 @@
     {
       "method": "GET",
       "path": "/v2/dialer/call-lists/{callListId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Call List by ID; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-lists get"
       }
     },
     {
@@ -1282,14 +1240,8 @@
     {
       "method": "GET",
       "path": "/v2/dialer/call-lists/{callListId}/prospects",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=List All Prospects in Call List; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}/prospects; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-lists prospects list"
       }
     },
     {
@@ -1360,14 +1312,8 @@
     {
       "method": "GET",
       "path": "/v2/dialer/prospects/{prospectId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Prospect by ID; provider_server=https://api.zoom.us/v2; provider_path=/dialer/prospects/{prospectId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer prospects get"
       }
     },
     {
@@ -3570,14 +3516,8 @@
     {
       "method": "GET",
       "path": "/clips",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=List all clips; provider_server=https://api.zoom.us/; provider_path=/clips; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips list"
       }
     },
     {
@@ -3596,14 +3536,8 @@
     {
       "method": "GET",
       "path": "/clips/{clipId}/collaborators",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Get collaborators of a clip; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/collaborators; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips collaborators list"
       }
     },
     {
@@ -3635,14 +3569,8 @@
     {
       "method": "GET",
       "path": "/clips/{clipId}/comments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=List clip comments; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/comments; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips comments list"
       }
     },
     {
@@ -3674,14 +3602,8 @@
     {
       "method": "GET",
       "path": "/clips/{clipId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Get a clip; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips get"
       }
     },
     {
@@ -3713,14 +3635,8 @@
     {
       "method": "GET",
       "path": "/clips/{clipId}/chapters",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Get Clip Chapters; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/chapters; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips chapters get"
       }
     },
     {
@@ -3778,14 +3694,8 @@
     {
       "method": "GET",
       "path": "/clips/transfers/{taskId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Transfer task status check; provider_server=https://api.zoom.us/; provider_path=/clips/transfers/{taskId}; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips transfers get"
       }
     },
     {
@@ -3843,53 +3753,29 @@
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/live_sessions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=List live sessions; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/live_sessions; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk live-sessions list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/past_sessions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=List past sessions; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/past_sessions; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk past-sessions list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/sessions/{sessionId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=Get session details; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/sessions/{sessionId}; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk sessions get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=List session users; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/sessions/{sessionId}/users; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk sessions users list"
       }
     },
     {
@@ -8471,14 +8357,8 @@
     {
       "method": "GET",
       "path": "/v2/crc/managed_rooms/account_setting",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get Cisco/Polycom Room Account Setting; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms/account_setting; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc managed-rooms account-setting get"
       }
     },
     {
@@ -8497,14 +8377,8 @@
     {
       "method": "GET",
       "path": "/v2/crc/api_connectors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=List API Connectors; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc api-connectors list"
       }
     },
     {
@@ -8523,14 +8397,8 @@
     {
       "method": "GET",
       "path": "/v2/crc/api_connectors/{connectorId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get an API Connector; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors/{connectorId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc api-connectors get"
       }
     },
     {
@@ -8562,14 +8430,8 @@
     {
       "method": "GET",
       "path": "/v2/crc/api_connectors/{connectorId}/private_key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get an API Connector's private key; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors/{connectorId}/private_key; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc api-connectors private-key get"
       }
     },
     {
@@ -8588,14 +8450,8 @@
     {
       "method": "GET",
       "path": "/v2/crc/managed_rooms",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=List Managed Rooms; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc managed-rooms list"
       }
     },
     {
@@ -8614,14 +8470,8 @@
     {
       "method": "GET",
       "path": "/v2/crc/managed_rooms/{deviceId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get a Managed Room; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms/{deviceId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc managed-rooms get"
       }
     },
     {
@@ -8653,27 +8503,15 @@
     {
       "method": "GET",
       "path": "/v2/crc/participant_identifier_code",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get participant identifier code; provider_server=https://api.zoom.us/v2; provider_path=/crc/participant_identifier_code; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc participant-identifier-code get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/room_templates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=List Room Templates; provider_server=https://api.zoom.us/v2; provider_path=/crc/room_templates; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc room-templates list"
       }
     },
     {
@@ -8692,14 +8530,8 @@
     {
       "method": "GET",
       "path": "/v2/crc/room_templates/{templateId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get a Room Template; provider_server=https://api.zoom.us/v2; provider_path=/crc/room_templates/{templateId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc room-templates get"
       }
     },
     {
@@ -9927,27 +9759,15 @@
     {
       "method": "GET",
       "path": "/v2/clinical_notes/notes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
-        "notes": "classification=implementable_now; provider_module=healthcare; operation_title=List clinical notes; provider_server=https://api.zoom.us/v2; provider_path=/clinical_notes/notes; artifact=https://developers.zoom.us/docs/api/healthcare.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "healthcare clinical-notes list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/clinical_notes/notes/{noteId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
-        "notes": "classification=implementable_now; provider_module=healthcare; operation_title=Get a Clinical Note; provider_server=https://api.zoom.us/v2; provider_path=/clinical_notes/notes/{noteId}; artifact=https://developers.zoom.us/docs/api/healthcare.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "healthcare clinical-notes get"
       }
     },
     {
@@ -14218,27 +14038,15 @@
     {
       "method": "GET",
       "path": "/v2/my_notes/notes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
-        "notes": "classification=implementable_now; provider_module=my-notes; operation_title=List my notes; provider_server=https://api.zoom.us/v2; provider_path=/my_notes/notes; artifact=https://developers.zoom.us/docs/api/my-notes.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "my-notes list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/my_notes/notes/{noteId}/content",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
-        "notes": "classification=implementable_now; provider_module=my-notes; operation_title=Get My Notes content and transcript; provider_server=https://api.zoom.us/v2; provider_path=/my_notes/notes/{noteId}/content; artifact=https://developers.zoom.us/docs/api/my-notes.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "my-notes content get"
       }
     },
     {
@@ -19691,92 +19499,50 @@
     {
       "method": "GET",
       "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/qss.md",
-        "notes": "classification=implementable_now; provider_module=qss; operation_title=List meeting participants QoS Summary; provider_server=https://api.zoom.us/v2; provider_path=/metrics/meetings/{meetingId}/participants/qos_summary; artifact=https://developers.zoom.us/docs/api/qss.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "qss meeting-participants list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/qss.md",
-        "notes": "classification=implementable_now; provider_module=qss; operation_title=List webinar participants QoS Summary; provider_server=https://api.zoom.us/v2; provider_path=/metrics/webinars/{webinarId}/participants/qos_summary; artifact=https://developers.zoom.us/docs/api/qss.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "qss webinar-participants list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/qss.md",
-        "notes": "classification=implementable_now; provider_module=qss; operation_title=List session users QoS Summary; provider_server=https://api.zoom.us/v2; provider_path=/videosdk/sessions/{sessionId}/users/qos_summary; artifact=https://developers.zoom.us/docs/api/qss.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "qss session-users list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/qm/automated_evaluations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
-        "notes": "classification=implementable_now; provider_module=quality-management; operation_title=List automated evaluations; provider_server=https://api.zoom.us/v2; provider_path=/qm/automated_evaluations; artifact=https://developers.zoom.us/docs/api/quality-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "quality-management automated-evaluations list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/qm/evaluation",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
-        "notes": "classification=implementable_now; provider_module=quality-management; operation_title=List evaluations; provider_server=https://api.zoom.us/v2; provider_path=/qm/evaluation; artifact=https://developers.zoom.us/docs/api/quality-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "quality-management evaluations list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/qm/evaluation/{evaluationId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
-        "notes": "classification=implementable_now; provider_module=quality-management; operation_title=View evaluation detail; provider_server=https://api.zoom.us/v2; provider_path=/qm/evaluation/{evaluationId}; artifact=https://developers.zoom.us/docs/api/quality-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "quality-management evaluations get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/qm/interactions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
-        "notes": "classification=implementable_now; provider_module=quality-management; operation_title=List interactions; provider_server=https://api.zoom.us/v2; provider_path=/qm/interactions; artifact=https://developers.zoom.us/docs/api/quality-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "quality-management interactions list"
       }
     },
     {
@@ -19795,14 +19561,8 @@
     {
       "method": "GET",
       "path": "/v2/qm/interactions/{interactionId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
-        "notes": "classification=implementable_now; provider_module=quality-management; operation_title=View interaction detail; provider_server=https://api.zoom.us/v2; provider_path=/qm/interactions/{interactionId}; artifact=https://developers.zoom.us/docs/api/quality-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "quality-management interactions get"
       }
     },
     {
@@ -21771,14 +21531,8 @@
     {
       "method": "GET",
       "path": "/scim2/Groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=List groups; provider_server=https://api.zoom.us; provider_path=/scim2/Groups; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 groups list"
       }
     },
     {
@@ -21797,14 +21551,8 @@
     {
       "method": "GET",
       "path": "/scim2/Groups/{groupId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Get a group; provider_server=https://api.zoom.us; provider_path=/scim2/Groups/{groupId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 groups get"
       }
     },
     {
@@ -21836,14 +21584,8 @@
     {
       "method": "GET",
       "path": "/scim2/Users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=List users; provider_server=https://api.zoom.us; provider_path=/scim2/Users; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 users list"
       }
     },
     {
@@ -21862,14 +21604,8 @@
     {
       "method": "GET",
       "path": "/scim2/Users/{userId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Get a user; provider_server=https://api.zoom.us; provider_path=/scim2/Users/{userId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 users get"
       }
     },
     {
@@ -21914,14 +21650,8 @@
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}/assignees",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get assignees of a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/assignees; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks assignees list"
       }
     },
     {
@@ -21953,14 +21683,8 @@
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}/collaborators",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get collaborators of a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/collaborators; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks collaborators list"
       }
     },
     {
@@ -21992,14 +21716,8 @@
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}/comments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get a task's comments; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/comments; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks comments list"
       }
     },
     {
@@ -22057,27 +21775,15 @@
     {
       "method": "GET",
       "path": "/v2/tasks/imports/{importId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get import job status; provider_server=https://api.zoom.us/v2; provider_path=/tasks/imports/{importId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks imports get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tasks/items",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=List tasks; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks items list"
       }
     },
     {
@@ -22096,14 +21802,8 @@
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get task details; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks items get"
       }
     },
     {
@@ -23897,14 +23597,8 @@
     {
       "method": "GET",
       "path": "/v2/km/kbs/{kbId}/articles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get articles; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/articles; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent knowledge-bases articles list"
       }
     },
     {
@@ -23923,14 +23617,8 @@
     {
       "method": "GET",
       "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get article; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/articles/{articleId}; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent knowledge-bases articles get"
       }
     },
     {
@@ -23975,92 +23663,50 @@
     {
       "method": "GET",
       "path": "/v2/km/kbs/{kbId}/sync/{syncId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get sync; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/sync/{syncId}; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent knowledge-bases sync get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/engagements",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA engagements; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/engagements; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports engagements list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/engagements/query_details",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA query details; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/engagements/query_details; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports engagements query-details list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/engagements/variables",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA variable details; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/engagements/variables; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports engagements variable-details list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/surveys",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA Surveys; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/surveys; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports surveys list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/transcripts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA transcripts; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/transcripts; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports transcripts list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/ai_studio/reports/operation_logs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=List AI Management operation logs; provider_server=https://api.zoom.us/v2; provider_path=/ai_studio/reports/operation_logs; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports operation-logs list"
       }
     },
     {
@@ -24625,40 +24271,22 @@
     {
       "method": "GET",
       "path": "/v2/workforce-management/filter-groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List filter groups; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/filter-groups; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management filter-groups list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/forecasts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List forecasts; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/forecasts; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management forecasts list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get a forecast for a scheduling group; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management forecasts scheduling-groups get"
       }
     },
     {
@@ -24716,27 +24344,15 @@
     {
       "method": "GET",
       "path": "/v2/workforce-management/imports/{importId}/historical-queue-metrics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get historical queue metrics import metadata; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/imports/{importId}/historical-queue-metrics; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management imports historical-queue-metrics get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/organizational-groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get multiple organizational groups; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/organizational-groups; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management organizational-groups list"
       }
     },
     {
@@ -24755,14 +24371,8 @@
     {
       "method": "GET",
       "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get a single organizational group; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/organizational-groups/{organizationalGroupId}; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management organizational-groups get"
       }
     },
     {
@@ -24794,66 +24404,36 @@
     {
       "method": "GET",
       "path": "/v2/workforce-management/reports/adherence/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List agents' adherence data; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/reports/adherence/agents; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management reports adherence agents list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/reports/schedules/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List all schedule agents; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/reports/schedules/agents; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management reports schedules agents list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/schedules/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List all schedule agents; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/schedules/agents; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management schedules agents list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/scheduling-groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List scheduling groups; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/scheduling-groups; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management scheduling-groups list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List users; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/users; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management users list"
       }
     }
   ]

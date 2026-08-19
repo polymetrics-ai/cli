@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "body": {
+    "filter_groups": [
+      {
+        "filter_group_id": "fixture-wfm-filter-group",
+        "name": "Fixture Workforce Management filter group"
+      }
+    ],
+    "next_page_token": "fixture-wfm-filter-page",
+    "total_records": 1
+  }
+}

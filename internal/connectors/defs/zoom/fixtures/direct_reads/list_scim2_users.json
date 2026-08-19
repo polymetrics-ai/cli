@@ -1,0 +1,33 @@
+{
+  "status": 200,
+  "body": {
+    "schemas": [
+      "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+    ],
+    "totalResults": 1,
+    "Resources": [
+      {
+        "id": "fixture-scim-user",
+        "userName": "fixture.user@example.invalid",
+        "displayName": "Fixture SCIM user",
+        "emails": [
+          {
+            "value": "fixture.user@example.invalid",
+            "primary": true
+          }
+        ],
+        "name": {
+          "givenName": "Fixture",
+          "familyName": "User"
+        },
+        "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User": {
+          "department": "fixture-department"
+        },
+        "urn:ietf:params:scim:schemas:extension:zoom:2.0:User": {
+          "customAttribute": "fixture-custom-attribute"
+        }
+      }
+    ],
+    "token": "fixture-scim-response-token"
+  }
+}

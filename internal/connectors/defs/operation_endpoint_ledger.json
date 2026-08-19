@@ -13570,5 +13570,426 @@
   "zoho-inventory": [],
   "zoho-invoice": [],
   "zonka-feedback": [],
-  "zoom": []
+  "zoom": [
+    {
+      "method": "GET",
+      "path": "/clips",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/clips/transfers/{taskId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/clips/{clipId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/clips/{clipId}/chapters",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/clips/{clipId}/collaborators",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/clips/{clipId}/comments",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/scim2/Groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/scim2/Groups/{groupId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/scim2/Users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/scim2/Users/{userId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/ai_studio/reports/operation_logs",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/aic/users/{userId}/conversation_archive",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/clinical_notes/notes",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/clinical_notes/notes/{noteId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cobrowsesdk/live_sessions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cobrowsesdk/past_sessions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cobrowsesdk/sessions/{sessionId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/api_connectors",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/api_connectors/{connectorId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/api_connectors/{connectorId}/private_key",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/managed_rooms",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/managed_rooms/account_setting",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/managed_rooms/{deviceId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/participant_identifier_code",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/room_templates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/room_templates/{templateId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/call-histories/{callHistoryId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/call-history",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/call-lists",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/call-lists/{callListId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/call-lists/{callListId}/prospects",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/prospects/{prospectId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/reports/call-history",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dialer/reports/seller-productivity",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/km/kbs/{kbId}/articles",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/km/kbs/{kbId}/sync/{syncId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/my_notes/notes",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/my_notes/notes/{noteId}/content",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/qm/automated_evaluations",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/qm/evaluation",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/qm/evaluation/{evaluationId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/qm/interactions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/qm/interactions/{interactionId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/imports/{importId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}/assignees",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}/collaborators",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}/comments",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/engagements",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/engagements/query_details",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/engagements/variables",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/surveys",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/transcripts",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/filter-groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/forecasts",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/imports/{importId}/historical-queue-metrics",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/organizational-groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/reports/adherence/agents",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/reports/schedules/agents",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/schedules/agents",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/scheduling-groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ]
 }

@@ -1,0 +1,39 @@
+{
+  "status": 200,
+  "body": {
+    "engagement_query_details": [
+      {
+        "engagement_id": "fixture-va-engagement",
+        "query_details": [
+          {
+            "query_id": "fixture-va-query",
+            "query_text": "fixture query text",
+            "agent_id": "fixture-va-agent",
+            "agent_name": "Fixture Virtual Agent",
+            "agent_session_id": "fixture-va-agent-session",
+            "bot_id": "fixture-va-bot",
+            "bot_name": "Fixture Virtual Agent bot",
+            "bot_session_id": "fixture-va-bot-session",
+            "intents": [
+              {
+                "intent_id": "fixture-va-intent",
+                "intent_name": "Fixture intent"
+              }
+            ],
+            "articles": [
+              {
+                "article_id": "fixture-va-article",
+                "article_title": "Fixture Virtual Agent article",
+                "article_answer": "fixture article answer",
+                "article_url": "https://fixture.invalid/virtual-agent/article"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "next_page_token": "fixture-va-page-token",
+    "page_size": 10,
+    "token": "fixture-va-response-token"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "body": {
+    "call_lists": [{"call_list_id": "fixture-ad-call-list", "assigned_to_user_id": "fixture-ad-user", "assigned_to_user_email": "fixture.user@example.invalid", "name": "Fixture Auto Dialer call list", "description": "fixture call-list description"}],
+    "next_page_token": "fixture-ad-page-token",
+    "token": "fixture-ad-response-token"
+  }
+}
