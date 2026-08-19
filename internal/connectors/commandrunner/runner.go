@@ -72,6 +72,7 @@ type WriteCommand struct {
 	RedactedRecord        connectors.Record        `json:"redacted_record,omitempty"`
 	PathParams            map[string]string        `json:"path_params,omitempty"`
 	Query                 map[string]string        `json:"query,omitempty"`
+	Headers               map[string]string        `json:"headers,omitempty"`
 	Batchable             bool                     `json:"batchable"`
 	Preview               *connectors.WritePreview `json:"preview,omitempty"`
 }
@@ -247,7 +248,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
-	pathParams, query, body, _, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, headers, body, _, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return WriteCommand{}, err
 	}
@@ -280,6 +281,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		RedactedRecord:        cloneRecord(record),
 		PathParams:            cloneStringMap(pathParams),
 		Query:                 cloneStringMap(query),
+		Headers:               cloneStringMap(headers),
 		Batchable:             metadata.Batchable,
 	}, nil
 }
@@ -610,7 +612,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, body, rawBody, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, headers, body, rawBody, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
@@ -629,6 +631,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Config:       req.Config,
 		PathParams:   pathParams,
 		Query:        query,
+		Headers:      headers,
 		Body:         body,
 		RawBody:      rawBody,
 		MaxBytes:     maxBytes,
@@ -1388,20 +1391,22 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 // narrower than the dotted JSON body mapping: only an operation direct read
 // may name the exact maps_to value "body", and the engine subsequently admits
 // it only for its declared text/plain root-string contract.
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, *string, error) {
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]string, map[string]any, *string, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, nil, nil, err
+			return nil, nil, nil, nil, nil, err
 		}
 		allowed[flag.Name] = flag
 	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
-		return nil, nil, nil, nil, err
+		return nil, nil, nil, nil, nil, err
 	}
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
+	headers := map[string]string{}
+	headerTargets := map[string]struct{}{}
 	body := map[string]any{}
 	var rawBody *string
 	for name, values := range flags {
@@ -1409,51 +1414,86 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			continue
 		}
 		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
-			return nil, nil, nil, nil, err
+			return nil, nil, nil, nil, nil, err
 		}
 		flag, ok := allowed[name]
 		if !ok {
-			return nil, nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+			return nil, nil, nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
 		value, err := coerceCommandFlagValue(cmd, flag, values)
 		if err != nil {
-			return nil, nil, nil, nil, err
+			return nil, nil, nil, nil, nil, err
 		}
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "path."):
 			target := strings.TrimPrefix(flag.MapsTo, "path.")
 			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
-				return nil, nil, nil, nil, err
+				return nil, nil, nil, nil, nil, err
 			}
 			pathParams[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
 			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-				return nil, nil, nil, nil, err
+				return nil, nil, nil, nil, nil, err
 			}
 			query[target] = stringifyCommandValue(value)
-		case strings.HasPrefix(flag.MapsTo, "body."):
-			target := strings.TrimPrefix(flag.MapsTo, "body.")
-			if err := setBodyValue(body, target, value); err != nil {
-				return nil, nil, nil, nil, err
+		case strings.HasPrefix(flag.MapsTo, "header."):
+			target := strings.TrimPrefix(flag.MapsTo, "header.")
+			if err := validateOperationHeaderTarget(target); err != nil {
+				return nil, nil, nil, nil, nil, err
 			}
-		case flag.MapsTo == "body":
-			if cmd.Intent != "direct_read" || flag.Type != "string" {
-				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			canonical := strings.ToLower(target)
+			if _, duplicate := headerTargets[canonical]; duplicate {
+				return nil, nil, nil, nil, nil, fmt.Errorf("command %q maps multiple flags to request header %q", cmd.Path, target)
 			}
 			text, ok := value.(string)
 			if !ok {
-				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to body but is not a string", name)}
+				return nil, nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to header but is not a string", name)}
+			}
+			headerTargets[canonical] = struct{}{}
+			headers[target] = text
+		case strings.HasPrefix(flag.MapsTo, "body."):
+			target := strings.TrimPrefix(flag.MapsTo, "body.")
+			if err := setBodyValue(body, target, value); err != nil {
+				return nil, nil, nil, nil, nil, err
+			}
+		case flag.MapsTo == "body":
+			if cmd.Intent != "direct_read" || flag.Type != "string" {
+				return nil, nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			}
+			text, ok := value.(string)
+			if !ok {
+				return nil, nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to body but is not a string", name)}
 			}
 			rawBody = &text
 		default:
-			return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			return nil, nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
 		}
 	}
 	if rawBody != nil && len(body) != 0 {
-		return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
+		return nil, nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
 	}
-	return pathParams, query, body, rawBody, nil
+	return pathParams, query, headers, body, rawBody, nil
+}
+
+// validateOperationHeaderTarget does not decide whether a header is allowed —
+// the engine does that against the selected operation and runtime-owned names.
+// It only prevents a hand-authored command surface from smuggling a malformed
+// field name across the commandrunner/engine boundary.
+func validateOperationHeaderTarget(target string) error {
+	if strings.TrimSpace(target) != target || target == "" {
+		return fmt.Errorf("header parameter is required")
+	}
+	if err := safety.RejectDangerousChars(target, "header parameter"); err != nil {
+		return err
+	}
+	for _, r := range target {
+		if strings.ContainsRune("!#$%&'*+-.^_`|~", r) || (r >= '0' && r <= '9') || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z') {
+			continue
+		}
+		return fmt.Errorf("header parameter contains invalid character %q", r)
+	}
+	return nil
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
@@ -1948,7 +1988,7 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 	if strings.TrimSpace(req.DestRoot) == "" {
 		return Result{}, fmt.Errorf("binary download requires --dest-root")
 	}
-	pathParams, query, err := directReadOverrides(cmd, req.Flags)
+	pathParams, query, headers, _, _, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
@@ -1960,6 +2000,7 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 		Config:     req.Config,
 		PathParams: pathParams,
 		Query:      query,
+		Headers:    headers,
 		MaxBytes:   int64(req.MaxBytes),
 		DestRoot:   req.DestRoot,
 		FileName:   req.FileName,
@@ -1993,14 +2034,14 @@ func runStatusCheck(ctx context.Context, connector connectors.Connector, cmd con
 	if err := validateStatusCheckCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, err := directReadOverrides(cmd, req.Flags)
+	pathParams, query, headers, _, _, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
 		return Result{}, err
 	}
-	status, err := connector.(connectors.OperationStatusChecker).OperationStatusCheck(ctx, connectors.OperationStatusCheckRequest{Operation: cmd.Operation, Config: req.Config, PathParams: pathParams, Query: query})
+	status, err := connector.(connectors.OperationStatusChecker).OperationStatusCheck(ctx, connectors.OperationStatusCheckRequest{Operation: cmd.Operation, Config: req.Config, PathParams: pathParams, Query: query, Headers: headers})
 	if err != nil {
 		return Result{}, err
 	}

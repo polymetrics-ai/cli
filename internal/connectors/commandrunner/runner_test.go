@@ -1813,6 +1813,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 				RedactFields: []string{"email"},
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
+					{Name: "header-x-request-mode", Type: "enum", Values: []string{"safe", "full"}, MapsTo: "header.X-Request-Mode"},
 				},
 			},
 		},
@@ -1820,7 +1821,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 
 	result, err := Run(context.Background(), connector, Request{
 		Path:  []string{"meetings", "integration-status"},
-		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}},
+		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}, "header-x-request-mode": {"safe"}},
 	}, func(connectors.Record) error {
 		t.Fatal("emit called for operation direct-read command")
 		return nil
@@ -1843,6 +1844,9 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 	if len(connector.operationDirectReadReq.RedactFields) != 0 {
 		t.Fatalf("operation direct read RedactFields = %#v, want empty", connector.operationDirectReadReq.RedactFields)
+	}
+	if got := connector.operationDirectReadReq.Headers["X-Request-Mode"]; got != "safe" {
+		t.Fatalf("operation request header = %q, want exact declared value", got)
 	}
 }
 

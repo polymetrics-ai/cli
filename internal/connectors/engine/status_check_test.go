@@ -29,11 +29,19 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 			t.Fatalf("method = %s, want HEAD", r.Method)
 		}
 		w.Header().Set("ETag", "abc")
+		w.Header().Set("X-Provider-Status", "ordinary-metadata")
+		w.Header().Add("Set-Cookie", "transport-secret")
 		w.WriteHeader(http.StatusNoContent)
 	}))
 	t.Cleanup(srv.Close)
 
-	connector := New(statusCheckBundle(srv.URL, http.MethodHead), nil)
+	bundle := statusCheckBundle(srv.URL, http.MethodHead)
+	bundle.Operations[0].REST.Response = &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+		{Name: "ETag", MaxBytes: 16},
+		{Name: "X-Provider-Status", MaxBytes: 32},
+		{Name: "Set-Cookie", MaxBytes: 32},
+	}}
+	connector := New(bundle, nil)
 	if err := connector.PreflightOperationStatusCheck("acme.tags.status", http.MethodHead, "/v2/tags", "status"); err != nil {
 		t.Fatalf("PreflightOperationStatusCheck: %v", err)
 	}
@@ -43,6 +51,15 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 	}
 	if result.Status != http.StatusNoContent || result.BodyBytes != 0 || requests != 1 {
 		t.Fatalf("result = %+v, requests = %d", result, requests)
+	}
+	if got := result.Headers["ETag"].Values; len(got) != 1 || got[0] != "abc" {
+		t.Fatalf("ETag = %#v, want declared ordinary metadata", got)
+	}
+	if got := result.Headers["X-Provider-Status"].Values; len(got) != 1 || got[0] != "ordinary-metadata" {
+		t.Fatalf("X-Provider-Status = %#v, want declared ordinary metadata", got)
+	}
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted {
+		t.Fatalf("Set-Cookie = %#v, want explicit redaction marker", cookie)
 	}
 }
 

@@ -54,6 +54,7 @@ type BinaryDownloadRequest struct {
 	Config     connectors.RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
+	Headers    map[string]string
 	// MaxBytes optionally lowers the operation's declared cap. It can never
 	// raise it.
 	MaxBytes int64
@@ -76,6 +77,8 @@ type BinaryDownloadResult struct {
 	Connector string
 	Operation string
 	Record    connectors.Record
+	Status    int
+	Headers   map[string]connectors.OperationResponseHeader
 }
 
 // OperationBinaryDownload executes a declared binary_download operation,
@@ -147,6 +150,10 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
+	headers, err := operationRequestHeaders(b, op, req.Headers)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
 	maxBytes := clampOperationBinaryDownloadMaxBytes(req.MaxBytes, spec.MaxBytes)
 
 	stall := defaultBinaryDownloadStallTimeout
@@ -166,6 +173,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
+	requester = requesterWithOperationHeaders(requester, headers)
 	resp, err := requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
 		Accept:         spec.Accept,
 		AllowCrossHost: spec.AllowCrossHost,
@@ -183,11 +191,12 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		return BinaryDownloadResult{}, formatResponseError(fmt.Sprintf("binary download GET %s: %s", spec.Path, msg), err)
 	}
 	defer func() { _ = resp.Body.Close() }()
-	if op.Kind == "text_export" {
-		mediaType, _, parseErr := mime.ParseMediaType(resp.Header.Get("Content-Type"))
-		if parseErr != nil || !strings.EqualFold(mediaType, "text/csv") {
-			return BinaryDownloadResult{}, fmt.Errorf("text export response is not text/csv")
-		}
+	if err := validateOperationBinaryResponseMediaType(op, resp.Header); err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	responseHeaders, err := operationResponseHeaders(op, resp.Header)
+	if err != nil {
+		return BinaryDownloadResult{}, err
 	}
 
 	fileName, err := resolveBinaryDownloadFileName(req.FileName, resp.Header.Get("Content-Disposition"), op.ID)
@@ -203,6 +212,8 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	return BinaryDownloadResult{
 		Connector: b.Name,
 		Operation: op.ID,
+		Status:    resp.Status,
+		Headers:   responseHeaders,
 		Record: redactBinaryDownloadRecord(connectors.Record{
 			"file_path":       filepath.Join(req.DestRoot, fileName),
 			"file_name":       fileName,
@@ -226,6 +237,57 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 			"truncated": false,
 		}, req.RedactFields),
 	}, nil
+}
+
+func validateOperationBinaryContentTypes(op OperationSpec) error {
+	if op.Binary == nil {
+		return fmt.Errorf("operation has no binary declaration")
+	}
+	for _, declared := range op.Binary.ContentTypes {
+		mediaType, _, err := mime.ParseMediaType(strings.TrimSpace(declared))
+		if err != nil || mediaType == "" || strings.Contains(mediaType, "*") {
+			return fmt.Errorf("content type %q is not a valid media type", declared)
+		}
+	}
+	if charset := strings.TrimSpace(op.Binary.Charset); charset != "" {
+		if _, _, err := mime.ParseMediaType("text/plain; charset=" + charset); err != nil {
+			return fmt.Errorf("charset %q is invalid", op.Binary.Charset)
+		}
+	}
+	return nil
+}
+
+// validateOperationBinaryResponseMediaType rejects an undeclared response
+// before a destination file is created. This keeps media policy bounded while
+// preserving every ordinary field of a response the declaration admits.
+func validateOperationBinaryResponseMediaType(op OperationSpec, headers http.Header) error {
+	if err := validateOperationBinaryContentTypes(op); err != nil {
+		return fmt.Errorf("operation %q response media declaration: %w", op.ID, err)
+	}
+	mediaType, params, err := mime.ParseMediaType(headers.Get("Content-Type"))
+	if err != nil || mediaType == "" {
+		return fmt.Errorf("operation %q response has no valid Content-Type", op.ID)
+	}
+	if op.Kind == "text_export" && !strings.EqualFold(mediaType, "text/csv") {
+		return fmt.Errorf("text export response is not text/csv")
+	}
+	if len(op.Binary.ContentTypes) != 0 {
+		matched := false
+		for _, declared := range op.Binary.ContentTypes {
+			allowed, _, _ := mime.ParseMediaType(strings.TrimSpace(declared))
+			if strings.EqualFold(mediaType, allowed) {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return fmt.Errorf("operation %q response media type %q is not declared", op.ID, mediaType)
+		}
+	}
+	if charset := strings.TrimSpace(op.Binary.Charset); charset != "" && !strings.EqualFold(params["charset"], charset) {
+		return fmt.Errorf("operation %q response charset %q does not match declared charset %q", op.ID, params["charset"], charset)
+	}
+	return nil
 }
 
 // redactBinaryDownloadRecord applies the command's declared redact_fields to

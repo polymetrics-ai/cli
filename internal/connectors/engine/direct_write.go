@@ -44,6 +44,7 @@ type preparedOperationDirectWrite struct {
 	contentType     string
 	policy          string
 	maxBytes        int
+	headers         map[string]string
 	redactionValues []string
 	prepared        PreparedWrite
 }
@@ -103,6 +104,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if err != nil {
 			return err
 		}
+		resolvedRequester = requesterWithOperationHeaders(resolvedRequester, prepared.headers)
 		requester := *resolvedRequester
 		requester.DisableRetries = true
 
@@ -149,6 +151,10 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if len(response.Body) > prepared.maxBytes {
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
 		}
+		responseHeaders, err := operationResponseHeaders(prepared.op, response.Header)
+		if err != nil {
+			return err
+		}
 		if prepared.op.Kind == "graphql_mutation" {
 			data, metadata, parseErr := graphQLOperationResponseWithRuntimeErrorPolicy(response.Body, prepared.maxBytes, operationRetainsSecretRuntimeContent(prepared.op))
 			if parseErr != nil {
@@ -176,6 +182,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				Path:      prepared.path,
 				Status:    response.Status,
 				Body:      body,
+				Headers:   responseHeaders,
 				GraphQL:   metadata,
 			}
 			return nil
@@ -196,6 +203,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			Path:      prepared.path,
 			Status:    response.Status,
 			Body:      body,
+			Headers:   responseHeaders,
 		}
 		return nil
 	})
@@ -384,6 +392,10 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
+	headers, err := operationRequestHeaders(b, op, req.Headers)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	policy := strings.TrimSpace(op.OutputPolicy)
 	if requested := strings.TrimSpace(req.OutputPolicy); requested != "" {
 		if requested != policy {
@@ -444,6 +456,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		"content_type":  contentType,
 		"output_policy": policy,
 	}
+	if len(headers) > 0 {
+		definition["headers"] = headers
+	}
 	if format == "multipart" {
 		// Bind the whole fixed upload declaration, including absent optional
 		// parts and their limits, rather than only the values present in this
@@ -468,6 +483,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			ContentType: contentType,
 			BodyFormat:  format,
 			Body:        encodedBody,
+			Headers:     cloneOperationHeaders(headers),
 		}},
 	}
 	return preparedOperationDirectWrite{
@@ -483,6 +499,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		contentType:     contentType,
 		policy:          policy,
 		maxBytes:        maxBytes,
+		headers:         cloneOperationHeaders(headers),
 		redactionValues: operationDirectWriteRedactionValues(op, body),
 		prepared:        prepared,
 	}, nil
@@ -498,6 +515,9 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	}
 	if len(req.Query) != 0 {
 		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept query overrides", op.ID)
+	}
+	if len(req.Headers) != 0 {
+		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept request header overrides", op.ID)
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	policy := strings.TrimSpace(op.OutputPolicy)

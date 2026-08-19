@@ -791,6 +791,11 @@ type OperationParameter struct {
 	Required bool     `json:"required,omitempty"`
 	Values   []string `json:"values,omitempty"`
 	Summary  string   `json:"summary,omitempty"`
+	// Schema and MaxBytes are required for a caller-provided header. Headers
+	// are strings on the wire, so their schema is deliberately a bounded
+	// string schema rather than a second generic request-body dialect.
+	Schema   json.RawMessage `json:"schema,omitempty"`
+	MaxBytes int             `json:"max_bytes,omitempty"`
 }
 
 type RESTOperationSpec struct {
@@ -833,7 +838,20 @@ type RESTOperationSpec struct {
 	// value on the outgoing request; a value hardcoded in Query counts, since
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
-	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+	RequiredQuery []RequiredQueryGroup   `json:"required_query,omitempty"`
+	Response      *OperationResponseSpec `json:"response,omitempty"`
+}
+
+// OperationResponseSpec is a narrow result metadata contract. Body bytes and
+// media remain governed by the operation's existing output policy/max_bytes;
+// only these named, bounded headers may appear in fixed-operation results.
+type OperationResponseSpec struct {
+	Headers []OperationResponseHeaderSpec `json:"headers,omitempty"`
+}
+
+type OperationResponseHeaderSpec struct {
+	Name     string `json:"name"`
+	MaxBytes int    `json:"max_bytes"`
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -910,6 +928,11 @@ type BinaryOperationSpec struct {
 	Method   string `json:"method"`
 	Path     string `json:"path"`
 	MaxBytes int    `json:"max_bytes,omitempty"`
+	// Parameters admits only the same declaration-owned typed path/query/header
+	// parameter dialect as REST operations. In particular, no arbitrary upload
+	// metadata or request header map exists.
+	Parameters []OperationParameter   `json:"parameters,omitempty"`
+	Response   *OperationResponseSpec `json:"response,omitempty"`
 	// Accept selects one fixed provider-documented response representation.
 	// It is declaration-owned and cannot be overridden by command callers.
 	Accept string `json:"accept,omitempty"`
@@ -928,10 +951,15 @@ type BinaryOperationSpec struct {
 	// AllowedHosts permits redirects to exactly these hosts. Credentials are
 	// stripped on such a hop regardless.
 	AllowedHosts []string `json:"allowed_hosts,omitempty"`
-	// ContentTypes records the content types this operation is documented to
-	// return. It is metadata for authors and is deliberately NOT enforced:
-	// providers mislabel binary payloads routinely.
+	// ContentTypes is the closed provider media-type allowlist for the streamed
+	// response. The runtime parses and enforces it before opening a destination
+	// file; an omitted list preserves legacy operations that have no exact media
+	// declaration.
 	ContentTypes []string `json:"content_types,omitempty"`
+	// Charset, when declared for a text_export, is exact and enforced on the
+	// response Content-Type. Empty preserves legacy declarations that specify a
+	// bounded media type but no provider charset guarantee.
+	Charset string `json:"charset,omitempty"`
 	// StallTimeoutSeconds bounds how long the download may make NO progress.
 	// It is not a wall-clock deadline, which would turn the byte cap into a
 	// bandwidth requirement.
@@ -2687,6 +2715,12 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateRequiredQuery(i, op); err != nil {
 		return err
 	}
+	if err := validateOperationHeaderParameters(op); err != nil {
+		return fmt.Errorf("operation %d (%q): %w", i, op.ID, err)
+	}
+	if err := validateOperationResponseContract(op); err != nil {
+		return fmt.Errorf("operation %d (%q): %w", i, op.ID, err)
+	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {
 		return err
 	}
@@ -2779,6 +2813,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 				return fmt.Errorf("operation %d (%q) binary_download accept %q is not a valid media type: %w", i, op.ID, op.Binary.Accept, err)
 			}
 		}
+		if err := validateOperationBinaryContentTypes(op); err != nil {
+			return fmt.Errorf("operation %d (%q) binary_download: %w", i, op.ID, err)
+		}
 	case "text_export":
 		if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != http.MethodGet {
 			return fmt.Errorf("operation %d (%q) text_export method must be GET, got %s", i, op.ID, method)
@@ -2791,6 +2828,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		}
 		if op.OutputPolicy != "file_manifest" {
 			return fmt.Errorf("operation %d (%q) text_export output_policy must be file_manifest", i, op.ID)
+		}
+		if err := validateOperationBinaryContentTypes(op); err != nil {
+			return fmt.Errorf("operation %d (%q) text_export: %w", i, op.ID, err)
 		}
 	case "file_upload":
 		if op.File.Direction != "upload" {

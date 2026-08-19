@@ -441,13 +441,12 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			}
 		}
 
-		// DERIVED: a direct_read command's flags come from the operation's
-		// imported parameter set, never from hand-authoring. An operation that
-		// declares no parameters leaves the command's flags untouched, so a
-		// connector whose parameters have not been imported yet is unaffected.
-		if intent == "direct_read" {
-			stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
-		}
+		// DERIVED: fixed-operation command flags come from the operation's
+		// imported parameter set, never from hand-authoring. This includes the
+		// closed header.<declared-name> channel for REST, status, binary, and
+		// text-export operations; a connector with no imported parameters is
+		// unaffected.
+		stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
 
 		// DERIVED: a REST path parameter marked required is an executable
 		// command input, not a display preference. Its mapped CLI flag must
@@ -456,6 +455,9 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		// applies to every REST operation kind and every connector, while
 		// leaving query/body requiredness to their own declared contracts.
 		filled, corrected := deriveRequiredPathFlagRequiredness(cmd, block)
+		stats.Filled.FlagRequired += filled
+		stats.Corrected.FlagRequired += corrected
+		filled, corrected = deriveRequiredHeaderFlagRequiredness(cmd, block)
 		stats.Filled.FlagRequired += filled
 		stats.Corrected.FlagRequired += corrected
 
@@ -709,15 +711,22 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 			continue
 		}
 		name := stringField(param, "name")
-		if name == "" || declared[name] {
+		location := stringField(param, "in")
+		if location != "query" && location != "path" && location != "header" {
 			continue
 		}
-		location := stringField(param, "in")
-		if location != "query" && location != "path" {
+		flagName := strings.ReplaceAll(name, "_", "-")
+		if location == "header" {
+			// Header names are case-insensitive and may overlap a path/query
+			// parameter. The generated CLI flag carries its location explicitly,
+			// while maps_to remains the exact provider header name.
+			flagName = "header-" + strings.ToLower(strings.ReplaceAll(name, "_", "-"))
+		}
+		if name == "" || declared[strings.ReplaceAll(flagName, "-", "_")] {
 			continue
 		}
 		flag := newOrderedObject()
-		flag.set("name", strings.ReplaceAll(name, "_", "-"))
+		flag.set("name", flagName)
 		flag.set("type", derivedFlagType(param))
 		if summary := stringField(param, "summary"); summary != "" {
 			flag.set("summary", summary)
@@ -730,13 +739,54 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		}
 		flag.set("maps_to", location+"."+name)
 		flags = append(flags, flag)
-		declared[name] = true
+		declared[strings.ReplaceAll(flagName, "-", "_")] = true
 		added++
 	}
 	if added > 0 {
 		cmd.set("flags", flags)
 	}
 	return added
+}
+
+// deriveRequiredHeaderFlagRequiredness mirrors the path rule for the other
+// caller-owned, fixed-operation input location. The engine independently
+// rejects an absent required header before I/O; synchronizing it here makes
+// generated help and the command parser explain the requirement earlier.
+func deriveRequiredHeaderFlagRequiredness(cmd, block *orderedObject) (filled, corrected int) {
+	required := map[string]bool{}
+	for _, raw := range arrayField(block, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		if isRequired, _ := parameter.get("required"); isRequired == true {
+			required[strings.ToLower(stringField(parameter, "name"))] = true
+		}
+	}
+	if len(required) == 0 {
+		return 0, 0
+	}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		target, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "header.")
+		if !mapped || !required[strings.ToLower(target)] {
+			continue
+		}
+		isRequired, present := flag.get("required")
+		if isRequired == true {
+			continue
+		}
+		flag.set("required", true)
+		if present {
+			corrected++
+		} else {
+			filled++
+		}
+	}
+	return filled, corrected
 }
 
 // deriveRequiredPathFlagRequiredness synchronizes requiredness for flags that

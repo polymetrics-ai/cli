@@ -862,6 +862,33 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 }
 
+func TestCheckCLISurfaceOperationHeaderMappingsRequiresExactDeclaredHeader(t *testing.T) {
+	bundle := engine.Bundle{Name: "acme"}
+	op := engine.OperationSpec{
+		ID: "acme.widgets.list",
+		REST: &engine.RESTOperationSpec{Parameters: []engine.OperationParameter{{
+			Name: "X-Request-Mode", In: "header", Type: "string", Required: true,
+			Values: []string{"safe", "full"}, Schema: json.RawMessage(`{"type":"string","enum":["safe","full"]}`), MaxBytes: 16,
+		}}},
+	}
+	valid := engine.CLICommand{
+		Path: "widgets list", Intent: "direct_read", Availability: "implemented",
+		Flags: []engine.CLIFlag{{Name: "header-x-request-mode", Type: "enum", Values: []string{"safe", "full"}, Required: true, MapsTo: "header.X-Request-Mode"}},
+	}
+	if findings := checkCLISurfaceOperationHeaderMappings(bundle, 0, valid, op); len(findings) != 0 {
+		t.Fatalf("valid declared header mapping findings = %+v", findings)
+	}
+	for _, invalid := range []engine.CLICommand{
+		{Path: valid.Path, Intent: valid.Intent, Availability: valid.Availability, Flags: []engine.CLIFlag{{Name: "wrong-case", Type: "enum", Values: []string{"safe", "full"}, Required: true, MapsTo: "header.x-request-mode"}}},
+		{Path: valid.Path, Intent: valid.Intent, Availability: valid.Availability, Flags: []engine.CLIFlag{{Name: "not-required", Type: "enum", Values: []string{"safe", "full"}, MapsTo: "header.X-Request-Mode"}}},
+		{Path: valid.Path, Intent: valid.Intent, Availability: valid.Availability, Flags: []engine.CLIFlag{{Name: "unknown", Type: "string", MapsTo: "header.X-Other-Operation"}}},
+	} {
+		if findings := checkCLISurfaceOperationHeaderMappings(bundle, 0, invalid, op); len(findings) == 0 {
+			t.Fatalf("invalid header mapping %+v unexpectedly passed", invalid.Flags)
+		}
+	}
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",

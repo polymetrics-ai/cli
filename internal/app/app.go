@@ -1955,6 +1955,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 				Config:     runtime,
 				PathParams: writeCommand.PathParams,
 				Query:      writeCommand.Query,
+				Headers:    writeCommand.Headers,
 				Body:       map[string]any(writeCommand.Record),
 			})
 			if err != nil {
@@ -1975,7 +1976,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record, payloadIdentity)
 	if writeCommand.Operation != "" {
-		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Record, payloadIdentity)
+		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Headers, writeCommand.Record, payloadIdentity)
 	}
 	if err != nil {
 		return ReversePlan{}, nil, err
@@ -2019,6 +2020,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		ConnectorCommandOperation:  writeCommand.Operation,
 		ConnectorCommandPathParams: cloneStringMap(writeCommand.PathParams),
 		ConnectorCommandQuery:      cloneStringMap(writeCommand.Query),
+		ConnectorCommandHeaders:    cloneStringMap(writeCommand.Headers),
 		ConnectorCommandRecord:     withheldRecord,
 		PayloadIdentity:            payloadIdentity,
 		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
@@ -2143,6 +2145,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string, withhe
 			Config:     runtime,
 			PathParams: plan.ConnectorCommandPathParams,
 			Query:      plan.ConnectorCommandQuery,
+			Headers:    plan.ConnectorCommandHeaders,
 			Body:       map[string]any(record),
 		})
 		if err != nil {
@@ -2188,6 +2191,7 @@ func connectorCommandHashForPlan(plan ReversePlan, record connectors.Record, pay
 			plan.ConnectorCommandOperation,
 			plan.ConnectorCommandPathParams,
 			plan.ConnectorCommandQuery,
+			plan.ConnectorCommandHeaders,
 			record,
 			payloadIdentity,
 		)
@@ -2822,6 +2826,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 		Config:     runtime,
 		PathParams: plan.ConnectorCommandPathParams,
 		Query:      plan.ConnectorCommandQuery,
+		Headers:    plan.ConnectorCommandHeaders,
 		Body:       map[string]any(record),
 	}
 	preview, err := validateOperationDirectWritePreview(ctx, directWriter, plan, operationRequest)

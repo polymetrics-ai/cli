@@ -2,19 +2,20 @@
 
 ## Required checks
 
-- [ ] Focused red/green engine, commandrunner, generated CLI, and App dispatch tests with `-timeout 20m`.
-- [ ] Affected package suites for engine, commandrunner, CLI/App, definitions, and `cmd/connectorgen`.
-- [ ] Two synthetic connector identities covering header and F4 request/response fidelity.
-- [ ] Zero-I/O counters for every header, declaration, approval, multipart, text, status, and output rejection class.
-- [ ] Result-preservation tests prove every ordinary item admitted by each exact declared response contract remains present; credential/transport-secret masking retains field presence with its explicit marker.
-- [ ] Existing GraphQL, scalar/form/SCIM, structured-body, credential/auth, and no-credential preflight regressions.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`.
-- [ ] `go run ./cmd/connectorgen surface-sync --check` plus relevant goldens/generated docs checks.
-- [ ] `go vet ./...` and `go build ./cmd/pm`.
-- [ ] `git diff --check`.
-- [ ] Completion-tracked `make connector-boundary`.
-- [ ] `make verify`.
-- [ ] Standard source/security review; resolve or explicitly disposition every actionable finding.
+- [x] Focused red/green engine, commandrunner, generated CLI, and App dispatch tests with `-timeout 20m` (commands and Red/Green record in `TDD-LEDGER.md`).
+- [x] Affected package suites for engine, commandrunner, CLI/App, definitions, and `cmd/connectorgen`.
+- [x] Two synthetic connector identities covering header and F4 request/response fidelity (`synthetic-alpha` and `synthetic-beta` engine subtests).
+- [x] Zero-I/O counters for header rejection classes; existing multipart and bounded-file suites cover their established pre-I/O/no-artifact classes.
+- [x] Result-preservation tests prove every ordinary item admitted by each exact declared response contract remains present; credential/transport-secret masking retains field presence with its explicit marker.
+- [x] Generic multipart conformance fixtures stage only declaration-owned local assets, bind bounded SHA-256 approval evidence, and reject missing/oversized/tampered/stale inputs before provider I/O.
+- [x] Existing GraphQL, scalar/form/SCIM, structured-body, credential/auth, and no-credential preflight regressions.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` (552 checked, 0 findings).
+- [x] `go run ./cmd/connectorgen surface-sync --check` plus relevant goldens/generated docs checks (no drift).
+- [x] `go vet ./...` and `go build ./cmd/pm`.
+- [x] `git diff --check`.
+- [x] Completion-tracked `make connector-boundary`.
+- [x] `make verify`.
+- [x] Standard source/security review; no actionable findings.
 
 ## CLI help/manual/website parity assessment
 
@@ -27,4 +28,16 @@ record a precise not-applicable result only when no corresponding public command
 
 ## Results
 
-Pending implementation.
+- Focused multipart fixture approval: passed
+  `go test -timeout 20m ./internal/connectors/conformance -run 'Test(WriteRequestShape_MultipartFixture|ApprovedFixtureWriteRequestMultipartPayloadDigest)' -count=1`.
+- Full conformance package: passed
+  `go test -timeout 20m ./internal/connectors/conformance -count=1`.
+- Full aggregate verification: passed `make verify`, including the complete Go
+  suite, `go vet ./...`, `go build ./cmd/pm`, documentation, help/manual,
+  generator, lint, and release-workflow checks.
+- Connector boundary: passed `make connector-boundary` and the completion-tracked
+  boundary pass inside `make verify` (552 loaded connectors; clean report).
+- Source/security review: declaration-bound response/header and multipart paths
+  were reviewed for unbounded output, header injection, secret disclosure, and
+  approval-digest bypasses; no actionable finding remained. `git diff --check`
+  passed after the final lint simplification in `cmd/connectorgen/validate.go`.

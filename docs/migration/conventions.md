@@ -474,6 +474,46 @@ declares `rest.pagination`, it additionally writes the pager's source-only query
 stays hermetic: `surface-sync --check` verifies drift with no artifact and no
 network.
 
+### Declaration-owned request headers and response metadata
+
+A fixed REST or binary operation may declare a non-auth request parameter with
+`"in":"header"`. It must use its provider's exact field name, a bounded
+string `schema`, and a positive `max_bytes` no greater than the shared 16 KiB
+ceiling. The declaration, not the command, owns the header name. `params-import`
+accepts only OpenAPI string headers it can bound; `surface-sync` derives a
+string/enum flag named `header-<provider-name>` with an exact
+`maps_to:"header.<provider-name>"` mapping. Generated command help therefore
+lists only the operation's declared header flags; authors must not add a header
+map, a generic `--header`, or a hand-authored mapping.
+
+Request headers are a separate namespace from path, query, and body fields.
+The engine validates requiredness, enum/pattern/length and byte bounds before
+credential setup or I/O. It refuses unknown names, duplicate case variants,
+CR/LF/control characters, cross-operation mappings, and every runtime-owned
+field, including authorization, cookies, host/routing, connection/proxy, and
+transport metadata. An operation may never declare a runtime-owned field to
+make it caller-selectable.
+
+An operation may also declare only the response headers it needs to expose:
+
+```json
+"response": {
+  "headers": [
+    { "name": "X-Request-ID", "max_bytes": 128 },
+    { "name": "ETag", "max_bytes": 256 }
+  ]
+}
+```
+
+The result retains every ordinary provider body field, status, and declared
+response-header value within the operation's existing body/media/schema bounds;
+it does not filter a value for scope, rarity, pricing tier, destructive effect,
+or unfamiliarity. Undeclared headers are not an output channel. Established
+credential/transport-secret header masking remains mandatory: a present masked
+header is returned as `{"redacted":true}` rather than silently disappearing.
+If a declared response header exceeds its cap, execution fails rather than
+truncating or leaking an unbounded value.
+
 The import deliberately drops two classes of parameter:
 
 - **paging parameters**, for the reason above. The test is the parameter's
@@ -1319,6 +1359,17 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   {"status": 201, "body": {"number": 42}}` because `hooks/github/hooks.go`'s `createPullRequest`
   decodes the POST response's `number` field before issuing its follow-up requests; a fixture with
   no `response` block is unaffected, still gets `200 {}`).
+- **Multipart write fixtures carry declared payload assets, never inline bytes.** For every
+  `multipart.parts[].type: "file"` field present in a write fixture record, add the sanitized,
+  bounded test payload at `fixtures/writes/<action>.payloads/<declared-record-field>`. The fixture
+  record keeps the ordinary project-relative source path (for example `"media_file_path":
+  "fixture-media.bin"`); conformance stages the asset into that path in a private temporary
+  project, computes its SHA-256 through the action's declared file and aggregate byte caps, and
+  sends only that digest through the real preview → fixture-approval → execute path. The asset
+  bytes and source content never enter plans, grants, reports, or provider-facing fixture output.
+  A missing, oversized, unsafe, changed-after-preview, or stale-digest asset is a hard conformance
+  failure before the replay server receives a request. This contract is provider-neutral: do not
+  add connector-specific fixture approval helpers or inline/base64 raw-byte escape hatches.
 - **No secret-looking values, ever.** `connectorgen validate`'s `secret_literal` rule and
   `conformance`'s `secret_redaction` check both regex-scan every fixture file (and `docs.md`) for
   Bearer-header shapes, `api_key`/`access_token`/`secret`/`password`-adjacent long tokens, and

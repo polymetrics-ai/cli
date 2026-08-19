@@ -1830,6 +1830,7 @@ func safeReversePlanForOutput(plan app.ReversePlan) app.ReversePlan {
 	plan.ConnectorCommandRecord = nil
 	plan.ConnectorCommandPathParams = nil
 	plan.ConnectorCommandQuery = nil
+	plan.ConnectorCommandHeaders = nil
 	plan.Sample = app.RedactReversePlanRecords(plan.Sample, plan.RedactFields)
 	return plan
 }

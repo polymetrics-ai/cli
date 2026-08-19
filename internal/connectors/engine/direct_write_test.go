@@ -30,7 +30,12 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 		if got := r.Form.Get("dir"); got != "1" {
 			t.Fatalf("form dir = %q, want 1", got)
 		}
+		if got := r.Header.Get("X-Change-Reason"); got != "correctness" {
+			t.Fatalf("X-Change-Reason = %q, want declaration-owned value", got)
+		}
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Write-Receipt", "receipt-42")
+		w.Header().Add("Set-Cookie", "transport-secret")
 		_, _ = w.Write([]byte(`{"ok":true,"token":"server-token","nested":{"token":"nested-server-token"}}`))
 	}))
 	defer srv.Close()
@@ -57,6 +62,10 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 				Path:        "/api/vote",
 				ContentType: "application/x-www-form-urlencoded",
 				MaxBytes:    1024,
+				Parameters: []OperationParameter{{
+					Name: "X-Change-Reason", In: "header", Type: "string", Required: true,
+					Schema: json.RawMessage(`{"type":"string","enum":["correctness","moderation"]}`), MaxBytes: 32,
+				}},
 				BodySchema: json.RawMessage(`{
 					"type": "object",
 					"required": ["id", "dir"],
@@ -65,6 +74,10 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 						"dir": {"type": "integer"}
 					}
 				}`),
+				Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+					{Name: "X-Write-Receipt", MaxBytes: 64},
+					{Name: "Set-Cookie", MaxBytes: 64},
+				}},
 			},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
@@ -87,6 +100,7 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 		},
 		Body:         map[string]any{"id": "t3_abc", "dir": 1},
+		Headers:      map[string]string{"X-Change-Reason": "correctness"},
 		RedactFields: []string{"token"},
 	}
 
@@ -99,6 +113,23 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 	if preview.ApprovalTarget.Batchable {
 		t.Fatal("preview made a batchable:false operation batchable")
+	}
+	changedHeader := req
+	changedHeader.Headers = map[string]string{"X-Change-Reason": "moderation"}
+	changedPreview, err := PreviewOperationDirectWrite(context.Background(), bundle, changedHeader, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite changed header: %v", err)
+	}
+	if changedPreview.Digest == preview.Digest {
+		t.Fatalf("header change preserved preview digest %q", preview.Digest)
+	}
+	changedHeader.PreviewDigest = preview.Digest
+	changedHeader.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, changedHeader, nil); err == nil || !strings.Contains(err.Error(), "no longer matches") {
+		t.Fatalf("OperationDirectWrite with changed header = %v, want preview mismatch", err)
+	}
+	if calls != 0 {
+		t.Fatalf("changed header reached network; calls = %d, want 0", calls)
 	}
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
@@ -119,6 +150,12 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 	if result.Status != http.StatusOK {
 		t.Fatalf("status = %d, want %d", result.Status, http.StatusOK)
+	}
+	if got := result.Headers["X-Write-Receipt"].Values; len(got) != 1 || got[0] != "receipt-42" {
+		t.Fatalf("write receipt = %#v, want declared provider metadata", got)
+	}
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted {
+		t.Fatalf("Set-Cookie = %#v, want explicit redaction marker", cookie)
 	}
 	body, ok := result.Body.(map[string]any)
 	if !ok {

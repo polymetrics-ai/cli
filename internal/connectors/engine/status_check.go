@@ -35,6 +35,10 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
+	headers, err := operationRequestHeaders(b, op, req.Headers)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
 	requestCtx, cancel := context.WithTimeout(ctx, defaultOperationStatusTimeout)
 	defer cancel()
 	rt, err := newRuntime(requestCtx, b, cfg, h)
@@ -45,6 +49,7 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
+	requester = requesterWithOperationHeaders(requester, headers)
 	cap := op.REST.MaxBytes
 	if cap == 0 {
 		cap = defaultOperationStatusMaxBytes
@@ -56,7 +61,11 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if len(response.Body) > cap {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status response exceeded metadata cap")
 	}
-	return connectors.OperationStatusCheckResult{Connector: b.Name, Operation: op.ID, Method: http.MethodHead, Path: path, Status: response.Status, BodyBytes: len(response.Body)}, nil
+	responseHeaders, err := operationResponseHeaders(op, response.Header)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	return connectors.OperationStatusCheckResult{Connector: b.Name, Operation: op.ID, Method: http.MethodHead, Path: path, Status: response.Status, BodyBytes: len(response.Body), Headers: responseHeaders}, nil
 }
 
 func PreflightOperationStatusCheck(b Bundle, operation, method, path, outputPolicy string) error {

@@ -7,7 +7,7 @@
 - Merges into: `main`
 - Delivery: Committed implementation and delivery evidence on `fm/cli-closed-operation-runtime-r1`, ready for Firstmate's later no-mistakes/PR stage; no push or merge in this lane.
 - Working branch: `fm/cli-closed-operation-runtime-r1`
-- Task: Build the connector-agnostic F2/F4 operation runtime: provider-declared typed non-auth request headers and bounded binary download/upload/multipart, fixed status, and text export. Extend the existing main contracts without connector-specific code, generic transports, raw operation controls, or production connector-definition edits.
+- Task: Build the connector-agnostic F2/F4 operation runtime: provider-declared typed non-auth request headers and bounded binary download/upload/multipart, fixed status, and text export. Extend the existing main contracts without connector-specific code, generic transports, raw operation controls, or production connector-definition edits. The generic conformance fixture approval path must additionally stage declaration-owned multipart fixture payloads and bind their exact digests through preview/approval/execute, without logging payload content.
 - Verification: TDD evidence using two synthetic connector identities; focused and affected package tests; generator validation/goldens/docs checks; `go vet ./...`; `go build ./cmd/pm`; `git diff --check`; tracked `make connector-boundary`; `make verify`; generated CLI/manual help assessment and deep source review.
 
 ## Evidence Table
@@ -22,6 +22,7 @@
 | Status/text behaviour is closed and bounded. | live | Status returns only declared bounded metadata with no decoded body; text observes declared media/charset and cap, and rejected declarations send zero requests. |
 | Declared output preserves ordinary provider data. | live | Synthetic providers return unusual-but-declared status/header/body fields; the result retains all of them, while a credential/transport-secret canary remains present with the established explicit masking marker. |
 | Mutating operations bind approval to exact bytes. | live | A changed typed header or multipart input after preview invalidates the approval digest before a provider double sees an execute request. |
+| Multipart conformance replay uses the real approval gate. | live | A provider-neutral fixture payload is staged only at its declared field/path, its digest appears in the approved preview, and missing, tampered, or stale-digest fixtures make zero provider requests. |
 | Existing typed paths are unchanged. | live | Existing GraphQL, scalar/form/SCIM, structured-body, credential/auth, and no-credential installed-command preflight regressions pass unchanged. |
 | Generated help and adoption docs have no escape hatch. | live | Generator/golden/docs checks show typed declared inputs only; repository assertions find no raw header/body/URL/operation control exposed by the changed surface. |
 
@@ -42,6 +43,7 @@
 4. **Bounded files and multipart (red → green → refactor).** Add request-fidelity, exact part/media, cap, unknown-part, explicit safe output, redirect/media, stream-error, and partial-file tests. Connect declaration-owned input/output validation and atomic completion to the existing approval/confirmation path.
 5. **Status/text/output/approval regressions (red → green → refactor).** Prove bodyless status output, text media/charset/cap stdout/file rules, complete declared ordinary response preservation, explicit presence-preserving credential/transport masking, changed-after-preview digest rejection, no-credential preflight, and unchanged GraphQL/scalar/form/SCIM/structured-body/credential flows.
 6. **Documentation and generated CLI (red → green → refactor).** Update the declaration/adoption contract and regenerate/help-test the typed CLI surface; record why bare namespaces are unaffected if no namespace command shape changes.
+7. **Fixture multipart approval (red → green → refactor).** Add a generic fixture payload staging convention and a shared digest collector for declared multipart write actions. The fixture helper must stage only declared file fields, hash bounded local bytes before preview, pass the map through the real fixture grant, and prove happy, missing-payload, tamper, and stale-approval cases without a connector bypass or payload logging.
 
 ## Lifecycle and Skills
 

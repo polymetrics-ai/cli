@@ -35,6 +35,7 @@ blocked.
 
 - `stream_etl`
 - `rest_read`
+- `rest_status`
 - `rest_write`
 - `provider_search`
 - `graphql_query`
@@ -42,6 +43,7 @@ blocked.
 - `xml_export`
 - `xml_import`
 - `binary_download`
+- `text_export`
 - `file_upload`
 - `local_git`
 - `local_file`
@@ -67,6 +69,12 @@ rules are enforceable at load time.
 - Binary and file operations are bounded by a byte cap and an explicit
   caller-supplied destination, never by an output policy: the response becomes a
   file on disk, not a JSON body.
+- A caller-provided operation header is an exact, declared bounded string
+  parameter. Authorization, cookie, routing, connection/proxy, and other
+  runtime-owned headers are never caller-selectable. Declared response metadata
+  is bounded by name and byte cap; every ordinary admitted value is retained,
+  while established credential/transport-secret headers retain presence with an
+  explicit redaction marker.
 - Local git/file operations must use allowlisted structured actions, never a
   shell string.
 - Generated candidates from provider specs are not executable until reviewed
@@ -95,6 +103,13 @@ decides before any network or filesystem access:
   connector-relative GET, the caller must supply a destination root, and the
   byte cap is the request value clamped by the operation's declared maximum and
   then by the engine's own ceiling.
+- `intent:"status_check"` with `availability:"implemented"` executes one
+  declared connector-relative HEAD operation and returns its fixed status plus
+  only declared bounded response metadata, never a body.
+- A `text_export` operation uses the bounded download executor with a declared
+  CSV media type (and optional exact charset), explicit destination, atomic
+  file completion, and the same response-metadata projection. A failed
+  media/charset or byte check leaves no output file.
 - `intent:"direct_write"` with `availability:"implemented"` can enter the
   plan → preview → approval → execute lifecycle for one declared `rest_write`
   operation. Disk-backed bundles cross-check the operation's fixed method/path

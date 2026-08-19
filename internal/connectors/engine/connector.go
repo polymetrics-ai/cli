@@ -313,7 +313,7 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 		var err error
 		result, err = OperationBinaryDownload(admitted, c.bundle, BinaryDownloadRequest{
 			Operation: req.Operation, Config: req.Config, PathParams: req.PathParams, Query: req.Query,
-			MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
+			Headers: req.Headers, MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
 		}, c.hooks)
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
 	})
@@ -324,6 +324,8 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 		Connector: result.Connector,
 		Operation: result.Operation,
 		Record:    result.Record,
+		Status:    result.Status,
+		Headers:   result.Headers,
 	}, nil
 }
 

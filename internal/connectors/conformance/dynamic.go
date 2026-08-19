@@ -10,12 +10,15 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
 	"math/big"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -200,6 +203,12 @@ func writeRequestFor(actionName string, cfg connectors.RuntimeConfig) connectors
 // engine's real no-network preview so fixture execution exercises the same
 // gate as production without granting a bypass to arbitrary callers.
 func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionName string, cfg connectors.RuntimeConfig, records []connectors.Record, hooks engine.Hooks) (connectors.WriteRequest, error) {
+	fixtureReq := writeRequestFor(actionName, cfg)
+	digests, err := engine.ApprovedMultipartPayloadSHA256ForWrite(ctx, b, fixtureReq, records, hooks)
+	if err != nil {
+		return connectors.WriteRequest{}, fmt.Errorf("bind conformance fixture multipart payloads: %w", err)
+	}
+	cfg.ApprovedPayloadSHA256 = digests
 	authority, err := connectors.NewFixtureWriteApprovalAuthority()
 	if err != nil {
 		return connectors.WriteRequest{}, err
@@ -260,6 +269,122 @@ func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionNam
 		return connectors.WriteRequest{}, err
 	}
 	return req, nil
+}
+
+// stagedFixtureMultipartPayloads materializes only the bytes declared by a
+// write action's multipart file parts into a private, temporary project root.
+// Assets live beside their write fixture under
+// fixtures/writes/<action>.payloads/<declared-record-field>; the record still
+// carries the bounded project-relative destination path that execution uses.
+// No payload content is retained in plans, errors, or conformance reports.
+type stagedFixtureMultipartPayloads struct {
+	root string
+}
+
+func (s *stagedFixtureMultipartPayloads) Close() {
+	if s != nil && s.root != "" {
+		_ = os.RemoveAll(s.root)
+	}
+}
+
+func stageFixtureMultipartPayloads(b engine.Bundle, action engine.WriteAction, record connectors.Record) (*stagedFixtureMultipartPayloads, error) {
+	if action.Multipart == nil {
+		return nil, nil
+	}
+	if b.Fixtures == nil {
+		return nil, fmt.Errorf("fixture payload staging requires a fixture filesystem")
+	}
+	root, err := os.MkdirTemp("", "polymetrics-conformance-multipart-")
+	if err != nil {
+		return nil, fmt.Errorf("create fixture multipart project root: %w", err)
+	}
+	staged := &stagedFixtureMultipartPayloads{root: root}
+	fail := func(err error) (*stagedFixtureMultipartPayloads, error) {
+		staged.Close()
+		return nil, err
+	}
+	seenPaths := make(map[string]struct{})
+	for _, part := range action.Multipart.Parts {
+		if part.Type != "file" {
+			continue
+		}
+		value, present := fixtureRecordPathValue(record, part.Field)
+		if !present || value == nil {
+			if part.Required {
+				return fail(fmt.Errorf("fixture multipart part %q is missing declared record field %q", part.Name, part.Field))
+			}
+			continue
+		}
+		raw, ok := value.(string)
+		if !ok || strings.TrimSpace(raw) == "" {
+			return fail(fmt.Errorf("fixture multipart part %q declared record field %q must be a non-empty file path", part.Name, part.Field))
+		}
+		if strings.TrimSpace(part.Field) == "" || strings.ContainsAny(part.Field, "/\\") {
+			return fail(fmt.Errorf("fixture multipart part %q has an unsafe declared record field %q", part.Name, part.Field))
+		}
+		assetPath := path.Join("writes", action.Name+".payloads", part.Field)
+		if !fs.ValidPath(assetPath) {
+			return fail(fmt.Errorf("fixture multipart part %q has invalid payload asset path", part.Name))
+		}
+		payload, err := readBoundedFixturePayload(b.Fixtures, assetPath, part.MaxBytes)
+		if err != nil {
+			return fail(fmt.Errorf("fixture multipart part %q: %w", part.Name, err))
+		}
+		rel := filepath.Clean(filepath.FromSlash(raw))
+		if filepath.IsAbs(rel) || !filepath.IsLocal(rel) {
+			return fail(fmt.Errorf("fixture multipart part %q destination must be project-relative", part.Name))
+		}
+		if _, duplicate := seenPaths[rel]; duplicate {
+			return fail(fmt.Errorf("fixture multipart parts reuse source path %q", rel))
+		}
+		seenPaths[rel] = struct{}{}
+		destination := filepath.Join(root, rel)
+		if err := os.MkdirAll(filepath.Dir(destination), 0o700); err != nil {
+			return fail(fmt.Errorf("fixture multipart part %q create destination: %w", part.Name, err))
+		}
+		if err := os.WriteFile(destination, payload, 0o600); err != nil {
+			return fail(fmt.Errorf("fixture multipart part %q stage payload: %w", part.Name, err))
+		}
+	}
+	return staged, nil
+}
+
+func fixtureRecordPathValue(record connectors.Record, field string) (any, bool) {
+	var current any = map[string]any(record)
+	for _, segment := range strings.Split(field, ".") {
+		if strings.TrimSpace(segment) == "" {
+			return nil, false
+		}
+		values, ok := current.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+		value, ok := values[segment]
+		if !ok {
+			return nil, false
+		}
+		current = value
+	}
+	return current, true
+}
+
+func readBoundedFixturePayload(fsys fs.FS, name string, maxBytes int64) ([]byte, error) {
+	if maxBytes <= 0 {
+		return nil, fmt.Errorf("declares no positive byte cap")
+	}
+	file, err := fsys.Open(name)
+	if err != nil {
+		return nil, fmt.Errorf("read declared payload asset %q: %w", name, err)
+	}
+	defer func() { _ = file.Close() }()
+	payload, err := io.ReadAll(io.LimitReader(file, maxBytes+1))
+	if err != nil {
+		return nil, err
+	}
+	if int64(len(payload)) > maxBytes {
+		return nil, fmt.Errorf("payload asset exceeds declared byte cap %d", maxBytes)
+	}
+	return payload, nil
 }
 
 // checkCheckFixture runs the bundle's declarative Check() against a replay
@@ -564,38 +689,49 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 			continue
 		}
 
-		record := connectors.Record(fx.Record)
-		ctx := context.Background()
-		cfg := runtimeConfigForEngine(b)
+		func() {
+			record := connectors.Record(fx.Record)
+			ctx := context.Background()
+			cfg := runtimeConfigForEngine(b)
+			staged, stageErr := stageFixtureMultipartPayloads(b, action, record)
+			if stageErr != nil {
+				out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("fixture multipart payload: %v", stageErr)})
+				return
+			}
+			if staged != nil {
+				defer staged.Close()
+				cfg.ProjectDir = staged.root
+			}
 
-		if verr := engine.ValidateWrite(ctx, b, writeRequestFor(action.Name, cfg), []connectors.Record{record}); verr != nil {
-			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("write_validate: fixture record failed validation: %v", verr)})
-			continue
-		}
+			if verr := engine.ValidateWrite(ctx, b, writeRequestFor(action.Name, cfg), []connectors.Record{record}); verr != nil {
+				out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("write_validate: fixture record failed validation: %v", verr)})
+				return
+			}
 
-		capture.Reset(fx.Response)
-		rb := withReplayURL(b, capture.URL)
-		hooks := engine.HooksFor(b.Name)
-		writeReq, err := approvedFixtureWriteRequest(ctx, rb, action.Name, cfg, []connectors.Record{record}, hooks)
-		if err != nil {
-			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.DryRunWrite against replay server failed: %v", err)})
-			continue
-		}
-		if _, err := engine.Write(ctx, rb, writeReq, []connectors.Record{record}, hooks); err != nil {
-			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.Write against replay server failed: %v", err)})
-			continue
-		}
-		got := capture.LastRequest()
-		if got == nil {
-			out = append(out, CheckResult{Name: name, Error: "engine.Write sent no HTTP request"})
-			continue
-		}
+			capture.Reset(fx.Response)
+			rb := withReplayURL(b, capture.URL)
+			hooks := engine.HooksFor(b.Name)
+			writeReq, err := approvedFixtureWriteRequest(ctx, rb, action.Name, cfg, []connectors.Record{record}, hooks)
+			if err != nil {
+				out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.DryRunWrite against replay server failed: %v", err)})
+				return
+			}
+			if _, err := engine.Write(ctx, rb, writeReq, []connectors.Record{record}, hooks); err != nil {
+				out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.Write against replay server failed: %v", err)})
+				return
+			}
+			got := capture.LastRequest()
+			if got == nil {
+				out = append(out, CheckResult{Name: name, Error: "engine.Write sent no HTTP request"})
+				return
+			}
 
-		if mismatch := compareWriteExpectation(*got, fx.Expect); mismatch != "" {
-			out = append(out, CheckResult{Name: name, Error: mismatch})
-			continue
-		}
-		out = append(out, CheckResult{Name: name, Passed: true})
+			if mismatch := compareWriteExpectation(*got, fx.Expect); mismatch != "" {
+				out = append(out, CheckResult{Name: name, Error: mismatch})
+				return
+			}
+			out = append(out, CheckResult{Name: name, Passed: true})
+		}()
 	}
 	return out
 }

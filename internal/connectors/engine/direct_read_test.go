@@ -805,6 +805,184 @@ func statusTextReadBundle(baseURL, id, method, endpointPath, outputPolicy, conte
 	}
 }
 
+func TestOperationDirectReadUsesOnlyDeclaredTypedHeaders(t *testing.T) {
+	type connectorFixture struct {
+		name   string
+		header string
+		path   string
+	}
+	fixtures := []connectorFixture{
+		{name: "synthetic-alpha", header: "X-Alpha-Tenant", path: "/v1/alpha/{id}"},
+		{name: "synthetic-beta", header: "X-Beta-Tenant", path: "/v1/beta/{id}"},
+	}
+
+	for _, fixture := range fixtures {
+		fixture := fixture
+		t.Run(fixture.name, func(t *testing.T) {
+			var issued int
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				issued++
+				if got, want := r.Header.Get(fixture.header), "tenant-42"; got != want {
+					t.Fatalf("%s = %q, want %q", fixture.header, got, want)
+				}
+				if got := r.Header.Get("X-Other-Operation"); got != "" {
+					t.Fatalf("cross-operation header reached wire: %q", got)
+				}
+				if got, want := r.URL.Query().Get("query_only"), "query-value"; got != want {
+					t.Fatalf("query_only = %q, want %q", got, want)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"provider_field":"preserved"}`))
+			}))
+			defer srv.Close()
+
+			b := statusTextReadBundle(srv.URL, fixture.name+".read", http.MethodGet, fixture.path, "json_redacted", "", 1024)
+			b.Name = fixture.name
+			b.Operations[0].REST.Parameters = []OperationParameter{
+				{Name: "id", In: "path", Type: "string", Required: true},
+				{Name: "query_only", In: "query", Type: "string"},
+				{
+					Name:     fixture.header,
+					In:       "header",
+					Type:     "string",
+					Required: true,
+					Schema:   json.RawMessage(`{"type":"string","pattern":"^[a-z0-9-]+$","minLength":1,"maxLength":16}`),
+					MaxBytes: 16,
+				},
+			}
+
+			result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+				Operation:  fixture.name + ".read",
+				PathParams: map[string]string{"id": "fixed-path"},
+				Query:      map[string]string{"query_only": "query-value"},
+				Headers:    map[string]string{fixture.header: "tenant-42"},
+				MaxBytes:   1024,
+			}, nil)
+			if err != nil {
+				t.Fatalf("OperationDirectRead: %v", err)
+			}
+			body, ok := result.Body.(map[string]any)
+			if !ok || body["provider_field"] != "preserved" {
+				t.Fatalf("body = %#v, want ordinary provider fields preserved", result.Body)
+			}
+			if issued != 1 {
+				t.Fatalf("requests = %d, want 1", issued)
+			}
+		})
+	}
+}
+
+func TestOperationDirectReadRejectsHeaderEscapeHatchesBeforeNetwork(t *testing.T) {
+	var issued int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer srv.Close()
+
+	b := statusTextReadBundle(srv.URL, "synthetic.header_read", http.MethodGet, "/v1/resource", "json_redacted", "", 1024)
+	b.Operations[0].REST.Parameters = []OperationParameter{{
+		Name:     "X-Declared-Tenant",
+		In:       "header",
+		Type:     "string",
+		Required: true,
+		Values:   []string{"alpha"},
+		Schema:   json.RawMessage(`{"type":"string","pattern":"^[a-z]+$","minLength":1,"maxLength":8}`),
+		MaxBytes: 8,
+	}}
+	b.Operations = append(b.Operations, OperationSpec{
+		ID: "synthetic.other_operation", Kind: "rest_read", Summary: "other header namespace", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/v1/other", MaxBytes: 1024, Parameters: []OperationParameter{{Name: "X-Other-Operation", In: "header", Type: "string", Schema: json.RawMessage(`{"type":"string"}`), MaxBytes: 8}}},
+	})
+	b.HTTP.Headers = map[string]string{"X-Runtime-Header": "fixed-runtime-value"}
+
+	tests := []struct {
+		name    string
+		headers map[string]string
+		want    string
+	}{
+		{name: "unknown", headers: map[string]string{"X-Unknown": "alpha"}, want: "unknown declared request header"},
+		{name: "cross operation", headers: map[string]string{"X-Other-Operation": "alpha"}, want: "unknown declared request header"},
+		{name: "malformed name", headers: map[string]string{"X Declared Tenant": "alpha"}, want: "malformed"},
+		{name: "duplicate case variant", headers: map[string]string{"X-Declared-Tenant": "alpha", "x-declared-tenant": "alpha"}, want: "duplicate"},
+		{name: "protected authorization case variant", headers: map[string]string{"aUtHoRiZaTiOn": "Bearer forbidden"}, want: "protected"},
+		{name: "protected proxy authorization case variant", headers: map[string]string{"PrOxY-AuThOrIzAtIoN": "forbidden"}, want: "protected"},
+		{name: "protected cookie case variant", headers: map[string]string{"cOoKiE": "forbidden"}, want: "protected"},
+		{name: "protected set cookie case variant", headers: map[string]string{"sEt-CoOkIe": "forbidden"}, want: "protected"},
+		{name: "protected host case variant", headers: map[string]string{"hOsT": "forbidden.test"}, want: "protected"},
+		{name: "protected connection case variant", headers: map[string]string{"cOnNeCtIoN": "close"}, want: "protected"},
+		{name: "protected forwarding case variant", headers: map[string]string{"X-FoRwArDeD-FoR": "203.0.113.1"}, want: "protected"},
+		{name: "runtime configured header", headers: map[string]string{"x-runtime-header": "caller-override"}, want: "protected"},
+		{name: "CRLF injection", headers: map[string]string{"X-Declared-Tenant": "alpha\r\nX-Escaped: true"}, want: "control character"},
+		{name: "over declared byte cap", headers: map[string]string{"X-Declared-Tenant": "abcdefghx"}, want: "exceeds declared byte cap"},
+		{name: "schema mismatch", headers: map[string]string{"X-Declared-Tenant": "ALPHA"}, want: "does not satisfy declared schema"},
+		{name: "enum mismatch", headers: map[string]string{"X-Declared-Tenant": "beta"}, want: "not one of the declared values"},
+		{name: "missing required", headers: nil, want: "requires declared request header"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+				Operation: "synthetic.header_read", Headers: tt.headers, MaxBytes: 1024,
+			}, nil)
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("OperationDirectRead error = %v, want %q", err, tt.want)
+			}
+		})
+	}
+	if issued != 0 {
+		t.Fatalf("requests = %d, want header rejections before I/O", issued)
+	}
+}
+
+func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Request-ID", "req-123")
+		w.Header().Set("X-Provider-Tier", "rare-paid-feature")
+		w.Header().Set("X-Undeclared-Transport-Metadata", "not-an-output-channel")
+		w.Header().Add("Set-Cookie", "session=transport-secret")
+		_, _ = w.Write([]byte(`{"ordinary":"retained","rare":"retained","paid_tier":"retained","destructive_state":"retained"}`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.result", Kind: "rest_read", Summary: "Declared result", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodGet, Path: "/v1/result", MaxBytes: 1024,
+				Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+					{Name: "X-Request-ID", MaxBytes: 64},
+					{Name: "X-Provider-Tier", MaxBytes: 64},
+					{Name: "Set-Cookie", MaxBytes: 128},
+				}},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v1/result", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+	}
+
+	result, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.result"}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok || body["ordinary"] != "retained" || body["rare"] != "retained" || body["paid_tier"] != "retained" || body["destructive_state"] != "retained" {
+		t.Fatalf("body = %#v, want every declared ordinary response field", result.Body)
+	}
+	if got := result.Headers["X-Request-ID"].Values; len(got) != 1 || got[0] != "req-123" {
+		t.Fatalf("request id header = %#v, want complete declared metadata", got)
+	}
+	if got := result.Headers["X-Provider-Tier"].Values; len(got) != 1 || got[0] != "rare-paid-feature" {
+		t.Fatalf("provider tier header = %#v, want complete declared metadata", got)
+	}
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted || len(cookie.Values) != 0 {
+		t.Fatalf("Set-Cookie = %#v, want presence-preserving redaction marker", cookie)
+	}
+	if _, present := result.Headers["X-Undeclared-Transport-Metadata"]; present {
+		t.Fatalf("headers = %#v, undeclared provider metadata became an output channel", result.Headers)
+	}
+}
+
 func TestOperationDirectReadSendsDeclaredPlainTextBody(t *testing.T) {
 	source := "# rendered from a declared plain-text body"
 	var issued int

@@ -56,6 +56,7 @@ type directReadWalk struct {
 	query           url.Values
 	body            any
 	bodyContentType string
+	headers         map[string]string
 	outputPolicy    string
 	maxBytes        int
 	page            int
@@ -143,6 +144,7 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	if err != nil {
 		return nil, connectors.DirectReadPage{}, nil, err
 	}
+	requester = requesterWithOperationHeaders(requester, w.headers)
 
 	// The paginator's stop rule for page_number/offset_limit is "this page held
 	// fewer records than the page size", so its threshold has to be the size

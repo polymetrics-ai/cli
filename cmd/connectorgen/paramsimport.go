@@ -6,7 +6,9 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -132,8 +134,11 @@ type openAPIParameter struct {
 	Required    bool   `json:"required"`
 	Description string `json:"description"`
 	Schema      struct {
-		Type string   `json:"type"`
-		Enum []string `json:"enum"`
+		Type      string   `json:"type"`
+		Enum      []string `json:"enum"`
+		Pattern   string   `json:"pattern"`
+		MinLength int      `json:"minLength"`
+		MaxLength int      `json:"maxLength"`
 	} `json:"schema"`
 	// Swagger 2 puts type/enum directly on the parameter rather than under a
 	// schema object.
@@ -380,16 +385,17 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 			continue
 		}
 		name := strings.TrimSpace(p.Name)
-		if name == "" || seen[name] || skip[name] {
+		parameterKey := p.In + "\x00" + name
+		if name == "" || seen[parameterKey] || skip[name] {
 			continue
 		}
-		if p.In != "query" && p.In != "path" {
+		if p.In != "query" && p.In != "path" && p.In != "header" {
 			continue
 		}
 		if isProviderPagingParameter(p) {
 			continue
 		}
-		seen[name] = true
+		seen[parameterKey] = true
 		entry := map[string]any{"name": name, "in": p.In}
 		if typ := firstNonEmpty(p.Schema.Type, p.Type); typ != "" {
 			entry["type"] = typ
@@ -403,12 +409,64 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 		if summary := strings.TrimSpace(firstLine(p.Description)); summary != "" {
 			entry["summary"] = summary
 		}
+		if p.In == "header" {
+			schema, maxBytes, ok := importedHeaderSchema(p)
+			if !ok {
+				// A header with no bounded string contract is not a safe CLI
+				// input. Leave it unavailable rather than inventing a generic
+				// header path; a source contract can be improved and re-imported.
+				continue
+			}
+			entry["type"] = "string"
+			entry["schema"] = schema
+			entry["max_bytes"] = maxBytes
+		}
 		out = append(out, entry)
 	}
 	sort.SliceStable(out, func(i, j int) bool {
 		return out[i]["name"].(string) < out[j]["name"].(string)
 	})
 	return out
+}
+
+// importedHeaderSchema turns the bounded string subset of an OpenAPI header
+// parameter into the engine's schema dialect. The byte cap is conservative for
+// a provider's character maxLength (UTF-8 can use four bytes per code point),
+// or exact for a closed enum. Unbounded or non-string headers are intentionally
+// not imported: generated commands must never create a generic header escape
+// hatch.
+func importedHeaderSchema(p openAPIParameter) (map[string]any, int, bool) {
+	typ := firstNonEmpty(p.Schema.Type, p.Type)
+	if typ != "string" {
+		return nil, 0, false
+	}
+	values := firstNonEmptySlice(p.Schema.Enum, p.Enum)
+	schema := map[string]any{"type": "string"}
+	if len(values) > 0 {
+		schema["enum"] = values
+	}
+	if p.Schema.Pattern != "" {
+		schema["pattern"] = p.Schema.Pattern
+	}
+	if p.Schema.MinLength > 0 {
+		schema["minLength"] = p.Schema.MinLength
+	}
+	if p.Schema.MaxLength > 0 {
+		schema["maxLength"] = p.Schema.MaxLength
+	}
+	maxBytes := 0
+	if p.Schema.MaxLength > 0 && p.Schema.MaxLength <= 4096 {
+		maxBytes = p.Schema.MaxLength * 4
+	}
+	for _, value := range values {
+		if len(value) > maxBytes {
+			maxBytes = len(value)
+		}
+	}
+	if maxBytes <= 0 || maxBytes > 16<<10 {
+		return nil, 0, false
+	}
+	return schema, maxBytes, true
 }
 
 // importedOperationPaginationParameters records the exact source parameters a
@@ -547,7 +605,40 @@ func sameImportedParameter(got *orderedObject, want map[string]any) bool {
 			return false
 		}
 	}
+	wantSchema, schemaDeclared := want["schema"]
+	gotSchema, gotSchemaDeclared := got.get("schema")
+	if schemaDeclared != gotSchemaDeclared || (schemaDeclared && !sameImportedJSONValue(gotSchema, wantSchema)) {
+		return false
+	}
+	wantMaxBytes, maxBytesDeclared := want["max_bytes"].(int)
+	gotMaxBytes, gotMaxBytesDeclared := got.get("max_bytes")
+	if maxBytesDeclared != gotMaxBytesDeclared {
+		return false
+	}
+	if maxBytesDeclared {
+		gotNumber, ok := gotMaxBytes.(json.Number)
+		if !ok || gotNumber.String() != strconv.Itoa(wantMaxBytes) {
+			return false
+		}
+	}
 	return true
+}
+
+// sameImportedJSONValue compares the ordered document representation with the
+// map/slice values constructed from the OpenAPI artifact. Re-marshalling keeps
+// the comparison semantic rather than treating orderedObject and map as two
+// different schemas.
+func sameImportedJSONValue(got, want any) bool {
+	gotRaw, gotErr := json.Marshal(got)
+	wantRaw, wantErr := json.Marshal(want)
+	if gotErr != nil || wantErr != nil {
+		return false
+	}
+	var gotNormalized, wantNormalized any
+	if json.Unmarshal(gotRaw, &gotNormalized) != nil || json.Unmarshal(wantRaw, &wantNormalized) != nil {
+		return false
+	}
+	return reflect.DeepEqual(gotNormalized, wantNormalized)
 }
 
 // setImportedParameters replaces the operation's parameter list wholesale: the
@@ -582,6 +673,12 @@ func setImportedField(rest *orderedObject, field string, want []map[string]any) 
 		}
 		if summary, ok := param["summary"].(string); ok && summary != "" {
 			entry.set("summary", summary)
+		}
+		if schema, ok := param["schema"].(map[string]any); ok {
+			entry.set("schema", schema)
+		}
+		if maxBytes, ok := param["max_bytes"].(int); ok && maxBytes > 0 {
+			entry.set("max_bytes", json.Number(strconv.Itoa(maxBytes)))
 		}
 		entries = append(entries, entry)
 	}

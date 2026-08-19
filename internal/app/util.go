@@ -341,7 +341,7 @@ func connectorCommandPlanHash(planName, connector, credential string, config map
 // connector-command plan hash. The path/query/body fields are all part of the
 // approved request, so they must be bound before a preview can mint a
 // single-use approval token.
-func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query map[string]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
+func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query, headers map[string]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
 	payload := map[string]any{
 		"name":         planName,
 		"connector":    connector,
@@ -352,6 +352,7 @@ func operationConnectorCommandPlanHash(planName, connector, credential string, c
 		"operation":    operation,
 		"path_params":  cloneStringMap(pathParams),
 		"query":        cloneStringMap(query),
+		"headers":      cloneStringMap(headers),
 		"record_count": 1,
 		"body":         cloneRecord(body),
 	}

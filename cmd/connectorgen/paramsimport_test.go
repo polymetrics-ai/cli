@@ -183,6 +183,48 @@ func TestParamsImportCarriesEnumRequirednessAndSummary(t *testing.T) {
 	}
 }
 
+func TestParamsImportImportsOnlyBoundedTypedHeaders(t *testing.T) {
+	defsDir, artifact := setupParamsFixture(t)
+	raw, err := os.ReadFile(artifact)
+	if err != nil {
+		t.Fatalf("read artifact: %v", err)
+	}
+	updated := strings.Replace(string(raw),
+		`{ "name": "accept", "in": "header", "schema": { "type": "string" } }`,
+		`{ "name": "accept", "in": "header", "schema": { "type": "string" } },
+          { "name": "X-Request-Mode", "in": "header", "required": true, "schema": { "type": "string", "enum": ["safe", "full"], "pattern": "^(safe|full)$", "minLength": 4, "maxLength": 4 } }`,
+		1,
+	)
+	if err := os.WriteFile(artifact, []byte(updated), 0o644); err != nil {
+		t.Fatalf("write bounded-header artifact: %v", err)
+	}
+	if _, _, err := importConnectorParameters(paramsImportOptions{connector: "acme", artifact: artifact, defsDir: defsDir}); err != nil {
+		t.Fatalf("importConnectorParameters: %v", err)
+	}
+	byName := map[string]map[string]any{}
+	for _, parameter := range importedFixtureParameters(t, defsDir) {
+		byName[parameter["name"].(string)] = parameter
+	}
+	if _, found := byName["accept"]; found {
+		t.Fatal("unbounded header was imported")
+	}
+	header, found := byName["X-Request-Mode"]
+	if !found {
+		t.Fatalf("parameters = %#v, want bounded header", byName)
+	}
+	if header["in"] != "header" || header["type"] != "string" || header["max_bytes"] != float64(16) || header["required"] != true {
+		t.Fatalf("header import = %#v, want bounded required string header", header)
+	}
+	schema, ok := header["schema"].(map[string]any)
+	if !ok || schema["pattern"] != "^(safe|full)$" || schema["maxLength"] != float64(4) {
+		t.Fatalf("header schema = %#v, want imported string constraints", header["schema"])
+	}
+	changed, _, err := importConnectorParameters(paramsImportOptions{connector: "acme", artifact: artifact, defsDir: defsDir})
+	if err != nil || changed != 0 {
+		t.Fatalf("bounded header re-import changed/err = %d/%v, want 0/nil", changed, err)
+	}
+}
+
 // TestParamsImportIsIdempotent guards --check: a rerun against the same
 // artifact must report no drift, or CI would fail on an unchanged bundle.
 func TestParamsImportIsIdempotent(t *testing.T) {
@@ -234,6 +276,29 @@ func TestDeriveCommandParameterFlagsOnlyAdds(t *testing.T) {
 	}
 	if required, _ := since.get("required"); required != true {
 		t.Fatal("derived flag lost its requiredness")
+	}
+}
+
+func TestDeriveCommandParameterFlagsAddsExactHeaderMapping(t *testing.T) {
+	var cli orderedJSON
+	if err := json.Unmarshal([]byte(`{"commands":[{"path":"things list"}]}`), &cli); err != nil {
+		t.Fatalf("parse cli fixture: %v", err)
+	}
+	var ops orderedJSON
+	if err := json.Unmarshal([]byte(`{"rest":{"parameters":[{"name":"X-Request-Mode","in":"header","type":"string","values":["safe","full"],"required":true,"schema":{"type":"string"},"max_bytes":16}]}}`), &ops); err != nil {
+		t.Fatalf("parse operation fixture: %v", err)
+	}
+	cmd := arrayField(cli.root, "commands")[0].(*orderedObject)
+	restRaw, _ := ops.root.get("rest")
+	if got := deriveCommandParameterFlags(cmd, restRaw.(*orderedObject)); got != 1 {
+		t.Fatalf("derived flags = %d, want 1", got)
+	}
+	flag := arrayField(cmd, "flags")[0].(*orderedObject)
+	if stringField(flag, "name") != "header-x-request-mode" || stringField(flag, "maps_to") != "header.X-Request-Mode" || stringField(flag, "type") != "enum" {
+		t.Fatalf("header flag = %#v, want exact header mapping", flag.values)
+	}
+	if required, _ := flag.get("required"); required != true {
+		t.Fatalf("header flag required = %#v, want true", required)
 	}
 }
 
