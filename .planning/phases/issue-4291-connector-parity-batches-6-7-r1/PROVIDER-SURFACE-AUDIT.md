@@ -5,13 +5,13 @@ The source-lock recovery audit covers every connector owned by this issue. A row
 | Connector | Legacy `api_surface` count | New count | Basis | Audit state |
 | --- | ---: | ---: | --- | --- |
 | close-com | 297 | — | pending provider-surface audit | pending |
-| outreach | 259 | — | pending provider-surface audit | pending |
+| outreach | 259 | 259 | complete machine-readable OpenAPI plus provider-rendered fixed generic custom-object supplement; per-account object schemas are dynamic | complete — remapped, count unchanged |
 | salesloft | 12 | 211 | complete rendered reference: all 315 public API pages in provider sitemap | complete — remapped |
 | copper | 5 | 89 | complete rendered reference: all 637 provider-published MkDocs search-index documentation nodes | complete — remapped |
 | zoho-bigin | 50 | — | pending provider-surface audit | pending |
 | klaviyo | 9 | 345 | official OpenAPI 3.0.2 full GA specification | complete — remapped |
 | braze | 95 | — | pending provider-surface audit | pending |
-| customer-io | 159 | — | pending provider-surface audit | pending |
+| customer-io | 159 | 166 | official OpenAPI 3.1.0 application API specification | complete — remapped |
 | intercom | 10 | 231 | official Intercom OpenAPI 3.0.1 v2.16 specification | complete — remapped |
 | freshdesk | 10 | 170 | complete rendered reference: all 171 endpoint sections in the 3.2MB reference, normalizing to 170 HTTP operations | complete — remapped |
 | segment | 188 | — | pending provider-surface audit | pending |

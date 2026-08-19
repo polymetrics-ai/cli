@@ -28,8 +28,12 @@ The same complete-remap invariant is now green for these provider-published mach
 | Iterable | 4 | **148** | `https://api.iterable.com/api-docs` (Swagger 2.0) |
 | Klaviyo | 9 | **345** | `https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json` (OpenAPI 3.0.2 full GA specification) |
 | Intercom | 10 | **231** | `https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml` (OpenAPI 3.0.1) |
+| Outreach | 259 | **259** | official OpenAPI 3.0.3 plus the provider’s fixed generic custom-object route reference |
+| Customer.io | 159 | **166** | `https://docs.customer.io/files/journeys-app.json` (OpenAPI 3.1.0) |
 
 For each slice, the source-lock count, API-surface rows, and disposition rows reconcile exactly; `declared_percent` was removed. Existing stream coverage was retained only where its method/path occurs in the authoritative artifact, and no source operation was reported enabled without a runnable CLI command or typed write action.
+
+Outreach is an explicit count-unchanged audit result, not an unverified carry-forward: the current public OpenAPI has 253 static operations, and the provider documents six fixed generic custom-object routes separately because the per-account object schemas are dynamic. The combined complete fixed surface is therefore 259. All 163 enabled rows have an exact typed write-action binding; the 96 stream-only rows remain ETL and declaration-pending. Customer.io increases from 159 to 166 source operations; its 10 enabled rows each retain an exact typed write-action binding.
 
 Freshdesk’s complete rendered-reference pass is also green: all 171 endpoint sections in the provider’s single 3.2MB reference normalize to **170** unique HTTP method/path operations (78 GET, 39 POST, 30 PUT, 22 DELETE, 1 PATCH), replacing the legacy 10-row boundary. Its full source lock, API surface, and disposition ledger reconcile at 170 rows.
 
