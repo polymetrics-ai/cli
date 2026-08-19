@@ -33,6 +33,11 @@ func structuredRESTBodyBundle(baseURL string) Bundle {
 					Path:        "/workspaces/{workspace_id}/widgets",
 					ContentType: "application/json",
 					MaxBytes:    1024,
+					Parameters: []OperationParameter{{
+						Name: "dry_run",
+						In:   "query",
+						Type: "boolean",
+					}},
 					BodySchema: json.RawMessage(`{
 						"type": "object",
 						"additionalProperties": false,
@@ -251,7 +256,7 @@ func TestOperationDirectWriteStructuredRESTBodyRejectsInvalidInputBeforeIO(t *te
 			mutate: func(req *connectors.OperationDirectWriteRequest) {
 				req.Body["archive"] = map[string]any{"reason": "wrong action"}
 			},
-			wantErr: "does not declare structured field",
+			wantErr: "additional property",
 		},
 	}
 
@@ -503,6 +508,223 @@ func TestOperationDirectWriteStructuredRESTBodyMaterializesInferredTypes(t *test
 						t.Fatalf("invalid request reached transport; calls = %d, want 1", calls)
 					}
 				})
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteStructuredRESTBodyCanonicalizesTypedAliases(t *testing.T) {
+	type recordSlice []connectors.Record
+	type recordTuple [1]connectors.Record
+
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	rest := *bundle.Operations[0].REST
+	rest.BodySchema = json.RawMessage(`{
+		"additionalProperties": false,
+		"required": ["attributes", "targets"],
+		"properties": {
+			"attributes": {
+				"additionalProperties": false,
+				"required": ["owner", "settings"],
+				"properties": {
+					"owner": {"type": "string"},
+					"settings": {
+						"additionalProperties": false,
+						"required": ["active"],
+						"properties": {"active": {"type": "boolean"}}
+					}
+				}
+			},
+			"targets": {
+				"maxItems": 1,
+				"items": {
+					"additionalProperties": false,
+					"required": ["id"],
+					"properties": {"id": {"type": "string"}}
+				}
+			}
+		}
+	}`)
+	bundle.Operations[0].REST = &rest
+
+	valid := structuredRESTBodyRequest()
+	valid.Body = map[string]any{
+		"attributes": connectors.Record{
+			"owner": "owner-1",
+			"settings": connectors.Record{
+				"active": true,
+			},
+		},
+		"targets": recordSlice{{"id": "target-1"}},
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, valid, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite typed aliases: %v", err)
+	}
+	attributes, ok := prepared.body["attributes"].(map[string]any)
+	if !ok || attributes["owner"] != "owner-1" {
+		t.Fatalf("canonical attributes = %#v, want ordinary declared object", prepared.body["attributes"])
+	}
+	targets, ok := prepared.body["targets"].([]any)
+	if !ok || len(targets) != 1 {
+		t.Fatalf("canonical targets = %#v, want one ordinary array item", prepared.body["targets"])
+	}
+
+	for _, test := range []struct {
+		name string
+		body map[string]any
+		want string
+	}{
+		{
+			name: "top level alias undeclared property",
+			body: map[string]any{
+				"attributes": connectors.Record{"owner": "owner-1", "settings": connectors.Record{"active": true}, "undeclared": true},
+				"targets":    recordSlice{{"id": "target-1"}},
+			},
+			want: "additional property",
+		},
+		{
+			name: "nested alias undeclared property",
+			body: map[string]any{
+				"attributes": connectors.Record{"owner": "owner-1", "settings": connectors.Record{"active": true, "undeclared": true}},
+				"targets":    recordSlice{{"id": "target-1"}},
+			},
+			want: "additional property",
+		},
+		{
+			name: "scalar where inferred object is required",
+			body: map[string]any{
+				"attributes": "not an object",
+				"targets":    recordSlice{{"id": "target-1"}},
+			},
+			want: "does not match type",
+		},
+		{
+			name: "typed array alias undeclared item property",
+			body: map[string]any{
+				"attributes": connectors.Record{"owner": "owner-1", "settings": connectors.Record{"active": true}},
+				"targets":    recordTuple{{"id": "target-1", "undeclared": true}},
+			},
+			want: "additional property",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			req := structuredRESTBodyRequest()
+			req.Body = test.body
+			_, err := prepareOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("prepareOperationDirectWrite error = %v, want %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteQueryOwnership(t *testing.T) {
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	rest := *bundle.Operations[0].REST
+	rest.Query = map[string]string{"fixed": "provider"}
+	rest.Parameters = []OperationParameter{
+		{Name: "scope", In: "query", Type: "string", Required: true},
+		{Name: "dry_run", In: "query", Type: "boolean"},
+		{Name: "mode", In: "query", Type: "string", Values: []string{"safe"}},
+	}
+	bundle.Operations[0].REST = &rest
+
+	request := structuredRESTBodyRequest()
+	request.Query = map[string]string{"scope": "workspace-1", "mode": "safe"}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	if got := prepared.query.Get("scope"); got != "workspace-1" {
+		t.Fatalf("query scope = %q, want workspace-1", got)
+	}
+	if got := prepared.query.Get("mode"); got != "safe" {
+		t.Fatalf("query mode = %q, want safe", got)
+	}
+	if got := prepared.query.Get("fixed"); got != "provider" {
+		t.Fatalf("provider fixed query = %q, want provider", got)
+	}
+	if _, present := prepared.query["dry_run"]; present {
+		t.Fatalf("optional absent query = %#v, want dry_run omitted", prepared.query)
+	}
+
+	for _, test := range []struct {
+		name   string
+		mutate func(*Bundle, *connectors.OperationDirectWriteRequest)
+		want   string
+	}{
+		{
+			name: "unknown caller query",
+			mutate: func(_ *Bundle, req *connectors.OperationDirectWriteRequest) {
+				req.Query["unknown"] = "value"
+			},
+			want: "not source-declared",
+		},
+		{
+			name: "fixed caller query overlap",
+			mutate: func(_ *Bundle, req *connectors.OperationDirectWriteRequest) {
+				req.Query["fixed"] = "caller"
+			},
+			want: "fixed by rest.query",
+		},
+		{
+			name: "malformed boolean",
+			mutate: func(_ *Bundle, req *connectors.OperationDirectWriteRequest) {
+				req.Query["dry_run"] = "not-a-bool"
+			},
+			want: "must be boolean",
+		},
+		{
+			name: "malformed fixed source query",
+			mutate: func(bundle *Bundle, _ *connectors.OperationDirectWriteRequest) {
+				bundle.Operations[0].REST.Query["dry_run"] = "not-a-bool"
+			},
+			want: "must be boolean",
+		},
+		{
+			name: "invalid enum",
+			mutate: func(_ *Bundle, req *connectors.OperationDirectWriteRequest) {
+				req.Query["mode"] = "unsafe"
+			},
+			want: "must be one of",
+		},
+		{
+			name: "required query absent",
+			mutate: func(_ *Bundle, req *connectors.OperationDirectWriteRequest) {
+				req.Query = map[string]string{"mode": "safe"}
+			},
+			want: "requires query parameter",
+		},
+		{
+			name: "duplicate source declaration",
+			mutate: func(bundle *Bundle, _ *connectors.OperationDirectWriteRequest) {
+				rest := *bundle.Operations[0].REST
+				rest.Parameters = append(rest.Parameters, OperationParameter{Name: "scope", In: "query", Type: "string"})
+				bundle.Operations[0].REST = &rest
+			},
+			want: "duplicates query parameter",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			testBundle := bundle
+			testBundle.Operations = append([]OperationSpec(nil), bundle.Operations...)
+			testRest := *bundle.Operations[0].REST
+			testRest.Parameters = append([]OperationParameter(nil), testRest.Parameters...)
+			testRest.Query = map[string]string{}
+			for name, value := range bundle.Operations[0].REST.Query {
+				testRest.Query[name] = value
+			}
+			testBundle.Operations[0].REST = &testRest
+			testRequest := structuredRESTBodyRequest()
+			testRequest.Query = map[string]string{}
+			for name, value := range request.Query {
+				testRequest.Query[name] = value
+			}
+			test.mutate(&testBundle, &testRequest)
+			_, err := prepareOperationDirectWrite(context.Background(), testBundle, testRequest, nil)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("prepareOperationDirectWrite error = %v, want %q", err, test.want)
 			}
 		})
 	}

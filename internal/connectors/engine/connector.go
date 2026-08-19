@@ -283,8 +283,8 @@ func (c *Connector) PreflightOperationStructuredJSONBodyField(operation, field s
 // PreflightOperationDirectWrite proves a command's declared binding can reach
 // this connector's typed write executor without resolving credentials or
 // making a network request.
-func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
-	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy)
+func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
+	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy, queryFields...)
 }
 
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
@@ -494,8 +494,8 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 
 // PreflightOperationDirectWrite validates a native connector's declared
 // operation direct-write binding without resolving credentials or network I/O.
-func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
-	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
+	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy, queryFields...)
 }
 
 // PreflightOperationStructuredJSONBodyField validates a native connector's

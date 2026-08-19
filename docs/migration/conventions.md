@@ -391,7 +391,10 @@ not a full override by default.
   canonical payload. This is also the canonical materializer used by typed-action/reverse-ETL
   execution; do not add a second request builder. Each adoption must still run `surface-sync`, add
   provider-source evidence, update its generated help/manual/website surfaces, and prove its own
-  exact request and rejected-input cases.
+  exact request and rejected-input cases. A direct-write `query.<name>` binding must match one
+  exact source-imported `rest.parameters` query row; a provider-fixed `rest.query` value cannot be
+  caller-bound or overridden, and each source-required query parameter must be fixed or mapped to
+  a required command flag.
 - **Write-query optionality is source-locked too**: a legacy `writes.json` action may use the
   existing object-form `query` entry with `"template":"{{ record.field }}"` and
   `"omit_when_absent": true` to omit that one parameter when the record does not contain the

@@ -1,10 +1,12 @@
 package engine
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"math"
 	"mime"
+	"reflect"
 	"strings"
 
 	"polymetrics.ai/internal/safety"
@@ -31,8 +33,8 @@ func PreflightOperationStructuredJSONBodyField(b Bundle, operation, field string
 // ValidateOperationStructuredJSONBodyField is the common declaration gate for
 // a json command flag on a fixed write operation. GraphQL retains its existing
 // closed-variable contract; REST uses the equivalent closed body-schema
-// contract. Commandrunner and connectorgen call this same function, while the
-// typed executor calls it again when a supplied value is structured.
+// contract. Commandrunner and connectorgen call this same function; typed
+// execution compiles the same schema at its shared body boundary.
 func ValidateOperationStructuredJSONBodyField(op OperationSpec, field string) error {
 	field = strings.TrimSpace(field)
 	if err := safety.ValidateIdentifier(field, "structured body field"); err != nil {
@@ -109,6 +111,51 @@ func structuredRESTBodySchema(op OperationSpec) (map[string]any, error) {
 	return compiled.root, nil
 }
 
+func operationHasStructuredRESTBodyField(op OperationSpec) bool {
+	if op.REST == nil || len(op.REST.BodySchema) == 0 {
+		return false
+	}
+	var root map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &root); err != nil {
+		return false
+	}
+	properties, ok := root["properties"].(map[string]any)
+	if !ok {
+		return false
+	}
+	for _, raw := range properties {
+		node, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if isObjectType(node) || isArrayType(node) {
+			return true
+		}
+		if _, ok := node["properties"]; ok {
+			return true
+		}
+		if _, ok := node["additionalProperties"]; ok {
+			return true
+		}
+		if _, ok := node["items"]; ok {
+			return true
+		}
+		if _, ok := node["prefixItems"]; ok {
+			return true
+		}
+	}
+	return false
+}
+
+func operationHasStructuredRESTBodyValue(body map[string]any) bool {
+	for _, value := range body {
+		if isStructuredJSONBodyValue(value) {
+			return true
+		}
+	}
+	return false
+}
+
 type structuredRESTBodySchemaCompilation struct {
 	root   map[string]any
 	schema *Schema
@@ -144,6 +191,30 @@ func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchem
 		return nil, err
 	}
 	return &structuredRESTBodySchemaCompilation{root: root, schema: sch}, nil
+}
+
+func materializeStructuredRESTBody(op OperationSpec, body map[string]any) (map[string]any, error) {
+	compiled, err := compileStructuredRESTBodySchema(op)
+	if err != nil {
+		return nil, err
+	}
+	raw, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("operation %q: encode structured body: %w", op.ID, err)
+	}
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	var canonical map[string]any
+	if err := decoder.Decode(&canonical); err != nil {
+		return nil, fmt.Errorf("operation %q: decode structured body: %w", op.ID, err)
+	}
+	if canonical == nil {
+		return nil, fmt.Errorf("operation %q: structured body must be an object", op.ID)
+	}
+	if err := compiled.schema.Validate(canonical); err != nil {
+		return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
+	}
+	return canonical, nil
 }
 
 type structuredRESTBodySchemaState struct {
@@ -382,7 +453,10 @@ func structuredRESTBodyNodeHasExplicitType(node map[string]any) bool {
 }
 
 func isStructuredJSONBodyValue(value any) bool {
-	if _, ok := value.(map[string]any); ok {
+	if value == nil {
+		return false
+	}
+	if reflect.ValueOf(value).Kind() == reflect.Map {
 		return true
 	}
 	_, ok := arrayElements(value)

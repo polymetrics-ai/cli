@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"mime"
 	"net/http"
 	"net/url"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -278,7 +280,7 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 // deliberately no-network and shares operationDirectWriteSpec with execution,
 // so an api_surface row cannot point a command at a different endpoint than
 // the preview-bound request the runtime will actually dispatch.
-func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, outputPolicy string) error {
+func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, outputPolicy string, queryFields ...string) error {
 	op, declaredMethod, err := operationDirectWriteSpec(b, operation)
 	if err != nil {
 		return err
@@ -299,7 +301,10 @@ func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, ou
 	if outputPolicy != op.OutputPolicy {
 		return fmt.Errorf("operation direct write output_policy %q does not match declared operation output_policy %q", outputPolicy, op.OutputPolicy)
 	}
-	return validateOperationDirectWriteOutputPolicy(outputPolicy)
+	if err := validateOperationDirectWriteOutputPolicy(outputPolicy); err != nil {
+		return err
+	}
+	return validateOperationDirectWriteQueryFields(op, queryFields)
 }
 
 func operationDirectWriteRedactFields(op OperationSpec) []string {
@@ -370,12 +375,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	queryMap := make(map[string]string, len(op.REST.Query)+len(req.Query))
-	for key, value := range op.REST.Query {
-		queryMap[key] = value
-	}
-	for key, value := range req.Query {
-		queryMap[key] = value
+	queryMap, err := operationDirectWriteQuery(op, req.Query)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
 	}
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -593,6 +595,9 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path, ""); err != nil {
 			return OperationSpec{}, "", err
 		}
+		if _, err := operationDirectWriteQueryParameters(op); err != nil {
+			return OperationSpec{}, "", err
+		}
 		return op, method, nil
 	case "graphql_mutation":
 		if err := validateGraphQLOperationDirectContract(op, "mutation"); err != nil {
@@ -649,43 +654,183 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 	if op.REST == nil {
 		return nil, nil
 	}
-	hasStructuredOverride := false
-	for field, value := range overrides {
-		if !isStructuredJSONBodyValue(value) {
-			continue
-		}
-		hasStructuredOverride = true
-		if err := ValidateOperationStructuredJSONBodyField(op, field); err != nil {
-			return nil, err
-		}
-	}
 	body := cloneAnyMap(op.REST.Body)
 	for key, value := range overrides {
 		body[key] = value
 	}
 	if len(op.REST.BodySchema) > 0 {
-		var sch *Schema
-		if hasStructuredOverride {
-			compiled, err := compileStructuredRESTBodySchema(op)
+		if _, _, err := operationStructuredJSONContentType(op); err == nil && op.REST.Multipart == nil && (operationHasStructuredRESTBodyField(op) || operationHasStructuredRESTBodyValue(body)) {
+			canonical, err := materializeStructuredRESTBody(op, body)
 			if err != nil {
 				return nil, err
 			}
-			sch = compiled.schema
+			body = canonical
 		} else {
-			var err error
-			sch, err = CompileSchema(op.REST.BodySchema)
+			sch, err := CompileSchema(op.REST.BodySchema)
 			if err != nil {
 				return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
 			}
-		}
-		if err := sch.Validate(body); err != nil {
-			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
+			if err := sch.Validate(body); err != nil {
+				return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
+			}
 		}
 	}
 	if len(body) == 0 {
 		return nil, nil
 	}
 	return body, nil
+}
+
+func operationDirectWriteQueryParameters(op OperationSpec) (map[string]OperationParameter, error) {
+	if op.Kind != "rest_write" || op.REST == nil {
+		return nil, nil
+	}
+	parameters := make(map[string]OperationParameter)
+	for _, parameter := range op.REST.Parameters {
+		if !strings.EqualFold(strings.TrimSpace(parameter.In), "query") {
+			continue
+		}
+		name := parameter.Name
+		if err := safety.ValidateIdentifier(name, "operation query parameter"); err != nil {
+			return nil, fmt.Errorf("operation %q rest.parameters: %w", op.ID, err)
+		}
+		if _, duplicate := parameters[name]; duplicate {
+			return nil, fmt.Errorf("operation %q rest.parameters duplicates query parameter %q", op.ID, name)
+		}
+		parameters[name] = parameter
+	}
+	return parameters, nil
+}
+
+func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []string) error {
+	if op.Kind != "rest_write" || op.REST == nil {
+		if len(queryFields) == 0 {
+			return nil
+		}
+		return fmt.Errorf("operation %q does not permit caller query fields", op.ID)
+	}
+	parameters, err := operationDirectWriteQueryParameters(op)
+	if err != nil {
+		return err
+	}
+	seen := make(map[string]struct{}, len(queryFields))
+	for _, rawName := range queryFields {
+		name := rawName
+		if err := safety.ValidateIdentifier(name, "operation query parameter"); err != nil {
+			return fmt.Errorf("operation %q query field: %w", op.ID, err)
+		}
+		if _, duplicate := seen[name]; duplicate {
+			return fmt.Errorf("operation %q maps more than one command flag to query parameter %q", op.ID, name)
+		}
+		seen[name] = struct{}{}
+		if _, fixed := op.REST.Query[name]; fixed {
+			return fmt.Errorf("operation %q query parameter %q is fixed by rest.query and cannot be caller-bound", op.ID, name)
+		}
+		if _, declared := parameters[name]; !declared {
+			return fmt.Errorf("operation %q query parameter %q is not source-declared in rest.parameters", op.ID, name)
+		}
+	}
+	parameterNames := make([]string, 0, len(parameters))
+	for name := range parameters {
+		parameterNames = append(parameterNames, name)
+	}
+	sort.Strings(parameterNames)
+	for _, name := range parameterNames {
+		parameter := parameters[name]
+		if !parameter.Required {
+			continue
+		}
+		if _, fixed := op.REST.Query[name]; fixed {
+			continue
+		}
+		if _, bound := seen[name]; !bound {
+			return fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
+		}
+	}
+	return nil
+}
+
+func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (map[string]string, error) {
+	parameters, err := operationDirectWriteQueryParameters(op)
+	if err != nil {
+		return nil, err
+	}
+	requestedNames := make([]string, 0, len(requested))
+	for name := range requested {
+		requestedNames = append(requestedNames, name)
+	}
+	sort.Strings(requestedNames)
+	if err := validateOperationDirectWriteQueryFields(op, requestedNames); err != nil {
+		return nil, err
+	}
+	query := make(map[string]string, len(op.REST.Query)+len(requested))
+	fixedNames := make([]string, 0, len(op.REST.Query))
+	for name := range op.REST.Query {
+		fixedNames = append(fixedNames, name)
+	}
+	sort.Strings(fixedNames)
+	for _, name := range fixedNames {
+		value := op.REST.Query[name]
+		if parameter, declared := parameters[name]; declared {
+			if err := validateOperationDirectWriteQueryValue(op, parameter, value); err != nil {
+				return nil, err
+			}
+		}
+		query[name] = value
+	}
+	for _, name := range requestedNames {
+		value := requested[name]
+		if err := validateOperationDirectWriteQueryValue(op, parameters[name], value); err != nil {
+			return nil, err
+		}
+		query[name] = value
+	}
+	parameterNames := make([]string, 0, len(parameters))
+	for name := range parameters {
+		parameterNames = append(parameterNames, name)
+	}
+	sort.Strings(parameterNames)
+	for _, name := range parameterNames {
+		parameter := parameters[name]
+		if parameter.Required && strings.TrimSpace(query[name]) == "" {
+			return nil, fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
+		}
+	}
+	return query, nil
+}
+
+func validateOperationDirectWriteQueryValue(op OperationSpec, parameter OperationParameter, value string) error {
+	name := parameter.Name
+	if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
+		return err
+	}
+	switch strings.ToLower(strings.TrimSpace(parameter.Type)) {
+	case "", "string":
+	case "boolean":
+		if _, err := strconv.ParseBool(value); err != nil {
+			return fmt.Errorf("operation %q query parameter %q must be boolean", op.ID, name)
+		}
+	case "integer":
+		if _, err := strconv.ParseInt(value, 10, 64); err != nil {
+			return fmt.Errorf("operation %q query parameter %q must be an integer", op.ID, name)
+		}
+	case "number":
+		number, err := strconv.ParseFloat(value, 64)
+		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
+			return fmt.Errorf("operation %q query parameter %q must be a number", op.ID, name)
+		}
+	}
+	if len(parameter.Values) == 0 {
+		return nil
+	}
+	values := append([]string(nil), parameter.Values...)
+	sort.Strings(values)
+	for _, allowed := range values {
+		if value == allowed {
+			return nil
+		}
+	}
+	return fmt.Errorf("operation %q query parameter %q must be one of %s", op.ID, name, strings.Join(values, "|"))
 }
 
 func operationDirectWriteContentType(op OperationSpec, body map[string]any) (contentType, format string, err error) {
