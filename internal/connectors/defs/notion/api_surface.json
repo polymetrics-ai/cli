@@ -418,6 +418,22 @@
         "source_url": "https://developers.notion.com/reference/post-database-query",
         "notes": "named_dependency=none - provider-deprecated, superseded by the data source query; artifact=https://developers.notion.com/openapi.json"
       }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/search",
+      "provenance": {
+        "artifact": "notion-operation-source-lock-2026-08-19",
+        "source_url": "https://developers.notion.com/openapi.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://developers.notion.com/openapi.json"
+      }
     }
   ]
 }

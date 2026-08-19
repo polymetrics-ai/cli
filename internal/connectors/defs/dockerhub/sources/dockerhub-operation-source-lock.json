@@ -1,0 +1,514 @@
+{
+  "schema_version": 2,
+  "connector": "dockerhub",
+  "captured_at": "2026-08-19T11:28:09Z",
+  "rest": {
+    "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+    "sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+    "bytes": 148322,
+    "openapi": "3.0.3",
+    "info_version": "2-beta",
+    "operation_counts": {
+      "POST": 12,
+      "GET": 24,
+      "PATCH": 5,
+      "DELETE": 6,
+      "PUT": 4,
+      "HEAD": 3
+    },
+    "operations": [
+      {
+        "id": "dockerhub.rest.PostUsersLogin",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/users/login",
+        "operation_id": "PostUsersLogin",
+        "deprecated": true,
+        "source_location": "paths[\"/v2/users/login\"].post"
+      },
+      {
+        "id": "dockerhub.rest.PostUsers2FALogin",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/users/2fa-login",
+        "operation_id": "PostUsers2FALogin",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/users/2fa-login\"].post"
+      },
+      {
+        "id": "dockerhub.rest.AuthCreateAccessToken",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/auth/token",
+        "operation_id": "AuthCreateAccessToken",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/auth/token\"].post"
+      },
+      {
+        "id": "dockerhub.rest.post_/v2/access-tokens",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/access-tokens",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/access-tokens\"].post"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/access-tokens",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/access-tokens",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/access-tokens\"].get"
+      },
+      {
+        "id": "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/access-tokens/{uuid}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/access-tokens/{uuid}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/access-tokens/{uuid}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/access-tokens/{uuid}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete"
+      },
+      {
+        "id": "dockerhub.rest.AuditLogs_ListAuditActions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}/actions",
+        "operation_id": "AuditLogs_ListAuditActions",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/auditlogs/{account}/actions\"].get"
+      },
+      {
+        "id": "dockerhub.rest.AuditLogs_ListAuditLogs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}",
+        "operation_id": "AuditLogs_ListAuditLogs",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/auditlogs/{account}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{name}/settings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{name}/settings",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{name}/settings\"].get"
+      },
+      {
+        "id": "dockerhub.rest.put_/v2/orgs/{name}/settings",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orgs/{name}/settings",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{name}/settings\"].put"
+      },
+      {
+        "id": "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch"
+      },
+      {
+        "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete"
+      },
+      {
+        "id": "dockerhub.rest.ListRepositoryTags",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "operation_id": "ListRepositoryTags",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get"
+      },
+      {
+        "id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "protocol": "rest",
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head"
+      },
+      {
+        "id": "dockerhub.rest.GetRepositoryTag",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "operation_id": "GetRepositoryTag",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "protocol": "rest",
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head"
+      },
+      {
+        "id": "dockerhub.rest.UpdateRepositoryImmutableTags",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+        "operation_id": "UpdateRepositoryImmutableTags",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch"
+      },
+      {
+        "id": "dockerhub.rest.VerifyRepositoryImmutableTags",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+        "operation_id": "VerifyRepositoryImmutableTags",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post"
+      },
+      {
+        "id": "dockerhub.rest.CreateRepositoryGroup",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/repositories/{namespace}/{repository}/groups",
+        "operation_id": "CreateRepositoryGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post"
+      },
+      {
+        "id": "dockerhub.rest.listNamespaceRepositories",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories",
+        "operation_id": "listNamespaceRepositories",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].get"
+      },
+      {
+        "id": "dockerhub.rest.CreateRepository",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories",
+        "operation_id": "CreateRepository",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post"
+      },
+      {
+        "id": "dockerhub.rest.GetRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+        "operation_id": "GetRepository",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.CheckRepository",
+        "protocol": "rest",
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+        "operation_id": "CheckRepository",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/members",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/members/export",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get"
+      },
+      {
+        "id": "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put"
+      },
+      {
+        "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{org_name}/invites",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/invites",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/invites\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get"
+      },
+      {
+        "id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put"
+      },
+      {
+        "id": "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch"
+      },
+      {
+        "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get"
+      },
+      {
+        "id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post"
+      },
+      {
+        "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete"
+      },
+      {
+        "id": "dockerhub.rest.delete_/v2/invites/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/invites/{id}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/invites/{id}\"].delete"
+      },
+      {
+        "id": "dockerhub.rest.patch_/v2/invites/{id}/resend",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v2/invites/{id}/resend",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/invites/{id}/resend\"].patch"
+      },
+      {
+        "id": "dockerhub.rest.post_/v2/invites/bulk",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/invites/bulk",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/invites/bulk\"].post"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/scim/2.0/ServiceProviderConfig",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/ResourceTypes\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes/{name}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/scim/2.0/Schemas",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/Schemas\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas/{id}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/Schemas/{id}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/scim/2.0/Users",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/Users\"].get"
+      },
+      {
+        "id": "dockerhub.rest.post_/v2/scim/2.0/Users",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/scim/2.0/Users",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/Users\"].post"
+      },
+      {
+        "id": "dockerhub.rest.get_/v2/scim/2.0/Users/{id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].get"
+      },
+      {
+        "id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "operation_id": "",
+        "deprecated": false,
+        "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 54,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 54
+  }
+}

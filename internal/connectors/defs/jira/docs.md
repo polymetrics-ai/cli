@@ -8,6 +8,9 @@ DELETE). Implemented rows: 584 = 3 stream-backed reads + 292 bounded direct read
 + 3 binary downloads. Declared `partial` and not executable: 6 typed writes. Blocked/planned rows:
 27. Certified rows: 0 (fixture-only; no live provider calls were made).
 
+The public Swagger source for this inventory is pinned, with byte and hash provenance, in
+`sources/jira-operation-source-lock.json` (retrieved 2026-08-19).
+
 Readable streams: `issues`, `projects`, `users`.
 
 Service API documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/.

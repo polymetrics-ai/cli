@@ -12,6 +12,9 @@ paths and 589 documented HTTP operations are tracked exactly once in `api_surfac
 that are not declared as streams, writes, or provider commands remain blocked/planned metadata until
 their typed schemas, bounds, fixtures, and safety evidence are authored.
 
+The exact public source URL, retrieval time, byte count, SHA-256, and operation inventory are pinned
+in `sources/stripe-operation-source-lock.json` (retrieved 2026-08-19).
+
 Service API documentation: https://stripe.com/docs/api.
 
 ## Auth setup

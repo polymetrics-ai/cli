@@ -1767,6 +1767,42 @@
         "category": "out_of_scope",
         "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
       }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/trace-items/stats/",
+      "provenance": {
+        "artifact": "sentry-operation-source-lock-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-checks/skip/",
+      "provenance": {
+        "artifact": "sentry-operation-source-lock-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-checks/skip/",
+      "provenance": {
+        "artifact": "sentry-operation-source-lock-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+      },
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+      }
     }
   ]
 }

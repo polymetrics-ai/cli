@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "source": "connector declarations",
+  "declared_commands": 4,
+  "declared_rows": 5,
+  "status_total": 5,
+  "commands": [
+    {
+      "summary": "Run the repositories ETL stream",
+      "path": "repositories list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "repositories",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Run the repository detail ETL stream",
+      "path": "repository detail list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "repository_detail",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Run the tag detail ETL stream",
+      "path": "tag detail list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "tag_detail",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Run the tags ETL stream",
+      "path": "tags list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "tags",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [],
+  "provider_refusals": []
+}

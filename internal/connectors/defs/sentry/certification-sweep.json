@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "connector": "sentry",
+  "source": "connector declarations",
+  "declared_commands": 0,
+  "declared_rows": 1,
+  "status_total": 1,
+  "commands": [
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [],
+  "provider_refusals": []
+}

@@ -146,6 +146,7 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - API coverage includes 9 stream-backed endpoint group(s), 18 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=9, destructive_admin=8, duplicate_of=34, non_data_endpoint=8, out_of_scope=101,
-  requires_elevated_scope=145.
+- The current public OpenAPI description is pinned in `sources/vercel-operation-source-lock.json`
+  (400 documented operations, retrieved 2026-08-19). Its unpromoted operations are explicitly
+  disabled in `api_surface.json`; the batch rejection ledger records the exact fixed-vocabulary reason
+  and recovery condition for each one.
