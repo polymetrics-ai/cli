@@ -28,3 +28,11 @@ Synthetic tests prove arbitrary first and second declarations, evidence
 isolation, malformed/unknown/wrong-role/capture refusal, approval refusal, and
 pre-write workset rejection. The real GitHub proof passed before the prior
 bespoke factory branch was retired.
+
+The persisted application path now carries a stable `destination_action` on a
+stream configuration, so one connector can expose multiple named typed actions
+without action inference or runtime selection. Exact selected-action schema
+properties accept both snake_case and camelCase bindings and reject all other
+names before I/O. Acknowledged typed writes preserve complete ordinary provider
+response status, headers, and bodies in persisted App/CLI results; only the
+credential boundary masks values in place with an explicit marker.

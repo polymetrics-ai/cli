@@ -421,6 +421,18 @@ func (c *Connector) PreflightWriteAction(name string) error {
 	return ValidatePromotableRecordSchema(action.RecordSchema)
 }
 
+// PreflightWriteRecordField proves that one exact, declaration-owned write
+// action exposes a top-level record field. It is intentionally a name check,
+// not a value or request builder: callers cannot use it to add a field to a
+// write action or to select another action at runtime.
+func (c *Connector) PreflightWriteRecordField(actionName, field string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateRecordSchemaField(action.RecordSchema, field)
+}
+
 // PreflightStructuredJSONRecordField makes the concrete write schema the
 // authority for a commandrunner `json` flag. It intentionally accepts a field
 // name rather than a raw body or arbitrary path, so the runner cannot grow a

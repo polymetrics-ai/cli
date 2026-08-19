@@ -8,6 +8,8 @@
     "make_verify": "passed",
     "connector_boundary": "passed_clean",
     "github_live_proof": "passed",
-    "code_review": "clean_inline_manual_fallback"
+    "code_review": "clean_inline_manual_fallback",
+    "application_dispatch": "passed",
+    "complete_result_output": "passed"
   }
 }

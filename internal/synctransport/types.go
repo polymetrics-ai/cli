@@ -135,6 +135,15 @@ type ManagedTargetApprovalDestination interface {
 	ManagedTargetApprovalDestination()
 }
 
+// DefinitionOwnedApprovalDestination marks a destination whose plan, preview,
+// approval, and workset binding are derived from a persisted connection and
+// the selected connector definition. It exposes no caller-selected action or
+// provider request surface.
+type DefinitionOwnedApprovalDestination interface {
+	DestinationExecutor
+	DefinitionOwnedApprovalDestination()
+}
+
 // SourceRequest is the fixed source invocation context. It has no generic
 // request URL, SQL text, command, action, or caller-authored payload.
 type SourceRequest struct {
@@ -319,6 +328,13 @@ type DestinationApproval struct {
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.
 	AuthorizeNextUnit func(context.Context) error `json:"-"`
+	// IssueWriteEvidence returns a fresh, destination-scoped evidence value for
+	// the next declared typed write. The adapter alone supplies the concrete
+	// prepared request to the connector engine; callers cannot use this hook to
+	// choose a route, action, body, or approval target. A fresh value is needed
+	// because the engine consumes evidence after each provider mutation while a
+	// durable authorization may admit several bounded worksets.
+	IssueWriteEvidence func(context.Context) (*connectors.WriteApprovalEvidence, error) `json:"-"`
 }
 
 type DestinationApplyRequest struct {
@@ -366,10 +382,11 @@ type DestinationReadBackRequest struct {
 // PreflightRequest contains only identities and closed declarations needed to
 // prove dispatch. It has no source payload and performs no provider I/O.
 type PreflightRequest struct {
-	Source      connectors.Connector
-	Destination connectors.Connector
-	Stream      string
-	Mode        synccontract.Mode
+	Source            connectors.Connector
+	Destination       connectors.Connector
+	Stream            string
+	Mode              synccontract.Mode
+	DestinationAction string
 }
 
 // RunRequest wires a resolved connection into one shared orchestrator.
@@ -382,9 +399,12 @@ type RunRequest struct {
 	DestinationRuntime connectors.RuntimeConfig
 	DestinationBinding DestinationBinding
 	Stream             string
-	CursorField        string
-	Mode               synccontract.Mode
-	BatchSize          int
+	// DestinationAction is the stable definition-owned action identity stored
+	// on the connection stream. It is never caller-supplied execution input.
+	DestinationAction string
+	CursorField       string
+	Mode              synccontract.Mode
+	BatchSize         int
 	// MaxInFlightBatches bounds the ordered Arrow full-overwrite pipeline.
 	// Zero keeps the programmatic legacy serial behavior; the CLI/app selects
 	// the user-facing default of two for an admitted fast path.
@@ -433,13 +453,17 @@ type Result struct {
 	ParquetBytes           int64
 	PeakCreditBytes        int64
 	CreditWaitElapsed      time.Duration
-	CommittedCheckpoint    *synccontract.CheckpointEnvelope
+	// DestinationResults are the complete, credential-sanitized typed-action
+	// results acknowledged by the destination. They remain opaque to the
+	// transport core: mapping and provider protocol stay connector-owned.
+	DestinationResults  []json.RawMessage
+	CommittedCheckpoint *synccontract.CheckpointEnvelope
 }
 
 const defaultTransportUnitDeadline = time.Minute
 
 func (r RunRequest) preflightRequest() PreflightRequest {
-	return PreflightRequest{Source: r.Source, Destination: r.Destination, Stream: r.Stream, Mode: r.Mode}
+	return PreflightRequest{Source: r.Source, Destination: r.Destination, Stream: r.Stream, Mode: r.Mode, DestinationAction: r.DestinationAction}
 }
 
 func (r RunRequest) validateExecution() error {

@@ -552,11 +552,21 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		}
 		source.Config = sourceConfig
 		dest.Config = destConfig
+		if len(flags.values["destination-action"]) > 1 || flags.isBare("destination-action") {
+			return validationErrorf("--destination-action must name exactly one declared action")
+		}
+		destinationAction := flags.first("destination-action")
+		if destinationAction != "" {
+			if err := safety.ValidateIdentifier(destinationAction, "destination action"); err != nil {
+				return validationErrorf("%v", err)
+			}
+		}
 		streamCfg := app.StreamConfig{
-			SyncMode:         valueOr(flags.first("sync-mode"), "full_refresh_overwrite"),
-			CursorField:      flags.first("cursor"),
-			PrimaryKey:       flags.values["primary-key"],
-			DestinationTable: valueOr(flags.first("table"), stream),
+			SyncMode:          valueOr(flags.first("sync-mode"), "full_refresh_overwrite"),
+			CursorField:       flags.first("cursor"),
+			PrimaryKey:        flags.values["primary-key"],
+			DestinationTable:  valueOr(flags.first("table"), stream),
+			DestinationAction: destinationAction,
 		}
 		if transformFile := flags.first("transform-file"); transformFile != "" {
 			plan, err := readTransformPlanFile(transformFile)
@@ -715,7 +725,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if approval, transportApproval, strictFlags, err := parseETLRunTransportApproval(args[1:], os.Stdin); err != nil {
 			return err
 		} else if transportApproval {
-			return runApprovedIssueLabelTransportETL(ctx, a, strictFlags, approval, stdout, jsonOut)
+			return runApprovedTransportETL(ctx, a, strictFlags, approval, stdout, jsonOut)
 		}
 		flags := parseFlags(args[1:])
 		batchSize, err := parseIntFlag("batch-size", flags.first("batch-size"), 0)

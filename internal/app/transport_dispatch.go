@@ -38,13 +38,14 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 // definition selects the allowed destination action for each declared mode;
 // non-additive modes are additionally gated by the persisted connection.
 func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
+	action := conn.Streams[streamName].DestinationAction
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationIssueLabel := isIssueLabelTransportConnector(destination)
 	if destinationIssueLabel {
 		if a == nil || a.transports == nil {
 			return false
 		}
-		if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode}); err != nil {
+		if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: action}); err != nil {
 			return false
 		}
 	} else if !sourceDeclarative {
@@ -61,13 +62,14 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 			return false
 		}
 		resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
-			Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
+			Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: action,
 		})
 		if err != nil {
 			return false
 		}
 		_, managedTarget := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
-		if managedTarget {
+		_, definitionOwnedApproval := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination)
+		if managedTarget || definitionOwnedApproval {
 			return true
 		}
 		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
@@ -176,18 +178,26 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		return emptyResult, err
 	}
 	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
-		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
+		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: stream.DestinationAction,
 	})
 	if err != nil {
 		return emptyResult, err
 	}
 	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
+	_, requiresDefinitionOwnedApproval := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination)
 	if err := validateClosedTransportBatchSize(source, destination, batchSize); err != nil {
 		return emptyResult, err
 	}
 	if requiresManagedTargetApproval {
 		var err error
 		approval, err = a.authorizePostgresManagedTargetTransport(ctx, conn, streamName, approval, destRuntime)
+		if err != nil {
+			return emptyResult, err
+		}
+	}
+	if requiresDefinitionOwnedApproval {
+		var err error
+		approval, err = a.authorizeDeclarativeTypedDestinationTransport(ctx, conn, streamName, approval, destRuntime)
 		if err != nil {
 			return emptyResult, err
 		}
@@ -223,6 +233,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			PrimaryKey:        append([]string(nil), stream.PrimaryKey...),
 		},
 		Stream:             streamName,
+		DestinationAction:  stream.DestinationAction,
 		CursorField:        stream.CursorField,
 		Mode:               mode.ContractMode,
 		BatchSize:          batchSize,
@@ -274,11 +285,17 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return etlExecutionResult{
 				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
 				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
+				DestinationResults: cloneDestinationResults(transportResult.DestinationResults),
 			}, err
 		}
 		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
 			if requiresManagedTargetApproval {
 				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+					return emptyResult, err
+				}
+			}
+			if requiresDefinitionOwnedApproval {
+				if err := a.markDeclarativeTypedDestinationPlanExecuted(approval.PlanID); err != nil {
 					return emptyResult, err
 				}
 			}
@@ -291,6 +308,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			updated.UpdatedAt = time.Now().UTC()
 			result := etlExecutionResult{
 				PendingStreamState: &pendingStreamState{Key: stateKey, State: updated}, TransportPhaseMeasurement: transportMeasurement,
+				DestinationResults: cloneDestinationResults(transportResult.DestinationResults),
 			}
 			result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
 			return result, nil
@@ -312,6 +330,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		RecordsLoaded:             transportResult.RecordsApplied,
 		BatchCount:                transportResult.Pages,
 		TransportPhaseMeasurement: transportMeasurement,
+		DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
 		PendingStreamState: &pendingStreamState{
 			Key:   stateKey,
 			State: updated,
@@ -323,6 +342,11 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	if requiresManagedTargetApproval {
 		if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+			return result, err
+		}
+	}
+	if requiresDefinitionOwnedApproval {
+		if err := a.markDeclarativeTypedDestinationPlanExecuted(approval.PlanID); err != nil {
 			return result, err
 		}
 	}

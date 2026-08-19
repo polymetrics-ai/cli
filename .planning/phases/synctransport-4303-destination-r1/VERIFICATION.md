@@ -4,6 +4,11 @@
 
 Passed locally. No checks were skipped and `/no-mistakes` was not run.
 
+The application-dispatch reconciliation and complete-result-output slice also
+passed locally. The first full run identified only generated CLI golden
+transcript drift; after regenerating that repository-owned snapshot, the
+second full `make verify` run exited `0`.
+
 ## Focused TDD checks
 
 - `go test -count=1 -timeout 20m ./internal/app -run '^TestDefinitionTransportFactories(RunTypedDestinationFromDefinition|SelectDistinctTypedDestinationEvidence|RefuseTypedDestinationDeclarationsBeforeIO)$'` — passed.
@@ -19,6 +24,15 @@ Passed locally. No checks were skipped and `/no-mistakes` was not run.
 - `go test -count=1 -timeout 20m ./internal/cli` — passed (529.662s).
 - `go vet ./...` — passed.
 - `go build ./cmd/pm` — passed.
+
+## Application dispatch and result-output checks
+
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestPersistedConnectionSelectsDeclarativeTypedDestinationAction$'` — passed. The production-shaped synthetic bundles prove two named actions in one connector and one in another are selected only by the persisted `destination_action`; missing, foreign, unlisted, and stale selections refuse before I/O. The same test proves persisted `Run.destination_results` preserves ordinary response status, headers, nested fields, large numeric values, and tier-specific fields, while credential material remains present as an explicit mask marker.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields$'` — passed. Exact schema-valid snake_case and camelCase names are admitted only for the selected action; malformed, unknown, cross-action, runtime-selected, generic/shell/http, and undeclared names refuse before I/O.
+- `go test -count=1 -timeout 20m ./internal/connectors -run 'TestSanitize.*Output'` — passed. Complete output retains ordinary provider results and masks only credential-bearing values in place.
+- `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed. `output_policy: none` controls parsing only and cannot suppress successful ordinary provider output.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed.
+- `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'` regenerated the tracked CLI snapshots; the same command without the update variable then passed.
 
 ## GitHub real-provider parity
 
@@ -40,3 +54,6 @@ checkpoint.
   complete `go test -timeout 20m ./...` suite, build, docs validation, smoke,
   lint, agent-contract validation, generated parity/certification checks,
   connector-boundary, connector canon, and release-target checks.
+
+The final full run reported `ConnectorBoundaryReport.outcome: clean`, 552
+connectors loaded, 294 files checked, and zero findings.

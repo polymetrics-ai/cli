@@ -167,7 +167,7 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	if destinationDescriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
 		return ResolvedTransport{}, fmt.Errorf("destination transport requires durable warehouse acknowledgement")
 	}
-	strategy, err := destinationDescriptor.ApplyStrategyFor(request.Mode)
+	strategy, err := destinationDescriptor.ApplyStrategyForAction(request.Mode, request.DestinationAction)
 	if err != nil {
 		return ResolvedTransport{}, err
 	}
