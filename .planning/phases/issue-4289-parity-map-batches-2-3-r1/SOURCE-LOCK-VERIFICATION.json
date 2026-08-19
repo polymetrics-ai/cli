@@ -3,6 +3,12 @@
   "checks": [
     {
       "connector": "grafana",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 11,
+        "new": 315,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 314,
       "coverage_confidence": {
         "level": "complete",
@@ -22,6 +28,12 @@
     },
     {
       "connector": "trello",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 7,
+        "new": 263,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 261,
       "coverage_confidence": {
         "level": "complete",
@@ -41,6 +53,12 @@
     },
     {
       "connector": "slack",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 10,
+        "new": 176,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 174,
       "coverage_confidence": {
         "level": "complete",
@@ -60,6 +78,12 @@
     },
     {
       "connector": "n8n",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 67,
+        "new": 108,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 100,
       "coverage_confidence": {
         "level": "complete",
@@ -79,6 +103,12 @@
     },
     {
       "connector": "google-calendar",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 38,
+        "new": 38,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 38,
       "coverage_confidence": {
         "level": "complete",
@@ -98,6 +128,12 @@
     },
     {
       "connector": "gmail",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 79,
+        "new": 79,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 79,
       "coverage_confidence": {
         "level": "complete",
@@ -117,6 +153,12 @@
     },
     {
       "connector": "twilio",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 197,
+        "new": 197,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 197,
       "coverage_confidence": {
         "level": "complete",
@@ -136,6 +178,12 @@
     },
     {
       "connector": "amazon-sqs",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 23,
+        "new": 23,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 23,
       "coverage_confidence": {
         "level": "complete",
@@ -155,6 +203,12 @@
     },
     {
       "connector": "elasticsearch",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 5,
+        "new": 818,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "operations_found": 845,
       "coverage_confidence": {
         "level": "complete",
@@ -174,6 +228,12 @@
     },
     {
       "connector": "gong",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 69,
+        "new": 69,
+        "basis": "provider-published OpenAPI document"
+      },
       "operations_found": 69,
       "coverage_confidence": {
         "level": "complete",
@@ -186,13 +246,19 @@
       "source_lock": {
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 453657,
-        "sha256": "f58d3b3bbf389c2ad4aacb0a52d96f12da46debcec01e31afd54009a03d0ae33",
+        "bytes": 453797,
+        "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "google-ads",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 164,
+        "new": 162,
+        "basis": "provider-published Google Discovery document"
+      },
       "operations_found": 163,
       "coverage_confidence": {
         "level": "complete",
@@ -206,61 +272,79 @@
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
         "captured_at": "2026-08-19T00:00:00Z",
         "bytes": 2937930,
-        "sha256": "f3675af470264637f2b19e61017f180573c1adde7f3da9e484a495b620d160f9",
+        "sha256": "f3d688798e8477a8ebc50397c829af79c717647b9f0eb4279a6ab93916adc03a",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "facebook-marketing",
-      "operations_found": 36,
-      "coverage_confidence": {
-        "level": "partial",
-        "basis": "official Meta business SDK code-generation source; complete Marketing API model traversal remains outstanding"
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 36,
+        "new": 1446,
+        "basis": "all current provider-published Facebook Business SDK code-generation API declarations; Graph routes are explicitly documented as object-ID node/edge templates, so totals count named owner-type/method/edge declarations rather than fabricated runtime identifiers"
       },
-      "enabled_operations": 5,
-      "disabled_operations": 31,
-      "documented_deletes": 2,
+      "operations_found": 1445,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "all current provider-published Facebook Business SDK code-generation API declarations; Graph routes are explicitly documented as object-ID node/edge templates, so totals count named owner-type/method/edge declarations rather than fabricated runtime identifiers"
+      },
+      "enabled_operations": 3,
+      "disabled_operations": 1442,
+      "documented_deletes": 112,
       "enabled_deletes": 0,
       "source_lock": {
-        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1",
+        "source_url": "https://codeload.github.com/facebook/facebook-business-sdk-codegen/tar.gz/refs/heads/main",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 424046,
-        "sha256": "7d8561a00488a69fb1a32808d218160fa3027af09a538a80eb3b827943718b14",
+        "bytes": 1183653,
+        "sha256": "a13fa8cf5b5b6df41623e42035d3dbf1d55fbc77a6e00f2a07977dd8a3d3a8ea",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "linkedin-ads",
-      "operations_found": 10,
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 10,
+        "new": 287,
+        "basis": "provider sitemap plus every current LinkedIn Marketing rendered-reference page"
+      },
+      "operations_found": 272,
       "coverage_confidence": {
-        "level": "partial",
-        "basis": "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding"
+        "level": "complete",
+        "basis": "provider sitemap plus every current LinkedIn Marketing rendered-reference page"
       },
       "enabled_operations": 0,
-      "disabled_operations": 10,
-      "documented_deletes": 0,
+      "disabled_operations": 272,
+      "documented_deletes": 35,
       "enabled_deletes": 0,
       "source_lock": {
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
+        "source_url": "https://learn.microsoft.com/_sitemaps/linkedin_en-us_1.xml",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 62945,
-        "sha256": "f16394e4d47039e2e18d69391c8df0742a79827517a3496f623f02a2d24ab68e",
+        "bytes": 12985424,
+        "sha256": "81414999acf61956363b465ee1d60632d5accc5053071398d8f0678117cfc307",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "aircall",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 93,
+        "new": 123,
+        "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
+      },
       "operations_found": 93,
       "coverage_confidence": {
         "level": "complete",
-        "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+        "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
       },
-      "enabled_operations": 20,
-      "disabled_operations": 73,
+      "enabled_operations": 19,
+      "disabled_operations": 74,
       "documented_deletes": 13,
       "enabled_deletes": 6,
       "source_lock": {
-        "source_url": "https://developer.aircall.io/api-references/",
+        "source_url": "https://developers.aircall.io/api-references",
         "captured_at": "2026-08-19T00:00:00Z",
         "bytes": 875367,
         "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
@@ -269,6 +353,12 @@
     },
     {
       "connector": "xero",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 235,
+        "new": 235,
+        "basis": "provider-published Xero Accounting OpenAPI document"
+      },
       "operations_found": 235,
       "coverage_confidence": {
         "level": "complete",
@@ -288,6 +378,12 @@
     },
     {
       "connector": "paypal-transaction",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 10,
+        "new": 10,
+        "basis": "provider-published Transaction Search OpenAPI document"
+      },
       "operations_found": 2,
       "coverage_confidence": {
         "level": "complete",
@@ -307,25 +403,37 @@
     },
     {
       "connector": "gocardless",
-      "operations_found": 142,
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 142,
+        "new": 142,
+        "basis": "provider-published GoCardless OpenAPI document served to its public API reference"
+      },
+      "operations_found": 137,
       "coverage_confidence": {
         "level": "complete",
-        "basis": "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published"
+        "basis": "provider-published GoCardless OpenAPI document served to its public API reference"
       },
-      "enabled_operations": 76,
-      "disabled_operations": 66,
+      "enabled_operations": 75,
+      "disabled_operations": 62,
       "documented_deletes": 1,
       "enabled_deletes": 1,
       "source_lock": {
-        "source_url": "https://developer.gocardless.com/api-reference/openapi",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 265226,
-        "sha256": "6ae95829354fd09a383df72b1a0239f86311d7098a8a3ff7666849fa9dc884e4",
+        "bytes": 2698693,
+        "sha256": "ae14f0631bb2b33d1403b159c25464e82b91fbb8187a5124866e30eed34a1a3c",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "amazon-seller-partner",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 353,
+        "new": 370,
+        "basis": "all provider-published Selling Partner OpenAPI model documents under models/"
+      },
       "operations_found": 370,
       "coverage_confidence": {
         "level": "complete",
@@ -336,15 +444,21 @@
       "documented_deletes": 13,
       "enabled_deletes": 8,
       "source_lock": {
-        "source_url": "https://api.github.com/repos/amzn/selling-partner-api-models/git/trees/main?recursive=1",
+        "source_url": "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 8212411,
-        "sha256": "a22c88f6991768e255633dcec5c59b692186016d57f0ac3825ac389b783bfaa3",
+        "bytes": 1732664,
+        "sha256": "924a416722b10a967708a94bbe49bc7f7d92f799922c5d2704313166b646b3d0",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "miro",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 197,
+        "new": 197,
+        "basis": "provider-published Miro OpenAPI document linked by the API reference"
+      },
       "operations_found": 197,
       "coverage_confidence": {
         "level": "complete",

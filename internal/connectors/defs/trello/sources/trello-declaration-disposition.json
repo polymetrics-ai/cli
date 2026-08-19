@@ -1199,7 +1199,7 @@
     },
     {
       "method": "GET",
-      "path": "/boards/{id}/actions",
+      "path": "/boards/{boardId}/actions",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",

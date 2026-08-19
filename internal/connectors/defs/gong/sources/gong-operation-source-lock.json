@@ -4,8 +4,8 @@
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
     "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-    "sha256": "f58d3b3bbf389c2ad4aacb0a52d96f12da46debcec01e31afd54009a03d0ae33",
-    "bytes": 453657,
+    "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
+    "bytes": 453797,
     "format": "application/json;charset=UTF-8",
     "inventory_basis": "parsed from the pinned provider machine-readable source artifact",
     "coverage_confidence": {

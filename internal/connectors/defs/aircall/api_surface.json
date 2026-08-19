@@ -1063,6 +1063,396 @@
         "source_url": "https://developer.aircall.io/api-references/",
         "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calls/:call_id/predicted_csat",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_calls_call_id_predicted_csat.37; source_location=rendered endpoint index GET /v1/calls/:call_id/predicted_csat"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/:user_id/dialer_campaign",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_users_user_id_dialer_campaign.44; source_location=rendered endpoint index GET /v1/users/:user_id/dialer_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/users/:user_id/dialer_campaign",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_users_user_id_dialer_campaign.45; source_location=rendered endpoint index POST /v1/users/:user_id/dialer_campaign"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/users/:user_id/dialer_campaign",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_users_user_id_dialer_campaign.46; source_location=rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_users_user_id_dialer_campaign_phone_numbers.47; source_location=rendered endpoint index GET /v1/users/:user_id/dialer_campaign/phone_numbers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_users_user_id_dialer_campaign_phone_numbers.48; source_location=rendered endpoint index POST /v1/users/:user_id/dialer_campaign/phone_numbers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers/:id",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_users_user_id_dialer_campaign_phone_numbers_id.49; source_location=rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/numbers/:id/templates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_numbers_id_templates.54; source_location=rendered endpoint index GET /v1/numbers/:id/templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/native/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_native_send.56; source_location=rendered endpoint index POST /v1/numbers/:id/messages/native/send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/group/native/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_group_native_send.57; source_location=rendered endpoint index POST /v1/numbers/:id/messages/group/native/send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_configuration.58; source_location=rendered endpoint index POST /v1/numbers/:id/messages/configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_numbers_id_messages_configuration.59; source_location=rendered endpoint index GET /v1/numbers/:id/messages/configuration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_numbers_id_messages_configuration.60; source_location=rendered endpoint index DELETE /v1/numbers/:id/messages/configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_send.61; source_location=rendered endpoint index POST /v1/numbers/:id/messages/send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/group/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_group_send.62; source_location=rendered endpoint index POST /v1/numbers/:id/messages/group/send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/messages/send/whatsapp/native",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_messages_send_whatsapp_native.63; source_location=rendered endpoint index POST /v1/messages/send/whatsapp/native"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/messages/whatsapp/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_messages_whatsapp_send.64; source_location=rendered endpoint index POST /v1/messages/whatsapp/send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/:id",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_contacts_id.69; source_location=rendered endpoint index POST /v1/contacts/:id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/:id/phone_details",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_contacts_id_phone_details.71; source_location=rendered endpoint index POST /v1/contacts/:id/phone_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.put.v1_contacts_id_phone_details_phone_number_id.72; source_location=rendered endpoint index PUT /v1/contacts/:id/phone_details/:phone_number_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_contacts_id_phone_details_phone_number_id.73; source_location=rendered endpoint index DELETE /v1/contacts/:id/phone_details/:phone_number_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/:id/email_details",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_contacts_id_email_details.74; source_location=rendered endpoint index POST /v1/contacts/:id/email_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/contacts/:id/email_details/:email_id",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.put.v1_contacts_id_email_details_email_id.75; source_location=rendered endpoint index PUT /v1/contacts/:id/email_details/:email_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/contacts/:id/email_details/:email_id",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_contacts_id_email_details_email_id.76; source_location=rendered endpoint index DELETE /v1/contacts/:id/email_details/:email_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/integrations/me",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_integrations_me.88; source_location=rendered endpoint index GET /v1/integrations/me"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integrations/enable",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_integrations_enable.89; source_location=rendered endpoint index POST /v1/integrations/enable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integrations/disable",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_integrations_disable.90; source_location=rendered endpoint index POST /v1/integrations/disable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/outbound-calls/agents/:agent_id",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_outbound_calls_agents_agent_id.91; source_location=rendered endpoint index POST /v1/outbound-calls/agents/:agent_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/analytics/report/export",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_analytics_report_export.92; source_location=rendered endpoint index POST /v1/analytics/report/export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/analytics/report/export/:export_id",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://developers.aircall.io/api-references",
+        "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_analytics_report_export_export_id.93; source_location=rendered endpoint index GET /v1/analytics/report/export/:export_id"
+      }
     }
   ],
   "operation_ledger_version": 1

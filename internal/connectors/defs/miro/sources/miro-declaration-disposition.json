@@ -4638,7 +4638,7 @@
     },
     {
       "method": "GET",
-      "path": "/v2/boards/{board_id}/items",
+      "path": "/v2/boards/{board_id_PlatformContainers}/items",
       "parity_class": "etl",
       "api_surface": {
         "method": "GET",
@@ -4679,7 +4679,7 @@
     },
     {
       "method": "POST",
-      "path": "/v2/boards/{board_id}/items/bulk",
+      "path": "/v2/boards/{board_id_Platformcreateitemsinbulkusingfilefromdevice}/items/bulk",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
@@ -5515,7 +5515,7 @@
     },
     {
       "method": "POST",
-      "path": "/v2/boards/{board_id}/documents",
+      "path": "/v2/boards/{board_id_PlatformFileUpload}/documents",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
@@ -5557,7 +5557,7 @@
     },
     {
       "method": "PATCH",
-      "path": "/v2/boards/{board_id}/documents/{item_id}",
+      "path": "/v2/boards/{board_id_PlatformFileUpload}/documents/{item_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PATCH",
@@ -5599,7 +5599,7 @@
     },
     {
       "method": "POST",
-      "path": "/v2/boards/{board_id}/images",
+      "path": "/v2/boards/{board_id_PlatformFileUpload}/images",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
@@ -5641,7 +5641,7 @@
     },
     {
       "method": "PATCH",
-      "path": "/v2/boards/{board_id}/images/{item_id}",
+      "path": "/v2/boards/{board_id_PlatformFileUpload}/images/{item_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PATCH",
@@ -5932,7 +5932,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/v2/boards/{board_id}/groups/{group_id}",
+      "path": "/v2/boards/{board_id}/groups/{group_id}?",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
@@ -6270,7 +6270,7 @@
     },
     {
       "method": "GET",
-      "path": "/v2/boards/{board_id}/items",
+      "path": "/v2/boards/{board_id_PlatformTags}/items",
       "parity_class": "etl",
       "api_surface": {
         "method": "GET",
@@ -6358,7 +6358,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/v2/boards/{board_id}/items/{item_id}",
+      "path": "/v2/boards/{board_id_PlatformTags}/items/{item_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",

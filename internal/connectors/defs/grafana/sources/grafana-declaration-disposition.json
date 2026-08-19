@@ -10634,7 +10634,7 @@
     },
     {
       "method": "GET",
-      "path": "/api/search?type=dash-db",
+      "path": "/api/search",
       "parity_class": "etl",
       "api_surface": {
         "method": "GET",

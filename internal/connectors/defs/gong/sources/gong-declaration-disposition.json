@@ -5,8 +5,8 @@
   "source_basis": {
     "source_lock": "sources/gong-operation-source-lock.json",
     "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-    "source_sha256": "f58d3b3bbf389c2ad4aacb0a52d96f12da46debcec01e31afd54009a03d0ae33",
-    "source_bytes": 453657,
+    "source_sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
+    "source_bytes": 453797,
     "operations_found": 69,
     "coverage_confidence": {
       "level": "complete",

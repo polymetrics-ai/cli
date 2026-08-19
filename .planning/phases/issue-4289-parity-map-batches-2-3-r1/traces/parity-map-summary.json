@@ -1116,30 +1116,30 @@
     },
     {
       "connector": "facebook-marketing",
-      "api_surface_rows": 36,
-      "exact_source_rows": 36,
-      "operations_found": 36,
+      "api_surface_rows": 1445,
+      "exact_source_rows": 1445,
+      "operations_found": 1445,
       "coverage_confidence": {
-        "level": "partial",
-        "basis": "official Meta business SDK code-generation source; complete Marketing API model traversal remains outstanding"
+        "level": "complete",
+        "basis": "all current provider-published Facebook Business SDK code-generation API declarations; Graph routes are explicitly documented as object-ID node/edge templates, so totals count named owner-type/method/edge declarations rather than fabricated runtime identifiers"
       },
-      "enabled_operations": 5,
-      "enabled_percent": 13.89,
-      "disabled_operations": 31,
-      "documented_deletes": 2,
+      "enabled_operations": 3,
+      "enabled_percent": 0.21,
+      "disabled_operations": 1442,
+      "documented_deletes": 112,
       "enabled_deletes": 0,
       "parity_class_counts": [
         {
           "key": "direct_read",
-          "count": 16
+          "count": 941
         },
         {
           "key": "direct_write",
-          "count": 10
+          "count": 498
         },
         {
           "key": "etl",
-          "count": 10
+          "count": 6
         },
         {
           "key": "reverse_etl",
@@ -1154,9 +1154,9 @@
           "count": 0
         }
       ],
-      "stream_bindings": 10,
-      "writes_actions": 5,
-      "terminal_commands": 5,
+      "stream_bindings": 6,
+      "writes_actions": 3,
+      "terminal_commands": 3,
       "live_certification": "pending",
       "gap_ids": [
         "generic-typed-destination-executor"
@@ -1164,19 +1164,19 @@
       "foundation_gaps": [
         {
           "id": "generic-typed-destination-executor",
-          "count": 5,
+          "count": 3,
           "scope": "destination_transport"
         }
       ],
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 31
+          "count": 1442
         }
       ],
       "reverse_etl_eligibility": {
         "state": "foundation-gap",
-        "typed_direct_write_operations": 5,
+        "typed_direct_write_operations": 3,
         "foundation_gap": {
           "id": "generic-typed-destination-executor",
           "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
@@ -1203,46 +1203,46 @@
         }
       },
       "declaration_pending_ids": [
-        "sync-transport-source-definition-facebook-marketing",
-        "typed-operation-contract-facebook-marketing"
+        "typed-operation-contract-facebook-marketing",
+        "sync-transport-source-definition-facebook-marketing"
       ],
       "declaration_pending": [
         {
-          "id": "sync-transport-source-definition-facebook-marketing",
-          "count": 10
+          "id": "typed-operation-contract-facebook-marketing",
+          "count": 1436
         },
         {
-          "id": "typed-operation-contract-facebook-marketing",
-          "count": 21
+          "id": "sync-transport-source-definition-facebook-marketing",
+          "count": 6
         }
       ]
     },
     {
       "connector": "linkedin-ads",
-      "api_surface_rows": 10,
-      "exact_source_rows": 10,
-      "operations_found": 10,
+      "api_surface_rows": 272,
+      "exact_source_rows": 272,
+      "operations_found": 272,
       "coverage_confidence": {
-        "level": "partial",
-        "basis": "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding"
+        "level": "complete",
+        "basis": "provider sitemap plus every current LinkedIn Marketing rendered-reference page"
       },
       "enabled_operations": 0,
       "enabled_percent": 0,
-      "disabled_operations": 10,
-      "documented_deletes": 0,
+      "disabled_operations": 272,
+      "documented_deletes": 35,
       "enabled_deletes": 0,
       "parity_class_counts": [
         {
           "key": "direct_read",
-          "count": 4
+          "count": 139
         },
         {
           "key": "direct_write",
-          "count": 2
+          "count": 131
         },
         {
           "key": "etl",
-          "count": 4
+          "count": 2
         },
         {
           "key": "reverse_etl",
@@ -1257,7 +1257,7 @@
           "count": 0
         }
       ],
-      "stream_bindings": 4,
+      "stream_bindings": 2,
       "writes_actions": 0,
       "terminal_commands": 0,
       "live_certification": "pending",
@@ -1274,7 +1274,7 @@
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 10
+          "count": 272
         }
       ],
       "reverse_etl_eligibility": {
@@ -1306,17 +1306,17 @@
         }
       },
       "declaration_pending_ids": [
-        "sync-transport-source-definition-linkedin-ads",
-        "typed-operation-contract-linkedin-ads"
+        "typed-operation-contract-linkedin-ads",
+        "sync-transport-source-definition-linkedin-ads"
       ],
       "declaration_pending": [
         {
-          "id": "sync-transport-source-definition-linkedin-ads",
-          "count": 4
+          "id": "typed-operation-contract-linkedin-ads",
+          "count": 270
         },
         {
-          "id": "typed-operation-contract-linkedin-ads",
-          "count": 6
+          "id": "sync-transport-source-definition-linkedin-ads",
+          "count": 2
         }
       ]
     },
@@ -1327,21 +1327,21 @@
       "operations_found": 93,
       "coverage_confidence": {
         "level": "complete",
-        "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+        "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
       },
-      "enabled_operations": 20,
-      "enabled_percent": 21.51,
-      "disabled_operations": 73,
+      "enabled_operations": 19,
+      "enabled_percent": 20.43,
+      "disabled_operations": 74,
       "documented_deletes": 13,
       "enabled_deletes": 6,
       "parity_class_counts": [
         {
           "key": "direct_read",
-          "count": 32
+          "count": 33
         },
         {
           "key": "direct_write",
-          "count": 54
+          "count": 53
         },
         {
           "key": "etl",
@@ -1361,8 +1361,8 @@
         }
       ],
       "stream_bindings": 7,
-      "writes_actions": 20,
-      "terminal_commands": 20,
+      "writes_actions": 19,
+      "terminal_commands": 19,
       "live_certification": "pending",
       "gap_ids": [
         "generic-typed-destination-executor"
@@ -1370,19 +1370,19 @@
       "foundation_gaps": [
         {
           "id": "generic-typed-destination-executor",
-          "count": 20,
+          "count": 19,
           "scope": "destination_transport"
         }
       ],
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 73
+          "count": 74
         }
       ],
       "reverse_etl_eligibility": {
         "state": "foundation-gap",
-        "typed_direct_write_operations": 20,
+        "typed_direct_write_operations": 19,
         "foundation_gap": {
           "id": "generic-typed-destination-executor",
           "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
@@ -1419,7 +1419,7 @@
         },
         {
           "id": "typed-operation-contract-aircall",
-          "count": 66
+          "count": 67
         }
       ]
     },
@@ -1626,16 +1626,16 @@
     },
     {
       "connector": "gocardless",
-      "api_surface_rows": 142,
-      "exact_source_rows": 142,
-      "operations_found": 142,
+      "api_surface_rows": 137,
+      "exact_source_rows": 137,
+      "operations_found": 137,
       "coverage_confidence": {
         "level": "complete",
-        "basis": "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published"
+        "basis": "provider-published GoCardless OpenAPI document served to its public API reference"
       },
-      "enabled_operations": 76,
-      "enabled_percent": 53.52,
-      "disabled_operations": 66,
+      "enabled_operations": 75,
+      "enabled_percent": 54.74,
+      "disabled_operations": 62,
       "documented_deletes": 1,
       "enabled_deletes": 1,
       "parity_class_counts": [
@@ -1645,11 +1645,11 @@
         },
         {
           "key": "direct_write",
-          "count": 79
+          "count": 75
         },
         {
           "key": "etl",
-          "count": 63
+          "count": 62
         },
         {
           "key": "reverse_etl",
@@ -1664,9 +1664,9 @@
           "count": 0
         }
       ],
-      "stream_bindings": 63,
-      "writes_actions": 76,
-      "terminal_commands": 76,
+      "stream_bindings": 62,
+      "writes_actions": 75,
+      "terminal_commands": 75,
       "live_certification": "pending",
       "gap_ids": [
         "generic-typed-destination-executor"
@@ -1674,19 +1674,19 @@
       "foundation_gaps": [
         {
           "id": "generic-typed-destination-executor",
-          "count": 76,
+          "count": 75,
           "scope": "destination_transport"
         }
       ],
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 66
+          "count": 62
         }
       ],
       "reverse_etl_eligibility": {
         "state": "foundation-gap",
-        "typed_direct_write_operations": 76,
+        "typed_direct_write_operations": 75,
         "foundation_gap": {
           "id": "generic-typed-destination-executor",
           "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
@@ -1713,17 +1713,12 @@
         }
       },
       "declaration_pending_ids": [
-        "sync-transport-source-definition-gocardless",
-        "typed-operation-contract-gocardless"
+        "sync-transport-source-definition-gocardless"
       ],
       "declaration_pending": [
         {
           "id": "sync-transport-source-definition-gocardless",
-          "count": 63
-        },
-        {
-          "id": "typed-operation-contract-gocardless",
-          "count": 3
+          "count": 62
         }
       ]
     },

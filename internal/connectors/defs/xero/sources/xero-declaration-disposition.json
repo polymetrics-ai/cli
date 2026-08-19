@@ -414,7 +414,7 @@
     },
     {
       "method": "GET",
-      "path": "/Accounts/{AccountID}/Attachments/{AttachmentID}",
+      "path": "/Accounts/{AccountID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -1142,7 +1142,7 @@
     },
     {
       "method": "GET",
-      "path": "/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
+      "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -1662,7 +1662,7 @@
     },
     {
       "method": "GET",
-      "path": "/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
+      "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -2299,7 +2299,7 @@
     },
     {
       "method": "GET",
-      "path": "/Contacts/{ContactNumber}",
+      "path": "/Contacts/{ContactID}",
       "parity_class": "etl",
       "api_surface": {
         "method": "GET",
@@ -2470,7 +2470,7 @@
     },
     {
       "method": "GET",
-      "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}",
+      "path": "/Contacts/{ContactID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -3323,7 +3323,7 @@
     },
     {
       "method": "GET",
-      "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
+      "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -4353,7 +4353,7 @@
     },
     {
       "method": "GET",
-      "path": "/Invoices/{InvoiceID}/Attachments/{AttachmentID}",
+      "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -5116,7 +5116,7 @@
     },
     {
       "method": "GET",
-      "path": "/Journals/{JournalID}",
+      "path": "/Journals/{JournalNumber}",
       "parity_class": "etl",
       "api_surface": {
         "method": "GET",
@@ -5661,7 +5661,7 @@
     },
     {
       "method": "GET",
-      "path": "/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
+      "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -7135,7 +7135,7 @@
     },
     {
       "method": "GET",
-      "path": "/PurchaseOrders/{PurchaseOrderID}",
+      "path": "/PurchaseOrders/{PurchaseOrderNumber}",
       "parity_class": "etl",
       "api_surface": {
         "method": "GET",
@@ -7347,7 +7347,7 @@
     },
     {
       "method": "GET",
-      "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
+      "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -7914,7 +7914,7 @@
     },
     {
       "method": "GET",
-      "path": "/Quotes/{QuoteID}/Attachments/{AttachmentID}",
+      "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -8309,7 +8309,7 @@
     },
     {
       "method": "GET",
-      "path": "/Receipts/{ReceiptID}/Attachments/{AttachmentID}",
+      "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",
@@ -8829,7 +8829,7 @@
     },
     {
       "method": "GET",
-      "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
+      "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
       "parity_class": "binary_read",
       "api_surface": {
         "method": "GET",

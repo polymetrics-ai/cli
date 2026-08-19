@@ -4,11 +4,16 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { gunzipSync } from "node:zlib";
 import path from "node:path";
 
 const root = process.cwd();
 const generatedAt = "2026-08-19T00:00:00Z";
 const batch2Draft = "fm/cli-top100-declaration-batch-r1-inc2-wip";
+// HEAD retains the connector-owned command/stream bindings authored by this
+// issue before source inventory expansion. It is input for binding metadata,
+// never an operation-inventory boundary; the public lock below remains that.
+const bindingRevision = "HEAD";
 const batch2 = ["grafana", "trello", "slack", "n8n", "google-calendar", "gmail", "twilio", "amazon-sqs", "elasticsearch"];
 const batch3 = ["gong", "google-ads", "facebook-marketing", "linkedin-ads", "aircall", "xero", "paypal-transaction", "gocardless", "amazon-seller-partner", "miro"];
 
@@ -17,16 +22,13 @@ const batch3 = ["gong", "google-ads", "facebook-marketing", "linkedin-ads", "air
 const batch3Sources = {
   "gong": { url: "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=", parser: "openapi", confidence: { level: "complete", basis: "provider-published OpenAPI document" } },
   "google-ads": { url: "https://googleads.googleapis.com/$discovery/rest?version=v22", parser: "discovery", confidence: { level: "complete", basis: "provider-published Google Discovery document" } },
-  // Meta's official code-generation source is a safer provenance artifact than
-  // the rendered landing page. Its current connector subset is honestly marked
-  // partial until the full Marketing API model traversal is materialised.
-  "facebook-marketing": { url: "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1", parser: "surface-partial", confidence: { level: "partial", basis: "official Meta business SDK code-generation source; complete Marketing API model traversal remains outstanding" } },
-  "linkedin-ads": { url: "https://learn.microsoft.com/en-us/linkedin/marketing/", parser: "surface-partial", confidence: { level: "partial", basis: "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding" } },
-  "aircall": { url: "https://developer.aircall.io/api-references/", parser: "surface-rendered", confidence: { level: "complete", basis: "provider's complete rendered API reference; Aircall publishes no public machine-readable specification" } },
+  "facebook-marketing": { url: "https://codeload.github.com/facebook/facebook-business-sdk-codegen/tar.gz/refs/heads/main", parser: "facebook-codegen", confidence: { level: "complete", basis: "all current provider-published Facebook Business SDK code-generation API declarations; Graph routes are explicitly documented as object-ID node/edge templates, so totals count named owner-type/method/edge declarations rather than fabricated runtime identifiers" } },
+  "linkedin-ads": { url: "https://learn.microsoft.com/_sitemaps/linkedin_en-us_1.xml", parser: "linkedin-rendered", confidence: { level: "complete", basis: "provider sitemap plus every current LinkedIn Marketing rendered-reference page" } },
+  "aircall": { url: "https://developers.aircall.io/api-references", parser: "aircall-rendered", confidence: { level: "complete", basis: "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates" } },
   "xero": { url: "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml", parser: "surface-machine", confidence: { level: "complete", basis: "provider-published Xero Accounting OpenAPI document" } },
   "paypal-transaction": { url: "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/reporting_transactions_v1.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published Transaction Search OpenAPI document" } },
-  "gocardless": { url: "https://developer.gocardless.com/api-reference/openapi", parser: "surface-rendered", confidence: { level: "complete", basis: "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published" } },
-  "amazon-seller-partner": { url: "https://api.github.com/repos/amzn/selling-partner-api-models/git/trees/main?recursive=1", parser: "amazon-models", confidence: { level: "complete", basis: "all provider-published Selling Partner OpenAPI model documents under models/" } },
+  "gocardless": { url: "https://developer.gocardless.com/openapi-schema-public.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published GoCardless OpenAPI document served to its public API reference" } },
+  "amazon-seller-partner": { url: "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main", parser: "amazon-models", confidence: { level: "complete", basis: "all provider-published Selling Partner OpenAPI model documents under models/" } },
   "miro": { url: "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published Miro OpenAPI document linked by the API reference" } }
 };
 
@@ -46,6 +48,27 @@ function readDraftLock(connector) {
   return JSON.parse(execFileSync("git", ["show", `${batch2Draft}:internal/connectors/defs/${connector}/sources/${connector}-operation-source-lock.json`], { encoding: "utf8" }));
 }
 
+function readBaselineSurface(connector) {
+  return JSON.parse(execFileSync("git", ["show", `${bindingRevision}:internal/connectors/defs/${connector}/api_surface.json`], { encoding: "utf8" }));
+}
+
+function mergeBaselineSurface(connector, surface) {
+  const baseline = readBaselineSurface(connector);
+  const seen = new Set();
+  const endpoints = [];
+  for (const endpoint of [...baseline.endpoints, ...surface.endpoints]) {
+    // Query-bearing provider surfaces may intentionally have more than one
+    // binding for one normalized resource path (for example Grafana folders).
+    // Deduplicate exact endpoint text only; source discovery below still uses
+    // normalized keys to bind a documented operation to its existing contract.
+    const key = `${endpoint.method.toUpperCase()} ${endpoint.path}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    endpoints.push(endpoint);
+  }
+  return { ...surface, endpoints };
+}
+
 function sourcePathToBundlePath(connector, input) {
   if (connector === "grafana" && !input.startsWith("/api/")) return `/api${input}`;
   if (connector === "gmail" && input.startsWith("/gmail/v1/")) return input.slice("/gmail/v1".length);
@@ -53,12 +76,18 @@ function sourcePathToBundlePath(connector, input) {
   return input;
 }
 
-function canonicalPath(input) {
-  return input
+function canonicalPath(input, preserveParameterNames = false) {
+  const path = input
     .replace(/\?.*$/, "")
-    .replace(/\{[^}]+\}/g, "{}")
+    .replace(/(^|\/):[^/]+(?=\/|$)/g, "$1{}")
     .replace(/\/+/g, "/")
     .replace(/\/$/, "") || "/";
+  if (!preserveParameterNames) return path.replace(/\{[^}]+\}/g, "{}");
+  return path.replace(/\{([^}]+)\}/g, (_match, name) => `{${String(name).trim().toLowerCase().replace(/[^a-z0-9]+/g, "_")}}`);
+}
+
+function operationKey(connector, method, pathname) {
+  return `${method.toUpperCase()} ${canonicalPath(pathname, connector === "facebook-marketing")}`;
 }
 
 function sourceID(connector, method, pathname, index) {
@@ -81,6 +110,17 @@ async function fetchPublicArtifact(url) {
   return { sha256: createHash("sha256").update(bytes).digest("hex"), bytes: bytes.length, contentType: response.headers.get("content-type") || "unknown" };
 }
 
+async function fetchPublicBytes(url) {
+  const response = await fetch(url, { headers: { "User-Agent": "polymetrics-source-lock/1" } });
+  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  return {
+    bytes,
+    sha256: createHash("sha256").update(bytes).digest("hex"),
+    contentType: response.headers.get("content-type") || "application/octet-stream"
+  };
+}
+
 async function fetchPublicJSON(url) {
   const response = await fetch(url, { headers: { "User-Agent": "polymetrics-source-lock/1" } });
   if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
@@ -90,6 +130,18 @@ async function fetchPublicJSON(url) {
     sha256: createHash("sha256").update(bytes).digest("hex"),
     bytes: bytes.length,
     contentType: response.headers.get("content-type") || "application/json"
+  };
+}
+
+async function fetchPublicText(url) {
+  const response = await fetch(url, { headers: { "User-Agent": "polymetrics-source-lock/1" } });
+  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  return {
+    text: bytes.toString("utf8"),
+    sha256: createHash("sha256").update(bytes).digest("hex"),
+    bytes: bytes.length,
+    contentType: response.headers.get("content-type") || "text/plain"
   };
 }
 
@@ -140,26 +192,207 @@ function discoveryOperations(connector, document, sourceURL) {
   return operations;
 }
 
-async function amazonModelOperations(connector, treeURL) {
-  const tree = await fetchPublicJSON(treeURL);
-  const models = tree.json.tree.filter((entry) => entry.path.startsWith("models/") && entry.path.endsWith(".json"));
+async function amazonModelOperations(connector, archiveURL) {
+  const archive = await fetchPublicBytes(archiveURL);
+  const models = tarEntries(archive.bytes)
+    .filter((entry) => /(?:^|\/)models\/.*\.json$/.test(entry.path))
+    .map((entry) => ({
+      path: entry.path.replace(/^.*?models\//, "models/"),
+      content: entry.content
+    }));
   const operations = [];
-  let bytes = 0;
-  const hash = createHash("sha256");
   const sourceDocuments = [];
   for (const model of models) {
     const sourceURL = `https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/${model.path}`;
-    const artifact = await fetchPublicJSON(sourceURL);
-    bytes += artifact.bytes;
-    hash.update(artifact.sha256);
-    sourceDocuments.push({ path: model.path, source_url: sourceURL, sha256: artifact.sha256, bytes: artifact.bytes });
-    for (const operation of openAPIOperations(connector, artifact.json, sourceURL)) {
+    const sha256 = createHash("sha256").update(model.content).digest("hex");
+    sourceDocuments.push({ path: model.path, source_url: sourceURL, sha256, bytes: model.content.length });
+    for (const operation of openAPIOperations(connector, JSON.parse(model.content.toString("utf8")), sourceURL)) {
       operation.id = `${connector}.rest.${model.path.replace(/[^A-Za-z0-9]+/g, ".")}.${operation.id.split(".").pop()}`;
       operation.source_location = `${model.path}:${operation.source_location}`;
       operations.push(operation);
     }
   }
+  return { operations, bytes: archive.bytes.length, sha256: archive.sha256, contentType: archive.contentType, sourceDocuments };
+}
+
+async function linkedInRenderedOperations(connector, sitemapURL) {
+  const sitemap = await fetchPublicText(sitemapURL);
+  const pages = [...sitemap.text.matchAll(/<loc>(https:\/\/learn\.microsoft\.com\/en-us\/linkedin\/marketing\/[^<]+)<\/loc>/g)]
+    .map((match) => match[1])
+    .filter((url) => url.includes("?view="));
+  const sourceDocuments = [];
+  const candidates = [];
+  let bytes = sitemap.bytes;
+  const hash = createHash("sha256").update(sitemap.sha256);
+  for (let index = 0; index < pages.length; index += 8) {
+    const batch = await Promise.all(pages.slice(index, index + 8).map(async (url) => ({ url, artifact: await fetchPublicText(url) })));
+    for (const { url, artifact } of batch) {
+      bytes += artifact.bytes;
+      hash.update(artifact.sha256);
+      sourceDocuments.push({ source_url: url, sha256: artifact.sha256, bytes: artifact.bytes });
+      const rendered = artifact.text.replace(/&amp;/g, "&").replace(/&#x2F;/g, "/");
+      for (const match of rendered.matchAll(/\b(GET|POST|PUT|PATCH|DELETE)\s+(https:\/\/api\.linkedin\.com\/(?:rest|v2)\/(?:[^\s'"`<{}]+|\{[^}]+\})+)/g)) {
+        const method = match[1];
+        const requestURL = match[2].replace(/[),.;]+$/, "");
+        const parsed = new URL(requestURL);
+        candidates.push({ method, path: decodeURIComponent(parsed.pathname), source_url: url, source_location: `rendered request ${method} ${requestURL}` });
+      }
+    }
+  }
+  const unique = new Map();
+  for (const candidate of candidates) {
+    const key = `${candidate.method} ${candidate.path}`;
+    if (!unique.has(key)) unique.set(key, candidate);
+  }
+  const documented = [...unique.values()];
+  const templates = documented.filter((candidate) => /\{[^}]+\}/.test(candidate.path));
+  const isLiteralExample = (pathname) => pathname.split("/").some((segment) => /^(?:\d+|urn:[^/]+|[0-9a-f]{16,})$/i.test(segment));
+  const matchesTemplate = (template, pathname) => {
+    const expected = template.split("/");
+    const actual = pathname.split("/");
+    return expected.length === actual.length && expected.every((segment, index) => /\{[^}]+\}/.test(segment) || segment === actual[index]);
+  };
+  // Microsoft Learn renders literal IDs next to the reusable parameterized
+  // request. Count the documented template, not each illustrative account or
+  // organization value, while retaining literal segments that have no matching
+  // parameterized operation in the complete reference.
+  const operations = documented
+    .filter((candidate) => !isLiteralExample(candidate.path) || !templates.some((template) => template.method === candidate.method && matchesTemplate(template.path, candidate.path)))
+    .map((candidate, index) => ({
+    id: sourceID(connector, candidate.method, candidate.path, index),
+    protocol: "rest",
+    method: candidate.method,
+    path: candidate.path,
+    operation_id: null,
+    deprecated: false,
+    source_location: candidate.source_location,
+    source_url: candidate.source_url
+  }));
   return { operations, bytes, sha256: hash.digest("hex"), sourceDocuments };
+}
+
+async function aircallRenderedOperations(connector, referenceURL) {
+  const artifact = await fetchPublicText(referenceURL);
+  const candidates = [];
+  for (const match of artifact.text.matchAll(/<span class="http-method[^>]*">(GET|POST|PUT|PATCH|DELETE)<\/span>\s*(\/v\d+(?:\/[^\s<]*)?)/g)) {
+    const method = match[1];
+    const pathname = match[2].replace(/[),.;]+$/, "");
+    // The reference lists two literal examples beside the parameterized users
+    // endpoint (a numeric ID and an email). They are illustrations, not extra
+    // operations; every other endpoint-index entry is source material.
+    if (/(^|\/)\d+(?:\/|$)/.test(pathname) || pathname.includes("@")) continue;
+    candidates.push({ method, path: pathname, source_location: `rendered endpoint index ${method} ${pathname}` });
+  }
+  const unique = new Map();
+  for (const candidate of candidates) {
+    const key = `${candidate.method} ${candidate.path}`;
+    if (!unique.has(key)) unique.set(key, candidate);
+  }
+  const operations = [...unique.values()].map((candidate, index) => ({
+    id: sourceID(connector, candidate.method, candidate.path, index),
+    protocol: "rest",
+    method: candidate.method,
+    path: candidate.path,
+    operation_id: null,
+    deprecated: false,
+    source_location: candidate.source_location,
+    source_url: referenceURL
+  }));
+  return {
+    operations,
+    bytes: artifact.bytes,
+    sha256: artifact.sha256,
+    sourceDocuments: [{ source_url: referenceURL, sha256: artifact.sha256, bytes: artifact.bytes }]
+  };
+}
+
+function facebookOwnerParameter(specPath) {
+  const objectName = path.basename(specPath, ".json");
+  const known = {
+    Ad: "ad_id",
+    AdAccount: "ad_account_id",
+    AdSet: "adset_id",
+    Campaign: "campaign_id",
+    User: "user_id"
+  };
+  if (known[objectName]) return known[objectName];
+  return `${objectName.replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/[^A-Za-z0-9]+/g, "_").toLowerCase()}_id`;
+}
+
+function facebookGraphPath(specPath, api) {
+  const owner = facebookOwnerParameter(specPath);
+  const endpoint = String(api.endpoint || api.basePath || "").replace(/^\/+|\/+$/g, "");
+  return endpoint ? `/{${owner}}/${endpoint}` : `/{${owner}}`;
+}
+
+function tarOctal(buffer, offset, length) {
+  const raw = buffer.subarray(offset, offset + length).toString("utf8").replace(/\0.*$/, "").trim();
+  return raw ? Number.parseInt(raw, 8) : 0;
+}
+
+function tarString(buffer, offset, length) {
+  return buffer.subarray(offset, offset + length).toString("utf8").replace(/\0.*$/, "");
+}
+
+function tarEntries(gzip) {
+  const tar = gunzipSync(gzip);
+  const entries = [];
+  let offset = 0;
+  let pendingPath = null;
+  while (offset + 512 <= tar.length) {
+    const header = tar.subarray(offset, offset + 512);
+    if (header.every((byte) => byte === 0)) break;
+    const size = tarOctal(header, 124, 12);
+    const type = tarString(header, 156, 1);
+    const prefix = tarString(header, 345, 155);
+    const named = [prefix, tarString(header, 0, 100)].filter(Boolean).join("/");
+    const contentStart = offset + 512;
+    const content = tar.subarray(contentStart, contentStart + size);
+    if (type === "x") {
+      for (const record of content.toString("utf8").split("\n")) {
+        const marker = record.indexOf(" path=");
+        if (marker >= 0) pendingPath = record.slice(marker + " path=".length);
+      }
+    } else if (type === "0" || type === "") {
+      entries.push({ path: pendingPath || named, content });
+      pendingPath = null;
+    }
+    offset = contentStart + Math.ceil(size / 512) * 512;
+  }
+  return entries;
+}
+
+async function facebookCodegenOperations(connector, archiveURL) {
+  const archive = await fetchPublicBytes(archiveURL);
+  const specs = tarEntries(archive.bytes)
+    .filter((entry) => /(?:^|\/)api_specs\/specs\/[^/]+\.json$/.test(entry.path))
+    .map((entry) => ({
+      path: entry.path.replace(/^.*?api_specs\/specs\//, "api_specs/specs/"),
+      content: entry.content
+    }));
+  const operations = [];
+  const sourceDocuments = [];
+  for (const spec of specs) {
+    const sourceURL = `https://raw.githubusercontent.com/facebook/facebook-business-sdk-codegen/main/${spec.path}`;
+    const sha256 = createHash("sha256").update(spec.content).digest("hex");
+    sourceDocuments.push({ path: spec.path, source_url: sourceURL, sha256, bytes: spec.content.length });
+    const document = JSON.parse(spec.content.toString("utf8"));
+    for (const [apiIndex, api] of (document.apis || []).entries()) {
+      if (!sourceMethods.has(String(api.method || "").toLowerCase())) continue;
+      const pathname = facebookGraphPath(spec.path, api);
+      operations.push({
+        id: `${connector}.graph.${spec.path.replace(/[^A-Za-z0-9]+/g, ".")}.${apiIndex + 1}`,
+        protocol: "rest",
+        method: api.method.toUpperCase(),
+        path: pathname,
+        operation_id: api.name || null,
+        deprecated: false,
+        source_location: `${spec.path}:apis[${apiIndex}] (owner=${path.basename(spec.path, ".json")}; Graph node/edge template)`,
+        source_url: sourceURL
+      });
+    }
+  }
+  return { operations, bytes: archive.bytes.length, sha256: archive.sha256, contentType: archive.contentType, sourceDocuments };
 }
 
 function convertExcluded(endpoint, sourceURL) {
@@ -271,7 +504,10 @@ function ledgerRow(connector, source, endpoint, lockName) {
     : { state: "present", evidence: "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.", declaration_pending: pending };
   return {
     method: source.method,
-    path: endpointCopy.path,
+    // The ledger's path is the provider-published operation path. The nested
+    // api_surface object records the exact connector binding when normalized
+    // parameter spellings coalesce to one executable surface endpoint.
+    path: source.path,
     parity_class: classification,
     api_surface: endpointCopy,
     source: {
@@ -332,7 +568,22 @@ async function batch3Lock(connector, surface) {
     operations = discoveryOperations(connector, artifact.json, plan.url);
   } else if (plan.parser === "amazon-models") {
     const aggregate = await amazonModelOperations(connector, plan.url);
-    artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: "application/vnd.amazon.selling-partner.openapi-model-set+json" };
+    artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: aggregate.contentType };
+    operations = aggregate.operations;
+    sourceDocuments = aggregate.sourceDocuments;
+  } else if (plan.parser === "linkedin-rendered") {
+    const aggregate = await linkedInRenderedOperations(connector, plan.url);
+    artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: "application/vnd.microsoft.learn.rendered-reference-set+html" };
+    operations = aggregate.operations;
+    sourceDocuments = aggregate.sourceDocuments;
+  } else if (plan.parser === "aircall-rendered") {
+    const aggregate = await aircallRenderedOperations(connector, plan.url);
+    artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: "text/html; rendered-aircall-reference" };
+    operations = aggregate.operations;
+    sourceDocuments = aggregate.sourceDocuments;
+  } else if (plan.parser === "facebook-codegen") {
+    const aggregate = await facebookCodegenOperations(connector, plan.url);
+    artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: aggregate.contentType };
     operations = aggregate.operations;
     sourceDocuments = aggregate.sourceDocuments;
   } else {
@@ -357,15 +608,20 @@ async function batch3Lock(connector, surface) {
       sha256: artifact.sha256,
       bytes: artifact.bytes,
       format: artifact.contentType,
-      inventory_basis: plan.parser === "surface-partial"
-        ? "connector-owned operation inventory reconciled to the pinned official provider source; it is explicitly partial, not a complete provider operation claim"
+      inventory_basis: plan.parser === "facebook-codegen"
+        ? "all current Facebook Business SDK code-generation API declarations; each operation is an owner-type plus HTTP method plus Graph node/edge template, because the concrete node identifier is instance-dependent"
         : plan.parser === "surface-rendered"
           ? "complete rendered provider API reference reconciled to the connector-owned API surface"
+        : plan.parser === "linkedin-rendered"
+          ? "parsed from every current LinkedIn Marketing rendered-reference page listed in the provider sitemap"
+          : plan.parser === "aircall-rendered"
+            ? "parsed from every rendered endpoint-index entry in Aircall's complete Public API reference"
           : "parsed from the pinned provider machine-readable source artifact",
       coverage_confidence: plan.confidence,
       counts: { total: operations.length, by_kind: { rest: operations.length }, by_method: methodCounts(operations) },
       operation_counts: methodCounts(operations),
       operations,
+      ...(plan.parser === "facebook-codegen" ? { dynamic_surface: { kind: "graph-node-edge", basis: "The provider source declares operations by owner type and edge while the concrete Graph path is selected by a runtime object ID; counts.total is the finite count of named source declarations, not an estimate of object instances." } } : {}),
       ...(sourceDocuments ? { source_documents: sourceDocuments } : {})
     }
   };
@@ -391,21 +647,25 @@ async function loadSourceLock(connector, surface) {
 
 function mapSurface(connector, surface, lock) {
   const sourceURL = Object.values(lock).find((value) => value?.source_url)?.source_url || surface.docs;
+  // Existing typed command/stream bindings remain executable API contracts.
+  // They are retained, but never constrain discovery: every operation in the
+  // complete source inventory below is added when it is absent. This prevents
+  // an old api_surface from acting as the boundary of what the provider has.
   const endpoints = surface.endpoints.map((endpoint) => convertExcluded(endpoint, sourceURL));
   const index = new Map();
   for (const endpoint of endpoints) {
-    const key = `${endpoint.method.toUpperCase()} ${canonicalPath(endpoint.path)}`;
+    const key = operationKey(connector, endpoint.method, endpoint.path);
     if (!index.has(key)) index.set(key, endpoint);
   }
   for (const source of sourceOperations(lock)) {
-    const key = `${source.method} ${canonicalPath(source.path)}`;
+    const key = operationKey(connector, source.method, source.path);
     if (index.has(key)) continue;
     const endpoint = { method: source.method, path: source.path, operation: inferredOperation(source.method, source.source_url, source) };
     endpoints.push(endpoint);
     index.set(key, endpoint);
   }
   const rows = sourceOperations(lock).map((source) => {
-    const key = `${source.method} ${canonicalPath(source.path)}`;
+    const key = operationKey(connector, source.method, source.path);
     const endpoint = index.get(key);
     return ledgerRow(connector, source, endpoint, `${connector}-operation-source-lock.json`);
   });
@@ -456,7 +716,7 @@ function summary(connector, lock, rows) {
 async function main() {
   const reports = [];
   for (const connector of [...batch2, ...batch3]) {
-    const surface = JSON.parse(await readFile(definitionPath(connector, "api_surface.json"), "utf8"));
+    const surface = mergeBaselineSurface(connector, JSON.parse(await readFile(definitionPath(connector, "api_surface.json"), "utf8")));
     const lock = await loadSourceLock(connector, surface);
     const mapped = mapSurface(connector, surface, lock);
     const lockName = `${connector}-operation-source-lock.json`;

@@ -6,7 +6,7 @@ The two mapping commits add source locks and declaration-disposition ledgers for
 
 ## Findings
 
-One delivery blocker is open: the Facebook Marketing and LinkedIn Ads provider sources are marked `coverage_confidence: partial`. Their prior landing-page inventories (36 and 10 operations) are no longer presented as complete; no PR may be opened until complete provider references are materialised and mapped.
+The source-lock delivery blocker is resolved. Facebook Marketing is now pinned to the complete provider-published Business SDK code-generation archive (1,445 named owner-type/method/node-edge declarations, with explicit instance-dependent Graph-path basis); LinkedIn Ads is pinned to every Marketing page in the provider sitemap (272 operations after removing literal examples covered by documented templates). `SOURCE-LOCK-VERIFICATION.json` records old/new API-surface counts, provider basis, total operation count, and confidence for all nineteen connectors; every lock is `complete`.
 
 - The verifier proves 3,348 currently found source inventory rows have exactly one corrected Batch-1-shaped disposition and a bound API-surface endpoint. It also requires `counts.total`, per-kind counts, and a confidence basis for every lock.
 - Typed actions now remain enabled `direct_write`. Reverse-ETL is nested eligibility metadata, not an endpoint parity class; every candidate carries only `generic-typed-destination-executor` with the required `internal/app/issue_label_warehouse_transport.go:85-95` evidence and minimal change.
@@ -16,4 +16,4 @@ One delivery blocker is open: the Facebook Marketing and LinkedIn Ads provider s
 
 ## Review evidence
 
-`git diff --check`, source-map verification, `connectorgen validate`, `surface-sync --check`, targeted conformance, and commandrunner runtime preflight all passed before the source-lock remediation. The long-running `connector-boundary` scanner completed cleanly in its captured trace. Those structural passes do not close the two source-completeness holds.
+`git diff --check`, source-map verification, `connectorgen validate`, and `surface-sync --check` pass after the complete-source remediation. Targeted conformance, commandrunner runtime preflight, and the long-running `connector-boundary` scanner passed before remediation and will be repeated against the final commit before PR progression.

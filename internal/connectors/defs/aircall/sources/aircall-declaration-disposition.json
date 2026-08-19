@@ -4,13 +4,13 @@
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
     "source_lock": "sources/aircall-operation-source-lock.json",
-    "source_url": "https://developer.aircall.io/api-references/",
+    "source_url": "https://developers.aircall.io/api-references",
     "source_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
     "source_bytes": 875367,
     "operations_found": 93,
     "coverage_confidence": {
       "level": "complete",
-      "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+      "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
     }
   },
   "summary": {
@@ -19,21 +19,21 @@
     "operations_found": 93,
     "coverage_confidence": {
       "level": "complete",
-      "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+      "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
     },
-    "enabled_operations": 20,
-    "enabled_percent": 21.51,
-    "disabled_operations": 73,
+    "enabled_operations": 19,
+    "enabled_percent": 20.43,
+    "disabled_operations": 74,
     "documented_deletes": 13,
     "enabled_deletes": 6,
     "parity_class_counts": [
       {
         "key": "direct_read",
-        "count": 32
+        "count": 33
       },
       {
         "key": "direct_write",
-        "count": 54
+        "count": 53
       },
       {
         "key": "etl",
@@ -53,8 +53,8 @@
       }
     ],
     "stream_bindings": 7,
-    "writes_actions": 20,
-    "terminal_commands": 20,
+    "writes_actions": 19,
+    "terminal_commands": 19,
     "live_certification": "pending",
     "gap_ids": [
       "generic-typed-destination-executor"
@@ -62,19 +62,19 @@
     "foundation_gaps": [
       {
         "id": "generic-typed-destination-executor",
-        "count": 20,
+        "count": 19,
         "scope": "destination_transport"
       }
     ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 73
+        "count": 74
       }
     ],
     "reverse_etl_eligibility": {
       "state": "foundation-gap",
-      "typed_direct_write_operations": 20,
+      "typed_direct_write_operations": 19,
       "foundation_gap": {
         "id": "generic-typed-destination-executor",
         "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
@@ -111,7 +111,7 @@
       },
       {
         "id": "typed-operation-contract-aircall",
-        "count": 66
+        "count": 67
       }
     ]
   },
@@ -131,8 +131,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_users.1",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/users",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/users",
         "operation_id": null,
         "deprecated": false
       },
@@ -179,8 +179,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_users_id.2",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/users/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/users/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -220,8 +220,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_users.3",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/users",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/users",
         "operation_id": null,
         "deprecated": false
       },
@@ -262,8 +262,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.put.v1_users_id.4",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/users/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/users/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -304,8 +304,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.delete.v1_users_id.5",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/users/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/users/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -352,8 +352,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_users_availabilities.6",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/users/availabilities",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/users/availabilities",
         "operation_id": null,
         "deprecated": false
       },
@@ -399,8 +399,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_users_id_availability.7",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/users/:id/availability",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/users/:id/availability",
         "operation_id": null,
         "deprecated": false
       },
@@ -446,8 +446,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_users_id_calls.8",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/users/:id/calls",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/users/:id/calls",
         "operation_id": null,
         "deprecated": false
       },
@@ -493,8 +493,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_users_id_dial.9",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/users/:id/dial",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/users/:id/dial",
         "operation_id": null,
         "deprecated": false
       },
@@ -541,8 +541,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v2_users.10",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v2/users",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v2/users",
         "operation_id": null,
         "deprecated": false
       },
@@ -589,8 +589,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v2_users_id.11",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v2/users/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v2/users/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -637,8 +637,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v2_users.12",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v2/users",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v2/users",
         "operation_id": null,
         "deprecated": false
       },
@@ -685,8 +685,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.put.v2_users_id.13",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v2/users/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v2/users/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -732,8 +732,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v2_users_id_numbers.14",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v2/users/:id/numbers",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v2/users/:id/numbers",
         "operation_id": null,
         "deprecated": false
       },
@@ -773,8 +773,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_teams.15",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/teams",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/teams",
         "operation_id": null,
         "deprecated": false
       },
@@ -821,8 +821,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_teams_id.16",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/teams/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/teams/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -862,8 +862,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_teams.17",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/teams",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/teams",
         "operation_id": null,
         "deprecated": false
       },
@@ -904,8 +904,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.delete.v1_teams_id.18",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/teams/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/teams/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -946,8 +946,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_teams_team_id_users_user_id.19",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/teams/:team_id/users/:user_id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/teams/:team_id/users/:user_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -988,8 +988,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.delete.v1_teams_team_id_users_user_id.20",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/teams/:team_id/users/:user_id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/teams/:team_id/users/:user_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -1030,8 +1030,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_calls.21",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls",
         "operation_id": null,
         "deprecated": false
       },
@@ -1078,8 +1078,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_calls_id.22",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -1126,8 +1126,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_calls_search.23",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/search",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/search",
         "operation_id": null,
         "deprecated": false
       },
@@ -1173,8 +1173,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_calls_id_transfers.24",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/calls/:id/transfers",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/calls/:id/transfers",
         "operation_id": null,
         "deprecated": false
       },
@@ -1214,8 +1214,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_calls_id_comments.25",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/calls/:id/comments",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/calls/:id/comments",
         "operation_id": null,
         "deprecated": false
       },
@@ -1256,8 +1256,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_calls_id_tags.26",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/calls/:id/tags",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/calls/:id/tags",
         "operation_id": null,
         "deprecated": false
       },
@@ -1298,8 +1298,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.put.v1_calls_id_archive.27",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/calls/:id/archive",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/calls/:id/archive",
         "operation_id": null,
         "deprecated": false
       },
@@ -1340,8 +1340,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.put.v1_calls_id_unarchive.28",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/calls/:id/unarchive",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/calls/:id/unarchive",
         "operation_id": null,
         "deprecated": false
       },
@@ -1388,8 +1388,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_calls_id_pause_recording.29",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/calls/:id/pause_recording",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/calls/:id/pause_recording",
         "operation_id": null,
         "deprecated": false
       },
@@ -1435,8 +1435,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_calls_id_resume_recording.30",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/calls/:id/resume_recording",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/calls/:id/resume_recording",
         "operation_id": null,
         "deprecated": false
       },
@@ -1482,8 +1482,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.delete.v1_calls_id_recording.31",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/calls/:id/recording",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/calls/:id/recording",
         "operation_id": null,
         "deprecated": false
       },
@@ -1529,8 +1529,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.delete.v1_calls_id_voicemail.32",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/calls/:id/voicemail",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/calls/:id/voicemail",
         "operation_id": null,
         "deprecated": false
       },
@@ -1576,8 +1576,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_calls_id_insight_cards.33",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/calls/:id/insight_cards",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/calls/:id/insight_cards",
         "operation_id": null,
         "deprecated": false
       },
@@ -1623,8 +1623,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_calls_call_id_transcription.34",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/transcription",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/transcription",
         "operation_id": null,
         "deprecated": false
       },
@@ -1670,8 +1670,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_calls_call_id_realtime_transcription.35",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/realtime_transcription",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/realtime_transcription",
         "operation_id": null,
         "deprecated": false
       },
@@ -1717,8 +1717,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_calls_call_id_sentiments.36",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/sentiments",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/sentiments",
         "operation_id": null,
         "deprecated": false
       },
@@ -1745,6 +1745,53 @@
     },
     {
       "method": "GET",
+      "path": "/v1/calls/:call_id/predicted_csat",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/predicted_csat",
+        "covered_by": null,
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_calls_call_id_predicted_csat.37; source_location=rendered endpoint index GET /v1/calls/:call_id/predicted_csat"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.get.v1_calls_call_id_predicted_csat.37",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/predicted_csat",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/calls/:call_id/predicted_csat is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/calls/:call_id/predicted_csat is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/calls/:call_id/topics",
       "parity_class": "direct_read",
       "api_surface": {
@@ -1763,9 +1810,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_calls_call_id_topics.37",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/topics",
+        "source_id": "aircall.rest.get.v1_calls_call_id_topics.38",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/topics",
         "operation_id": null,
         "deprecated": false
       },
@@ -1810,9 +1857,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_calls_call_id_summary.38",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/summary",
+        "source_id": "aircall.rest.get.v1_calls_call_id_summary.39",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/summary",
         "operation_id": null,
         "deprecated": false
       },
@@ -1857,9 +1904,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_calls_call_id_custom_summary_result.39",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/custom_summary_result",
+        "source_id": "aircall.rest.get.v1_calls_call_id_custom_summary_result.40",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/custom_summary_result",
         "operation_id": null,
         "deprecated": false
       },
@@ -1904,9 +1951,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_calls_call_id_action_items.40",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/action_items",
+        "source_id": "aircall.rest.get.v1_calls_call_id_action_items.41",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/action_items",
         "operation_id": null,
         "deprecated": false
       },
@@ -1951,9 +1998,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_calls_call_id_playbook_result.41",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/playbook_result",
+        "source_id": "aircall.rest.get.v1_calls_call_id_playbook_result.42",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/playbook_result",
         "operation_id": null,
         "deprecated": false
       },
@@ -1998,9 +2045,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_calls_call_id_evaluations.42",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/calls/:call_id/evaluations",
+        "source_id": "aircall.rest.get.v1_calls_call_id_evaluations.43",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/evaluations",
         "operation_id": null,
         "deprecated": false
       },
@@ -2027,27 +2074,27 @@
     },
     {
       "method": "GET",
-      "path": "/v1/dialer_campaigns/:id",
+      "path": "/v1/users/:user_id/dialer_campaign",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/v1/dialer_campaigns/:id",
+        "path": "/v1/users/:user_id/dialer_campaign",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "direct_read",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "Power Dialer add-on feature not available on every Aircall plan; no list-all-campaigns endpoint exists to hang a stream off of (detail-only by id)",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_users_user_id_dialer_campaign.44; source_location=rendered endpoint index GET /v1/users/:user_id/dialer_campaign"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_dialer_campaigns_id.43",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/dialer_campaigns/:id",
+        "source_id": "aircall.rest.get.v1_users_user_id_dialer_campaign.44",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/users/:user_id/dialer_campaign",
         "operation_id": null,
         "deprecated": false
       },
@@ -2057,7 +2104,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/dialer_campaigns/:id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/users/:user_id/dialer_campaign is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -2065,7 +2112,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/dialer_campaigns/:id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/users/:user_id/dialer_campaign is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -2074,27 +2121,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/dialer_campaigns",
+      "path": "/v1/users/:user_id/dialer_campaign",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/dialer_campaigns",
+        "path": "/v1/users/:user_id/dialer_campaign",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "Power Dialer add-on feature not available on every Aircall plan",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_users_user_id_dialer_campaign.45; source_location=rendered endpoint index POST /v1/users/:user_id/dialer_campaign"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_dialer_campaigns.44",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/dialer_campaigns",
+        "source_id": "aircall.rest.post.v1_users_user_id_dialer_campaign.45",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/users/:user_id/dialer_campaign",
         "operation_id": null,
         "deprecated": false
       },
@@ -2104,7 +2151,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/dialer_campaigns is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/users/:user_id/dialer_campaign is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -2112,7 +2159,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/dialer_campaigns is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/users/:user_id/dialer_campaign is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -2121,27 +2168,27 @@
     },
     {
       "method": "DELETE",
-      "path": "/v1/dialer_campaigns/:id",
+      "path": "/v1/users/:user_id/dialer_campaign",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
-        "path": "/v1/dialer_campaigns/:id",
+        "path": "/v1/users/:user_id/dialer_campaign",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "destructive_action",
           "status": "blocked",
-          "risk": "medium",
+          "risk": "high",
           "blocked_by_default": true,
-          "reason": "Power Dialer add-on feature not available on every Aircall plan",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_users_user_id_dialer_campaign.46; source_location=rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.delete.v1_dialer_campaigns_id.45",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/dialer_campaigns/:id",
+        "source_id": "aircall.rest.delete.v1_users_user_id_dialer_campaign.46",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign",
         "operation_id": null,
         "deprecated": false
       },
@@ -2151,7 +2198,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/dialer_campaigns/:id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/users/:user_id/dialer_campaign is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -2159,7 +2206,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/dialer_campaigns/:id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/users/:user_id/dialer_campaign is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -2168,27 +2215,27 @@
     },
     {
       "method": "GET",
-      "path": "/v1/dialer_campaigns/:id/phone_numbers",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/v1/dialer_campaigns/:id/phone_numbers",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "direct_read",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "Power Dialer add-on feature not available on every Aircall plan",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_users_user_id_dialer_campaign_phone_numbers.47; source_location=rendered endpoint index GET /v1/users/:user_id/dialer_campaign/phone_numbers"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_dialer_campaigns_id_phone_numbers.46",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/dialer_campaigns/:id/phone_numbers",
+        "source_id": "aircall.rest.get.v1_users_user_id_dialer_campaign_phone_numbers.47",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/users/:user_id/dialer_campaign/phone_numbers",
         "operation_id": null,
         "deprecated": false
       },
@@ -2198,7 +2245,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/dialer_campaigns/:id/phone_numbers is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/users/:user_id/dialer_campaign/phone_numbers is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -2206,7 +2253,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/dialer_campaigns/:id/phone_numbers is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/users/:user_id/dialer_campaign/phone_numbers is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -2215,27 +2262,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/dialer_campaigns/:id/phone_numbers",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/dialer_campaigns/:id/phone_numbers",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "Power Dialer add-on feature not available on every Aircall plan",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_users_user_id_dialer_campaign_phone_numbers.48; source_location=rendered endpoint index POST /v1/users/:user_id/dialer_campaign/phone_numbers"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_dialer_campaigns_id_phone_numbers.47",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/dialer_campaigns/:id/phone_numbers",
+        "source_id": "aircall.rest.post.v1_users_user_id_dialer_campaign_phone_numbers.48",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/users/:user_id/dialer_campaign/phone_numbers",
         "operation_id": null,
         "deprecated": false
       },
@@ -2245,7 +2292,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/dialer_campaigns/:id/phone_numbers is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/users/:user_id/dialer_campaign/phone_numbers is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -2253,7 +2300,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/dialer_campaigns/:id/phone_numbers is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/users/:user_id/dialer_campaign/phone_numbers is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -2262,27 +2309,27 @@
     },
     {
       "method": "DELETE",
-      "path": "/v1/dialer_campaigns/:id/phone_numbers/:phone_number_id",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers/:id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
-        "path": "/v1/dialer_campaigns/:id/phone_numbers/:phone_number_id",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers/:id",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "destructive_action",
           "status": "blocked",
-          "risk": "medium",
+          "risk": "high",
           "blocked_by_default": true,
-          "reason": "Power Dialer add-on feature not available on every Aircall plan",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_users_user_id_dialer_campaign_phone_numbers_id.49; source_location=rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.delete.v1_dialer_campaigns_id_phone_numbers_phone_number_id.48",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/dialer_campaigns/:id/phone_numbers/:phone_number_id",
+        "source_id": "aircall.rest.delete.v1_users_user_id_dialer_campaign_phone_numbers_id.49",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -2292,7 +2339,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/dialer_campaigns/:id/phone_numbers/:phone_number_id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -2300,7 +2347,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/dialer_campaigns/:id/phone_numbers/:phone_number_id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -2321,9 +2368,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_numbers.49",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/numbers",
+        "source_id": "aircall.rest.get.v1_numbers.50",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/numbers",
         "operation_id": null,
         "deprecated": false
       },
@@ -2369,9 +2416,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_numbers_id.50",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/numbers/:id",
+        "source_id": "aircall.rest.get.v1_numbers_id.51",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/numbers/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -2416,9 +2463,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.put.v1_numbers_id.51",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/numbers/:id",
+        "source_id": "aircall.rest.put.v1_numbers_id.52",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/numbers/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -2437,53 +2484,6 @@
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
         "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/numbers/:id is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v1/numbers/:id/messages",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "PUT",
-        "path": "/v1/numbers/:id/messages",
-        "covered_by": null,
-        "operation": {
-          "model": "disallowed",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "IVR music/message-file configuration is an audio-asset upload (multipart), not a JSON record mutation this dialect can express",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.put.v1_numbers_id_messages.52",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/numbers/:id/messages",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/numbers/:id/messages is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/numbers/:id/messages is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -2511,8 +2511,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_numbers_id_registration_status.53",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/numbers/:id/registration_status",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/registration_status",
         "operation_id": null,
         "deprecated": false
       },
@@ -2538,75 +2538,28 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/number_configurations",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/number_configurations",
-        "covered_by": null,
-        "operation": {
-          "model": "disallowed",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "creates a live number-porting/configuration provisioning request; an account-provisioning action, not reverse-ETL record data",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_number_configurations.54",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/number_configurations",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/number_configurations is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/number_configurations is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
       "method": "GET",
-      "path": "/v1/number_configurations/:id",
+      "path": "/v1/numbers/:id/templates",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/v1/number_configurations/:id",
+        "path": "/v1/numbers/:id/templates",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "direct_read",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "per-configuration-request detail fetch, no list-all endpoint to hang a stream off of",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_numbers_id_templates.54; source_location=rendered endpoint index GET /v1/numbers/:id/templates"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_number_configurations_id.55",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/number_configurations/:id",
+        "source_id": "aircall.rest.get.v1_numbers_id_templates.54",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/templates",
         "operation_id": null,
         "deprecated": false
       },
@@ -2616,7 +2569,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/number_configurations/:id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/numbers/:id/templates is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -2624,383 +2577,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/number_configurations/:id is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/number_configurations/:id",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "DELETE",
-        "path": "/v1/number_configurations/:id",
-        "covered_by": null,
-        "operation": {
-          "model": "disallowed",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "cancels a live number-porting/configuration provisioning request; an account-provisioning action",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.delete.v1_number_configurations_id.56",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/number_configurations/:id",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/number_configurations/:id is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/number_configurations/:id is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/conversations/:conversation_id/messages",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/conversations/:conversation_id/messages",
-        "covered_by": null,
-        "operation": {
-          "model": "destructive_action",
-          "status": "blocked",
-          "risk": "high",
-          "blocked_by_default": true,
-          "reason": "sends a live outbound SMS/message to a real phone number; a real-world messaging side effect, not a reverse-ETL data mutation",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_conversations_conversation_id_messages.57",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/conversations/:conversation_id/messages",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/messages is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/messages is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/conversations/:conversation_id/messages/skip_inbox",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/conversations/:conversation_id/messages/skip_inbox",
-        "covered_by": null,
-        "operation": {
-          "model": "destructive_action",
-          "status": "blocked",
-          "risk": "high",
-          "blocked_by_default": true,
-          "reason": "sends a live outbound SMS/message to a real phone number; a real-world messaging side effect",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_conversations_conversation_id_messages_skip_inbox.58",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/conversations/:conversation_id/messages/skip_inbox",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/messages/skip_inbox is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/messages/skip_inbox is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/conversations/:conversation_id/group_messages",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/conversations/:conversation_id/group_messages",
-        "covered_by": null,
-        "operation": {
-          "model": "destructive_action",
-          "status": "blocked",
-          "risk": "high",
-          "blocked_by_default": true,
-          "reason": "sends a live outbound group SMS/message to real phone numbers; a real-world messaging side effect",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_conversations_conversation_id_group_messages.59",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/conversations/:conversation_id/group_messages",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/group_messages is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/group_messages is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/conversations/:conversation_id/group_messages/skip_inbox",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/conversations/:conversation_id/group_messages/skip_inbox",
-        "covered_by": null,
-        "operation": {
-          "model": "destructive_action",
-          "status": "blocked",
-          "risk": "high",
-          "blocked_by_default": true,
-          "reason": "sends a live outbound group SMS/message to real phone numbers; a real-world messaging side effect",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_conversations_conversation_id_group_messages_skip_inbox.60",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/conversations/:conversation_id/group_messages/skip_inbox",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/group_messages/skip_inbox is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/group_messages/skip_inbox is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/conversations/:conversation_id/whatsapp_messages",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/conversations/:conversation_id/whatsapp_messages",
-        "covered_by": null,
-        "operation": {
-          "model": "destructive_action",
-          "status": "blocked",
-          "risk": "high",
-          "blocked_by_default": true,
-          "reason": "sends a live outbound WhatsApp message to a real phone number; a real-world messaging side effect",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_conversations_conversation_id_whatsapp_messages.61",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/conversations/:conversation_id/whatsapp_messages",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/whatsapp_messages is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/whatsapp_messages is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/conversations/:conversation_id/whatsapp_messages/skip_inbox",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/conversations/:conversation_id/whatsapp_messages/skip_inbox",
-        "covered_by": null,
-        "operation": {
-          "model": "destructive_action",
-          "status": "blocked",
-          "risk": "high",
-          "blocked_by_default": true,
-          "reason": "sends a live outbound WhatsApp message to a real phone number; a real-world messaging side effect",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_conversations_conversation_id_whatsapp_messages_skip_inbox.62",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/conversations/:conversation_id/whatsapp_messages/skip_inbox",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/whatsapp_messages/skip_inbox is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/conversations/:conversation_id/whatsapp_messages/skip_inbox is source-bound but has no runnable connector-local typed contract."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-aircall",
-        "contract": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/numbers/:id/whatsapp_templates",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/v1/numbers/:id/whatsapp_templates",
-        "covered_by": null,
-        "operation": {
-          "model": "disallowed",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "WhatsApp Business add-on feature not available on every Aircall plan; per-number sub-resource, not a bulk syncable list",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
-        }
-      },
-      "source": {
-        "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_numbers_id_whatsapp_templates.63",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/numbers/:id/whatsapp_templates",
-        "operation_id": null,
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/numbers/:id/whatsapp_templates is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/numbers/:id/whatsapp_templates is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/numbers/:id/templates is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -3027,9 +2604,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_numbers_id_whatsapp_status.64",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/numbers/:id/whatsapp_status",
+        "source_id": "aircall.rest.get.v1_numbers_id_whatsapp_status.55",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/whatsapp_status",
         "operation_id": null,
         "deprecated": false
       },
@@ -3055,6 +2632,429 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/native/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/native/send",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_native_send.56; source_location=rendered endpoint index POST /v1/numbers/:id/messages/native/send"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.post.v1_numbers_id_messages_native_send.56",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/native/send",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/native/send is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/native/send is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/group/native/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/group/native/send",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_group_native_send.57; source_location=rendered endpoint index POST /v1/numbers/:id/messages/group/native/send"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.post.v1_numbers_id_messages_group_native_send.57",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/group/native/send",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/group/native/send is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/group/native/send is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_configuration.58; source_location=rendered endpoint index POST /v1/numbers/:id/messages/configuration"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.post.v1_numbers_id_messages_configuration.58",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/configuration",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/configuration is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/configuration is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "covered_by": null,
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_numbers_id_messages_configuration.59; source_location=rendered endpoint index GET /v1/numbers/:id/messages/configuration"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.get.v1_numbers_id_messages_configuration.59",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/messages/configuration",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/numbers/:id/messages/configuration is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/numbers/:id/messages/configuration is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "covered_by": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_numbers_id_messages_configuration.60; source_location=rendered endpoint index DELETE /v1/numbers/:id/messages/configuration"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.delete.v1_numbers_id_messages_configuration.60",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/numbers/:id/messages/configuration",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/numbers/:id/messages/configuration is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/numbers/:id/messages/configuration is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/send",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_send.61; source_location=rendered endpoint index POST /v1/numbers/:id/messages/send"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.post.v1_numbers_id_messages_send.61",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/send",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/send is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/send is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/numbers/:id/messages/group/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/group/send",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_numbers_id_messages_group_send.62; source_location=rendered endpoint index POST /v1/numbers/:id/messages/group/send"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.post.v1_numbers_id_messages_group_send.62",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/group/send",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/group/send is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/numbers/:id/messages/group/send is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/messages/send/whatsapp/native",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/messages/send/whatsapp/native",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_messages_send_whatsapp_native.63; source_location=rendered endpoint index POST /v1/messages/send/whatsapp/native"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.post.v1_messages_send_whatsapp_native.63",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/messages/send/whatsapp/native",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/messages/send/whatsapp/native is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/messages/send/whatsapp/native is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/messages/whatsapp/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/messages/whatsapp/send",
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_messages_whatsapp_send.64; source_location=rendered endpoint index POST /v1/messages/whatsapp/send"
+        }
+      },
+      "source": {
+        "source_lock": "sources/aircall-operation-source-lock.json",
+        "source_id": "aircall.rest.post.v1_messages_whatsapp_send.64",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/messages/whatsapp/send",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/messages/whatsapp/send is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/messages/whatsapp/send is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
+      }
+    },
+    {
       "method": "GET",
       "path": "/v1/contacts",
       "parity_class": "etl",
@@ -3069,8 +3069,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_contacts.65",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/contacts",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/contacts",
         "operation_id": null,
         "deprecated": false
       },
@@ -3117,8 +3117,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_contacts_search.66",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/contacts/search",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/contacts/search",
         "operation_id": null,
         "deprecated": false
       },
@@ -3165,8 +3165,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_contacts_id.67",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/contacts/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/contacts/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3206,8 +3206,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_contacts.68",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/contacts",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/contacts",
         "operation_id": null,
         "deprecated": false
       },
@@ -3234,45 +3234,50 @@
       }
     },
     {
-      "method": "PUT",
+      "method": "POST",
       "path": "/v1/contacts/:id",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "PUT",
+        "method": "POST",
         "path": "/v1/contacts/:id",
-        "covered_by": {
-          "write": "update_contact"
-        },
-        "operation": null
+        "covered_by": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_contacts_id.69; source_location=rendered endpoint index POST /v1/contacts/:id"
+        }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.put.v1_contacts_id.69",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/contacts/:id",
+        "source_id": "aircall.rest.post.v1_contacts_id.69",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/contacts/:id",
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
-      },
-      "rejection": null,
-      "declaration": {
-        "status": "enabled; existing connector-local binding",
-        "contract": {
-          "write": "update_contact"
-        },
-        "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-aircall",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-aircall",
+        "contract": null
       }
     },
     {
@@ -3290,8 +3295,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.delete.v1_contacts_id.70",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/contacts/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/contacts/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3319,27 +3324,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/contacts/:id/phone_numbers",
+      "path": "/v1/contacts/:id/phone_details",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/contacts/:id/phone_numbers",
+        "path": "/v1/contacts/:id/phone_details",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "sub-resource add of a single phone number to a contact; update_contact's full-record PUT already lets a caller replace a contact's phone_numbers array in one request",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_contacts_id_phone_details.71; source_location=rendered endpoint index POST /v1/contacts/:id/phone_details"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_contacts_id_phone_numbers.71",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/contacts/:id/phone_numbers",
+        "source_id": "aircall.rest.post.v1_contacts_id_phone_details.71",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/contacts/:id/phone_details",
         "operation_id": null,
         "deprecated": false
       },
@@ -3349,7 +3354,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/phone_numbers is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/phone_details is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -3357,7 +3362,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/phone_numbers is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/phone_details is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -3366,27 +3371,27 @@
     },
     {
       "method": "PUT",
-      "path": "/v1/contacts/:id/phone_numbers/:phone_number_id",
+      "path": "/v1/contacts/:id/phone_details/:phone_number_id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
-        "path": "/v1/contacts/:id/phone_numbers/:phone_number_id",
+        "path": "/v1/contacts/:id/phone_details/:phone_number_id",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "sub-resource update of a single contact phone number; covered by update_contact's full-record PUT",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.put.v1_contacts_id_phone_details_phone_number_id.72; source_location=rendered endpoint index PUT /v1/contacts/:id/phone_details/:phone_number_id"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.put.v1_contacts_id_phone_numbers_phone_number_id.72",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/contacts/:id/phone_numbers/:phone_number_id",
+        "source_id": "aircall.rest.put.v1_contacts_id_phone_details_phone_number_id.72",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/contacts/:id/phone_details/:phone_number_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3396,7 +3401,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/phone_numbers/:phone_number_id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/phone_details/:phone_number_id is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -3404,7 +3409,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/phone_numbers/:phone_number_id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/phone_details/:phone_number_id is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -3413,27 +3418,27 @@
     },
     {
       "method": "DELETE",
-      "path": "/v1/contacts/:id/phone_numbers/:phone_number_id",
+      "path": "/v1/contacts/:id/phone_details/:phone_number_id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
-        "path": "/v1/contacts/:id/phone_numbers/:phone_number_id",
+        "path": "/v1/contacts/:id/phone_details/:phone_number_id",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "destructive_action",
           "status": "blocked",
-          "risk": "medium",
+          "risk": "high",
           "blocked_by_default": true,
-          "reason": "sub-resource delete of a single contact phone number; covered by update_contact's full-record PUT",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_contacts_id_phone_details_phone_number_id.73; source_location=rendered endpoint index DELETE /v1/contacts/:id/phone_details/:phone_number_id"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.delete.v1_contacts_id_phone_numbers_phone_number_id.73",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/contacts/:id/phone_numbers/:phone_number_id",
+        "source_id": "aircall.rest.delete.v1_contacts_id_phone_details_phone_number_id.73",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/contacts/:id/phone_details/:phone_number_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3443,7 +3448,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/phone_numbers/:phone_number_id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/phone_details/:phone_number_id is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -3451,7 +3456,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/phone_numbers/:phone_number_id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/phone_details/:phone_number_id is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -3460,27 +3465,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/contacts/:id/emails",
+      "path": "/v1/contacts/:id/email_details",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/contacts/:id/emails",
+        "path": "/v1/contacts/:id/email_details",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "sub-resource add of a single email to a contact; update_contact's full-record PUT already lets a caller replace a contact's emails array in one request",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_contacts_id_email_details.74; source_location=rendered endpoint index POST /v1/contacts/:id/email_details"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_contacts_id_emails.74",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/contacts/:id/emails",
+        "source_id": "aircall.rest.post.v1_contacts_id_email_details.74",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/contacts/:id/email_details",
         "operation_id": null,
         "deprecated": false
       },
@@ -3490,7 +3495,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/emails is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/email_details is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -3498,7 +3503,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/emails is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/contacts/:id/email_details is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -3507,27 +3512,27 @@
     },
     {
       "method": "PUT",
-      "path": "/v1/contacts/:id/emails/:email_id",
+      "path": "/v1/contacts/:id/email_details/:email_id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
-        "path": "/v1/contacts/:id/emails/:email_id",
+        "path": "/v1/contacts/:id/email_details/:email_id",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "sub-resource update of a single contact email; covered by update_contact's full-record PUT",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.put.v1_contacts_id_email_details_email_id.75; source_location=rendered endpoint index PUT /v1/contacts/:id/email_details/:email_id"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.put.v1_contacts_id_emails_email_id.75",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/contacts/:id/emails/:email_id",
+        "source_id": "aircall.rest.put.v1_contacts_id_email_details_email_id.75",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/contacts/:id/email_details/:email_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3537,7 +3542,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/emails/:email_id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/email_details/:email_id is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -3545,7 +3550,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/emails/:email_id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: PUT /v1/contacts/:id/email_details/:email_id is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -3554,27 +3559,27 @@
     },
     {
       "method": "DELETE",
-      "path": "/v1/contacts/:id/emails/:email_id",
+      "path": "/v1/contacts/:id/email_details/:email_id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
-        "path": "/v1/contacts/:id/emails/:email_id",
+        "path": "/v1/contacts/:id/email_details/:email_id",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "destructive_action",
           "status": "blocked",
-          "risk": "medium",
+          "risk": "high",
           "blocked_by_default": true,
-          "reason": "sub-resource delete of a single contact email; covered by update_contact's full-record PUT",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.delete.v1_contacts_id_email_details_email_id.76; source_location=rendered endpoint index DELETE /v1/contacts/:id/email_details/:email_id"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.delete.v1_contacts_id_emails_email_id.76",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/contacts/:id/emails/:email_id",
+        "source_id": "aircall.rest.delete.v1_contacts_id_email_details_email_id.76",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/contacts/:id/email_details/:email_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3584,7 +3589,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/emails/:email_id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/email_details/:email_id is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -3592,7 +3597,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/emails/:email_id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: DELETE /v1/contacts/:id/email_details/:email_id is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -3614,8 +3619,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_tags.77",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/tags",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/tags",
         "operation_id": null,
         "deprecated": false
       },
@@ -3662,8 +3667,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_tags_id.78",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/tags/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/tags/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3703,8 +3708,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_tags.79",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/tags",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/tags",
         "operation_id": null,
         "deprecated": false
       },
@@ -3745,8 +3750,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.put.v1_tags_id.80",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/tags/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/tags/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3787,8 +3792,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.delete.v1_tags_id.81",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/tags/:id",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/tags/:id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3829,8 +3834,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_webhooks.82",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/webhooks",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/webhooks",
         "operation_id": null,
         "deprecated": false
       },
@@ -3857,7 +3862,7 @@
     },
     {
       "method": "GET",
-      "path": "/v1/webhooks/:id",
+      "path": "/v1/webhooks/:webhook_id",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
@@ -3876,9 +3881,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_webhooks_id.83",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/webhooks/:id",
+        "source_id": "aircall.rest.get.v1_webhooks_webhook_id.83",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/webhooks/:webhook_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3918,8 +3923,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.post.v1_webhooks.84",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/webhooks",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/webhooks",
         "operation_id": null,
         "deprecated": false
       },
@@ -3947,7 +3952,7 @@
     },
     {
       "method": "PUT",
-      "path": "/v1/webhooks/:id",
+      "path": "/v1/webhooks/:webhook_id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -3959,9 +3964,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.put.v1_webhooks_id.85",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint PUT /v1/webhooks/:id",
+        "source_id": "aircall.rest.put.v1_webhooks_webhook_id.85",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index PUT /v1/webhooks/:webhook_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -3989,7 +3994,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/v1/webhooks/:id",
+      "path": "/v1/webhooks/:webhook_id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
@@ -4001,9 +4006,9 @@
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.delete.v1_webhooks_id.86",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint DELETE /v1/webhooks/:id",
+        "source_id": "aircall.rest.delete.v1_webhooks_webhook_id.86",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index DELETE /v1/webhooks/:webhook_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -4050,8 +4055,8 @@
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
         "source_id": "aircall.rest.get.v1_company.87",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/company",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/company",
         "operation_id": null,
         "deprecated": false
       },
@@ -4078,27 +4083,27 @@
     },
     {
       "method": "GET",
-      "path": "/v1/integrations/:name",
+      "path": "/v1/integrations/me",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/v1/integrations/:name",
+        "path": "/v1/integrations/me",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "direct_read",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "per-named-integration detail requires knowing the integration's name in advance and account-admin visibility; no list-all endpoint",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_integrations_me.88; source_location=rendered endpoint index GET /v1/integrations/me"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_integrations_name.88",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/integrations/:name",
+        "source_id": "aircall.rest.get.v1_integrations_me.88",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/integrations/me",
         "operation_id": null,
         "deprecated": false
       },
@@ -4108,7 +4113,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/integrations/:name is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/integrations/me is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -4116,7 +4121,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/integrations/:name is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/integrations/me is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -4125,27 +4130,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/integrations/:name/enable",
+      "path": "/v1/integrations/enable",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/integrations/:name/enable",
+        "path": "/v1/integrations/enable",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "account-level integration provisioning, not reverse-ETL record data",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_integrations_enable.89; source_location=rendered endpoint index POST /v1/integrations/enable"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_integrations_name_enable.89",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/integrations/:name/enable",
+        "source_id": "aircall.rest.post.v1_integrations_enable.89",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/integrations/enable",
         "operation_id": null,
         "deprecated": false
       },
@@ -4155,7 +4160,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/:name/enable is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/enable is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -4163,7 +4168,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/:name/enable is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/enable is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -4172,27 +4177,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/integrations/:name/disable",
+      "path": "/v1/integrations/disable",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/integrations/:name/disable",
+        "path": "/v1/integrations/disable",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "account-level integration provisioning, not reverse-ETL record data",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_integrations_disable.90; source_location=rendered endpoint index POST /v1/integrations/disable"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_integrations_name_disable.90",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/integrations/:name/disable",
+        "source_id": "aircall.rest.post.v1_integrations_disable.90",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/integrations/disable",
         "operation_id": null,
         "deprecated": false
       },
@@ -4202,7 +4207,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/:name/disable is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/disable is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -4210,7 +4215,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/:name/disable is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/integrations/disable is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -4219,27 +4224,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/ai_voice_agents/:id/trigger_outbound_call",
+      "path": "/v1/outbound-calls/agents/:agent_id",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/ai_voice_agents/:id/trigger_outbound_call",
+        "path": "/v1/outbound-calls/agents/:agent_id",
         "covered_by": null,
         "operation": {
-          "model": "destructive_action",
+          "model": "disallowed",
           "status": "blocked",
-          "risk": "high",
+          "risk": "medium",
           "blocked_by_default": true,
-          "reason": "triggers a live outbound AI Voice Agent call; a real-world telephony side effect, not a reverse-ETL data mutation",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_outbound_calls_agents_agent_id.91; source_location=rendered endpoint index POST /v1/outbound-calls/agents/:agent_id"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_ai_voice_agents_id_trigger_outbound_call.91",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/ai_voice_agents/:id/trigger_outbound_call",
+        "source_id": "aircall.rest.post.v1_outbound_calls_agents_agent_id.91",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/outbound-calls/agents/:agent_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -4249,7 +4254,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/ai_voice_agents/:id/trigger_outbound_call is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/outbound-calls/agents/:agent_id is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -4257,7 +4262,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/ai_voice_agents/:id/trigger_outbound_call is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/outbound-calls/agents/:agent_id is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -4266,27 +4271,27 @@
     },
     {
       "method": "POST",
-      "path": "/v1/analytics/report_exports",
+      "path": "/v1/analytics/report/export",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/analytics/report_exports",
+        "path": "/v1/analytics/report/export",
         "covered_by": null,
         "operation": {
           "model": "disallowed",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "starts an async analytics report export job; the resulting export is a downloadable artifact, not a synchronous JSON record this dialect's write action can model without polling",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.post.v1_analytics_report_export.92; source_location=rendered endpoint index POST /v1/analytics/report/export"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.post.v1_analytics_report_exports.92",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint POST /v1/analytics/report_exports",
+        "source_id": "aircall.rest.post.v1_analytics_report_export.92",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index POST /v1/analytics/report/export",
         "operation_id": null,
         "deprecated": false
       },
@@ -4296,7 +4301,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/analytics/report_exports is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/analytics/report/export is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -4304,7 +4309,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/analytics/report_exports is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: POST /v1/analytics/report/export is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",
@@ -4313,27 +4318,27 @@
     },
     {
       "method": "GET",
-      "path": "/v1/analytics/report_exports/:id",
+      "path": "/v1/analytics/report/export/:export_id",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/v1/analytics/report_exports/:id",
+        "path": "/v1/analytics/report/export/:export_id",
         "covered_by": null,
         "operation": {
-          "model": "disallowed",
+          "model": "direct_read",
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "async export-job status/result poll, paired with the excluded report_exports create above",
-          "source_url": "https://developer.aircall.io/api-references/",
-          "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+          "source_url": "https://developers.aircall.io/api-references",
+          "notes": "classification=declaration-pending; source_id=aircall.rest.get.v1_analytics_report_export_export_id.93; source_location=rendered endpoint index GET /v1/analytics/report/export/:export_id"
         }
       },
       "source": {
         "source_lock": "sources/aircall-operation-source-lock.json",
-        "source_id": "aircall.rest.get.v1_analytics_report_exports_id.93",
-        "source_url": "https://developer.aircall.io/api-references/",
-        "source_location": "documented endpoint GET /v1/analytics/report_exports/:id",
+        "source_id": "aircall.rest.get.v1_analytics_report_export_export_id.93",
+        "source_url": "https://developers.aircall.io/api-references",
+        "source_location": "rendered endpoint index GET /v1/analytics/report/export/:export_id",
         "operation_id": null,
         "deprecated": false
       },
@@ -4343,7 +4348,7 @@
         "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
         "declaration_pending": {
           "id": "typed-operation-contract-aircall",
-          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/analytics/report_exports/:id is source-bound but has no runnable connector-local typed contract.",
+          "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/analytics/report/export/:export_id is source-bound but has no runnable connector-local typed contract.",
           "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
         }
       },
@@ -4351,7 +4356,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/analytics/report_exports/:id is source-bound but has no runnable connector-local typed contract."
+        "evidence": "internal/connectors/defs/aircall/api_surface.json: GET /v1/analytics/report/export/:export_id is source-bound but has no runnable connector-local typed contract."
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-aircall",

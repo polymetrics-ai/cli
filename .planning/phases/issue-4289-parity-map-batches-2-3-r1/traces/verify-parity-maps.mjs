@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { readFile, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 
 const root = process.cwd();
@@ -8,6 +9,7 @@ const phase = path.join(root, ".planning", "phases", "issue-4289-parity-map-batc
 const connectors = ["grafana", "trello", "slack", "n8n", "google-calendar", "gmail", "twilio", "amazon-sqs", "elasticsearch", "gong", "google-ads", "facebook-marketing", "linkedin-ads", "aircall", "xero", "paypal-transaction", "gocardless", "amazon-seller-partner", "miro"];
 const classes = new Set(["direct_read", "direct_write", "etl", "reverse_etl", "binary_read", "binary_write"]);
 const required = ["method", "path", "parity_class", "api_surface", "source", "state", "foundation", "rejection", "declaration"];
+const baselineRevision = "acb85dc03";
 
 function file(connector, name) {
   return path.join(root, "internal", "connectors", "defs", connector, "sources", name);
@@ -27,12 +29,15 @@ for (const connector of connectors) {
   const map = await readJSON(file(connector, `${connector}-declaration-disposition.json`));
   const surface = await readJSON(path.join(root, "internal", "connectors", "defs", connector, "api_surface.json"));
   const operations = Object.values(lock).flatMap((value) => Array.isArray(value?.operations) ? value.operations : []);
+  const oldSurface = JSON.parse(execFileSync("git", ["show", `${baselineRevision}:internal/connectors/defs/${connector}/api_surface.json`], { encoding: "utf8" }));
   if (operations.length !== map.ledger_dispositions.length) throw new Error(`${connector}: source inventory ${operations.length} != disposition rows ${map.ledger_dispositions.length}`);
   if (lock.rest.counts?.total !== operations.length || lock.rest.counts?.by_kind?.rest !== operations.length || !lock.rest.coverage_confidence?.level || !lock.rest.coverage_confidence?.basis) throw new Error(`${connector}: source lock lacks counts.total, per-kind counts, or coverage confidence`);
   if (map.source_basis.operations_found !== operations.length || map.summary.operations_found !== operations.length || !map.source_basis.coverage_confidence?.level || map.summary.coverage_confidence?.level !== lock.rest.coverage_confidence.level || "declared_percent" in map.summary) throw new Error(`${connector}: source accounting is self-referential or incomplete`);
   const surfaceKeys = new Set(surface.endpoints.map((endpoint) => `${endpoint.method.toUpperCase()} ${canonicalPath(endpoint.path)}`));
   for (const row of map.ledger_dispositions) {
+    const sourceOperation = operations.find((operation) => operation.id === row.source?.source_id && operation.source_location === row.source?.source_location && operation.source_url === row.source?.source_url);
     for (const key of required) if (!(key in row)) throw new Error(`${connector}: ${row.method} ${row.path} missing ${key}`);
+    if (!sourceOperation || sourceOperation.method !== row.method || sourceOperation.path !== row.path) throw new Error(`${connector}: ${row.method} ${row.path} is not the exact provider source operation for ${row.source?.source_id}`);
     if (!classes.has(row.parity_class)) throw new Error(`${connector}: ${row.method} ${row.path} has invalid parity class ${row.parity_class}`);
     if (!["enabled", "disabled"].includes(row.state)) throw new Error(`${connector}: ${row.method} ${row.path} has invalid state ${row.state}`);
     if (!surfaceKeys.has(`${row.method.toUpperCase()} ${canonicalPath(row.api_surface.path)}`)) throw new Error(`${connector}: ${row.method} ${row.path} is not bound to a surface endpoint`);
@@ -63,7 +68,22 @@ for (const connector of connectors) {
     sha256: lock.rest.sha256,
     verified: "captured public source metadata is complete; remote content is intentionally not refetched"
   };
-  checks.push({ connector, operations_found: operations.length, coverage_confidence: lock.rest.coverage_confidence, enabled_operations: map.summary.enabled_operations, disabled_operations: map.summary.disabled_operations, documented_deletes: map.summary.documented_deletes, enabled_deletes: map.summary.enabled_deletes, source_lock: sourceLock });
+  checks.push({
+    connector,
+    api_surface_counts: {
+      baseline_revision: baselineRevision,
+      old: oldSurface.endpoints.length,
+      new: surface.endpoints.length,
+      basis: lock.rest.coverage_confidence.basis
+    },
+    operations_found: operations.length,
+    coverage_confidence: lock.rest.coverage_confidence,
+    enabled_operations: map.summary.enabled_operations,
+    disabled_operations: map.summary.disabled_operations,
+    documented_deletes: map.summary.documented_deletes,
+    enabled_deletes: map.summary.enabled_deletes,
+    source_lock: sourceLock
+  });
 }
 
 const total = checks.reduce((sum, check) => sum + check.operations_found, 0);
@@ -72,11 +92,11 @@ const markdown = [
   "",
   "All source artifacts were fetched credential-free from their recorded public documentation URLs. No provider operation, credential, write, or live certification was used. A connector marked `partial` is an explicit delivery hold, not a complete-source assertion.",
   "",
-  "| Connector | Operations found | Coverage confidence | Enabled | Disabled | Enabled % | Deletes | Foundation gaps |",
-  "| --- | ---: | ---: | ---: | ---: | ---: | --- |",
-  ...checks.map((check) => `| ${check.connector} | ${check.operations_found} | ${check.coverage_confidence.level}: ${check.coverage_confidence.basis} | ${check.enabled_operations} | ${check.disabled_operations} | ${((check.enabled_operations / check.operations_found) * 100).toFixed(2)} | ${check.enabled_deletes}/${check.documented_deletes} | generic-typed-destination-executor (reverse ETL) |`),
+  "| Connector | Old api_surface | New api_surface | Operations found | Coverage confidence and basis | Enabled | Disabled | Enabled % | Deletes | Foundation gaps |",
+  "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |",
+  ...checks.map((check) => `| ${check.connector} | ${check.api_surface_counts.old} | ${check.api_surface_counts.new} | ${check.operations_found} | ${check.coverage_confidence.level}: ${check.coverage_confidence.basis} | ${check.enabled_operations} | ${check.disabled_operations} | ${((check.enabled_operations / check.operations_found) * 100).toFixed(2)} | ${check.enabled_deletes}/${check.documented_deletes} | generic-typed-destination-executor (reverse ETL) |`),
   "",
-  `Total operations found across pinned source artifacts: **${total}**. This is not a self-referential coverage percentage: the per-connector confidence and basis state whether the input is complete or partial. Un-authored endpoint declarations are \`declaration-pending\`; a typed write remains enabled \`direct_write\`, while its nested reverse-ETL eligibility records the real \`generic-typed-destination-executor\` foundation gap at \`internal/app/issue_label_warehouse_transport.go:85-95\`.`,
+  `Old api_surface counts are from \`${baselineRevision}\` (the current-main revision named in the transport correction); new counts are the source-derived projection at this revision. A new api_surface count can be lower than operations found when the provider publishes multiple operation declarations with the same normalized request shape. Total operations found across pinned source artifacts: **${total}**. This is not a self-referential coverage percentage: the per-connector confidence and basis state whether the input is complete or partial. Un-authored endpoint declarations are \`declaration-pending\`; a typed write remains enabled \`direct_write\`, while its nested reverse-ETL eligibility records the real \`generic-typed-destination-executor\` foundation gap at \`internal/app/issue_label_warehouse_transport.go:85-95\`.`,
   "",
   "ETL source transport is declaration-pending until each connector authors `sync_transport.json` with exact source executor, delivery, and conformance evidence. Reverse-ETL eligibility for typed direct writes remains foundation-blocked: the current only destination DefinitionFactory enforces the GitHub issue-label contract, so no transport binding/action is invented."
 ].join("\n") + "\n";

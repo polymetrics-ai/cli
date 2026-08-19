@@ -16844,7 +16844,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{ai21_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -16891,7 +16891,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{alibabacloud_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -16938,7 +16938,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{amazonbedrock_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -16985,7 +16985,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{amazonsagemaker_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17032,7 +17032,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{anthropic_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17079,7 +17079,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{azureaistudio_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17126,7 +17126,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{azureopenai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17173,7 +17173,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{cohere_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17220,7 +17220,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{contextualai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17267,7 +17267,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{custom_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17314,7 +17314,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{deepseek_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17361,7 +17361,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{elasticsearch_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17408,7 +17408,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{elser_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17455,7 +17455,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{fireworksai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17502,7 +17502,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{googleaistudio_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17549,7 +17549,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{googlevertexai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17596,7 +17596,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{groq_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17643,7 +17643,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{huggingface_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17690,7 +17690,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{jinaai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17737,7 +17737,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{llama_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17784,7 +17784,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{mistral_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17831,7 +17831,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{nvidia_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17878,7 +17878,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{openai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17925,7 +17925,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{openshiftai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -17972,7 +17972,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{voyageai_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -18019,7 +18019,7 @@
     },
     {
       "method": "PUT",
-      "path": "/_inference/{task_type}/{inference_id}",
+      "path": "/_inference/{task_type}/{watsonx_inference_id}",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
@@ -26197,7 +26197,7 @@
     },
     {
       "method": "GET",
-      "path": "/_nodes/{node_id}",
+      "path": "/_nodes/{metric}",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",

@@ -3,10 +3,10 @@
   "connector": "amazon-seller-partner",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://api.github.com/repos/amzn/selling-partner-api-models/git/trees/main?recursive=1",
-    "sha256": "a22c88f6991768e255633dcec5c59b692186016d57f0ac3825ac389b783bfaa3",
-    "bytes": 8212411,
-    "format": "application/vnd.amazon.selling-partner.openapi-model-set+json",
+    "source_url": "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main",
+    "sha256": "924a416722b10a967708a94bbe49bc7f7d92f799922c5d2704313166b646b3d0",
+    "bytes": 1732664,
+    "format": "application/x-gzip",
     "inventory_basis": "parsed from the pinned provider machine-readable source artifact",
     "coverage_confidence": {
       "level": "complete",
