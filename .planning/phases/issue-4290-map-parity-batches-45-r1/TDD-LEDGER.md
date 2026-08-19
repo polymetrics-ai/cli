@@ -5,6 +5,7 @@
 - 2026-08-19 source-lock defect: the first implementation used existing `api_surface.json` as the operation boundary. Provider totals showed that a self-consistent map can omit most of a public API. The replacement assertions require the source-derived inventory to be explicit, pin a complete artifact/reference where possible, state dynamic/unavailable cases with a null count, and reject legacy `declared_percent`.
 - 2026-08-19: none of the twenty assigned bundles had a connector-local operation source lock or declaration-disposition ledger. A complete-map inventory assertion cannot pass until both files exist and agree exactly with `api_surface.json`.
 - Required failure assertions are: source lock exists; disposition map exists; normalized method/path sets are equal; each row has one valid parity class; every source DELETE appears; an unauthored row is not recorded as `foundation-gap`; absent `sync_transport.json` is recorded as ETL declaration-pending; typed write actions are enabled `direct_write`; and their reverse-ETL eligibility attribute uses the exact generic typed-destination executor gap with file/line evidence and minimal change.
+- 2026-08-20 dispatch reconciliation: #4304 foundation SHA `c6f03c937` supplies the generic typed-destination factory, but `App.shouldRunTransport` still admits only the issue-label/managed-warehouse paths. The old `generic-typed-destination-executor` map gap was therefore stale; generic reverse-ETL cannot be claimed deployable until #4304's App/CLI dispatch work lands.
 
 ## Green
 
@@ -14,6 +15,7 @@
 - 2026-08-19 Batch 4: `node .planning/phases/issue-4290-map-parity-batches-45-r1/materialize-parity-maps.mjs write batch4` materialized ten public-source locks and exact crosswalk maps. The matching `check batch4` passed after asserting exact method/path inventory equality, required SHA-256/byte pins, DELETE coverage, enabled typed `direct_write` rows, and the nested reverse-ETL foundation attribute. `go run ./cmd/connectorgen validate` and `go run ./cmd/connectorgen surface-sync --check` passed.
 - 2026-08-19 Batch 5 Red: `materialize-parity-maps.mjs check batch5` failed on the absent Pinterest source lock (`ENOENT`), proving the same complete-map invariant before materialization.
 - 2026-08-19 Batch 5 Green: `write batch5` created all ten locks/maps and `check batch5` passed. TikTok Marketing and eBay Fulfillment retain the exact Chrome failures as `skipped: no-public-api-description`, with no SHA-256 or byte-count invented; all other Batch 5 source locks carry a SHA-256 and positive byte count.
+- 2026-08-20 seven-surface Green: regenerated maps replace the stale generic-factory gap with `application-generic-destination-dispatch`. The checker proves every existing typed `writes.json` action has exactly one source-backed direct-write disposition and explicit reverse-ETL eligibility; `SEVEN-SURFACE-LEDGER.json` has exactly the assigned 20 connector rows and is deterministic under `--check`.
 
 ## Refactor
 

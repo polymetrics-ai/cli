@@ -6,6 +6,8 @@
 - [x] Every map has valid six-class parity classification and DELETE coverage (Batch 4 and Batch 5 check assertions).
 - [x] Every unauthored operation is `declaration-pending`, not `foundation-gap` (Batch 4 and Batch 5 check assertions); the only recorded gap is the reverse-ETL eligibility attribute `generic-typed-destination-executor`.
 - [x] Buildkite v1 sensitive-operation provenance recovery: targeted `connectorgen validate internal/connectors/defs/buildkite --json` first reported 100 missing provider citations; after rematerialization through the pinned retrieval-artifact fallback it reports zero findings, and the ledger has 100 cited operations with zero missing sensitive citations.
+- [x] Seven-surface audit: `materialize-parity-maps.mjs seven-surface-ledger --check` asserts exactly 20 assigned rows; every existing typed write has a single explicit reverse-ETL eligibility disposition.
+- [ ] Foundation dependency: before final push, fetch and merge the current `origin/fm/cli-reverse-etl-destination-r1`, prove it is an ancestor, and exercise the real installed App/CLI generic destination dispatch. At SHA `c6f03c937`, that dispatch remains pending; no connector claims deployment.
 - [x] `go run ./cmd/connectorgen validate` is green (552 connectors, 0 findings; final run).
 - [x] `go run ./cmd/connectorgen surface-sync --check` is green (552 connectors, 0 fields corrected; final run).
 - [x] `make connector-boundary` is green (final detached run, exit 0; log: `connector-boundary-final.log`).

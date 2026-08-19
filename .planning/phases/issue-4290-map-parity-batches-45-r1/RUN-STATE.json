@@ -1,9 +1,9 @@
 {
   "issue": 4290,
   "phase": "issue-4290-map-parity-batches-45-r1",
-  "state": "recovery-validation",
+  "state": "foundation-dispatch-pending",
   "delivery": "direct-pr",
-  "base_branch": "main",
+  "base_branch": "fm/cli-reverse-etl-destination-r1",
   "working_branch": "fm/cli-map-batch45-r1",
   "batches": {
     "4": "materialized-and-asserted",
@@ -12,6 +12,7 @@
   "credentials_used": false,
   "live_provider_calls": false,
   "browser_documentation_failures": ["tiktok-marketing", "ebay-fulfillment"],
-  "reverse_etl_foundation": "generic-typed-destination-executor",
+  "reverse_etl_foundation": "application-generic-destination-dispatch",
+  "foundation_sha": "c6f03c937c1f4e516d339b48e8c2143726179fdf",
   "gsd_execution": "inline-manual-fallback"
 }
