@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"testing"
@@ -2092,6 +2093,112 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	})
 	if err == nil || !strings.Contains(err.Error(), "plan, preview, approval, execute") {
 		t.Fatalf("Run(direct_write) error = %v, want plan lifecycle block", err)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.workspaces.create_widget",
+			Kind:          "rest_write",
+			Summary:       "Create one declared widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/workspaces/{workspace_id}/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["label", "attributes", "targets"],
+					"properties": {
+						"label": {"type": "string"},
+						"attributes": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["owner", "active"],
+							"properties": {
+								"owner": {"type": "string"},
+								"active": {"type": "boolean"}
+							}
+						},
+						"targets": {
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 2,
+							"items": {
+								"type": "object",
+								"additionalProperties": false,
+								"required": ["id"],
+								"properties": {"id": {"type": "string"}}
+							}
+						}
+					}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: http.MethodPost,
+			Path:   "/workspaces/{workspace_id}/widgets",
+			Operation: &engine.SurfaceOperation{
+				Model:            "destructive_action",
+				Status:           "blocked",
+				Risk:             "high",
+				BlockedByDefault: true,
+				Reason:           "declared typed write",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.workspaces.create_widget",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/workspaces/{workspace_id}/widgets"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "workspace-id", Type: "string", MapsTo: "path.workspace_id", Required: true},
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+				{Name: "label", Type: "string", MapsTo: "body.label", Required: true},
+				{Name: "attributes", Type: "json", MapsTo: "body.attributes", Required: true},
+				{Name: "targets", Type: "json", MapsTo: "body.targets", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"widgets", "create"},
+		Flags: map[string][]string{
+			"workspace-id": {"workspace-1"},
+			"dry-run":      {"true"},
+			"label":        {"fixture widget"},
+			"attributes":   {`{"owner":"owner-1","active":true}`},
+			"targets":      {`[{"id":"target-1"}]`},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if got, want := command.PathParams, map[string]string{"workspace_id": "workspace-1"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("path params = %#v, want %#v", got, want)
+	}
+	if got, want := command.Query, map[string]string{"dry_run": "true"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("query = %#v, want %#v", got, want)
+	}
+	attributes, ok := command.Record["attributes"].(map[string]any)
+	if !ok || attributes["owner"] != "owner-1" || attributes["active"] != true {
+		t.Fatalf("attributes = %#v, want declared nested object", command.Record["attributes"])
+	}
+	targets, ok := command.Record["targets"].([]any)
+	if !ok || len(targets) != 1 {
+		t.Fatalf("targets = %#v, want one declared array entry", command.Record["targets"])
 	}
 }
 
