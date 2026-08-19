@@ -57,6 +57,26 @@ and token values withheld):
 This is real-data runtime proof only; it does not widen the repository's
 separate certification allowlist or claim `CERTIFIED` status for Twenty.
 
+## Current dedicated-runtime discovery — blocked
+
+Captain authorized a read-only local-runtime and protected-tree discovery on
+2026-08-20. Docker reported two stopped Polymetrics PostgreSQL integration
+containers, zero Compose projects, and no Twenty container. Its local image
+store contains `twentycrm/twenty:latest` and `twentycrm/twenty-app-dev:latest`,
+but neither image is deployed. Podman is installed but unavailable; both local
+machines are stopped. The preserved `.twenty-live.SRsCLr/` tree contains one
+non-executable JSON file and no compose, shell, environment, secret, credential,
+stdin-handoff, or deployment marker. Its contents and all environment/inspect
+values were intentionally not printed.
+
+Therefore no currently running dedicated Twenty identity, isolation proof, or
+non-exporting credential handoff is available. Do not create, start, inspect
+with environment output, or repurpose any other local container until a
+dedicated disposable runtime and an execution-time stdin/FD/approved-secret-store
+credential reference are available. The refreshed #4304 head is also still
+`c6f03c937`; it remains an ancestor, but it does not provide the required
+persisted multi-action selection.
+
 ## Local verification results
 
 All of these completed successfully unless explicitly marked as a documented

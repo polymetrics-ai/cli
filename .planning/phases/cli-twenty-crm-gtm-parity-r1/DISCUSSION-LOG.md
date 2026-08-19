@@ -47,3 +47,10 @@
   dedicated credentialed instance through the registered `pm-twenty`
   Keychain/secret-store reference, test the built CLI and persisted App path,
   and treat the prior direct-stream run as historical evidence only.
+- Runtime discovery result (2026-08-20): captain authorized read-only Docker,
+  Podman, and protected-tree inspection. There is no deployed Twenty container
+  or Compose project on the local Docker daemon, Podman is unavailable with
+  both local machines stopped, and the protected tree exposes no non-exporting
+  credential or deployment reference. The lane remains blocked on a dedicated
+  disposable running instance plus an execution-time stdin/FD/approved
+  secret-store handoff; no production or unrelated local container may be used.

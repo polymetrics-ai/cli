@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "preparing_refreshed_multi_action_destination",
+  "status": "blocked_dedicated_runtime_identity_and_auth",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -18,5 +18,9 @@
     "current_observed_sha": "c6f03c937c1f4e516d339b48e8c2143726179fdf",
     "required_state": "published persisted multi-action selection with exact per-action bindings",
     "captain_decision": "all 55 eligible actions remain mandatory; no connector workaround"
+  },
+  "live_certification_blocker": {
+    "reason": "No deployed local Twenty container/Compose project; Podman unavailable; protected runtime tree has no non-exporting credential or deployment reference",
+    "safe_next_step": "provide or start a dedicated disposable Twenty instance and an execution-time stdin/FD/approved-secret-store credential handoff without exposing the credential"
   }
 }
