@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "foundation_dispatch": "pending latest fm/cli-reverse-etl-destination-r1",
+  "connectors": [
+    {
+      "connector": "grafana",
+      "source_operations": 314,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 139,
+        "direct_write": 171,
+        "etl": 4,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "trello",
+      "source_operations": 261,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 126,
+        "direct_write": 133,
+        "etl": 2,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "slack",
+      "source_operations": 174,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 76,
+        "direct_write": 94,
+        "etl": 4,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "n8n",
+      "source_operations": 100,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 17,
+        "direct_write": 66,
+        "etl": 17,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "google-calendar",
+      "source_operations": 38,
+      "represented": {
+        "direct_read": 1,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 0,
+        "direct_write": 26,
+        "etl": 11,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 38
+    },
+    {
+      "connector": "gmail",
+      "source_operations": 79,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 20,
+        "direct_write": 49,
+        "etl": 10,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 63
+    },
+    {
+      "connector": "twilio",
+      "source_operations": 197,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 0,
+        "direct_write": 94,
+        "etl": 103,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "amazon-sqs",
+      "source_operations": 23,
+      "represented": {
+        "direct_read": 6,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 0,
+        "direct_write": 16,
+        "etl": 1,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 23
+    },
+    {
+      "connector": "elasticsearch",
+      "source_operations": 845,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 361,
+        "direct_write": 482,
+        "etl": 2,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "gong",
+      "source_operations": 69,
+      "represented": {
+        "direct_read": 13,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 17,
+        "direct_write": 27,
+        "etl": 12,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 45
+    },
+    {
+      "connector": "google-ads",
+      "source_operations": 163,
+      "represented": {
+        "direct_read": 21,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 7,
+        "direct_write": 134,
+        "etl": 1,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 21
+    },
+    {
+      "connector": "facebook-marketing",
+      "source_operations": 1445,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 941,
+        "direct_write": 498,
+        "etl": 6,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "linkedin-ads",
+      "source_operations": 272,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 139,
+        "direct_write": 131,
+        "etl": 2,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "aircall",
+      "source_operations": 93,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 33,
+        "direct_write": 53,
+        "etl": 7,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "xero",
+      "source_operations": 235,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 26,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 0,
+        "direct_write": 87,
+        "etl": 100,
+        "binary_read": 0,
+        "binary_write": 22
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 23
+    },
+    {
+      "connector": "paypal-transaction",
+      "source_operations": 115,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 34,
+        "direct_write": 77,
+        "etl": 4,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "gocardless",
+      "source_operations": 137,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 0,
+        "direct_write": 75,
+        "etl": 62,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "amazon-seller-partner",
+      "source_operations": 370,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 20,
+        "direct_write": 163,
+        "etl": 147,
+        "binary_read": 40,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    },
+    {
+      "connector": "miro",
+      "source_operations": 197,
+      "represented": {
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "missing": {
+        "direct_read": 1,
+        "direct_write": 112,
+        "etl": 84,
+        "binary_read": 0,
+        "binary_write": 0
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0
+    }
+  ]
+}
