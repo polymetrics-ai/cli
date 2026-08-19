@@ -729,6 +729,172 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 
 }
 
+// TestSourceTransportDeclaresEveryExecutableZoomStream keeps the merged
+// definition-owned transport adapter honest: the concrete allowlist is the
+// complete stream surface, not an optimistic wildcard. The existing per-stream
+// fixture execution test below supplies the corresponding source proof.
+func TestSourceTransportDeclaresEveryExecutableZoomStream(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil {
+		t.Fatal("Zoom must declare its source sync transport")
+	}
+	if bundle.SyncTransport.Destination != nil {
+		t.Fatal("Zoom has no connector-neutral typed destination executor or action binding to declare")
+	}
+	source := bundle.SyncTransport.Source
+	if got, want := source.Executor.Family, connectors.TransportExecutorFamilyDeclarativeAPI; got != want {
+		t.Errorf("source transport family = %q, want %q", got, want)
+	}
+	if got, want := source.Executor.ID, "declarative_stream_source"; got != want {
+		t.Errorf("source transport executor = %q, want %q", got, want)
+	}
+	if got, want := source.Conformance.Suite, "declarative_stream_transport"; got != want {
+		t.Errorf("source transport conformance suite = %q, want %q", got, want)
+	}
+	if got, want := source.Conformance.RunID, "zoom_users_meetings_webinars_v1"; got != want {
+		t.Errorf("source transport conformance run = %q, want %q", got, want)
+	}
+	if got, want := source.EligibleStreams, []string{"users", "meetings", "webinars"}; !reflect.DeepEqual(got, want) {
+		t.Errorf("source transport eligible streams = %#v, want %#v", got, want)
+	}
+	if got, want := source.Delivery.Idempotency, connectors.DeliveryIdempotencyKeyed; got != want {
+		t.Errorf("source transport idempotency = %q, want %q", got, want)
+	}
+	if got, want := source.Delivery.Ordering, connectors.DeliveryOrderingSource; got != want {
+		t.Errorf("source transport ordering = %q, want %q", got, want)
+	}
+	if got, want := source.Delivery.Deletes, connectors.DeliveryDeletesUnavailable; got != want {
+		t.Errorf("source transport deletes = %q, want %q", got, want)
+	}
+}
+
+// TestPinnedCreationCursorsAreProjected proves the cursors used by certification
+// are not invented. The SHA-pinned public OpenAPI modules identify users'
+// user_created_at/created_at and meetings/webinars' created_at fields as
+// date-time creation timestamps; streams.json projects those exact fields into
+// the one common, declared cursor field.
+func TestPinnedCreationCursorsAreProjected(t *testing.T) {
+	type streamDoc struct {
+		Streams []struct {
+			Name           string            `json:"name"`
+			ComputedFields map[string]string `json:"computed_fields"`
+			Schema         string            `json:"schema"`
+		} `json:"streams"`
+	}
+	type schemaDoc struct {
+		Cursor     string                     `json:"x-cursor-field"`
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+
+	raw, err := os.ReadFile("streams.json")
+	if err != nil {
+		t.Fatalf("read streams: %v", err)
+	}
+	var streams streamDoc
+	if err := json.Unmarshal(raw, &streams); err != nil {
+		t.Fatalf("decode streams: %v", err)
+	}
+	want := map[string]string{
+		"users":    "{{ coalesce record.user_created_at record.created_at }}",
+		"meetings": "{{ record.created_at }}",
+		"webinars": "{{ record.created_at }}",
+	}
+	for _, stream := range streams.Streams {
+		computed, expected := want[stream.Name]
+		if !expected {
+			continue
+		}
+		if got := stream.ComputedFields["created_at"]; got != computed {
+			t.Errorf("stream %q created_at projection = %q, want %q", stream.Name, got, computed)
+		}
+		schemaRaw, err := os.ReadFile(stream.Schema)
+		if err != nil {
+			t.Errorf("read schema %q: %v", stream.Schema, err)
+			continue
+		}
+		var schema schemaDoc
+		if err := json.Unmarshal(schemaRaw, &schema); err != nil {
+			t.Errorf("decode schema %q: %v", stream.Schema, err)
+			continue
+		}
+		if schema.Cursor != "created_at" {
+			t.Errorf("schema %q cursor = %q, want created_at", stream.Schema, schema.Cursor)
+		}
+		property, ok := schema.Properties["created_at"]
+		if !ok || len(property) == 0 {
+			t.Errorf("schema %q must retain the projected created_at property", stream.Schema)
+		}
+	}
+}
+
+// TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites proves the
+// definition can generate the one safe live read candidate without pretending
+// that reverse-ETL actions have a connector-neutral destination executor.
+func TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	if bundle.Certification == nil {
+		t.Fatal("certification.json did not load")
+	}
+	if got := bundle.Certification.Source.DefaultStream; got != "users" {
+		t.Errorf("certification default stream = %q, want users", got)
+	}
+	generation := bundle.Certification.DirectReadGeneration
+	if generation == nil || len(generation.Cohorts) != 1 {
+		t.Fatalf("direct-read candidate generation = %+v, want one bounded cohort", generation)
+	}
+	cohort := generation.Cohorts[0]
+	if cohort.Name != "authenticated_self_read" || cohort.CommandCount != 1 || !reflect.DeepEqual(cohort.Commands, []string{"api users user"}) {
+		t.Errorf("direct-read candidate cohort = %+v, want the authenticated self read", cohort)
+	}
+	if generation.RequiredFlagDefaults["user-id"] != "me" || generation.RequiredFlagDefaults["userId"] != "me" {
+		t.Error("self-read candidate must supply both declared user path flag forms as me")
+	}
+	mutations := bundle.Certification.MutationGeneration
+	if mutations == nil || mutations.Cohort.CommandCount != 204 || !reflect.DeepEqual(mutations.Cohort.Intents, []string{"reverse_etl"}) {
+		t.Fatalf("mutation candidate generation = %+v, want all 204 reverse-ETL actions", mutations)
+	}
+	if len(mutations.Families) != 1 || mutations.Families[0].ID != "generic_typed_destination_executor_deferred" || mutations.Families[0].Classification.Code != "unassessed" {
+		t.Errorf("mutation candidate containment = %+v, want one explicitly deferred generic-destination family", mutations.Families)
+	}
+}
+
+// TestAcceptedLiveReadProofDoesNotOverstateCertification locks the distinction
+// between an accepted live observation and a certified cell. The matrix has no
+// operation-specific fixture projection yet, so fixture_tested must remain
+// false even though the bounded REST read has accepted live evidence.
+func TestAcceptedLiveReadProofDoesNotOverstateCertification(t *testing.T) {
+	raw, err := os.ReadFile("certification-matrix.json")
+	if err != nil {
+		t.Fatalf("read generated certification matrix: %v", err)
+	}
+	var matrix struct {
+		Connector struct {
+			Cells []struct {
+				FunctionKind  string `json:"function_kind"`
+				FixtureTested bool   `json:"fixture_tested"`
+				LiveTested    bool   `json:"live_tested"`
+				LiveEvidence  []any  `json:"live_evidence"`
+			} `json:"cells"`
+		} `json:"connector"`
+	}
+	if err := json.Unmarshal(raw, &matrix); err != nil {
+		t.Fatalf("decode generated certification matrix: %v", err)
+	}
+	for _, cell := range matrix.Connector.Cells {
+		if cell.FunctionKind != "operation:rest_read" {
+			continue
+		}
+		if !cell.LiveTested || len(cell.LiveEvidence) == 0 {
+			t.Fatal("operation:rest_read must retain its accepted bounded live proof")
+		}
+		if cell.FixtureTested {
+			t.Fatal("operation:rest_read must remain uncertified until an operation-specific fixture projection exists")
+		}
+		return
+	}
+	t.Fatal("generated certification matrix has no operation:rest_read cell")
+}
+
 // TestRunnableOperationContractsHaveCommands is the corrected parity gate: an
 // operation contract is useful only when a user can reach it through an
 // implemented command. It deliberately limits the first promoted write cohort

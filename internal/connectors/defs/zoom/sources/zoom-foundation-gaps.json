@@ -80,17 +80,69 @@
       "affected_count": 1,
       "applicable_source_contract_count": 1
     },
-    {
-      "id": "declarative-stream-source-transport-registration",
+  {
+    "id": "generic-typed-destination-executor",
       "tracking": null,
       "evidence": [
-        "internal/connectors/certify/stages_transport_internal_test.go:89 proves declarative_stream_source fails closed because it is not registered.",
-        "internal/connectors/certify/stages_transport.go:70-89 requires durable registered source and destination proof before a transport claim."
+        "internal/app/issue_label_warehouse_transport.go:85-95 registers only issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
       ],
-      "minimal_change": "Register a declarative stream source transport adapter and prove an executable Zoom source-to-warehouse conformance run before declaring sync_transport.json.",
+      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+      "recoverable": true,
+      "affected_count": 204,
+    "applicable_typed_write_actions": 204,
+    "primary_rejection_count": 0
+  },
+    {
+      "id": "operation-specific-fixture-evidence-projection",
+    "tracking": null,
+    "evidence": [
+      "cmd/connectorgen/certificationmatrix.go:1308-1352 projects fixture evidence only for capability:check, capability:read, and capability:write; every operation-kind cell falls through to fixture_tested=false.",
+      "The accepted Zoom observed-operations record proves one operation:rest_read live exchange, but the matrix cannot certify it without an operation-specific replay fixture projection."
+    ],
+    "minimal_change": "Project a connector-owned direct-operation fixture and conformance assertion to the matching operation kind, retaining exact command/operation identity rather than treating a stream fixture as generic operation evidence.",
+    "recoverable": true,
+    "affected_count": 776,
+      "applicable_source_contract_count": 776,
+      "live_proven_candidate_count": 1,
+      "primary_rejection_count": 0
+    },
+    {
+      "id": "definition-fixture-conformance-certification-stage",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/certify/stages_source.go:811-814 always records fixture_conformance as passed=false with the obsolete noDefsBundleReason, although Zoom has connector-owned fixtures and the bundle validates them locally.",
+        "The bounded Zoom full live run therefore cannot be an accepted report even when its exact source ETL stages and query read-back pass."
+      ],
+      "minimal_change": "Replace the wave0 constant stage with a connector-neutral declaration-fixture conformance runner over defs.FS; pass only when the declared connector fixtures execute, and retain an explicit unavailable result where no fixture contract exists.",
       "recoverable": true,
       "affected_count": 3,
-      "applicable_existing_stream_count": 3,
+      "applicable_source_contract_count": 3,
+      "primary_rejection_count": 0
+    },
+    {
+      "id": "capability-scoped-live-evidence-publication",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/certify/stages_source.go:673-695 runs every stream's read, flow, and schedule lifecycle in a full sweep; Zoom's entitled users and meetings stages pass while Webinar is a paid-tier refusal.",
+        "internal/connectors/certify/stages_source.go:431 makes Report.Passed depend on every stage, and external evidence import accepts only a passing report. The successful bounded source stages therefore cannot publish a capability:read proof with their already-passing fixtures."
+      ],
+      "minimal_change": "Preserve all-or-nothing full-report and full-parity semantics, but publish a separately keyed, fingerprint-only capability-stage evidence record only when that exact declared stream, fixture contract, and bounded live stage passed; unrelated stream refusals must remain visible and cannot promote a broader connector claim.",
+      "recoverable": true,
+      "affected_count": 2,
+      "applicable_source_contract_count": 3,
+      "primary_rejection_count": 0
+    },
+    {
+      "id": "schedule-roundtrip-source-only-skip",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/certify/stages_source.go:690-694 runs flow and schedule round-trips for every full-sweep source stream.",
+        "Zoom declares only a source transport because generic-typed-destination-executor is absent; its full run correctly has no flow manifest, but schedule creation fails instead of recording the absent optional flow/schedule surface as non-applicable."
+      ],
+      "minimal_change": "When the connector lacks a declared executable flow or source/destination transport pair, mark flow and schedule round-trip stages non-applicable before invoking schedule creation; retain failures for connectors that do declare the required surface.",
+      "recoverable": true,
+      "affected_count": 3,
+      "applicable_source_contract_count": 3,
       "primary_rejection_count": 0
     }
   ]

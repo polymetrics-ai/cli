@@ -39,17 +39,20 @@ Exposes source-backed Zoom direct reads and approval-gated typed write actions, 
 
 - users:
   - primary key: id
-  - fields: email(string), id(string), name(string), updated_at(string)
+  - cursor: created_at
+  - fields: created_at(string), email(string), id(string), name(string), updated_at(string)
 - meetings:
   - primary key: id
-  - fields: email(string), id(string), name(string), updated_at(string)
+  - cursor: created_at
+  - fields: created_at(string), email(string), id(string), name(string), updated_at(string)
 - webinars:
   - primary key: id
-  - fields: email(string), id(string), name(string), updated_at(string)
+  - cursor: created_at
+  - fields: created_at(string), email(string), id(string), name(string), updated_at(string)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Reverse ETL Actions
 
@@ -1605,6 +1608,13 @@ Exposes source-backed Zoom direct reads and approval-gated typed write actions, 
   - api workforce-management deleteorganizationalgroup - Delete organizational group [intent=reverse_etl availability=implemented write=zoom_workforce_management_deleteorganizationalgroup]; approval: plan, preview, approval, execute; risk: high; notes: Provider OAuth scopes: workforce_management:delete:organizational_groups:admin, workforce_management:write:admin. A missing scope is surfaced by Zoom as a provider 403 at runtime.; flags: --organizational-group-id (required), --division-id, --wfm-cluster-id
 - Help topics:
   - provider-inventory - The Zoom source lock and disposition ledger account for all tracked REST operations. Runnable commands cover source-backed scalar-parameter reads and no-body writes; every other operation is either pending parent integration or explicitly disabled with source evidence and a recovery path.
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
 
 ## Commands
 

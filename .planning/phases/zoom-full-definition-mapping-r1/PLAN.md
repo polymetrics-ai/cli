@@ -1,14 +1,14 @@
 # Plan — Zoom full definition mapping
 
 Issue: #4265 (parent mapping session)
-Base: `origin/main` at `362d7ccf9`
+Base: `origin/main` at `acb85dc03`
 
 ## Task Delivery Header
 
 - Issue: Refs #4265 — Zoom connector parity mapping session.
 - Base branch: `main` at `362d7ccf9`.
 - Merges into: `fm/cli-zoom-full-definition-mapping-r1` → `main` through the existing draft parent PR #4285; captain approval remains required for any main merge.
-- Delivery: a committed, locally-verified Zoom command surface, typed write actions, source contracts, and exhaustive disposition ledger; certification and parent merge are explicitly out of scope.
+- Delivery: a committed, locally-verified Zoom command surface, typed write actions, source contracts, source transport declaration, candidate declaration, and exhaustive disposition ledger. Certification proof is imported only for cells that have both an exact fixture and passing live proof; parent merge remains explicitly human-gated.
 - Working branch: `fm/cli-zoom-full-definition-mapping-r1`.
 - Task: pin public provider provenance, crosswalk Zoom's ledger, bind every executable source-backed contract to a runnable command and typed action where applicable, and record every other endpoint as disabled with evidence, a fixed-vocabulary reason, and recovery path.
 - Verification: focused Zoom bundle tests, `connectorgen validate`, `surface-sync --check`, `connector-boundary`, the required non-Zoom certification regression, and `make verify` before pushing.
@@ -42,9 +42,9 @@ Every declaration must bind to a real API-surface row. The ledger provides metho
    `mutation_class=delete` and destructive confirmation. Hold body-schema, array-encoding,
    binary, upload, paid-tier, and source-mismatch cases in the disposition ledger; do not infer a
    substitute contract.
-4. Preserve the existing streams and derive only source-backed schemas/fixtures. Omit `sync_transport.json` until an executor identity and conformance run prove a closed source or destination transport; a placeholder is invalid.
-5. Do not reconcile held credentials in this lane. No credential access or auth/engine change is permitted. Update metadata capabilities only for executable definitions.
-6. Generate the required declared/blocked/per-class/foundation-gap report. Certification begins only after these surfaces validate.
+4. Preserve the existing streams and derive only source-backed schemas/fixtures. Declare `sync_transport.json` only for the merged connector-neutral declarative source adapter; do not invent a reverse-ETL destination binding while the factory remains GitHub issue-label-specific.
+5. Generate a bounded direct-read candidate and all typed mutation candidate inventory. Read held OAuth values only at point of use, exchange them in memory, and import only fingerprint-only external proof.
+6. Generate the required declared/blocked/per-class/foundation-gap report. Record a live operation as uncertified when the matrix lacks its exact fixture projection.
 
 ## Source-lock result (2026-08-19)
 

@@ -3,7 +3,8 @@
 Exposes source-backed Zoom API commands through the Zoom REST API. The current branch contains 712
 runnable commands: three preserved ETL streams, 505 direct reads, and 204 approval-gated typed
 write commands, including 185 guarded deletes. The 707 newly mapped endpoint rows are implemented
-pending fixture and live certification; they are not certified claims.
+pending certification; none is a certified claim. One bounded REST read has accepted live proof,
+but it remains uncertified until the matrix can project an operation-specific fixture.
 
 The committed public source lock records 35 Zoom Developer Docs OpenAPI documents (12,127,228
 bytes and 1,937 REST operations), captured on 2026-08-19. The provider documents identify
@@ -80,9 +81,13 @@ fixture-backed warehouse destination actions remain useful examples:
 - `pm zoom quality-management interactions create` imports a Quality Management interaction from
   a third-party download URL.
 
-No newly mapped command is live-certified. `sources/zoom-declaration-disposition.json` supplies the
-per-operation status, evidence, fixed-vocabulary rejection reason, and recoverability record. It
-does not silently treat ordinary deletes as unsafe.
+No newly mapped command is certified. A bounded authenticated `operation:rest_read` proof records
+two HTTP 200 exchanges with fingerprint-only evidence and `observed_operations` scope; it does not
+certify the operation because the current matrix has no operation-specific fixture projection.
+All 204 generated mutation candidates are explicitly unassessed/deferred on the typed destination
+foundation gap. `sources/zoom-declaration-disposition.json` supplies the per-operation status,
+evidence, fixed-vocabulary rejection reason, and recoverability record. It does not silently treat
+ordinary deletes as unsafe.
 
 ## Known limits
 
@@ -97,9 +102,28 @@ does not silently treat ordinary deletes as unsafe.
   contracts need array-query encoding. The 34 multipart uploads remain deferred on the bounded `file_upload`
   executor gap (G12); unsupported legacy extension fields are not coerced into a substitute.
 - The bounded Clip download remains disabled: Zoom documents a 302 redirect but does not provide a
-  provider-declared safe redirect host for the current binary contract. No `sync_transport.json` is
-  declared because `declarative_stream_source` lacks a registered, proven source-to-warehouse
-  transport adapter.
+  provider-declared safe redirect host for the current binary contract. `sync_transport.json`
+  declares the three preserved streams through the connector-neutral declarative source adapter.
+  Zoom does not declare a reverse-ETL transport destination: no connector-neutral typed destination
+  executor exists yet, and no action transport binding is invented as a substitute.
+- `operation-specific-fixture-evidence-projection` prevents the one accepted `operation:rest_read`
+  live proof from becoming a certified operation cell. The minimal foundation change is an exact
+  direct-operation fixture/replay projection; a stream fixture is not substituted as evidence.
+- A bounded full live run passed the catalog, append ETL, and query read-back stages for Users and
+  Meetings. It cannot publish those capability proofs yet because the shared harness unconditionally
+  reports its obsolete definition-fixture stage as skipped/failing, aggregates unrelated stream
+  refusals into one report, and invokes flow/schedule checks when Zoom declares no executable flow
+  pair. These are `definition-fixture-conformance-certification-stage`,
+  `capability-scoped-live-evidence-publication`, and `schedule-roundtrip-source-only-skip` foundation
+  gaps; their remedies preserve all-or-nothing full-parity semantics and do not promote a connector
+  from partial stage proof.
+- The pinned Users and Meetings OpenAPI response schemas declare durable creation timestamps for all
+  three preserved streams: `user_created_at`/`created_at` for users and `created_at` for meetings
+  and webinars. The connector projects those exact provider fields as `created_at` and declares
+  that field as its cursor; it does not infer a watermark. The bounded Webinar probe returned
+  HTTP 400 with Zoom error code 200: the Webinar plan is missing and must be subscribed/enabled for
+  the user. It remains a runnable command for entitled accounts but is explicitly uncertified for
+  this account with `requires-paid-tier` evidence; the account identifier is redacted.
 - Foundation-gap detail, source evidence, exact code locations, minimal remedies, and recoverability
   are recorded in `sources/zoom-foundation-gaps.json`. No auth, engine, or certification-scope code
   is changed by this connector lane.

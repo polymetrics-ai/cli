@@ -24,6 +24,7 @@
       "records": { "path": "users" },
       "computed_fields": {
         "name": "{{ coalesce record.name record.email record.first_name record.display_name }}",
+        "created_at": "{{ coalesce record.user_created_at record.created_at }}",
         "updated_at": "{{ coalesce record.updated_at record.created_at }}"
       },
       "schema": "schemas/users.json",
@@ -37,6 +38,7 @@
       "computed_fields": {
         "id": "{{ coalesce record.id record.uuid }}",
         "name": "{{ coalesce record.name record.topic }}",
+        "created_at": "{{ record.created_at }}",
         "updated_at": "{{ coalesce record.updated_at record.start_time }}"
       },
       "schema": "schemas/meetings.json",
@@ -50,6 +52,7 @@
       "computed_fields": {
         "id": "{{ coalesce record.id record.uuid }}",
         "name": "{{ coalesce record.name record.topic }}",
+        "created_at": "{{ record.created_at }}",
         "updated_at": "{{ coalesce record.updated_at record.start_time }}"
       },
       "schema": "schemas/webinars.json",

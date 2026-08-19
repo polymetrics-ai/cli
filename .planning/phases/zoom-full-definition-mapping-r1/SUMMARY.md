@@ -14,6 +14,12 @@ Phase: `zoom-full-definition-mapping-r1`
   has 712 runnable commands, 204 typed write actions, and 185 typed guarded deletes.
 - Rebuilt connector manuals, catalog/website data, root-help golden transcripts, and the generated
   operation endpoint ledger from the command declarations.
+- Declared the connector-neutral declarative ETL source for users, meetings, and webinars. Reverse
+  ETL has no destination declaration because the only production destination factory remains the
+  GitHub issue-label contract.
+- Generated one bounded authenticated direct-read candidate and 204 typed mutation candidates.
+  The live external-proof run returned HTTP 200 for two Zoom GET exchanges and published one
+  fingerprint-only `observed_operations` evidence record.
 - Recorded a disposition for every 1,913 ledger row and 26 source-only rows. The 1,131 disabled
   ledger rows use only `foundation-gap`, `schema-incompatible`, `provider-does-not-expose`, or
   `requires-paid-tier`, with evidence and recovery state.
@@ -23,8 +29,19 @@ Phase: `zoom-full-definition-mapping-r1`
 - This is not provider-wide complete parity. It does not claim a runnable command for JSON-body
   writes, array-query contracts, file uploads, the bounded Clip download redirect case, paid-tier
   operations, or source/ledger mismatches.
-- No connector-specific sync transport is declared in this slice; that needs the newly merged
-  definition-owned transport foundation and is handled in the following committed slice.
-- The current matrix has no new live certification claim. The next slice adds the candidate
-  declaration and executes only provider-supported live cells with the held Zoom credential.
+- No Zoom operation is certified yet. The accepted REST-read live proof lacks an exact operation
+  fixture because the shared matrix projects fixtures only for capabilities, not operation kinds;
+  `operation-specific-fixture-evidence-projection` records the minimal recovery.
+- The SHA-pinned public OpenAPI response schemas provide creation timestamps for all three preserved
+  streams, so the connector projects and declares a `created_at` cursor without inferring a
+  watermark. The Webinar probe returned Zoom HTTP 400, error code 200: Webinar plan is missing;
+  it is a recoverable `requires-paid-tier` observation for this account, not a product defect.
+- The rerun passed catalog, Users append ETL, Meetings append ETL, and their query read-backs.
+  It cannot be imported as accepted capability evidence because the shared fixture-conformance stage
+  is still hard-wired to fail, the all-stream report aggregates the paid Webinar refusal, and the
+  source-only connector receives irrelevant flow/schedule checks. Each foundation gap and its
+  minimal recovery is recorded; no partial report is called certification.
+- Reverse-ETL mutations are generated but unassessed/deferred on
+  `generic-typed-destination-executor`; certification must not claim them without that executor,
+  explicit source bindings, acknowledgement, and per-mode apply strategies.
 - No auth, engine, generator, certification allowlist, or status code was changed.

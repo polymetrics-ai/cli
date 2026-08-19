@@ -180080,6 +180080,35 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "users",
+          "meetings",
+          "webinars"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "keyed",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport",
+          "run_id": "zoom_users_meetings_webinars_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Zoom Connection Specification",
@@ -180125,9 +180154,11 @@
         "primary_key": [
           "id"
         ],
+        "cursor_field": "created_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -180135,9 +180166,11 @@
         "primary_key": [
           "id"
         ],
+        "cursor_field": "created_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -180145,9 +180178,11 @@
         "primary_key": [
           "id"
         ],
+        "cursor_field": "created_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],

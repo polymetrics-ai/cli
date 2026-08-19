@@ -39,12 +39,48 @@ fixed-vocabulary reason, evidence, and recovery state. `go test -timeout 20m
 internal/connectors/defs/zoom --json`, and `go run ./cmd/connectorgen surface-sync
 internal/connectors/defs --check` pass.
 
-The intentionally absent `sync_transport.json` is not a missing declaration: a closed
-`declarative_stream_source` executor and a durable source-to-warehouse conformance proof do not
-exist. `sources/zoom-foundation-gaps.json` records this along with the REST-write, upload, and
-binary redirect/origin gaps. Zoom's later central scope admission requires only the generated local
-certification matrix; no authentication, engine, generator, allowlist, or status file is changed by
-this lane.
+Red: before `sync_transport.json`, Zoom inspection projected no source role even though the merged
+definition-owned adapter could execute the three existing declared streams.
+
+Green: `TestSourceTransportDeclaresEveryExecutableZoomStream` proves the complete users/meetings/
+webinars source allowlist, declarative executor reference, five source modes, delivery semantics,
+and conformance run. Reverse ETL remains undeclared: `generic-typed-destination-executor` cites
+`internal/app/issue_label_warehouse_transport.go:85-95`; no action binding is invented.
+
+## Candidate and live-proof boundary
+
+Red: Zoom had no `certification.json`, so candidate generation could schedule neither a bounded
+read nor the 204 typed mutation declarations. The first generated matrix also showed that an
+accepted REST-read live record alone has `fixture_tested=false` for `operation:rest_read`.
+
+Green: `TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites` proves one authenticated
+self-read candidate plus all 204 explicitly unassessed mutation candidates. An isolated external
+proof run obtained a short-lived OAuth token in memory, returned HTTP 200 for both guarded GET
+exchanges, and imported a fingerprint-only `observed_operations` record. `TestAcceptedLiveReadProofDoesNotOverstateCertification`
+proves that live evidence stays uncertified until the shared matrix can project an exact
+operation-specific fixture. The recovery is logged as
+`operation-specific-fixture-evidence-projection`; no auth, engine, generator, or status code was
+changed by this lane.
+
+Red: the attempted bounded full certification passed the Zoom `users` and `meetings`
+full-refresh-append stages, but its catalog stage rejected every preserved stream for lacking
+`cursor_fields`. The bounded Webinar request additionally received provider HTTP 400.
+
+Green: verified against the SHA-pinned public OpenAPI response schemas that `user_created_at` /
+`created_at` is a date-time creation timestamp for users and `created_at` is the creation timestamp
+for meetings and webinars. Each stream now projects and declares its exact `created_at` cursor; no
+watermark is invented. The fresh full run passed catalog plus Users and Meetings append ETL and query
+read-back. The provider response was HTTP 400, code 200: Webinar plan is missing; it is recorded as
+a recoverable `requires-paid-tier` certification finding with the account identifier redacted.
+
+Red: the exact successful source stages cannot become accepted capability evidence: the fixture stage
+unconditionally returns a wave0 no-bundle skip, all unrelated stream and schedule failures aggregate
+into `Report.Passed=false`, and the external evidence importer correctly refuses a non-passing report.
+
+Green: `definition-fixture-conformance-certification-stage`,
+`capability-scoped-live-evidence-publication`, and `schedule-roundtrip-source-only-skip` record the
+three exact engine limitations and minimal connector-neutral remedies. The lane leaves all three
+cells uncertified rather than treating a partial full-run report as accepted proof.
 
 Refactor criteria: run `connectorgen validate`, `connectorgen surface-sync --check`,
 `make connector-boundary`, and then the full `make verify` before a push.

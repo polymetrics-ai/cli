@@ -5,8 +5,10 @@ Phase: `zoom-full-definition-mapping-r1`
 
 ## Result
 
-PASS. The clean post-disk-recovery full repository gate completed successfully. No Zoom
-credential or provider request was used in this command-surface slice.
+LOCAL COMMAND-SURFACE PASS; LIVE CERTIFICATION PARTIAL. The clean post-disk-recovery full repository
+gate completed successfully after the current certification declarations were added. A bounded authenticated
+read then produced accepted fingerprint-only evidence. No Zoom capability cell is certified because
+the matrix requires fixture plus live proof, and the applicable fixture projection is absent.
 
 ## Focused evidence
 
@@ -26,13 +28,38 @@ credential or provider request was used in this command-surface slice.
 `go test -timeout 20m ./...`, `go build ./cmd/pm`, connector docs validation, smoke, lint,
 agent-contract check, definition validation, surface sync, certification artifact checks, connector
 boundary, connector canon, pinned build dependencies, Homebrew notification, and release-target
-parity checks. The all-package test reported `internal/cli` PASS in 1073.053s and the Zoom bundle
-PASS in 825.169s.
+parity checks. The all-package test reported `internal/cli` PASS in 614.326s and the Zoom bundle
+PASS.
 
 ## Command/certification boundary
 
 The branch exposes 712 commands: 505 direct reads, three preserved ETL streams, and 204 guarded
 reverse-ETL commands backed by 204 typed write actions, including 185 DELETE actions. All are
-implemented pending certification; this verification record makes no fixture or live-certification
-claim. The connector-local certification matrix still records zero live-tested cells for these new
-commands.
+implemented pending certification. The connector-local matrix records one live-tested
+`operation:rest_read` cell but zero certified cells because `fixture_tested=false`.
+
+## Live certification evidence
+
+| Candidate/stage | Result | Honest conclusion |
+| --- | --- | --- |
+| `api users user` bounded authenticated direct read | PASS — two HTTP 200 exchanges, imported as fingerprint-only `observed_operations` evidence | Implemented with live proof, **not certified**: `operation-specific-fixture-evidence-projection` means no exact fixture can be projected to the operation cell. |
+| `users` full-refresh append plus query read-back | PASS within the bounded full run | Uncertified: the hard-wired fixture-conformance skip and aggregate-report policy prevent publication of an accepted per-capability record. |
+| `meetings` full-refresh append plus query read-back | PASS within the bounded full run | Uncertified: the hard-wired fixture-conformance skip and aggregate-report policy prevent publication of an accepted per-capability record. |
+| `webinars` full-refresh append | NOT CERTIFIED — Zoom returned HTTP 400 for `GET /v2/users/me/webinars` | Recorded as a provider refusal without retaining its response body. |
+| three preserved streams catalog acceptance | PASS | The SHA-pinned provider schemas give each stream a real creation timestamp, projected as `created_at`; no synthetic watermark is used. |
+| 204 typed mutations / 185 deletes | NOT CERTIFIED | Deferred on `generic-typed-destination-executor`; no provider mutation was attempted. |
+
+The Webinar response was HTTP 400 with Zoom error code 200: Webinar plan is missing; subscribe to
+the Webinar plan and enable webinars for the user before the action can run. The account identifier
+from that response is redacted. The token exchange read Markdown-labelled Account ID, Client ID, and Client Secret at point of use,
+held the short-lived token only in process memory, and passed it via an environment binding. No
+credential value, token, raw provider response body, or account identifier appears in the repository,
+command arguments, evidence, or this record; the structured HTTP status, provider code, and
+entitlement message are retained with that identifier redacted.
+
+The rerun contained 52 passing and 32 non-passing stages. The exact blockers to accepting its two
+passing source capabilities are `definition-fixture-conformance-certification-stage`
+(`internal/connectors/certify/stages_source.go:811-814`),
+`capability-scoped-live-evidence-publication` (`:673-695`, `:431`), and
+`schedule-roundtrip-source-only-skip` (`:690-694`). They are connector-neutral foundation work;
+no engine/auth/certification-status code is modified here.

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "users",
+    "source_credential_defaults": {
+      "base_url": "https://api.zoom.us/v2"
+    },
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "status 401",
+          "status 403",
+          "Invalid access token",
+          "does not contain scopes"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [
+    {
+      "stage_name": "generated_direct_read_api_users_user",
+      "command": "api users user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "api"
+        },
+        {
+          "literal": "users"
+        },
+        {
+          "literal": "user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--user-id"
+        },
+        {
+          "config_key": "user-id",
+          "default": "me"
+        },
+        {
+          "literal": "--userId"
+        },
+        {
+          "config_key": "userId",
+          "default": "me"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "authenticated_self_read",
+      "generated": true
+    }
+  ],
+  "direct_read_generation": {
+    "required_flag_defaults": {
+      "user-id": "me",
+      "userId": "me"
+    },
+    "cohorts": [
+      {
+        "name": "authenticated_self_read",
+        "command_count": 1,
+        "commands": [
+          "api users user"
+        ]
+      }
+    ]
+  },
+  "mutation_generation": {
+    "cohort": {
+      "name": "generic_destination_deferred",
+      "command_count": 204,
+      "intents": [
+        "reverse_etl"
+      ]
+    },
+    "unassessed": {
+      "code": "unassessed",
+      "evidence": "no connector-neutral typed destination executor exists; see foundation gap generic-typed-destination-executor"
+    },
+    "families": [
+      {
+        "id": "generic_typed_destination_executor_deferred",
+        "classification": {
+          "code": "unassessed",
+          "evidence": "all Zoom reverse-ETL actions are deferred until a connector-neutral typed destination executor can bind a declared action, source bindings, acknowledgement, and per-mode apply strategies"
+        },
+        "intents": [
+          "reverse_etl"
+        ]
+      }
+    ]
+  },
+  "write_inventory": {},
+  "evidence_import": {
+    "provider": "zoom_api",
+    "bindings": [
+      {
+        "scope": "capability",
+        "function_kind": "operation:rest_read",
+        "stage_sets": [
+          "direct_read_candidates"
+        ]
+      },
+      {
+        "scope": "capability",
+        "function_kind": "capability:read",
+        "stages": [
+          "etl_full_refresh_append"
+        ]
+      }
+    ]
+  }
+}

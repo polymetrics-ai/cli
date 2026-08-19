@@ -126,9 +126,37 @@
         "source_contracts": 1,
         "terminal_commands": 0
       },
-      "declarative_stream_source_transport_registration": {
-        "existing_streams": 3,
-        "declared_sync_transport": false
+    "declarative_stream_source_transport": {
+      "existing_streams": 3,
+      "declared_sync_transport": true,
+      "executor": "declarative_api/declarative_stream_source",
+      "conformance": "declarative_stream_transport/zoom_users_meetings_webinars_v1"
+    },
+    "generic_typed_destination_executor": {
+      "typed_write_actions": 204,
+      "declared_destination_transport": false,
+      "foundation_gap": "generic-typed-destination-executor"
+    },
+      "operation_specific_fixture_evidence_projection": {
+        "operation_rest_read_contracts": 776,
+        "live_proven_candidates": 1,
+        "certified_operation_cells": 0,
+        "foundation_gap": "operation-specific-fixture-evidence-projection"
+      },
+      "definition_fixture_conformance_certification_stage": {
+        "fixture_backed_streams": 3,
+        "live_stage_passes": 2,
+        "certified_capability_cells": 0,
+        "foundation_gap": "definition-fixture-conformance-certification-stage"
+      },
+      "capability_scoped_live_evidence_publication": {
+        "fixture_and_live_proven_streams": 2,
+        "certified_capability_cells": 0,
+        "foundation_gap": "capability-scoped-live-evidence-publication"
+      },
+      "schedule_roundtrip_source_only_skip": {
+        "source_only_streams": 3,
+        "foundation_gap": "schedule-roundtrip-source-only-skip"
       }
     },
     "implemented_pending_certification": 707,
@@ -139,10 +167,9 @@
   "notes": [
     "An operations.json entry is a source-contract inventory declaration, not an executable terminal command or api_surface coverage claim.",
     "The 70 direct reads owned by Wave 2 remain external until their parent integration; this branch does not duplicate them.",
-    "writes.json contains only the two real warehouse destination actions. The 311 provider DELETE contracts are typed rest_write operation inventory entries, never manufactured warehouse actions.",
-    "sync_transport.json is intentionally absent: no registered declarative_stream_source transport executor and no source-to-warehouse conformance proof exists.",
-    "Runnable-command correction: 505 scalar-parameter reads and 202 no-body writes are implemented pending certification; elevated OAuth scope is runtime metadata, not a disable reason.",
-    "Runnable-command correction: 0 scalar-parameter reads and 0 no-body writes are implemented pending certification; elevated OAuth scope is runtime metadata, not a disable reason."
+    "writes.json contains 204 typed actions, including 185 provider DELETE actions. They are guarded reverse-ETL commands, not invented generic HTTP writes.",
+    "sync_transport.json declares Zoom's three source streams using the connector-neutral declarative_stream_source executor. A Zoom destination transport is not declared because generic-typed-destination-executor remains a foundation gap.",
+    "Runnable-command correction: 505 scalar-parameter reads and 202 no-body writes are implemented pending certification; elevated OAuth scope is runtime metadata, not a disable reason."
   ],
   "ledger_dispositions": [
     {
@@ -42233,7 +42260,18 @@
       "declaration": {
         "kind": "stream_etl",
         "target": "webinars",
-        "certification": "existing stream coverage; not changed by this mapping"
+        "certification": "existing stream coverage; not changed by this mapping",
+        "live_certification": {
+          "state": "uncertified",
+          "reason": "requires-paid-tier",
+          "recoverable": true,
+          "evidence": {
+            "provider_status": 400,
+            "provider_code": 200,
+            "provider_message": "Webinar plan is missing. Subscribe to the Webinar plan and enable webinars for the user before this action can run; account identifier redacted.",
+            "observations": "certification-observations.json"
+          }
+        }
       }
     },
     {
