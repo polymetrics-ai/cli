@@ -1,0 +1,10 @@
+{
+  "issue": 4268,
+  "phase": "zoom-direct-write-delete-r1",
+  "base": "31bfe62eb",
+  "lifecycle": "manual-inline-fallback",
+  "state": "deferred-foundation-gap",
+  "certification": "not-applicable-until-coverage-support",
+  "integration": false,
+  "expanded_parity": ">90-percent-required-with-rejections"
+}
