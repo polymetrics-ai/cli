@@ -2,13 +2,13 @@
 
 ## Task Delivery Header
 
-- Issue: Closes #4291 — chore(connectors): map parity batches 6 and 7
-- Base branch: main
-- Merges into: main
-- Delivery: Pull request open against `main` with the declared source locks, six-class disposition ledgers, local validation, and repository connector gates green.
+- Issue: Refs #4291 — chore(connectors): map parity batches 6 and 7
+- Base branch: fm/cli-reverse-etl-destination-r1
+- Merges into: fm/cli-reverse-etl-destination-r1 → main
+- Delivery: PR #4296 remains open against `fm/cli-reverse-etl-destination-r1`; its twenty connector definitions, generated CLI/manual/website data, and required local gates are green.
 - Working branch: fm/cli-map-batch67-r1
-- Task: Add a credential-free, public-source-locked six-class parity map for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree`. Every authoritative provider operation receives exactly one disposition row. `enabled` requires an actual API-surface command or typed write-action binding: an unbound ETL stream remains `declaration-pending`. Typed write action endpoints remain enabled `direct_write`; their reverse-ETL eligibility is a separate attribute blocked by `generic-typed-destination-executor`.
-- Verification: Run the ledger-invariant checker, `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, the relevant package tests, and `make verify` gates individually, including `connector-boundary` through a bounded poll.
+- Task: Reconcile the credential-free, public-source-locked inventory for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree` against all seven delivery surfaces. Every documented operation must be faithfully modeled and user-reachable through the installed CLI when the existing closed contract supports it. Destructive, privileged, uncommon, binary, and non-certified operations remain reachable with their established safety/approval metadata; only a named technical contract gap can make an operation unsupported.
+- Verification: Run the readiness-baseline invariant, `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, generated docs/website data checks, focused connector and CLI tests, `connector-boundary` through a bounded poll, and the non-suite `make verify` gates individually.
 
 ## Evidence Table
 
@@ -18,6 +18,8 @@
 | Every documented operation has one six-class disposition | live | The checker compares endpoint identities to ledger rows, rejects duplicates/missing rows, and counts every documented DELETE. |
 | Reasons describe present engine capability accurately | live | The checker rejects a typed write action classified as `reverse_etl`, an enabled operation without a command/action binding, and verifies the separate reverse-ETL foundation-gap attribute against the supplied destination-executor evidence/minimal change. |
 | Generator and connector surfaces remain valid | live | `connectorgen validate` and `surface-sync --check` operate on the real changed definition directories. |
+| Every documented provider operation remains user-reachable unless a precise technical contract is absent | live | The seven-surface readiness ledger compares every source-locked direct-read/write/binary row against an exact command or typed action and rejects safety or certification as an unreachability reason. |
+| Reverse-ETL declarations use the merged typed-destination contract | live | Bundle validation and runtime preflight load each connector-owned `sync_transport.json`, select only a named `writes.json` action, and reject an absent source binding, acknowledgement, or per-mode strategy before I/O. |
 
 ## Lifecycle record
 
@@ -42,3 +44,26 @@
 - Batch 6 source locks and ledgers after its green validation.
 - Batch 7 source locks and ledgers after its green validation.
 - Review-fix checkpoint only if the required review finds an actionable defect.
+
+## Relaunch reconciliation — 2026-08-20
+
+The preceding map is retained as provenance, but its prior generic destination gap and `main`
+base are superseded. PR #4304 was merged locally as commit `d27d4bb64` and PR #4296 was retargeted
+to `fm/cli-reverse-etl-destination-r1`; its declarative typed-destination factory is now the
+available foundation. `READINESS-BASELINE.{json,md}` is the before-state for this reconciliation.
+
+1. **RED — seven-surface baseline:** confirm the source-locked denominator has no source or
+   destination transport claims, 1,465 direct-read rows have only 122 current exact command
+   bindings, and 2,189 direct-write rows have only 444 exact typed-action bindings. Confirm the
+   two current binary commands are missing binary ledger classifications. This is a reachability
+   deficit, never a safety or certification exclusion.
+2. **GREEN — connector-owned reconciliation:** add only provider-evidenced operation contracts,
+   typed actions, fixtures, CLI bindings, source transports, and typed destination declarations;
+   generate command/manual/website projections and prove preflight without credentials.
+3. **REFACTOR / review:** remove stale `generic-typed-destination-executor` statements, make
+   transport evidence connector-owned, classify binary operations separately, and preserve
+   `provider_live_certification: pending` rather than treating fixture proof as certification.
+
+The canonical contract forbids role spawning. The GSD lifecycle therefore runs inline with this
+issue-local phase evidence; generated prompts were refreshed on 2026-08-20 after `scripts/gsd
+doctor` and all five command sources passed `agentcontractgen check`.

@@ -51,3 +51,23 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 | `./scripts/tests/release-target-parity.sh` | pass |
 
 `go test -timeout 20m ./...` and aggregate `make verify` were deliberately not run as single commands: the repository AGENTS instruction says agents under a per-command timeout must run changed packages plus `internal/cli` separately and execute `make verify`'s non-suite gates individually, because the full 550+ connector suite is routinely cut off and indistinguishable from a hang. The targeted package tests and each applicable gate above were run; CI retains the full suite.
+
+## Relaunch baseline and CI repair — 2026-08-20
+
+- **RED:** PR run `32283259925` failed `TestGorgiasAPISurfaceOperationLedger`: the recovered v2
+  surface left seven blocked rows without their source citation and named dependency, while its
+  connector-local test intentionally verifies the v1 ledger metadata contract. The same PR head
+  failed `Website Data` because the generated connector catalog still described the former Segment
+  `workspaces` stream.
+- **GREEN:** Gorgias now keeps the source-locked ReadMe OpenAPI citation and a named
+  connector-local dependency on every affected blocked row, and declares ledger version 1 as its
+  existing test requires. `go test -timeout 20m ./cmd/connectorgen -run
+  TestGorgiasAPISurfaceOperationLedger -count=1` passed.
+- **GREEN:** `npm --prefix website run gen:website-data` regenerated only
+  `website/data/connectors.generated.json` and
+  `website/lib/connectors.catalog.data.generated.json`, carrying the already-correct Segment
+  singleton stream into website data.
+- **GREEN:** `go run ./cmd/connectorgen validate` passed (`552 connector(s) checked, 0 findings`)
+  and `go run ./cmd/connectorgen surface-sync --check` passed (`552 connector(s) scanned, 0
+  field(s) filled and 0 field(s) corrected across 0 connector(s)`). `jq empty` passed for the
+  readiness baseline and Gorgias API surface.

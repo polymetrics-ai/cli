@@ -2,7 +2,7 @@
   "api": "Gorgias REST API OpenAPI 3.1.0",
   "docs": "https://docs.gorgias.com/en_US/rest-api",
   "reviewed_at": "2026-08-19",
-  "operation_ledger_version": 2,
+  "operation_ledger_version": 1,
   "scope": "Complete provider-reference inventory generated from every operation in the cited OpenAPI 3.1.0 document (114 HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.",
   "artifacts": [
     {
@@ -223,7 +223,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding.",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "notes": "named_dependency=connector-local bounded binary or direct-read contract and generated CLI binding; source=gorgias-openapi-3.1.0-2026-08-19"
       }
     },
     {
@@ -623,7 +625,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding.",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "notes": "named_dependency=connector-local bounded direct-read contract and generated CLI binding; source=gorgias-openapi-3.1.0-2026-08-19"
       }
     },
     {
@@ -814,7 +818,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "notes": "named_dependency=connector-local typed write action, generated CLI binding, and approval contract; source=gorgias-openapi-3.1.0-2026-08-19"
       }
     },
     {
@@ -884,7 +890,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "notes": "named_dependency=connector-local typed write action, generated CLI binding, and approval contract; source=gorgias-openapi-3.1.0-2026-08-19"
       }
     },
     {
@@ -1042,7 +1050,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "notes": "named_dependency=connector-local typed write action, generated CLI binding, and approval contract; source=gorgias-openapi-3.1.0-2026-08-19"
       }
     },
     {
@@ -1222,7 +1232,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "notes": "named_dependency=connector-local typed write action, generated CLI binding, and approval contract; source=gorgias-openapi-3.1.0-2026-08-19"
       }
     },
     {
@@ -1281,7 +1293,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "notes": "named_dependency=connector-local typed write action, generated CLI binding, and approval contract; source=gorgias-openapi-3.1.0-2026-08-19"
       }
     },
     {

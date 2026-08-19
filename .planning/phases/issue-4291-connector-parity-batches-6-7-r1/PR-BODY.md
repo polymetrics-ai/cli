@@ -1,28 +1,65 @@
-Closes #4291
+Refs #4291
 
-> **Held — source-lock completeness recovery in progress.** The original maps correctly classify their then-current `api_surface.json` rows, but that denominator was incomplete for several providers. Do not merge until the recovery checklist is complete.
+## Status
 
-## Summary
+Reconciliation is in progress; do not merge. This PR now depends on
+`fm/cli-reverse-etl-destination-r1` / PR #4304, merged into this branch as
+`d27d4bb64`. The base has been verified through the GitHub API as
+`fm/cli-reverse-etl-destination-r1`.
 
-- Adds public-documentation source locks and declaration-disposition ledgers for batches 6 and 7 (20 canonical connector IDs); source-lock completeness recovery is now correcting the provider denominator before merge.
-- Salesloft is the first comprehensive recovery slice: its former 12-operation documentation-index map is replaced by a 315-page provider-reference crawl with **211** cited operations (120 GET, 50 POST, 23 PUT, 18 DELETE), and both `api_surface.json` and its full disposition ledger were regenerated from that inventory.
-- Makes enabled status reachable: an endpoint is enabled only with a bound API-surface direct-read command or typed write action. The former **2,099 documented / 575 enabled / 348 commands / 448 writes / 211 deletes** is explicitly a superseded legacy-crosswalk total, not a provider-surface claim.
-- Corrects write semantics: typed actions are `direct_write`; reverse ETL is a separate, currently blocked attribute with `generic-typed-destination-executor` and no fabricated transport binding.
-- Captures Close.com as `close-com` and ServiceNow as `service-now`; both public source retrievals succeeded.
+## Twenty-connector seven-surface baseline
 
-## Delivery record
+`read` and `typed write` are exact current bindings over the source-locked
+denominator. `ETL` is declared source transport / bundle streams; `reverse` is
+declared typed-destination bindings; `binary` is CLI commands / ledger rows.
+An unproven inventory needs source recovery. Safety and provider-live
+certification never make an operation unreachable.
 
-- Issue-first GSD sequence completed inline. The adapter has no roadmap phase for #4291 (`phase_found: false`) and the canonical contract forbids spawning GSD roles; the discuss, TDD plan, execute, verification, and manual-review artifacts are in `.planning/phases/issue-4291-connector-parity-batches-6-7-r1/`.
-- TDD evidence: source-lock/ledger absence checks supplied the red state; the strict complete-map invariant check supplied green state. The recovery adds a 211/211/211 Salesloft source-lock/API-surface/ledger invariant and rejects `declared_percent`.
-- Required skills used: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-testing`.
-- Safety: all provenance came from public documentation. No credentials, provider write calls, engine changes, or command-surface changes were made.
+| Connector | Inventory | Read | Typed write | Write CLI | ETL | Reverse | Binary | Deletes |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| close-com | complete | 0 / 123 | 12 / 163 | 0 | 0 / 14 | 0 | 0 / 0 | 52 |
+| outreach | complete | 0 / 0 | 163 / 163 | 0 | 0 / 96 | 0 | 0 / 0 | 36 |
+| salesloft | complete | 0 / 115 | 0 / 91 | 0 | 0 / 5 | 0 | 0 / 0 | 18 |
+| copper | complete | 0 / 32 | 0 / 52 | 0 | 0 / 5 | 0 | 0 / 0 | 11 |
+| zoho-bigin | complete | 0 / 26 | 6 / 43 | 0 | 0 / 13 | 0 | 0 / 0 | 11 |
+| klaviyo | complete | 0 / 198 | 0 / 141 | 0 | 0 / 6 | 0 | 0 / 0 | 30 |
+| braze | unproven | 0 / 21 | 29 / 53 | 0 | 0 / 21 | 0 | 0 / 0 | 4 |
+| customer-io | complete | 0 / 82 | 10 / 68 | 0 | 0 / 16 | 0 | 0 / 0 | 14 |
+| intercom | complete | 0 / 103 | 0 / 123 | 0 | 0 / 5 | 0 | 0 / 0 | 31 |
+| freshdesk | complete | 0 / 73 | 0 / 92 | 0 | 0 / 5 | 0 | 0 / 0 | 22 |
+| segment | complete | 0 / 97 | 0 / 101 | 0 | 0 / 3 | 0 | 0 / 0 | 28 |
+| activecampaign | complete | 0 / 128 | 0 / 157 | 0 | 0 / 11 | 0 | 0 / 0 | 50 |
+| iterable | complete | 0 / 49 | 0 / 96 | 0 | 0 / 3 | 0 | 0 / 0 | 12 |
+| help-scout | unproven | 50 / 55 | 65 / 65 | 0 | 0 / 24 | 0 | 1 / 0 | 18 |
+| gorgias | complete | 40 / 42 | 61 / 68 | 0 | 0 / 4 | 0 | 1 / 0 | 18 |
+| service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 0 / 3 | 0 | 0 / 0 | 1 |
+| chatwoot | complete | 32 / 57 | 60 / 84 | 0 | 0 / 7 | 0 | 0 / 0 | 18 |
+| chargebee | complete | 0 / 128 | 36 / 367 | 0 | 0 / 32 | 0 | 0 / 0 | 0 |
+| square | complete | 0 / 117 | 0 / 213 | 0 | 0 / 4 | 0 | 0 / 0 | 27 |
+| braintree | unproven | 0 / 18 | 0 / 45 | 0 | 0 / 10 | 0 | 0 / 0 | 6 |
 
-## Verification
+## Remaining gaps
 
-Passed: `connectorgen validate`, `surface-sync --check`, changed-package and `internal/cli` tests, `go vet ./...`, `go build ./cmd/pm`, docs validation, smoke/lint/agent-contract/connectorgen make gates, generated-ledger snapshot checks, certification checks, connector boundary, and release/canon scripts. Full commands and results: `.planning/phases/issue-4291-connector-parity-batches-6-7-r1/VERIFICATION.md`.
+- 1,343 direct reads need provider-evidenced bounded operation contracts and generated CLI
+  bindings; 1,745 direct writes need exact typed actions; all 2,189 direct writes still need their
+  CLI command surfaces.
+- No connector currently declares a source transport or a typed destination route. The merged
+  #4304 contract is available; each declaration still needs exact eligible actions, input fields,
+  keyed delivery, durable acknowledgement, strategies, and conformance evidence.
+- Braze, Help Scout, and Braintree source inventories remain unproven; the rest use a complete
+  provider specification/reference or ServiceNow's explicitly dynamic fixed-template basis.
+- The existing Help Scout and Gorgias binary commands must be represented as binary parity rows.
+- Every connector is provider-live-certification pending; no credentials or provider calls are
+  authorized for this lane.
 
-The repository instruction specifically asks per-command agents not to run aggregate `go test ./...` or `make verify`; their full-suite coverage is left to CI after the scoped tests and individual non-suite gates above.
+## Lifecycle and verification
 
-## Review
-
-Manual diff review found no actionable defects. Claude automatic PR review is expected on PR creation; no duplicate on-demand request is needed unless new commits require it.
+- GSD executed inline because this issue has no roadmap phase and the canonical worker prohibits
+  role spawning. Required skills: `golang-how-to`, `golang-design-patterns`,
+  `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-testing`, `golang-cli`, and `golang-documentation`.
+- Red/green evidence and exact commands are in
+  `.planning/phases/issue-4291-connector-parity-batches-6-7-r1/VERIFICATION.md`.
+- Current checks: Gorgias ledger test, `connectorgen validate`, `surface-sync --check`, and
+  website data generation pass. Full repository gates will be recorded after the connector-owned
+  increments complete.

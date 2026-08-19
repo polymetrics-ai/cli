@@ -13,3 +13,11 @@
 | ActiveCampaign embedded-OpenAPI recovery | The legacy 61-row landing-page inventory cannot prove the full current v3 surface | Parse the complete OpenAPI 3.1.0 document embedded in the official reference renderer and regenerate the source lock, API surface, and disposition ledger at 296 source operations | Preserve no enabled operation without an exact command/action binding; every recovered mutation is `direct_write` with the neutral destination gap as an attribute |
 
 The map is a declarative inventory artifact, not a change to runtime behaviour. The red/green checks therefore assert the observable artifact state that is absent before the map and present after it.
+
+## Relaunch reconciliation ledger — 2026-08-20
+
+| Slice | Red | Green | Refactor / evidence |
+| --- | --- | --- | --- |
+| Seven-surface baseline | `READINESS-BASELINE.json` reports zero declared source/destination transports, 1,343 direct reads without an exact command binding, 1,745 direct writes without an exact typed-action binding, and two executable binary commands whose ledger class is not binary. | Every source-locked provider operation is bound to its exact user-reachable command or typed action, or carries a precise named technical contract gap; safety, scope, rarity, binary form, and live-certification state are rejected as an unreachability reason. | Preserve a separate `provider_live_certification: pending` value and executable safety metadata. |
+| Declarative typed destinations | Before `d27d4bb64`, no connector-neutral definition-owned destination existed. | Each declared `declarative_typed_destination` has exact named actions, input-field source bindings, keyed delivery, durable acknowledgement, a strategy per mode, connector-owned evidence, and passing no-credential preflight. | Use `docs/sync-transport-definition.md`; never add a generic HTTP writer or `transport_binding` to the selected action. |
+| Generated surface parity | The two existing binary commands demonstrate ledger/class drift, and the failed CI run shows stale Gorgias blocked-row metadata. | `surface-sync --check`, generated docs/website-data check, and the targeted Gorgias source-ledger test pass with regenerated projection artifacts committed. | Manual review confirms every generated CLI command traces to a pinned source operation and its safety/approval policy. |
