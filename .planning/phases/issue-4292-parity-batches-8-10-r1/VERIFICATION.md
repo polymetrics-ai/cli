@@ -19,6 +19,19 @@
   its exact SHA is an ancestor, and exercise the installed App/CLI dispatch
   route without credentials.
 
+### First five-connector declaration increment
+
+- [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check brex zoho-books testrail amplitude posthog` failed before declarations with `brex: source transport declaration missing`.
+- [x] Green: wrote only connector-owned `sync_transport.json` declarations
+  for Brex, Zoho Books, TestRail, Amplitude, and PostHog; generated
+  `SEVEN-SURFACE-LEDGER.json` and `SEVEN-SURFACE-SUMMARY.md` for all 30
+  connectors.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check brex zoho-books testrail amplitude posthog`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+
 ## Source-first map checks
 
 - [x] Red: initial maps rejected because their locks lacked complete provider

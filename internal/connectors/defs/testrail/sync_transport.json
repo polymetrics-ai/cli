@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "projects",
+      "users",
+      "case_types",
+      "case_fields",
+      "priorities",
+      "statuses",
+      "result_fields",
+      "templates",
+      "suites",
+      "milestones",
+      "cases",
+      "plans",
+      "runs"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport_static",
+      "run_id": "testrail_source_definition_v1"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_typed_destination"
+    },
+    "eligible_actions": [
+      "add_project",
+      "add_milestone",
+      "add_suite",
+      "add_case",
+      "update_case",
+      "add_plan",
+      "add_run",
+      "close_run",
+      "delete_run"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_typed_destination_static",
+      "run_id": "testrail_add_project_full_append_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "mode": "full_append",
+        "strategy": "append",
+        "action": "add_project"
+      }
+    ],
+    "source_bindings": [
+      {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects"
+        ],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {
+              "input": "name",
+              "field": "name"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

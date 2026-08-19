@@ -32,6 +32,25 @@
   that generic App/CLI dispatch is deployed before the newer #4304 foundation
   head is merged and exercised.
 
+### Seven-surface declaration proof — first increment
+
+- **Red:** `node traces/reconcile-seven-surfaces.mjs --check brex zoho-books
+  testrail amplitude posthog` failed with `brex: source transport declaration
+  missing`. This asserts that a source inventory alone cannot be presented as
+  a transport declaration.
+- **Green:** the same trace generated connector-owned source declarations for
+  all five bundles. It selected one non-destructive, exact-schema typed action
+  as an initial destination proof where one exists, listed every other
+  record-driven typed action as eligible, and preserved a per-action
+  multiplicity dependency when the one-action-per-mode model cannot select it.
+  PostHog has no existing typed action and therefore has no invented
+  destination declaration.
+- `node traces/reconcile-seven-surfaces.mjs --check brex zoho-books testrail
+  amplitude posthog`, `go run ./cmd/connectorgen validate
+  internal/connectors/defs`, and `go run ./cmd/connectorgen surface-sync
+  --check` pass. The generated 30-row ledger keeps generic App/CLI dispatch
+  explicitly pending foundation integration.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:
