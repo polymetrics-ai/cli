@@ -711,6 +711,35 @@ type OperationBinaryDownloader interface {
 	OperationBinaryDownload(context.Context, OperationBinaryDownloadRequest) (OperationBinaryDownloadResult, error)
 }
 
+// OperationStatusCheckRequest selects one declared response-less HEAD
+// operation. It has no body, output policy, or pagination channel, so it
+// cannot become a JSON direct-read escape hatch.
+type OperationStatusCheckRequest struct {
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+}
+
+// OperationStatusCheckResult intentionally exposes only bounded response
+// metadata. HEAD response bodies are never decoded or surfaced.
+type OperationStatusCheckResult struct {
+	Connector string `json:"connector"`
+	Operation string `json:"operation"`
+	Method    string `json:"method"`
+	Path      string `json:"path"`
+	Status    int    `json:"status"`
+	BodyBytes int    `json:"body_bytes"`
+}
+
+type OperationStatusChecker interface {
+	OperationStatusCheck(context.Context, OperationStatusCheckRequest) (OperationStatusCheckResult, error)
+}
+
+type OperationStatusCheckPreflighter interface {
+	PreflightOperationStatusCheck(operation, method, path, outputPolicy string) error
+}
+
 var ErrReadLimitReached = errors.New("connector read limit reached")
 
 func LimitEmitter(limit int, emit func(Record) error) func(Record) error {

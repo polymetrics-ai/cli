@@ -403,6 +403,18 @@ not a full override by default.
   `SKILL.md`, and the website generator, so one declaration keeps all three documenting the same
   flag surface. `--max-bytes` may only lower the operation's declared `binary.max_bytes`, never
   raise it.
+- **Operation-only capability contracts stay typed and bounded**: use `rest_status` with
+  `intent:"status_check"`, a single HEAD endpoint, and `output_policy:"status"` for a
+  response-less status probe; it cannot be declared as `direct_read`. Use `text_export` only
+  for a declared `binary.accept:"text/csv"` GET with positive `binary.max_bytes`; it writes the
+  same explicit destination manifest as a binary download and never streams text to stdout. A
+  `rest_read.rest.pagination` may override connector-level pagination for one endpoint; its
+  `pagination_parameters` are source-imported evidence only, not command flags, and every
+  declared query mechanic must match them. For a secret-returning `rest_write`, declare the
+  closed `output_policy:"secret_stored"` plus
+  `sensitive_policy.response_secret_field` and `response_secret_store_key`: the returned value
+  is routed directly to the credential secret store, which protects it encrypted at rest. Runtime
+  output remains complete for diagnosis; do not add a redacting output path.
 - **`certification.json` stays definition-owned and harness-only**: connector-specific certify
   contracts belong beside the connector bundle, never in provider-named shared certify branches.
   This optional file may declare `source.default_stream`, source credential defaults,
@@ -455,7 +467,9 @@ go run ./cmd/connectorgen surface-sync internal/connectors/defs
 ```
 
 `params-import` writes the accepted parameter set into `operations.json` under
-`rest.parameters` (name, location, type, requiredness, enum values, summary).
+`rest.parameters` (name, location, type, requiredness, enum values, summary). When an operation
+declares `rest.pagination`, it additionally writes the pager's source-only query set under
+`rest.pagination_parameters`; these values remain excluded from generated flags.
 `surface-sync` then derives the command flags from it. The split exists so CI
 stays hermetic: `surface-sync --check` verifies drift with no artifact and no
 network.

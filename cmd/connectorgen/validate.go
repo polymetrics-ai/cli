@@ -100,6 +100,8 @@ var surfaceCategories = map[string]bool{
 var surfaceOperationModels = map[string]bool{
 	"direct_read":           true,
 	"binary_read":           true,
+	"text_export":           true,
+	"status_check":          true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,
@@ -141,6 +143,7 @@ var directWriteOutputPolicies = map[string]bool{
 	"json_redacted":               true,
 	"write_result_redacted":       true,
 	"gong_bounded_input_redacted": true,
+	"secret_stored":               true,
 }
 
 var repositoryDirectReadOutputPolicies = map[string]bool{
@@ -632,7 +635,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			// binary_download commands consume an api_surface endpoint the same
 			// way a direct read does and are tracked by the same covered_by
 			// bookkeeping, so they satisfy that coverage too.
-			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
+			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download" || cmd.Intent == "text_export" || cmd.Intent == "status_check") &&
 				cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
@@ -1121,8 +1124,11 @@ func checkCLISurfaceOperationSafety(
 	if !ok {
 		return nil
 	}
-	if cmd.Intent == "binary_download" {
+	if cmd.Intent == "binary_download" || cmd.Intent == "text_export" {
 		return checkCLISurfaceBinaryOperationSafety(b, i, cmd, op)
+	}
+	if cmd.Intent == "status_check" {
+		return checkCLISurfaceStatusCheckOperationSafety(b, i, cmd, op)
 	}
 	if op.Kind == "graphql_query" || op.Kind == "graphql_mutation" {
 		return checkCLISurfaceGraphQLOperationSafety(b, i, cmd, op)
@@ -1275,6 +1281,7 @@ func supportedDirectWriteContentType(rest *engine.RESTOperationSpec) bool {
 		return false
 	}
 	return strings.EqualFold(mediaType, "application/json") ||
+		strings.EqualFold(mediaType, "application/scim+json") ||
 		strings.EqualFold(mediaType, "application/x-www-form-urlencoded")
 }
 
@@ -1981,16 +1988,17 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 		if len(findings) > 0 {
 			return findings
 		}
-	case "binary_download":
+	case "binary_download", "text_export":
 		// Mirrors commandrunner.validateBinaryDownloadCommand. No output_policy
 		// applies: the response becomes a file, not a JSON body.
+		label := strings.ReplaceAll(cmd.Intent, "_", " ")
 		var findings []Finding
 		if cmd.Operation == "" {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceMissingMapping,
-				Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference an operation", i, cmd.Path),
+				Message:   fmt.Sprintf("implemented %s command %d (%q) must reference an operation", label, i, cmd.Path),
 			})
 		}
 		if len(cmd.APISurface) != 1 {
@@ -1998,7 +2006,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceMissingMapping,
-				Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+				Message:   fmt.Sprintf("implemented %s command %d (%q) must reference exactly one api_surface endpoint", label, i, cmd.Path),
 			})
 		}
 		for _, ep := range cmd.APISurface {
@@ -2007,7 +2015,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 					Connector: b.Name,
 					File:      "cli_surface.json",
 					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+					Message:   fmt.Sprintf("implemented %s command %d (%q) must reference a GET api_surface endpoint, got %s", label, i, cmd.Path, strings.ToUpper(ep.Method)),
 				})
 			}
 			if isAbsoluteHTTPURL(ep.Path) {
@@ -2015,9 +2023,31 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 					Connector: b.Name,
 					File:      "cli_surface.json",
 					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
+					Message:   fmt.Sprintf("implemented %s command %d (%q) must reference a connector-relative api_surface endpoint", label, i, cmd.Path),
 				})
 			}
+		}
+		if len(findings) > 0 {
+			return findings
+		}
+	case "status_check":
+		var findings []Finding
+		if cmd.Operation == "" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceMissingMapping, Message: fmt.Sprintf("implemented status check command %d (%q) must reference an operation", i, cmd.Path)})
+		}
+		if len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceMissingMapping, Message: fmt.Sprintf("implemented status check command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path)})
+		}
+		for _, ep := range cmd.APISurface {
+			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "HEAD" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) must reference a HEAD api_surface endpoint", i, cmd.Path)})
+			}
+			if isAbsoluteHTTPURL(ep.Path) {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path)})
+			}
+		}
+		if cmd.OutputPolicy != "status" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) must declare status output_policy", i, cmd.Path)})
 		}
 		if len(findings) > 0 {
 			return findings
@@ -2105,7 +2135,7 @@ func checkCLISurfaceEndpointCoverage(
 			// binary_download shares direct_read's coverage bookkeeping: an
 			// api_surface row records the command that consumes the endpoint,
 			// and which executor runs it does not change who covers it.
-			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
+			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download" || cmd.Intent == "text_export" || cmd.Intent == "status_check") &&
 				directReadCoverageMatches(state.coveredBy, cmd.Path) {
 				continue
 			}
@@ -2447,12 +2477,17 @@ func specPropertyHasDateShapedFormat(rawSpec []byte, key string) bool {
 // decompression-bomb territory and is a separate capability, never a flag.
 func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
 	var findings []Finding
-	if op.Kind != "binary_download" || op.Binary == nil {
+	label := strings.ReplaceAll(cmd.Intent, "_", " ")
+	wantKind := "binary_download"
+	if cmd.Intent == "text_export" {
+		wantKind = "text_export"
+	}
+	if op.Kind != wantKind || op.Binary == nil {
 		return append(findings, Finding{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must be binary_download", i, cmd.Path, cmd.Operation),
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must be %s", label, i, cmd.Path, cmd.Operation, wantKind),
 		})
 	}
 	if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != "GET" {
@@ -2460,7 +2495,7 @@ func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLI
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must use GET, got %s", i, cmd.Path, cmd.Operation, method),
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must use GET, got %s", label, i, cmd.Path, cmd.Operation, method),
 		})
 	}
 	if isAbsoluteHTTPURL(op.Binary.Path) {
@@ -2468,7 +2503,7 @@ func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLI
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must use connector-relative path", i, cmd.Path, cmd.Operation),
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must use connector-relative path", label, i, cmd.Path, cmd.Operation),
 		})
 	}
 	if op.Binary.MaxBytes <= 0 {
@@ -2476,15 +2511,18 @@ func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLI
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must declare positive binary.max_bytes", i, cmd.Path, cmd.Operation),
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must declare positive binary.max_bytes", label, i, cmd.Path, cmd.Operation),
 		})
+	}
+	if cmd.Intent == "text_export" && !strings.EqualFold(strings.TrimSpace(op.Binary.Accept), "text/csv") {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented text export command %d (%q) operation %q must accept text/csv", i, cmd.Path, cmd.Operation)})
 	}
 	if op.Binary.ExtractArchives {
 		findings = append(findings, Finding{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q declares extract_archives, which the executor refuses; archive extraction is a separate capability", i, cmd.Path, cmd.Operation),
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q declares extract_archives, which the executor refuses; archive extraction is a separate capability", label, i, cmd.Path, cmd.Operation),
 		})
 	}
 	for _, flag := range cmd.Flags {
@@ -2496,8 +2534,35 @@ func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLI
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented binary download command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo),
+			Message:   fmt.Sprintf("implemented %s command %d (%q) flag --%s maps to unsupported target %q", label, i, cmd.Path, flag.Name, flag.MapsTo),
 		})
+	}
+	return findings
+}
+
+func checkCLISurfaceStatusCheckOperationSafety(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	var findings []Finding
+	if op.Kind != "rest_status" || op.REST == nil {
+		return []Finding{{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must be rest_status", i, cmd.Path, cmd.Operation)}}
+	}
+	if !strings.EqualFold(op.REST.Method, "HEAD") {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must use HEAD", i, cmd.Path, cmd.Operation)})
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must use connector-relative path", i, cmd.Path, cmd.Operation)})
+	}
+	if op.REST.MaxBytes < 0 || op.REST.MaxBytes > 1024 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must bound rest.max_bytes to 1024", i, cmd.Path, cmd.Operation)})
+	}
+	if op.OutputPolicy != "status" || cmd.OutputPolicy != op.OutputPolicy {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) output_policy must match status operation", i, cmd.Path)})
+	}
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.") {
+			continue
+		}
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 	}
 	return findings
 }

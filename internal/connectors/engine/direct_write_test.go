@@ -145,6 +145,92 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 }
 
+func TestOperationDirectWriteContentTypeAllowsClosedJSONFamily(t *testing.T) {
+	op := OperationSpec{ID: "acme.scim.create", REST: &RESTOperationSpec{ContentType: "application/scim+json"}}
+	contentType, format, err := operationDirectWriteContentType(op, map[string]any{"userName": "ada"})
+	if err != nil {
+		t.Fatalf("operationDirectWriteContentType: %v", err)
+	}
+	if contentType != "application/scim+json" || format != "json" {
+		t.Fatalf("content type/format = %q/%q, want application/scim+json/json", contentType, format)
+	}
+}
+
+func TestOperationDirectWriteContentTypeRejectsUnknownBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
+	t.Cleanup(srv.Close)
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL}, Operations: []OperationSpec{{
+		ID: "acme.bad.create", Kind: "rest_write", Summary: "Bad content", Risk: "medium", Approval: "none", OutputPolicy: "none", MutationClass: "create",
+		REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets", ContentType: "application/x-unsafe", MaxBytes: 1024},
+	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write"}}}}}
+	_, err := PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{Operation: "acme.bad.create", Body: map[string]any{"value": "x"}}, nil)
+	if err == nil || !strings.Contains(err.Error(), "not supported") {
+		t.Fatalf("PreviewOperationDirectWrite error = %v, want closed-content-type refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("requests = %d, want pre-I/O refusal", requests)
+	}
+}
+
+func TestOperationDirectWriteStoresReturnedSecretAndRetainsRuntimeResponse(t *testing.T) {
+	const canary = "returned-credential-canary"
+	store := newRecordingSecretStore()
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"credential":"` + canary + `"}`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL}, Operations: []OperationSpec{{
+		ID: "acme.credentials.create", Kind: "rest_write", Summary: "Create credential", Risk: "high", Approval: "typed", OutputPolicy: directWritePolicySecretStored,
+		MutationClass: "secret", SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
+		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
+	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: store, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", WriteApprovalScope: connectors.WriteApprovalScopeFixture}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if got, ok := store.written("generated_credential"); !ok || got != canary {
+		t.Fatal("credential response did not reach the declared encrypted secret store")
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok || body["credential"] != canary {
+		t.Fatal("runtime result did not retain the complete provider response")
+	}
+	if requests != 1 {
+		t.Fatalf("requests = %d, want 1", requests)
+	}
+}
+
+func TestOperationDirectWriteRejectsSecretResponseWithoutEncryptedStoreBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
+	t.Cleanup(srv.Close)
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL}, Operations: []OperationSpec{{
+		ID: "acme.credentials.create", Kind: "rest_write", Summary: "Create credential", Risk: "high", Approval: "typed", OutputPolicy: "json",
+		MutationClass: "secret", SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
+		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
+	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	_, err := PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: newRecordingSecretStore()}}, nil)
+	if err == nil || !strings.Contains(err.Error(), "secret response") {
+		t.Fatalf("PreviewOperationDirectWrite error = %v, want pre-I/O encrypted-store refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("requests = %d, want pre-I/O refusal", requests)
+	}
+}
+
 func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 	raw := []byte(`{"ok":true,"token":"server-token","nested":{"value":"visible"}}`)
 	for _, policy := range []string{

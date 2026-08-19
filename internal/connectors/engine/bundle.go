@@ -798,6 +798,16 @@ type RESTOperationSpec struct {
 	Path        string `json:"path"`
 	ContentType string `json:"content_type,omitempty"`
 	MaxBytes    int    `json:"max_bytes,omitempty"`
+	// Pagination is a direct-read operation's own pager. It deliberately
+	// shadows neither HTTP.Pagination nor streams.json: an API commonly mixes
+	// page/page_size and startIndex/count endpoints, and using the connector
+	// global value for both sends a request the provider did not document.
+	Pagination *PaginationSpec `json:"pagination,omitempty"`
+	// PaginationParameters is the source-imported, non-CLI subset of this
+	// endpoint's provider parameters. It proves that every query mechanic in
+	// Pagination is documented by this operation while keeping raw cursors and
+	// page selectors out of the command flag surface.
+	PaginationParameters []OperationParameter `json:"pagination_parameters,omitempty"`
 	// Parameters is the operation's accepted parameter set, imported from the
 	// connector's own provider specification by `connectorgen params-import`.
 	// It is the source command flags are DERIVED from — a command's flags are
@@ -835,20 +845,28 @@ type RequiredQueryGroup struct {
 }
 
 // SensitivePolicySpec is the reverse-ETL sensitive/admin policy for an operation
-// whose inputs or effects must never leak (secrets, variables, elevated-scope
-// admin actions). It declares how secret values may be supplied (never inline
-// CLI by default), which record fields must be redacted everywhere, the
-// provider-specific transform that replaces a generic body template (e.g.
-// GitHub's fetch-public-key + libsodium-encrypt flow), the preflight check that
-// runs without reading secret values, and the approval mode that requires typed
-// confirmation. The first sensitive/admin policy issue (#41) implements schema
-// and validator support only; live secret writes remain blocked.
+// whose inputs or effects need encrypted credential storage or elevated-scope
+// confirmation. It declares safe secret delivery (never inline CLI by default),
+// the provider-specific transform that replaces a generic body template, the
+// preflight check that runs without reading secret values, the approval mode,
+// and the closed response-secret store route. Secret operation runtime output
+// stays complete; no redacting response path is part of this policy.
 type SensitivePolicySpec struct {
-	InputMode    string   `json:"input_mode,omitempty"`    // env | file | stdin | env_or_file | env_or_stdin (never "inline")
-	RedactFields []string `json:"redact_fields,omitempty"` // record fields redacted in docs/previews/logs/errors
+	InputMode string `json:"input_mode,omitempty"` // env | file | stdin | env_or_file | env_or_stdin (never "inline")
+	// RedactFields is legacy compatibility metadata for non-secret operations.
+	// Secret operations retain complete runtime output; credential secrecy is
+	// provided by encrypted-at-rest storage rather than redaction.
+	RedactFields []string `json:"redact_fields,omitempty"`
 	Preflight    string   `json:"preflight,omitempty"`     // scope/availability check without reading secret values
 	Transform    string   `json:"transform,omitempty"`     // none | github_secret_encryption | provider-specific
 	ApprovalMode string   `json:"approval_mode,omitempty"` // typed_confirmation required for secret writes
+	// ResponseSecretField and ResponseSecretStoreKey form the only live
+	// response-secret route. The value is extracted from this fixed JSON field
+	// and handed directly to RuntimeConfig.SecretStore. Runtime output retains
+	// the provider response intact; protection is encryption at rest, not field
+	// deletion.
+	ResponseSecretField    string `json:"response_secret_field,omitempty"`
+	ResponseSecretStoreKey string `json:"response_secret_store_key,omitempty"`
 }
 
 type GraphQLOperationSpec struct {
@@ -2674,6 +2692,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	}
 	switch op.Kind {
 	case "rest_read":
+		if err := validateRESTOperationPagination(op); err != nil {
+			return fmt.Errorf("operation %d (%q) rest_read: %w", i, op.ID, err)
+		}
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 		if method != "GET" && method != "POST" {
 			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
@@ -2693,6 +2714,22 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
+		}
+	case "rest_status":
+		if op.REST == nil {
+			return fmt.Errorf("operation %d (%q) rest_status requires rest metadata", i, op.ID)
+		}
+		if method := strings.ToUpper(strings.TrimSpace(op.REST.Method)); method != http.MethodHead {
+			return fmt.Errorf("operation %d (%q) rest_status method must be HEAD, got %s", i, op.ID, method)
+		}
+		if op.OutputPolicy != "status" {
+			return fmt.Errorf("operation %d (%q) rest_status output_policy must be status", i, op.ID)
+		}
+		if op.REST.MaxBytes < 0 || op.REST.MaxBytes > 1024 {
+			return fmt.Errorf("operation %d (%q) rest_status max_bytes must be between 0 and 1024", i, op.ID)
+		}
+		if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || strings.TrimSpace(op.REST.ContentType) != "" {
+			return fmt.Errorf("operation %d (%q) rest_status must not declare a request body", i, op.ID)
 		}
 	case "provider_search":
 		if err := validateProviderSearchSemantics(i, op); err != nil {
@@ -2742,6 +2779,19 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 				return fmt.Errorf("operation %d (%q) binary_download accept %q is not a valid media type: %w", i, op.ID, op.Binary.Accept, err)
 			}
 		}
+	case "text_export":
+		if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != http.MethodGet {
+			return fmt.Errorf("operation %d (%q) text_export method must be GET, got %s", i, op.ID, method)
+		}
+		if op.Binary.MaxBytes <= 0 {
+			return fmt.Errorf("operation %d (%q) text_export must declare positive max_bytes", i, op.ID)
+		}
+		if !strings.EqualFold(strings.TrimSpace(op.Binary.Accept), "text/csv") {
+			return fmt.Errorf("operation %d (%q) text_export accept must be text/csv", i, op.ID)
+		}
+		if op.OutputPolicy != "file_manifest" {
+			return fmt.Errorf("operation %d (%q) text_export output_policy must be file_manifest", i, op.ID)
+		}
 	case "file_upload":
 		if op.File.Direction != "upload" {
 			return fmt.Errorf("operation %d (%q) file_upload direction must be upload, got %s", i, op.ID, op.File.Direction)
@@ -2768,12 +2818,95 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	return nil
 }
 
+// validateRESTOperationPagination binds a per-operation pager to the query
+// parameters imported from that endpoint's source contract. This is kept out
+// of Parameters deliberately: those values must never be exposed as raw CLI
+// flags alongside --page/--page-cursor.
+func validateRESTOperationPagination(op OperationSpec) error {
+	if op.REST == nil || op.REST.Pagination == nil {
+		return nil
+	}
+	if op.Kind != "rest_read" {
+		return fmt.Errorf("pagination is only supported by rest_read operations")
+	}
+	spec := *op.REST.Pagination
+	if _, err := newPaginator(spec, spec.PageSize, ""); err != nil {
+		return fmt.Errorf("pagination is invalid: %w", err)
+	}
+	expected := restPaginationQueryParameters(spec)
+	if len(expected) == 0 {
+		return nil
+	}
+	expectedSet := make(map[string]struct{}, len(expected))
+	for _, name := range expected {
+		expectedSet[name] = struct{}{}
+	}
+	source := make(map[string]struct{}, len(op.REST.PaginationParameters))
+	for _, parameter := range op.REST.PaginationParameters {
+		name := strings.TrimSpace(parameter.Name)
+		if parameter.In != "query" || name == "" {
+			return fmt.Errorf("pagination source parameter must be a named query parameter")
+		}
+		source[name] = struct{}{}
+	}
+	if len(source) == 0 {
+		return fmt.Errorf("pagination declares query mechanics but has no source pagination_parameters")
+	}
+	for _, name := range expected {
+		if _, ok := source[name]; !ok {
+			return fmt.Errorf("pagination parameter %q disagrees with source pagination_parameters", name)
+		}
+	}
+	for name := range source {
+		if _, ok := expectedSet[name]; !ok {
+			return fmt.Errorf("source pagination parameter %q is not used by the declared pagination", name)
+		}
+	}
+	return nil
+}
+
+func restPaginationQueryParameters(spec PaginationSpec) []string {
+	var names []string
+	appendName := func(name string) {
+		name = strings.TrimSpace(name)
+		if name == "" {
+			return
+		}
+		for _, existing := range names {
+			if existing == name {
+				return
+			}
+		}
+		names = append(names, name)
+	}
+	switch strings.TrimSpace(spec.Type) {
+	case "page_number":
+		appendName(spec.PageParam)
+		appendName(spec.SizeParam)
+	case "offset_limit":
+		appendName(spec.OffsetParam)
+		appendName(spec.LimitParam)
+		appendName(spec.SizeParam)
+	case "cursor":
+		appendName(spec.CursorParam)
+		appendName(spec.SizeParam)
+	case "start_index":
+		appendName(valueOrDefault(spec.StartIndexParam, defaultStartIndexParam))
+		appendName(valueOrDefault(spec.CountParam, defaultStartIndexCount))
+		appendName(spec.SizeParam)
+	case "next_url", "link_header", "none", "":
+		// These have no operation query mechanics to verify.
+	}
+	return names
+}
+
 // validateSensitivePolicy enforces the sensitive/admin reverse-ETL policy model
 // (#41). An operation that is secret_sensitive or has mutation_class "secret"
 // must declare a sensitive_policy with: a non-inline input_mode and
 // approval_mode "typed_confirmation". The transform,
 // when set, must be a known value. Live secret writes remain blocked in this
-// issue; this is schema + validator support only.
+// issue; live execution is admitted only through the closed secret-store
+// response contract below.
 func validateSensitivePolicy(i int, op OperationSpec) error {
 	isSecret := op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
 	if !isSecret {
@@ -2804,6 +2937,9 @@ func validateSensitivePolicy(i int, op OperationSpec) error {
 	}
 	if isSecret && !strings.EqualFold(p.ApprovalMode, "typed_confirmation") {
 		return fmt.Errorf("operation %d (%q) sensitive_policy approval_mode must be typed_confirmation for secret writes", i, op.ID)
+	}
+	if (p.ResponseSecretField == "") != (p.ResponseSecretStoreKey == "") {
+		return fmt.Errorf("operation %d (%q) sensitive_policy response_secret_field and response_secret_store_key must be declared together", i, op.ID)
 	}
 	return nil
 }

@@ -28,6 +28,7 @@ const (
 	directWritePolicyJSONRedacted             = "json_redacted"
 	directWritePolicyWriteResultRedacted      = "write_result_redacted"
 	directWritePolicyGongBoundedInputRedacted = "gong_bounded_input_redacted"
+	directWritePolicySecretStored             = "secret_stored"
 )
 
 type preparedOperationDirectWrite struct {
@@ -40,6 +41,7 @@ type preparedOperationDirectWrite struct {
 	body            map[string]any
 	form            url.Values
 	format          string
+	contentType     string
 	policy          string
 	maxBytes        int
 	redactionValues []string
@@ -109,7 +111,11 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		case "form":
 			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
 		case "json", "none", "graphql":
-			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.maxBytes)
+			contentType := prepared.contentType
+			if contentType == "" {
+				contentType = "application/json"
+			}
+			response, err = requester.DoJSONLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, contentType, prepared.maxBytes)
 		case "multipart":
 			root, rootErr := openMultipartRoot(prepared.cfg.ProjectDir)
 			if rootErr != nil {
@@ -131,7 +137,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation", prepared.redactionValues)
+			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -144,13 +150,13 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
 		}
 		if prepared.op.Kind == "graphql_mutation" {
-			data, metadata, parseErr := graphQLOperationResponse(response.Body, prepared.maxBytes)
+			data, metadata, parseErr := graphQLOperationResponseWithRuntimeErrorPolicy(response.Body, prepared.maxBytes, operationRetainsSecretRuntimeContent(prepared.op))
 			if parseErr != nil {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: parseErr}
 			}
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)}
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)}
 			}
 			if data == nil {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response has no data"}
@@ -173,6 +179,11 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				GraphQL:   metadata,
 			}
 			return nil
+		}
+		if prepared.policy == directWritePolicySecretStored {
+			if err := storeOperationResponseSecret(gated, prepared.op, prepared.cfg, response.Body); err != nil {
+				return err
+			}
 		}
 		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
 		if err != nil {
@@ -218,6 +229,13 @@ func redactOperationDirectWriteErrorText(text string, redact bool, values []stri
 		return text
 	}
 	return safety.RedactErrorText(redactWriteLiterals(text, values))
+}
+
+// operationRetainsSecretRuntimeContent identifies the closed secret-operation
+// path. Its diagnostic output is complete by policy; the declared secret store
+// protects the returned credential at rest rather than deleting runtime fields.
+func operationRetainsSecretRuntimeContent(op OperationSpec) bool {
+	return op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -292,6 +310,12 @@ func operationDirectWriteRedactFields(op OperationSpec) []string {
 }
 
 func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) []string {
+	// A live secret operation retains complete runtime output for diagnosis;
+	// secrecy is provided by the encrypted credential store, not deletion from
+	// responses, errors, logs, previews, reports, or fixtures.
+	if op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret") {
+		return nil
+	}
 	if op.SensitivePolicy == nil || len(op.SensitivePolicy.RedactFields) == 0 {
 		return nil
 	}
@@ -369,6 +393,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	}
 	if err := validateOperationDirectWriteOutputPolicy(policy); err != nil {
 		return preparedOperationDirectWrite{}, err
+	}
+	if policy == directWritePolicySecretStored && cfg.SecretStore == nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q secret response requires a credential secret store", op.ID)
 	}
 	body, err := operationWriteBody(op, req.Body)
 	if err != nil {
@@ -453,6 +480,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		body:            body,
 		form:            form,
 		format:          format,
+		contentType:     contentType,
 		policy:          policy,
 		maxBytes:        maxBytes,
 		redactionValues: operationDirectWriteRedactionValues(op, body),
@@ -534,6 +562,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		requestPath:     requestPath,
 		body:            payload,
 		format:          "graphql",
+		contentType:     "application/json",
 		policy:          policy,
 		maxBytes:        maxBytes,
 		redactionValues: operationDirectWriteRedactionValues(op, variables),
@@ -554,6 +583,9 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 		if !isOperationDirectWriteMethod(method) {
 			return OperationSpec{}, "", fmt.Errorf("operation direct write requires POST, PUT, PATCH, or DELETE, got %s", method)
+		}
+		if err := validateOperationResponseSecretContract(op); err != nil {
+			return OperationSpec{}, "", err
 		}
 		if isAbsoluteHTTPURL(op.REST.Path) {
 			return OperationSpec{}, "", fmt.Errorf("operation direct write endpoint must be connector-relative, got absolute URL")
@@ -658,11 +690,11 @@ func operationDirectWriteContentType(op OperationSpec, body map[string]any) (con
 		return "", "", fmt.Errorf("operation %q has invalid rest content_type %q: %w", op.ID, declared, parseErr)
 	}
 	switch strings.ToLower(mediaType) {
-	case "application/json":
+	case "application/json", "application/scim+json":
 		if len(body) == 0 {
 			return "", "none", nil
 		}
-		return "application/json", "json", nil
+		return strings.ToLower(mediaType), "json", nil
 	case "application/x-www-form-urlencoded":
 		if len(body) == 0 {
 			return "", "none", nil
@@ -756,7 +788,7 @@ func operationDirectWriteRequestURL(baseURL, requestPath string, query url.Value
 
 func validateOperationDirectWriteOutputPolicy(policy string) error {
 	switch policy {
-	case directWritePolicyNone, directWritePolicyJSON, directWritePolicyJSONRedacted, directWritePolicyWriteResultRedacted, directWritePolicyGongBoundedInputRedacted:
+	case directWritePolicyNone, directWritePolicyJSON, directWritePolicyJSONRedacted, directWritePolicyWriteResultRedacted, directWritePolicyGongBoundedInputRedacted, directWritePolicySecretStored:
 		return nil
 	default:
 		return fmt.Errorf("operation direct write output policy %q is not supported", policy)
@@ -775,11 +807,61 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (
 	case directWritePolicyJSON,
 		directWritePolicyJSONRedacted,
 		directWritePolicyWriteResultRedacted,
-		directWritePolicyGongBoundedInputRedacted:
+		directWritePolicyGongBoundedInputRedacted,
+		directWritePolicySecretStored:
 		// The legacy policy names remain valid declaration values, but direct
 		// writes retain their complete decoded response content.
 		return decoded, nil
 	default:
 		return nil, fmt.Errorf("operation direct write output policy %q is not supported", policy)
 	}
+}
+
+// validateOperationResponseSecretContract makes a response carrying a
+// credential store-bound before runtime construction and I/O. The response is
+// deliberately still returned intact: the runtime does not redact content.
+func validateOperationResponseSecretContract(op OperationSpec) error {
+	if !op.SecretSensitive && !strings.EqualFold(op.MutationClass, "secret") {
+		return nil
+	}
+	if op.SensitivePolicy == nil {
+		return fmt.Errorf("operation %q secret response requires sensitive_policy", op.ID)
+	}
+	p := op.SensitivePolicy
+	if strings.TrimSpace(p.ResponseSecretField) == "" || strings.TrimSpace(p.ResponseSecretStoreKey) == "" {
+		return fmt.Errorf("operation %q secret response requires a declared secret-store destination", op.ID)
+	}
+	if op.OutputPolicy != directWritePolicySecretStored {
+		return fmt.Errorf("operation %q secret response must use output_policy %q", op.ID, directWritePolicySecretStored)
+	}
+	if err := safety.ValidateIdentifier(p.ResponseSecretField, "response secret field"); err != nil {
+		return err
+	}
+	return safety.ValidateIdentifier(p.ResponseSecretStoreKey, "response secret store key")
+}
+
+func storeOperationResponseSecret(ctx context.Context, op OperationSpec, cfg connectors.RuntimeConfig, raw []byte) error {
+	if err := validateOperationResponseSecretContract(op); err != nil {
+		return err
+	}
+	if cfg.SecretStore == nil {
+		return fmt.Errorf("operation %q secret response requires a credential secret store", op.ID)
+	}
+	var body map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &body); err != nil {
+		return fmt.Errorf("operation %q secret response is not a JSON object", op.ID)
+	}
+	field := op.SensitivePolicy.ResponseSecretField
+	encoded, ok := body[field]
+	if !ok {
+		return fmt.Errorf("operation %q secret response does not contain its declared credential field", op.ID)
+	}
+	var value string
+	if err := json.Unmarshal(encoded, &value); err != nil || value == "" {
+		return fmt.Errorf("operation %q secret response credential field is not a non-empty string", op.ID)
+	}
+	if err := cfg.SecretStore.PutSecret(ctx, op.SensitivePolicy.ResponseSecretStoreKey, value); err != nil {
+		return fmt.Errorf("operation %q store returned credential: %w", op.ID, err)
+	}
+	return nil
 }

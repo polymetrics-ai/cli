@@ -326,7 +326,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 
 		intent := stringField(cmd, "intent")
-		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" {
+		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" && intent != "text_export" && intent != "status_check" {
 			continue
 		}
 		if intent == "direct_read" {
@@ -355,12 +355,14 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		// left untouched for the validator to report.
 		kind := stringField(op, "kind")
 		blockName := "rest"
-		if intent == "binary_download" {
+		if intent == "binary_download" || intent == "text_export" {
 			blockName = "binary"
 		}
 		if (intent == "direct_read" && kind != "rest_read") ||
 			(intent == "direct_write" && kind != "rest_write") ||
-			(intent == "binary_download" && kind != "binary_download") {
+			(intent == "binary_download" && kind != "binary_download") ||
+			(intent == "text_export" && kind != "text_export") ||
+			(intent == "status_check" && kind != "rest_status") {
 			continue
 		}
 		blockRaw, _ := op.get(blockName)
@@ -382,7 +384,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		// preview-bound contract, so it must exactly match. Direct reads use a
 		// supported default and binary downloads carry no body policy.
 		switch policy := strings.TrimSpace(stringField(cmd, "output_policy")); {
-		case intent == "binary_download":
+		case intent == "binary_download" || intent == "text_export":
 			if cmd.remove("output_policy") {
 				stats.Corrected.OutputPolicy++
 			}
@@ -394,6 +396,11 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 				stats.Filled.OutputPolicy++
 			case policy != want:
 				cmd.set("output_policy", want)
+				stats.Corrected.OutputPolicy++
+			}
+		case intent == "status_check":
+			if policy != "status" {
+				cmd.set("output_policy", "status")
 				stats.Corrected.OutputPolicy++
 			}
 		case policy == "":
