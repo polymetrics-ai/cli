@@ -137,3 +137,23 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
   generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
   not claimed.
+
+## Close connector-owned destination increment — 2026-08-20
+
+- **RED:** Close had 14 source-locked streams and 12 exact typed actions but no source or
+  destination transport declaration. Its remaining 151 mutations lack connector-owned typed actions
+  and had been incorrectly assigned a generic destination foundation gap.
+- **GREEN:** `sync_transport.json` declares all 14 sources and the exact
+  `leads(id,name,description,url,status_id) → update_lead` typed-destination proof, including keyed
+  delivery, durable acknowledgement, all three mode strategies, and fixture/dry conformance. All 12
+  typed actions explicitly carry eligibility: `update_lead` is the bound proof and the other 11
+  await #4304 closed exact-action selection. The remaining mutations are correctly
+  `declaration-pending`, never safety-excluded. No credentials or provider calls were used.
+- **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1` passed.
+- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
+  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
+  not claimed.

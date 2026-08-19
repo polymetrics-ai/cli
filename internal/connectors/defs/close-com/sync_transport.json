@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+    "eligible_streams": [
+      "leads", "contacts", "opportunities", "activities", "users", "tasks", "lead_statuses",
+      "opportunity_statuses", "pipelines", "roles", "groups", "custom_fields_lead",
+      "custom_fields_contact", "custom_fields_opportunity"
+    ],
+    "modes": ["full_overwrite", "full_append", "incremental_upsert"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "declarative_stream_transport", "run_id": "close_com_fixture_source_v1"}
+  },
+  "destination_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
+    "eligible_actions": ["update_lead"],
+    "modes": ["full_overwrite", "full_append", "incremental_upsert"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "declarative_typed_destination", "run_id": "close_com_update_lead_fixture_v1"},
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {"mode": "full_overwrite", "strategy": "replace", "action": "update_lead"},
+      {"mode": "full_append", "strategy": "append", "action": "update_lead"},
+      {"mode": "incremental_upsert", "strategy": "merge", "action": "update_lead"}
+    ],
+    "source_bindings": [{
+      "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+      "eligible_streams": ["leads"],
+      "record_mapping": {"kind": "input_fields", "inputs": [
+        {"input": "id", "field": "id"},
+        {"input": "name", "field": "name"},
+        {"input": "description", "field": "description"},
+        {"input": "url", "field": "url"},
+        {"input": "status_id", "field": "status_id"}
+      ]}
+    }]
+  }
+}

@@ -8,7 +8,7 @@ provider-live certification. The machine-readable source is
 
 | Connector | Inventory | Documented | Direct read command / documented | Typed write / documented | ETL source / streams | Reverse destination | Binary CLI / ledger | Deletes | Implemented CLI commands |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| close-com | complete | 300 | 0 / 123 | 12 / 163 | 0 / 14 | 0 | 0 / 0 | 52 | 0 |
+| close-com | complete | 300 | 0 / 123 | 12 / 163 | 1 / 14 | 1 (App dispatch pending) | 0 / 0 | 52 | 0 |
 | outreach | complete | 259 | 0 / 0 | 163 / 163 | 0 / 96 | 0 | 0 / 0 | 36 | 0 |
 | salesloft | complete | 211 | 0 / 115 | 0 / 91 | 0 / 5 | 0 | 0 / 0 | 18 | 0 |
 | copper | complete | 89 | 0 / 32 | 0 / 52 | 0 / 5 | 0 | 0 / 0 | 11 | 0 |
@@ -29,9 +29,9 @@ provider-live certification. The machine-readable source is
 | square | complete | 334 | 0 / 117 | 0 / 213 | 0 / 4 | 0 | 0 / 0 | 27 | 0 |
 | braintree | unproven | 73 | 0 / 18 | 0 / 45 | 0 / 10 | 0 | 0 / 0 | 6 | 0 |
 
-Totals after the Gorgias increment: 3,932 documented operations; 1,465 direct reads with 123 exact
-command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, three source
-transports, three typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
+Totals after the Close increment: 3,932 documented operations; 1,465 direct reads with 123 exact
+command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, four source
+transports, four typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
 deletes, and zero provider-live certifications.
 
 Help Scout still has a binary-ledger classification defect. Gorgias now maps its
@@ -63,3 +63,11 @@ proof. Its ten typed actions now have explicit eligibility states (one bound and
 action selection), while its remaining 58 direct writes are correctly `declaration-pending` until
 their exact typed operation and CLI contracts are authored. The destination does not claim
 application-level deployment while #4304 dispatch remains pending.
+
+## Increment — Close declarative destination proof
+
+Close declares all 14 streams and one fixture/dry
+`leads(id,name,description,url,status_id) → update_lead` proof. Its twelve typed actions now have
+explicit eligibility states (one bound and eleven pending closed exact-action selection); its
+other 151 direct writes are correctly `declaration-pending` until their exact connector-owned
+contracts and CLI reachability are authored. It remains pending #4304 persisted App/CLI dispatch.
