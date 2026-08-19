@@ -109,6 +109,15 @@ const configs = {
     info: 'Zoho Bigin ordinary and bulk v2 API-reference endpoint inventory',
     docs: 'https://www.bigin.com/developer/docs/apis/v2/',
     parser: 'bigin-rendered-reference',
+    coverageAliases: [
+      { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'pipelines' } },
+      { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'companies' } },
+      { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'contacts' } },
+      { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'products' } },
+      { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'tasks' } },
+      { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'events' } },
+      { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'calls' } },
+    ],
   },
 };
 const config = configs[connector];
@@ -203,6 +212,12 @@ const authoritativeCoverage = new Map((config.authoritativeBindings ?? []).map(b
   `${binding.method} ${coveragePath(binding.path)}`,
   validCoverage({ covered_by: binding.covered_by }),
 ]));
+const coverageAliases = (config.coverageAliases ?? []).map(alias => {
+  const coverage = validCoverage({ covered_by: alias.covered_by });
+  const operation = sourceOperations.find(candidate => candidate.method === alias.method && coveragePath(candidate.path) === coveragePath(alias.path));
+  if (!coverage || !operation) throw new Error(`${connector}: invalid coverage alias ${alias.method} ${alias.path}`);
+  return { ...alias, coverage, source_url: operation.source_url };
+});
 const sluggify = value => value.replace(/[^a-zA-Z0-9]+/g, ' ').trim().split(/\s+/).map(part => part[0]?.toUpperCase() + part.slice(1)).join('');
 const operationCounts = Object.fromEntries(methods.filter(method => sourceOperations.some(operation => operation.method === method.toUpperCase()))
   .map(method => [method.toUpperCase(), sourceOperations.filter(operation => operation.method === method.toUpperCase()).length]));
@@ -288,6 +303,6 @@ const disposition = {
   ],
 };
 writeJSON(`${base}/sources/${connector}-operation-source-lock.json`, sourceLock);
-writeJSON(`${base}/api_surface.json`, { api: config.api, docs: config.docs, reviewed_at: '2026-08-19', operation_ledger_version: 2, scope: `Complete provider-reference inventory generated from every operation in the cited ${sourceDescription}${config.supplements?.length ? ' plus its fixed generic dynamic-resource routes from the cited rendered provider reference' : ''} (${sourceOperations.length} HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.${config.legacyDeclarationRemovals?.length ? ' Legacy declarations absent from the authoritative source are explicitly recorded as REMOVED in the source lock and disposition ledger.' : ''}`, artifacts: [{ id: config.artifact, url: config.sourceURL, retrieved_at: '2026-08-19', sha256: sourceHash }, ...supplementArtifacts.map((supplement, index) => ({ id: `${connector}-rendered-dynamic-supplement-${index + 1}-2026-08-19`, url: supplement.source_url, retrieved_at: '2026-08-19', sha256: supplement.sha256 }))], endpoints: rows.map(row => row.endpoint) });
+writeJSON(`${base}/api_surface.json`, { api: config.api, docs: config.docs, reviewed_at: '2026-08-19', operation_ledger_version: 2, scope: `Complete provider-reference inventory generated from every operation in the cited ${sourceDescription}${config.supplements?.length ? ' plus its fixed generic dynamic-resource routes from the cited rendered provider reference' : ''} (${sourceOperations.length} HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.${coverageAliases.length ? ` ${coverageAliases.length} additional API-surface rows project the same documented template to distinct existing streams/actions; they do not increase the provider-operation denominator.` : ''}${config.legacyDeclarationRemovals?.length ? ' Legacy declarations absent from the authoritative source are explicitly recorded as REMOVED in the source lock and disposition ledger.' : ''}`, artifacts: [{ id: config.artifact, url: config.sourceURL, retrieved_at: '2026-08-19', sha256: sourceHash }, ...supplementArtifacts.map((supplement, index) => ({ id: `${connector}-rendered-dynamic-supplement-${index + 1}-2026-08-19`, url: supplement.source_url, retrieved_at: '2026-08-19', sha256: supplement.sha256 }))], endpoints: [...rows.map(row => row.endpoint), ...coverageAliases.map(alias => ({ method: alias.method, path: alias.path, provenance: { artifact: config.artifact, source_url: alias.source_url }, covered_by: alias.coverage }))] });
 writeJSON(`${base}/sources/${connector}-declaration-disposition.json`, disposition);
 console.log(`${connector}: ${sourceOperations.length} source rows; enabled=${enabled}, writes=${endpointBoundWrites}, commands=${endpointBoundCommands}`);

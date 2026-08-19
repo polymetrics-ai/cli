@@ -4,244 +4,100 @@
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
     "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
-    "sha256": "60ad2905fa8b60a90606880d590128f2bf2010e2d7eb5a8d7b3e630d46d543f5",
-    "bytes": 8404,
-    "openapi": "public-provider-description",
-    "info_version": "ServiceNow Table API",
+    "source_kind": "fixed_platform_surface_with_dynamic_instance_schema",
+    "sha256": "40373ba5e928fa781d71ff4ac5c281f3c97a64f0704171778df067e56eaf0743",
+    "bytes": 8413,
+    "info_version": "ServiceNow Zurich Table API",
     "operation_counts": {
-      "DELETE": 3,
-      "GET": 9,
-      "PATCH": 3,
-      "POST": 4,
-      "PUT": 3
+      "GET": 2,
+      "POST": 1,
+      "PUT": 1,
+      "PATCH": 1,
+      "DELETE": 1
     },
     "operations": [
       {
-        "id": "service-now.rest.get.ApiNowTableIncident0",
+        "id": "service-now.table_api.get.0",
         "protocol": "rest",
         "method": "GET",
-        "path": "/api/now/table/incident",
+        "path": "/api/now/table/{table_name}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]",
+        "source_location": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html: Table API GET /api/now/table/{table_name}",
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       },
       {
-        "id": "service-now.rest.get.ApiNowTableSysUser1",
+        "id": "service-now.table_api.get.1",
         "protocol": "rest",
         "method": "GET",
-        "path": "/api/now/table/sys_user",
+        "path": "/api/now/table/{table_name}/{sys_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]",
+        "source_location": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html: Table API GET /api/now/table/{table_name}/{sys_id}",
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       },
       {
-        "id": "service-now.rest.get.ApiNowTableSysUserGroup2",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/now/table/sys_user_group",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.get.ApiNowTableIncidentSysId3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/now/table/incident/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.get.ApiNowTableSysUserSysId4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/now/table/sys_user/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.get.ApiNowTableSysUserGroupSysId5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/now/table/sys_user_group/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.post.ApiNowTableIncident6",
+        "id": "service-now.table_api.post.2",
         "protocol": "rest",
         "method": "POST",
-        "path": "/api/now/table/incident",
+        "path": "/api/now/table/{table_name}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]",
+        "source_location": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html: Table API POST /api/now/table/{table_name}",
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       },
       {
-        "id": "service-now.rest.post.ApiNowTableSysUser7",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/now/table/sys_user",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.post.ApiNowTableSysUserGroup8",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/now/table/sys_user_group",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.patch.ApiNowTableIncidentSysId9",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/now/table/incident/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.patch.ApiNowTableSysUserSysId10",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/now/table/sys_user/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[10]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.patch.ApiNowTableSysUserGroupSysId11",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/now/table/sys_user_group/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[11]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.put.ApiNowTableIncidentSysId12",
+        "id": "service-now.table_api.put.3",
         "protocol": "rest",
         "method": "PUT",
-        "path": "/api/now/table/incident/{sys_id}",
+        "path": "/api/now/table/{table_name}/{sys_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[12]",
+        "source_location": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html: Table API PUT /api/now/table/{table_name}/{sys_id}",
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       },
       {
-        "id": "service-now.rest.put.ApiNowTableSysUserSysId13",
+        "id": "service-now.table_api.patch.4",
         "protocol": "rest",
-        "method": "PUT",
-        "path": "/api/now/table/sys_user/{sys_id}",
+        "method": "PATCH",
+        "path": "/api/now/table/{table_name}/{sys_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[13]",
+        "source_location": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html: Table API PATCH /api/now/table/{table_name}/{sys_id}",
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       },
       {
-        "id": "service-now.rest.put.ApiNowTableSysUserGroupSysId14",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/api/now/table/sys_user_group/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[14]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.delete.ApiNowTableIncidentSysId15",
+        "id": "service-now.table_api.delete.5",
         "protocol": "rest",
         "method": "DELETE",
-        "path": "/api/now/table/incident/{sys_id}",
+        "path": "/api/now/table/{table_name}/{sys_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[15]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.delete.ApiNowTableSysUserSysId16",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/now/table/sys_user/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[16]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.delete.ApiNowTableSysUserGroupSysId17",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/now/table/sys_user_group/{sys_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[17]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.get.ApiNowTableSysUserGrmember18",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/now/table/sys_user_grmember",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[18]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.get.ApiNowStatsTableName19",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/now/stats/{tableName}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[19]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.post.ApiNowImportImportSetTableName20",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/now/import/{importSetTableName}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[20]",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      },
-      {
-        "id": "service-now.rest.get.ApiNowAttachment21",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/now/attachment",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[21]",
+        "source_location": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html: Table API DELETE /api/now/table/{table_name}/{sys_id}",
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       }
     ]
   },
   "counts": {
-    "rest": 22,
+    "rest": 6,
     "graphql_query": 0,
     "graphql_mutation": 0,
-    "total": 22
+    "total": 6
+  },
+  "operations_found": {
+    "rest": 6,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 6
+  },
+  "coverage_confidence": {
+    "level": "fixed_platform_surface_with_dynamic_instance_schema",
+    "basis": "The official ServiceNow Table API documents six uniform HTTP operation templates. The table name, fields, ACLs, and customer-defined tables are instance-dependent; this connector pins the six fixed templates and records the dynamic-schema basis rather than inventing a finite instance total."
+  },
+  "dynamic_schema": {
+    "state": "instance_dependent",
+    "basis": "The request template accepts any table_name allowed by the target instance. Its dictionary fields and ACL-permitted data surface cannot be enumerated from the public platform reference.",
+    "fixed_platform_operations": 6,
+    "instance_operation_total": null
   }
 }

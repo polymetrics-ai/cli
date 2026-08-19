@@ -19,7 +19,7 @@ The source-lock recovery audit covers every connector owned by this issue. A row
 | iterable | 4 | 148 | official Iterable Swagger 2.0 specification | complete — remapped |
 | help-scout | 144 | — | pending provider-surface audit | pending |
 | gorgias | 114 | 114 | official OpenAPI 3.1.0 specification | complete — remapped, count unchanged |
-| service-now | 22 | — | pending fixed-platform and dynamic-schema basis | pending |
+| service-now | 22 | 6 fixed templates | official Zurich Table API fixed platform surface; table names, fields, ACLs, and customer tables are instance-dependent and explicitly uncounted | complete — remapped with dynamic-schema basis |
 | chatwoot | 148 | 148 | official OpenAPI 3.1.0 specification | complete — remapped, count unchanged |
 | chargebee | 428 | 527 | official Chargebee v2 SDK OpenAPI 3.1.0, the complete public surface used to generate provider client libraries (160 GET, 367 POST) | complete — remapped |
 | square | 11 | 334 | official OpenAPI 3.0.0 machine-readable specification; rendered crawl retained only as partial/superseded evidence | complete — remapped |

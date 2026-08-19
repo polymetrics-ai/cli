@@ -3,7 +3,7 @@
   "docs": "https://www.bigin.com/developer/docs/apis/v2/",
   "reviewed_at": "2026-08-19",
   "operation_ledger_version": 2,
-  "scope": "Complete provider-reference inventory generated from every operation in the cited complete rendered provider reference (75 HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.",
+  "scope": "Complete provider-reference inventory generated from every operation in the cited complete rendered provider reference (75 HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source. 7 additional API-surface rows project the same documented template to distinct existing streams/actions; they do not increase the provider-operation denominator.",
   "artifacts": [
     {
       "id": "zoho-bigin-v2-rendered-reference-2026-08-19",
@@ -1088,6 +1088,83 @@
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "calls"
       }
     }
   ]

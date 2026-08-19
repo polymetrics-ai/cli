@@ -55,6 +55,12 @@ Bigin's 8KB landing page is not a usable operation source. Its provider sitemap 
 
 The recovered denominator is **75** operations: 32 GET, 22 POST, 9 PUT, 1 PATCH, and 11 DELETE. The regenerated source lock, `api_surface.json`, and disposition ledger reconcile at 75 rows with `counts.total` and `operations_found.total` both 75 and `coverage_confidence: complete_rendered_reference`. The legacy 50-row surface is discarded. Six pre-existing exact typed actions remain enabled `direct_write`; the other 37 direct writes are declaration-pending but retain the neutral-destination foundation gap as an attribute, never a `reverse_etl` primary class.
 
+## ServiceNow — fixed platform surface, dynamic target schema
+
+ServiceNow is intentionally not assigned a fabricated count of instance tables. The official Table API publishes **six** fixed method/path templates: list, get-by-`sys_id`, insert, replace, partial update, and delete. Its target `table_name`, dictionary fields, ACLs, and customer-defined tables are determined by the configured instance, not the public platform reference. The recovered source lock therefore records `counts.total: 6` and `operations_found.total: 6` only for the fixed platform templates, plus a `dynamic_schema` basis with `instance_operation_total: null`.
+
+The legacy 22 rows were three selected table instantiations, not a truthful platform denominator. The regenerated ledger is six source rows (two direct writes with exact existing typed actions, four declaration-pending), and six extra `api_surface` coverage projections preserve the existing incident/user/group streams and typed actions without increasing the six-template count. Every one of the four direct-write templates records `generic-typed-destination-executor` only as a reverse-ETL attribute; no transport binding is declared.
+
 ## Remaining full-batch audit
 
 All 20 owned connectors are in the recovery audit—not only the eight whose initial counts were visibly implausible. Each will receive a comprehensive provider-surface review: source lock, API surface, and every disposition row are regenerated from the authoritative source when the legacy source understates it. ServiceNow is dynamic-schema: its fixed platform surface must be pinned separately from its instance-dependent schema basis. A connector whose complete source proves the legacy count correct is an explicit no-change result, with source count and confidence basis recorded. A small number alone will never be presented as complete coverage.
