@@ -32,7 +32,7 @@ certification never make an operation unreachable.
 | iterable | complete | 0 / 49 | 0 / 96 | 0 | 0 / 3 | 0 | 0 / 0 | 12 |
 | help-scout | unproven | 50 / 55 | 65 / 65 | 0 | 0 / 24 | 0 | 1 / 0 | 18 |
 | gorgias | complete | 41 / 42 | 61 / 68 | 61 | 1 / 4 | 1 (App dispatch pending) | 1 / 1 | 18 |
-| service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 0 / 3 | 0 | 0 / 0 | 1 |
+| service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 1 / 3 | 1 (App dispatch pending) | 0 / 0 | 1 |
 | chatwoot | complete | 32 / 57 | 60 / 84 | 60 | 1 / 7 | 1 (App dispatch pending) | 0 / 0 | 18 |
 | chargebee | complete | 0 / 128 | 36 / 367 | 0 | 1 / 32 | 1 (App dispatch pending) | 0 / 0 | 0 |
 | square | complete | 0 / 117 | 0 / 213 | 0 | 0 / 4 | 0 | 0 / 0 | 27 |
@@ -44,10 +44,10 @@ certification never make an operation unreachable.
   bindings; 1,745 direct writes need exact typed actions. Gorgias already has 61 user-reachable
   approval-governed write commands; its native `direct_write` intent count remains zero, so the
   ledger keeps direct capability distinct from reverse-ETL deployment.
-- Gorgias, Chatwoot, Customer.io, Close, Outreach, Zoho Bigin, and Chargebee now declare their complete ETL stream sets and
+- Gorgias, Chatwoot, Customer.io, Close, Outreach, Zoho Bigin, Chargebee, and ServiceNow now declare their complete ETL stream sets and
   one exact typed-destination proof each (`tickets → update_ticket`, `contacts → update_contact`,
   `snippets → update_snippet`, `leads → update_lead`, `sequences → activate_sequence`, and
-  `records → delete_record`, and `customers → update_customer`) with
+  `records → delete_record`, `customers → update_customer`, and `incidents → update_incident`) with
   keyed delivery, durable acknowledgement, per-mode strategies, and fixture/dry conformance
   evidence. None is application-level deployable yet: #4304 must land persisted App/CLI
   generic-destination dispatch integration. The remaining typed actions are explicitly eligible but

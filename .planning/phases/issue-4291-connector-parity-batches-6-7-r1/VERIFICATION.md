@@ -217,3 +217,21 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
   generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
   not claimed.
+
+## ServiceNow connector-owned destination increment — 2026-08-20
+
+- **RED:** ServiceNow's public Table API provides six fixed templates but customer table/field
+  schemas are instance-dependent. Expanding the template into finite instance operations would be
+  invented provider evidence; only two existing source-action projections were visible in the map.
+- **GREEN:** `sync_transport.json` declares all three fixture streams and the exact
+  `incidents(sys_id) → update_incident` proof with keyed delivery, durable acknowledgement, closed
+  modes, and fixture/dry conformance. `typed_action_eligibility` explicitly accounts for all six
+  typed actions (one bound and five pending closed selection) without fabricating dynamic table
+  source identities. No credentials or provider calls were used.
+- **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1` passed.
+- **PENDING FOUNDATION:** persisted App/CLI generic-destination dispatch remains #4304 work; this
+  connector claims fixture/dry proof only, never application-level reverse-ETL deployment.

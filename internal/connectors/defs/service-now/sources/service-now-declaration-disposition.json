@@ -70,12 +70,17 @@
     "writes_actions": 6,
     "terminal_commands": 0,
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "declarative-typed-destination-app-dispatch",
+      "declarative-typed-destination-exact-action-selection"
     ],
     "foundation_gaps": [
       {
-        "id": "generic-typed-destination-executor",
-        "count": 4
+        "id": "declarative-typed-destination-app-dispatch",
+        "count": 1
+      },
+      {
+        "id": "declarative-typed-destination-exact-action-selection",
+        "count": 5
       }
     ],
     "rejected_by_reason": [
@@ -87,26 +92,20 @@
     "transport": {
       "contract": "docs/sync-transport-definition.md",
       "source_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-service-now",
-          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/service-now/sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
-        }
+        "state": "declared",
+        "declaration": "sync_transport.json",
+        "conformance": "declarative_stream_transport/service_now_fixture_source_v1"
       },
       "destination_transport": {
-        "state": "foundation-gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-        }
+        "state": "declared_pending_foundation_dispatch",
+        "declaration": "sync_transport.json",
+        "action": "update_incident",
+        "foundation_dependency": "#4304 persisted App/CLI dispatch integration"
       }
     },
     "declaration_pending_ids": [
       "runnable-command-binding-service-now",
-      "typed-operation-contract-service-now",
-      "sync-transport-source-definition-service-now"
+      "typed-operation-contract-service-now"
     ],
     "declaration_pending": [
       {
@@ -243,11 +242,11 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
+          "state": "eligible_pending_exact_action_selection",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "declarative-typed-destination-exact-action-selection",
+            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
+            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
           }
         }
       }
@@ -297,12 +296,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action yet binds this exact fixed provider template. This is an unauthored connector declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -339,11 +334,11 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
+          "state": "bound_pending_foundation_dispatch",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "declarative-typed-destination-app-dispatch",
+            "evidence": "#4304 currently composes declarative typed destinations but persisted App/CLI dispatch integration is pending; no connector workaround is permitted.",
+            "minimal_change": "Land and exercise the #4304 persisted App/CLI generic destination dispatch, then certify this exact connector declaration."
           }
         }
       }
@@ -393,12 +388,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action yet binds this exact fixed provider template. This is an unauthored connector declaration, not a foundation gap or safety exclusion."
         }
       }
     }
@@ -407,6 +398,39 @@
   "notes": [
     "The Table API operation count is the fixed public platform-template count only. It is not a fabricated count of target-instance tables or fields.",
     "Direct writes are direct_write. Their reverse-ETL eligibility is a separate foundation-gapped attribute until #4303 provides the connector-neutral typed destination executor.",
-    "No transport binding is declared in this map."
+    "No transport binding is declared in this map.",
+    "2026-08-20 reconciliation: source transport declares incidents, users, and groups; update_incident is the exact typed-destination proof. typed_action_eligibility accounts for all six table-specific actions without inventing an instance-dependent provider operation identity. The two unmapped fixed templates remain declaration-pending."
+  ],
+  "typed_action_eligibility": [
+    {
+      "action": "create_incident",
+      "state": "eligible_pending_exact_action_selection",
+      "source_basis": "fixed ServiceNow Table API POST template; incident table contract"
+    },
+    {
+      "action": "create_user",
+      "state": "eligible_pending_exact_action_selection",
+      "source_basis": "fixed ServiceNow Table API POST template; sys_user table contract"
+    },
+    {
+      "action": "create_group",
+      "state": "eligible_pending_exact_action_selection",
+      "source_basis": "fixed ServiceNow Table API POST template; sys_user_group table contract"
+    },
+    {
+      "action": "update_incident",
+      "state": "bound_pending_foundation_dispatch",
+      "source_basis": "fixed ServiceNow Table API PATCH template; incident table contract"
+    },
+    {
+      "action": "update_user",
+      "state": "eligible_pending_exact_action_selection",
+      "source_basis": "fixed ServiceNow Table API PATCH template; sys_user table contract"
+    },
+    {
+      "action": "update_group",
+      "state": "eligible_pending_exact_action_selection",
+      "source_basis": "fixed ServiceNow Table API PATCH template; sys_user_group table contract"
+    }
   ]
 }
