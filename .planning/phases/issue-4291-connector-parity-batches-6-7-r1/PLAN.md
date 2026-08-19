@@ -7,7 +7,7 @@
 - Merges into: main
 - Delivery: Pull request open against `main` with the declared source locks, six-class disposition ledgers, local validation, and repository connector gates green.
 - Working branch: fm/cli-map-batch67-r1
-- Task: Add a credential-free, public-source-locked six-class parity map for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree`. Every current documented `api_surface.json` endpoint receives exactly one disposition row. `enabled` requires an actual API-surface command or typed write-action binding: an unbound ETL stream remains `declaration-pending`. Typed write action endpoints remain enabled `direct_write`; their reverse-ETL eligibility is a separate attribute blocked by `generic-typed-destination-executor`.
+- Task: Add a credential-free, public-source-locked six-class parity map for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree`. Every authoritative provider operation receives exactly one disposition row. `enabled` requires an actual API-surface command or typed write-action binding: an unbound ETL stream remains `declaration-pending`. Typed write action endpoints remain enabled `direct_write`; their reverse-ETL eligibility is a separate attribute blocked by `generic-typed-destination-executor`.
 - Verification: Run the ledger-invariant checker, `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, the relevant package tests, and `make verify` gates individually, including `connector-boundary` through a bounded poll.
 
 ## Evidence Table
@@ -23,7 +23,7 @@
 
 - Required GSD commands resolved with `scripts/gsd sources` and prompts generated for `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review`.
 - Inline/manual fallback: `gsd-sdk query init.phase-op connector-parity-batches-6-7-r1` reports `phase_found: false` because `.planning/ROADMAP.md` intentionally delegates connector work to the issue-first canon. The canonical delivery contract also forbids spawning GSD roles. This issue-local phase record executes the same discuss → TDD plan → execute → verify → review sequence inline.
-- Discuss decisions locked by issue #4291 and the repaired brief: current `api_surface.json` is the crosswalk denominator; no credentials or provider API calls; source material is public documentation only; un-authored operations are `declaration-pending`; deletes are not unsafe solely because they delete; ETL is source-declaration-pending when absent; typed write actions are enabled `direct_write`; their reverse-ETL eligibility uses the `generic-typed-destination-executor` gap stated in the 2026-08-19 correction.
+- Discuss decisions locked by issue #4291 and the repaired brief: no credentials or provider API calls; source material is public documentation only; an authoritative provider specification or complete rendered reference is the denominator; no legacy `api_surface.json` entry bounds a recovery remap; un-authored operations are `declaration-pending`; deletes are not unsafe solely because they delete; ETL is source-declaration-pending when absent; typed write actions are enabled `direct_write`; their reverse-ETL eligibility uses the `generic-typed-destination-executor` gap stated in the 2026-08-19 correction.
 - Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-testing`.
 
 ## TDD slices
@@ -33,6 +33,7 @@
 3. **RED — batch 7 source-lock and ledger invariants:** prove the ten locks/ledgers are absent and the invariant checker cannot pass.
 4. **GREEN — batch 7 map:** materialize the remaining ten maps and repeat the real invariant check.
 5. **REFACTOR / review:** inspect generated JSON for source provenance and reason vocabulary, then run the repository gates without widening scope beyond these definitions and the issue evidence.
+6. **SOURCE-LOCK RECOVERY — captain defect 2026-08-19:** hold PR #4296. Replace the incomplete public-documentation pins for `copper`, `freshdesk`, `intercom`, `iterable`, `klaviyo`, `salesloft`, `square`, and `service-now` with each provider's complete machine-readable specification or complete rendered reference. Record `counts.total` plus per-method counts, replace self-referential `declared_percent` with `operations_found` and `coverage_confidence`/basis, and regenerate the documented-operation ledger from the corrected denominator before requesting any PR progress.
 
 ## Commit checkpoints
 

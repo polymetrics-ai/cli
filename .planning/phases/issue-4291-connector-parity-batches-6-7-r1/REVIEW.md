@@ -6,6 +6,10 @@ Reviewed the diff from `main` to the issue branch after the final reachability c
 
 The review checked the source-lock hash/byte provenance, exact `api_surface.json` endpoint coverage, duplicate endpoint identity, six-class vocabulary, DELETE accounting, action/command binding semantics, and the required reverse-ETL foundation-gap wording. Required skills used during delivery: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-testing`.
 
+## Superseded finding
+
+The prior no-findings review covered the parity/reachability diff, but did not detect that the source locks were derived from the existing `api_surface.json` scope. It is superseded for provider-surface completeness by the 2026-08-19 captain defect; PR #4296 remains held until the source-lock recovery is complete.
+
 ## Findings
 
 No actionable findings.

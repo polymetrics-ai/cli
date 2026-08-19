@@ -1,20 +1,3162 @@
 {
-  "api": "Salesloft REST API v2 (https://api.salesloft.com/v2)",
-  "docs": "https://developers.salesloft.com/docs/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "fresh migration: the 5 legacy-parity read streams only; legacy internal/connectors/salesloft is read-only (Capabilities.Write: false, no write.go), so there are no write endpoints in or out of scope. The full Salesloft v2 surface (calls, meetings, notes, tasks, action items, custom fields, imports, etc.) is out of scope until a capability-expansion pass.",
+  "api": "Salesloft REST API public reference",
+  "docs": "https://developers.salesloft.com/docs/api/",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-reference inventory regenerated from every public docs/api page in the published sitemap (315 pages, 211 unique HTTP operations). Existing streams are retained only where a current provider operation provides the same documented collection; every other operation is an explicitly blocked provider operation pending a connector-owned declaration.",
+  "artifacts": [
+    {
+      "id": "salesloft-rendered-reference-2026-08-19",
+      "url": "https://developers.salesloft.com/sitemap.xml",
+      "retrieved_at": "2026-08-19",
+      "sha256": "fa347769532335503ef647faf667eaf6d149831b7d784e825f13bc3d9766f8f2"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v2/people", "covered_by": { "stream": "people" } },
-    { "method": "GET", "path": "/v2/accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/v2/cadences", "covered_by": { "stream": "cadences" } },
-    { "method": "GET", "path": "/v2/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/v2/emails", "covered_by": { "stream": "emails" } },
-    { "method": "POST", "path": "/oauth/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 refresh-token exchange, consumed internally by the salesloft AuthHook, not a syncable object stream" } },
-    { "method": "GET", "path": "/v2/calls", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
-    { "method": "GET", "path": "/v2/meetings", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
-    { "method": "GET", "path": "/v2/notes", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
-    { "method": "GET", "path": "/v2/tasks", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
-    { "method": "GET", "path": "/v2/action_items", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
-    { "method": "POST", "path": "/v2/people", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } }
+    {
+      "method": "DELETE",
+      "path": "/v2/accounts/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/accounts-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/bulk_jobs/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/cadence_memberships/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/custom_fields/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/external/configurations/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/external-configurations-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/external/mappings/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/external-mappings-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/groups/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/groups-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/imports/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/imports-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/integrations/signals/registrations/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/integrations/signals/registrations/plays/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/notes/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/notes-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/opportunity_people/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-people-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/opportunity_stages/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/people/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/people-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/person_stages/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/person-stages-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/saved_list_views/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/tasks/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/tasks-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/webhook_subscriptions/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-destroy/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/cadences",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-cadences-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/calls",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-calls-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/companies/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/custom_fields",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-custom-fields-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/me",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-credentials-me/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/people/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/people/{person_id}/cadence_memberships",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-person-cadence-memberships-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/successes",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-successes-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public_api/v1/tags",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-tags-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account_stages",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/account-stages-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account_stages/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/account-stages-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account_team_member_roles",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/account-team-member-roles-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account_tiers",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/account-tiers-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account_tiers/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/account-tiers-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account_types",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/account-types-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounts",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/accounts-index/"
+      },
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounts/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/accounts-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/action_details/call_instructions",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/action-details-call-instructions-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/action_details/call_instructions/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/action-details-call-instructions-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/actions",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/actions-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/actions/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/actions-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/activities/calls",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/activities-calls-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/activities/calls/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/activities-calls-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/activities/emails",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/activities-emails-index/"
+      },
+      "covered_by": {
+        "stream": "emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/activities/emails/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/activities-emails-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/activity_histories",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/activity-histories-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audit_reports",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/audit-reports-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audit_reports/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/audit-reports-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bulk_jobs",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bulk_jobs/{bulk_jobs_id}/job_data",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-job-data-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bulk_jobs/{bulk_jobs_id}/results",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-results-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bulk_jobs/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadence_collection_exports/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-collection-exports-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadence_collections",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-collections-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadence_collections/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-collections-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadence_exports/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-exports-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadence_memberships",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadence_memberships/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadence_stats/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-stats-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadences",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadences-index/"
+      },
+      "covered_by": {
+        "stream": "cadences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadences/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadences-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/calendar_availabilities",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/calendar-availabilities-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/calendar/events",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/calendar/events_with_recurring",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-with-recurring-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/call_data_records",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/call_data_records/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/call_dispositions",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-dispositions-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/call_dispositions/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-dispositions-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/call_sentiments",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-sentiments-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/call_sentiments/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-sentiments-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-all/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-one/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{id}/extensive",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-one-extensive/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{id}/recording",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-one-conversation-recording/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm_account_team_members",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/crm-account-team-members-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm_activities",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/crm-activities-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm_activities/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/crm-activities-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm_activity_fields",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/crm-activity-fields-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm_team_members_with_roles",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/crm-team-members-with-roles-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crm_users",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/crm-users-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_fields",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_fields/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_roles",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/custom-roles-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/custom_roles/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/custom-roles-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data_control/requests",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/data-control-requests-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data_control/requests/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/data-control-requests-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/email_template_attachments",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/email-template-attachments-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/email_templates",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/email-templates-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/email_templates/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/email-templates-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/external/configurations",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/external-configurations-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/external/mappings",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/external-mappings-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/groups",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/groups-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/groups/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/groups-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/imports",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/imports-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/imports/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/imports-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/integrations/signals/registrations",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/integrations/signals/registrations/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/integrations/signals/registrations/plays",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/integrations/signals/registrations/plays/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/me",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/me-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/meetings",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/meetings-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/meetings/reschedule_links/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/meetings-reschedule-links-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/mime_email_payloads/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/mime-email-payloads-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/notes",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/notes-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/notes/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/notes-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/opportunities",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunities-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/opportunities/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunities-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/opportunity_people",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-people-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/opportunity_stages",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/opportunity_stages/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pending_emails",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/pending-emails-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/people",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/people-index/"
+      },
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/people/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/people-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/person_stages",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/person-stages-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/person_stages/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/person-stages-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/phone_number_assignments",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/phone-number-assignments-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/phone_number_assignments/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/phone-number-assignments-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/phone_numbers/caller_ids",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/phone-numbers-caller-ids-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/phone_numbers/recording_settings/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/phone-numbers-recording-settings-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/saved_list_views",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/saved_list_views/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/steps",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/steps-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/steps/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/steps-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/successes",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/successes-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tags",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/tags-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/tasks-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/tasks-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/counts",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/tasks-counts-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/team-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team_template_attachments",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/team-template-attachments-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team_templates",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/team-templates-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team_templates/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/team-templates-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transcriptions",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-all-transcripts/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transcriptions/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transcriptions/{id}/artifact",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript-artifact/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transcriptions/{id}/sentences",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript-sentences/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/users-index/"
+      },
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/users-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhook_subscriptions",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-index/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhook_subscriptions/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-show/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public_api/v1/companies",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public_api/v1/people",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public_api/v1/people/{person_id}/cadence_memberships",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-person-cadence-memberships-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/account_upserts",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/account-upserts-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounts",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/accounts-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/activities",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/activities-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/activities/calls",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/activities-calls-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/audit_reports",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/audit-reports-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bulk_jobs",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bulk_jobs/{bulk_jobs_id}/job_data",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-job-data-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bulk_reschedule_tasks",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-reschedule-tasks-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cadence_bulk_memberships",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-bulk-memberships-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cadence_collection_export_downloads",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-collection-export-downloads-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cadence_collection_imports",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-collection-imports-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cadence_export_downloads",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-export-downloads-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cadence_imports",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-imports-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cadence_memberships",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/calendar_events",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/calendar/events/upsert",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-upsert-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/call_data_records",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/calls",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/conversations-calls-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/custom_fields",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/data_control/account_and_people_redaction",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/data-control-account-and-people-redaction-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/data_control/account_redaction",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/data-control-account-redaction-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/data_control/people_soft_deletion",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/data-control-people-soft-deletion-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/data_control/right_to_be_forgotten",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/data-control-right-to-be-forgotten-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/email_missing_tags",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/email-missing-tags-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/email_templates",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/email-templates-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external_emails",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/external-emails-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external/configurations",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/external-configurations-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external/mappings",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/external-mappings-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/groups",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/groups-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/imports",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/imports-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/integrations/signals/registrations",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/integrations/signals/registrations/plays",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live_website_tracking_parameters",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/live-website-tracking-parameters-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/meetings/settings/searches",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/meetings-settings-searches-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/notes",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/notes-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/ongoing_actions",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/ongoing-actions-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/opportunity_people",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-people-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/opportunity_stages",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/people",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/people-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/person_stages",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/person-stages-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/person_upserts",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/person-upserts-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/saved_list_views",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/signals",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/signals-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/tasks",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/tasks-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team_templates",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/team-templates-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/third_party_live_feed_items",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/third-party-live-feed-items-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhook_subscriptions",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-create/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/public_api/v1/companies/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/public_api/v1/people/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounts/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/accounts-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/bulk_jobs/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/calendar_events/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/call_data_records/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/email_templates/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/email-templates-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/groups/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/groups-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/imports/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/imports-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/integrations/signals/registrations/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/integrations/signals/registrations/plays/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/meetings/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/meetings-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/meetings/settings/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/meetings-settings-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/notes/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/notes-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/opportunity_stages/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/pending_emails/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/pending-emails-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/people/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/people-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/person_stages/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/person-stages-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/saved_list_views/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/tasks/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/tasks-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/team_templates/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/team-templates-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/users/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/users-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/webhook_subscriptions/{id}",
+      "provenance": {
+        "artifact": "salesloft-rendered-reference-2026-08-19",
+        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-update/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    }
   ]
 }

@@ -1,10 +1,15 @@
 # Verification — issue #4291
 
+## Superseded verification record
+
+The earlier complete-map validation is superseded by the 2026-08-19 source-lock completeness defect. PR #4296 is held. Its former `source_operation_count` / `declared_percent` figures were based on the legacy `api_surface.json` denominator and must not be used as provider-coverage evidence.
+
 ## Artifact-level red/green evidence
 
 - **RED — batch 6:** `test ! -f` for every proposed batch-6 source lock and disposition ledger passed before implementation.
 - **RED — batch 7:** `test ! -f` for every proposed batch-7 source lock and disposition ledger passed before implementation.
-- **GREEN — complete map:** the issue-local strict ledger-invariant check passed: all 20 canonical connector directories have exact source-lock and `api_surface.json` coverage, no duplicate `method/path`, no endpoint has `parity_class: reverse_etl`, each enabled endpoint has `covered_by.direct_read`, `covered_by.direct_reads`, or `covered_by.write`, every typed write action is an enabled `direct_write` with the required separate reverse-ETL gap, and unbound stream rows are `declaration-pending`. Totals: **2,099 documented, 575 enabled, 348 commands, 448 writes, 211 deletes**.
+- **GREEN — initial map only:** the issue-local strict ledger-invariant check passed against the then-current `api_surface.json` denominator. It correctly checked parity classes, reachability, and reverse-ETL semantics, but it did not prove provider-source completeness. Its former total (**2,099 documented, 575 enabled, 348 commands, 448 writes, 211 deletes**) is therefore an initial crosswalk count, not a complete provider-surface claim.
+- **GREEN — Salesloft comprehensive remap:** complete rendered-reference crawl passed: 315 public API-reference pages yielded **211 unique operations** (120 GET, 50 POST, 23 PUT, 18 DELETE), replacing the prior 12-operation/84,498-byte index-derived inventory. `counts.total`, `operations_found`, per-method counts, and `coverage_confidence` are recorded in the source lock; the regenerated API surface and disposition ledger each contain all 211 operations and omit `declared_percent`. The explicit map invariant passed at **211/211/211** (source lock/API surface/disposition rows), with 91 `direct_write` rows carrying the separate generic reverse-ETL foundation-gap attribute.
 
 ## Repository checks
 
