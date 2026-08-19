@@ -1,14 +1,14 @@
 {
   "api": "Docker Hub API v2-beta (https://docs.docker.com/reference/api/hub/latest/, spec: https://docs.docker.com/reference/api/hub/latest.yaml); provider artifact version: Docker Hub API 2-beta; OpenAPI 3.0.3",
   "docs": "https://docs.docker.com/reference/api/hub/latest/",
-  "reviewed_at": "2026-08-06",
+  "reviewed_at": "2026-08-19",
   "operation_ledger_version": 2,
   "scope": "Provider-artifact inventory generated from the cited openapi artifact (54 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
   "artifacts": [
     {
-      "id": "dockerhub-artifact-2026-08-06",
+      "id": "dockerhub-artifact-2026-08-19",
       "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-      "retrieved_at": "2026-08-06",
+      "retrieved_at": "2026-08-19",
       "sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756"
     }
   ],
@@ -17,7 +17,7 @@
       "method": "GET",
       "path": "/v2/access-tokens",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -32,7 +32,7 @@
       "method": "POST",
       "path": "/v2/access-tokens",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -47,7 +47,7 @@
       "method": "GET",
       "path": "/v2/access-tokens/{uuid}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -62,7 +62,7 @@
       "method": "PATCH",
       "path": "/v2/access-tokens/{uuid}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -77,7 +77,7 @@
       "method": "DELETE",
       "path": "/v2/access-tokens/{uuid}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -92,7 +92,7 @@
       "method": "GET",
       "path": "/v2/auditlogs/{account}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -107,7 +107,7 @@
       "method": "GET",
       "path": "/v2/auditlogs/{account}/actions",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -122,7 +122,7 @@
       "method": "POST",
       "path": "/v2/auth/token",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -137,7 +137,7 @@
       "method": "POST",
       "path": "/v2/invites/bulk",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -152,7 +152,7 @@
       "method": "DELETE",
       "path": "/v2/invites/{id}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -167,7 +167,7 @@
       "method": "PATCH",
       "path": "/v2/invites/{id}/resend",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -182,7 +182,7 @@
       "method": "GET",
       "path": "/v2/namespaces/{namespace}/repositories",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "covered_by": {
@@ -193,7 +193,7 @@
       "method": "POST",
       "path": "/v2/namespaces/{namespace}/repositories",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -208,7 +208,7 @@
       "method": "GET",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "covered_by": {
@@ -219,7 +219,7 @@
       "method": "HEAD",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -234,7 +234,7 @@
       "method": "PATCH",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -249,7 +249,7 @@
       "method": "POST",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -264,7 +264,7 @@
       "method": "GET",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "covered_by": {
@@ -275,7 +275,7 @@
       "method": "HEAD",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -290,7 +290,7 @@
       "method": "GET",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "covered_by": {
@@ -301,7 +301,7 @@
       "method": "HEAD",
       "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -316,7 +316,7 @@
       "method": "GET",
       "path": "/v2/orgs/{name}/access-tokens",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -331,7 +331,7 @@
       "method": "POST",
       "path": "/v2/orgs/{name}/access-tokens",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -346,7 +346,7 @@
       "method": "GET",
       "path": "/v2/orgs/{name}/settings",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -361,7 +361,7 @@
       "method": "PUT",
       "path": "/v2/orgs/{name}/settings",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -376,7 +376,7 @@
       "method": "GET",
       "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -391,7 +391,7 @@
       "method": "PATCH",
       "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -406,7 +406,7 @@
       "method": "DELETE",
       "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -421,7 +421,7 @@
       "method": "GET",
       "path": "/v2/orgs/{org_name}/groups",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -436,7 +436,7 @@
       "method": "POST",
       "path": "/v2/orgs/{org_name}/groups",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -451,7 +451,7 @@
       "method": "GET",
       "path": "/v2/orgs/{org_name}/groups/{group_name}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -466,7 +466,7 @@
       "method": "PUT",
       "path": "/v2/orgs/{org_name}/groups/{group_name}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -481,7 +481,7 @@
       "method": "PATCH",
       "path": "/v2/orgs/{org_name}/groups/{group_name}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -496,7 +496,7 @@
       "method": "DELETE",
       "path": "/v2/orgs/{org_name}/groups/{group_name}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -511,7 +511,7 @@
       "method": "GET",
       "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -526,7 +526,7 @@
       "method": "POST",
       "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -541,7 +541,7 @@
       "method": "DELETE",
       "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -556,7 +556,7 @@
       "method": "GET",
       "path": "/v2/orgs/{org_name}/invites",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -571,7 +571,7 @@
       "method": "GET",
       "path": "/v2/orgs/{org_name}/members",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -586,7 +586,7 @@
       "method": "GET",
       "path": "/v2/orgs/{org_name}/members/export",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -601,7 +601,7 @@
       "method": "PUT",
       "path": "/v2/orgs/{org_name}/members/{username}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -616,7 +616,7 @@
       "method": "DELETE",
       "path": "/v2/orgs/{org_name}/members/{username}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -631,7 +631,7 @@
       "method": "POST",
       "path": "/v2/repositories/{namespace}/{repository}/groups",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -646,7 +646,7 @@
       "method": "GET",
       "path": "/v2/scim/2.0/ResourceTypes",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -661,7 +661,7 @@
       "method": "GET",
       "path": "/v2/scim/2.0/ResourceTypes/{name}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -676,7 +676,7 @@
       "method": "GET",
       "path": "/v2/scim/2.0/Schemas",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -691,7 +691,7 @@
       "method": "GET",
       "path": "/v2/scim/2.0/Schemas/{id}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -706,7 +706,7 @@
       "method": "GET",
       "path": "/v2/scim/2.0/ServiceProviderConfig",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -721,7 +721,7 @@
       "method": "GET",
       "path": "/v2/scim/2.0/Users",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -736,7 +736,7 @@
       "method": "POST",
       "path": "/v2/scim/2.0/Users",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -751,7 +751,7 @@
       "method": "GET",
       "path": "/v2/scim/2.0/Users/{id}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -766,7 +766,7 @@
       "method": "PUT",
       "path": "/v2/scim/2.0/Users/{id}",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -781,7 +781,7 @@
       "method": "POST",
       "path": "/v2/users/2fa-login",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {
@@ -796,7 +796,7 @@
       "method": "POST",
       "path": "/v2/users/login",
       "provenance": {
-        "artifact": "dockerhub-artifact-2026-08-06",
+        "artifact": "dockerhub-artifact-2026-08-19",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
       "operation": {

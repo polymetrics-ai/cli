@@ -158,6 +158,48 @@ Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag
 - approval: none; this bundle is read-only and excludes app-level webhook subscription mutations
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Oura's declared streams and reverse-ETL actions.
+- Usage: pm oura <command> [flags]
+- Read streams
+- Other Commands
+  - daily activity detail list - Run the daily activity detail ETL stream [intent=etl availability=implemented stream=daily_activity_detail]
+  - daily activity list - Run the daily activity ETL stream [intent=etl availability=implemented stream=daily_activity]
+  - daily cardiovascular age detail list - Run the daily cardiovascular age detail ETL stream [intent=etl availability=implemented stream=daily_cardiovascular_age_detail]
+  - daily cardiovascular age list - Run the daily cardiovascular age ETL stream [intent=etl availability=implemented stream=daily_cardiovascular_age]
+  - daily readiness detail list - Run the daily readiness detail ETL stream [intent=etl availability=implemented stream=daily_readiness_detail]
+  - daily readiness list - Run the daily readiness ETL stream [intent=etl availability=implemented stream=daily_readiness]
+  - daily resilience detail list - Run the daily resilience detail ETL stream [intent=etl availability=implemented stream=daily_resilience_detail]
+  - daily resilience list - Run the daily resilience ETL stream [intent=etl availability=implemented stream=daily_resilience]
+  - daily sleep detail list - Run the daily sleep detail ETL stream [intent=etl availability=implemented stream=daily_sleep_detail]
+  - daily sleep list - Run the daily sleep ETL stream [intent=etl availability=implemented stream=daily_sleep]
+  - daily spo2 detail list - Run the daily spo2 detail ETL stream [intent=etl availability=implemented stream=daily_spo2_detail]
+  - daily spo2 list - Run the daily spo2 ETL stream [intent=etl availability=implemented stream=daily_spo2]
+  - daily stress detail list - Run the daily stress detail ETL stream [intent=etl availability=implemented stream=daily_stress_detail]
+  - daily stress list - Run the daily stress ETL stream [intent=etl availability=implemented stream=daily_stress]
+  - enhanced tag detail list - Run the enhanced tag detail ETL stream [intent=etl availability=implemented stream=enhanced_tag_detail]
+  - enhanced tag list - Run the enhanced tag ETL stream [intent=etl availability=implemented stream=enhanced_tag]
+  - heartrate list - Run the heartrate ETL stream [intent=etl availability=implemented stream=heartrate]
+  - personal info list - Run the personal info ETL stream [intent=etl availability=implemented stream=personal_info]
+  - rest mode period detail list - Run the rest mode period detail ETL stream [intent=etl availability=implemented stream=rest_mode_period_detail]
+  - rest mode period list - Run the rest mode period ETL stream [intent=etl availability=implemented stream=rest_mode_period]
+  - ring battery level list - Run the ring battery level ETL stream [intent=etl availability=implemented stream=ring_battery_level]
+  - ring configuration detail list - Run the ring configuration detail ETL stream [intent=etl availability=implemented stream=ring_configuration_detail]
+  - ring configuration list - Run the ring configuration ETL stream [intent=etl availability=implemented stream=ring_configuration]
+  - session detail list - Run the session detail ETL stream [intent=etl availability=implemented stream=session_detail]
+  - session list - Run the session ETL stream [intent=etl availability=implemented stream=session]
+  - sleep detail list - Run the sleep detail ETL stream [intent=etl availability=implemented stream=sleep_detail]
+  - sleep list - Run the sleep ETL stream [intent=etl availability=implemented stream=sleep]
+  - sleep time detail list - Run the sleep time detail ETL stream [intent=etl availability=implemented stream=sleep_time_detail]
+  - sleep time list - Run the sleep time ETL stream [intent=etl availability=implemented stream=sleep_time]
+  - tag detail list - Run the tag detail ETL stream [intent=etl availability=implemented stream=tag_detail]
+  - tag list - Run the tag ETL stream [intent=etl availability=implemented stream=tag]
+  - vo2 max detail list - Run the vo2 max detail ETL stream [intent=etl availability=implemented stream=vo2_max_detail]
+  - vo2 max list - Run the vo2 max ETL stream [intent=etl availability=implemented stream=vo2_max]
+  - workout detail list - Run the workout detail ETL stream [intent=etl availability=implemented stream=workout_detail]
+  - workout list - Run the workout ETL stream [intent=etl availability=implemented stream=workout]
+
 ## Commands
 
 ### Inspect as a manual

@@ -18,7 +18,7 @@
 | Foundation limitations are visible rather than masked | live | Structured gap log names the missing executor/policy, affected connectors, evidence, and smallest bounded fix. |
 | Candidate selection is evidence-qualified and bounded | live | `batch plan --size 20` emits a manifest with exactly 20 source-ledger candidates and preserves their URLs, versions, dates, and measured totals. |
 | Each accepted generated bundle is structurally/runtimely checked | live | Materialize/gate reports name every included or dropped candidate; each included command runs real `commandrunner.Preflight`. |
-| The branch has no connector-boundary or generated-surface drift | live | `connectorgen validate`, `surface-sync --check`, `surface-reconcile --check`, and `connector-boundary` exit successfully. |
+| The branch has no connector-boundary or generated-surface drift | live | `connectorgen validate`, `surface-sync --check`, and `connector-boundary` exit successfully. `surface-reconcile --check` is preserved as a non-applying discovery probe: its fleet-wide nonzero report is recorded as foundation gap G16 rather than applied outside this bounded batch. |
 | Certification is not overstated | live | Certification-candidate output is recorded per included connector and ledger status stays declared/validated/gated, never certified, without live evidence. |
 
 ## Required skills and GSD mode

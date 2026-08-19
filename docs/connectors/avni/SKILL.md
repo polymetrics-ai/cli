@@ -75,6 +75,20 @@ Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic
 - approval: none; read-only source connector
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Avni's declared streams and reverse-ETL actions.
+- Usage: pm avni <command> [flags]
+- Read streams
+- Other Commands
+  - approval statuses list - Run the approval statuses ETL stream [intent=etl availability=implemented stream=approval_statuses]
+  - encounters list - Run the encounters ETL stream [intent=etl availability=implemented stream=encounters]
+  - group subjects list - Run the group subjects ETL stream [intent=etl availability=implemented stream=group_subjects]
+  - locations list - Run the locations ETL stream [intent=etl availability=implemented stream=locations]
+  - program encounters list - Run the program encounters ETL stream [intent=etl availability=implemented stream=program_encounters]
+  - program enrolments list - Run the program enrolments ETL stream [intent=etl availability=implemented stream=program_enrolments]
+  - subjects list - Run the subjects ETL stream [intent=etl availability=implemented stream=subjects]
+
 ## Commands
 
 ### Inspect as a manual

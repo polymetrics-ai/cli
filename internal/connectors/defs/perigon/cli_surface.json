@@ -1,0 +1,140 @@
+{
+  "tagline": "Run Perigon's declared streams and reverse-ETL actions.",
+  "usage": "pm perigon \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "articles list",
+        "companies list",
+        "journalists list",
+        "people list",
+        "sources list",
+        "stories list",
+        "topics list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "articles list",
+      "summary": "Run the articles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "articles",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon articles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/articles/all"
+        }
+      ]
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies/all"
+        }
+      ]
+    },
+    {
+      "path": "journalists list",
+      "summary": "Run the journalists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "journalists",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon journalists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/journalists/all"
+        }
+      ]
+    },
+    {
+      "path": "people list",
+      "summary": "Run the people ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "people",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon people list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/people/all"
+        }
+      ]
+    },
+    {
+      "path": "sources list",
+      "summary": "Run the sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/sources/all"
+        }
+      ]
+    },
+    {
+      "path": "stories list",
+      "summary": "Run the stories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stories",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon stories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stories/all"
+        }
+      ]
+    },
+    {
+      "path": "topics list",
+      "summary": "Run the topics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "topics",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon topics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/topics/all"
+        }
+      ]
+    }
+  ]
+}

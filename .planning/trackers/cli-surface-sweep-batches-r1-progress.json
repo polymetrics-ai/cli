@@ -10,21 +10,21 @@
     "source_bundle_corpus": "/private/tmp/claude-501/-Users-karthiksivadas-karthik-agent-workspace/3e026f04-5b2c-4ada-bc62-2a28ceeef040/scratchpad/parked-slot41-scratch/.regen-command-contracts.ye3jWI/source"
   },
   "resume": {
-    "next_batch_number": 1,
-    "last_completed_batch": 0,
-    "state": "ready_to_plan",
-    "next_action": "run connectorgen batch plan --size 20 using the recorded provider-artifact ledger",
-    "batch_manifest": null
+    "next_batch_number": 2,
+    "last_completed_batch": 1,
+    "state": "batch_1_gated",
+    "next_action": "plan a fresh 20-connector candidate group; do not retry batch-1 skipped records without new provider-artifact evidence or a named foundation fix",
+    "batch_manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json"
   },
   "totals": {
     "connectors": 552,
     "states": {
-      "pending": 552,
+      "pending": 532,
       "materialized": 0,
       "validated": 0,
-      "gated": 0,
+      "gated": 8,
       "failed": 0,
-      "skipped": 0
+      "skipped": 12
     },
     "declared_parity_classes": {
       "direct_read": 23,
@@ -292,8 +292,8 @@
     },
     {
       "connector": "alpaca-broker-api",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -308,8 +308,21 @@
         "writes_json": false,
         "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 10 command(s) passed real runtime preflight across 52 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 10,
+        "declared_operations": 52,
+        "operation_split": {
+          "executable": 10,
+          "provider_blocked": 5,
+          "excluded": 37
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "alpha-vantage",
@@ -678,8 +691,8 @@
     },
     {
       "connector": "avni",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -692,10 +705,23 @@
       "supporting_bundle_files": {
         "streams_json": true,
         "writes_json": false,
-        "operations_json": false
+        "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 7 command(s) passed real runtime preflight across 31 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 7,
+        "declared_operations": 31,
+        "operation_split": {
+          "executable": 7,
+          "provider_blocked": 0,
+          "excluded": 24
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "awin-advertiser",
@@ -936,8 +962,8 @@
     },
     {
       "connector": "blogger",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -952,8 +978,14 @@
         "writes_json": false,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at artifact_parse: artifact is not an OpenAPI or Swagger document",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "artifact_parse",
+        "failure_reason": "artifact is not an OpenAPI or Swagger document"
+      }
     },
     {
       "connector": "bluetally",
@@ -1967,8 +1999,8 @@
     },
     {
       "connector": "coin-api",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -1983,8 +2015,14 @@
         "writes_json": false,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at coverage: executable coverage GET /v1/symbols is absent from the cited artifact",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "coverage",
+        "failure_reason": "executable coverage GET /v1/symbols is absent from the cited artifact"
+      }
     },
     {
       "connector": "coingecko-coins",
@@ -2366,8 +2404,8 @@
     },
     {
       "connector": "defillama",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -2382,8 +2420,21 @@
         "writes_json": false,
         "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 10 command(s) passed real runtime preflight across 31 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 10,
+        "declared_operations": 31,
+        "operation_split": {
+          "executable": 10,
+          "provider_blocked": 0,
+          "excluded": 21
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "delighted",
@@ -2513,8 +2564,8 @@
     },
     {
       "connector": "dockerhub",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -2529,13 +2580,26 @@
         "writes_json": false,
         "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 4 command(s) passed real runtime preflight across 54 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 4,
+        "declared_operations": 54,
+        "operation_split": {
+          "executable": 4,
+          "provider_blocked": 0,
+          "excluded": 50
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "docuseal",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -2550,8 +2614,14 @@
         "writes_json": true,
         "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams, writes"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at artifact_inventory_unknown: artifact operation inventory is unknown: top-level webhooks (formCompletedWebhook, formDeclinedWebhook, formStartedWebhook, formViewedWebhook, submissionArchivedWebhook, submissionCompletedWebhook, submissionCreatedWebhook, submissionExpiredWebhook, templateArchivedWebhook, templateCreatedWebhook, templateUpdatedWebhook) cannot be represented as provider request paths",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "artifact_inventory_unknown",
+        "failure_reason": "artifact operation inventory is unknown: top-level webhooks (formCompletedWebhook, formDeclinedWebhook, formStartedWebhook, formViewedWebhook, submissionArchivedWebhook, submissionCompletedWebhook, submissionCreatedWebhook, submissionExpiredWebhook, templateArchivedWebhook, templateCreatedWebhook, templateUpdatedWebhook) cannot be represented as provider request paths"
+      }
     },
     {
       "connector": "dolibarr",
@@ -2954,8 +3024,8 @@
     },
     {
       "connector": "eventzilla",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -2970,8 +3040,14 @@
         "writes_json": true,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams, writes"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at artifact_parse: decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "artifact_parse",
+        "failure_reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+      }
     },
     {
       "connector": "everhour",
@@ -3269,8 +3345,8 @@
     },
     {
       "connector": "finnworlds",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -3285,8 +3361,14 @@
         "writes_json": false,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at artifact_fetch: fetch artifact: provider returned HTTP 403",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "artifact_fetch",
+        "failure_reason": "fetch artifact: provider returned HTTP 403"
+      }
     },
     {
       "connector": "firehydrant",
@@ -3332,8 +3414,8 @@
     },
     {
       "connector": "flexmail",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -3348,8 +3430,21 @@
         "writes_json": false,
         "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 5 command(s) passed real runtime preflight across 43 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 5,
+        "declared_operations": 43,
+        "operation_split": {
+          "executable": 5,
+          "provider_blocked": 22,
+          "excluded": 16
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "flexport",
@@ -5043,8 +5138,8 @@
     },
     {
       "connector": "judge-me-reviews",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -5059,8 +5154,14 @@
         "writes_json": true,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams, writes"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at artifact_parse: artifact path \"reviews/{id}\" must be non-empty and connector-relative",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "artifact_parse",
+        "failure_reason": "artifact path \"reviews/{id}\" must be non-empty and connector-relative"
+      }
     },
     {
       "connector": "just-sift",
@@ -6307,8 +6408,8 @@
     },
     {
       "connector": "nebius-ai",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -6323,8 +6424,14 @@
         "writes_json": true,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams, writes"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at coverage: executable coverage GET /v1/batches is absent from the cited artifact",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "coverage",
+        "failure_reason": "executable coverage GET /v1/batches is absent from the cited artifact"
+      }
     },
     {
       "connector": "netsuite",
@@ -6646,8 +6753,8 @@
     },
     {
       "connector": "oncehub",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -6662,8 +6769,14 @@
         "writes_json": false,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at artifact_parse: artifact is not an OpenAPI or Swagger document",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "artifact_parse",
+        "failure_reason": "artifact is not an OpenAPI or Swagger document"
+      }
     },
     {
       "connector": "onepagecrm",
@@ -6919,8 +7032,8 @@
     },
     {
       "connector": "oura",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -6933,10 +7046,23 @@
       "supporting_bundle_files": {
         "streams_json": true,
         "writes_json": false,
-        "operations_json": false
+        "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 35 command(s) passed real runtime preflight across 75 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 35,
+        "declared_operations": 75,
+        "operation_split": {
+          "executable": 35,
+          "provider_blocked": 0,
+          "excluded": 40
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "outbrain-amplify",
@@ -7234,8 +7360,8 @@
     },
     {
       "connector": "paypal-transaction",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -7250,8 +7376,14 @@
         "writes_json": false,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at artifact_parse: decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "artifact_parse",
+        "failure_reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context"
+      }
     },
     {
       "connector": "paystack",
@@ -7318,8 +7450,8 @@
     },
     {
       "connector": "perigon",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -7332,10 +7464,23 @@
       "supporting_bundle_files": {
         "streams_json": true,
         "writes_json": false,
-        "operations_json": false
+        "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 7 command(s) passed real runtime preflight across 45 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 7,
+        "declared_operations": 45,
+        "operation_split": {
+          "executable": 7,
+          "provider_blocked": 23,
+          "excluded": 15
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "perk",
@@ -7360,8 +7505,8 @@
     },
     {
       "connector": "persistiq",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -7376,8 +7521,14 @@
         "writes_json": true,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams, writes"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at coverage: executable coverage GET /v1/mailboxes is absent from the cited artifact",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "coverage",
+        "failure_reason": "executable coverage GET /v1/mailboxes is absent from the cited artifact"
+      }
     },
     {
       "connector": "persona",
@@ -7465,8 +7616,8 @@
     },
     {
       "connector": "pingdom",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "gated",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -7479,10 +7630,23 @@
       "supporting_bundle_files": {
         "streams_json": true,
         "writes_json": true,
-        "operations_json": false
+        "operations_json": true
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams, writes"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 gated: 21 command(s) passed real runtime preflight across 50 declared provider operation(s); certification.json is absent, so no certification is claimed",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "gate_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-gate.json",
+        "commands_checked": 21,
+        "declared_operations": 50,
+        "operation_split": {
+          "executable": 21,
+          "provider_blocked": 0,
+          "excluded": 29
+        },
+        "certification_candidates": "unavailable: connector has no certification.json"
+      }
     },
     {
       "connector": "pinterest",
@@ -7867,8 +8031,8 @@
     },
     {
       "connector": "printify",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -7883,8 +8047,14 @@
         "writes_json": true,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams, writes"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at coverage: executable coverage GET /v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json is absent from the cited artifact",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "coverage",
+        "failure_reason": "executable coverage GET /v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json is absent from the cited artifact"
+      }
     },
     {
       "connector": "productboard",
@@ -10768,8 +10938,8 @@
     },
     {
       "connector": "watchmode",
-      "batch_number": null,
-      "state": "pending",
+      "batch_number": 1,
+      "state": "skipped",
       "parity_classes": {
         "direct_read": false,
         "direct_write": false,
@@ -10784,8 +10954,14 @@
         "writes_json": false,
         "operations_json": false
       },
-      "updated_at": "2026-08-19T08:53:34.341Z",
-      "reason": "unprocessed; baseline streams"
+      "updated_at": "2026-08-19T09:01:20.630Z",
+      "reason": "batch 1 materialize skipped at coverage: executable coverage GET /v1/search/ is absent from the cited artifact",
+      "batch_evidence": {
+        "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+        "materialize_report": ".planning/phases/issue-4273-surface-sweep-batches-r1/traces/batch-001-materialize.json",
+        "stage": "coverage",
+        "failure_reason": "executable coverage GET /v1/search/ is absent from the cited artifact"
+      }
     },
     {
       "connector": "weatherstack",
@@ -11703,5 +11879,6 @@
       "updated_at": "2026-08-19T08:53:34.341Z",
       "reason": "unprocessed; baseline streams"
     }
-  ]
+  ],
+  "last_updated_at": "2026-08-19T09:01:20.630Z"
 }

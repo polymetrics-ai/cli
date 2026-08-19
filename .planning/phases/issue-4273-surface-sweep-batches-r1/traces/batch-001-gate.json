@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001-survivors.json",
+  "candidates": 8,
+  "included": [
+    {
+      "connector": "avni",
+      "commands_checked": 7,
+      "declared_operations": 31,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 0,
+        "excluded": 24
+      },
+      "warnings": []
+    },
+    {
+      "connector": "defillama",
+      "commands_checked": 10,
+      "declared_operations": 31,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 0,
+        "excluded": 21
+      },
+      "warnings": []
+    },
+    {
+      "connector": "dockerhub",
+      "commands_checked": 4,
+      "declared_operations": 54,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 0,
+        "excluded": 50
+      },
+      "warnings": []
+    },
+    {
+      "connector": "oura",
+      "commands_checked": 35,
+      "declared_operations": 75,
+      "operation_split": {
+        "executable": 35,
+        "provider_blocked": 0,
+        "excluded": 40
+      },
+      "warnings": []
+    },
+    {
+      "connector": "flexmail",
+      "commands_checked": 5,
+      "declared_operations": 43,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 22,
+        "excluded": 16
+      },
+      "warnings": []
+    },
+    {
+      "connector": "perigon",
+      "commands_checked": 7,
+      "declared_operations": 45,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 23,
+        "excluded": 15
+      },
+      "warnings": []
+    },
+    {
+      "connector": "pingdom",
+      "commands_checked": 21,
+      "declared_operations": 50,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 0,
+        "excluded": 29
+      },
+      "warnings": []
+    },
+    {
+      "connector": "alpaca-broker-api",
+      "commands_checked": 10,
+      "declared_operations": 52,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 5,
+        "excluded": 37
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 334,
+    "read": 215,
+    "write": 119
+  },
+  "declared_operations": 381,
+  "operation_split": {
+    "executable": 99,
+    "provider_blocked": 50,
+    "excluded": 232
+  }
+}

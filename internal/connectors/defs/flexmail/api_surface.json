@@ -1,14 +1,14 @@
 {
   "api": "Flexmail REST API (https://api.flexmail.eu); provider artifact version: Flexmail email marketing API 1.2.0 (OpenAPI 3.1.0)",
   "docs": "https://api.flexmail.eu/documentation/",
-  "reviewed_at": "2026-08-06",
+  "reviewed_at": "2026-08-19",
   "operation_ledger_version": 2,
   "scope": "Provider-artifact inventory generated from the cited openapi artifact (43 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
   "artifacts": [
     {
-      "id": "flexmail-artifact-2026-08-06",
+      "id": "flexmail-artifact-2026-08-19",
       "url": "https://api.flexmail.eu/documentation/openapi.php",
-      "retrieved_at": "2026-08-06",
+      "retrieved_at": "2026-08-19",
       "sha256": "f7280a3b90cf5efba92bf6c048a2621f923d5652d076d765b7a3f67efd39e1f6"
     }
   ],
@@ -17,7 +17,7 @@
       "method": "GET",
       "path": "/",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -32,7 +32,7 @@
       "method": "GET",
       "path": "/account-contact-languages",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -47,7 +47,7 @@
       "method": "POST",
       "path": "/contact-preference-subscriptions",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -62,7 +62,7 @@
       "method": "DELETE",
       "path": "/contact-preference-subscriptions/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -77,7 +77,7 @@
       "method": "GET",
       "path": "/contacts",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "covered_by": {
@@ -88,7 +88,7 @@
       "method": "POST",
       "path": "/contacts",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -103,7 +103,7 @@
       "method": "POST",
       "path": "/contacts/imports",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -118,7 +118,7 @@
       "method": "GET",
       "path": "/contacts/imports/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -133,7 +133,7 @@
       "method": "PATCH",
       "path": "/contacts/imports/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -148,7 +148,7 @@
       "method": "POST",
       "path": "/contacts/imports/{id}/records",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -163,7 +163,7 @@
       "method": "POST",
       "path": "/contacts/imports/{id}/start",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -178,7 +178,7 @@
       "method": "GET",
       "path": "/contacts/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -193,7 +193,7 @@
       "method": "PUT",
       "path": "/contacts/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -208,7 +208,7 @@
       "method": "PATCH",
       "path": "/contacts/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -223,7 +223,7 @@
       "method": "GET",
       "path": "/contacts/{id}/interest-labels",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -238,7 +238,7 @@
       "method": "GET",
       "path": "/contacts/{id}/interest-subscriptions",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -253,7 +253,7 @@
       "method": "POST",
       "path": "/contacts/{id}/interest-subscriptions",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -268,7 +268,7 @@
       "method": "DELETE",
       "path": "/contacts/{id}/interest-subscriptions/{interest_id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -283,7 +283,7 @@
       "method": "GET",
       "path": "/contacts/{id}/preferences",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -298,7 +298,7 @@
       "method": "GET",
       "path": "/contacts/{id}/sources",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -313,7 +313,7 @@
       "method": "POST",
       "path": "/contacts/{id}/unsubscribe",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -328,7 +328,7 @@
       "method": "GET",
       "path": "/custom-fields",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "covered_by": {
@@ -339,7 +339,7 @@
       "method": "GET",
       "path": "/interest-labels",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -354,7 +354,7 @@
       "method": "GET",
       "path": "/interests",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "covered_by": {
@@ -365,7 +365,7 @@
       "method": "POST",
       "path": "/interests",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -380,7 +380,7 @@
       "method": "GET",
       "path": "/interests/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -395,7 +395,7 @@
       "method": "PATCH",
       "path": "/interests/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -410,7 +410,7 @@
       "method": "DELETE",
       "path": "/interests/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -425,7 +425,7 @@
       "method": "GET",
       "path": "/interests/{id}/translations",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -440,7 +440,7 @@
       "method": "PUT",
       "path": "/interests/{id}/translations",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -455,7 +455,7 @@
       "method": "GET",
       "path": "/opt-in-forms",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -470,7 +470,7 @@
       "method": "GET",
       "path": "/opt-in-forms/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -485,7 +485,7 @@
       "method": "POST",
       "path": "/opt-ins",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -500,7 +500,7 @@
       "method": "GET",
       "path": "/preferences",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -515,7 +515,7 @@
       "method": "GET",
       "path": "/segments",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "covered_by": {
@@ -526,7 +526,7 @@
       "method": "GET",
       "path": "/sources",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "covered_by": {
@@ -537,7 +537,7 @@
       "method": "GET",
       "path": "/sources/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -552,7 +552,7 @@
       "method": "GET",
       "path": "/webhook-events",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -567,7 +567,7 @@
       "method": "GET",
       "path": "/webhooks",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -582,7 +582,7 @@
       "method": "POST",
       "path": "/webhooks",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -597,7 +597,7 @@
       "method": "GET",
       "path": "/webhooks/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -612,7 +612,7 @@
       "method": "PATCH",
       "path": "/webhooks/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {
@@ -627,7 +627,7 @@
       "method": "DELETE",
       "path": "/webhooks/{id}",
       "provenance": {
-        "artifact": "flexmail-artifact-2026-08-06",
+        "artifact": "flexmail-artifact-2026-08-19",
         "source_url": "https://api.flexmail.eu/documentation/openapi.php"
       },
       "operation": {

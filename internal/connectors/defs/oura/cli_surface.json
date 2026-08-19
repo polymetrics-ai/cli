@@ -1,0 +1,644 @@
+{
+  "tagline": "Run Oura's declared streams and reverse-ETL actions.",
+  "usage": "pm oura \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "daily activity detail list",
+        "daily activity list",
+        "daily cardiovascular age detail list",
+        "daily cardiovascular age list",
+        "daily readiness detail list",
+        "daily readiness list",
+        "daily resilience detail list",
+        "daily resilience list",
+        "daily sleep detail list",
+        "daily sleep list",
+        "daily spo2 detail list",
+        "daily spo2 list",
+        "daily stress detail list",
+        "daily stress list",
+        "enhanced tag detail list",
+        "enhanced tag list",
+        "heartrate list",
+        "personal info list",
+        "rest mode period detail list",
+        "rest mode period list",
+        "ring battery level list",
+        "ring configuration detail list",
+        "ring configuration list",
+        "session detail list",
+        "session list",
+        "sleep detail list",
+        "sleep list",
+        "sleep time detail list",
+        "sleep time list",
+        "tag detail list",
+        "tag list",
+        "vo2 max detail list",
+        "vo2 max list",
+        "workout detail list",
+        "workout list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "daily activity detail list",
+      "summary": "Run the daily activity detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_activity_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily activity detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_activity/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "daily activity list",
+      "summary": "Run the daily activity ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_activity",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily activity list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_activity"
+        }
+      ]
+    },
+    {
+      "path": "daily cardiovascular age detail list",
+      "summary": "Run the daily cardiovascular age detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_cardiovascular_age_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily cardiovascular age detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_cardiovascular_age/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "daily cardiovascular age list",
+      "summary": "Run the daily cardiovascular age ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_cardiovascular_age",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily cardiovascular age list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_cardiovascular_age"
+        }
+      ]
+    },
+    {
+      "path": "daily readiness detail list",
+      "summary": "Run the daily readiness detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_readiness_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily readiness detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_readiness/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "daily readiness list",
+      "summary": "Run the daily readiness ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_readiness",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily readiness list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_readiness"
+        }
+      ]
+    },
+    {
+      "path": "daily resilience detail list",
+      "summary": "Run the daily resilience detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_resilience_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily resilience detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_resilience/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "daily resilience list",
+      "summary": "Run the daily resilience ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_resilience",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily resilience list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_resilience"
+        }
+      ]
+    },
+    {
+      "path": "daily sleep detail list",
+      "summary": "Run the daily sleep detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_sleep_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily sleep detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_sleep/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "daily sleep list",
+      "summary": "Run the daily sleep ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_sleep",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily sleep list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_sleep"
+        }
+      ]
+    },
+    {
+      "path": "daily spo2 detail list",
+      "summary": "Run the daily spo2 detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_spo2_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily spo2 detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_spo2/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "daily spo2 list",
+      "summary": "Run the daily spo2 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_spo2",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily spo2 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_spo2"
+        }
+      ]
+    },
+    {
+      "path": "daily stress detail list",
+      "summary": "Run the daily stress detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_stress_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily stress detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_stress/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "daily stress list",
+      "summary": "Run the daily stress ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "daily_stress",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura daily stress list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/daily_stress"
+        }
+      ]
+    },
+    {
+      "path": "enhanced tag detail list",
+      "summary": "Run the enhanced tag detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "enhanced_tag_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura enhanced tag detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/enhanced_tag/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "enhanced tag list",
+      "summary": "Run the enhanced tag ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "enhanced_tag",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura enhanced tag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/enhanced_tag"
+        }
+      ]
+    },
+    {
+      "path": "heartrate list",
+      "summary": "Run the heartrate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "heartrate",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura heartrate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/heartrate"
+        }
+      ]
+    },
+    {
+      "path": "personal info list",
+      "summary": "Run the personal info ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "personal_info",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura personal info list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/personal_info"
+        }
+      ]
+    },
+    {
+      "path": "rest mode period detail list",
+      "summary": "Run the rest mode period detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rest_mode_period_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura rest mode period detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/rest_mode_period/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "rest mode period list",
+      "summary": "Run the rest mode period ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rest_mode_period",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura rest mode period list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/rest_mode_period"
+        }
+      ]
+    },
+    {
+      "path": "ring battery level list",
+      "summary": "Run the ring battery level ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ring_battery_level",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura ring battery level list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/ring_battery_level"
+        }
+      ]
+    },
+    {
+      "path": "ring configuration detail list",
+      "summary": "Run the ring configuration detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ring_configuration_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura ring configuration detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/ring_configuration/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "ring configuration list",
+      "summary": "Run the ring configuration ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ring_configuration",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura ring configuration list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/ring_configuration"
+        }
+      ]
+    },
+    {
+      "path": "session detail list",
+      "summary": "Run the session detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "session_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura session detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/session/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "session list",
+      "summary": "Run the session ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "session",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura session list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/session"
+        }
+      ]
+    },
+    {
+      "path": "sleep detail list",
+      "summary": "Run the sleep detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sleep_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura sleep detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/sleep/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "sleep list",
+      "summary": "Run the sleep ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sleep",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura sleep list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/sleep"
+        }
+      ]
+    },
+    {
+      "path": "sleep time detail list",
+      "summary": "Run the sleep time detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sleep_time_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura sleep time detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/sleep_time/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "sleep time list",
+      "summary": "Run the sleep time ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sleep_time",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura sleep time list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/sleep_time"
+        }
+      ]
+    },
+    {
+      "path": "tag detail list",
+      "summary": "Run the tag detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tag_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura tag detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/tag/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "tag list",
+      "summary": "Run the tag ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tag",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura tag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/tag"
+        }
+      ]
+    },
+    {
+      "path": "vo2 max detail list",
+      "summary": "Run the vo2 max detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vo2_max_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura vo2 max detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/vO2_max/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "vo2 max list",
+      "summary": "Run the vo2 max ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vo2_max",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura vo2 max list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/vO2_max"
+        }
+      ]
+    },
+    {
+      "path": "workout detail list",
+      "summary": "Run the workout detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workout_detail",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura workout detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/workout/{document_id}"
+        }
+      ]
+    },
+    {
+      "path": "workout list",
+      "summary": "Run the workout ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workout",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "examples": [
+        "pm oura workout list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/usercollection/workout"
+        }
+      ]
+    }
+  ]
+}

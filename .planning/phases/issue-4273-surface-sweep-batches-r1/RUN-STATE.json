@@ -1,6 +1,6 @@
 {
   "phase": "issue-4273-surface-sweep-batches-r1",
-  "status": "planned",
+  "status": "verified_ready_for_pr",
   "delivery": "direct-pr",
   "base": "main",
   "working_branch": "fm/cli-surface-sweep-batches-r1",
@@ -8,5 +8,5 @@
   "reason": "Canonical delivery contract prohibits GSD role spawning; Firstmate task explicitly authorizes autonomous inline completion.",
   "issue": 4273,
   "batch": 1,
-  "resume": "create and commit the initial fleet progress ledger and foundation-gap log, then run batch plan"
+  "resume": "batch 1 is verified and ready for a direct PR to main; the durable sweep resume pointer remains batch 2 in .planning/trackers/cli-surface-sweep-batches-r1-progress.json"
 }

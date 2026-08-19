@@ -1,0 +1,140 @@
+{
+  "tagline": "Run Avni's declared streams and reverse-ETL actions.",
+  "usage": "pm avni \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "approval statuses list",
+        "encounters list",
+        "group subjects list",
+        "locations list",
+        "program encounters list",
+        "program enrolments list",
+        "subjects list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "approval statuses list",
+      "summary": "Run the approval statuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "approval_statuses",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni approval statuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/approvalStatuses"
+        }
+      ]
+    },
+    {
+      "path": "encounters list",
+      "summary": "Run the encounters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounters",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni encounters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/encounters"
+        }
+      ]
+    },
+    {
+      "path": "group subjects list",
+      "summary": "Run the group subjects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_subjects",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni group subjects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/groupSubjects"
+        }
+      ]
+    },
+    {
+      "path": "locations list",
+      "summary": "Run the locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/locations"
+        }
+      ]
+    },
+    {
+      "path": "program encounters list",
+      "summary": "Run the program encounters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "program_encounters",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni program encounters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/programEncounters"
+        }
+      ]
+    },
+    {
+      "path": "program enrolments list",
+      "summary": "Run the program enrolments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "program_enrolments",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni program enrolments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/programEnrolments"
+        }
+      ]
+    },
+    {
+      "path": "subjects list",
+      "summary": "Run the subjects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subjects",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni subjects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subjects"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,596 @@
+{
+  "tagline": "Run Pingdom's declared streams and reverse-ETL actions.",
+  "usage": "pm pingdom \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "actions list",
+        "alerting contacts list",
+        "alerting teams list",
+        "checks list",
+        "credits list",
+        "maintenance list",
+        "maintenance occurrences list",
+        "probes list",
+        "reference list",
+        "tms checks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create check apply",
+        "create contact apply",
+        "create maintenance apply",
+        "create team apply",
+        "delete check apply",
+        "delete contact apply",
+        "delete maintenance apply",
+        "delete team apply",
+        "update check apply",
+        "update contact apply",
+        "update team apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "actions list",
+      "summary": "Run the actions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "actions",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom actions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/actions"
+        }
+      ]
+    },
+    {
+      "path": "alerting contacts list",
+      "summary": "Run the alerting contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alerting_contacts",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom alerting contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerting/contacts"
+        }
+      ]
+    },
+    {
+      "path": "alerting teams list",
+      "summary": "Run the alerting teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alerting_teams",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom alerting teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerting/teams"
+        }
+      ]
+    },
+    {
+      "path": "checks list",
+      "summary": "Run the checks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "checks",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom checks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checks"
+        }
+      ]
+    },
+    {
+      "path": "create check apply",
+      "summary": "Plan and execute the create check reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_check",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "host",
+          "type": "string",
+          "summary": "Required host record field.",
+          "maps_to": "record.host",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom create check apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checks"
+        }
+      ],
+      "risk": "creates a new Pingdom uptime check (this action models the common HTTP-type check shape; Pingdom's other 8 check types share the same name/host/type/paused/resolution/notification fields plus type-specific attributes not modeled here, see docs.md Known limits); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "notification_targets",
+          "type": "json",
+          "summary": "Required notification targets record field.",
+          "maps_to": "record.notification_targets",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerting/contacts"
+        }
+      ],
+      "risk": "creates a new alerting contact with email/SMS notification targets; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create maintenance apply",
+      "summary": "Plan and execute the create maintenance reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_maintenance",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "from",
+          "type": "integer",
+          "summary": "Required from record field.",
+          "maps_to": "record.from",
+          "required": true
+        },
+        {
+          "name": "to",
+          "type": "integer",
+          "summary": "Required to record field.",
+          "maps_to": "record.to",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom create maintenance apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/maintenance"
+        }
+      ],
+      "risk": "creates a new maintenance window that suppresses alerting for the assigned checks during the scheduled period; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "member_ids",
+          "type": "json",
+          "summary": "Required member ids record field.",
+          "maps_to": "record.member_ids",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom create team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerting/teams"
+        }
+      ],
+      "risk": "creates a new alerting team from a list of contact ids; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "credits list",
+      "summary": "Run the credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credits",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credits"
+        }
+      ]
+    },
+    {
+      "path": "delete check apply",
+      "summary": "Plan and execute the delete check reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_check",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete check apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/checks/{checkid}"
+        }
+      ],
+      "risk": "permanently deletes an uptime check and its historical results; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/alerting/contacts/{contactid}"
+        }
+      ],
+      "risk": "permanently deletes an alerting contact and its notification targets; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete maintenance apply",
+      "summary": "Plan and execute the delete maintenance reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_maintenance",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete maintenance apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/maintenance/{id}"
+        }
+      ],
+      "risk": "permanently deletes a maintenance window, immediately resuming alerting for its assigned checks; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete team apply",
+      "summary": "Plan and execute the delete team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_team",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/alerting/teams/{teamid}"
+        }
+      ],
+      "risk": "permanently deletes an alerting team; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "maintenance list",
+      "summary": "Run the maintenance ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "maintenance",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom maintenance list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenance"
+        }
+      ]
+    },
+    {
+      "path": "maintenance occurrences list",
+      "summary": "Run the maintenance occurrences ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "maintenance_occurrences",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom maintenance occurrences list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenance.occurrences"
+        }
+      ]
+    },
+    {
+      "path": "probes list",
+      "summary": "Run the probes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "probes",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom probes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/probes"
+        }
+      ]
+    },
+    {
+      "path": "reference list",
+      "summary": "Run the reference ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reference",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom reference list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reference"
+        }
+      ]
+    },
+    {
+      "path": "tms checks list",
+      "summary": "Run the tms checks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tms_checks",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom tms checks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tms/check"
+        }
+      ]
+    },
+    {
+      "path": "update check apply",
+      "summary": "Plan and execute the update check reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_check",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom update check apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/checks/{checkid}"
+        }
+      ],
+      "risk": "updates an existing check's settings (name/host/paused/resolution/tags); external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "notification_targets",
+          "type": "json",
+          "summary": "Required notification targets record field.",
+          "maps_to": "record.notification_targets",
+          "required": true
+        },
+        {
+          "name": "paused",
+          "type": "boolean",
+          "summary": "Required paused record field.",
+          "maps_to": "record.paused",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/alerting/contacts/{contactid}"
+        }
+      ],
+      "risk": "updates an existing alerting contact's name/paused state/notification targets (Pingdom's PUT is a full replacement, requiring name/paused/notification_targets together); external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update team apply",
+      "summary": "Plan and execute the update team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_team",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "member_ids",
+          "type": "json",
+          "summary": "Required member ids record field.",
+          "maps_to": "record.member_ids",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom update team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/alerting/teams/{teamid}"
+        }
+      ],
+      "risk": "updates an existing alerting team's name/member list; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}
