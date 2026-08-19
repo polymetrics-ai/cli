@@ -263,7 +263,7 @@ func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, 
 	return &connsdk.Requester{
 		Client:    c.Client,
 		BaseURL:   base,
-		Auth:      connsdk.Basic(secret, ""),
+		Auth:      connsdk.BasicWithRequirements(secret, "", true, false),
 		UserAgent: prestashopUserAgent,
 	}, nil
 }

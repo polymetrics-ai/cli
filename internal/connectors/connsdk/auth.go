@@ -75,16 +75,24 @@ func APIKeyHeader(header, value, prefix string) Authenticator {
 
 // Basic authenticates with HTTP Basic auth.
 func Basic(username, password string) Authenticator {
+	return BasicWithRequirements(username, password, true, true)
+}
+
+func BasicWithRequirements(username, password string, requireUsername, requirePassword bool) Authenticator {
 	creds := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
-	return staticHeader{
+	auth := staticHeader{
 		name:  "Authorization",
 		value: "Basic " + creds,
-		required: [2]requiredCredential{
-			{field: "basic username", value: username},
-			{field: "basic password", value: password},
-		},
-		requiredCount: 2,
 	}
+	if requireUsername {
+		auth.required[auth.requiredCount] = requiredCredential{field: "basic username", value: username}
+		auth.requiredCount++
+	}
+	if requirePassword {
+		auth.required[auth.requiredCount] = requiredCredential{field: "basic password", value: password}
+		auth.requiredCount++
+	}
+	return auth
 }
 
 // apiKeyQuery authenticates by adding a query parameter to the request URL.

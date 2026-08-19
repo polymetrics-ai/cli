@@ -20,6 +20,29 @@ func authVars(cfg connectors.RuntimeConfig) Vars {
 	return Vars{Config: cfg.Config, Secrets: cfg.Secrets}
 }
 
+func ValidateExplicitEmptyRequiredSecretFields(b Bundle, secrets map[string]string) error {
+	if b.Spec == nil {
+		return nil
+	}
+	required := make(map[string]bool, len(b.Spec.RequiredKeys()))
+	for _, field := range b.Spec.RequiredKeys() {
+		required[field] = true
+	}
+	for _, field := range b.Spec.SecretKeys() {
+		if !required[field] {
+			continue
+		}
+		value, supplied := secrets[field]
+		if !supplied {
+			continue
+		}
+		if err := credential.RequirePersistentValue(field, value); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // rateLimitConfigForSelectedAuth gives the resolver a hook-declared, non-secret
 // profile for the first auth spec that will be selected. This lets a custom
 // auth exchange be admitted before it sends its own request without changing
@@ -129,13 +152,19 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		if err != nil {
 			return nil, fmt.Errorf("basic: password: %w", err)
 		}
-		if err := credential.RequireAuthenticationValue("basic username", username); err != nil {
-			return nil, fmt.Errorf("basic: %w", err)
+		requireUsername := spec.Username != ""
+		requirePassword := spec.Password != ""
+		if requireUsername {
+			if err := credential.RequireAuthenticationValue("basic username", username); err != nil {
+				return nil, fmt.Errorf("basic: %w", err)
+			}
 		}
-		if err := credential.RequireAuthenticationValue("basic password", password); err != nil {
-			return nil, fmt.Errorf("basic: %w", err)
+		if requirePassword {
+			if err := credential.RequireAuthenticationValue("basic password", password); err != nil {
+				return nil, fmt.Errorf("basic: %w", err)
+			}
 		}
-		return connsdk.Basic(username, password), nil
+		return connsdk.BasicWithRequirements(username, password, requireUsername, requirePassword), nil
 
 	case "api_key_header":
 		value, err := Interpolate(spec.Value, vars)

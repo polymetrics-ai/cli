@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -76,6 +77,84 @@ func TestSelectAuthBasic(t *testing.T) {
 	wantUser, wantPass, ok := req.BasicAuth()
 	if !ok || wantUser != "alice" || wantPass != "hunter2" {
 		t.Fatalf("BasicAuth() = (%q, %q, %v), want (alice, hunter2, true)", wantUser, wantPass, ok)
+	}
+}
+
+func TestSelectAuthAllowsDeclarationAuthorizedBlankBasicPassword(t *testing.T) {
+	const apiKey = "basic-declaration-canary"
+	specs := []AuthSpec{{Mode: "basic", Username: "{{ secrets.api_key }}", Password: ""}}
+	auth, err := selectAuth(context.Background(), cfgWith(nil, map[string]string{"api_key": apiKey}), specs, nil)
+	if err != nil {
+		t.Fatalf("selectAuth() error = %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://api.example.com/x", nil)
+	if err != nil {
+		t.Fatalf("new request: %v", err)
+	}
+	applyToRequest(t, auth, req)
+	username, password, ok := req.BasicAuth()
+	wantHash := sha256.Sum256([]byte(apiKey))
+	gotHash := sha256.Sum256([]byte(username))
+	if !ok || len(username) != len(apiKey) || gotHash != wantHash || len(password) != 0 {
+		t.Fatal("basic auth did not preserve the declaration-authorized blank password")
+	}
+}
+
+func TestNewRuntimeRejectsExplicitEmptyRequiredSecretBeforeNoneFallback(t *testing.T) {
+	spec, err := CompileSchema([]byte(`{"type":"object","required":["token"],"properties":{"token":{"type":"string","x-secret":true}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	bundle := Bundle{
+		Spec: spec,
+		HTTP: HTTPBase{
+			URL: "https://api.example.com",
+			Auth: []AuthSpec{
+				{Mode: "bearer", Token: "{{ secrets.token }}", When: "{{ secrets.token }}"},
+				{Mode: "none"},
+			},
+		},
+	}
+	_, err = newRuntime(context.Background(), bundle, cfgWith(nil, map[string]string{"token": ""}), nil)
+	var empty *credential.EmptySecretError
+	if !errors.As(err, &empty) {
+		t.Fatalf("newRuntime() error type = %T, want typed empty-secret classification", err)
+	}
+}
+
+func TestNewRuntimeAllowsOptionalEmptySecretToSelectNone(t *testing.T) {
+	spec, err := CompileSchema([]byte(`{"type":"object","properties":{"token":{"type":"string","x-secret":true}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	bundle := Bundle{
+		Spec: spec,
+		HTTP: HTTPBase{
+			URL: "https://api.example.com",
+			Auth: []AuthSpec{
+				{Mode: "bearer", Token: "{{ secrets.token }}", When: "{{ secrets.token }}"},
+				{Mode: "none"},
+			},
+		},
+	}
+	for name, secrets := range map[string]map[string]string{
+		"absent":           nil,
+		"explicitly empty": {"token": ""},
+	} {
+		t.Run(name, func(t *testing.T) {
+			runtime, err := newRuntime(context.Background(), bundle, cfgWith(nil, secrets), nil)
+			if err != nil {
+				t.Fatalf("newRuntime() error = %v", err)
+			}
+			req, err := http.NewRequest(http.MethodGet, "https://api.example.com/x", nil)
+			if err != nil {
+				t.Fatalf("new request: %v", err)
+			}
+			applyToRequest(t, runtime.Requester.Auth, req)
+			if req.Header.Get("Authorization") != "" {
+				t.Fatal("optional empty secret emitted authentication")
+			}
+		})
 	}
 }
 

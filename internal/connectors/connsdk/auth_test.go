@@ -2,6 +2,7 @@ package connsdk
 
 import (
 	"context"
+	"crypto/sha256"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -49,6 +50,20 @@ func TestBasicAuth(t *testing.T) {
 	user, pass, ok := req.BasicAuth()
 	if !ok || user != "user" || pass != "pass" {
 		t.Fatalf("BasicAuth() = %q,%q,%v", user, pass, ok)
+	}
+}
+
+func TestBasicWithRequirementsAllowsBlankOptionalPassword(t *testing.T) {
+	const apiKey = "basic-optional-password-canary"
+	req := newReq(t)
+	if err := BasicWithRequirements(apiKey, "", true, false).Apply(context.Background(), req); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	username, password, ok := req.BasicAuth()
+	wantHash := sha256.Sum256([]byte(apiKey))
+	gotHash := sha256.Sum256([]byte(username))
+	if !ok || len(username) != len(apiKey) || gotHash != wantHash || len(password) != 0 {
+		t.Fatal("BasicWithRequirements did not preserve the declaration-authorized blank password")
 	}
 }
 

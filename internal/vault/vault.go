@@ -126,6 +126,9 @@ func (v *Vault) Get(ctx context.Context, id string) (map[string]string, error) {
 	if err := json.Unmarshal(plaintext, &out); err != nil {
 		return nil, fmt.Errorf("decode secret bundle: %w", err)
 	}
+	if err := credential.RequirePersistentValues(out); err != nil {
+		return nil, err
+	}
 	if out == nil {
 		out = map[string]string{}
 	}
