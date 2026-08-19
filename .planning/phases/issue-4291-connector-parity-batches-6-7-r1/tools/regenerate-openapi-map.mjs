@@ -50,6 +50,20 @@ const configs = {
     info: 'Square API v2 public OpenAPI specification',
     docs: 'https://github.com/square/connect-api-specification/blob/master/api.json',
   },
+  gorgias: {
+    sourceURL: 'https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r',
+    artifact: 'gorgias-openapi-3.1.0-2026-08-19',
+    api: 'Gorgias REST API OpenAPI 3.1.0',
+    info: 'Gorgias REST API public OpenAPI specification',
+    docs: 'https://docs.gorgias.com/en_US/rest-api',
+  },
+  chatwoot: {
+    sourceURL: 'https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json',
+    artifact: 'chatwoot-openapi-3.1.0-2026-08-19',
+    api: 'Chatwoot REST API OpenAPI 3.1.0',
+    info: 'Chatwoot application, platform, client, and CSAT APIs',
+    docs: 'https://developers.chatwoot.com/api-reference',
+  },
 };
 const config = configs[connector];
 if (!config) throw new Error(`unsupported connector ${connector}; add an authoritative-source config`);

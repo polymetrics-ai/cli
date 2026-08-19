@@ -3,1498 +3,1499 @@
   "connector": "chatwoot",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://developers.chatwoot.com/api-reference",
-    "sha256": "500b1b83b59b5f9708db6e91e7d96a5624dae8006e40622cbc5bfd526749302f",
-    "bytes": 327221,
-    "openapi": "public-provider-description",
-    "info_version": "Chatwoot Application, Platform, Client and CSAT-survey APIs (OpenAPI 3.1.0, bundled swagger.json)",
+    "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json",
+    "source_kind": "complete_machine_readable_specification",
+    "sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+    "bytes": 490422,
+    "openapi": "3.1.0",
+    "info_version": "Chatwoot application, platform, client, and CSAT APIs",
     "operation_counts": {
       "DELETE": 18,
       "GET": 64,
-      "PATCH": 22,
       "POST": 42,
-      "PUT": 2
+      "PUT": 2,
+      "PATCH": 22
     },
     "operations": [
       {
-        "id": "chatwoot.rest.get.AccountsAccountIdConversationsConversationIdMessages0",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/accounts/{account_id}/conversations/{conversation_id}/messages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]",
-        "source_url": "https://developers.chatwoot.com/api-reference/messages-api"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountId1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountId2",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdActionsContactMerge3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/actions/contact_merge",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdAgentBots4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/agent_bots",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdAgentBots5",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/agent_bots",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdAgentBotsId6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdAgentBotsId7",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdAgentBotsId8",
+        "id": "chatwoot.rest.delete.DeleteAnAccountAgentBot0",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
-        "operation_id": null,
+        "operation_id": "delete-an-account-agent-bot",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agent_bots/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdAgents9",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/agents",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdAgents10",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/agents",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[10]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdAgentsId11",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/agents/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[11]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdAgentsId12",
+        "id": "chatwoot.rest.delete.DeleteAgentFromAccount1",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/api/v1/accounts/{account_id}/agents/{id}",
-        "operation_id": null,
+        "operation_id": "delete-agent-from-account",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[12]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agents/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdAuditLogs13",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/audit_logs",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[13]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdAutomationRules14",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/automation_rules",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[14]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdAutomationRules15",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/automation_rules",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[15]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdAutomationRulesId16",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[16]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdAutomationRulesId17",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[17]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdAutomationRulesId18",
+        "id": "chatwoot.rest.delete.DeleteAutomationRuleFromAccount2",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
-        "operation_id": null,
+        "operation_id": "delete-automation-rule-from-account",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[18]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/automation_rules/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdBrandedEmailLayout19",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/branded_email_layout",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[19]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdBrandedEmailLayout20",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/branded_email_layout",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[20]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdCannedResponses21",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/canned_responses",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[21]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdCannedResponses22",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/canned_responses",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[22]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdCannedResponsesId23",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[23]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdCannedResponsesId24",
+        "id": "chatwoot.rest.delete.DeleteCannedResponseFromAccount3",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
-        "operation_id": null,
+        "operation_id": "delete-canned-response-from-account",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[24]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/canned_responses/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdContacts25",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/contacts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[25]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdContacts26",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/contacts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[26]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdContactsFilter27",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/contacts/filter",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[27]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdContactsSearch28",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/contacts/search",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[28]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdContactsId29",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/contacts/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[29]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.put.ApiV1AccountsAccountIdContactsId30",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/api/v1/accounts/{account_id}/contacts/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[30]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdContactsId31",
+        "id": "chatwoot.rest.delete.ContactDelete4",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/api/v1/accounts/{account_id}/contacts/{id}",
-        "operation_id": null,
+        "operation_id": "contactDelete",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[31]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdContactsIdContactInboxes32",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[32]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdContactsIdContactableInboxes33",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[33]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdContactsIdConversations34",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[34]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdContactsIdLabels35",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[35]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdContactsIdLabels36",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[36]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdConversations37",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/conversations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[37]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversations38",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[38]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsFilter39",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/filter",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[39]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdConversationsMeta40",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/conversations/meta",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[40]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdConversationsConversationId41",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[41]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdConversationsConversationId42",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[42]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdAssignments43",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[43]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdCustomAttributes44",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[44]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdDestroyCustomAttributes45",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[45]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdConversationsConversationIdLabels46",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[46]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdLabels47",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[47]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdConversationsConversationIdMessages48",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[48]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdMessages49",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[49]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdConversationsConversationIdMessagesMessageId50",
+        "id": "chatwoot.rest.delete.DeleteAMessage5",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
-        "operation_id": null,
+        "operation_id": "delete-a-message",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[50]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdConversationsConversationIdReportingEvents51",
+        "id": "chatwoot.rest.delete.DeleteCustomAttributeFromAccount6",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+        "operation_id": "delete-custom-attribute-from-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteACustomFilter7",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+        "operation_id": "delete-a-custom-filter",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAgentInInbox8",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/inbox_members",
+        "operation_id": "delete-agent-in-inbox",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inbox_members\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAnIntegrationHook9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+        "operation_id": "delete-an-integration-hook",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteALabel10",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/labels/{id}",
+        "operation_id": "delete-a-label",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/labels/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteATeam11",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+        "operation_id": "delete-a-team",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams/{team_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAgentInTeam12",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+        "operation_id": "delete-agent-in-team",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams/{team_id}/team_members\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAWebhook13",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+        "operation_id": "delete-a-webhook",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/webhooks/{webhook_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAnAccount14",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/platform/api/v1/accounts/{account_id}",
+        "operation_id": "delete-an-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/accounts/{account_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAnAccountUser15",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/platform/api/v1/accounts/{account_id}/account_users",
+        "operation_id": "delete-an-account-user",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/accounts/{account_id}/account_users\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAnAgentBot16",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/platform/api/v1/agent_bots/{id}",
+        "operation_id": "delete-an-agent-bot",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/agent_bots/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.delete.DeleteAUser17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/platform/api/v1/users/{id}",
+        "operation_id": "delete-a-user",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/users/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetConversationMessages18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/accounts/{account_id}/conversations/{conversation_id}/messages",
+        "operation_id": "getConversationMessages",
+        "deprecated": false,
+        "source_location": ".paths[\"/accounts/{account_id}/conversations/{conversation_id}/messages\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetAccountDetails19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}",
+        "operation_id": "get-account-details",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ListAllAccountAgentBots20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/agent_bots",
+        "operation_id": "list-all-account-agent-bots",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agent_bots\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetDetailsOfASingleAccountAgentBot21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+        "operation_id": "get-details-of-a-single-account-agent-bot",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agent_bots/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetAccountAgents22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/agents",
+        "operation_id": "get-account-agents",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agents\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetAccountAuditLogs23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/audit_logs",
+        "operation_id": "get-account-audit-logs",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/audit_logs\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetAccountAutomationRule24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/automation_rules",
+        "operation_id": "get-account-automation-rule",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/automation_rules\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetDetailsOfASingleAutomationRule25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+        "operation_id": "get-details-of-a-single-automation-rule",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/automation_rules/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetAccountBrandedEmailLayout26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+        "operation_id": "getAccountBrandedEmailLayout",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/branded_email_layout\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetAccountCannedResponse27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/canned_responses",
+        "operation_id": "get-account-canned-response",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/canned_responses\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ContactList28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts",
+        "operation_id": "contactList",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ContactDetails29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+        "operation_id": "contactDetails",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ContactableInboxesGet30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
+        "operation_id": "contactableInboxesGet",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ContactConversations31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
+        "operation_id": "contactConversations",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}/conversations\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ListAllLabelsOfAContact32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+        "operation_id": "list-all-labels-of-a-contact",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}/labels\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ContactSearch33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/search",
+        "operation_id": "contactSearch",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ConversationList34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations",
+        "operation_id": "conversationList",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetDetailsOfAConversation35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+        "operation_id": "get-details-of-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ListAllLabelsOfAConversation36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+        "operation_id": "list-all-labels-of-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.ListAllMessages37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+        "operation_id": "list-all-messages",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.get.GetConversationReportingEvents38",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
-        "operation_id": null,
+        "operation_id": "get-conversation-reporting-events",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[51]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdTogglePriority52",
+        "id": "chatwoot.rest.get.ConversationListMeta39",
         "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority",
-        "operation_id": null,
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/meta",
+        "operation_id": "conversationListMeta",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[52]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/meta\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdToggleStatus53",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[53]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdConversationsConversationIdToggleTypingStatus54",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[54]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdCustomAttributeDefinitions55",
+        "id": "chatwoot.rest.get.GetAccountCustomAttribute40",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
-        "operation_id": null,
+        "operation_id": "get-account-custom-attribute",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[55]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_attribute_definitions\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdCustomAttributeDefinitions56",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[56]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdCustomAttributeDefinitionsId57",
+        "id": "chatwoot.rest.get.GetDetailsOfASingleCustomAttribute41",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-single-custom-attribute",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[57]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdCustomAttributeDefinitionsId58",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[58]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdCustomAttributeDefinitionsId59",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[59]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdCustomFilters60",
+        "id": "chatwoot.rest.get.ListAllFilters42",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/custom_filters",
-        "operation_id": null,
+        "operation_id": "list-all-filters",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[60]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_filters\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdCustomFilters61",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/custom_filters",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[61]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdCustomFiltersCustomFilterId62",
+        "id": "chatwoot.rest.get.GetDetailsOfASingleCustomFilter43",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-single-custom-filter",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[62]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdCustomFiltersCustomFilterId63",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[63]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdCustomFiltersCustomFilterId64",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[64]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdInboxMembers65",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/inbox_members",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[65]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdInboxMembers66",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/inbox_members",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[66]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdInboxMembers67",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/inbox_members",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[67]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdInboxMembersInboxId68",
+        "id": "chatwoot.rest.get.GetInboxMembers44",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
-        "operation_id": null,
+        "operation_id": "get-inbox-members",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[68]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inbox_members/{inbox_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdInboxes69",
+        "id": "chatwoot.rest.get.ListAllInboxes45",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/inboxes",
-        "operation_id": null,
+        "operation_id": "listAllInboxes",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[69]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inboxes\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdInboxes70",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/inboxes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[70]",
-        "source_url": "https://developers.chatwoot.com/api-reference/inboxes-api"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdInboxesId71",
+        "id": "chatwoot.rest.get.GetInbox46",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
-        "operation_id": null,
+        "operation_id": "GetInbox",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[71]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inboxes/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdInboxesId72",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[72]",
-        "source_url": "https://developers.chatwoot.com/api-reference/inboxes-api"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdInboxesIdAgentBot73",
+        "id": "chatwoot.rest.get.GetInboxAgentBot47",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
-        "operation_id": null,
+        "operation_id": "getInboxAgentBot",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[73]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdInboxesIdMessageTemplates74",
+        "id": "chatwoot.rest.get.ListWhatsappMessageTemplates48",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/inboxes/{id}/message_templates",
-        "operation_id": null,
+        "operation_id": "listWhatsappMessageTemplates",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[74]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inboxes/{id}/message_templates\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdInboxesIdSetAgentBot75",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[75]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdIntegrationsApps76",
+        "id": "chatwoot.rest.get.GetDetailsOfAllIntegrations49",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/integrations/apps",
-        "operation_id": null,
+        "operation_id": "get-details-of-all-integrations",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[76]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/integrations/apps\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdIntegrationsHooks77",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/integrations/hooks",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[77]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdIntegrationsHooksHookId78",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[78]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdIntegrationsHooksHookId79",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[79]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdLabels80",
+        "id": "chatwoot.rest.get.ListAllLabels50",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/labels",
-        "operation_id": null,
+        "operation_id": "list-all-labels",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[80]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/labels\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdLabels81",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/labels",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[81]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdLabelsId82",
+        "id": "chatwoot.rest.get.GetDetailsOfASingleLabel51",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/labels/{id}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-single-label",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[82]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/labels/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdLabelsId83",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/labels/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[83]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdLabelsId84",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/labels/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[84]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdPortals85",
+        "id": "chatwoot.rest.get.GetPortal52",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/portals",
-        "operation_id": null,
+        "operation_id": "get-portal",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[85]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/portals\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdPortals86",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/portals",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[86]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdPortalsId87",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/portals/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[87]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdPortalsIdArticles88",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/portals/{id}/articles",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[88]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdPortalsIdCategories89",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/portals/{id}/categories",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[89]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdReportingEvents90",
+        "id": "chatwoot.rest.get.GetAccountReportingEvents53",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/reporting_events",
-        "operation_id": null,
+        "operation_id": "get-account-reporting-events",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[90]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/reporting_events\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdTeams91",
+        "id": "chatwoot.rest.get.ListAllTeams54",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/teams",
-        "operation_id": null,
+        "operation_id": "list-all-teams",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[91]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdTeams92",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/teams",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[92]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdTeamsTeamId93",
+        "id": "chatwoot.rest.get.GetDetailsOfASingleTeam55",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-single-team",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[93]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams/{team_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdTeamsTeamId94",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[94]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdTeamsTeamId95",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[95]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdTeamsTeamIdTeamMembers96",
+        "id": "chatwoot.rest.get.GetTeamMembers56",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-        "operation_id": null,
+        "operation_id": "get-team-members",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[96]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams/{team_id}/team_members\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdTeamsTeamIdTeamMembers97",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[97]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdTeamsTeamIdTeamMembers98",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[98]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdTeamsTeamIdTeamMembers99",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[99]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1AccountsAccountIdWebhooks100",
+        "id": "chatwoot.rest.get.ListAllWebhooks57",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/accounts/{account_id}/webhooks",
-        "operation_id": null,
+        "operation_id": "list-all-webhooks",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[100]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/webhooks\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.ApiV1AccountsAccountIdWebhooks101",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/api/v1/accounts/{account_id}/webhooks",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[101]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.patch.ApiV1AccountsAccountIdWebhooksWebhookId102",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[102]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.delete.ApiV1AccountsAccountIdWebhooksWebhookId103",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[103]",
-        "source_url": "https://developers.chatwoot.com/api-reference"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV1Profile104",
+        "id": "chatwoot.rest.get.FetchProfile58",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v1/profile",
-        "operation_id": null,
+        "operation_id": "fetchProfile",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[104]",
-        "source_url": "https://developers.chatwoot.com/api-reference/profile-api"
+        "source_location": ".paths[\"/api/v1/profile\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.put.ApiV1Profile105",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/api/v1/profile",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[105]",
-        "source_url": "https://developers.chatwoot.com/api-reference/profile-api"
-      },
-      {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdReports106",
+        "id": "chatwoot.rest.get.ListAllConversationStatistics59",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/reports",
-        "operation_id": null,
+        "operation_id": "list-all-conversation-statistics",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[106]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/reports\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdReportsConversations107",
+        "id": "chatwoot.rest.get.GetAccountConversationMetrics60",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/reports/conversations",
-        "operation_id": null,
+        "operation_id": "get-account-conversation-metrics",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[107]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/reports/conversations\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdReportsConversations108",
+        "id": "chatwoot.rest.get.GetAgentConversationMetrics61",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/reports/conversations/",
-        "operation_id": null,
+        "operation_id": "get-agent-conversation-metrics",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[108]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/reports/conversations/\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdReportsFirstResponseTimeDistribution109",
+        "id": "chatwoot.rest.get.GetFirstResponseTimeDistribution62",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution",
-        "operation_id": null,
+        "operation_id": "get-first-response-time-distribution",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[109]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/reports/first_response_time_distribution\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdReportsInboxLabelMatrix110",
+        "id": "chatwoot.rest.get.GetInboxLabelMatrix63",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix",
-        "operation_id": null,
+        "operation_id": "get-inbox-label-matrix",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[110]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/reports/inbox_label_matrix\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdReportsOutgoingMessagesCount111",
+        "id": "chatwoot.rest.get.GetOutgoingMessagesCount64",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count",
-        "operation_id": null,
+        "operation_id": "get-outgoing-messages-count",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[111]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/reports/outgoing_messages_count\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdReportsSummary112",
+        "id": "chatwoot.rest.get.ListAllConversationStatisticsSummary65",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/reports/summary",
-        "operation_id": null,
+        "operation_id": "list-all-conversation-statistics-summary",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[112]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/reports/summary\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdSummaryReportsAgent113",
+        "id": "chatwoot.rest.get.GetAgentSummaryReport66",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/summary_reports/agent",
-        "operation_id": null,
+        "operation_id": "get-agent-summary-report",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[113]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/summary_reports/agent\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdSummaryReportsChannel114",
+        "id": "chatwoot.rest.get.GetChannelSummaryReport67",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/summary_reports/channel",
-        "operation_id": null,
+        "operation_id": "get-channel-summary-report",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[114]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/summary_reports/channel\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdSummaryReportsInbox115",
+        "id": "chatwoot.rest.get.GetInboxSummaryReport68",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/summary_reports/inbox",
-        "operation_id": null,
+        "operation_id": "get-inbox-summary-report",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[115]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/summary_reports/inbox\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.ApiV2AccountsAccountIdSummaryReportsTeam116",
+        "id": "chatwoot.rest.get.GetTeamSummaryReport69",
         "protocol": "rest",
         "method": "GET",
         "path": "/api/v2/accounts/{account_id}/summary_reports/team",
-        "operation_id": null,
+        "operation_id": "get-team-summary-report",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[116]",
-        "source_url": "https://developers.chatwoot.com/api-reference/reports-api"
+        "source_location": ".paths[\"/api/v2/accounts/{account_id}/summary_reports/team\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.PlatformApiV1Accounts117",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/platform/api/v1/accounts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[117]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.get.PlatformApiV1AccountsAccountId118",
+        "id": "chatwoot.rest.get.GetDetailsOfAnAccount70",
         "protocol": "rest",
         "method": "GET",
         "path": "/platform/api/v1/accounts/{account_id}",
-        "operation_id": null,
+        "operation_id": "get-details-of-an-account",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[118]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
+        "source_location": ".paths[\"/platform/api/v1/accounts/{account_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.PlatformApiV1AccountsAccountId119",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/platform/api/v1/accounts/{account_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[119]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.delete.PlatformApiV1AccountsAccountId120",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/platform/api/v1/accounts/{account_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[120]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.get.PlatformApiV1AccountsAccountIdAccountUsers121",
+        "id": "chatwoot.rest.get.ListAllAccountUsers71",
         "protocol": "rest",
         "method": "GET",
         "path": "/platform/api/v1/accounts/{account_id}/account_users",
-        "operation_id": null,
+        "operation_id": "list-all-account-users",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[121]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
+        "source_location": ".paths[\"/platform/api/v1/accounts/{account_id}/account_users\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.PlatformApiV1AccountsAccountIdAccountUsers122",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/platform/api/v1/accounts/{account_id}/account_users",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[122]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.delete.PlatformApiV1AccountsAccountIdAccountUsers123",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/platform/api/v1/accounts/{account_id}/account_users",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[123]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.get.PlatformApiV1AgentBots124",
+        "id": "chatwoot.rest.get.ListAllAgentBots72",
         "protocol": "rest",
         "method": "GET",
         "path": "/platform/api/v1/agent_bots",
-        "operation_id": null,
+        "operation_id": "list-all-agent-bots",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[124]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
+        "source_location": ".paths[\"/platform/api/v1/agent_bots\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.PlatformApiV1AgentBots125",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/platform/api/v1/agent_bots",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[125]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.get.PlatformApiV1AgentBotsId126",
+        "id": "chatwoot.rest.get.GetDetailsOfASingleAgentBot73",
         "protocol": "rest",
         "method": "GET",
         "path": "/platform/api/v1/agent_bots/{id}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-single-agent-bot",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[126]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
+        "source_location": ".paths[\"/platform/api/v1/agent_bots/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.PlatformApiV1AgentBotsId127",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/platform/api/v1/agent_bots/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[127]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.delete.PlatformApiV1AgentBotsId128",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/platform/api/v1/agent_bots/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[128]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.post.PlatformApiV1Users129",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/platform/api/v1/users",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[129]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.get.PlatformApiV1UsersId130",
+        "id": "chatwoot.rest.get.GetDetailsOfAUser74",
         "protocol": "rest",
         "method": "GET",
         "path": "/platform/api/v1/users/{id}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-user",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[130]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
+        "source_location": ".paths[\"/platform/api/v1/users/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.PlatformApiV1UsersId131",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/platform/api/v1/users/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[131]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.delete.PlatformApiV1UsersId132",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/platform/api/v1/users/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[132]",
-        "source_url": "https://developers.chatwoot.com/api-reference/accounts-api"
-      },
-      {
-        "id": "chatwoot.rest.get.PlatformApiV1UsersIdLogin133",
+        "id": "chatwoot.rest.get.GetSsoUrlOfAUser75",
         "protocol": "rest",
         "method": "GET",
         "path": "/platform/api/v1/users/{id}/login",
-        "operation_id": null,
+        "operation_id": "get-sso-url-of-a-user",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[133]",
-        "source_url": "https://developers.chatwoot.com/api-reference/users-api"
+        "source_location": ".paths[\"/platform/api/v1/users/{id}/login\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.PublicApiV1InboxesInboxIdentifier134",
+        "id": "chatwoot.rest.get.GetDetailsOfAInbox76",
         "protocol": "rest",
         "method": "GET",
         "path": "/public/api/v1/inboxes/{inbox_identifier}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-inbox",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[134]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.PublicApiV1InboxesInboxIdentifierContacts135",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[135]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.get.PublicApiV1InboxesInboxIdentifierContactsContactIdentifier136",
+        "id": "chatwoot.rest.get.GetDetailsOfAContact77",
         "protocol": "rest",
         "method": "GET",
         "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
-        "operation_id": null,
+        "operation_id": "get-details-of-a-contact",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[136]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.patch.PublicApiV1InboxesInboxIdentifierContactsContactIdentifier137",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[137]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.get.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversations138",
+        "id": "chatwoot.rest.get.ListAllContactConversations78",
         "protocol": "rest",
         "method": "GET",
         "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
-        "operation_id": null,
+        "operation_id": "list-all-contact-conversations",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[138]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversations139",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[139]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.get.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversationsConversationId140",
+        "id": "chatwoot.rest.get.GetSingleConversation79",
         "protocol": "rest",
         "method": "GET",
         "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}",
-        "operation_id": null,
+        "operation_id": "get-single-conversation",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[140]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.get.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversationsConversationIdMessages141",
+        "id": "chatwoot.rest.get.ListAllConversationMessages80",
         "protocol": "rest",
         "method": "GET",
         "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
-        "operation_id": null,
+        "operation_id": "list-all-conversation-messages",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[141]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       },
       {
-        "id": "chatwoot.rest.post.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversationsConversationIdMessages142",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[142]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.patch.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversationsConversationIdMessagesMessageId143",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages/{message_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[143]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.post.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversationsConversationIdToggleStatus144",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_status",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[144]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.post.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversationsConversationIdToggleTyping145",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_typing",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[145]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.post.PublicApiV1InboxesInboxIdentifierContactsContactIdentifierConversationsConversationIdUpdateLastSeen146",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/update_last_seen",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[146]",
-        "source_url": "https://developers.chatwoot.com/api-reference/client-apis"
-      },
-      {
-        "id": "chatwoot.rest.get.SurveyResponsesConversationUuid147",
+        "id": "chatwoot.rest.get.GetCsatSurveyPage81",
         "protocol": "rest",
         "method": "GET",
         "path": "/survey/responses/{conversation_uuid}",
-        "operation_id": null,
+        "operation_id": "get-csat-survey-page",
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[147]",
-        "source_url": "https://developers.chatwoot.com/api-reference/csat-survey-page"
+        "source_location": ".paths[\"/survey/responses/{conversation_uuid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ContactMerge82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/actions/contact_merge",
+        "operation_id": "contactMerge",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/actions/contact_merge\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAnAccountAgentBot83",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/agent_bots",
+        "operation_id": "create-an-account-agent-bot",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agent_bots\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewAgentToAccount84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/agents",
+        "operation_id": "add-new-agent-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agents\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewAutomationRuleToAccount85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/automation_rules",
+        "operation_id": "add-new-automation-rule-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/automation_rules\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewCannedResponseToAccount86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/canned_responses",
+        "operation_id": "add-new-canned-response-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/canned_responses\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ContactCreate87",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/contacts",
+        "operation_id": "contactCreate",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ContactInboxCreation88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes",
+        "operation_id": "contactInboxCreation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ContactAddLabels89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+        "operation_id": "contact-add-labels",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}/labels\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ContactFilter90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/contacts/filter",
+        "operation_id": "contactFilter",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/filter\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.NewConversation91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations",
+        "operation_id": "newConversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AssignAConversation92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments",
+        "operation_id": "assign-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.UpdateCustomAttributesOfAConversation93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes",
+        "operation_id": "update-custom-attributes-of-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.DestroyCustomAttributesOfAConversation94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes",
+        "operation_id": "destroy-custom-attributes-of-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ConversationAddLabels95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+        "operation_id": "conversation-add-labels",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateANewMessageInAConversation96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+        "operation_id": "create-a-new-message-in-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.TogglePriorityOfAConversation97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority",
+        "operation_id": "toggle-priority-of-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ToggleStatusOfAConversation98",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status",
+        "operation_id": "toggle-status-of-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ToggleTypingStatusOfAConversation99",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status",
+        "operation_id": "toggle-typing-status-of-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ConversationFilter100",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/filter",
+        "operation_id": "conversationFilter",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/filter\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewCustomAttributeToAccount101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+        "operation_id": "add-new-custom-attribute-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_attribute_definitions\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateACustomFilter102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/custom_filters",
+        "operation_id": "create-a-custom-filter",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_filters\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewAgentToInbox103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/inbox_members",
+        "operation_id": "add-new-agent-to-inbox",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inbox_members\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.InboxCreation104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/inboxes",
+        "operation_id": "inboxCreation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inboxes\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.UpdateAgentBot105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot",
+        "operation_id": "updateAgentBot",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAnIntegrationHook106",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/integrations/hooks",
+        "operation_id": "create-an-integration-hook",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/integrations/hooks\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateALabel107",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/labels",
+        "operation_id": "create-a-label",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/labels\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewPortalToAccount108",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/portals",
+        "operation_id": "add-new-portal-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/portals\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewArticleToAccount109",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/portals/{id}/articles",
+        "operation_id": "add-new-article-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/portals/{id}/articles\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewCategoryToAccount110",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/portals/{id}/categories",
+        "operation_id": "add-new-category-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/portals/{id}/categories\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateATeam111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/teams",
+        "operation_id": "create-a-team",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.AddNewAgentToTeam112",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+        "operation_id": "add-new-agent-to-team",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams/{team_id}/team_members\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAWebhook113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/webhooks",
+        "operation_id": "create-a-webhook",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/webhooks\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAnAccount114",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/platform/api/v1/accounts",
+        "operation_id": "create-an-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/accounts\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAnAccountUser115",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/platform/api/v1/accounts/{account_id}/account_users",
+        "operation_id": "create-an-account-user",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/accounts/{account_id}/account_users\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAnAgentBot116",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/platform/api/v1/agent_bots",
+        "operation_id": "create-an-agent-bot",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/agent_bots\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAUser117",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/platform/api/v1/users",
+        "operation_id": "create-a-user",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/users\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAContact118",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts",
+        "operation_id": "create-a-contact",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAConversation119",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+        "operation_id": "create-a-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.CreateAMessage120",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+        "operation_id": "create-a-message",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ResolveConversation121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_status",
+        "operation_id": "resolve-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_status\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.ToggleTypingStatus122",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_typing",
+        "operation_id": "toggle-typing-status",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_typing\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.post.UpdateLastSeen123",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/update_last_seen",
+        "operation_id": "update-last-seen",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/update_last_seen\"].post",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.put.ContactUpdate124",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+        "operation_id": "contactUpdate",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/contacts/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.put.UpdateProfile125",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/profile",
+        "operation_id": "updateProfile",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/profile\"].put",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAccount126",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}",
+        "operation_id": "update-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAnAccountAgentBot127",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+        "operation_id": "update-an-account-agent-bot",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agent_bots/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAgentInAccount128",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/agents/{id}",
+        "operation_id": "update-agent-in-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/agents/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAutomationRuleInAccount129",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+        "operation_id": "update-automation-rule-in-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/automation_rules/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAccountBrandedEmailLayout130",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+        "operation_id": "updateAccountBrandedEmailLayout",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/branded_email_layout\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateCannedResponseInAccount131",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
+        "operation_id": "update-canned-response-in-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/canned_responses/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateConversation132",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+        "operation_id": "update-conversation",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/conversations/{conversation_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateCustomAttributeInAccount133",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+        "operation_id": "update-custom-attribute-in-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateACustomFilter134",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+        "operation_id": "update-a-custom-filter",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAgentsInInbox135",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/inbox_members",
+        "operation_id": "update-agents-in-inbox",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inbox_members\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateInbox136",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+        "operation_id": "updateInbox",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/inboxes/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAnIntegrationsHook137",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+        "operation_id": "update-an-integrations-hook",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateALabel138",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/labels/{id}",
+        "operation_id": "update-a-label",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/labels/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdatePortalToAccount139",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/portals/{id}",
+        "operation_id": "update-portal-to-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/portals/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateATeam140",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+        "operation_id": "update-a-team",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams/{team_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAgentsInTeam141",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+        "operation_id": "update-agents-in-team",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/teams/{team_id}/team_members\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAWebhook142",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+        "operation_id": "update-a-webhook",
+        "deprecated": false,
+        "source_location": ".paths[\"/api/v1/accounts/{account_id}/webhooks/{webhook_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAnAccount143",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/platform/api/v1/accounts/{account_id}",
+        "operation_id": "update-an-account",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/accounts/{account_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAnAgentBot144",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/platform/api/v1/agent_bots/{id}",
+        "operation_id": "update-an-agent-bot",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/agent_bots/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAUser145",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/platform/api/v1/users/{id}",
+        "operation_id": "update-a-user",
+        "deprecated": false,
+        "source_location": ".paths[\"/platform/api/v1/users/{id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAContact146",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+        "operation_id": "update-a-contact",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      },
+      {
+        "id": "chatwoot.rest.patch.UpdateAMessage147",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages/{message_id}",
+        "operation_id": "update-a-message",
+        "deprecated": false,
+        "source_location": ".paths[\"/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages/{message_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
       }
     ]
   },
@@ -1503,5 +1504,15 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 148
+  },
+  "operations_found": {
+    "rest": 148,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 148
+  },
+  "coverage_confidence": {
+    "level": "complete_machine_readable_specification",
+    "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json."
   }
 }

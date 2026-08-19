@@ -30,10 +30,14 @@ The same complete-remap invariant is now green for these provider-published mach
 | Intercom | 10 | **231** | `https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml` (OpenAPI 3.0.1) |
 | Outreach | 259 | **259** | official OpenAPI 3.0.3 plus the provider’s fixed generic custom-object route reference |
 | Customer.io | 159 | **166** | `https://docs.customer.io/files/journeys-app.json` (OpenAPI 3.1.0) |
+| Gorgias | 114 | **114** | official OpenAPI 3.1.0 API-registry specification |
+| Chatwoot | 148 | **148** | official OpenAPI 3.1.0 `swagger/swagger.json` specification |
 
 For each slice, the source-lock count, API-surface rows, and disposition rows reconcile exactly; `declared_percent` was removed. Existing stream coverage was retained only where its method/path occurs in the authoritative artifact, and no source operation was reported enabled without a runnable CLI command or typed write action.
 
 Outreach is an explicit count-unchanged audit result, not an unverified carry-forward: the current public OpenAPI has 253 static operations, and the provider documents six fixed generic custom-object routes separately because the per-account object schemas are dynamic. The combined complete fixed surface is therefore 259. All 163 enabled rows have an exact typed write-action binding; the 96 stream-only rows remain ETL and declaration-pending. Customer.io increases from 159 to 166 source operations; its 10 enabled rows each retain an exact typed write-action binding.
+
+Gorgias and Chatwoot are explicit count-unchanged audit results from their actual current OpenAPI sources, not carry-forwards from documentation landings. Gorgias reconciles to 114 source operations with 103 exact command/write bindings; Chatwoot reconciles to 148, with 94 exact command/write bindings. Their remaining source rows stay declaration-pending.
 
 ## Square — partial crawl superseded by complete machine spec
 

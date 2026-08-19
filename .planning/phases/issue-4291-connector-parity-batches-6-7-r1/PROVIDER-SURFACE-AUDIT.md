@@ -18,9 +18,9 @@ The source-lock recovery audit covers every connector owned by this issue. A row
 | activecampaign | 61 | — | pending provider-surface audit | pending |
 | iterable | 4 | 148 | official Iterable Swagger 2.0 specification | complete — remapped |
 | help-scout | 144 | — | pending provider-surface audit | pending |
-| gorgias | 114 | — | pending provider-surface audit | pending |
+| gorgias | 114 | 114 | official OpenAPI 3.1.0 specification | complete — remapped, count unchanged |
 | service-now | 22 | — | pending fixed-platform and dynamic-schema basis | pending |
-| chatwoot | 148 | — | pending provider-surface audit | pending |
+| chatwoot | 148 | 148 | official OpenAPI 3.1.0 specification | complete — remapped, count unchanged |
 | chargebee | 428 | — | pending provider-surface audit | pending |
 | square | 11 | 334 | official OpenAPI 3.0.0 machine-readable specification; rendered crawl retained only as partial/superseded evidence | complete — remapped |
 | braintree | 73 | — | pending provider-surface audit | pending |

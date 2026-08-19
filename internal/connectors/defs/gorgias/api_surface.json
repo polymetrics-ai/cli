@@ -1,13 +1,238 @@
 {
-  "api": "Gorgias REST API (OpenAPI 3.1.0)",
-  "docs": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
-  "reviewed_at": "2026-08-07",
-  "operation_ledger_version": 1,
-  "scope": "Full documented-operation parity for the Gorgias REST API. 114 documented operations, re-derived 2026-08-07 from the provider's stable OpenAPI 3.1.0 document (gorgias-rest-api.json, ReadMe docs version 1.5.1), fetched via https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r: 61 paths, 114 operations (GET 46, POST 23, PUT 27, DELETE 18), 1 deprecated (still counted). The provider-artifact ledger recorded this artifact as html_reference and 114 operations; both the classification and the count reconcile exactly against the live spec once fetched as JSON. There is no top-level webhooks block and no webhook management surface. Every endpoint below is partitioned exactly once.",
+  "api": "Gorgias REST API OpenAPI 3.1.0",
+  "docs": "https://docs.gorgias.com/en_US/rest-api",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-reference inventory generated from every operation in the cited OpenAPI 3.1.0 document (114 HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.",
+  "artifacts": [
+    {
+      "id": "gorgias-openapi-3.1.0-2026-08-19",
+      "url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+      "retrieved_at": "2026-08-19",
+      "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897"
+    }
+  ],
   "endpoints": [
+    {
+      "method": "DELETE",
+      "path": "/api/customers",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_customers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_customer_custom_field_value"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/integrations/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_integration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/jobs/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "cancel_job"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/macros/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_macro"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/phone/voice-call-recordings/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_voice_call_recording"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/rules/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_tags"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/teams/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_ticket_custom_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_ticket_message"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_ticket_tags"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/users/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/views/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/widgets/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "delete_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
     {
       "method": "GET",
       "path": "/api/account",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "account get"
       }
@@ -15,152 +240,76 @@
     {
       "method": "GET",
       "path": "/api/account/settings",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "account settings list"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/account/settings",
-      "covered_by": {
-        "write": "create_account_setting"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/account/settings/{id}",
-      "covered_by": {
-        "write": "update_account_setting"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "custom-fields list"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/custom-fields",
-      "covered_by": {
-        "write": "create_custom_field"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/custom-fields",
-      "covered_by": {
-        "write": "update_custom_fields"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "custom-fields get"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/custom-fields/{id}",
-      "covered_by": {
-        "write": "update_custom_field"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/customers",
-      "covered_by": {
-        "write": "delete_customers"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/customers",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "stream": "customers"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/customers",
-      "covered_by": {
-        "write": "create_customer"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/customers/merge",
-      "covered_by": {
-        "write": "merge_customers"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/customers/{customer_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "customers custom-fields list"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/customers/{customer_id}/custom-fields",
-      "covered_by": {
-        "write": "update_customer_custom_field_values"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/customers/{customer_id}/custom-fields/{id}",
-      "covered_by": {
-        "write": "delete_customer_custom_field_value"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/customers/{customer_id}/custom-fields/{id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "'Update customer field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-customer-custom-field-value",
-        "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-value",
-        "notes": "named_dependency=a write body_type that sends a bare top-level JSON scalar rather than an object or array; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/customers/{customer_id}/data",
-      "covered_by": {
-        "write": "update_customer_data"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/customers/{id}",
-      "covered_by": {
-        "write": "delete_customer"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/customers/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "customers get"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/customers/{id}",
-      "covered_by": {
-        "write": "update_customer"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/events",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "events list"
       }
@@ -168,6 +317,10 @@
     {
       "method": "GET",
       "path": "/api/events/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "events get"
       }
@@ -175,125 +328,76 @@
     {
       "method": "GET",
       "path": "/api/integrations",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "integrations list"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/integrations",
-      "covered_by": {
-        "write": "create_integration"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/integrations/{id}",
-      "covered_by": {
-        "write": "delete_integration"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/integrations/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "integrations get"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/integrations/{id}",
-      "covered_by": {
-        "write": "update_integration"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/jobs",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "jobs list"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/jobs",
-      "covered_by": {
-        "write": "create_job"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/jobs/{id}",
-      "covered_by": {
-        "write": "cancel_job"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/jobs/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "jobs get"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/jobs/{id}",
-      "covered_by": {
-        "write": "update_job"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/macros",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "macros list"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/macros",
-      "covered_by": {
-        "write": "create_macro"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/macros/archive",
-      "covered_by": {
-        "write": "bulk_archive_macros"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/macros/unarchive",
-      "covered_by": {
-        "write": "bulk_unarchive_macros"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/macros/{id}",
-      "covered_by": {
-        "write": "delete_macro"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/macros/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "macros get"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/macros/{id}",
-      "covered_by": {
-        "write": "update_macro"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/messages",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "stream": "messages"
       }
@@ -301,6 +405,10 @@
     {
       "method": "GET",
       "path": "/api/metric-cards",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "metric-cards list"
       }
@@ -308,20 +416,21 @@
     {
       "method": "GET",
       "path": "/api/metric-cards/{slug}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "metric-cards get"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/metric-cards/{slug}/feedback",
-      "covered_by": {
-        "write": "create_metric_card_feedback"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/phone/voice-call-events",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "voice-call-events list"
       }
@@ -329,6 +438,10 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-call-events/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "voice-call-events get"
       }
@@ -336,20 +449,21 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-call-recordings",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "voice-call-recordings list"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/phone/voice-call-recordings/{id}",
-      "covered_by": {
-        "write": "delete_voice_call_recording"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/phone/voice-call-recordings/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "voice-call-recordings get"
       }
@@ -357,6 +471,10 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-calls",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "voice-calls list"
       }
@@ -364,33 +482,348 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-calls/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "voice-calls get"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/reporting/stats",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "No reachable direct-read command declares POST /api/reporting/stats.",
-        "source_url": "https://developers.gorgias.com/reference/get-statistic",
-        "notes": "named_dependency=a structured filter-expression command input (a DSL flag/builder) for the Statistics query grammar; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/rules",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "rules list"
       }
     },
     {
+      "method": "GET",
+      "path": "/api/rules/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "rules get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/satisfaction-surveys",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "stream": "satisfaction_surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/satisfaction-surveys/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "satisfaction-surveys get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "tags list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "tags get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "teams list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "teams get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "tickets get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "tickets custom-fields list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "tickets messages get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "tickets tags list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "users list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "users get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/views",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "views list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "views get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{view_id}/items",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "views items list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "widgets list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "direct_read": "widgets get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/account/settings",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "create_account_setting"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "create_custom_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/customers",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/integrations",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "create_integration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/jobs",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "create_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/macros",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "create_macro"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/metric-cards/{slug}/feedback",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "create_metric_card_feedback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/reporting/stats",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
       "method": "POST",
       "path": "/api/rules",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_rule"
       }
@@ -398,62 +831,32 @@
     {
       "method": "POST",
       "path": "/api/rules/priorities",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "update_rules_priorities"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/rules/{id}",
-      "covered_by": {
-        "write": "delete_rule"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/rules/{id}",
-      "covered_by": {
-        "direct_read": "rules get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/rules/{id}",
-      "covered_by": {
-        "write": "update_rule"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/satisfaction-surveys",
-      "covered_by": {
-        "stream": "satisfaction_surveys"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/satisfaction-surveys",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_satisfaction_survey"
       }
     },
     {
-      "method": "GET",
-      "path": "/api/satisfaction-surveys/{id}",
-      "covered_by": {
-        "direct_read": "satisfaction-surveys get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/satisfaction-surveys/{id}",
-      "covered_by": {
-        "write": "update_satisfaction_survey"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/search",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "search"
       }
@@ -461,6 +864,10 @@
     {
       "method": "POST",
       "path": "/api/stats/{name}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "direct_read": "stats get"
       }
@@ -468,377 +875,424 @@
     {
       "method": "POST",
       "path": "/api/stats/{name}/download",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "operation": {
-        "model": "binary_read",
+        "model": "disallowed",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "'Download a statistic' returns text/csv from a POST request that carries a required JSON filter body. This repository's binary download executor (engine.OperationBinaryDownload / commandrunner.validateBinaryDownloadCommand) requires GET, so a POST-triggered CSV export cannot be wired through it. Source: https://developers.gorgias.com/reference/download-legacy-statistic",
-        "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic",
-        "notes": "named_dependency=a POST-capable binary/CSV download executor (the binary_download kind is GET-only today); artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/tags",
-      "covered_by": {
-        "write": "delete_tags"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tags",
-      "covered_by": {
-        "direct_read": "tags list"
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     },
     {
       "method": "POST",
       "path": "/api/tags",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_tag"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/tags/{destination_tag_id}/merge",
-      "covered_by": {
-        "write": "merge_tags"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/tags/{id}",
-      "covered_by": {
-        "write": "delete_tag"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tags/{id}",
-      "covered_by": {
-        "direct_read": "tags get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/tags/{id}",
-      "covered_by": {
-        "write": "update_tag"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/teams",
-      "covered_by": {
-        "direct_read": "teams list"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/teams",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_team"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/teams/{id}",
-      "covered_by": {
-        "write": "delete_team"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/teams/{id}",
-      "covered_by": {
-        "direct_read": "teams get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/teams/{id}",
-      "covered_by": {
-        "write": "update_team"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tickets",
-      "covered_by": {
-        "stream": "tickets"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/tickets",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_ticket"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/tickets/{id}",
-      "covered_by": {
-        "write": "delete_ticket"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tickets/{id}",
-      "covered_by": {
-        "direct_read": "tickets get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/tickets/{id}",
-      "covered_by": {
-        "write": "update_ticket"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tickets/{ticket_id}/custom-fields",
-      "covered_by": {
-        "direct_read": "tickets custom-fields list"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/tickets/{ticket_id}/custom-fields",
-      "covered_by": {
-        "write": "update_ticket_custom_fields"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
-      "covered_by": {
-        "write": "delete_ticket_custom_field"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "'Update ticket field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-ticket-custom-field",
-        "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-field",
-        "notes": "named_dependency=a write body_type that sends a bare top-level JSON scalar rather than an object or array; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tickets/{ticket_id}/messages",
-      "operation": {
-        "model": "deprecated",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Provider-deprecated 'List messages of a ticket' endpoint. The OpenAPI document marks it deprecated:true and its own description says 'Use list messages endpoint instead' (GET /api/messages, implemented here as the messages stream, which accepts a ticket_id filter). Source: https://developers.gorgias.com/reference/list-ticket-messages",
-        "source_url": "https://developers.gorgias.com/reference/list-ticket-messages",
-        "notes": "named_dependency=none - provider-deprecated, superseded by the messages stream; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/tickets/{ticket_id}/messages",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_ticket_message"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/tickets/{ticket_id}/messages/{id}",
-      "covered_by": {
-        "write": "delete_ticket_message"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tickets/{ticket_id}/messages/{id}",
-      "covered_by": {
-        "direct_read": "tickets messages get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/tickets/{ticket_id}/messages/{id}",
-      "covered_by": {
-        "write": "update_ticket_message"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/tickets/{ticket_id}/tags",
-      "covered_by": {
-        "write": "delete_ticket_tags"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/tickets/{ticket_id}/tags",
-      "covered_by": {
-        "direct_read": "tickets tags list"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_ticket_tags"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/tickets/{ticket_id}/tags",
-      "covered_by": {
-        "write": "update_ticket_tags"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/upload",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "upload_file"
       }
     },
     {
-      "method": "GET",
-      "path": "/api/users",
-      "covered_by": {
-        "direct_read": "users list"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/users",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_user"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/users/{id}",
-      "covered_by": {
-        "write": "delete_user"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/users/{id}",
-      "covered_by": {
-        "direct_read": "users get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/users/{id}",
-      "covered_by": {
-        "write": "update_user"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/views",
-      "covered_by": {
-        "direct_read": "views list"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/views",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_view"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/views/{id}",
-      "covered_by": {
-        "write": "delete_view"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/views/{id}",
-      "covered_by": {
-        "direct_read": "views get"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/views/{id}",
-      "covered_by": {
-        "write": "update_view"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/views/{view_id}/items",
-      "covered_by": {
-        "direct_read": "views items list"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/views/{view_id}/items",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "No reachable direct-read command declares PUT /api/views/{view_id}/items.",
-        "source_url": "https://developers.gorgias.com/reference/update-view-items",
-        "notes": "named_dependency=a PUT-capable operation direct-read executor (the runtime accepts only GET or POST today); artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/widgets",
-      "covered_by": {
-        "direct_read": "widgets list"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/widgets",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "create_widget"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/widgets/{id}",
+      "method": "PUT",
+      "path": "/api/account/settings/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
-        "write": "delete_widget"
+        "write": "update_account_setting"
       }
     },
     {
-      "method": "GET",
-      "path": "/api/widgets/{id}",
+      "method": "PUT",
+      "path": "/api/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
-        "direct_read": "widgets get"
+        "write": "update_custom_fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_custom_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_customer_custom_field_values"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/data",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_customer_data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/merge",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "merge_customers"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/integrations/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_integration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/jobs/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_job"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_macro"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/archive",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "bulk_archive_macros"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/unarchive",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "bulk_unarchive_macros"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/rules/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/satisfaction-surveys/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_satisfaction_survey"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tags/{destination_tag_id}/merge",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "merge_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/teams/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_ticket_custom_fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_ticket_message"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_ticket_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/users/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/views/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "covered_by": {
+        "write": "update_view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/views/{view_id}/items",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     },
     {
       "method": "PUT",
       "path": "/api/widgets/{id}",
+      "provenance": {
+        "artifact": "gorgias-openapi-3.1.0-2026-08-19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      },
       "covered_by": {
         "write": "update_widget"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
-      "covered_by": {
-        "direct_reads": [
-          "files download"
-        ]
       }
     }
   ]
