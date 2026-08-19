@@ -293,8 +293,32 @@ func TestCertificationParityClassifierProjectsOnlyTheNormalizedTaxonomy(t *testi
 		{
 			name: "REST direct write", input: certificationParityInput{
 				Command:   &engine.CLICommand{Path: "widgets update", Intent: "direct_write", Operation: "widgets_update"},
-				Operation: &engine.OperationSpec{ID: "widgets_update", Kind: "rest_write"},
-			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite,
+				Operation: &engine.OperationSpec{ID: "widgets_update", Kind: "rest_write", MutationClass: "update", REST: &engine.RESTOperationSpec{Method: "PATCH", Path: "/widgets/{id}"}},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite, wantAction: "update",
+		},
+		{
+			name: "operation-backed REST delete", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets delete", Intent: "direct_write", Operation: "widgets_delete"},
+				Operation: &engine.OperationSpec{ID: "widgets_delete", Kind: "rest_write", MutationClass: "destructive", REST: &engine.RESTOperationSpec{Method: "DELETE", Path: "/widgets/{id}"}},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite, wantAction: "delete",
+		},
+		{
+			name: "operation-backed create mutation class", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets create", Intent: "direct_write", Operation: "widgets_create"},
+				Operation: &engine.OperationSpec{ID: "widgets_create", Kind: "rest_write", MutationClass: "create", REST: &engine.RESTOperationSpec{Method: "POST", Path: "/widgets"}},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite, wantAction: "create",
+		},
+		{
+			name: "operation-backed PUT is upsert", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets replace", Intent: "direct_write", Operation: "widgets_replace"},
+				Operation: &engine.OperationSpec{ID: "widgets_replace", Kind: "rest_write", MutationClass: "admin", REST: &engine.RESTOperationSpec{Method: "PUT", Path: "/widgets/{id}"}},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite, wantAction: "upsert",
+		},
+		{
+			name: "operation-backed GraphQL mutation is custom", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets archive", Intent: "direct_write", Operation: "widgets_archive"},
+				Operation: &engine.OperationSpec{ID: "widgets_archive", Kind: "graphql_mutation", MutationClass: "admin"},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite, wantAction: "custom",
 		},
 		{
 			name: "ETL stream", input: certificationParityInput{
@@ -391,6 +415,24 @@ func TestCertificationParityClassifierRefusesMismatchedOrUnresolvedReferences(t 
 				t.Fatal("classifyCertificationParity() error = nil, want invalid projection error")
 			}
 		})
+	}
+}
+
+func TestCertificationParityClassifierRefusesUndeterminableOperationWriteActionKind(t *testing.T) {
+	command := engine.CLICommand{Path: "widgets rotate", Intent: "direct_write", Availability: "implemented", Operation: "widgets_rotate"}
+	operation := engine.OperationSpec{ID: "widgets_rotate", Kind: "rest_write", MutationClass: "secret", REST: &engine.RESTOperationSpec{Method: "POST", Path: "/widgets/{id}/rotate"}}
+	projection, err := classifyCertificationParity(certificationParityInput{
+		Command: &command, Operation: &operation,
+	})
+	if err == nil {
+		t.Fatal("classifyCertificationParity() error = nil, want indeterminate operation write action kind error")
+	}
+	if !strings.Contains(err.Error(), "cannot determine write action kind") {
+		t.Fatalf("classifyCertificationParity() error = %q, want indeterminate action-kind context", err)
+	}
+	row, defect := classifyCertificationSweepCommand(command, operation, projection, err, certificationSweepAssertionOverlay{}, certificationSweepGraphQLProfile{}, certificationSweepProviderRefusal{})
+	if row.Status != certificationSweepStatusProductDefect || defect == nil {
+		t.Fatalf("indeterminate action-kind row = status=%q defect=%#v, want product defect", row.Status, defect)
 	}
 }
 
