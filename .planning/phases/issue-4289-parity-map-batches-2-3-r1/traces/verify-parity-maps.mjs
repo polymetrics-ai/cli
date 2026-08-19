@@ -28,7 +28,8 @@ for (const connector of connectors) {
   const surface = await readJSON(path.join(root, "internal", "connectors", "defs", connector, "api_surface.json"));
   const operations = Object.values(lock).flatMap((value) => Array.isArray(value?.operations) ? value.operations : []);
   if (operations.length !== map.ledger_dispositions.length) throw new Error(`${connector}: source inventory ${operations.length} != disposition rows ${map.ledger_dispositions.length}`);
-  if (map.source_basis.source_operation_count !== operations.length) throw new Error(`${connector}: summary source denominator drift`);
+  if (lock.rest.counts?.total !== operations.length || lock.rest.counts?.by_kind?.rest !== operations.length || !lock.rest.coverage_confidence?.level || !lock.rest.coverage_confidence?.basis) throw new Error(`${connector}: source lock lacks counts.total, per-kind counts, or coverage confidence`);
+  if (map.source_basis.operations_found !== operations.length || map.summary.operations_found !== operations.length || !map.source_basis.coverage_confidence?.level || map.summary.coverage_confidence?.level !== lock.rest.coverage_confidence.level || "declared_percent" in map.summary) throw new Error(`${connector}: source accounting is self-referential or incomplete`);
   const surfaceKeys = new Set(surface.endpoints.map((endpoint) => `${endpoint.method.toUpperCase()} ${canonicalPath(endpoint.path)}`));
   for (const row of map.ledger_dispositions) {
     for (const key of required) if (!(key in row)) throw new Error(`${connector}: ${row.method} ${row.path} missing ${key}`);
@@ -62,20 +63,20 @@ for (const connector of connectors) {
     sha256: lock.rest.sha256,
     verified: "captured public source metadata is complete; remote content is intentionally not refetched"
   };
-  checks.push({ connector, documented_operations: operations.length, enabled_operations: map.summary.enabled_operations, disabled_operations: map.summary.disabled_operations, documented_deletes: map.summary.documented_deletes, enabled_deletes: map.summary.enabled_deletes, source_lock: sourceLock });
+  checks.push({ connector, operations_found: operations.length, coverage_confidence: lock.rest.coverage_confidence, enabled_operations: map.summary.enabled_operations, disabled_operations: map.summary.disabled_operations, documented_deletes: map.summary.documented_deletes, enabled_deletes: map.summary.enabled_deletes, source_lock: sourceLock });
 }
 
-const total = checks.reduce((sum, check) => sum + check.documented_operations, 0);
+const total = checks.reduce((sum, check) => sum + check.operations_found, 0);
 const markdown = [
-  "# Complete parity map — batches 2 and 3",
+  "# Source-accounted parity map — batches 2 and 3",
   "",
-  "All source artifacts were fetched credential-free from their recorded public documentation URLs. No provider operation, credential, write, or live certification was used.",
+  "All source artifacts were fetched credential-free from their recorded public documentation URLs. No provider operation, credential, write, or live certification was used. A connector marked `partial` is an explicit delivery hold, not a complete-source assertion.",
   "",
-  "| Connector | Documented | Enabled | Disabled | Enabled % | Deletes | Foundation gaps |",
+  "| Connector | Operations found | Coverage confidence | Enabled | Disabled | Enabled % | Deletes | Foundation gaps |",
   "| --- | ---: | ---: | ---: | ---: | ---: | --- |",
-  ...checks.map((check) => `| ${check.connector} | ${check.documented_operations} | ${check.enabled_operations} | ${check.disabled_operations} | ${((check.enabled_operations / check.documented_operations) * 100).toFixed(2)} | ${check.enabled_deletes}/${check.documented_deletes} | generic-typed-destination-executor (reverse ETL) |`),
+  ...checks.map((check) => `| ${check.connector} | ${check.operations_found} | ${check.coverage_confidence.level}: ${check.coverage_confidence.basis} | ${check.enabled_operations} | ${check.disabled_operations} | ${((check.enabled_operations / check.operations_found) * 100).toFixed(2)} | ${check.enabled_deletes}/${check.documented_deletes} | generic-typed-destination-executor (reverse ETL) |`),
   "",
-  `Total documented operations: **${total}**. Un-authored endpoint declarations are \`declaration-pending\`; a typed write remains enabled \`direct_write\`, while its nested reverse-ETL eligibility records the real \`generic-typed-destination-executor\` foundation gap at \`internal/app/issue_label_warehouse_transport.go:85-95\`.`,
+  `Total operations found across pinned source artifacts: **${total}**. This is not a self-referential coverage percentage: the per-connector confidence and basis state whether the input is complete or partial. Un-authored endpoint declarations are \`declaration-pending\`; a typed write remains enabled \`direct_write\`, while its nested reverse-ETL eligibility records the real \`generic-typed-destination-executor\` foundation gap at \`internal/app/issue_label_warehouse_transport.go:85-95\`.`,
   "",
   "ETL source transport is declaration-pending until each connector authors `sync_transport.json` with exact source executor, delivery, and conformance evidence. Reverse-ETL eligibility for typed direct writes remains foundation-blocked: the current only destination DefinitionFactory enforces the GitHub issue-label contract, so no transport binding/action is invented."
 ].join("\n") + "\n";

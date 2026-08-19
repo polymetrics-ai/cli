@@ -7,13 +7,20 @@
     "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
     "source_sha256": "9b2ad824cfc8c8c4ea1b942ef6797da63ac6306c69f7e30e108b11a1e527dde9",
     "source_bytes": 6458869,
-    "source_operation_count": 845
+    "operations_found": 845,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "summary": {
     "api_surface_rows": 845,
     "exact_source_rows": 845,
-    "declared_operations": 845,
-    "declared_percent": 100,
+    "operations_found": 845,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
     "enabled_operations": 0,
     "enabled_percent": 0,
     "disabled_operations": 845,

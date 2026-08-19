@@ -5,8 +5,11 @@
       "connector": "grafana",
       "api_surface_rows": 314,
       "exact_source_rows": 314,
-      "declared_operations": 314,
-      "declared_percent": 100,
+      "operations_found": 314,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "enabled_percent": 0,
       "disabled_operations": 314,
@@ -105,8 +108,11 @@
       "connector": "trello",
       "api_surface_rows": 261,
       "exact_source_rows": 261,
-      "declared_operations": 261,
-      "declared_percent": 100,
+      "operations_found": 261,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "enabled_percent": 0,
       "disabled_operations": 261,
@@ -205,8 +211,11 @@
       "connector": "slack",
       "api_surface_rows": 174,
       "exact_source_rows": 174,
-      "declared_operations": 174,
-      "declared_percent": 100,
+      "operations_found": 174,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "enabled_percent": 0,
       "disabled_operations": 174,
@@ -305,8 +314,11 @@
       "connector": "n8n",
       "api_surface_rows": 100,
       "exact_source_rows": 100,
-      "declared_operations": 100,
-      "declared_percent": 100,
+      "operations_found": 100,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 26,
       "enabled_percent": 26,
       "disabled_operations": 74,
@@ -405,8 +417,11 @@
       "connector": "google-calendar",
       "api_surface_rows": 38,
       "exact_source_rows": 38,
-      "declared_operations": 38,
-      "declared_percent": 100,
+      "operations_found": 38,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 27,
       "enabled_percent": 71.05,
       "disabled_operations": 11,
@@ -500,8 +515,11 @@
       "connector": "gmail",
       "api_surface_rows": 79,
       "exact_source_rows": 79,
-      "declared_operations": 79,
-      "declared_percent": 100,
+      "operations_found": 79,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 56,
       "enabled_percent": 70.89,
       "disabled_operations": 23,
@@ -600,8 +618,11 @@
       "connector": "twilio",
       "api_surface_rows": 197,
       "exact_source_rows": 197,
-      "declared_operations": 197,
-      "declared_percent": 100,
+      "operations_found": 197,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 94,
       "enabled_percent": 47.72,
       "disabled_operations": 103,
@@ -695,8 +716,11 @@
       "connector": "amazon-sqs",
       "api_surface_rows": 23,
       "exact_source_rows": 23,
-      "declared_operations": 23,
-      "declared_percent": 100,
+      "operations_found": 23,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 22,
       "enabled_percent": 95.65,
       "disabled_operations": 1,
@@ -790,8 +814,11 @@
       "connector": "elasticsearch",
       "api_surface_rows": 845,
       "exact_source_rows": 845,
-      "declared_operations": 845,
-      "declared_percent": 100,
+      "operations_found": 845,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "enabled_percent": 0,
       "disabled_operations": 845,
@@ -890,8 +917,11 @@
       "connector": "gong",
       "api_surface_rows": 69,
       "exact_source_rows": 69,
-      "declared_operations": 69,
-      "declared_percent": 100,
+      "operations_found": 69,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published OpenAPI document"
+      },
       "enabled_operations": 57,
       "enabled_percent": 82.61,
       "disabled_operations": 12,
@@ -983,13 +1013,16 @@
     },
     {
       "connector": "google-ads",
-      "api_surface_rows": 164,
-      "exact_source_rows": 164,
-      "declared_operations": 164,
-      "declared_percent": 100,
+      "api_surface_rows": 163,
+      "exact_source_rows": 163,
+      "operations_found": 163,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Google Discovery document"
+      },
       "enabled_operations": 28,
-      "enabled_percent": 17.07,
-      "disabled_operations": 136,
+      "enabled_percent": 17.18,
+      "disabled_operations": 135,
       "documented_deletes": 1,
       "enabled_deletes": 0,
       "parity_class_counts": [
@@ -999,11 +1032,11 @@
         },
         {
           "key": "direct_write",
-          "count": 133
+          "count": 134
         },
         {
           "key": "etl",
-          "count": 3
+          "count": 1
         },
         {
           "key": "reverse_etl",
@@ -1018,7 +1051,7 @@
           "count": 0
         }
       ],
-      "stream_bindings": 3,
+      "stream_bindings": 1,
       "writes_actions": 7,
       "terminal_commands": 28,
       "live_certification": "pending",
@@ -1035,7 +1068,7 @@
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 136
+          "count": 135
         }
       ],
       "reverse_etl_eligibility": {
@@ -1067,17 +1100,17 @@
         }
       },
       "declaration_pending_ids": [
-        "sync-transport-source-definition-google-ads",
-        "typed-operation-contract-google-ads"
+        "typed-operation-contract-google-ads",
+        "sync-transport-source-definition-google-ads"
       ],
       "declaration_pending": [
         {
-          "id": "sync-transport-source-definition-google-ads",
-          "count": 3
+          "id": "typed-operation-contract-google-ads",
+          "count": 134
         },
         {
-          "id": "typed-operation-contract-google-ads",
-          "count": 133
+          "id": "sync-transport-source-definition-google-ads",
+          "count": 1
         }
       ]
     },
@@ -1085,8 +1118,11 @@
       "connector": "facebook-marketing",
       "api_surface_rows": 36,
       "exact_source_rows": 36,
-      "declared_operations": 36,
-      "declared_percent": 100,
+      "operations_found": 36,
+      "coverage_confidence": {
+        "level": "partial",
+        "basis": "official Meta business SDK code-generation source; complete Marketing API model traversal remains outstanding"
+      },
       "enabled_operations": 5,
       "enabled_percent": 13.89,
       "disabled_operations": 31,
@@ -1185,8 +1221,11 @@
       "connector": "linkedin-ads",
       "api_surface_rows": 10,
       "exact_source_rows": 10,
-      "declared_operations": 10,
-      "declared_percent": 100,
+      "operations_found": 10,
+      "coverage_confidence": {
+        "level": "partial",
+        "basis": "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding"
+      },
       "enabled_operations": 0,
       "enabled_percent": 0,
       "disabled_operations": 10,
@@ -1285,8 +1324,11 @@
       "connector": "aircall",
       "api_surface_rows": 93,
       "exact_source_rows": 93,
-      "declared_operations": 93,
-      "declared_percent": 100,
+      "operations_found": 93,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+      },
       "enabled_operations": 20,
       "enabled_percent": 21.51,
       "disabled_operations": 73,
@@ -1385,8 +1427,11 @@
       "connector": "xero",
       "api_surface_rows": 235,
       "exact_source_rows": 235,
-      "declared_operations": 235,
-      "declared_percent": 100,
+      "operations_found": 235,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Xero Accounting OpenAPI document"
+      },
       "enabled_operations": 87,
       "enabled_percent": 37.02,
       "disabled_operations": 148,
@@ -1483,27 +1528,30 @@
     },
     {
       "connector": "paypal-transaction",
-      "api_surface_rows": 10,
-      "exact_source_rows": 10,
-      "declared_operations": 10,
-      "declared_percent": 100,
+      "api_surface_rows": 2,
+      "exact_source_rows": 2,
+      "operations_found": 2,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Transaction Search OpenAPI document"
+      },
       "enabled_operations": 0,
       "enabled_percent": 0,
-      "disabled_operations": 10,
+      "disabled_operations": 2,
       "documented_deletes": 0,
       "enabled_deletes": 0,
       "parity_class_counts": [
         {
           "key": "direct_read",
-          "count": 4
+          "count": 0
         },
         {
           "key": "direct_write",
-          "count": 2
+          "count": 0
         },
         {
           "key": "etl",
-          "count": 4
+          "count": 2
         },
         {
           "key": "reverse_etl",
@@ -1518,7 +1566,7 @@
           "count": 0
         }
       ],
-      "stream_bindings": 4,
+      "stream_bindings": 2,
       "writes_actions": 0,
       "terminal_commands": 0,
       "live_certification": "pending",
@@ -1535,7 +1583,7 @@
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 10
+          "count": 2
         }
       ],
       "reverse_etl_eligibility": {
@@ -1567,17 +1615,12 @@
         }
       },
       "declaration_pending_ids": [
-        "sync-transport-source-definition-paypal-transaction",
-        "typed-operation-contract-paypal-transaction"
+        "sync-transport-source-definition-paypal-transaction"
       ],
       "declaration_pending": [
         {
           "id": "sync-transport-source-definition-paypal-transaction",
-          "count": 4
-        },
-        {
-          "id": "typed-operation-contract-paypal-transaction",
-          "count": 6
+          "count": 2
         }
       ]
     },
@@ -1585,8 +1628,11 @@
       "connector": "gocardless",
       "api_surface_rows": 142,
       "exact_source_rows": 142,
-      "declared_operations": 142,
-      "declared_percent": 100,
+      "operations_found": 142,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published"
+      },
       "enabled_operations": 76,
       "enabled_percent": 53.52,
       "disabled_operations": 66,
@@ -1683,23 +1729,26 @@
     },
     {
       "connector": "amazon-seller-partner",
-      "api_surface_rows": 353,
-      "exact_source_rows": 353,
-      "declared_operations": 353,
-      "declared_percent": 100,
+      "api_surface_rows": 370,
+      "exact_source_rows": 370,
+      "operations_found": 370,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "all provider-published Selling Partner OpenAPI model documents under models/"
+      },
       "enabled_operations": 98,
-      "enabled_percent": 27.76,
-      "disabled_operations": 255,
+      "enabled_percent": 26.49,
+      "disabled_operations": 272,
       "documented_deletes": 13,
       "enabled_deletes": 8,
       "parity_class_counts": [
         {
           "key": "direct_read",
-          "count": 10
+          "count": 20
         },
         {
           "key": "direct_write",
-          "count": 156
+          "count": 163
         },
         {
           "key": "etl",
@@ -1735,7 +1784,7 @@
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 255
+          "count": 272
         }
       ],
       "reverse_etl_eligibility": {
@@ -1767,17 +1816,17 @@
         }
       },
       "declaration_pending_ids": [
-        "typed-operation-contract-amazon-seller-partner",
-        "sync-transport-source-definition-amazon-seller-partner"
+        "sync-transport-source-definition-amazon-seller-partner",
+        "typed-operation-contract-amazon-seller-partner"
       ],
       "declaration_pending": [
         {
-          "id": "typed-operation-contract-amazon-seller-partner",
-          "count": 108
-        },
-        {
           "id": "sync-transport-source-definition-amazon-seller-partner",
           "count": 147
+        },
+        {
+          "id": "typed-operation-contract-amazon-seller-partner",
+          "count": 125
         }
       ]
     },
@@ -1785,8 +1834,11 @@
       "connector": "miro",
       "api_surface_rows": 197,
       "exact_source_rows": 197,
-      "declared_operations": 197,
-      "declared_percent": 100,
+      "operations_found": 197,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Miro OpenAPI document linked by the API reference"
+      },
       "enabled_operations": 104,
       "enabled_percent": 52.79,
       "disabled_operations": 93,
@@ -1867,17 +1919,17 @@
         }
       },
       "declaration_pending_ids": [
-        "sync-transport-source-definition-miro",
-        "typed-operation-contract-miro"
+        "typed-operation-contract-miro",
+        "sync-transport-source-definition-miro"
       ],
       "declaration_pending": [
         {
-          "id": "sync-transport-source-definition-miro",
-          "count": 84
-        },
-        {
           "id": "typed-operation-contract-miro",
           "count": 9
+        },
+        {
+          "id": "sync-transport-source-definition-miro",
+          "count": 84
         }
       ]
     }

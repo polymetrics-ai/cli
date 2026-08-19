@@ -7,7 +7,23 @@
     "sha256": "6ae95829354fd09a383df72b1a0239f86311d7098a8a3ff7666849fa9dc884e4",
     "bytes": 265226,
     "format": "text/html",
-    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "inventory_basis": "complete rendered provider API reference reconciled to the connector-owned API surface",
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published"
+    },
+    "counts": {
+      "total": 142,
+      "by_kind": {
+        "rest": 142
+      },
+      "by_method": {
+        "DELETE": 1,
+        "GET": 63,
+        "POST": 66,
+        "PUT": 12
+      }
+    },
     "operation_counts": {
       "DELETE": 1,
       "GET": 63,

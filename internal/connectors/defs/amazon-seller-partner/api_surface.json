@@ -3122,6 +3122,227 @@
       "covered_by": {
         "stream": "get_transaction_vendor_transactions_v1_transactions_transaction_id"
       }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/invoices/2026-06-25/invoices",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/finances-api-model/financesInvoices_2026-06-25.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.finances.api.model.financesInvoices.2026.06.25.json.1; source_location=models/finances-api-model/financesInvoices_2026-06-25.json:paths[\"/finances/invoices/2026-06-25/invoices\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/invoices/2026-06-25/invoices/{invoiceIdentifier}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/finances-api-model/financesInvoices_2026-06-25.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.finances.api.model.financesInvoices.2026.06.25.json.2; source_location=models/finances-api-model/financesInvoices_2026-06-25.json:paths[\"/finances/invoices/2026-06-25/invoices/{invoiceIdentifier}\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/2024-06-19/balances",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/finances-api-model/finances_2024-06-19.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.finances.api.model.finances.2024.06.19.json.2; source_location=models/finances-api-model/finances_2024-06-19.json:paths[\"/finances/2024-06-19/balances\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/2024-06-19/summary",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/finances-api-model/finances_2024-06-19.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.finances.api.model.finances.2024.06.19.json.3; source_location=models/finances-api-model/finances_2024-06-19.json:paths[\"/finances/2024-06-19/summary\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/2024-06-01/payouts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/finances-api-model/transfers_2024-06-01.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.finances.api.model.transfers.2024.06.01.json.2; source_location=models/finances-api-model/transfers_2024-06-01.json:paths[\"/finances/transfers/2024-06-01/payouts\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/2024-06-01/payouts/expected",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/finances-api-model/transfers_2024-06-01.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.finances.api.model.transfers.2024.06.01.json.4; source_location=models/finances-api-model/transfers_2024-06-01.json:paths[\"/finances/transfers/2024-06-01/payouts/expected\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fulfillment/outbound/2026-07-04/previews",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.1; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/previews\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fulfillment/outbound/2026-07-04/offers",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.2; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/offers\"].post"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}/cancel",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.3; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}/cancel\"].put"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}/status",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.4; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}/status\"].put"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}/packages/{packageId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.5; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}/packages/{packageId}\"].put"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.6; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}\"].put"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.7; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fulfillment/outbound/2026-07-04/orders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.8; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fulfillment/outbound/2026-07-04/orders",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.9; source_location=models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/v1/subscriptions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/notifications-api-model/notifications.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.notifications.api.model.notifications.json.1; source_location=models/notifications-api-model/notifications.json:paths[\"/notifications/v1/subscriptions\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking/2026-01-30/shipments/track",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/tracking-api-model/tracking_2026-01-30.json",
+        "notes": "classification=declaration-pending; source_id=amazon-seller-partner.rest.models.tracking.api.model.tracking.2026.01.30.json.1; source_location=models/tracking-api-model/tracking_2026-01-30.json:paths[\"/tracking/2026-01-30/shipments/track\"].get"
+      }
     }
   ],
   "operation_ledger_version": 1

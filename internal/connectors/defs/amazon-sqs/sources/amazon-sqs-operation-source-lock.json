@@ -242,7 +242,20 @@
         "source_location": "operations[\"UntagQueue\"]",
         "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
       }
-    ]
+    ],
+    "counts": {
+      "total": 23,
+      "by_kind": {
+        "rest": 23
+      },
+      "by_method": {
+        "POST": 23
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 23,

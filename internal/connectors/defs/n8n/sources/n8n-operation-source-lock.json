@@ -1396,7 +1396,24 @@
         "bytes": 3672,
         "source_path": "packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml"
       }
-    ]
+    ],
+    "counts": {
+      "total": 100,
+      "by_kind": {
+        "rest": 100
+      },
+      "by_method": {
+        "DELETE": 15,
+        "GET": 34,
+        "PATCH": 8,
+        "POST": 31,
+        "PUT": 12
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 100,

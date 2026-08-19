@@ -7,13 +7,20 @@
     "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
     "source_sha256": "282d08c85a2003ab91ed400a81339fe81952e446ae40a599877705903e870c0f",
     "source_bytes": 157139,
-    "source_operation_count": 23
+    "operations_found": 23,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "summary": {
     "api_surface_rows": 23,
     "exact_source_rows": 23,
-    "declared_operations": 23,
-    "declared_percent": 100,
+    "operations_found": 23,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
     "enabled_operations": 22,
     "enabled_percent": 95.65,
     "disabled_operations": 1,

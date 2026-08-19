@@ -7,13 +7,20 @@
     "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
     "source_sha256": "f980dbcfc317b9ea60c5095f1861f9e60fe05e5f8059781c4f2c2a816e918746",
     "source_bytes": 929720,
-    "source_operation_count": 235
+    "operations_found": 235,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published Xero Accounting OpenAPI document"
+    }
   },
   "summary": {
     "api_surface_rows": 235,
     "exact_source_rows": 235,
-    "declared_operations": 235,
-    "declared_percent": 100,
+    "operations_found": 235,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published Xero Accounting OpenAPI document"
+    },
     "enabled_operations": 87,
     "enabled_percent": 37.02,
     "disabled_operations": 148,

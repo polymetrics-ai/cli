@@ -4,16 +4,23 @@
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
     "source_lock": "sources/linkedin-ads-operation-source-lock.json",
-    "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
-    "source_sha256": "9e26dc877582c3296e903ae498515983dc45e3a0611f561d31ed8cc331c42521",
-    "source_bytes": 214702,
-    "source_operation_count": 10
+    "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
+    "source_sha256": "f16394e4d47039e2e18d69391c8df0742a79827517a3496f623f02a2d24ab68e",
+    "source_bytes": 62945,
+    "operations_found": 10,
+    "coverage_confidence": {
+      "level": "partial",
+      "basis": "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding"
+    }
   },
   "summary": {
     "api_surface_rows": 10,
     "exact_source_rows": 10,
-    "declared_operations": 10,
-    "declared_percent": 100,
+    "operations_found": 10,
+    "coverage_confidence": {
+      "level": "partial",
+      "basis": "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding"
+    },
     "enabled_operations": 0,
     "enabled_percent": 0,
     "disabled_operations": 10,
@@ -124,7 +131,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_adaccounts.1",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/adAccounts",
         "operation_id": null,
         "deprecated": false
@@ -171,7 +178,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_adaccountgroups.2",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/adAccountGroups",
         "operation_id": null,
         "deprecated": false
@@ -212,7 +219,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_adcampaigngroups.3",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/adCampaignGroups",
         "operation_id": null,
         "deprecated": false
@@ -253,7 +260,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_adcampaigns.4",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/adCampaigns",
         "operation_id": null,
         "deprecated": false
@@ -294,7 +301,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_creatives.5",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/creatives",
         "operation_id": null,
         "deprecated": false
@@ -341,7 +348,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_adanalytics.6",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/adAnalytics",
         "operation_id": null,
         "deprecated": false
@@ -388,7 +395,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_conversions.7",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/conversions",
         "operation_id": null,
         "deprecated": false
@@ -435,7 +442,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.get.rest_adtargetingfacets.8",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint GET /rest/adTargetingFacets",
         "operation_id": null,
         "deprecated": false
@@ -482,7 +489,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.post.rest_adaccounts.9",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint POST /rest/adAccounts",
         "operation_id": null,
         "deprecated": false
@@ -529,7 +536,7 @@
       "source": {
         "source_lock": "sources/linkedin-ads-operation-source-lock.json",
         "source_id": "linkedin-ads.rest.post.rest_adcampaigns.10",
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "source_location": "documented endpoint POST /rest/adCampaigns",
         "operation_id": null,
         "deprecated": false

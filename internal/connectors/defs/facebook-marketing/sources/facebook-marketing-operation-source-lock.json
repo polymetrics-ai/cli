@@ -3,11 +3,26 @@
   "connector": "facebook-marketing",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://developers.facebook.com/docs/marketing-api/",
-    "sha256": "5b8bc0e250898ea1dffd1974f4c976a6e8e37e7f5402db058107ba52774134c2",
-    "bytes": 2689319,
-    "format": "text/html; charset=\"utf-8\"",
-    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1",
+    "sha256": "7d8561a00488a69fb1a32808d218160fa3027af09a538a80eb3b827943718b14",
+    "bytes": 424046,
+    "format": "application/json; charset=utf-8",
+    "inventory_basis": "connector-owned operation inventory reconciled to the pinned official provider source; it is explicitly partial, not a complete provider operation claim",
+    "coverage_confidence": {
+      "level": "partial",
+      "basis": "official Meta business SDK code-generation source; complete Marketing API model traversal remains outstanding"
+    },
+    "counts": {
+      "total": 36,
+      "by_kind": {
+        "rest": 36
+      },
+      "by_method": {
+        "DELETE": 2,
+        "GET": 26,
+        "POST": 8
+      }
+    },
     "operation_counts": {
       "DELETE": 2,
       "GET": 26,
@@ -22,7 +37,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /me/adaccounts",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_campaigns.2",
@@ -32,7 +47,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/campaigns",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.ad_account_id_campaigns.3",
@@ -42,7 +57,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{ad_account_id}/campaigns",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.campaign_id.4",
@@ -52,7 +67,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{campaign_id}",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.delete.campaign_id.5",
@@ -62,7 +77,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint DELETE /{campaign_id}",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_ads.6",
@@ -72,7 +87,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/ads",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.ad_account_id_ads.7",
@@ -82,7 +97,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{ad_account_id}/ads",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.ad_id.8",
@@ -92,7 +107,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{ad_id}",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_adsets.9",
@@ -102,7 +117,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/adsets",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.ad_account_id_adsets.10",
@@ -112,7 +127,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{ad_account_id}/adsets",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.adset_id.11",
@@ -122,7 +137,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{adset_id}",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.delete.adset_id.12",
@@ -132,7 +147,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint DELETE /{adset_id}",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_adcreatives.13",
@@ -142,7 +157,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/adcreatives",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.ad_account_id_adcreatives.14",
@@ -152,7 +167,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{ad_account_id}/adcreatives",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_customaudiences.15",
@@ -162,7 +177,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/customaudiences",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.post.ad_account_id_customaudiences.16",
@@ -172,7 +187,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint POST /{ad_account_id}/customaudiences",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_insights.17",
@@ -182,7 +197,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/insights",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.campaign_id_insights.18",
@@ -192,7 +207,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{campaign_id}/insights",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.adset_id_insights.19",
@@ -202,7 +217,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{adset_id}/insights",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_id_insights.20",
@@ -212,7 +227,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_id}/insights",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_activities.21",
@@ -222,7 +237,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/activities",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_adimages.22",
@@ -232,7 +247,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/adimages",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_advideos.23",
@@ -242,7 +257,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/advideos",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_adlabels.24",
@@ -252,7 +267,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/adlabels",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_adrules_library.25",
@@ -262,7 +277,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/adrules_library",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_adrules_history.26",
@@ -272,7 +287,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/adrules_history",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_adspixels.27",
@@ -282,7 +297,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/adspixels",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_applications.28",
@@ -292,7 +307,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/applications",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_assigned_users.29",
@@ -302,7 +317,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/assigned_users",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_async_requests.30",
@@ -312,7 +327,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/async_requests",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_ads_reporting_mmm_reports.31",
@@ -322,7 +337,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/ads_reporting_mmm_reports",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_ad_studies.32",
@@ -332,7 +347,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/ad_studies",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_broadtargetingcategories.33",
@@ -342,7 +357,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/broadtargetingcategories",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_businessprojects.34",
@@ -352,7 +367,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/businessprojects",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_ad_place_page_sets.35",
@@ -362,7 +377,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/ad_place_page_sets",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       },
       {
         "id": "facebook-marketing.rest.get.ad_account_id_ad_saved_keywords.36",
@@ -372,7 +387,7 @@
         "operation_id": null,
         "deprecated": false,
         "source_location": "documented endpoint GET /{ad_account_id}/ad_saved_keywords",
-        "source_url": "https://developers.facebook.com/docs/marketing-api/"
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1"
       }
     ]
   }

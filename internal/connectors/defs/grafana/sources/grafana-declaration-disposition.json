@@ -7,13 +7,20 @@
     "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
     "source_sha256": "8d54e6ceb1aeef72ef8fe31213eed910d82d264b0d8328b7e53670ce4c88b46c",
     "source_bytes": 790237,
-    "source_operation_count": 314
+    "operations_found": 314,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "summary": {
     "api_surface_rows": 314,
     "exact_source_rows": 314,
-    "declared_operations": 314,
-    "declared_percent": 100,
+    "operations_found": 314,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
     "enabled_operations": 0,
     "enabled_percent": 0,
     "disabled_operations": 314,

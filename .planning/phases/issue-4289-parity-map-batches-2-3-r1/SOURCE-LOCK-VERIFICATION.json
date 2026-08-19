@@ -3,7 +3,11 @@
   "checks": [
     {
       "connector": "grafana",
-      "documented_operations": 314,
+      "operations_found": 314,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "disabled_operations": 314,
       "documented_deletes": 44,
@@ -18,7 +22,11 @@
     },
     {
       "connector": "trello",
-      "documented_operations": 261,
+      "operations_found": 261,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "disabled_operations": 261,
       "documented_deletes": 37,
@@ -33,7 +41,11 @@
     },
     {
       "connector": "slack",
-      "documented_operations": 174,
+      "operations_found": 174,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "disabled_operations": 174,
       "documented_deletes": 0,
@@ -48,7 +60,11 @@
     },
     {
       "connector": "n8n",
-      "documented_operations": 100,
+      "operations_found": 100,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 26,
       "disabled_operations": 74,
       "documented_deletes": 15,
@@ -63,7 +79,11 @@
     },
     {
       "connector": "google-calendar",
-      "documented_operations": 38,
+      "operations_found": 38,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 27,
       "disabled_operations": 11,
       "documented_deletes": 4,
@@ -78,7 +98,11 @@
     },
     {
       "connector": "gmail",
-      "documented_operations": 79,
+      "operations_found": 79,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 56,
       "disabled_operations": 23,
       "documented_deletes": 10,
@@ -93,7 +117,11 @@
     },
     {
       "connector": "twilio",
-      "documented_operations": 197,
+      "operations_found": 197,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 94,
       "disabled_operations": 103,
       "documented_deletes": 32,
@@ -108,7 +136,11 @@
     },
     {
       "connector": "amazon-sqs",
-      "documented_operations": 23,
+      "operations_found": 23,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 22,
       "disabled_operations": 1,
       "documented_deletes": 0,
@@ -123,7 +155,11 @@
     },
     {
       "connector": "elasticsearch",
-      "documented_operations": 845,
+      "operations_found": 845,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
       "enabled_operations": 0,
       "disabled_operations": 845,
       "documented_deletes": 72,
@@ -138,7 +174,11 @@
     },
     {
       "connector": "gong",
-      "documented_operations": 69,
+      "operations_found": 69,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published OpenAPI document"
+      },
       "enabled_operations": 57,
       "disabled_operations": 12,
       "documented_deletes": 3,
@@ -146,59 +186,75 @@
       "source_lock": {
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 453797,
-        "sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
+        "bytes": 453657,
+        "sha256": "f58d3b3bbf389c2ad4aacb0a52d96f12da46debcec01e31afd54009a03d0ae33",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "google-ads",
-      "documented_operations": 164,
+      "operations_found": 163,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Google Discovery document"
+      },
       "enabled_operations": 28,
-      "disabled_operations": 136,
+      "disabled_operations": 135,
       "documented_deletes": 1,
       "enabled_deletes": 0,
       "source_lock": {
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
         "captured_at": "2026-08-19T00:00:00Z",
         "bytes": 2937930,
-        "sha256": "b04e992e2e4e602d9f356635361a65115d1ea923d6be3116054b7d2e3917339c",
+        "sha256": "f3675af470264637f2b19e61017f180573c1adde7f3da9e484a495b620d160f9",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "facebook-marketing",
-      "documented_operations": 36,
+      "operations_found": 36,
+      "coverage_confidence": {
+        "level": "partial",
+        "basis": "official Meta business SDK code-generation source; complete Marketing API model traversal remains outstanding"
+      },
       "enabled_operations": 5,
       "disabled_operations": 31,
       "documented_deletes": 2,
       "enabled_deletes": 0,
       "source_lock": {
-        "source_url": "https://developers.facebook.com/docs/marketing-api/",
+        "source_url": "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 2689319,
-        "sha256": "5b8bc0e250898ea1dffd1974f4c976a6e8e37e7f5402db058107ba52774134c2",
+        "bytes": 424046,
+        "sha256": "7d8561a00488a69fb1a32808d218160fa3027af09a538a80eb3b827943718b14",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "linkedin-ads",
-      "documented_operations": 10,
+      "operations_found": 10,
+      "coverage_confidence": {
+        "level": "partial",
+        "basis": "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding"
+      },
       "enabled_operations": 0,
       "disabled_operations": 10,
       "documented_deletes": 0,
       "enabled_deletes": 0,
       "source_lock": {
-        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+        "source_url": "https://learn.microsoft.com/en-us/linkedin/marketing/",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 214702,
-        "sha256": "9e26dc877582c3296e903ae498515983dc45e3a0611f561d31ed8cc331c42521",
+        "bytes": 62945,
+        "sha256": "f16394e4d47039e2e18d69391c8df0742a79827517a3496f623f02a2d24ab68e",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "aircall",
-      "documented_operations": 93,
+      "operations_found": 93,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+      },
       "enabled_operations": 20,
       "disabled_operations": 73,
       "documented_deletes": 13,
@@ -213,7 +269,11 @@
     },
     {
       "connector": "xero",
-      "documented_operations": 235,
+      "operations_found": 235,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Xero Accounting OpenAPI document"
+      },
       "enabled_operations": 87,
       "disabled_operations": 148,
       "documented_deletes": 10,
@@ -228,22 +288,30 @@
     },
     {
       "connector": "paypal-transaction",
-      "documented_operations": 10,
+      "operations_found": 2,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Transaction Search OpenAPI document"
+      },
       "enabled_operations": 0,
-      "disabled_operations": 10,
+      "disabled_operations": 2,
       "documented_deletes": 0,
       "enabled_deletes": 0,
       "source_lock": {
-        "source_url": "https://developer.paypal.com/api/rest/",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/reporting_transactions_v1.json",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 196206,
-        "sha256": "a227eadf7eaa3379441a6569ba212c6b7440ba63b9a5344bcbcd0f4895d0cd48",
+        "bytes": 75463,
+        "sha256": "40f2af0c02c204dde9227b14a6f9f91c2a6cc4222fe2c7c20983c6bc6f9e52b4",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "gocardless",
-      "documented_operations": 142,
+      "operations_found": 142,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published"
+      },
       "enabled_operations": 76,
       "disabled_operations": 66,
       "documented_deletes": 1,
@@ -258,31 +326,39 @@
     },
     {
       "connector": "amazon-seller-partner",
-      "documented_operations": 353,
+      "operations_found": 370,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "all provider-published Selling Partner OpenAPI model documents under models/"
+      },
       "enabled_operations": 98,
-      "disabled_operations": 255,
+      "disabled_operations": 272,
       "documented_deletes": 13,
       "enabled_deletes": 8,
       "source_lock": {
-        "source_url": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
+        "source_url": "https://api.github.com/repos/amzn/selling-partner-api-models/git/trees/main?recursive=1",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 345239,
-        "sha256": "bcd9bfdddc538b022a11be225a8343bcf0a5034b5b13a54a31ab7e7980d5d357",
+        "bytes": 8212411,
+        "sha256": "a22c88f6991768e255633dcec5c59b692186016d57f0ac3825ac389b783bfaa3",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },
     {
       "connector": "miro",
-      "documented_operations": 197,
+      "operations_found": 197,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Miro OpenAPI document linked by the API reference"
+      },
       "enabled_operations": 104,
       "disabled_operations": 93,
       "documented_deletes": 34,
       "enabled_deletes": 34,
       "source_lock": {
-        "source_url": "https://developers.miro.com/reference/overview",
+        "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 588083,
-        "sha256": "85edf9a8f69697169d874f9807894107a9d26897168584d4e9a89cab984b52bd",
+        "bytes": 1065633,
+        "sha256": "f0e17b5b43c92ff2d85c7fbe9a84301e39df1d3c14e6738cd939a6d7142f44dd",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     }

@@ -1984,7 +1984,22 @@
         "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json\"].delete",
         "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
       }
-    ]
+    ],
+    "counts": {
+      "total": 197,
+      "by_kind": {
+        "rest": 197
+      },
+      "by_method": {
+        "DELETE": 32,
+        "GET": 103,
+        "POST": 62
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 197,

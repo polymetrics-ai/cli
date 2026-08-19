@@ -7,13 +7,20 @@
     "source_url": "https://developer.gocardless.com/api-reference/openapi",
     "source_sha256": "6ae95829354fd09a383df72b1a0239f86311d7098a8a3ff7666849fa9dc884e4",
     "source_bytes": 265226,
-    "source_operation_count": 142
+    "operations_found": 142,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published"
+    }
   },
   "summary": {
     "api_surface_rows": 142,
     "exact_source_rows": 142,
-    "declared_operations": 142,
-    "declared_percent": 100,
+    "operations_found": 142,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published"
+    },
     "enabled_operations": 76,
     "enabled_percent": 53.52,
     "disabled_operations": 66,

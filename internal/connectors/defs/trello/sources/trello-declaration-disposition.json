@@ -7,13 +7,20 @@
     "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
     "source_sha256": "b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19",
     "source_bytes": 261671,
-    "source_operation_count": 261
+    "operations_found": 261,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "summary": {
     "api_surface_rows": 261,
     "exact_source_rows": 261,
-    "declared_operations": 261,
-    "declared_percent": 100,
+    "operations_found": 261,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
     "enabled_operations": 0,
     "enabled_percent": 0,
     "disabled_operations": 261,

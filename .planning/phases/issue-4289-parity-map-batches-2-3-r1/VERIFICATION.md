@@ -1,7 +1,7 @@
 # Issue #4289 — Verification Checklist
 
-- [x] Every listed bundle has a parsing source lock and a corrected declaration-disposition ledger.
-- [x] The source-lock/map-integrity assertion proves all nineteen source inventories, API-surface bindings, row shapes, six-class totals, and rejected-operation reasons: `node .planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/verify-parity-maps.mjs` → `verified 19 connectors / 3340 documented operations`.
+- [x] Every listed bundle has a parsing source lock, `counts.total`, per-kind/method counts, coverage-confidence basis, and a corrected declaration-disposition ledger.
+- [ ] The source-lock/map-integrity assertion proves all nineteen source inventories, API-surface bindings, row shapes, six-class totals, and rejected-operation reasons without a partial source. It currently verifies 19 connectors / 3348 operations found, but Facebook Marketing and LinkedIn Ads correctly report `coverage_confidence: partial`; PR progression is held until their complete public references are materialised.
 - [x] Every documented DELETE is declared or carries an explicit disabled disposition; the generated report records its enabled/documented count per connector.
 - [x] `go run ./cmd/connectorgen validate --json` → `connectors_checked: 552`, zero findings and warnings.
 - [x] `go run ./cmd/connectorgen surface-sync --check` → 552 scanned, zero fields filled/corrected.

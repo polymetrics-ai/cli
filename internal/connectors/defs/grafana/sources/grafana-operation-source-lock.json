@@ -3156,7 +3156,24 @@
         "source_location": "paths[\"/v1/sso-settings/{key}\"].put",
         "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
       }
-    ]
+    ],
+    "counts": {
+      "total": 314,
+      "by_kind": {
+        "rest": 314
+      },
+      "by_method": {
+        "DELETE": 44,
+        "GET": 143,
+        "PATCH": 11,
+        "POST": 81,
+        "PUT": 35
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 314,

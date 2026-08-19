@@ -7,13 +7,20 @@
     "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
     "source_sha256": "55537f18631fa45e5458c46b0c9a6f9cc288f38a8f4657ebc2bca87b0874be49",
     "source_bytes": 169810,
-    "source_operation_count": 38
+    "operations_found": 38,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "summary": {
     "api_surface_rows": 38,
     "exact_source_rows": 38,
-    "declared_operations": 38,
-    "declared_percent": 100,
+    "operations_found": 38,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
     "enabled_operations": 27,
     "enabled_percent": 71.05,
     "disabled_operations": 11,

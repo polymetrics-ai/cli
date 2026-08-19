@@ -12,7 +12,7 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| Every selected connector has reproducible public provenance | live | Its source lock has the official artifact URL, capture date, SHA-256, byte count, format metadata, per-method counts, and a complete operation inventory. The local verifier checks that captured inventory against the ledger without refetching mutable provider pages or discovery documents. |
+| Every selected connector has auditable public provenance | live | Its source lock has the official artifact URL, capture date, SHA-256, byte count, `counts.total`, per-kind/method counts, and explicit `coverage_confidence` with a basis. The local verifier checks that captured inventory against the ledger without refetching mutable provider pages or discovery documents. A partial source is a hold, not a complete-map claim. |
 | Every documented operation is accounted for exactly once | live | The integrity check proves source-inventory count equals disposition count and API-surface bindings, while primary parity-class totals equal that denominator. |
 | Disabled operations have an honest reason | live | The verifier rejects missing state/rejection fields, treats un-authored contracts as `declaration-pending`, and requires file/line plus a minimal change for every `foundation-gap`. |
 | No credentialed or live provider execution is claimed | live | Every ledger reports `live_certification: pending`; all source artifacts are public descriptions and all validation is local structural/fixture evidence. |
@@ -56,3 +56,7 @@ Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-struc
 3. Repeat capture/integrity assertion and validation for batch 3, then commit and push checkpoint.
 4. Run targeted fixture/conformance and commandrunner preflight tests, generated/check gates, detached `connector-boundary`, `verify-work`, and data-focused code review.
 5. Rebase on `main`, push without force, open a Conventional Commit PR using `Refs #4289`, and read back its API-reported base.
+
+## Source-Lock Completeness Remediation — 2026-08-19
+
+Captain review found a fleet-wide defect: a source lock without `counts.total`, or a landing-page inventory that divides its own count by itself, cannot prove coverage. This phase replaces `declared_percent` with `operations_found` and `coverage_confidence`/basis everywhere, and makes `counts.total` plus per-kind/method counts mandatory. Gong, Google Ads, Miro, PayPal Transaction Search, and all Amazon Selling Partner models now use parsed machine-readable source inventories. Facebook Marketing and LinkedIn Ads are explicitly `partial` until their complete public provider references can be materialised; the branch must not be pushed or opened as a PR while either remains partial.

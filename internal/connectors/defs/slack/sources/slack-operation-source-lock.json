@@ -1753,7 +1753,21 @@
         "source_location": "paths[\"/workflows.updateStep\"].get",
         "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
       }
-    ]
+    ],
+    "counts": {
+      "total": 174,
+      "by_kind": {
+        "rest": 174
+      },
+      "by_method": {
+        "GET": 80,
+        "POST": 94
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 174,

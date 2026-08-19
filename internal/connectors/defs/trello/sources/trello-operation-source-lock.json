@@ -2625,7 +2625,23 @@
         "source_location": "paths[\"/webhooks/{id}/{field}\"].get",
         "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json"
       }
-    ]
+    ],
+    "counts": {
+      "total": 261,
+      "by_kind": {
+        "rest": 261
+      },
+      "by_method": {
+        "DELETE": 37,
+        "GET": 128,
+        "POST": 45,
+        "PUT": 51
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 261,

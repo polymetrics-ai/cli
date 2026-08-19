@@ -15,16 +15,19 @@ const batch3 = ["gong", "google-ads", "facebook-marketing", "linkedin-ads", "air
 // These are documentation artifacts only. No endpoint, credential, or provider
 // action is invoked by this map generator.
 const batch3Sources = {
-  "gong": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-  "google-ads": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-  "facebook-marketing": "https://developers.facebook.com/docs/marketing-api/",
-  "linkedin-ads": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
-  "aircall": "https://developer.aircall.io/api-references/",
-  "xero": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-  "paypal-transaction": "https://developer.paypal.com/api/rest/",
-  "gocardless": "https://developer.gocardless.com/api-reference/openapi",
-  "amazon-seller-partner": "https://github.com/amzn/selling-partner-api-models/tree/main/models",
-  "miro": "https://developers.miro.com/reference/overview"
+  "gong": { url: "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=", parser: "openapi", confidence: { level: "complete", basis: "provider-published OpenAPI document" } },
+  "google-ads": { url: "https://googleads.googleapis.com/$discovery/rest?version=v22", parser: "discovery", confidence: { level: "complete", basis: "provider-published Google Discovery document" } },
+  // Meta's official code-generation source is a safer provenance artifact than
+  // the rendered landing page. Its current connector subset is honestly marked
+  // partial until the full Marketing API model traversal is materialised.
+  "facebook-marketing": { url: "https://api.github.com/repos/facebook/facebook-business-sdk-codegen/git/trees/main?recursive=1", parser: "surface-partial", confidence: { level: "partial", basis: "official Meta business SDK code-generation source; complete Marketing API model traversal remains outstanding" } },
+  "linkedin-ads": { url: "https://learn.microsoft.com/en-us/linkedin/marketing/", parser: "surface-partial", confidence: { level: "partial", basis: "official Microsoft LinkedIn Marketing reference portal; complete versioned REST.li reference traversal remains outstanding" } },
+  "aircall": { url: "https://developer.aircall.io/api-references/", parser: "surface-rendered", confidence: { level: "complete", basis: "provider's complete rendered API reference; Aircall publishes no public machine-readable specification" } },
+  "xero": { url: "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml", parser: "surface-machine", confidence: { level: "complete", basis: "provider-published Xero Accounting OpenAPI document" } },
+  "paypal-transaction": { url: "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/reporting_transactions_v1.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published Transaction Search OpenAPI document" } },
+  "gocardless": { url: "https://developer.gocardless.com/api-reference/openapi", parser: "surface-rendered", confidence: { level: "complete", basis: "provider's complete rendered OpenAPI reference; no downloadable machine-readable artifact is published" } },
+  "amazon-seller-partner": { url: "https://api.github.com/repos/amzn/selling-partner-api-models/git/trees/main?recursive=1", parser: "amazon-models", confidence: { level: "complete", basis: "all provider-published Selling Partner OpenAPI model documents under models/" } },
+  "miro": { url: "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published Miro OpenAPI document linked by the API reference" } }
 };
 
 function pretty(value) {
@@ -76,6 +79,87 @@ async function fetchPublicArtifact(url) {
   if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
   const bytes = Buffer.from(await response.arrayBuffer());
   return { sha256: createHash("sha256").update(bytes).digest("hex"), bytes: bytes.length, contentType: response.headers.get("content-type") || "unknown" };
+}
+
+async function fetchPublicJSON(url) {
+  const response = await fetch(url, { headers: { "User-Agent": "polymetrics-source-lock/1" } });
+  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  return {
+    json: JSON.parse(bytes.toString("utf8")),
+    sha256: createHash("sha256").update(bytes).digest("hex"),
+    bytes: bytes.length,
+    contentType: response.headers.get("content-type") || "application/json"
+  };
+}
+
+const sourceMethods = new Set(["get", "post", "put", "patch", "delete", "head"]);
+
+function openAPIOperations(connector, document, sourceURL) {
+  const operations = [];
+  for (const [pathname, item] of Object.entries(document.paths || {})) {
+    for (const [method, operation] of Object.entries(item || {})) {
+      if (!sourceMethods.has(method.toLowerCase())) continue;
+      operations.push({
+        id: sourceID(connector, method, pathname, operations.length),
+        protocol: "rest",
+        method: method.toUpperCase(),
+        path: pathname,
+        operation_id: operation?.operationId || null,
+        deprecated: Boolean(operation?.deprecated),
+        source_location: `paths[${JSON.stringify(pathname)}].${method.toLowerCase()}`,
+        source_url: sourceURL
+      });
+    }
+  }
+  return operations;
+}
+
+function discoveryOperations(connector, document, sourceURL) {
+  const operations = [];
+  function visit(resources) {
+    for (const resource of Object.values(resources || {})) {
+      for (const method of Object.values(resource.methods || {})) {
+        if (!sourceMethods.has(method.httpMethod?.toLowerCase())) continue;
+        const pathname = `/${String(method.path || "").replace(/^\//, "")}`;
+        operations.push({
+          id: sourceID(connector, method.httpMethod, pathname, operations.length),
+          protocol: "rest",
+          method: method.httpMethod.toUpperCase(),
+          path: pathname,
+          operation_id: method.id || null,
+          deprecated: Boolean(method.deprecated),
+          source_location: `Discovery method ${JSON.stringify(method.id || pathname)}`,
+          source_url: sourceURL
+        });
+      }
+      visit(resource.resources);
+    }
+  }
+  visit(document.resources);
+  return operations;
+}
+
+async function amazonModelOperations(connector, treeURL) {
+  const tree = await fetchPublicJSON(treeURL);
+  const models = tree.json.tree.filter((entry) => entry.path.startsWith("models/") && entry.path.endsWith(".json"));
+  const operations = [];
+  let bytes = 0;
+  const hash = createHash("sha256");
+  const sourceDocuments = [];
+  for (const model of models) {
+    const sourceURL = `https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/${model.path}`;
+    const artifact = await fetchPublicJSON(sourceURL);
+    bytes += artifact.bytes;
+    hash.update(artifact.sha256);
+    sourceDocuments.push({ path: model.path, source_url: sourceURL, sha256: artifact.sha256, bytes: artifact.bytes });
+    for (const operation of openAPIOperations(connector, artifact.json, sourceURL)) {
+      operation.id = `${connector}.rest.${model.path.replace(/[^A-Za-z0-9]+/g, ".")}.${operation.id.split(".").pop()}`;
+      operation.source_location = `${model.path}:${operation.source_location}`;
+      operations.push(operation);
+    }
+  }
+  return { operations, bytes, sha256: hash.digest("hex"), sourceDocuments };
 }
 
 function convertExcluded(endpoint, sourceURL) {
@@ -236,30 +320,53 @@ function transportSummary(connector) {
 }
 
 async function batch3Lock(connector, surface) {
-  const sourceURL = batch3Sources[connector];
-  const artifact = await fetchPublicArtifact(sourceURL);
-  const operations = surface.endpoints.map((endpoint, index) => ({
-    id: sourceID(connector, endpoint.method, endpoint.path, index),
-    protocol: "rest",
-    method: endpoint.method.toUpperCase(),
-    path: endpoint.path,
-    operation_id: endpoint.operation?.notes?.match(/operation_id=([^;\s]+)/)?.[1] || null,
-    deprecated: endpoint.operation?.model === "deprecated",
-    source_location: `documented endpoint ${endpoint.method.toUpperCase()} ${endpoint.path}`,
-    source_url: sourceURL
-  }));
+  const plan = batch3Sources[connector];
+  let artifact;
+  let operations;
+  let sourceDocuments;
+  if (plan.parser === "openapi") {
+    artifact = await fetchPublicJSON(plan.url);
+    operations = openAPIOperations(connector, artifact.json, plan.url);
+  } else if (plan.parser === "discovery") {
+    artifact = await fetchPublicJSON(plan.url);
+    operations = discoveryOperations(connector, artifact.json, plan.url);
+  } else if (plan.parser === "amazon-models") {
+    const aggregate = await amazonModelOperations(connector, plan.url);
+    artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: "application/vnd.amazon.selling-partner.openapi-model-set+json" };
+    operations = aggregate.operations;
+    sourceDocuments = aggregate.sourceDocuments;
+  } else {
+    artifact = await fetchPublicArtifact(plan.url);
+    operations = surface.endpoints.map((endpoint, index) => ({
+      id: sourceID(connector, endpoint.method, endpoint.path, index),
+      protocol: "rest",
+      method: endpoint.method.toUpperCase(),
+      path: endpoint.path,
+      operation_id: endpoint.operation?.notes?.match(/operation_id=([^;\s]+)/)?.[1] || null,
+      deprecated: endpoint.operation?.model === "deprecated",
+      source_location: `documented endpoint ${endpoint.method.toUpperCase()} ${endpoint.path}`,
+      source_url: plan.url
+    }));
+  }
   return {
     schema_version: 2,
     connector,
     captured_at: generatedAt,
     rest: {
-      source_url: sourceURL,
+      source_url: plan.url,
       sha256: artifact.sha256,
       bytes: artifact.bytes,
       format: artifact.contentType,
-      inventory_basis: "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+      inventory_basis: plan.parser === "surface-partial"
+        ? "connector-owned operation inventory reconciled to the pinned official provider source; it is explicitly partial, not a complete provider operation claim"
+        : plan.parser === "surface-rendered"
+          ? "complete rendered provider API reference reconciled to the connector-owned API surface"
+          : "parsed from the pinned provider machine-readable source artifact",
+      coverage_confidence: plan.confidence,
+      counts: { total: operations.length, by_kind: { rest: operations.length }, by_method: methodCounts(operations) },
       operation_counts: methodCounts(operations),
-      operations
+      operations,
+      ...(sourceDocuments ? { source_documents: sourceDocuments } : {})
     }
   };
 }
@@ -276,6 +383,9 @@ async function loadSourceLock(connector, surface) {
     }
   }
   lock.captured_at = generatedAt;
+  const operations = sourceOperations(lock);
+  lock.rest.counts = { total: operations.length, by_kind: { rest: operations.length }, by_method: methodCounts(operations) };
+  lock.rest.coverage_confidence = { level: "complete", basis: "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document" };
   return lock;
 }
 
@@ -317,8 +427,8 @@ function summary(connector, lock, rows) {
   return {
     api_surface_rows: rows.length,
     exact_source_rows: rows.length,
-    declared_operations: rows.length,
-    declared_percent: 100,
+    operations_found: rows.length,
+    coverage_confidence: lock.rest.coverage_confidence,
     enabled_operations: enabledRows.length,
     enabled_percent: Number(((enabledRows.length / rows.length) * 100).toFixed(2)),
     disabled_operations: rows.length - enabledRows.length,
@@ -357,9 +467,10 @@ async function main() {
       source_basis: {
         source_lock: `sources/${lockName}`,
         source_url: lock.rest.source_url,
-        source_sha256: lock.rest.sha256,
-        source_bytes: lock.rest.bytes,
-        source_operation_count: mapped.rows.length
+      source_sha256: lock.rest.sha256,
+      source_bytes: lock.rest.bytes,
+      operations_found: mapped.rows.length,
+      coverage_confidence: lock.rest.coverage_confidence
       },
       summary: summary(connector, lock, mapped.rows),
       ledger_dispositions: mapped.rows

@@ -7,13 +7,20 @@
     "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
     "source_sha256": "6b6ffccef14cd55fd6d2fd38c3fde68585e1937eead4c099a92c5efe696b882c",
     "source_bytes": 1877530,
-    "source_operation_count": 197
+    "operations_found": 197,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "summary": {
     "api_surface_rows": 197,
     "exact_source_rows": 197,
-    "declared_operations": 197,
-    "declared_percent": 100,
+    "operations_found": 197,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
     "enabled_operations": 94,
     "enabled_percent": 47.72,
     "disabled_operations": 103,

@@ -8466,7 +8466,24 @@
         "source_location": "paths[\"/_xpack/usage\"].get",
         "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json"
       }
-    ]
+    ],
+    "counts": {
+      "total": 845,
+      "by_kind": {
+        "rest": 845
+      },
+      "by_method": {
+        "DELETE": 72,
+        "GET": 354,
+        "HEAD": 9,
+        "POST": 270,
+        "PUT": 140
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 845,

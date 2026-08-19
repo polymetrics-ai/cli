@@ -7,7 +7,23 @@
     "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
     "bytes": 875367,
     "format": "text/html",
-    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "inventory_basis": "complete rendered provider API reference reconciled to the connector-owned API surface",
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+    },
+    "counts": {
+      "total": 93,
+      "by_kind": {
+        "rest": 93
+      },
+      "by_method": {
+        "DELETE": 13,
+        "GET": 39,
+        "POST": 30,
+        "PUT": 11
+      }
+    },
     "operation_counts": {
       "DELETE": 13,
       "GET": 39,

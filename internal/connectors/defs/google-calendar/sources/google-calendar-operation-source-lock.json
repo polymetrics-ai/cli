@@ -396,7 +396,24 @@
         "source_location": "discovery method \"calendar.calendarList.watch\"",
         "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
       }
-    ]
+    ],
+    "counts": {
+      "total": 38,
+      "by_kind": {
+        "rest": 38
+      },
+      "by_method": {
+        "DELETE": 4,
+        "GET": 11,
+        "PATCH": 4,
+        "POST": 15,
+        "PUT": 4
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "counts": {
     "rest": 38,

@@ -7,13 +7,20 @@
     "source_url": "https://developer.aircall.io/api-references/",
     "source_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
     "source_bytes": 875367,
-    "source_operation_count": 93
+    "operations_found": 93,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+    }
   },
   "summary": {
     "api_surface_rows": 93,
     "exact_source_rows": 93,
-    "declared_operations": 93,
-    "declared_percent": 100,
+    "operations_found": 93,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider's complete rendered API reference; Aircall publishes no public machine-readable specification"
+    },
     "enabled_operations": 20,
     "enabled_percent": 21.51,
     "disabled_operations": 73,

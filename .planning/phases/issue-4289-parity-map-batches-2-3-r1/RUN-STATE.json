@@ -2,7 +2,7 @@
   "issue": 4289,
   "branch": "fm/cli-map-batch23-r1",
   "base": "main",
-  "state": "verified-pending-rebase-and-pr",
+  "state": "source-lock-remediation-in-progress",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "commands_reviewed": [
@@ -26,6 +26,7 @@
     "targeted_conformance": "green",
     "runtime_preflight": "green",
     "connector_boundary": "green: clean / 292 files / 552 connectors",
-    "repository_gates": "green"
+    "repository_gates": "green-before-source-lock-remediation",
+    "source_lock_remediation": "19 locks now carry counts.total and confidence; facebook-marketing and linkedin-ads remain explicitly partial"
   }
 }

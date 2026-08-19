@@ -12,6 +12,7 @@ For each selected bundle, a source lock pins a credential-free public provider d
 - every row has all required corrected batch-1 fields;
 - every source operation has exactly one method/path API-surface binding;
 - parity-class totals equal the pinned source denominator;
+- every source lock has `counts.total`, per-kind/method counts, and non-self-referential `operations_found` with a coverage-confidence basis; a partial inventory is visible as a hold, not reported as 100% declared;
 - `foundation-gap` records include a concrete engine file/line and minimal change; enabled typed `direct_write` rows carry reverse-ETL eligibility metadata using the actual `generic-typed-destination-executor` refusal at `internal/app/issue_label_warehouse_transport.go:85-95` rather than the retired estate-wide source gap;
 - unauthored connector work is `declaration-pending`, and elevated scopes do not disable rows.
 
@@ -19,4 +20,4 @@ For each selected bundle, a source lock pins a credential-free public provider d
 
 ## Refactor
 
-Keep the generated ledgers connector-local and use the exact corrected batch-1 schema. Do not alter engine code, infer schemas, fabricate transport descriptors, request a credential, or produce a terminal-command/certification claim.
+Keep the generated ledgers connector-local and use the exact corrected batch-1 schema. Do not alter engine code, infer schemas, fabricate transport descriptors, request a credential, or produce a terminal-command/certification claim. Never promote a rendered index or a self-referential count to complete source coverage.

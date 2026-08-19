@@ -7,7 +7,23 @@
     "sha256": "f980dbcfc317b9ea60c5095f1861f9e60fe05e5f8059781c4f2c2a816e918746",
     "bytes": 929720,
     "format": "text/plain; charset=utf-8",
-    "inventory_basis": "existing connector api_surface.json reconciled to the pinned public provider documentation artifact",
+    "inventory_basis": "parsed from the pinned provider machine-readable source artifact",
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published Xero Accounting OpenAPI document"
+    },
+    "counts": {
+      "total": 235,
+      "by_kind": {
+        "rest": 235
+      },
+      "by_method": {
+        "DELETE": 10,
+        "GET": 126,
+        "POST": 46,
+        "PUT": 53
+      }
+    },
     "operation_counts": {
       "DELETE": 10,
       "GET": 126,

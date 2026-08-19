@@ -7,13 +7,20 @@
     "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json",
     "source_sha256": "742a5c977180a829df8767cf57bc417d99b3713583aee83741efb9c08ca731e7",
     "source_bytes": 1237332,
-    "source_operation_count": 174
+    "operations_found": 174,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
   },
   "summary": {
     "api_surface_rows": 174,
     "exact_source_rows": 174,
-    "declared_operations": 174,
-    "declared_percent": 100,
+    "operations_found": 174,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
     "enabled_operations": 0,
     "enabled_percent": 0,
     "disabled_operations": 174,
