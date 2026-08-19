@@ -1,0 +1,1256 @@
+{
+  "schema_version": 1,
+  "connector": "amplitude",
+  "source_lock": "sources/amplitude-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-3-cohorts-api-surface-1",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "amplitude.rest.get-api-3-cohorts-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/3/cohorts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/3/cohorts",
+          "operation": null,
+          "covered_by": {
+            "stream": "cohorts"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "cohorts"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-3-cohorts-usage-api-surface-2",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "amplitude.rest.get-api-3-cohorts-usage-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/3/cohorts/usage",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/3/cohorts/usage",
+          "operation": null,
+          "covered_by": {
+            "stream": "cohorts_usage"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "cohorts_usage"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-5-cohorts-request-id-api-surface-3",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "amplitude.rest.get-api-5-cohorts-request-id-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/5/cohorts/request/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/5/cohorts/request/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "step 1 of Amplitude's 2-step async cohort-membership download protocol (returns a request_id/cohort_id pair, not the membership data itself); the dialect has no async-job-poll-then-fetch primitive to express the request/request-status/file 3-endpoint sequence as a single declarative stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-5-cohorts-request-status-request-id-api-surface-4",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "amplitude.rest.get-api-5-cohorts-request-status-request-id-api-surface-4",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/5/cohorts/request-status/{request_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/5/cohorts/request-status/{request_id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "step 2 of the async cohort-membership download protocol; polls job status, no standalone record value without the paired request/file endpoints"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-5-cohorts-request-request-id-file-api-surface-5",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "amplitude.rest.get-api-5-cohorts-request-request-id-file-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/5/cohorts/request/{request_id}/file",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/5/cohorts/request/{request_id}/file",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "returns either a small inline body or a 302 redirect to a presigned S3 URL for large cohorts; the redirect-to-external-storage shape has no declarative equivalent and the payload itself is a bulk id list, not a projectable record shape"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-3-cohorts-upload-api-surface-6",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "amplitude.rest.post-api-3-cohorts-upload-api-surface-6",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/3/cohorts/upload",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/3/cohorts/upload",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "bulk-uploads an arbitrary user/amplitude-id list to create or replace cohort membership wholesale; a write action with no path-addressable existing record (a cohort id is optional/generated) and payload shape (an id array, potentially large) is a bulk-import operation outside the per-record create/update/delete write model"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-3-cohorts-membership-api-surface-7",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "amplitude.rest.post-api-3-cohorts-membership-api-surface-7",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/3/cohorts/membership",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/3/cohorts/membership",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "incrementally adds/removes members to/from cohort membership via an array of {ids, id_type, operation} objects; same bulk-membership-list shape as cohorts/upload, not a single addressable record mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-3-annotations-api-surface-8",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "amplitude.rest.get-api-3-annotations-api-surface-8",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/3/annotations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/3/annotations",
+          "operation": null,
+          "covered_by": {
+            "stream": "annotations"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "annotations"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-3-annotations-annotation-id-api-surface-9",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "amplitude.rest.get-api-3-annotations-annotation-id-api-surface-9",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/3/annotations/{annotation_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/3/annotations/{annotation_id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-annotation detail GET; every field it returns is already present on each record of the annotations list stream, which this connector reads to exhaustion every sync"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-3-annotations-api-surface-10",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "amplitude.rest.post-api-3-annotations-api-surface-10",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/3/annotations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/3/annotations",
+          "operation": null,
+          "covered_by": {
+            "write": "create_annotation"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_annotation"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-3-annotations-annotation-id-api-surface-11",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "amplitude.rest.put-api-3-annotations-annotation-id-api-surface-11",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/3/annotations/{annotation_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/3/annotations/{annotation_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_annotation"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_annotation"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.delete-api-3-annotations-annotation-id-api-surface-12",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "amplitude.rest.delete-api-3-annotations-annotation-id-api-surface-12",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/3/annotations/{annotation_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/3/annotations/{annotation_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_annotation"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_annotation"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-3-annotation-categories-api-surface-13",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "amplitude.rest.get-api-3-annotation-categories-api-surface-13",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/3/annotation-categories",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/3/annotation-categories",
+          "operation": null,
+          "covered_by": {
+            "stream": "annotation_categories"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "annotation_categories"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-3-annotation-categories-category-id-api-surface-14",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "amplitude.rest.get-api-3-annotation-categories-category-id-api-surface-14",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/3/annotation-categories/{category_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/3/annotation-categories/{category_id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-category detail GET; every field is already present on each record of the annotation_categories list stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-3-annotation-categories-api-surface-15",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "amplitude.rest.post-api-3-annotation-categories-api-surface-15",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/3/annotation-categories",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/3/annotation-categories",
+          "operation": null,
+          "covered_by": {
+            "write": "create_annotation_category"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_annotation_category"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-3-annotation-categories-category-id-api-surface-16",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[15]",
+      "operation_id": "amplitude.rest.put-api-3-annotation-categories-category-id-api-surface-16",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/3/annotation-categories/{category_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/3/annotation-categories/{category_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_annotation_category"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_annotation_category"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.delete-api-3-annotation-categories-category-id-api-surface-17",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[16]",
+      "operation_id": "amplitude.rest.delete-api-3-annotation-categories-category-id-api-surface-17",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/3/annotation-categories/{category_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/3/annotation-categories/{category_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_annotation_category"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_annotation_category"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-3-annotation-categories-bulk-category-id-api-surface-18",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[17]",
+      "operation_id": "amplitude.rest.put-api-3-annotation-categories-bulk-category-id-api-surface-18",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/3/annotation-categories/bulk/{category_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/3/annotation-categories/bulk/{category_id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "bulk-reassigns an array of annotation_ids to a category in one call; a batch-of-ids mutation, not a single addressable record the per-record write model targets — an operator can express the same effect as N update_annotation calls setting each annotation's category individually"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-events-list-api-surface-19",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[18]",
+      "operation_id": "amplitude.rest.get-api-2-events-list-api-surface-19",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/events/list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/events/list",
+          "operation": null,
+          "covered_by": {
+            "stream": "events_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "events_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-category-api-surface-20",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[19]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-category-api-surface-20",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/category",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/category",
+          "operation": null,
+          "covered_by": {
+            "stream": "taxonomy_categories"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "taxonomy_categories"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-category-category-name-api-surface-21",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[20]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-category-category-name-api-surface-21",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/category/{category_name}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/category/{category_name}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-category detail GET; every field is already present on each record of the taxonomy_categories list stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-category-api-surface-22",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[21]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-category-api-surface-22",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/category",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/category",
+          "operation": null,
+          "covered_by": {
+            "write": "create_taxonomy_category"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_taxonomy_category"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-2-taxonomy-category-category-id-api-surface-23",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[22]",
+      "operation_id": "amplitude.rest.put-api-2-taxonomy-category-category-id-api-surface-23",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/2/taxonomy/category/{category_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/2/taxonomy/category/{category_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_taxonomy_category"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_taxonomy_category"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.delete-api-2-taxonomy-category-category-id-api-surface-24",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[23]",
+      "operation_id": "amplitude.rest.delete-api-2-taxonomy-category-category-id-api-surface-24",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/category/{category_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/2/taxonomy/category/{category_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_taxonomy_category"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_taxonomy_category"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-event-api-surface-25",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[24]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-event-api-surface-25",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/event",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/event",
+          "operation": null,
+          "covered_by": {
+            "stream": "taxonomy_events"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "taxonomy_events"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-event-event-type-api-surface-26",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[25]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-event-event-type-api-surface-26",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/event/{event_type}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/event/{event_type}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-event-type detail GET; every field is already present on each record of the taxonomy_events list stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-event-api-surface-27",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[26]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-event-api-surface-27",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/event",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/event",
+          "operation": null,
+          "covered_by": {
+            "write": "create_taxonomy_event"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_taxonomy_event"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-2-taxonomy-event-event-type-api-surface-28",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[27]",
+      "operation_id": "amplitude.rest.put-api-2-taxonomy-event-event-type-api-surface-28",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/2/taxonomy/event/{event_type}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/2/taxonomy/event/{event_type}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_taxonomy_event"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_taxonomy_event"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.delete-api-2-taxonomy-event-event-type-api-surface-29",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[28]",
+      "operation_id": "amplitude.rest.delete-api-2-taxonomy-event-event-type-api-surface-29",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/event/{event_type}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/2/taxonomy/event/{event_type}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_taxonomy_event"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_taxonomy_event"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-event-event-type-restore-api-surface-30",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[29]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-event-event-type-restore-api-surface-30",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/event/{event_type}/restore",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/event/{event_type}/restore",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "undoes a prior soft-delete; a state-transition action on an already-deleted resource with no corresponding read/list of deleted event types to source a record from, outside the create/update/delete write model"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-event-property-api-surface-31",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[30]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-event-property-api-surface-31",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/event-property",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/event-property",
+          "operation": null,
+          "covered_by": {
+            "stream": "taxonomy_event_properties"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "taxonomy_event_properties"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-event-property-event-property-api-surface-32",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[31]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-event-property-event-property-api-surface-32",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/event-property/{event_property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/event-property/{event_property}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-property detail GET; every field is already present on each record of the taxonomy_event_properties list stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-event-property-api-surface-33",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[32]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-event-property-api-surface-33",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/event-property",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/event-property",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "event-property mutations were not prioritized for this wave (read coverage was); a follow-up capability expansion can add create/update/delete once a reverse-ETL use case is scoped"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-2-taxonomy-event-property-event-property-api-surface-34",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[33]",
+      "operation_id": "amplitude.rest.put-api-2-taxonomy-event-property-event-property-api-surface-34",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/2/taxonomy/event-property/{event-property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/2/taxonomy/event-property/{event-property}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "same rationale as the create action above"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.delete-api-2-taxonomy-event-property-event-property-api-surface-35",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[34]",
+      "operation_id": "amplitude.rest.delete-api-2-taxonomy-event-property-event-property-api-surface-35",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/event-property/{event-property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/2/taxonomy/event-property/{event-property}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "same rationale as the create action above"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-event-property-event-property-restore-api-surface-36",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[35]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-event-property-event-property-restore-api-surface-36",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/event-property/{event-property}/restore",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/event-property/{event-property}/restore",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "restore action for a mutation surface not yet covered (event-property CUD)"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-user-property-api-surface-37",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[36]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-user-property-api-surface-37",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/user-property",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/user-property",
+          "operation": null,
+          "covered_by": {
+            "stream": "taxonomy_user_properties"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "taxonomy_user_properties"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-user-property-user-property-api-surface-38",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[37]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-user-property-user-property-api-surface-38",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/user-property/{user_property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/user-property/{user_property}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-property detail GET; every field is already present on each record of the taxonomy_user_properties list stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-user-property-api-surface-39",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[38]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-user-property-api-surface-39",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/user-property",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/user-property",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "user-property mutations were not prioritized for this wave (read coverage was); a follow-up capability expansion can add create/update/delete once a reverse-ETL use case is scoped"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-2-taxonomy-user-property-user-property-api-surface-40",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[39]",
+      "operation_id": "amplitude.rest.put-api-2-taxonomy-user-property-user-property-api-surface-40",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/2/taxonomy/user-property/{user_property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/2/taxonomy/user-property/{user_property}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "same rationale as the create action above"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.delete-api-2-taxonomy-user-property-user-property-api-surface-41",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[40]",
+      "operation_id": "amplitude.rest.delete-api-2-taxonomy-user-property-user-property-api-surface-41",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/user-property/{user_property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/2/taxonomy/user-property/{user_property}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "same rationale as the create action above"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-user-property-user-property-restore-api-surface-42",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[41]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-user-property-user-property-restore-api-surface-42",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/user-property/{user_property}/restore",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/user-property/{user_property}/restore",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "restore action for a mutation surface not yet covered (user-property CUD)"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-group-property-api-surface-43",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[42]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-group-property-api-surface-43",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/group-property",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/group-property",
+          "operation": null,
+          "covered_by": {
+            "stream": "taxonomy_group_properties"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "taxonomy_group_properties"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-taxonomy-group-property-group-property-api-surface-44",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[43]",
+      "operation_id": "amplitude.rest.get-api-2-taxonomy-group-property-group-property-api-surface-44",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/taxonomy/group-property/{group_property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/taxonomy/group-property/{group_property}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-property detail GET; every field is already present on each record of the taxonomy_group_properties list stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-api-2-taxonomy-group-property-api-surface-45",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[44]",
+      "operation_id": "amplitude.rest.post-api-2-taxonomy-group-property-api-surface-45",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/2/taxonomy/group-property",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/2/taxonomy/group-property",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "group-property mutations were not prioritized for this wave (read coverage was); a follow-up capability expansion can add create/update once a reverse-ETL use case is scoped"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.put-api-2-taxonomy-group-property-group-property-api-surface-46",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[45]",
+      "operation_id": "amplitude.rest.put-api-2-taxonomy-group-property-group-property-api-surface-46",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/api/2/taxonomy/group-property/{group_property}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/api/2/taxonomy/group-property/{group_property}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "same rationale as the create action above"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.get-api-2-export-api-surface-47",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[46]",
+      "operation_id": "amplitude.rest.get-api-2-export-api-surface-47",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/2/export",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/2/export",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "returns a zipped archive of newline-delimited JSON event files (not a single JSON body); the read dialect has no gzip/zip decompression or archive-member-fan-out primitive (conventions.md §1's Tier-2 trigger list names response decompression/CSV parsing as a hook-only concern, and this connector deliberately stays Tier-1 with zero hooks)"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/amplitude-operation-source-lock.json",
+      "source_id": "amplitude.rest.post-2-httpapi-api-surface-48",
+      "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+      "source_location": "api_surface.json:endpoints[47]",
+      "operation_id": "amplitude.rest.post-2-httpapi-api-surface-48",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/2/httpapi",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/2/httpapi",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "event-ingestion telemetry sink (creates NEW raw analytics events from a client SDK), not a reverse-ETL mutation of an existing Amplitude-managed resource; out of scope for a connector whose write surface targets annotations/taxonomy"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

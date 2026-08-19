@@ -1,0 +1,65 @@
+{
+  "schema_version": 2,
+  "connector": "mode",
+  "captured_at": "2026-08-19T15:28:37.221Z",
+  "rest": {
+    "source_url": "https://mode.com/developer/api-reference/introduction/",
+    "requested_url": "https://mode.com/developer/api-reference/",
+    "sha256": "e13ae9fce82d75c20d43a62d0b67e1d11a7f4f28022dedcd9e4e2c700bac82a1",
+    "bytes": 37901,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "HOOK": 5
+    },
+    "operations": [
+      {
+        "id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/mode spaces read path",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/mode reports read path",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/mode data_sources read path",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/mode groups read path",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/mode memberships read path",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      }
+    ]
+  }
+}

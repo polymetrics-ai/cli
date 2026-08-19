@@ -1,0 +1,468 @@
+{
+  "schema_version": 1,
+  "connector": "posthog",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_basis": {
+    "source_lock": "sources/posthog-operation-source-lock.json",
+    "source_url": "https://posthog.com/docs/api",
+    "source_sha256": "2279dbc7a06d039ef38955662c649d478bd9fd0ca38d440ef0157c2a3105ee40",
+    "source_bytes": 1163012,
+    "source_operation_count": 9
+  },
+  "summary": {
+    "api_surface_rows": 9,
+    "exact_source_rows": 9,
+    "declared_operations": 9,
+    "declared_percent": 100,
+    "enabled_operations": 2,
+    "enabled_percent": 22.22,
+    "disabled_operations": 7,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 6
+      },
+      {
+        "key": "direct_write",
+        "count": 1
+      },
+      {
+        "key": "etl",
+        "count": 2
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 2,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 1,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 7
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-posthog",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/posthog/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-posthog",
+      "sync-transport-source-definition-posthog"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-posthog",
+        "count": 7
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/events/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/events/",
+        "operation": null,
+        "covered_by": {
+          "stream": "events"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-events-api-surface-1",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-events-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/posthog/streams.json: existing stream \"events\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"events\" binds the pinned source contract",
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/persons/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/persons/",
+        "operation": null,
+        "covered_by": {
+          "stream": "persons"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-persons-api-surface-2",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-persons-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/posthog/streams.json: existing stream \"persons\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"persons\" binds the pinned source contract",
+        "stream": "persons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/insights/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/insights/",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/api/projects/{project_id}/insights/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-insights-api-surface-3",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-insights-api-surface-3",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-posthog",
+          "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[2]; api_surface.json:endpoints[2].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[2]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-posthog",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/cohorts/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/cohorts/",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/api/projects/{project_id}/cohorts/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-cohorts-api-surface-4",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-cohorts-api-surface-4",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-posthog",
+          "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[3]; api_surface.json:endpoints[3].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[3]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-posthog",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/feature_flags/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/feature_flags/",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/api/projects/{project_id}/feature_flags/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-feature-flags-api-surface-5",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-feature-flags-api-surface-5",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-posthog",
+          "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[4]; api_surface.json:endpoints[4].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[4]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-posthog",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/dashboards/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/dashboards/",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/api/projects/{project_id}/dashboards/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-dashboards-api-surface-6",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-dashboards-api-surface-6",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-posthog",
+          "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[5]; api_surface.json:endpoints[5].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[5]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-posthog",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/actions/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/actions/",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/api/projects/{project_id}/actions/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-actions-api-surface-7",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-actions-api-surface-7",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-posthog",
+          "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[6]; api_surface.json:endpoints[6].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[6]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-posthog",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/annotations/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/projects/{project_id}/annotations/",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/api/projects/{project_id}/annotations/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.get-api-projects-project-id-annotations-api-surface-8",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": "posthog.rest.get-api-projects-project-id-annotations-api-surface-8",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-posthog",
+          "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[7]; api_surface.json:endpoints[7].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[7]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-posthog",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/capture/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/capture/",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/capture/ is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/posthog-operation-source-lock.json",
+        "source_id": "posthog.rest.post-capture-api-surface-9",
+        "source_url": "https://posthog.com/docs/api",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": "posthog.rest.post-capture-api-surface-9",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-posthog",
+          "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[8]; api_surface.json:endpoints[8].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/posthog/api_surface.json:endpoints[8]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-posthog",
+        "contract": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 2,
+  "connector": "metabase",
+  "captured_at": "2026-08-19T15:28:37.221Z",
+  "rest": {
+    "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+    "requested_url": "https://www.metabase.com/docs/latest/api-documentation",
+    "sha256": "084793c6d42f7f4f18e350f7f67dd6f4e8ed35f2950f506fe76a9221acc2cd8c",
+    "bytes": 369,
+    "content_type": "text/html",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "HOOK": 5
+    },
+    "operations": [
+      {
+        "id": "metabase.rest.hook-internal-connectors-metabase-cards-read-path-api-surface-1",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/metabase cards read path",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-cards-read-path-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "metabase.rest.hook-internal-connectors-metabase-dashboards-read-path-api-surface-2",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/metabase dashboards read path",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-dashboards-read-path-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "metabase.rest.hook-internal-connectors-metabase-collections-read-path-api-surface-3",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/metabase collections read path",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-collections-read-path-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "metabase.rest.hook-internal-connectors-metabase-databases-read-path-api-surface-4",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/metabase databases read path",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-databases-read-path-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "metabase.rest.hook-internal-connectors-metabase-users-read-path-api-surface-5",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/metabase users read path",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-users-read-path-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      }
+    ]
+  }
+}

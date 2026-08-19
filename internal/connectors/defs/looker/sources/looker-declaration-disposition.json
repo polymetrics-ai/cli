@@ -1,0 +1,714 @@
+{
+  "schema_version": 1,
+  "connector": "looker",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_basis": {
+    "source_lock": "sources/looker-operation-source-lock.json",
+    "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+    "source_sha256": "36645b23cb3b3dc1c5d8b25d39544a6c20e4ea549bd58c7c2c87545e0d9bb6db",
+    "source_bytes": 205201,
+    "source_operation_count": 15
+  },
+  "summary": {
+    "api_surface_rows": 15,
+    "exact_source_rows": 15,
+    "declared_operations": 15,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 33.33,
+    "disabled_operations": 10,
+    "documented_deletes": 1,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 6
+      },
+      {
+        "key": "direct_write",
+        "count": 4
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 4,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 10
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-looker",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/looker/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-looker",
+      "sync-transport-source-definition-looker"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-looker",
+        "count": 10
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/users",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-users-api-surface-1",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "looker.rest.get-users-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/looker/streams.json: existing stream \"users\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"users\" binds the pinned source contract",
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/groups",
+        "operation": null,
+        "covered_by": {
+          "stream": "groups"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-groups-api-surface-2",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "looker.rest.get-groups-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/looker/streams.json: existing stream \"groups\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"groups\" binds the pinned source contract",
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/folders",
+        "operation": null,
+        "covered_by": {
+          "stream": "folders"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-folders-api-surface-3",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "looker.rest.get-folders-api-surface-3",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/looker/streams.json: existing stream \"folders\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"folders\" binds the pinned source contract",
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/looks",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/looks",
+        "operation": null,
+        "covered_by": {
+          "stream": "looks"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-looks-api-surface-4",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "looker.rest.get-looks-api-surface-4",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/looker/streams.json: existing stream \"looks\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"looks\" binds the pinned source contract",
+        "stream": "looks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/dashboards",
+        "operation": null,
+        "covered_by": {
+          "stream": "dashboards"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-dashboards-api-surface-5",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "looker.rest.get-dashboards-api-surface-5",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/looker/streams.json: existing stream \"dashboards\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"dashboards\" binds the pinned source contract",
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/login",
+        "operation": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "auth token exchange, not a syncable object stream; modeled by base.auth's oauth2_client_credentials candidates"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.post-login-api-surface-6",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "looker.rest.post-login-api-surface-6",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[5]; api_surface.json:endpoints[5].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[5]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/queries/{query_id}/run/{result_format}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/queries/{query_id}/run/{result_format}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/queries/{query_id}/run/{result_format} is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-queries-query-id-run-result-format-api-surface-7",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "looker.rest.get-queries-query-id-run-result-format-api-surface-7",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[6]; api_surface.json:endpoints[6].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[6]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/looks/{look_id}/run/{result_format}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/looks/{look_id}/run/{result_format}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/looks/{look_id}/run/{result_format} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.post-looks-look-id-run-result-format-api-surface-8",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": "looker.rest.post-looks-look-id-run-result-format-api-surface-8",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[7]; api_surface.json:endpoints[7].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[7]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_plans",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scheduled_plans",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/scheduled_plans is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-scheduled-plans-api-surface-9",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": "looker.rest.get-scheduled-plans-api-surface-9",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[8]; api_surface.json:endpoints[8].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[8]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_metadata",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/content_metadata",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/content_metadata is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-content-metadata-api-surface-10",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": "looker.rest.get-content-metadata-api-surface-10",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[9]; api_surface.json:endpoints[9].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[9]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/connections",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/connections",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/connections is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-connections-api-surface-11",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": "looker.rest.get-connections-api-surface-11",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[10]; api_surface.json:endpoints[10].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[10]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/boards",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/boards is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-boards-api-surface-12",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": "looker.rest.get-boards-api-surface-12",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[11]; api_surface.json:endpoints[11].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[11]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/alerts",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/alerts",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/alerts is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.get-alerts-api-surface-13",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": "looker.rest.get-alerts-api-surface-13",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[12]; api_surface.json:endpoints[12].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[12]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Connector is read-only in pm today"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.post-users-api-surface-14",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": "looker.rest.post-users-api-surface-14",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[13]; api_surface.json:endpoints[13].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[13]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{user_id}",
+        "operation": null,
+        "excluded": {
+          "category": "destructive_admin",
+          "reason": "user deletion; not a safe reverse-ETL action"
+        }
+      },
+      "source": {
+        "source_lock": "sources/looker-operation-source-lock.json",
+        "source_id": "looker.rest.delete-users-user-id-api-surface-15",
+        "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": "looker.rest.delete-users-user-id-api-surface-15",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-looker",
+          "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[14]; api_surface.json:endpoints[14].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/looker/api_surface.json:endpoints[14]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-looker",
+        "contract": null
+      }
+    }
+  ]
+}

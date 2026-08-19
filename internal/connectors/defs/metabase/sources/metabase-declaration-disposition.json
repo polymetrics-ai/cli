@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "connector": "metabase",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_basis": {
+    "source_lock": "sources/metabase-operation-source-lock.json",
+    "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+    "source_sha256": "084793c6d42f7f4f18e350f7f67dd6f4e8ed35f2950f506fe76a9221acc2cd8c",
+    "source_bytes": 369,
+    "source_operation_count": 5
+  },
+  "summary": {
+    "api_surface_rows": 5,
+    "exact_source_rows": 5,
+    "declared_operations": 5,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 100,
+    "disabled_operations": 0,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 0
+      },
+      {
+        "key": "direct_write",
+        "count": 0
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-metabase",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/metabase/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-metabase",
+      "sync-transport-source-definition-metabase"
+    ],
+    "declaration_pending": []
+  },
+  "ledger_dispositions": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase cards read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/metabase cards read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "cards"
+        }
+      },
+      "source": {
+        "source_lock": "sources/metabase-operation-source-lock.json",
+        "source_id": "metabase.rest.hook-internal-connectors-metabase-cards-read-path-api-surface-1",
+        "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-cards-read-path-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/metabase/streams.json: existing stream \"cards\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"cards\" binds the pinned source contract",
+        "stream": "cards"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase dashboards read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/metabase dashboards read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "dashboards"
+        }
+      },
+      "source": {
+        "source_lock": "sources/metabase-operation-source-lock.json",
+        "source_id": "metabase.rest.hook-internal-connectors-metabase-dashboards-read-path-api-surface-2",
+        "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-dashboards-read-path-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/metabase/streams.json: existing stream \"dashboards\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"dashboards\" binds the pinned source contract",
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase collections read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/metabase collections read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "collections"
+        }
+      },
+      "source": {
+        "source_lock": "sources/metabase-operation-source-lock.json",
+        "source_id": "metabase.rest.hook-internal-connectors-metabase-collections-read-path-api-surface-3",
+        "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-collections-read-path-api-surface-3",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/metabase/streams.json: existing stream \"collections\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"collections\" binds the pinned source contract",
+        "stream": "collections"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase databases read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/metabase databases read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "databases"
+        }
+      },
+      "source": {
+        "source_lock": "sources/metabase-operation-source-lock.json",
+        "source_id": "metabase.rest.hook-internal-connectors-metabase-databases-read-path-api-surface-4",
+        "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-databases-read-path-api-surface-4",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/metabase/streams.json: existing stream \"databases\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"databases\" binds the pinned source contract",
+        "stream": "databases"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase users read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/metabase users read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/metabase-operation-source-lock.json",
+        "source_id": "metabase.rest.hook-internal-connectors-metabase-users-read-path-api-surface-5",
+        "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "metabase.rest.hook-internal-connectors-metabase-users-read-path-api-surface-5",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/metabase/streams.json: existing stream \"users\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"users\" binds the pinned source contract",
+        "stream": "users"
+      }
+    }
+  ]
+}

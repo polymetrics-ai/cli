@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "connector": "mode",
+  "source_lock": "sources/mode-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+      "source_url": "https://mode.com/developer/api-reference/introduction/",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/mode spaces read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/mode spaces read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "spaces"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "spaces"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+      "source_url": "https://mode.com/developer/api-reference/introduction/",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/mode reports read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/mode reports read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "reports"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "reports"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+      "source_url": "https://mode.com/developer/api-reference/introduction/",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/mode data_sources read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/mode data_sources read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "data_sources"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "data_sources"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+      "source_url": "https://mode.com/developer/api-reference/introduction/",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/mode groups read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/mode groups read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "groups"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "groups"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+      "source_url": "https://mode.com/developer/api-reference/introduction/",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/mode memberships read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/mode memberships read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "memberships"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "memberships"
+        }
+      }
+    }
+  ]
+}

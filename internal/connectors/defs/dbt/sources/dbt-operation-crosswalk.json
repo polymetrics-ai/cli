@@ -1,0 +1,1360 @@
+{
+  "schema_version": 1,
+  "connector": "dbt",
+  "source_lock": "sources/dbt-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-api-surface-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-api-surface-1",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead' in the published OpenAPI spec; this bundle's account scoping uses the required account_id config value directly, never an account-listing call"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-api-surface-2",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "account-level billing/plan metadata retrieval, not a syncable data stream; account_id is supplied directly via config, not discovered"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-api-surface-3",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-api-surface-3",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "mutates account-level billing/plan settings; account-admin scope, not connector-appropriate data mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.patch-api-v2-accounts-account-id-api-surface-4",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "dbt.rest.patch-api-v2-accounts-account-id-api-surface-4",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/api/v2/accounts/{account_id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/api/v2/accounts/{account_id}/",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "partial account-level settings update; same account-admin scope as the full account update"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-api-surface-5",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/encryptions/",
+          "operation": null,
+          "covered_by": {
+            "stream": "ssh_tunnels"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "ssh_tunnels"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-api-surface-6",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-api-surface-6",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/encryptions/",
+          "operation": null,
+          "covered_by": {
+            "write": "create_ssh_tunnel"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_ssh_tunnel"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-id-api-surface-7",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-id-api-surface-7",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-SSH-tunnel detail is a strict subset of the ssh_tunnels stream's list response fields; the list stream already reads every tunnel"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-id-api-surface-8",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-id-api-surface-8",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+          "operation": null,
+          "covered_by": {
+            "write": "update_ssh_tunnel"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_ssh_tunnel"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.delete-api-v2-accounts-account-id-encryptions-id-api-surface-9",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-encryptions-id-api-surface-9",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_ssh_tunnel"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_ssh_tunnel"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-environments-api-surface-10",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-environments-api-surface-10",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/environments/",
+          "operation": null,
+          "covered_by": {
+            "stream": "environments"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "environments"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-environments-api-surface-11",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-environments-api-surface-11",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/environments/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'; environment mutation belongs to the v3 Administrative API this connector does not target"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-environments-id-api-surface-12",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-environments-id-api-surface-12",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-environment detail is a strict subset of the environments stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-environments-id-api-surface-13",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-environments-id-api-surface-13",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.delete-api-v2-accounts-account-id-environments-id-api-surface-14",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-environments-id-api-surface-14",
+      "deprecated": true,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-invites-api-surface-15",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-invites-api-surface-15",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/invites/",
+          "operation": null,
+          "covered_by": {
+            "stream": "invites"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "invites"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-invites-id-api-surface-16",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[15]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-invites-id-api-surface-16",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-invite detail is a strict subset of the invites stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-api-surface-17",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[16]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-api-surface-17",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/",
+          "operation": null,
+          "covered_by": {
+            "stream": "jobs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "jobs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-api-surface-18",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[17]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-api-surface-18",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/",
+          "operation": null,
+          "covered_by": {
+            "write": "create_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-id-api-surface-19",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[18]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-id-api-surface-19",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-job detail is a strict subset of the jobs stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-id-api-surface-20",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[19]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-id-api-surface-20",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+          "operation": null,
+          "covered_by": {
+            "write": "update_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.delete-api-v2-accounts-account-id-jobs-id-api-surface-21",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[20]",
+      "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-jobs-id-api-surface-21",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-job-id-artifacts-remainder-api-surface-22",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[21]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-job-id-artifacts-remainder-api-surface-22",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "downloads a specific completed run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-rerun-api-surface-23",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[22]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-rerun-api-surface-23",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+          "operation": null,
+          "covered_by": {
+            "write": "retry_failed_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "retry_failed_job"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-run-api-surface-24",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[23]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-run-api-surface-24",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+          "operation": null,
+          "covered_by": {
+            "write": "trigger_job_run"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "trigger_job_run"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-licenses-api-surface-25",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[24]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-licenses-api-surface-25",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/licenses/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/licenses/",
+          "operation": null,
+          "covered_by": {
+            "stream": "licenses"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "licenses"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-api-surface-26",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[25]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-api-surface-26",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/notifications/",
+          "operation": null,
+          "covered_by": {
+            "stream": "notifications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "notifications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-api-surface-27",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[26]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-api-surface-27",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/notifications/",
+          "operation": null,
+          "covered_by": {
+            "write": "create_notification"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_notification"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-id-api-surface-28",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[27]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-id-api-surface-28",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-notification detail is a strict subset of the notifications stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-id-api-surface-29",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[28]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-id-api-surface-29",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+          "operation": null,
+          "covered_by": {
+            "write": "update_notification"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_notification"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.delete-api-v2-accounts-account-id-notifications-id-api-surface-30",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[29]",
+      "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-notifications-id-api-surface-30",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_notification"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_notification"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-permissions-id-api-surface-31",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[30]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-permissions-id-api-surface-31",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "mutates a user's license/role permission grant; account-admin identity-management action, not connector data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-projects-api-surface-32",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[31]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-projects-api-surface-32",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/projects/",
+          "operation": null,
+          "covered_by": {
+            "stream": "projects"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "projects"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-projects-api-surface-33",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[32]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-projects-api-surface-33",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/projects/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-projects-id-api-surface-34",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[33]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-projects-id-api-surface-34",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-project detail is a strict subset of the projects stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-projects-id-api-surface-35",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[34]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-projects-id-api-surface-35",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.delete-api-v2-accounts-account-id-projects-id-api-surface-36",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[35]",
+      "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-projects-id-api-surface-36",
+      "deprecated": true,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-api-surface-37",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[36]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-api-surface-37",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/repositories/",
+          "operation": null,
+          "covered_by": {
+            "stream": "repositories"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "repositories"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-repositories-api-surface-38",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[37]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-repositories-api-surface-38",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/repositories/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-id-api-surface-39",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[38]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-id-api-surface-39",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-repository detail is a strict subset of the repositories stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.delete-api-v2-accounts-account-id-repositories-id-api-surface-40",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[39]",
+      "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-repositories-id-api-surface-40",
+      "deprecated": true,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-runs-api-surface-41",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[40]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-api-surface-41",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/",
+          "operation": null,
+          "covered_by": {
+            "stream": "runs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "runs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-runs-id-api-surface-42",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[41]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-id-api-surface-42",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-run detail is a strict subset of the runs stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-api-surface-43",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[42]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-api-surface-43",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "lists artifact FILENAMES only as a precursor to downloading each raw artifact body; the artifacts themselves are binary_payload (see the per-file GET below), and the filename list carries no independently syncable record data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-remainder-api-surface-44",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[43]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-remainder-api-surface-44",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "downloads a specific run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-cancel-api-surface-45",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[44]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-cancel-api-surface-45",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+          "operation": null,
+          "covered_by": {
+            "write": "cancel_run"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "cancel_run"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-retry-api-surface-46",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[45]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-retry-api-surface-46",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "retrieves retry-eligibility/failure-point details already present on the runs stream's own record (status/status_message); no independent record shape"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-retry-api-surface-47",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[46]",
+      "operation_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-retry-api-surface-47",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+          "operation": null,
+          "covered_by": {
+            "write": "retry_run"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "retry_run"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-steps-id-api-surface-48",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[47]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-steps-id-api-surface-48",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "a single run step's full stdout/debug log text is a large unbounded blob keyed by an id only discoverable by first reading a run's own step list (not itself a list endpoint dbt Cloud publishes); no practical stream shape without a parent-id fan_out this connector does not declare"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-accounts-account-id-users-api-surface-49",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[48]",
+      "operation_id": "dbt.rest.get-api-v2-accounts-account-id-users-api-surface-49",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/users/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/users/",
+          "operation": null,
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.get-api-v2-users-id-api-surface-50",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[49]",
+      "operation_id": "dbt.rest.get-api-v2-users-id-api-surface-50",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/users/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/users/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-user detail is a strict subset of the users stream's list response fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-users-id-api-surface-51",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[50]",
+      "operation_id": "dbt.rest.post-api-v2-users-id-api-surface-51",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/users/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/users/{id}/",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "mutates a user's own account profile fields; user-identity self-service action, not connector-appropriate data mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.post-api-v2-notifications-unsubscribe-api-surface-52",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "api_surface.json:endpoints[51]",
+      "operation_id": "dbt.rest.post-api-v2-notifications-unsubscribe-api-surface-52",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/notifications/unsubscribe/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/notifications/unsubscribe/",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "clears every email notification configuration for the CALLING user's own identity; a caller-identity action, not a mutation targeting a specific record the connector reads"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

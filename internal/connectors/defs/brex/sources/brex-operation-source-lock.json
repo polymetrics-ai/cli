@@ -1,0 +1,995 @@
+{
+  "schema_version": 2,
+  "connector": "brex",
+  "captured_at": "2026-08-19T15:28:37.221Z",
+  "rest": {
+    "source_url": "https://developer.brex.com/",
+    "requested_url": "https://developer.brex.com/",
+    "sha256": "9e6714f589f3524f34609637881f51c0024171f1b58824ed334fea2c09319836",
+    "bytes": 323905,
+    "content_type": "text/html; charset=UTF-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 5,
+      "GET": 59,
+      "POST": 34,
+      "PUT": 10
+    },
+    "operations": [
+      {
+        "id": "brex.rest.get-v2-accounts-card-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/accounts/card",
+        "operation_id": "brex.rest.get-v2-accounts-card-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "brex.rest.get-v2-accounts-card-primary-statements-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/accounts/card/primary/statements",
+        "operation_id": "brex.rest.get-v2-accounts-card-primary-statements-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "brex.rest.get-v2-accounts-cash-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/accounts/cash",
+        "operation_id": "brex.rest.get-v2-accounts-cash-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "brex.rest.get-v2-accounts-cash-primary-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/accounts/cash/primary",
+        "operation_id": "brex.rest.get-v2-accounts-cash-primary-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "brex.rest.get-v2-accounts-cash-id-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/accounts/cash/{id}",
+        "operation_id": "brex.rest.get-v2-accounts-cash-id-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "brex.rest.get-v2-accounts-cash-id-statements-api-surface-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/accounts/cash/{id}/statements",
+        "operation_id": "brex.rest.get-v2-accounts-cash-id-statements-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "brex.rest.get-v2-transactions-card-primary-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/transactions/card/primary",
+        "operation_id": "brex.rest.get-v2-transactions-card-primary-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "brex.rest.get-v2-transactions-cash-id-api-surface-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/transactions/cash/{id}",
+        "operation_id": "brex.rest.get-v2-transactions-cash-id-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "brex.rest.get-v1-expenses-api-surface-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/expenses",
+        "operation_id": "brex.rest.get-v1-expenses-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "brex.rest.get-v1-expenses-card-api-surface-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/expenses/card",
+        "operation_id": "brex.rest.get-v1-expenses-card-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "brex.rest.post-v1-expenses-card-receipt-match-api-surface-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/expenses/card/receipt_match",
+        "operation_id": "brex.rest.post-v1-expenses-card-receipt-match-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "brex.rest.get-v1-expenses-card-expense-id-api-surface-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/expenses/card/{expense_id}",
+        "operation_id": "brex.rest.get-v1-expenses-card-expense-id-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "brex.rest.put-v1-expenses-card-expense-id-api-surface-13",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/expenses/card/{expense_id}",
+        "operation_id": "brex.rest.put-v1-expenses-card-expense-id-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "brex.rest.post-v1-expenses-card-expense-id-receipt-upload-api-surface-14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/expenses/card/{expense_id}/receipt_upload",
+        "operation_id": "brex.rest.post-v1-expenses-card-expense-id-receipt-upload-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "brex.rest.get-v1-expenses-id-api-surface-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/expenses/{id}",
+        "operation_id": "brex.rest.get-v1-expenses-id-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "brex.rest.get-v2-cards-api-surface-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cards",
+        "operation_id": "brex.rest.get-v2-cards-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "brex.rest.post-v2-cards-api-surface-17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/cards",
+        "operation_id": "brex.rest.post-v2-cards-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "brex.rest.get-v2-cards-id-api-surface-18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cards/{id}",
+        "operation_id": "brex.rest.get-v2-cards-id-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "brex.rest.put-v2-cards-id-api-surface-19",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/cards/{id}",
+        "operation_id": "brex.rest.put-v2-cards-id-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "brex.rest.post-v2-cards-id-lock-api-surface-20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/cards/{id}/lock",
+        "operation_id": "brex.rest.post-v2-cards-id-lock-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "brex.rest.get-v2-cards-id-pan-api-surface-21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cards/{id}/pan",
+        "operation_id": "brex.rest.get-v2-cards-id-pan-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "brex.rest.post-v2-cards-id-secure-email-api-surface-22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/cards/{id}/secure_email",
+        "operation_id": "brex.rest.post-v2-cards-id-secure-email-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "brex.rest.post-v2-cards-id-terminate-api-surface-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/cards/{id}/terminate",
+        "operation_id": "brex.rest.post-v2-cards-id-terminate-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "brex.rest.post-v2-cards-id-unlock-api-surface-24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/cards/{id}/unlock",
+        "operation_id": "brex.rest.post-v2-cards-id-unlock-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "brex.rest.get-v2-company-api-surface-25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/company",
+        "operation_id": "brex.rest.get-v2-company-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "brex.rest.get-v2-departments-api-surface-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/departments",
+        "operation_id": "brex.rest.get-v2-departments-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "brex.rest.post-v2-departments-api-surface-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/departments",
+        "operation_id": "brex.rest.post-v2-departments-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "brex.rest.get-v2-departments-id-api-surface-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/departments/{id}",
+        "operation_id": "brex.rest.get-v2-departments-id-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "brex.rest.get-v2-legal-entities-api-surface-29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/legal_entities",
+        "operation_id": "brex.rest.get-v2-legal-entities-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "brex.rest.get-v2-legal-entities-id-api-surface-30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/legal_entities/{id}",
+        "operation_id": "brex.rest.get-v2-legal-entities-id-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "brex.rest.get-v2-locations-api-surface-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations",
+        "operation_id": "brex.rest.get-v2-locations-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "brex.rest.post-v2-locations-api-surface-32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/locations",
+        "operation_id": "brex.rest.post-v2-locations-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "brex.rest.get-v2-locations-id-api-surface-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/locations/{id}",
+        "operation_id": "brex.rest.get-v2-locations-id-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "brex.rest.get-v2-titles-api-surface-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/titles",
+        "operation_id": "brex.rest.get-v2-titles-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "brex.rest.post-v2-titles-api-surface-35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/titles",
+        "operation_id": "brex.rest.post-v2-titles-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "brex.rest.get-v2-titles-id-api-surface-36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/titles/{id}",
+        "operation_id": "brex.rest.get-v2-titles-id-api-surface-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "brex.rest.get-v2-users-api-surface-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users",
+        "operation_id": "brex.rest.get-v2-users-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "brex.rest.post-v2-users-api-surface-38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/users",
+        "operation_id": "brex.rest.post-v2-users-api-surface-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "brex.rest.get-v2-users-me-api-surface-39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users/me",
+        "operation_id": "brex.rest.get-v2-users-me-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "brex.rest.get-v2-users-id-api-surface-40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users/{id}",
+        "operation_id": "brex.rest.get-v2-users-id-api-surface-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "brex.rest.put-v2-users-id-api-surface-41",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/users/{id}",
+        "operation_id": "brex.rest.put-v2-users-id-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "brex.rest.get-v2-users-id-limit-api-surface-42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users/{id}/limit",
+        "operation_id": "brex.rest.get-v2-users-id-limit-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "brex.rest.post-v2-users-id-limit-api-surface-43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/users/{id}/limit",
+        "operation_id": "brex.rest.post-v2-users-id-limit-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "brex.rest.post-v1-incoming-transfers-api-surface-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/incoming_transfers",
+        "operation_id": "brex.rest.post-v1-incoming-transfers-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "brex.rest.get-v1-linked-accounts-api-surface-45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/linked_accounts",
+        "operation_id": "brex.rest.get-v1-linked-accounts-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      },
+      {
+        "id": "brex.rest.get-v1-transfers-api-surface-46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transfers",
+        "operation_id": "brex.rest.get-v1-transfers-api-surface-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]"
+      },
+      {
+        "id": "brex.rest.post-v1-transfers-api-surface-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/transfers",
+        "operation_id": "brex.rest.post-v1-transfers-api-surface-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]"
+      },
+      {
+        "id": "brex.rest.get-v1-transfers-id-api-surface-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transfers/{id}",
+        "operation_id": "brex.rest.get-v1-transfers-id-api-surface-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]"
+      },
+      {
+        "id": "brex.rest.get-v1-vendors-api-surface-49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/vendors",
+        "operation_id": "brex.rest.get-v1-vendors-api-surface-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]"
+      },
+      {
+        "id": "brex.rest.post-v1-vendors-api-surface-50",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/vendors",
+        "operation_id": "brex.rest.post-v1-vendors-api-surface-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]"
+      },
+      {
+        "id": "brex.rest.get-v1-vendors-id-api-surface-51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/vendors/{id}",
+        "operation_id": "brex.rest.get-v1-vendors-id-api-surface-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]"
+      },
+      {
+        "id": "brex.rest.put-v1-vendors-id-api-surface-52",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/vendors/{id}",
+        "operation_id": "brex.rest.put-v1-vendors-id-api-surface-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]"
+      },
+      {
+        "id": "brex.rest.delete-v1-vendors-id-api-surface-53",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/vendors/{id}",
+        "operation_id": "brex.rest.delete-v1-vendors-id-api-surface-53",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]"
+      },
+      {
+        "id": "brex.rest.get-v1-webhooks-api-surface-54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks",
+        "operation_id": "brex.rest.get-v1-webhooks-api-surface-54",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]"
+      },
+      {
+        "id": "brex.rest.post-v1-webhooks-api-surface-55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/webhooks",
+        "operation_id": "brex.rest.post-v1-webhooks-api-surface-55",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]"
+      },
+      {
+        "id": "brex.rest.get-v1-webhooks-groups-api-surface-56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/groups",
+        "operation_id": "brex.rest.get-v1-webhooks-groups-api-surface-56",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]"
+      },
+      {
+        "id": "brex.rest.post-v1-webhooks-groups-api-surface-57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/webhooks/groups",
+        "operation_id": "brex.rest.post-v1-webhooks-groups-api-surface-57",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]"
+      },
+      {
+        "id": "brex.rest.get-v1-webhooks-groups-id-api-surface-58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/groups/{id}",
+        "operation_id": "brex.rest.get-v1-webhooks-groups-id-api-surface-58",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]"
+      },
+      {
+        "id": "brex.rest.delete-v1-webhooks-groups-id-api-surface-59",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/webhooks/groups/{id}",
+        "operation_id": "brex.rest.delete-v1-webhooks-groups-id-api-surface-59",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]"
+      },
+      {
+        "id": "brex.rest.post-v1-webhooks-groups-id-add-members-api-surface-60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/webhooks/groups/{id}/add_members",
+        "operation_id": "brex.rest.post-v1-webhooks-groups-id-add-members-api-surface-60",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]"
+      },
+      {
+        "id": "brex.rest.get-v1-webhooks-groups-id-members-api-surface-61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/groups/{id}/members",
+        "operation_id": "brex.rest.get-v1-webhooks-groups-id-members-api-surface-61",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]"
+      },
+      {
+        "id": "brex.rest.post-v1-webhooks-groups-id-remove-members-api-surface-62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/webhooks/groups/{id}/remove_members",
+        "operation_id": "brex.rest.post-v1-webhooks-groups-id-remove-members-api-surface-62",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]"
+      },
+      {
+        "id": "brex.rest.get-v1-webhooks-secrets-api-surface-63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/secrets",
+        "operation_id": "brex.rest.get-v1-webhooks-secrets-api-surface-63",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]"
+      },
+      {
+        "id": "brex.rest.get-v1-webhooks-id-api-surface-64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/{id}",
+        "operation_id": "brex.rest.get-v1-webhooks-id-api-surface-64",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]"
+      },
+      {
+        "id": "brex.rest.put-v1-webhooks-id-api-surface-65",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/webhooks/{id}",
+        "operation_id": "brex.rest.put-v1-webhooks-id-api-surface-65",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]"
+      },
+      {
+        "id": "brex.rest.delete-v1-webhooks-id-api-surface-66",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/webhooks/{id}",
+        "operation_id": "brex.rest.delete-v1-webhooks-id-api-surface-66",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]"
+      },
+      {
+        "id": "brex.rest.get-v1-budget-programs-api-surface-67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/budget_programs",
+        "operation_id": "brex.rest.get-v1-budget-programs-api-surface-67",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[66]"
+      },
+      {
+        "id": "brex.rest.get-v1-budget-programs-id-api-surface-68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/budget_programs/{id}",
+        "operation_id": "brex.rest.get-v1-budget-programs-id-api-surface-68",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[67]"
+      },
+      {
+        "id": "brex.rest.get-v1-budgets-api-surface-69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/budgets",
+        "operation_id": "brex.rest.get-v1-budgets-api-surface-69",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[68]"
+      },
+      {
+        "id": "brex.rest.post-v1-budgets-api-surface-70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/budgets",
+        "operation_id": "brex.rest.post-v1-budgets-api-surface-70",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[69]"
+      },
+      {
+        "id": "brex.rest.get-v1-budgets-id-api-surface-71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/budgets/{id}",
+        "operation_id": "brex.rest.get-v1-budgets-id-api-surface-71",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[70]"
+      },
+      {
+        "id": "brex.rest.put-v1-budgets-id-api-surface-72",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/budgets/{id}",
+        "operation_id": "brex.rest.put-v1-budgets-id-api-surface-72",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[71]"
+      },
+      {
+        "id": "brex.rest.post-v1-budgets-id-archive-api-surface-73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/budgets/{id}/archive",
+        "operation_id": "brex.rest.post-v1-budgets-id-archive-api-surface-73",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[72]"
+      },
+      {
+        "id": "brex.rest.get-v2-budgets-api-surface-74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/budgets",
+        "operation_id": "brex.rest.get-v2-budgets-api-surface-74",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]"
+      },
+      {
+        "id": "brex.rest.post-v2-budgets-api-surface-75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/budgets",
+        "operation_id": "brex.rest.post-v2-budgets-api-surface-75",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]"
+      },
+      {
+        "id": "brex.rest.get-v2-budgets-id-api-surface-76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/budgets/{id}",
+        "operation_id": "brex.rest.get-v2-budgets-id-api-surface-76",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]"
+      },
+      {
+        "id": "brex.rest.put-v2-budgets-id-api-surface-77",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/budgets/{id}",
+        "operation_id": "brex.rest.put-v2-budgets-id-api-surface-77",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]"
+      },
+      {
+        "id": "brex.rest.post-v2-budgets-id-archive-api-surface-78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/budgets/{id}/archive",
+        "operation_id": "brex.rest.post-v2-budgets-id-archive-api-surface-78",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]"
+      },
+      {
+        "id": "brex.rest.get-v2-spend-limits-api-surface-79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/spend_limits",
+        "operation_id": "brex.rest.get-v2-spend-limits-api-surface-79",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]"
+      },
+      {
+        "id": "brex.rest.post-v2-spend-limits-api-surface-80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/spend_limits",
+        "operation_id": "brex.rest.post-v2-spend-limits-api-surface-80",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]"
+      },
+      {
+        "id": "brex.rest.get-v2-spend-limits-id-api-surface-81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/spend_limits/{id}",
+        "operation_id": "brex.rest.get-v2-spend-limits-id-api-surface-81",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]"
+      },
+      {
+        "id": "brex.rest.put-v2-spend-limits-id-api-surface-82",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/spend_limits/{id}",
+        "operation_id": "brex.rest.put-v2-spend-limits-id-api-surface-82",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]"
+      },
+      {
+        "id": "brex.rest.post-v2-spend-limits-id-archive-api-surface-83",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/spend_limits/{id}/archive",
+        "operation_id": "brex.rest.post-v2-spend-limits-id-archive-api-surface-83",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]"
+      },
+      {
+        "id": "brex.rest.post-v3-accounting-integration-api-surface-84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/accounting/integration",
+        "operation_id": "brex.rest.post-v3-accounting-integration-api-surface-84",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]"
+      },
+      {
+        "id": "brex.rest.post-v3-accounting-integration-integration-id-disconnect-api-surface-85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/accounting/integration/{integration_id}/disconnect",
+        "operation_id": "brex.rest.post-v3-accounting-integration-integration-id-disconnect-api-surface-85",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]"
+      },
+      {
+        "id": "brex.rest.post-v3-accounting-integration-integration-id-reactivate-api-surface-86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/accounting/integration/{integration_id}/reactivate",
+        "operation_id": "brex.rest.post-v3-accounting-integration-integration-id-reactivate-api-surface-86",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]"
+      },
+      {
+        "id": "brex.rest.get-v3-accounting-records-record-id-api-surface-87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/accounting/records/{record_id}",
+        "operation_id": "brex.rest.get-v3-accounting-records-record-id-api-surface-87",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]"
+      },
+      {
+        "id": "brex.rest.get-v3-accounting-records-api-surface-88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v3/accounting/records",
+        "operation_id": "brex.rest.get-v3-accounting-records-api-surface-88",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]"
+      },
+      {
+        "id": "brex.rest.post-v3-accounting-records-export-results-api-surface-89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v3/accounting/records/export-results",
+        "operation_id": "brex.rest.post-v3-accounting-records-export-results-api-surface-89",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]"
+      },
+      {
+        "id": "brex.rest.get-v1-fields-api-surface-90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/fields",
+        "operation_id": "brex.rest.get-v1-fields-api-surface-90",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]"
+      },
+      {
+        "id": "brex.rest.post-v1-fields-api-surface-91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/fields",
+        "operation_id": "brex.rest.post-v1-fields-api-surface-91",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]"
+      },
+      {
+        "id": "brex.rest.get-v1-fields-field-id-values-api-surface-92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/fields/{field_id}/values",
+        "operation_id": "brex.rest.get-v1-fields-field-id-values-api-surface-92",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]"
+      },
+      {
+        "id": "brex.rest.put-v1-fields-field-id-values-api-surface-93",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/fields/{field_id}/values",
+        "operation_id": "brex.rest.put-v1-fields-field-id-values-api-surface-93",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]"
+      },
+      {
+        "id": "brex.rest.post-v1-fields-field-id-values-api-surface-94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/fields/{field_id}/values",
+        "operation_id": "brex.rest.post-v1-fields-field-id-values-api-surface-94",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]"
+      },
+      {
+        "id": "brex.rest.delete-v1-fields-field-id-values-api-surface-95",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/fields/{field_id}/values",
+        "operation_id": "brex.rest.delete-v1-fields-field-id-values-api-surface-95",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]"
+      },
+      {
+        "id": "brex.rest.get-v1-fields-field-id-values-brex-id-api-surface-96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/fields/{field_id}/values/{brex_id}",
+        "operation_id": "brex.rest.get-v1-fields-field-id-values-brex-id-api-surface-96",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]"
+      },
+      {
+        "id": "brex.rest.get-v1-fields-id-api-surface-97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/fields/{id}",
+        "operation_id": "brex.rest.get-v1-fields-id-api-surface-97",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]"
+      },
+      {
+        "id": "brex.rest.put-v1-fields-id-api-surface-98",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/fields/{id}",
+        "operation_id": "brex.rest.put-v1-fields-id-api-surface-98",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]"
+      },
+      {
+        "id": "brex.rest.delete-v1-fields-id-api-surface-99",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/fields/{id}",
+        "operation_id": "brex.rest.delete-v1-fields-id-api-surface-99",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]"
+      },
+      {
+        "id": "brex.rest.get-v1-referrals-api-surface-100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/referrals",
+        "operation_id": "brex.rest.get-v1-referrals-api-surface-100",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]"
+      },
+      {
+        "id": "brex.rest.post-v1-referrals-api-surface-101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/referrals",
+        "operation_id": "brex.rest.post-v1-referrals-api-surface-101",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]"
+      },
+      {
+        "id": "brex.rest.get-v1-referrals-id-api-surface-102",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/referrals/{id}",
+        "operation_id": "brex.rest.get-v1-referrals-id-api-surface-102",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]"
+      },
+      {
+        "id": "brex.rest.post-v1-referrals-id-document-upload-api-surface-103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/referrals/{id}/document_upload",
+        "operation_id": "brex.rest.post-v1-referrals-id-document-upload-api-surface-103",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]"
+      },
+      {
+        "id": "brex.rest.post-v1-referrals-id-process-ein-document-api-surface-104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/referrals/{id}/process_ein_document",
+        "operation_id": "brex.rest.post-v1-referrals-id-process-ein-document-api-surface-104",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]"
+      },
+      {
+        "id": "brex.rest.get-v1-trips-api-surface-105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/trips",
+        "operation_id": "brex.rest.get-v1-trips-api-surface-105",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]"
+      },
+      {
+        "id": "brex.rest.get-v1-trips-trip-id-api-surface-106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/trips/{trip_id}",
+        "operation_id": "brex.rest.get-v1-trips-trip-id-api-surface-106",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]"
+      },
+      {
+        "id": "brex.rest.get-v1-trips-trip-id-bookings-api-surface-107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/trips/{trip_id}/bookings",
+        "operation_id": "brex.rest.get-v1-trips-trip-id-bookings-api-surface-107",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]"
+      },
+      {
+        "id": "brex.rest.get-v1-trips-trip-id-bookings-booking-id-api-surface-108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/trips/{trip_id}/bookings/{booking_id}",
+        "operation_id": "brex.rest.get-v1-trips-trip-id-bookings-booking-id-api-surface-108",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]"
+      }
+    ]
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "connector": "mode",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_basis": {
+    "source_lock": "sources/mode-operation-source-lock.json",
+    "source_url": "https://mode.com/developer/api-reference/introduction/",
+    "source_sha256": "e13ae9fce82d75c20d43a62d0b67e1d11a7f4f28022dedcd9e4e2c700bac82a1",
+    "source_bytes": 37901,
+    "source_operation_count": 5
+  },
+  "summary": {
+    "api_surface_rows": 5,
+    "exact_source_rows": 5,
+    "declared_operations": 5,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 100,
+    "disabled_operations": 0,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 0
+      },
+      {
+        "key": "direct_write",
+        "count": 0
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-mode",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/mode/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-mode",
+      "sync-transport-source-definition-mode"
+    ],
+    "declaration_pending": []
+  },
+  "ledger_dispositions": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode spaces read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/mode spaces read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "spaces"
+        }
+      },
+      "source": {
+        "source_lock": "sources/mode-operation-source-lock.json",
+        "source_id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+        "source_url": "https://mode.com/developer/api-reference/introduction/",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-spaces-read-path-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/mode/streams.json: existing stream \"spaces\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"spaces\" binds the pinned source contract",
+        "stream": "spaces"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode reports read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/mode reports read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "reports"
+        }
+      },
+      "source": {
+        "source_lock": "sources/mode-operation-source-lock.json",
+        "source_id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+        "source_url": "https://mode.com/developer/api-reference/introduction/",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-reports-read-path-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/mode/streams.json: existing stream \"reports\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"reports\" binds the pinned source contract",
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode data_sources read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/mode data_sources read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "data_sources"
+        }
+      },
+      "source": {
+        "source_lock": "sources/mode-operation-source-lock.json",
+        "source_id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+        "source_url": "https://mode.com/developer/api-reference/introduction/",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-data-sources-read-path-api-surface-3",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/mode/streams.json: existing stream \"data_sources\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"data_sources\" binds the pinned source contract",
+        "stream": "data_sources"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode groups read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/mode groups read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "groups"
+        }
+      },
+      "source": {
+        "source_lock": "sources/mode-operation-source-lock.json",
+        "source_id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+        "source_url": "https://mode.com/developer/api-reference/introduction/",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-groups-read-path-api-surface-4",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/mode/streams.json: existing stream \"groups\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"groups\" binds the pinned source contract",
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode memberships read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/mode memberships read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "memberships"
+        }
+      },
+      "source": {
+        "source_lock": "sources/mode-operation-source-lock.json",
+        "source_id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+        "source_url": "https://mode.com/developer/api-reference/introduction/",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "mode.rest.hook-internal-connectors-mode-memberships-read-path-api-surface-5",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/mode/streams.json: existing stream \"memberships\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"memberships\" binds the pinned source contract",
+        "stream": "memberships"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2816 @@
+{
+  "schema_version": 1,
+  "connector": "brex",
+  "source_lock": "sources/brex-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-accounts-card-api-surface-1",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "brex.rest.get-v2-accounts-card-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/accounts/card",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/accounts/card",
+          "operation": null,
+          "covered_by": {
+            "stream": "accounts_card"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "accounts_card"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-accounts-card-primary-statements-api-surface-2",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "brex.rest.get-v2-accounts-card-primary-statements-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/accounts/card/primary/statements",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/accounts/card/primary/statements",
+          "operation": null,
+          "covered_by": {
+            "stream": "card_statements"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "card_statements"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-accounts-cash-api-surface-3",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "brex.rest.get-v2-accounts-cash-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/accounts/cash",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/accounts/cash",
+          "operation": null,
+          "covered_by": {
+            "stream": "accounts_cash"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "accounts_cash"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-accounts-cash-primary-api-surface-4",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "brex.rest.get-v2-accounts-cash-primary-api-surface-4",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/accounts/cash/primary",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/accounts/cash/primary",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single primary-cash-account detail; identical record shape to the accounts_cash list stream's per-item object (primary=true row), already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-accounts-cash-id-api-surface-5",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "brex.rest.get-v2-accounts-cash-id-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/accounts/cash/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/accounts/cash/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single cash-account detail by id; identical record shape to the accounts_cash list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-accounts-cash-id-statements-api-surface-6",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "brex.rest.get-v2-accounts-cash-id-statements-api-surface-6",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/accounts/cash/{id}/statements",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/accounts/cash/{id}/statements",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "cash-account statements scoped by id; same record shape as card_statements, and this connector's primary account is the card account, not cash — Pass B breadth-vs-cost triage, no consuming stream added for the cash variant this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-transactions-card-primary-api-surface-7",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "brex.rest.get-v2-transactions-card-primary-api-surface-7",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/transactions/card/primary",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/transactions/card/primary",
+          "operation": null,
+          "covered_by": {
+            "stream": "transactions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "transactions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-transactions-cash-id-api-surface-8",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "brex.rest.get-v2-transactions-cash-id-api-surface-8",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/transactions/cash/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/transactions/cash/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "cash-account transaction list scoped by account id; this connector's existing transactions stream targets the primary CARD account only (legacy parity), Pass B breadth-vs-cost triage for the cash-account variant"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-expenses-api-surface-9",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "brex.rest.get-v1-expenses-api-surface-9",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/expenses",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/expenses",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "all-expense-types list (card + reimbursement + travel); the expenses stream already covers card expenses, this connector's original scope, and the unfiltered variant returns a mixed-type union this dialect's single schema cannot cleanly project without losing type-specific fields"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-expenses-card-api-surface-10",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "brex.rest.get-v1-expenses-card-api-surface-10",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/expenses/card",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/expenses/card",
+          "operation": null,
+          "covered_by": {
+            "stream": "expenses"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "expenses"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-expenses-card-receipt-match-api-surface-11",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "brex.rest.post-v1-expenses-card-receipt-match-api-surface-11",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/expenses/card/receipt_match",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/expenses/card/receipt_match",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "attempts to match an uploaded receipt to an existing expense; a matching/reconciliation action, not a plain record mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-expenses-card-expense-id-api-surface-12",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "brex.rest.get-v1-expenses-card-expense-id-api-surface-12",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/expenses/card/{expense_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/expenses/card/{expense_id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single card-expense detail; identical record shape to the expenses list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v1-expenses-card-expense-id-api-surface-13",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "brex.rest.put-v1-expenses-card-expense-id-api-surface-13",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v1/expenses/card/{expense_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v1/expenses/card/{expense_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_expense"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_expense"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-expenses-card-expense-id-receipt-upload-api-surface-14",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "brex.rest.post-v1-expenses-card-expense-id-receipt-upload-api-surface-14",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/expenses/card/{expense_id}/receipt_upload",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/expenses/card/{expense_id}/receipt_upload",
+          "operation": null,
+          "excluded": {
+            "category": "binary_payload",
+            "reason": "uploads a binary receipt image/PDF (multipart), not a plain JSON/form data mutation this dialect can express"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-expenses-id-api-surface-15",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "brex.rest.get-v1-expenses-id-api-surface-15",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/expenses/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/expenses/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "generic (type-unaware) single-expense detail; same underlying record as GET /v1/expenses/card/{expense_id} for card expenses, already covered by the expenses stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-cards-api-surface-16",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[15]",
+      "operation_id": "brex.rest.get-v2-cards-api-surface-16",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/cards",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/cards",
+          "operation": null,
+          "covered_by": {
+            "stream": "cards"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "cards"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-cards-api-surface-17",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[16]",
+      "operation_id": "brex.rest.post-v2-cards-api-surface-17",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/cards",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/cards",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating a new physical/virtual card requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) that this engine's declarative write dialect has no field to attach on ANY write request (engine.WriteAction has no headers field; write.go's executeWriteRecord calls Requester.Do/DoForm with a nil headers argument unconditionally) — a genuine ENGINE_GAP, not a scoping choice; update_card/lock_card/unlock_card/terminate_card cover the rest of the card lifecycle since their Idempotency-Key is optional on Brex's own spec"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-cards-id-api-surface-18",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[17]",
+      "operation_id": "brex.rest.get-v2-cards-id-api-surface-18",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/cards/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/cards/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-card detail; identical record shape to the cards list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v2-cards-id-api-surface-19",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[18]",
+      "operation_id": "brex.rest.put-v2-cards-id-api-surface-19",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v2/cards/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/cards/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_card"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_card"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-cards-id-lock-api-surface-20",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[19]",
+      "operation_id": "brex.rest.post-v2-cards-id-lock-api-surface-20",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/cards/{id}/lock",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/cards/{id}/lock",
+          "operation": null,
+          "covered_by": {
+            "write": "lock_card"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "lock_card"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-cards-id-pan-api-surface-21",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[20]",
+      "operation_id": "brex.rest.get-v2-cards-id-pan-api-surface-21",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/cards/{id}/pan",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/cards/{id}/pan",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "returns the card's full unmasked PAN/CVV; PCI-scoped sensitive-data endpoint gated behind elevated card-data entitlement, never modeled as ordinary sync data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-cards-id-secure-email-api-surface-22",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[21]",
+      "operation_id": "brex.rest.post-v2-cards-id-secure-email-api-surface-22",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/cards/{id}/secure_email",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/cards/{id}/secure_email",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "emails a secure link to view the card number; a notification/delivery action, not a data mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-cards-id-terminate-api-surface-23",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[22]",
+      "operation_id": "brex.rest.post-v2-cards-id-terminate-api-surface-23",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/cards/{id}/terminate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/cards/{id}/terminate",
+          "operation": null,
+          "covered_by": {
+            "write": "terminate_card"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "terminate_card"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-cards-id-unlock-api-surface-24",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[23]",
+      "operation_id": "brex.rest.post-v2-cards-id-unlock-api-surface-24",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/cards/{id}/unlock",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/cards/{id}/unlock",
+          "operation": null,
+          "covered_by": {
+            "write": "unlock_card"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "unlock_card"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-company-api-surface-25",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[24]",
+      "operation_id": "brex.rest.get-v2-company-api-surface-25",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/company",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/company",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "single company-identity snapshot for the authenticated account, not a syncable object list"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-departments-api-surface-26",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[25]",
+      "operation_id": "brex.rest.get-v2-departments-api-surface-26",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/departments",
+          "operation": null,
+          "covered_by": {
+            "stream": "departments"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "departments"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-departments-api-surface-27",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[26]",
+      "operation_id": "brex.rest.post-v2-departments-api-surface-27",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/departments",
+          "operation": null,
+          "covered_by": {
+            "write": "create_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_department"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-departments-id-api-surface-28",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[27]",
+      "operation_id": "brex.rest.get-v2-departments-id-api-surface-28",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/departments/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/departments/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-department detail; identical record shape to the departments list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-legal-entities-api-surface-29",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[28]",
+      "operation_id": "brex.rest.get-v2-legal-entities-api-surface-29",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/legal_entities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/legal_entities",
+          "operation": null,
+          "covered_by": {
+            "stream": "legal_entities"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "legal_entities"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-legal-entities-id-api-surface-30",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[29]",
+      "operation_id": "brex.rest.get-v2-legal-entities-id-api-surface-30",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/legal_entities/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/legal_entities/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-legal-entity detail; identical record shape to the legal_entities list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-locations-api-surface-31",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[30]",
+      "operation_id": "brex.rest.get-v2-locations-api-surface-31",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/locations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/locations",
+          "operation": null,
+          "covered_by": {
+            "stream": "locations"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "locations"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-locations-api-surface-32",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[31]",
+      "operation_id": "brex.rest.post-v2-locations-api-surface-32",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/locations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/locations",
+          "operation": null,
+          "covered_by": {
+            "write": "create_location"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_location"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-locations-id-api-surface-33",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[32]",
+      "operation_id": "brex.rest.get-v2-locations-id-api-surface-33",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/locations/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/locations/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-location detail; identical record shape to the locations list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-titles-api-surface-34",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[33]",
+      "operation_id": "brex.rest.get-v2-titles-api-surface-34",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/titles",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/titles",
+          "operation": null,
+          "covered_by": {
+            "stream": "titles"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "titles"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-titles-api-surface-35",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[34]",
+      "operation_id": "brex.rest.post-v2-titles-api-surface-35",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/titles",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/titles",
+          "operation": null,
+          "covered_by": {
+            "write": "create_title"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_title"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-titles-id-api-surface-36",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[35]",
+      "operation_id": "brex.rest.get-v2-titles-id-api-surface-36",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/titles/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/titles/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-title detail; identical record shape to the titles list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-users-api-surface-37",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[36]",
+      "operation_id": "brex.rest.get-v2-users-api-surface-37",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/users",
+          "operation": null,
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-users-api-surface-38",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[37]",
+      "operation_id": "brex.rest.post-v2-users-api-surface-38",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/users",
+          "operation": null,
+          "covered_by": {
+            "write": "create_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "create_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-users-me-api-surface-39",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[38]",
+      "operation_id": "brex.rest.get-v2-users-me-api-surface-39",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/users/me",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/users/me",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "returns the identity of the currently-authenticated user/token, not a syncable object stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-users-id-api-surface-40",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[39]",
+      "operation_id": "brex.rest.get-v2-users-id-api-surface-40",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/users/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/users/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v2-users-id-api-surface-41",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[40]",
+      "operation_id": "brex.rest.put-v2-users-id-api-surface-41",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v2/users/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/users/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-users-id-limit-api-surface-42",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[41]",
+      "operation_id": "brex.rest.get-v2-users-id-limit-api-surface-42",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/users/{id}/limit",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/users/{id}/limit",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "a user's card-spend limit sub-resource; already embedded on the users/cards records' own limit-adjacent fields, not a distinct list-shaped resource"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-users-id-limit-api-surface-43",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[42]",
+      "operation_id": "brex.rest.post-v2-users-id-limit-api-surface-43",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/users/{id}/limit",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/users/{id}/limit",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "sets a per-user card-spend limit; a narrow admin-console action, Pass B breadth-vs-cost triage"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-incoming-transfers-api-surface-44",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[43]",
+      "operation_id": "brex.rest.post-v1-incoming-transfers-api-surface-44",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/incoming_transfers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/incoming_transfers",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating an incoming transfer requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-linked-accounts-api-surface-45",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[44]",
+      "operation_id": "brex.rest.get-v1-linked-accounts-api-surface-45",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/linked_accounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/linked_accounts",
+          "operation": null,
+          "covered_by": {
+            "stream": "linked_accounts"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "linked_accounts"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-transfers-api-surface-46",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[45]",
+      "operation_id": "brex.rest.get-v1-transfers-api-surface-46",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/transfers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/transfers",
+          "operation": null,
+          "covered_by": {
+            "stream": "transfers"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "transfers"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-transfers-api-surface-47",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[46]",
+      "operation_id": "brex.rest.post-v1-transfers-api-surface-47",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/transfers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/transfers",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating a money transfer requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice; the highest-consequence write in the entire Brex surface, doubly appropriate to block rather than approximate"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-transfers-id-api-surface-48",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[47]",
+      "operation_id": "brex.rest.get-v1-transfers-id-api-surface-48",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/transfers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/transfers/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-transfer detail; identical record shape to the transfers list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-vendors-api-surface-49",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[48]",
+      "operation_id": "brex.rest.get-v1-vendors-api-surface-49",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/vendors",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/vendors",
+          "operation": null,
+          "covered_by": {
+            "stream": "vendors"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "vendors"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-vendors-api-surface-50",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[49]",
+      "operation_id": "brex.rest.post-v1-vendors-api-surface-50",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/vendors",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/vendors",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating a vendor requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice; update_vendor/delete_vendor cover the rest of the vendor lifecycle since their Idempotency-Key is optional on Brex's own spec"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-vendors-id-api-surface-51",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[50]",
+      "operation_id": "brex.rest.get-v1-vendors-id-api-surface-51",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/vendors/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/vendors/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-vendor detail; identical record shape to the vendors list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v1-vendors-id-api-surface-52",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[51]",
+      "operation_id": "brex.rest.put-v1-vendors-id-api-surface-52",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v1/vendors/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v1/vendors/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_vendor"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_vendor"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.delete-v1-vendors-id-api-surface-53",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[52]",
+      "operation_id": "brex.rest.delete-v1-vendors-id-api-surface-53",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/vendors/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/vendors/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_vendor"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_vendor"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-webhooks-api-surface-54",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[53]",
+      "operation_id": "brex.rest.get-v1-webhooks-api-surface-54",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/webhooks",
+          "operation": null,
+          "covered_by": {
+            "stream": "webhooks"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "webhooks"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-webhooks-api-surface-55",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[54]",
+      "operation_id": "brex.rest.post-v1-webhooks-api-surface-55",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/webhooks",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating a webhook subscription requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice; update_webhook/delete_webhook cover the rest of the webhook lifecycle since neither requires the header"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-webhooks-groups-api-surface-56",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[55]",
+      "operation_id": "brex.rest.get-v1-webhooks-groups-api-surface-56",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/webhooks/groups",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/webhooks/groups",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "webhook-group (partner multi-tenant fan-out) list; a partner-tier feature this connector's single-account scope does not use, Pass B breadth-vs-cost triage"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-webhooks-groups-api-surface-57",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[56]",
+      "operation_id": "brex.rest.post-v1-webhooks-groups-api-surface-57",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/webhooks/groups",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/webhooks/groups",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating a webhook group requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP; also a partner-tier feature this connector's single-account scope does not use"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-webhooks-groups-id-api-surface-58",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[57]",
+      "operation_id": "brex.rest.get-v1-webhooks-groups-id-api-surface-58",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/webhooks/groups/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/webhooks/groups/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "single webhook-group detail; partner-tier feature this connector's single-account scope does not use"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.delete-v1-webhooks-groups-id-api-surface-59",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[58]",
+      "operation_id": "brex.rest.delete-v1-webhooks-groups-id-api-surface-59",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/webhooks/groups/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/webhooks/groups/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "deletes a webhook group; partner-tier feature this connector's single-account scope does not use"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-webhooks-groups-id-add-members-api-surface-60",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[59]",
+      "operation_id": "brex.rest.post-v1-webhooks-groups-id-add-members-api-surface-60",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/webhooks/groups/{id}/add_members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/webhooks/groups/{id}/add_members",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "adds member accounts to a webhook group; partner-tier feature this connector's single-account scope does not use"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-webhooks-groups-id-members-api-surface-61",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[60]",
+      "operation_id": "brex.rest.get-v1-webhooks-groups-id-members-api-surface-61",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/webhooks/groups/{id}/members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/webhooks/groups/{id}/members",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "lists webhook-group members; partner-tier feature this connector's single-account scope does not use"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-webhooks-groups-id-remove-members-api-surface-62",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[61]",
+      "operation_id": "brex.rest.post-v1-webhooks-groups-id-remove-members-api-surface-62",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/webhooks/groups/{id}/remove_members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/webhooks/groups/{id}/remove_members",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "removes member accounts from a webhook group; partner-tier feature this connector's single-account scope does not use"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-webhooks-secrets-api-surface-63",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[62]",
+      "operation_id": "brex.rest.get-v1-webhooks-secrets-api-surface-63",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/webhooks/secrets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/webhooks/secrets",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "returns the signing secret used to verify webhook payloads; a credential, never modeled as ordinary sync data"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-webhooks-id-api-surface-64",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[63]",
+      "operation_id": "brex.rest.get-v1-webhooks-id-api-surface-64",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/webhooks/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/webhooks/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v1-webhooks-id-api-surface-65",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[64]",
+      "operation_id": "brex.rest.put-v1-webhooks-id-api-surface-65",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v1/webhooks/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v1/webhooks/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_webhook"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "update_webhook"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.delete-v1-webhooks-id-api-surface-66",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[65]",
+      "operation_id": "brex.rest.delete-v1-webhooks-id-api-surface-66",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/webhooks/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/webhooks/{id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_webhook"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": "delete_webhook"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-budget-programs-api-surface-67",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[66]",
+      "operation_id": "brex.rest.get-v1-budget-programs-api-surface-67",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/v1/budget_programs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/budget_programs",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "v1 budget-program metadata list; superseded by the v2 Budgets surface this connector already targets, Pass B breadth-vs-cost triage on the legacy v1 variant"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-budget-programs-id-api-surface-68",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[67]",
+      "operation_id": "brex.rest.get-v1-budget-programs-id-api-surface-68",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/v1/budget_programs/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/budget_programs/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "single v1 budget-program detail; superseded v1 surface"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-budgets-api-surface-69",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[68]",
+      "operation_id": "brex.rest.get-v1-budgets-api-surface-69",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/v1/budgets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/budgets",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "v1 spend-limit list; superseded by the v2 budgets stream this connector already targets"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-budgets-api-surface-70",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[69]",
+      "operation_id": "brex.rest.post-v1-budgets-api-surface-70",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/v1/budgets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/budgets",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "creates a v1 spend limit; superseded legacy surface, and creation requires a mandatory Idempotency-Key header this engine cannot attach regardless"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-budgets-id-api-surface-71",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[70]",
+      "operation_id": "brex.rest.get-v1-budgets-id-api-surface-71",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/v1/budgets/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/budgets/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "single v1 spend-limit detail; superseded v1 surface"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v1-budgets-id-api-surface-72",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[71]",
+      "operation_id": "brex.rest.put-v1-budgets-id-api-surface-72",
+      "deprecated": true,
+      "method": "PUT",
+      "path": "/v1/budgets/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v1/budgets/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "updates a v1 spend limit; superseded legacy surface, and update requires a mandatory Idempotency-Key header this engine cannot attach regardless"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-budgets-id-archive-api-surface-73",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[72]",
+      "operation_id": "brex.rest.post-v1-budgets-id-archive-api-surface-73",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/v1/budgets/{id}/archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/budgets/{id}/archive",
+          "operation": null,
+          "excluded": {
+            "category": "deprecated",
+            "reason": "archives a v1 spend limit; superseded legacy surface"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-budgets-api-surface-74",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[73]",
+      "operation_id": "brex.rest.get-v2-budgets-api-surface-74",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/budgets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/budgets",
+          "operation": null,
+          "covered_by": {
+            "stream": "budgets"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "budgets"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-budgets-api-surface-75",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[74]",
+      "operation_id": "brex.rest.post-v2-budgets-api-surface-75",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/budgets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/budgets",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating a budget requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-budgets-id-api-surface-76",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[75]",
+      "operation_id": "brex.rest.get-v2-budgets-id-api-surface-76",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/budgets/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/budgets/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single-budget detail; identical record shape to the budgets list stream's per-item object, already covered by that stream"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v2-budgets-id-api-surface-77",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[76]",
+      "operation_id": "brex.rest.put-v2-budgets-id-api-surface-77",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v2/budgets/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/budgets/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "updating a budget requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP, not a scoping choice"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-budgets-id-archive-api-surface-78",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[77]",
+      "operation_id": "brex.rest.post-v2-budgets-id-archive-api-surface-78",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/budgets/{id}/archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/budgets/{id}/archive",
+          "operation": null,
+          "excluded": {
+            "category": "destructive_admin",
+            "reason": "archives (soft-deletes) a budget and detaches every card/limit still assigned to it; not exposed as a write action this pass pending destructive-scope review"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-spend-limits-api-surface-79",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[78]",
+      "operation_id": "brex.rest.get-v2-spend-limits-api-surface-79",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/spend_limits",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/spend_limits",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "v2 spend-limit list; Brex's v2 API models spend limits as budgets with limit_type=budget, same underlying record shape the budgets stream already reads"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-spend-limits-api-surface-80",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[79]",
+      "operation_id": "brex.rest.post-v2-spend-limits-api-surface-80",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/spend_limits",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/spend_limits",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "creating a spend limit requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP, not a scoping choice"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v2-spend-limits-id-api-surface-81",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[80]",
+      "operation_id": "brex.rest.get-v2-spend-limits-id-api-surface-81",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v2/spend_limits/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/spend_limits/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "duplicate_of",
+            "reason": "single spend-limit detail; same underlying record shape as the budgets stream already covers"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v2-spend-limits-id-api-surface-82",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[81]",
+      "operation_id": "brex.rest.put-v2-spend-limits-id-api-surface-82",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v2/spend_limits/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/spend_limits/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "requires_elevated_scope",
+            "reason": "updating a spend limit requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP, not a scoping choice"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v2-spend-limits-id-archive-api-surface-83",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[82]",
+      "operation_id": "brex.rest.post-v2-spend-limits-id-archive-api-surface-83",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v2/spend_limits/{id}/archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/spend_limits/{id}/archive",
+          "operation": null,
+          "excluded": {
+            "category": "destructive_admin",
+            "reason": "archives (soft-deletes) a spend limit; not exposed as a write action this pass pending destructive-scope review"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v3-accounting-integration-api-surface-84",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[83]",
+      "operation_id": "brex.rest.post-v3-accounting-integration-api-surface-84",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v3/accounting/integration",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v3/accounting/integration",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "connects a third-party accounting system (e.g. NetSuite/QuickBooks) integration; a one-time provisioning action, not a syncable data mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v3-accounting-integration-integration-id-disconnect-api-surface-85",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[84]",
+      "operation_id": "brex.rest.post-v3-accounting-integration-integration-id-disconnect-api-surface-85",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v3/accounting/integration/{integration_id}/disconnect",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v3/accounting/integration/{integration_id}/disconnect",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "disconnects an accounting integration; a provisioning action, not a syncable data mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v3-accounting-integration-integration-id-reactivate-api-surface-86",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[85]",
+      "operation_id": "brex.rest.post-v3-accounting-integration-integration-id-reactivate-api-surface-86",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v3/accounting/integration/{integration_id}/reactivate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v3/accounting/integration/{integration_id}/reactivate",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "reactivates an accounting integration; a provisioning action, not a syncable data mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v3-accounting-records-record-id-api-surface-87",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[86]",
+      "operation_id": "brex.rest.get-v3-accounting-records-record-id-api-surface-87",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v3/accounting/records/{record_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v3/accounting/records/{record_id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "single accounting-sync record detail; accounting-integration surface out of scope for this connector, Pass B breadth-vs-cost triage"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v3-accounting-records-api-surface-88",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[87]",
+      "operation_id": "brex.rest.get-v3-accounting-records-api-surface-88",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v3/accounting/records",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v3/accounting/records",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "accounting-sync record list (Brex's own outbound accounting-export queue); a distinct product surface from the card/expense/vendor data this connector targets"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v3-accounting-records-export-results-api-surface-89",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[88]",
+      "operation_id": "brex.rest.post-v3-accounting-records-export-results-api-surface-89",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v3/accounting/records/export-results",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v3/accounting/records/export-results",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "reports back the result of an accounting export the CALLER performed; a callback/acknowledgment action, not a data mutation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-fields-api-surface-90",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[89]",
+      "operation_id": "brex.rest.get-v1-fields-api-surface-90",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/fields",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "custom-field schema/definition list, not record data itself; Pass B breadth-vs-cost triage"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-fields-api-surface-91",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[90]",
+      "operation_id": "brex.rest.post-v1-fields-api-surface-91",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/fields",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "creates a custom field definition (account schema mutation), not a record-level write"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-fields-field-id-values-api-surface-92",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[91]",
+      "operation_id": "brex.rest.get-v1-fields-field-id-values-api-surface-92",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/fields/{field_id}/values",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/fields/{field_id}/values",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "custom-field value list for one field definition; account-schema-adjacent surface, Pass B breadth-vs-cost triage"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v1-fields-field-id-values-api-surface-93",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[92]",
+      "operation_id": "brex.rest.put-v1-fields-field-id-values-api-surface-93",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v1/fields/{field_id}/values",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v1/fields/{field_id}/values",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "bulk-updates custom-field values; account-schema-adjacent surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-fields-field-id-values-api-surface-94",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[93]",
+      "operation_id": "brex.rest.post-v1-fields-field-id-values-api-surface-94",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/fields/{field_id}/values",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/fields/{field_id}/values",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "creates custom-field values; account-schema-adjacent surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.delete-v1-fields-field-id-values-api-surface-95",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[94]",
+      "operation_id": "brex.rest.delete-v1-fields-field-id-values-api-surface-95",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/fields/{field_id}/values",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/fields/{field_id}/values",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "deletes custom-field values; account-schema-adjacent surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-fields-field-id-values-brex-id-api-surface-96",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[95]",
+      "operation_id": "brex.rest.get-v1-fields-field-id-values-brex-id-api-surface-96",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/fields/{field_id}/values/{brex_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/fields/{field_id}/values/{brex_id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "single custom-field value; account-schema-adjacent surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-fields-id-api-surface-97",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[96]",
+      "operation_id": "brex.rest.get-v1-fields-id-api-surface-97",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/fields/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/fields/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "single custom-field definition; account-schema-adjacent surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.put-v1-fields-id-api-surface-98",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[97]",
+      "operation_id": "brex.rest.put-v1-fields-id-api-surface-98",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/v1/fields/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v1/fields/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "updates a custom-field definition (account schema mutation), not a record-level write"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.delete-v1-fields-id-api-surface-99",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[98]",
+      "operation_id": "brex.rest.delete-v1-fields-id-api-surface-99",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/fields/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/fields/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "deletes a custom-field definition account-wide, wiping that field's stored value everywhere it's used; account-schema mutation, not a record-level operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-referrals-api-surface-100",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[99]",
+      "operation_id": "brex.rest.get-v1-referrals-api-surface-100",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/referrals",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/referrals",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "partner-referral list; a partner-onboarding surface unrelated to this connector's financial-data sync scope"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-referrals-api-surface-101",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[100]",
+      "operation_id": "brex.rest.post-v1-referrals-api-surface-101",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/referrals",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/referrals",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "creates a partner referral; partner-onboarding surface out of scope"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-referrals-id-api-surface-102",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[101]",
+      "operation_id": "brex.rest.get-v1-referrals-id-api-surface-102",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/referrals/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/referrals/{id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "single referral detail; partner-onboarding surface out of scope"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-referrals-id-document-upload-api-surface-103",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[102]",
+      "operation_id": "brex.rest.post-v1-referrals-id-document-upload-api-surface-103",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/referrals/{id}/document_upload",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/referrals/{id}/document_upload",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "uploads a binary onboarding document (multipart); partner-onboarding surface out of scope, also binary-payload-shaped"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.post-v1-referrals-id-process-ein-document-api-surface-104",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[103]",
+      "operation_id": "brex.rest.post-v1-referrals-id-process-ein-document-api-surface-104",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/referrals/{id}/process_ein_document",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/referrals/{id}/process_ein_document",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "processes a delayed EIN document after upload; partner-onboarding surface out of scope"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-trips-api-surface-105",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[104]",
+      "operation_id": "brex.rest.get-v1-trips-api-surface-105",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/trips",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/trips",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "corporate-travel trip list; a distinct Brex Travel product surface, Pass B breadth-vs-cost triage, no consuming stream this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-trips-trip-id-api-surface-106",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[105]",
+      "operation_id": "brex.rest.get-v1-trips-trip-id-api-surface-106",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/trips/{trip_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/trips/{trip_id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "single-trip detail; part of the travel surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-trips-trip-id-bookings-api-surface-107",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[106]",
+      "operation_id": "brex.rest.get-v1-trips-trip-id-bookings-api-surface-107",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/trips/{trip_id}/bookings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/trips/{trip_id}/bookings",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "trip booking list; part of the travel surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/brex-operation-source-lock.json",
+      "source_id": "brex.rest.get-v1-trips-trip-id-bookings-booking-id-api-surface-108",
+      "source_url": "https://developer.brex.com/",
+      "source_location": "api_surface.json:endpoints[107]",
+      "operation_id": "brex.rest.get-v1-trips-trip-id-bookings-booking-id-api-surface-108",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/trips/{trip_id}/bookings/{booking_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/trips/{trip_id}/bookings/{booking_id}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "single-booking detail; part of the travel surface excluded this pass"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

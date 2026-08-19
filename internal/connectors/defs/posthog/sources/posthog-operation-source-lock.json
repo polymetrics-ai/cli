@@ -1,0 +1,102 @@
+{
+  "schema_version": 2,
+  "connector": "posthog",
+  "captured_at": "2026-08-19T15:28:37.221Z",
+  "rest": {
+    "source_url": "https://posthog.com/docs/api",
+    "requested_url": "https://posthog.com/docs/api",
+    "sha256": "2279dbc7a06d039ef38955662c649d478bd9fd0ca38d440ef0157c2a3105ee40",
+    "bytes": 1163012,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "GET": 8,
+      "POST": 1
+    },
+    "operations": [
+      {
+        "id": "posthog.rest.get-api-projects-project-id-events-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/events/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-events-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "posthog.rest.get-api-projects-project-id-persons-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/persons/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-persons-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "posthog.rest.get-api-projects-project-id-insights-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/insights/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-insights-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "posthog.rest.get-api-projects-project-id-cohorts-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/cohorts/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-cohorts-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "posthog.rest.get-api-projects-project-id-feature-flags-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/feature_flags/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-feature-flags-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "posthog.rest.get-api-projects-project-id-dashboards-api-surface-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/dashboards/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-dashboards-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "posthog.rest.get-api-projects-project-id-actions-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/actions/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-actions-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "posthog.rest.get-api-projects-project-id-annotations-api-surface-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/projects/{project_id}/annotations/",
+        "operation_id": "posthog.rest.get-api-projects-project-id-annotations-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "posthog.rest.post-capture-api-surface-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/capture/",
+        "operation_id": "posthog.rest.post-capture-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      }
+    ]
+  }
+}

@@ -1,0 +1,455 @@
+{
+  "schema_version": 2,
+  "connector": "amplitude",
+  "captured_at": "2026-08-19T15:28:37.221Z",
+  "rest": {
+    "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+    "requested_url": "https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/",
+    "sha256": "d51ce958e97ab99c010e35cd651e37d98ac6b69ff40b129ec77286c53df9e42a",
+    "bytes": 782457,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 6,
+      "GET": 21,
+      "POST": 13,
+      "PUT": 8
+    },
+    "operations": [
+      {
+        "id": "amplitude.rest.get-api-3-cohorts-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/cohorts",
+        "operation_id": "amplitude.rest.get-api-3-cohorts-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "amplitude.rest.get-api-3-cohorts-usage-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/cohorts/usage",
+        "operation_id": "amplitude.rest.get-api-3-cohorts-usage-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "amplitude.rest.get-api-5-cohorts-request-id-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/5/cohorts/request/{id}",
+        "operation_id": "amplitude.rest.get-api-5-cohorts-request-id-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "amplitude.rest.get-api-5-cohorts-request-status-request-id-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/5/cohorts/request-status/{request_id}",
+        "operation_id": "amplitude.rest.get-api-5-cohorts-request-status-request-id-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "amplitude.rest.get-api-5-cohorts-request-request-id-file-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/5/cohorts/request/{request_id}/file",
+        "operation_id": "amplitude.rest.get-api-5-cohorts-request-request-id-file-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "amplitude.rest.post-api-3-cohorts-upload-api-surface-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/cohorts/upload",
+        "operation_id": "amplitude.rest.post-api-3-cohorts-upload-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "amplitude.rest.post-api-3-cohorts-membership-api-surface-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/cohorts/membership",
+        "operation_id": "amplitude.rest.post-api-3-cohorts-membership-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "amplitude.rest.get-api-3-annotations-api-surface-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/annotations",
+        "operation_id": "amplitude.rest.get-api-3-annotations-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "amplitude.rest.get-api-3-annotations-annotation-id-api-surface-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/annotations/{annotation_id}",
+        "operation_id": "amplitude.rest.get-api-3-annotations-annotation-id-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "amplitude.rest.post-api-3-annotations-api-surface-10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/annotations",
+        "operation_id": "amplitude.rest.post-api-3-annotations-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "amplitude.rest.put-api-3-annotations-annotation-id-api-surface-11",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/annotations/{annotation_id}",
+        "operation_id": "amplitude.rest.put-api-3-annotations-annotation-id-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "amplitude.rest.delete-api-3-annotations-annotation-id-api-surface-12",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/annotations/{annotation_id}",
+        "operation_id": "amplitude.rest.delete-api-3-annotations-annotation-id-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "amplitude.rest.get-api-3-annotation-categories-api-surface-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/annotation-categories",
+        "operation_id": "amplitude.rest.get-api-3-annotation-categories-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "amplitude.rest.get-api-3-annotation-categories-category-id-api-surface-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/3/annotation-categories/{category_id}",
+        "operation_id": "amplitude.rest.get-api-3-annotation-categories-category-id-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "amplitude.rest.post-api-3-annotation-categories-api-surface-15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/3/annotation-categories",
+        "operation_id": "amplitude.rest.post-api-3-annotation-categories-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "amplitude.rest.put-api-3-annotation-categories-category-id-api-surface-16",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/annotation-categories/{category_id}",
+        "operation_id": "amplitude.rest.put-api-3-annotation-categories-category-id-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "amplitude.rest.delete-api-3-annotation-categories-category-id-api-surface-17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/3/annotation-categories/{category_id}",
+        "operation_id": "amplitude.rest.delete-api-3-annotation-categories-category-id-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "amplitude.rest.put-api-3-annotation-categories-bulk-category-id-api-surface-18",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/3/annotation-categories/bulk/{category_id}",
+        "operation_id": "amplitude.rest.put-api-3-annotation-categories-bulk-category-id-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-events-list-api-surface-19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/events/list",
+        "operation_id": "amplitude.rest.get-api-2-events-list-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-category-api-surface-20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/category",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-category-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-category-category-name-api-surface-21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/category/{category_name}",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-category-category-name-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-category-api-surface-22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/category",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-category-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "amplitude.rest.put-api-2-taxonomy-category-category-id-api-surface-23",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/2/taxonomy/category/{category_id}",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-category-category-id-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "amplitude.rest.delete-api-2-taxonomy-category-category-id-api-surface-24",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/category/{category_id}",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-category-category-id-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-event-api-surface-25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/event",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-event-event-type-api-surface-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/event/{event_type}",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-event-type-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-event-api-surface-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/event",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "amplitude.rest.put-api-2-taxonomy-event-event-type-api-surface-28",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/2/taxonomy/event/{event_type}",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-event-event-type-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "amplitude.rest.delete-api-2-taxonomy-event-event-type-api-surface-29",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/event/{event_type}",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-event-event-type-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-event-event-type-restore-api-surface-30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/event/{event_type}/restore",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-event-type-restore-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-event-property-api-surface-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/event-property",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-property-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-event-property-event-property-api-surface-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/event-property/{event_property}",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-property-event-property-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-event-property-api-surface-33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/event-property",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-property-api-surface-33",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "amplitude.rest.put-api-2-taxonomy-event-property-event-property-api-surface-34",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/2/taxonomy/event-property/{event-property}",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-event-property-event-property-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "amplitude.rest.delete-api-2-taxonomy-event-property-event-property-api-surface-35",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/event-property/{event-property}",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-event-property-event-property-api-surface-35",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-event-property-event-property-restore-api-surface-36",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/event-property/{event-property}/restore",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-property-event-property-restore-api-surface-36",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-user-property-api-surface-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/user-property",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-user-property-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-user-property-user-property-api-surface-38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/user-property/{user_property}",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-user-property-user-property-api-surface-38",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-user-property-api-surface-39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/user-property",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-user-property-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "amplitude.rest.put-api-2-taxonomy-user-property-user-property-api-surface-40",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/2/taxonomy/user-property/{user_property}",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-user-property-user-property-api-surface-40",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "amplitude.rest.delete-api-2-taxonomy-user-property-user-property-api-surface-41",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/user-property/{user_property}",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-user-property-user-property-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-user-property-user-property-restore-api-surface-42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/user-property/{user_property}/restore",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-user-property-user-property-restore-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-group-property-api-surface-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/group-property",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-group-property-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-taxonomy-group-property-group-property-api-surface-44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/taxonomy/group-property/{group_property}",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-group-property-group-property-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "amplitude.rest.post-api-2-taxonomy-group-property-api-surface-45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/2/taxonomy/group-property",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-group-property-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      },
+      {
+        "id": "amplitude.rest.put-api-2-taxonomy-group-property-group-property-api-surface-46",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/2/taxonomy/group-property/{group_property}",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-group-property-group-property-api-surface-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]"
+      },
+      {
+        "id": "amplitude.rest.get-api-2-export-api-surface-47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/2/export",
+        "operation_id": "amplitude.rest.get-api-2-export-api-surface-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]"
+      },
+      {
+        "id": "amplitude.rest.post-2-httpapi-api-surface-48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/2/httpapi",
+        "operation_id": "amplitude.rest.post-2-httpapi-api-surface-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]"
+      }
+    ]
+  }
+}

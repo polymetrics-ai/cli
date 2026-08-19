@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "issue": 4292,
-  "state": "planned",
+  "state": "executing",
   "delivery": "direct-pr",
   "base_branch": "main",
   "working_branch": "fm/cli-map-batch8910-r1",
   "batches": {
-    "8": "pending",
+    "8": "validated; pending commit",
     "9": "pending",
     "10": "pending"
   },

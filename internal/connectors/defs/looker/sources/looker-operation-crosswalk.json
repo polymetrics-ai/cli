@@ -1,0 +1,398 @@
+{
+  "schema_version": 1,
+  "connector": "looker",
+  "source_lock": "sources/looker-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-users-api-surface-1",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "looker.rest.get-users-api-surface-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users",
+          "operation": null,
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-groups-api-surface-2",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "looker.rest.get-groups-api-surface-2",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/groups",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/groups",
+          "operation": null,
+          "covered_by": {
+            "stream": "groups"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "groups"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-folders-api-surface-3",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "looker.rest.get-folders-api-surface-3",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/folders",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/folders",
+          "operation": null,
+          "covered_by": {
+            "stream": "folders"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "folders"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-looks-api-surface-4",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "looker.rest.get-looks-api-surface-4",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/looks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/looks",
+          "operation": null,
+          "covered_by": {
+            "stream": "looks"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "looks"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-dashboards-api-surface-5",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "looker.rest.get-dashboards-api-surface-5",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/dashboards",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/dashboards",
+          "operation": null,
+          "covered_by": {
+            "stream": "dashboards"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "dashboards"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.post-login-api-surface-6",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[5]",
+      "operation_id": "looker.rest.post-login-api-surface-6",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/login",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/login",
+          "operation": null,
+          "excluded": {
+            "category": "non_data_endpoint",
+            "reason": "auth token exchange, not a syncable object stream; modeled by base.auth's oauth2_client_credentials candidates"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-queries-query-id-run-result-format-api-surface-7",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[6]",
+      "operation_id": "looker.rest.get-queries-query-id-run-result-format-api-surface-7",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/queries/{query_id}/run/{result_format}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/queries/{query_id}/run/{result_format}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "/queries/{query_id}/run/{result_format} is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.post-looks-look-id-run-result-format-api-surface-8",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[7]",
+      "operation_id": "looker.rest.post-looks-look-id-run-result-format-api-surface-8",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/looks/{look_id}/run/{result_format}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/looks/{look_id}/run/{result_format}",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "/looks/{look_id}/run/{result_format} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-scheduled-plans-api-surface-9",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[8]",
+      "operation_id": "looker.rest.get-scheduled-plans-api-surface-9",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scheduled_plans",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scheduled_plans",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "/scheduled_plans is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-content-metadata-api-surface-10",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[9]",
+      "operation_id": "looker.rest.get-content-metadata-api-surface-10",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/content_metadata",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/content_metadata",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "/content_metadata is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-connections-api-surface-11",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[10]",
+      "operation_id": "looker.rest.get-connections-api-surface-11",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/connections",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/connections",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "/connections is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-boards-api-surface-12",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[11]",
+      "operation_id": "looker.rest.get-boards-api-surface-12",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/boards",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/boards",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "/boards is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.get-alerts-api-surface-13",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[12]",
+      "operation_id": "looker.rest.get-alerts-api-surface-13",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/alerts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/alerts",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "/alerts is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.post-users-api-surface-14",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[13]",
+      "operation_id": "looker.rest.post-users-api-surface-14",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users",
+          "operation": null,
+          "excluded": {
+            "category": "out_of_scope",
+            "reason": "Connector is read-only in pm today"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/looker-operation-source-lock.json",
+      "source_id": "looker.rest.delete-users-user-id-api-surface-15",
+      "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+      "source_location": "api_surface.json:endpoints[14]",
+      "operation_id": "looker.rest.delete-users-user-id-api-surface-15",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/users/{user_id}",
+          "operation": null,
+          "excluded": {
+            "category": "destructive_admin",
+            "reason": "user deletion; not a safe reverse-ETL action"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

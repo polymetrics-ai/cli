@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "connector": "metabase",
+  "source_lock": "sources/metabase-operation-source-lock.json",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/metabase-operation-source-lock.json",
+      "source_id": "metabase.rest.hook-internal-connectors-metabase-cards-read-path-api-surface-1",
+      "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+      "source_location": "api_surface.json:endpoints[0]",
+      "operation_id": "metabase.rest.hook-internal-connectors-metabase-cards-read-path-api-surface-1",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/metabase cards read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/metabase cards read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "cards"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "cards"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/metabase-operation-source-lock.json",
+      "source_id": "metabase.rest.hook-internal-connectors-metabase-dashboards-read-path-api-surface-2",
+      "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+      "source_location": "api_surface.json:endpoints[1]",
+      "operation_id": "metabase.rest.hook-internal-connectors-metabase-dashboards-read-path-api-surface-2",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/metabase dashboards read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/metabase dashboards read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "dashboards"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "dashboards"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/metabase-operation-source-lock.json",
+      "source_id": "metabase.rest.hook-internal-connectors-metabase-collections-read-path-api-surface-3",
+      "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+      "source_location": "api_surface.json:endpoints[2]",
+      "operation_id": "metabase.rest.hook-internal-connectors-metabase-collections-read-path-api-surface-3",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/metabase collections read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/metabase collections read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "collections"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "collections"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/metabase-operation-source-lock.json",
+      "source_id": "metabase.rest.hook-internal-connectors-metabase-databases-read-path-api-surface-4",
+      "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+      "source_location": "api_surface.json:endpoints[3]",
+      "operation_id": "metabase.rest.hook-internal-connectors-metabase-databases-read-path-api-surface-4",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/metabase databases read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/metabase databases read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "databases"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "databases"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/metabase-operation-source-lock.json",
+      "source_id": "metabase.rest.hook-internal-connectors-metabase-users-read-path-api-surface-5",
+      "source_url": "https://www.metabase.com/docs/latest/api-documentation",
+      "source_location": "api_surface.json:endpoints[4]",
+      "operation_id": "metabase.rest.hook-internal-connectors-metabase-users-read-path-api-surface-5",
+      "deprecated": false,
+      "method": "HOOK",
+      "path": "internal/connectors/metabase users read path",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HOOK",
+          "path": "internal/connectors/metabase users read path",
+          "operation": null,
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    }
+  ]
+}

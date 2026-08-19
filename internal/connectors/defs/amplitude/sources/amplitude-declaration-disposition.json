@@ -1,0 +1,2150 @@
+{
+  "schema_version": 1,
+  "connector": "amplitude",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_basis": {
+    "source_lock": "sources/amplitude-operation-source-lock.json",
+    "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+    "source_sha256": "d51ce958e97ab99c010e35cd651e37d98ac6b69ff40b129ec77286c53df9e42a",
+    "source_bytes": 782457,
+    "source_operation_count": 48
+  },
+  "summary": {
+    "api_surface_rows": 48,
+    "exact_source_rows": 48,
+    "declared_operations": 48,
+    "declared_percent": 100,
+    "enabled_operations": 22,
+    "enabled_percent": 45.83,
+    "disabled_operations": 26,
+    "documented_deletes": 6,
+    "enabled_deletes": 4,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 9
+      },
+      {
+        "key": "direct_write",
+        "count": 27
+      },
+      {
+        "key": "etl",
+        "count": 10
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 2
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 10,
+    "writes_actions": 12,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 27,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 26
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-amplitude",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/amplitude/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-amplitude",
+      "sync-transport-source-definition-amplitude"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-amplitude",
+        "count": 26
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/api/3/cohorts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/cohorts",
+        "operation": null,
+        "covered_by": {
+          "stream": "cohorts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-3-cohorts-api-surface-1",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "amplitude.rest.get-api-3-cohorts-api-surface-1",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"cohorts\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"cohorts\" binds the pinned source contract",
+        "stream": "cohorts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/cohorts/usage",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/cohorts/usage",
+        "operation": null,
+        "covered_by": {
+          "stream": "cohorts_usage"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-3-cohorts-usage-api-surface-2",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "amplitude.rest.get-api-3-cohorts-usage-api-surface-2",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"cohorts_usage\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"cohorts_usage\" binds the pinned source contract",
+        "stream": "cohorts_usage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/5/cohorts/request/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/5/cohorts/request/{id}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "step 1 of Amplitude's 2-step async cohort-membership download protocol (returns a request_id/cohort_id pair, not the membership data itself); the dialect has no async-job-poll-then-fetch primitive to express the request/request-status/file 3-endpoint sequence as a single declarative stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-5-cohorts-request-id-api-surface-3",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "amplitude.rest.get-api-5-cohorts-request-id-api-surface-3",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[2]; api_surface.json:endpoints[2].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[2]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/5/cohorts/request-status/{request_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/5/cohorts/request-status/{request_id}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "step 2 of the async cohort-membership download protocol; polls job status, no standalone record value without the paired request/file endpoints"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-5-cohorts-request-status-request-id-api-surface-4",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "amplitude.rest.get-api-5-cohorts-request-status-request-id-api-surface-4",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[3]; api_surface.json:endpoints[3].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[3]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/5/cohorts/request/{request_id}/file",
+      "parity_class": "binary_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/5/cohorts/request/{request_id}/file",
+        "operation": null,
+        "excluded": {
+          "category": "binary_payload",
+          "reason": "returns either a small inline body or a 302 redirect to a presigned S3 URL for large cohorts; the redirect-to-external-storage shape has no declarative equivalent and the payload itself is a bulk id list, not a projectable record shape"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-5-cohorts-request-request-id-file-api-surface-5",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "amplitude.rest.get-api-5-cohorts-request-request-id-file-api-surface-5",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[4]; api_surface.json:endpoints[4].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[4]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/cohorts/upload",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/cohorts/upload",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "bulk-uploads an arbitrary user/amplitude-id list to create or replace cohort membership wholesale; a write action with no path-addressable existing record (a cohort id is optional/generated) and payload shape (an id array, potentially large) is a bulk-import operation outside the per-record create/update/delete write model"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-3-cohorts-upload-api-surface-6",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "amplitude.rest.post-api-3-cohorts-upload-api-surface-6",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[5]; api_surface.json:endpoints[5].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[5]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/cohorts/membership",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/cohorts/membership",
+        "operation": null,
+        "excluded": {
+          "category": "requires_elevated_scope",
+          "reason": "incrementally adds/removes members to/from cohort membership via an array of {ids, id_type, operation} objects; same bulk-membership-list shape as cohorts/upload, not a single addressable record mutation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-3-cohorts-membership-api-surface-7",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "amplitude.rest.post-api-3-cohorts-membership-api-surface-7",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[6]; api_surface.json:endpoints[6].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[6]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/annotations",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/annotations",
+        "operation": null,
+        "covered_by": {
+          "stream": "annotations"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-3-annotations-api-surface-8",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": "amplitude.rest.get-api-3-annotations-api-surface-8",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"annotations\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"annotations\" binds the pinned source contract",
+        "stream": "annotations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/annotations/{annotation_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/annotations/{annotation_id}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-annotation detail GET; every field it returns is already present on each record of the annotations list stream, which this connector reads to exhaustion every sync"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-3-annotations-annotation-id-api-surface-9",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": "amplitude.rest.get-api-3-annotations-annotation-id-api-surface-9",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[8]; api_surface.json:endpoints[8].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[8]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/annotations",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/annotations",
+        "operation": null,
+        "covered_by": {
+          "write": "create_annotation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-3-annotations-api-surface-10",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": "amplitude.rest.post-api-3-annotations-api-surface-10",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"create_annotation\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_annotation"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_annotation\" binds the pinned source contract",
+        "write": "create_annotation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/annotations/{annotation_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/annotations/{annotation_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_annotation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-3-annotations-annotation-id-api-surface-11",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": "amplitude.rest.put-api-3-annotations-annotation-id-api-surface-11",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"update_annotation\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_annotation"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_annotation\" binds the pinned source contract",
+        "write": "update_annotation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/annotations/{annotation_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/annotations/{annotation_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_annotation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.delete-api-3-annotations-annotation-id-api-surface-12",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": "amplitude.rest.delete-api-3-annotations-annotation-id-api-surface-12",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"delete_annotation\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_annotation"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_annotation\" binds the pinned source contract",
+        "write": "delete_annotation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/annotation-categories",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/annotation-categories",
+        "operation": null,
+        "covered_by": {
+          "stream": "annotation_categories"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-3-annotation-categories-api-surface-13",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": "amplitude.rest.get-api-3-annotation-categories-api-surface-13",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"annotation_categories\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"annotation_categories\" binds the pinned source contract",
+        "stream": "annotation_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/3/annotation-categories/{category_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/3/annotation-categories/{category_id}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-category detail GET; every field is already present on each record of the annotation_categories list stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-3-annotation-categories-category-id-api-surface-14",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": "amplitude.rest.get-api-3-annotation-categories-category-id-api-surface-14",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[13]; api_surface.json:endpoints[13].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[13]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/3/annotation-categories",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/3/annotation-categories",
+        "operation": null,
+        "covered_by": {
+          "write": "create_annotation_category"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-3-annotation-categories-api-surface-15",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": "amplitude.rest.post-api-3-annotation-categories-api-surface-15",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"create_annotation_category\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_annotation_category"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_annotation_category\" binds the pinned source contract",
+        "write": "create_annotation_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/annotation-categories/{category_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/annotation-categories/{category_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_annotation_category"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-3-annotation-categories-category-id-api-surface-16",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": "amplitude.rest.put-api-3-annotation-categories-category-id-api-surface-16",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"update_annotation_category\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_annotation_category"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_annotation_category\" binds the pinned source contract",
+        "write": "update_annotation_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/3/annotation-categories/{category_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/3/annotation-categories/{category_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_annotation_category"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.delete-api-3-annotation-categories-category-id-api-surface-17",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": "amplitude.rest.delete-api-3-annotation-categories-category-id-api-surface-17",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"delete_annotation_category\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_annotation_category"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_annotation_category\" binds the pinned source contract",
+        "write": "delete_annotation_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/3/annotation-categories/bulk/{category_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/3/annotation-categories/bulk/{category_id}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "bulk-reassigns an array of annotation_ids to a category in one call; a batch-of-ids mutation, not a single addressable record the per-record write model targets — an operator can express the same effect as N update_annotation calls setting each annotation's category individually"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-3-annotation-categories-bulk-category-id-api-surface-18",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": "amplitude.rest.put-api-3-annotation-categories-bulk-category-id-api-surface-18",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[17]; api_surface.json:endpoints[17].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[17]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/events/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/events/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "events_list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-events-list-api-surface-19",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": "amplitude.rest.get-api-2-events-list-api-surface-19",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"events_list\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"events_list\" binds the pinned source contract",
+        "stream": "events_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/category",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/category",
+        "operation": null,
+        "covered_by": {
+          "stream": "taxonomy_categories"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-category-api-surface-20",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-category-api-surface-20",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"taxonomy_categories\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"taxonomy_categories\" binds the pinned source contract",
+        "stream": "taxonomy_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/category/{category_name}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/category/{category_name}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-category detail GET; every field is already present on each record of the taxonomy_categories list stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-category-category-name-api-surface-21",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-category-category-name-api-surface-21",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[20]; api_surface.json:endpoints[20].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[20]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/category",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/category",
+        "operation": null,
+        "covered_by": {
+          "write": "create_taxonomy_category"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-category-api-surface-22",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-category-api-surface-22",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"create_taxonomy_category\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_taxonomy_category"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_taxonomy_category\" binds the pinned source contract",
+        "write": "create_taxonomy_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/2/taxonomy/category/{category_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/2/taxonomy/category/{category_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_taxonomy_category"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-2-taxonomy-category-category-id-api-surface-23",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[22]",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-category-category-id-api-surface-23",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"update_taxonomy_category\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_taxonomy_category"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_taxonomy_category\" binds the pinned source contract",
+        "write": "update_taxonomy_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/category/{category_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/category/{category_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_taxonomy_category"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.delete-api-2-taxonomy-category-category-id-api-surface-24",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-category-category-id-api-surface-24",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"delete_taxonomy_category\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_taxonomy_category"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_taxonomy_category\" binds the pinned source contract",
+        "write": "delete_taxonomy_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/event",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/event",
+        "operation": null,
+        "covered_by": {
+          "stream": "taxonomy_events"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-event-api-surface-25",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-api-surface-25",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"taxonomy_events\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"taxonomy_events\" binds the pinned source contract",
+        "stream": "taxonomy_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/event/{event_type}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/event/{event_type}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-event-type detail GET; every field is already present on each record of the taxonomy_events list stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-event-event-type-api-surface-26",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-event-type-api-surface-26",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[25]; api_surface.json:endpoints[25].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[25]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/event",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/event",
+        "operation": null,
+        "covered_by": {
+          "write": "create_taxonomy_event"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-event-api-surface-27",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-api-surface-27",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"create_taxonomy_event\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "create_taxonomy_event"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"create_taxonomy_event\" binds the pinned source contract",
+        "write": "create_taxonomy_event"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/2/taxonomy/event/{event_type}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/2/taxonomy/event/{event_type}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_taxonomy_event"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-2-taxonomy-event-event-type-api-surface-28",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-event-event-type-api-surface-28",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"update_taxonomy_event\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "update_taxonomy_event"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"update_taxonomy_event\" binds the pinned source contract",
+        "write": "update_taxonomy_event"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/event/{event_type}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/event/{event_type}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_taxonomy_event"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.delete-api-2-taxonomy-event-event-type-api-surface-29",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[28]",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-event-event-type-api-surface-29",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/writes.json: typed write action \"delete_taxonomy_event\" binds this source endpoint.",
+        "contract": {
+          "kind": "typed_write_action",
+          "id": "delete_taxonomy_event"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action \"delete_taxonomy_event\" binds the pinned source contract",
+        "write": "delete_taxonomy_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/event/{event_type}/restore",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/event/{event_type}/restore",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "undoes a prior soft-delete; a state-transition action on an already-deleted resource with no corresponding read/list of deleted event types to source a record from, outside the create/update/delete write model"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-event-event-type-restore-api-surface-30",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[29]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-event-type-restore-api-surface-30",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[29]; api_surface.json:endpoints[29].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[29]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/event-property",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/event-property",
+        "operation": null,
+        "covered_by": {
+          "stream": "taxonomy_event_properties"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-event-property-api-surface-31",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[30]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-property-api-surface-31",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"taxonomy_event_properties\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"taxonomy_event_properties\" binds the pinned source contract",
+        "stream": "taxonomy_event_properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/event-property/{event_property}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/event-property/{event_property}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-property detail GET; every field is already present on each record of the taxonomy_event_properties list stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-event-property-event-property-api-surface-32",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[31]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-event-property-event-property-api-surface-32",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[31]; api_surface.json:endpoints[31].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[31]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/event-property",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/event-property",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "event-property mutations were not prioritized for this wave (read coverage was); a follow-up capability expansion can add create/update/delete once a reverse-ETL use case is scoped"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-event-property-api-surface-33",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[32]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-property-api-surface-33",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[32]; api_surface.json:endpoints[32].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[32]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/2/taxonomy/event-property/{event-property}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/2/taxonomy/event-property/{event-property}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "same rationale as the create action above"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-2-taxonomy-event-property-event-property-api-surface-34",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[33]",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-event-property-event-property-api-surface-34",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[33]; api_surface.json:endpoints[33].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[33]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/event-property/{event-property}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/event-property/{event-property}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "same rationale as the create action above"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.delete-api-2-taxonomy-event-property-event-property-api-surface-35",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[34]",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-event-property-event-property-api-surface-35",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[34]; api_surface.json:endpoints[34].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[34]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/event-property/{event-property}/restore",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/event-property/{event-property}/restore",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "restore action for a mutation surface not yet covered (event-property CUD)"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-event-property-event-property-restore-api-surface-36",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[35]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-event-property-event-property-restore-api-surface-36",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[35]; api_surface.json:endpoints[35].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[35]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/user-property",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/user-property",
+        "operation": null,
+        "covered_by": {
+          "stream": "taxonomy_user_properties"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-user-property-api-surface-37",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[36]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-user-property-api-surface-37",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"taxonomy_user_properties\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"taxonomy_user_properties\" binds the pinned source contract",
+        "stream": "taxonomy_user_properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/user-property/{user_property}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/user-property/{user_property}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-property detail GET; every field is already present on each record of the taxonomy_user_properties list stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-user-property-user-property-api-surface-38",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[37]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-user-property-user-property-api-surface-38",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[37]; api_surface.json:endpoints[37].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[37]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/user-property",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/user-property",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "user-property mutations were not prioritized for this wave (read coverage was); a follow-up capability expansion can add create/update/delete once a reverse-ETL use case is scoped"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-user-property-api-surface-39",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[38]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-user-property-api-surface-39",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[38]; api_surface.json:endpoints[38].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[38]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/2/taxonomy/user-property/{user_property}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/2/taxonomy/user-property/{user_property}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "same rationale as the create action above"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-2-taxonomy-user-property-user-property-api-surface-40",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[39]",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-user-property-user-property-api-surface-40",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[39]; api_surface.json:endpoints[39].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[39]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/user-property/{user_property}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/2/taxonomy/user-property/{user_property}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "same rationale as the create action above"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.delete-api-2-taxonomy-user-property-user-property-api-surface-41",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[40]",
+        "operation_id": "amplitude.rest.delete-api-2-taxonomy-user-property-user-property-api-surface-41",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[40]; api_surface.json:endpoints[40].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[40]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/user-property/{user_property}/restore",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/user-property/{user_property}/restore",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "restore action for a mutation surface not yet covered (user-property CUD)"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-user-property-user-property-restore-api-surface-42",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[41]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-user-property-user-property-restore-api-surface-42",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[41]; api_surface.json:endpoints[41].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[41]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/group-property",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/group-property",
+        "operation": null,
+        "covered_by": {
+          "stream": "taxonomy_group_properties"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-group-property-api-surface-43",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[42]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-group-property-api-surface-43",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/amplitude/streams.json: existing stream \"taxonomy_group_properties\" binds this source endpoint.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"taxonomy_group_properties\" binds the pinned source contract",
+        "stream": "taxonomy_group_properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/taxonomy/group-property/{group_property}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/taxonomy/group-property/{group_property}",
+        "operation": null,
+        "excluded": {
+          "category": "duplicate_of",
+          "reason": "single-property detail GET; every field is already present on each record of the taxonomy_group_properties list stream"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-taxonomy-group-property-group-property-api-surface-44",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[43]",
+        "operation_id": "amplitude.rest.get-api-2-taxonomy-group-property-group-property-api-surface-44",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[43]; api_surface.json:endpoints[43].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[43]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/2/taxonomy/group-property",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/2/taxonomy/group-property",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "group-property mutations were not prioritized for this wave (read coverage was); a follow-up capability expansion can add create/update once a reverse-ETL use case is scoped"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-api-2-taxonomy-group-property-api-surface-45",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[44]",
+        "operation_id": "amplitude.rest.post-api-2-taxonomy-group-property-api-surface-45",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[44]; api_surface.json:endpoints[44].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[44]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/2/taxonomy/group-property/{group_property}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/2/taxonomy/group-property/{group_property}",
+        "operation": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "same rationale as the create action above"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.put-api-2-taxonomy-group-property-group-property-api-surface-46",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[45]",
+        "operation_id": "amplitude.rest.put-api-2-taxonomy-group-property-group-property-api-surface-46",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[45]; api_surface.json:endpoints[45].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[45]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2/export",
+      "parity_class": "binary_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/2/export",
+        "operation": null,
+        "excluded": {
+          "category": "binary_payload",
+          "reason": "returns a zipped archive of newline-delimited JSON event files (not a single JSON body); the read dialect has no gzip/zip decompression or archive-member-fan-out primitive (conventions.md §1's Tier-2 trigger list names response decompression/CSV parsing as a hook-only concern, and this connector deliberately stays Tier-1 with zero hooks)"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.get-api-2-export-api-surface-47",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[46]",
+        "operation_id": "amplitude.rest.get-api-2-export-api-surface-47",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[46]; api_surface.json:endpoints[46].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[46]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/httpapi",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/2/httpapi",
+        "operation": null,
+        "excluded": {
+          "category": "non_data_endpoint",
+          "reason": "event-ingestion telemetry sink (creates NEW raw analytics events from a client SDK), not a reverse-ETL mutation of an existing Amplitude-managed resource; out of scope for a connector whose write surface targets annotations/taxonomy"
+        }
+      },
+      "source": {
+        "source_lock": "sources/amplitude-operation-source-lock.json",
+        "source_id": "amplitude.rest.post-2-httpapi-api-surface-48",
+        "source_url": "https://amplitude.com/docs/apis/analytics/http-v2",
+        "source_location": "api_surface.json:endpoints[47]",
+        "operation_id": "amplitude.rest.post-2-httpapi-api-surface-48",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-amplitude",
+          "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[47]; api_surface.json:endpoints[47].",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned public document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/amplitude/api_surface.json:endpoints[47]."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-amplitude",
+        "contract": null
+      }
+    }
+  ]
+}

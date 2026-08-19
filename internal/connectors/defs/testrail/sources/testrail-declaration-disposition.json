@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "connector": "testrail",
+  "generated_at": "2026-08-19T15:28:37.221Z",
+  "source_basis": {
+    "state": "skipped",
+    "source_lock": "sources/testrail-operation-source-lock.json",
+    "reason": "no-public-api-description"
+  },
+  "summary": {
+    "state": "skipped",
+    "reason": "no-public-api-description",
+    "live_certification": "pending"
+  },
+  "ledger_dispositions": []
+}

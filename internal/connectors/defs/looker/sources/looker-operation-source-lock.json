@@ -1,0 +1,157 @@
+{
+  "schema_version": 2,
+  "connector": "looker",
+  "captured_at": "2026-08-19T15:28:37.221Z",
+  "rest": {
+    "source_url": "https://docs.cloud.google.com/looker/docs/reference/looker-api/latest",
+    "requested_url": "https://cloud.google.com/looker/docs/reference/looker-api/latest",
+    "sha256": "36645b23cb3b3dc1c5d8b25d39544a6c20e4ea549bd58c7c2c87545e0d9bb6db",
+    "bytes": 205201,
+    "content_type": "text/html; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 1,
+      "GET": 11,
+      "POST": 3
+    },
+    "operations": [
+      {
+        "id": "looker.rest.get-users-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users",
+        "operation_id": "looker.rest.get-users-api-surface-1",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "looker.rest.get-groups-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups",
+        "operation_id": "looker.rest.get-groups-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "looker.rest.get-folders-api-surface-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/folders",
+        "operation_id": "looker.rest.get-folders-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "looker.rest.get-looks-api-surface-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/looks",
+        "operation_id": "looker.rest.get-looks-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "looker.rest.get-dashboards-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dashboards",
+        "operation_id": "looker.rest.get-dashboards-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "looker.rest.post-login-api-surface-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/login",
+        "operation_id": "looker.rest.post-login-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "looker.rest.get-queries-query-id-run-result-format-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/queries/{query_id}/run/{result_format}",
+        "operation_id": "looker.rest.get-queries-query-id-run-result-format-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "looker.rest.post-looks-look-id-run-result-format-api-surface-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/looks/{look_id}/run/{result_format}",
+        "operation_id": "looker.rest.post-looks-look-id-run-result-format-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "looker.rest.get-scheduled-plans-api-surface-9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduled_plans",
+        "operation_id": "looker.rest.get-scheduled-plans-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "looker.rest.get-content-metadata-api-surface-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/content_metadata",
+        "operation_id": "looker.rest.get-content-metadata-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "looker.rest.get-connections-api-surface-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/connections",
+        "operation_id": "looker.rest.get-connections-api-surface-11",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "looker.rest.get-boards-api-surface-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/boards",
+        "operation_id": "looker.rest.get-boards-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "looker.rest.get-alerts-api-surface-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/alerts",
+        "operation_id": "looker.rest.get-alerts-api-surface-13",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "looker.rest.post-users-api-surface-14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users",
+        "operation_id": "looker.rest.post-users-api-surface-14",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "looker.rest.delete-users-user-id-api-surface-15",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{user_id}",
+        "operation_id": "looker.rest.delete-users-user-id-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      }
+    ]
+  }
+}

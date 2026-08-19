@@ -1,0 +1,491 @@
+{
+  "schema_version": 2,
+  "connector": "dbt",
+  "captured_at": "2026-08-19T15:28:37.221Z",
+  "rest": {
+    "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+    "requested_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+    "sha256": "733481d6d3a894c6c7b0fe828db2d2d4d80090769f458f1a56e9681b6c9045b8",
+    "bytes": 167519,
+    "content_type": "text/plain; charset=utf-8",
+    "retrieval_method": "http",
+    "representation": "published-document",
+    "inventory_basis": "The existing source-reviewed api_surface.json endpoint inventory is crosswalked verbatim; no request, response, pagination, or body schema is inferred by this map.",
+    "operation_counts": {
+      "DELETE": 6,
+      "GET": 26,
+      "PATCH": 1,
+      "POST": 19
+    },
+    "operations": [
+      {
+        "id": "dbt.rest.get-api-v2-accounts-api-surface-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-api-surface-1",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[0]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-api-surface-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-api-surface-2",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-api-surface-3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-api-surface-3",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]"
+      },
+      {
+        "id": "dbt.rest.patch-api-v2-accounts-account-id-api-surface-4",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation_id": "dbt.rest.patch-api-v2-accounts-account-id-api-surface-4",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-api-surface-5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/encryptions/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-api-surface-5",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-api-surface-6",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/encryptions/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-api-surface-6",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-id-api-surface-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-encryptions-id-api-surface-7",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-id-api-surface-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-encryptions-id-api-surface-8",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]"
+      },
+      {
+        "id": "dbt.rest.delete-api-v2-accounts-account-id-encryptions-id-api-surface-9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-encryptions-id-api-surface-9",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-environments-api-surface-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/environments/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-environments-api-surface-10",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-environments-api-surface-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/environments/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-environments-api-surface-11",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[10]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-environments-id-api-surface-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-environments-id-api-surface-12",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-environments-id-api-surface-13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-environments-id-api-surface-13",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[12]"
+      },
+      {
+        "id": "dbt.rest.delete-api-v2-accounts-account-id-environments-id-api-surface-14",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-environments-id-api-surface-14",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[13]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-invites-api-surface-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/invites/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-invites-api-surface-15",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-invites-id-api-surface-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-invites-id-api-surface-16",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-jobs-api-surface-17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-api-surface-17",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-api-surface-18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-api-surface-18",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-jobs-id-api-surface-19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-id-api-surface-19",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-id-api-surface-20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-id-api-surface-20",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]"
+      },
+      {
+        "id": "dbt.rest.delete-api-v2-accounts-account-id-jobs-id-api-surface-21",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-jobs-id-api-surface-21",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-jobs-job-id-artifacts-remainder-api-surface-22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-jobs-job-id-artifacts-remainder-api-surface-22",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-rerun-api-surface-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-rerun-api-surface-23",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-run-api-surface-24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-jobs-job-id-run-api-surface-24",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-licenses-api-surface-25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/licenses/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-licenses-api-surface-25",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-notifications-api-surface-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/notifications/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-api-surface-26",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-notifications-api-surface-27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/notifications/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-api-surface-27",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-notifications-id-api-surface-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-notifications-id-api-surface-28",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-notifications-id-api-surface-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-notifications-id-api-surface-29",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]"
+      },
+      {
+        "id": "dbt.rest.delete-api-v2-accounts-account-id-notifications-id-api-surface-30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-notifications-id-api-surface-30",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-permissions-id-api-surface-31",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-permissions-id-api-surface-31",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-projects-api-surface-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/projects/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-projects-api-surface-32",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-projects-api-surface-33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-projects-api-surface-33",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[32]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-projects-id-api-surface-34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-projects-id-api-surface-34",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-projects-id-api-surface-35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-projects-id-api-surface-35",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[34]"
+      },
+      {
+        "id": "dbt.rest.delete-api-v2-accounts-account-id-projects-id-api-surface-36",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-projects-id-api-surface-36",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[35]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-repositories-api-surface-37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/repositories/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-api-surface-37",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-repositories-api-surface-38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/repositories/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-repositories-api-surface-38",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[37]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-repositories-id-api-surface-39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-repositories-id-api-surface-39",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]"
+      },
+      {
+        "id": "dbt.rest.delete-api-v2-accounts-account-id-repositories-id-api-surface-40",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "operation_id": "dbt.rest.delete-api-v2-accounts-account-id-repositories-id-api-surface-40",
+        "deprecated": true,
+        "source_location": "api_surface.json:endpoints[39]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-api-surface-41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-api-surface-41",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-id-api-surface-42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-id-api-surface-42",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-api-surface-43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-api-surface-43",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-remainder-api-surface-44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-artifacts-remainder-api-surface-44",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-cancel-api-surface-45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-cancel-api-surface-45",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-retry-api-surface-46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-runs-run-id-retry-api-surface-46",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-retry-api-surface-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+        "operation_id": "dbt.rest.post-api-v2-accounts-account-id-runs-run-id-retry-api-surface-47",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-steps-id-api-surface-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-steps-id-api-surface-48",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-accounts-account-id-users-api-surface-49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/users/",
+        "operation_id": "dbt.rest.get-api-v2-accounts-account-id-users-api-surface-49",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]"
+      },
+      {
+        "id": "dbt.rest.get-api-v2-users-id-api-surface-50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/users/{id}/",
+        "operation_id": "dbt.rest.get-api-v2-users-id-api-surface-50",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-users-id-api-surface-51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/users/{id}/",
+        "operation_id": "dbt.rest.post-api-v2-users-id-api-surface-51",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]"
+      },
+      {
+        "id": "dbt.rest.post-api-v2-notifications-unsubscribe-api-surface-52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/notifications/unsubscribe/",
+        "operation_id": "dbt.rest.post-api-v2-notifications-unsubscribe-api-surface-52",
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]"
+      }
+    ]
+  }
+}
