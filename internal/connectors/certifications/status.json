@@ -3,7 +3,8 @@
   "generated_command": "go run ./cmd/connectorgen certification-matrix --all",
   "certification_scope": [
     "github",
-    "postgres"
+    "postgres",
+    "zoom"
   ],
   "connectors": [
     {
@@ -14,6 +15,12 @@
     },
     {
       "connector": "postgres",
+      "certified": false,
+      "label": "COMMUNITY BUILD, UNCERTIFIED",
+      "warning": "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."
+    },
+    {
+      "connector": "zoom",
       "certified": false,
       "label": "COMMUNITY BUILD, UNCERTIFIED",
       "warning": "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."

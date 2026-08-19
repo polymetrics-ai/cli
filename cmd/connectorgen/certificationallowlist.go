@@ -7,6 +7,7 @@ package main
 var certificationConnectorAllowlist = []string{
 	"github",
 	"postgres",
+	"zoom",
 }
 
 func certificationConnectorAllowed(name string) bool {

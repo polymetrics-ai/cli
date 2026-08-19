@@ -19,6 +19,18 @@ func TestGeneratedStatusMakesUncertifiedConnectorVisible(t *testing.T) {
 }
 
 func TestGeneratedStatusIncludesEveryAllowlistedConnector(t *testing.T) {
+	var artifact statusArtifact
+	if err := decodeStatusJSON(embeddedStatusJSON, &artifact); err != nil {
+		t.Fatalf("parse generated status artifact: %v", err)
+	}
+	expected := make(map[string]bool, len(artifact.CertificationScope))
+	for _, connector := range artifact.CertificationScope {
+		if expected[connector] {
+			t.Fatalf("generated status artifact duplicates allowlisted connector %q", connector)
+		}
+		expected[connector] = true
+	}
+
 	statuses, err := AllStatuses()
 	if err != nil {
 		t.Fatalf("AllStatuses() error = %v", err)
@@ -30,13 +42,18 @@ func TestGeneratedStatusIncludesEveryAllowlistedConnector(t *testing.T) {
 	for _, status := range statuses {
 		found[status.Connector] = true
 	}
-	for _, connector := range []string{"github", "postgres"} {
+	for connector := range expected {
 		if !found[connector] {
 			t.Fatalf("AllStatuses() omitted allowlisted connector %q", connector)
 		}
 	}
-	if len(found) != 2 {
-		t.Fatalf("AllStatuses() returned %d statuses, want the two certification claims", len(found))
+	for connector := range found {
+		if !expected[connector] {
+			t.Fatalf("AllStatuses() returned non-allowlisted connector %q", connector)
+		}
+	}
+	if len(found) != len(expected) {
+		t.Fatalf("AllStatuses() returned %d statuses, want exactly %d allowlisted connectors", len(found), len(expected))
 	}
 }
 
