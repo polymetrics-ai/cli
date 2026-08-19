@@ -1,0 +1,3184 @@
+{
+  "schema_version": 2,
+  "connector": "grafana",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+    "sha256": "8d54e6ceb1aeef72ef8fe31213eed910d82d264b0d8328b7e53670ce4c88b46c",
+    "bytes": 790237,
+    "openapi": "3.0.3",
+    "info_version": "0.0.1",
+    "operation_counts": {
+      "DELETE": 44,
+      "GET": 143,
+      "PATCH": 11,
+      "POST": 81,
+      "PUT": 35
+    },
+    "operations": [
+      {
+        "id": "grafana.rest.listRoles",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/roles",
+        "operation_id": "listRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/roles\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createRole",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/roles",
+        "operation_id": "createRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/roles\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteRole",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/access-control/roles/{roleUID}",
+        "operation_id": "deleteRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/roles/{roleUID}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getRole",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/roles/{roleUID}",
+        "operation_id": "getRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/roles/{roleUID}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateRole",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/access-control/roles/{roleUID}",
+        "operation_id": "updateRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/roles/{roleUID}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getRoleAssignments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/roles/{roleUID}/assignments",
+        "operation_id": "getRoleAssignments",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/roles/{roleUID}/assignments\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setRoleAssignments",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/access-control/roles/{roleUID}/assignments",
+        "operation_id": "setRoleAssignments",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/roles/{roleUID}/assignments\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getAccessControlStatus",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/status",
+        "operation_id": "getAccessControlStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/status\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listTeamsRoles",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/teams/roles/search",
+        "operation_id": "listTeamsRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/teams/roles/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listTeamRoles",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/teams/{teamId}/roles",
+        "operation_id": "listTeamRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/teams/{teamId}/roles\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addTeamRole",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/teams/{teamId}/roles",
+        "operation_id": "addTeamRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/teams/{teamId}/roles\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setTeamRoles",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/access-control/teams/{teamId}/roles",
+        "operation_id": "setTeamRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/teams/{teamId}/roles\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.removeTeamRole",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/access-control/teams/{teamId}/roles/{roleUID}",
+        "operation_id": "removeTeamRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/teams/{teamId}/roles/{roleUID}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listUsersRoles",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/users/roles/search",
+        "operation_id": "listUsersRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/users/roles/search\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listUserRoles",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/users/{userId}/roles",
+        "operation_id": "listUserRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/users/{userId}/roles\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addUserRole",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/users/{userId}/roles",
+        "operation_id": "addUserRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/users/{userId}/roles\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setUserRoles",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/access-control/users/{userId}/roles",
+        "operation_id": "setUserRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/users/{userId}/roles\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.removeUserRole",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/access-control/users/{userId}/roles/{roleUID}",
+        "operation_id": "removeUserRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/users/{userId}/roles/{roleUID}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getResourceDescription",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/{resource}/description",
+        "operation_id": "getResourceDescription",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/{resource}/description\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getResourcePermissions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/access-control/{resource}/{resourceID}",
+        "operation_id": "getResourcePermissions",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/{resource}/{resourceID}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setResourcePermissions",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/{resource}/{resourceID}",
+        "operation_id": "setResourcePermissions",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/{resource}/{resourceID}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setResourcePermissionsForBuiltInRole",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/{resource}/{resourceID}/builtInRoles/{builtInRole}",
+        "operation_id": "setResourcePermissionsForBuiltInRole",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/{resource}/{resourceID}/builtInRoles/{builtInRole}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setResourcePermissionsForTeam",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/{resource}/{resourceID}/teams/{teamID}",
+        "operation_id": "setResourcePermissionsForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/{resource}/{resourceID}/teams/{teamID}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setResourcePermissionsForUser",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/access-control/{resource}/{resourceID}/users/{userID}",
+        "operation_id": "setResourcePermissionsForUser",
+        "deprecated": false,
+        "source_location": "paths[\"/access-control/{resource}/{resourceID}/users/{userID}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSyncStatus",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/admin/ldap-sync-status",
+        "operation_id": "getSyncStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/ldap-sync-status\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.reloadLDAPCfg",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/ldap/reload",
+        "operation_id": "reloadLDAPCfg",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/ldap/reload\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getLDAPStatus",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/admin/ldap/status",
+        "operation_id": "getLDAPStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/ldap/status\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postSyncUserWithLDAP",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/ldap/sync/{user_id}",
+        "operation_id": "postSyncUserWithLDAP",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/ldap/sync/{user_id}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserFromLDAP",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/admin/ldap/{user_name}",
+        "operation_id": "getUserFromLDAP",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/ldap/{user_name}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminProvisioningReloadAccessControl",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/provisioning/access-control/reload",
+        "operation_id": "adminProvisioningReloadAccessControl",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/provisioning/access-control/reload\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminProvisioningReloadDashboards",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/provisioning/dashboards/reload",
+        "operation_id": "adminProvisioningReloadDashboards",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/provisioning/dashboards/reload\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminProvisioningReloadDatasources",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/provisioning/datasources/reload",
+        "operation_id": "adminProvisioningReloadDatasources",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/provisioning/datasources/reload\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminProvisioningReloadPlugins",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/provisioning/plugins/reload",
+        "operation_id": "adminProvisioningReloadPlugins",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/provisioning/plugins/reload\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminGetSettings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/admin/settings",
+        "operation_id": "adminGetSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/settings\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminGetStats",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/admin/stats",
+        "operation_id": "adminGetStats",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/stats\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminCreateUser",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/users",
+        "operation_id": "adminCreateUser",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminDeleteUser",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/admin/users/{user_id}",
+        "operation_id": "adminDeleteUser",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminGetUserAuthTokens",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/admin/users/{user_id}/auth-tokens",
+        "operation_id": "adminGetUserAuthTokens",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/auth-tokens\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminDisableUser",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/users/{user_id}/disable",
+        "operation_id": "adminDisableUser",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/disable\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminEnableUser",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/users/{user_id}/enable",
+        "operation_id": "adminEnableUser",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/enable\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminLogoutUser",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/users/{user_id}/logout",
+        "operation_id": "adminLogoutUser",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/logout\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminUpdateUserPassword",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/admin/users/{user_id}/password",
+        "operation_id": "adminUpdateUserPassword",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/password\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminUpdateUserPermissions",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/admin/users/{user_id}/permissions",
+        "operation_id": "adminUpdateUserPermissions",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/permissions\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserQuota",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/admin/users/{user_id}/quotas",
+        "operation_id": "getUserQuota",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/quotas\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateUserQuota",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/admin/users/{user_id}/quotas/{quota_target}",
+        "operation_id": "updateUserQuota",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/quotas/{quota_target}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.adminRevokeUserAuthToken",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/admin/users/{user_id}/revoke-auth-token",
+        "operation_id": "adminRevokeUserAuthToken",
+        "deprecated": false,
+        "source_location": "paths[\"/admin/users/{user_id}/revoke-auth-token\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getAnnotations",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/annotations",
+        "operation_id": "getAnnotations",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postAnnotation",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/annotations",
+        "operation_id": "postAnnotation",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postGraphiteAnnotation",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/annotations/graphite",
+        "operation_id": "postGraphiteAnnotation",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations/graphite\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.massDeleteAnnotations",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/annotations/mass-delete",
+        "operation_id": "massDeleteAnnotations",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations/mass-delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getAnnotationTags",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/annotations/tags",
+        "operation_id": "getAnnotationTags",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations/tags\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteAnnotationByID",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/annotations/{annotation_id}",
+        "operation_id": "deleteAnnotationByID",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations/{annotation_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getAnnotationByID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/annotations/{annotation_id}",
+        "operation_id": "getAnnotationByID",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations/{annotation_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.patchAnnotation",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/annotations/{annotation_id}",
+        "operation_id": "patchAnnotation",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations/{annotation_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateAnnotation",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/annotations/{annotation_id}",
+        "operation_id": "updateAnnotation",
+        "deprecated": false,
+        "source_location": "paths[\"/annotations/{annotation_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listDevices",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/anonymous/devices",
+        "operation_id": "listDevices",
+        "deprecated": false,
+        "source_location": "paths[\"/anonymous/devices\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.SearchDevices",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/anonymous/search",
+        "operation_id": "SearchDevices",
+        "deprecated": false,
+        "source_location": "paths[\"/anonymous/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSessionList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/cloudmigration/migration",
+        "operation_id": "getSessionList",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createSession",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/cloudmigration/migration",
+        "operation_id": "createSession",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteSession",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/cloudmigration/migration/{uid}",
+        "operation_id": "deleteSession",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration/{uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSession",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/cloudmigration/migration/{uid}",
+        "operation_id": "getSession",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration/{uid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createSnapshot",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/cloudmigration/migration/{uid}/snapshot",
+        "operation_id": "createSnapshot",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration/{uid}/snapshot\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSnapshot",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/cloudmigration/migration/{uid}/snapshot/{snapshotUid}",
+        "operation_id": "getSnapshot",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration/{uid}/snapshot/{snapshotUid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.cancelSnapshot",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/cloudmigration/migration/{uid}/snapshot/{snapshotUid}/cancel",
+        "operation_id": "cancelSnapshot",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration/{uid}/snapshot/{snapshotUid}/cancel\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.uploadSnapshot",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/cloudmigration/migration/{uid}/snapshot/{snapshotUid}/upload",
+        "operation_id": "uploadSnapshot",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration/{uid}/snapshot/{snapshotUid}/upload\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getShapshotList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/cloudmigration/migration/{uid}/snapshots",
+        "operation_id": "getShapshotList",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/migration/{uid}/snapshots\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getResourceDependencies",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/cloudmigration/resources/dependencies",
+        "operation_id": "getResourceDependencies",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/resources/dependencies\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCloudMigrationToken",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/cloudmigration/token",
+        "operation_id": "getCloudMigrationToken",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/token\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createCloudMigrationToken",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/cloudmigration/token",
+        "operation_id": "createCloudMigrationToken",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/token\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteCloudMigrationToken",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/cloudmigration/token/{uid}",
+        "operation_id": "deleteCloudMigrationToken",
+        "deprecated": false,
+        "source_location": "paths[\"/cloudmigration/token/{uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusCortexGetRules",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/convert/api/prom/rules",
+        "operation_id": "RouteConvertPrometheusCortexGetRules",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/api/prom/rules\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusCortexPostRuleGroups",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/convert/api/prom/rules",
+        "operation_id": "RouteConvertPrometheusCortexPostRuleGroups",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/api/prom/rules\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusCortexDeleteNamespace",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/convert/api/prom/rules/{NamespaceTitle}",
+        "operation_id": "RouteConvertPrometheusCortexDeleteNamespace",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/api/prom/rules/{NamespaceTitle}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusCortexGetNamespace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/convert/api/prom/rules/{NamespaceTitle}",
+        "operation_id": "RouteConvertPrometheusCortexGetNamespace",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/api/prom/rules/{NamespaceTitle}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusCortexPostRuleGroup",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/convert/api/prom/rules/{NamespaceTitle}",
+        "operation_id": "RouteConvertPrometheusCortexPostRuleGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/api/prom/rules/{NamespaceTitle}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusCortexDeleteRuleGroup",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/convert/api/prom/rules/{NamespaceTitle}/{Group}",
+        "operation_id": "RouteConvertPrometheusCortexDeleteRuleGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/api/prom/rules/{NamespaceTitle}/{Group}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusCortexGetRuleGroup",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/convert/api/prom/rules/{NamespaceTitle}/{Group}",
+        "operation_id": "RouteConvertPrometheusCortexGetRuleGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/api/prom/rules/{NamespaceTitle}/{Group}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusGetRules",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/convert/prometheus/config/v1/rules",
+        "operation_id": "RouteConvertPrometheusGetRules",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/prometheus/config/v1/rules\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusPostRuleGroups",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/convert/prometheus/config/v1/rules",
+        "operation_id": "RouteConvertPrometheusPostRuleGroups",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/prometheus/config/v1/rules\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusDeleteNamespace",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/convert/prometheus/config/v1/rules/{NamespaceTitle}",
+        "operation_id": "RouteConvertPrometheusDeleteNamespace",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/prometheus/config/v1/rules/{NamespaceTitle}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusGetNamespace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/convert/prometheus/config/v1/rules/{NamespaceTitle}",
+        "operation_id": "RouteConvertPrometheusGetNamespace",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/prometheus/config/v1/rules/{NamespaceTitle}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusPostRuleGroup",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/convert/prometheus/config/v1/rules/{NamespaceTitle}",
+        "operation_id": "RouteConvertPrometheusPostRuleGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/prometheus/config/v1/rules/{NamespaceTitle}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusDeleteRuleGroup",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/convert/prometheus/config/v1/rules/{NamespaceTitle}/{Group}",
+        "operation_id": "RouteConvertPrometheusDeleteRuleGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/prometheus/config/v1/rules/{NamespaceTitle}/{Group}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteConvertPrometheusGetRuleGroup",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/convert/prometheus/config/v1/rules/{NamespaceTitle}/{Group}",
+        "operation_id": "RouteConvertPrometheusGetRuleGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/convert/prometheus/config/v1/rules/{NamespaceTitle}/{Group}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchDashboardSnapshots",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboard/snapshots",
+        "operation_id": "searchDashboardSnapshots",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboard/snapshots\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postDashboard",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/dashboards/db",
+        "operation_id": "postDashboard",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/db\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getHomeDashboard",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/home",
+        "operation_id": "getHomeDashboard",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/home\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.importDashboard",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/dashboards/import",
+        "operation_id": "importDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboards/import\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.interpolateDashboard",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/dashboards/interpolate",
+        "operation_id": "interpolateDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboards/interpolate\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listPublicDashboards",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/public-dashboards",
+        "operation_id": "listPublicDashboards",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboards/public-dashboards\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDashboardTags",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/tags",
+        "operation_id": "getDashboardTags",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/tags\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getPublicDashboard",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/uid/{dashboardUid}/public-dashboards",
+        "operation_id": "getPublicDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboards/uid/{dashboardUid}/public-dashboards\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createPublicDashboard",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/dashboards/uid/{dashboardUid}/public-dashboards",
+        "operation_id": "createPublicDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboards/uid/{dashboardUid}/public-dashboards\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deletePublicDashboard",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/dashboards/uid/{dashboardUid}/public-dashboards/{uid}",
+        "operation_id": "deletePublicDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboards/uid/{dashboardUid}/public-dashboards/{uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updatePublicDashboard",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/dashboards/uid/{dashboardUid}/public-dashboards/{uid}",
+        "operation_id": "updatePublicDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/dashboards/uid/{dashboardUid}/public-dashboards/{uid}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteDashboardByUID",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/dashboards/uid/{uid}",
+        "operation_id": "deleteDashboardByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/uid/{uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDashboardByUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/uid/{uid}",
+        "operation_id": "getDashboardByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/uid/{uid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDashboardPermissionsListByUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/uid/{uid}/permissions",
+        "operation_id": "getDashboardPermissionsListByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/uid/{uid}/permissions\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateDashboardPermissionsByUID",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/dashboards/uid/{uid}/permissions",
+        "operation_id": "updateDashboardPermissionsByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/uid/{uid}/permissions\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.restoreDashboardVersionByUID",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/dashboards/uid/{uid}/restore",
+        "operation_id": "restoreDashboardVersionByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/uid/{uid}/restore\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDashboardVersionsByUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/uid/{uid}/versions",
+        "operation_id": "getDashboardVersionsByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/uid/{uid}/versions\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDashboardVersionByUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/dashboards/uid/{uid}/versions/{DashboardVersionID}",
+        "operation_id": "getDashboardVersionByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/dashboards/uid/{uid}/versions/{DashboardVersionID}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDataSources",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources",
+        "operation_id": "getDataSources",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addDataSource",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/datasources",
+        "operation_id": "addDataSource",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCorrelations",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/correlations",
+        "operation_id": "getCorrelations",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/correlations\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDataSourceIdByName",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/id/{name}",
+        "operation_id": "getDataSourceIdByName",
+        "deprecated": true,
+        "source_location": "paths[\"/datasources/id/{name}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteDataSourceByName",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/datasources/name/{name}",
+        "operation_id": "deleteDataSourceByName",
+        "deprecated": true,
+        "source_location": "paths[\"/datasources/name/{name}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDataSourceByName",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/name/{name}",
+        "operation_id": "getDataSourceByName",
+        "deprecated": true,
+        "source_location": "paths[\"/datasources/name/{name}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.datasourceProxyDELETEByUIDcalls",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/datasources/proxy/uid/{uid}/{datasource_proxy_route}",
+        "operation_id": "datasourceProxyDELETEByUIDcalls",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/proxy/uid/{uid}/{datasource_proxy_route}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.datasourceProxyGETByUIDcalls",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/proxy/uid/{uid}/{datasource_proxy_route}",
+        "operation_id": "datasourceProxyGETByUIDcalls",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/proxy/uid/{uid}/{datasource_proxy_route}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.datasourceProxyPOSTByUIDcalls",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/datasources/proxy/uid/{uid}/{datasource_proxy_route}",
+        "operation_id": "datasourceProxyPOSTByUIDcalls",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/proxy/uid/{uid}/{datasource_proxy_route}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCorrelationsBySourceUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/uid/{sourceUID}/correlations",
+        "operation_id": "getCorrelationsBySourceUID",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{sourceUID}/correlations\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createCorrelation",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/datasources/uid/{sourceUID}/correlations",
+        "operation_id": "createCorrelation",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{sourceUID}/correlations\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCorrelation",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/uid/{sourceUID}/correlations/{correlationUID}",
+        "operation_id": "getCorrelation",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{sourceUID}/correlations/{correlationUID}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateCorrelation",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/datasources/uid/{sourceUID}/correlations/{correlationUID}",
+        "operation_id": "updateCorrelation",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{sourceUID}/correlations/{correlationUID}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteDataSourceByUID",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/datasources/uid/{uid}",
+        "operation_id": "deleteDataSourceByUID",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDataSourceByUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/uid/{uid}",
+        "operation_id": "getDataSourceByUID",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateDataSourceByUID",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/datasources/uid/{uid}",
+        "operation_id": "updateDataSourceByUID",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteCorrelation",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/datasources/uid/{uid}/correlations/{correlationUID}",
+        "operation_id": "deleteCorrelation",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}/correlations/{correlationUID}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.checkDatasourceHealthWithUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/uid/{uid}/health",
+        "operation_id": "checkDatasourceHealthWithUID",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}/health\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getTeamLBACRulesApi",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/uid/{uid}/lbac/teams",
+        "operation_id": "getTeamLBACRulesApi",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}/lbac/teams\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateTeamLBACRulesApi",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/datasources/uid/{uid}/lbac/teams",
+        "operation_id": "updateTeamLBACRulesApi",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}/lbac/teams\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.callDatasourceResourceWithUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/uid/{uid}/resources/{datasource_proxy_route}",
+        "operation_id": "callDatasourceResourceWithUID",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/uid/{uid}/resources/{datasource_proxy_route}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDataSourceCacheConfig",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/datasources/{dataSourceUID}/cache",
+        "operation_id": "getDataSourceCacheConfig",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/{dataSourceUID}/cache\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setDataSourceCacheConfig",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/datasources/{dataSourceUID}/cache",
+        "operation_id": "setDataSourceCacheConfig",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/{dataSourceUID}/cache\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.cleanDataSourceCache",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/datasources/{dataSourceUID}/cache/clean",
+        "operation_id": "cleanDataSourceCache",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/{dataSourceUID}/cache/clean\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.disableDataSourceCache",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/datasources/{dataSourceUID}/cache/disable",
+        "operation_id": "disableDataSourceCache",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/{dataSourceUID}/cache/disable\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.enableDataSourceCache",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/datasources/{dataSourceUID}/cache/enable",
+        "operation_id": "enableDataSourceCache",
+        "deprecated": false,
+        "source_location": "paths[\"/datasources/{dataSourceUID}/cache/enable\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.queryMetricsWithExpressions",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/ds/query",
+        "operation_id": "queryMetricsWithExpressions",
+        "deprecated": false,
+        "source_location": "paths[\"/ds/query\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getFolders",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/folders",
+        "operation_id": "getFolders",
+        "deprecated": true,
+        "source_location": "paths[\"/folders\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createFolder",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/folders",
+        "operation_id": "createFolder",
+        "deprecated": true,
+        "source_location": "paths[\"/folders\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteFolder",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/folders/{folder_uid}",
+        "operation_id": "deleteFolder",
+        "deprecated": true,
+        "source_location": "paths[\"/folders/{folder_uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getFolderByUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/folders/{folder_uid}",
+        "operation_id": "getFolderByUID",
+        "deprecated": true,
+        "source_location": "paths[\"/folders/{folder_uid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateFolder",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/folders/{folder_uid}",
+        "operation_id": "updateFolder",
+        "deprecated": true,
+        "source_location": "paths[\"/folders/{folder_uid}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getFolderDescendantCounts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/folders/{folder_uid}/counts",
+        "operation_id": "getFolderDescendantCounts",
+        "deprecated": true,
+        "source_location": "paths[\"/folders/{folder_uid}/counts\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.moveFolder",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/folders/{folder_uid}/move",
+        "operation_id": "moveFolder",
+        "deprecated": true,
+        "source_location": "paths[\"/folders/{folder_uid}/move\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getFolderPermissionList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/folders/{folder_uid}/permissions",
+        "operation_id": "getFolderPermissionList",
+        "deprecated": true,
+        "source_location": "paths[\"/folders/{folder_uid}/permissions\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateFolderPermissions",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/folders/{folder_uid}/permissions",
+        "operation_id": "updateFolderPermissions",
+        "deprecated": false,
+        "source_location": "paths[\"/folders/{folder_uid}/permissions\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getHealth",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/health",
+        "operation_id": "getHealth",
+        "deprecated": false,
+        "source_location": "paths[\"/health\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getLibraryElements",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/library-elements",
+        "operation_id": "getLibraryElements",
+        "deprecated": false,
+        "source_location": "paths[\"/library-elements\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createLibraryElement",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/library-elements",
+        "operation_id": "createLibraryElement",
+        "deprecated": false,
+        "source_location": "paths[\"/library-elements\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getLibraryElementByName",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/library-elements/name/{library_element_name}",
+        "operation_id": "getLibraryElementByName",
+        "deprecated": false,
+        "source_location": "paths[\"/library-elements/name/{library_element_name}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteLibraryElementByUID",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/library-elements/{library_element_uid}",
+        "operation_id": "deleteLibraryElementByUID",
+        "deprecated": false,
+        "source_location": "paths[\"/library-elements/{library_element_uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getLibraryElementByUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/library-elements/{library_element_uid}",
+        "operation_id": "getLibraryElementByUID",
+        "deprecated": false,
+        "source_location": "paths[\"/library-elements/{library_element_uid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateLibraryElement",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/library-elements/{library_element_uid}",
+        "operation_id": "updateLibraryElement",
+        "deprecated": false,
+        "source_location": "paths[\"/library-elements/{library_element_uid}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getLibraryElementConnections",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/library-elements/{library_element_uid}/connections/",
+        "operation_id": "getLibraryElementConnections",
+        "deprecated": false,
+        "source_location": "paths[\"/library-elements/{library_element_uid}/connections/\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getStatus",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/licensing/check",
+        "operation_id": "getStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/licensing/check\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCustomPermissionsReport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/licensing/custom-permissions",
+        "operation_id": "getCustomPermissionsReport",
+        "deprecated": true,
+        "source_location": "paths[\"/licensing/custom-permissions\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCustomPermissionsCSV",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/licensing/custom-permissions-csv",
+        "operation_id": "getCustomPermissionsCSV",
+        "deprecated": true,
+        "source_location": "paths[\"/licensing/custom-permissions-csv\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.refreshLicenseStats",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/licensing/refresh-stats",
+        "operation_id": "refreshLicenseStats",
+        "deprecated": false,
+        "source_location": "paths[\"/licensing/refresh-stats\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteLicenseToken",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/licensing/token",
+        "operation_id": "deleteLicenseToken",
+        "deprecated": false,
+        "source_location": "paths[\"/licensing/token\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getLicenseToken",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/licensing/token",
+        "operation_id": "getLicenseToken",
+        "deprecated": false,
+        "source_location": "paths[\"/licensing/token\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postLicenseToken",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/licensing/token",
+        "operation_id": "postLicenseToken",
+        "deprecated": false,
+        "source_location": "paths[\"/licensing/token\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postRenewLicenseToken",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/licensing/token/renew",
+        "operation_id": "postRenewLicenseToken",
+        "deprecated": false,
+        "source_location": "paths[\"/licensing/token/renew\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSAMLLogout",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/logout/saml",
+        "operation_id": "getSAMLLogout",
+        "deprecated": false,
+        "source_location": "paths[\"/logout/saml\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCurrentOrg",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/org",
+        "operation_id": "getCurrentOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/org\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateCurrentOrg",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/org",
+        "operation_id": "updateCurrentOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/org\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateCurrentOrgAddress",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/org/address",
+        "operation_id": "updateCurrentOrgAddress",
+        "deprecated": false,
+        "source_location": "paths[\"/org/address\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getPendingOrgInvites",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/org/invites",
+        "operation_id": "getPendingOrgInvites",
+        "deprecated": false,
+        "source_location": "paths[\"/org/invites\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addOrgInvite",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/org/invites",
+        "operation_id": "addOrgInvite",
+        "deprecated": false,
+        "source_location": "paths[\"/org/invites\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.revokeInvite",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/org/invites/{invitation_code}/revoke",
+        "operation_id": "revokeInvite",
+        "deprecated": false,
+        "source_location": "paths[\"/org/invites/{invitation_code}/revoke\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getOrgPreferences",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/org/preferences",
+        "operation_id": "getOrgPreferences",
+        "deprecated": true,
+        "source_location": "paths[\"/org/preferences\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.patchOrgPreferences",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/org/preferences",
+        "operation_id": "patchOrgPreferences",
+        "deprecated": true,
+        "source_location": "paths[\"/org/preferences\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateOrgPreferences",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/org/preferences",
+        "operation_id": "updateOrgPreferences",
+        "deprecated": true,
+        "source_location": "paths[\"/org/preferences\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getCurrentOrgQuota",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/org/quotas",
+        "operation_id": "getCurrentOrgQuota",
+        "deprecated": false,
+        "source_location": "paths[\"/org/quotas\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getOrgUsersForCurrentOrg",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/org/users",
+        "operation_id": "getOrgUsersForCurrentOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/org/users\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addOrgUserToCurrentOrg",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/org/users",
+        "operation_id": "addOrgUserToCurrentOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/org/users\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getOrgUsersForCurrentOrgLookup",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/org/users/lookup",
+        "operation_id": "getOrgUsersForCurrentOrgLookup",
+        "deprecated": false,
+        "source_location": "paths[\"/org/users/lookup\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.removeOrgUserForCurrentOrg",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/org/users/{user_id}",
+        "operation_id": "removeOrgUserForCurrentOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/org/users/{user_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateOrgUserForCurrentOrg",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/org/users/{user_id}",
+        "operation_id": "updateOrgUserForCurrentOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/org/users/{user_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchOrgs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/orgs",
+        "operation_id": "searchOrgs",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createOrg",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/orgs",
+        "operation_id": "createOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getOrgByName",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/orgs/name/{org_name}",
+        "operation_id": "getOrgByName",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/name/{org_name}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteOrgByID",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/orgs/{org_id}",
+        "operation_id": "deleteOrgByID",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getOrgByID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/orgs/{org_id}",
+        "operation_id": "getOrgByID",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateOrg",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/orgs/{org_id}",
+        "operation_id": "updateOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateOrgAddress",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/orgs/{org_id}/address",
+        "operation_id": "updateOrgAddress",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/address\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getOrgQuota",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/orgs/{org_id}/quotas",
+        "operation_id": "getOrgQuota",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/quotas\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateOrgQuota",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/orgs/{org_id}/quotas/{quota_target}",
+        "operation_id": "updateOrgQuota",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/quotas/{quota_target}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getOrgUsers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/orgs/{org_id}/users",
+        "operation_id": "getOrgUsers",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/users\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addOrgUser",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/orgs/{org_id}/users",
+        "operation_id": "addOrgUser",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/users\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchOrgUsers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/orgs/{org_id}/users/search",
+        "operation_id": "searchOrgUsers",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/users/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.removeOrgUser",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/orgs/{org_id}/users/{user_id}",
+        "operation_id": "removeOrgUser",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/users/{user_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateOrgUser",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/orgs/{org_id}/users/{user_id}",
+        "operation_id": "updateOrgUser",
+        "deprecated": false,
+        "source_location": "paths[\"/orgs/{org_id}/users/{user_id}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchPlaylists",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/playlists",
+        "operation_id": "searchPlaylists",
+        "deprecated": true,
+        "source_location": "paths[\"/playlists\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createPlaylist",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/playlists",
+        "operation_id": "createPlaylist",
+        "deprecated": true,
+        "source_location": "paths[\"/playlists\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deletePlaylist",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/playlists/{uid}",
+        "operation_id": "deletePlaylist",
+        "deprecated": true,
+        "source_location": "paths[\"/playlists/{uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getPlaylist",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/playlists/{uid}",
+        "operation_id": "getPlaylist",
+        "deprecated": true,
+        "source_location": "paths[\"/playlists/{uid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updatePlaylist",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/playlists/{uid}",
+        "operation_id": "updatePlaylist",
+        "deprecated": true,
+        "source_location": "paths[\"/playlists/{uid}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getPlaylistItems",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/playlists/{uid}/items",
+        "operation_id": "getPlaylistItems",
+        "deprecated": true,
+        "source_location": "paths[\"/playlists/{uid}/items\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.viewPublicDashboard",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/public/dashboards/{accessToken}",
+        "operation_id": "viewPublicDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/public/dashboards/{accessToken}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getPublicAnnotations",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/public/dashboards/{accessToken}/annotations",
+        "operation_id": "getPublicAnnotations",
+        "deprecated": false,
+        "source_location": "paths[\"/public/dashboards/{accessToken}/annotations\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.queryPublicDashboard",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/public/dashboards/{accessToken}/panels/{panelId}/query",
+        "operation_id": "queryPublicDashboard",
+        "deprecated": false,
+        "source_location": "paths[\"/public/dashboards/{accessToken}/panels/{panelId}/query\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchQueries",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/query-history",
+        "operation_id": "searchQueries",
+        "deprecated": false,
+        "source_location": "paths[\"/query-history\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createQuery",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/query-history",
+        "operation_id": "createQuery",
+        "deprecated": false,
+        "source_location": "paths[\"/query-history\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.unstarQuery",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/query-history/star/{query_history_uid}",
+        "operation_id": "unstarQuery",
+        "deprecated": false,
+        "source_location": "paths[\"/query-history/star/{query_history_uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.starQuery",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/query-history/star/{query_history_uid}",
+        "operation_id": "starQuery",
+        "deprecated": false,
+        "source_location": "paths[\"/query-history/star/{query_history_uid}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteQuery",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/query-history/{query_history_uid}",
+        "operation_id": "deleteQuery",
+        "deprecated": false,
+        "source_location": "paths[\"/query-history/{query_history_uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.patchQueryComment",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/query-history/{query_history_uid}",
+        "operation_id": "patchQueryComment",
+        "deprecated": false,
+        "source_location": "paths[\"/query-history/{query_history_uid}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listRecordingRules",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/recording-rules",
+        "operation_id": "listRecordingRules",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createRecordingRule",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/recording-rules",
+        "operation_id": "createRecordingRule",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateRecordingRule",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/recording-rules",
+        "operation_id": "updateRecordingRule",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.testCreateRecordingRule",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/recording-rules/test",
+        "operation_id": "testCreateRecordingRule",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules/test\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteRecordingRuleWriteTarget",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/recording-rules/writer",
+        "operation_id": "deleteRecordingRuleWriteTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules/writer\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getRecordingRuleWriteTarget",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/recording-rules/writer",
+        "operation_id": "getRecordingRuleWriteTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules/writer\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createRecordingRuleWriteTarget",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/recording-rules/writer",
+        "operation_id": "createRecordingRuleWriteTarget",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules/writer\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteRecordingRule",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/recording-rules/{recordingRuleID}",
+        "operation_id": "deleteRecordingRule",
+        "deprecated": false,
+        "source_location": "paths[\"/recording-rules/{recordingRuleID}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getReports",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/reports",
+        "operation_id": "getReports",
+        "deprecated": false,
+        "source_location": "paths[\"/reports\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createReport",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/reports",
+        "operation_id": "createReport",
+        "deprecated": false,
+        "source_location": "paths[\"/reports\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getReportsByDashboardUID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/reports/dashboards/{uid}",
+        "operation_id": "getReportsByDashboardUID",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/dashboards/{uid}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.sendReport",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/reports/email",
+        "operation_id": "sendReport",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/email\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSettingsImage",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/reports/images/:image",
+        "operation_id": "getSettingsImage",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/images/:image\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.renderReportCSVs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/reports/render/csvs",
+        "operation_id": "renderReportCSVs",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/render/csvs\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.renderReportPDFs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/reports/render/pdfs",
+        "operation_id": "renderReportPDFs",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/render/pdfs\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getReportSettings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/reports/settings",
+        "operation_id": "getReportSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/settings\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.saveReportSettings",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/reports/settings",
+        "operation_id": "saveReportSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/settings\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.sendTestEmail",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/reports/test-email",
+        "operation_id": "sendTestEmail",
+        "deprecated": false,
+        "source_location": "paths[\"/reports/test-email\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteReport",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/reports/{id}",
+        "operation_id": "deleteReport",
+        "deprecated": true,
+        "source_location": "paths[\"/reports/{id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getReport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/reports/{id}",
+        "operation_id": "getReport",
+        "deprecated": true,
+        "source_location": "paths[\"/reports/{id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateReport",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/reports/{id}",
+        "operation_id": "updateReport",
+        "deprecated": true,
+        "source_location": "paths[\"/reports/{id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postACS",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/saml/acs",
+        "operation_id": "postACS",
+        "deprecated": false,
+        "source_location": "paths[\"/saml/acs\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getMetadata",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/saml/metadata",
+        "operation_id": "getMetadata",
+        "deprecated": false,
+        "source_location": "paths[\"/saml/metadata\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSLO",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/saml/slo",
+        "operation_id": "getSLO",
+        "deprecated": false,
+        "source_location": "paths[\"/saml/slo\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.postSLO",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/saml/slo",
+        "operation_id": "postSLO",
+        "deprecated": false,
+        "source_location": "paths[\"/saml/slo\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.search",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/search",
+        "operation_id": "search",
+        "deprecated": false,
+        "source_location": "paths[\"/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listSortOptions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/search/sorting",
+        "operation_id": "listSortOptions",
+        "deprecated": false,
+        "source_location": "paths[\"/search/sorting\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createServiceAccount",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/serviceaccounts",
+        "operation_id": "createServiceAccount",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchOrgServiceAccountsWithPaging",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/serviceaccounts/search",
+        "operation_id": "searchOrgServiceAccountsWithPaging",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteServiceAccount",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/serviceaccounts/{serviceAccountId}",
+        "operation_id": "deleteServiceAccount",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts/{serviceAccountId}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.retrieveServiceAccount",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/serviceaccounts/{serviceAccountId}",
+        "operation_id": "retrieveServiceAccount",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts/{serviceAccountId}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateServiceAccount",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/serviceaccounts/{serviceAccountId}",
+        "operation_id": "updateServiceAccount",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts/{serviceAccountId}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listTokens",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/serviceaccounts/{serviceAccountId}/tokens",
+        "operation_id": "listTokens",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts/{serviceAccountId}/tokens\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createToken",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/serviceaccounts/{serviceAccountId}/tokens",
+        "operation_id": "createToken",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts/{serviceAccountId}/tokens\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteToken",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/serviceaccounts/{serviceAccountId}/tokens/{tokenId}",
+        "operation_id": "deleteToken",
+        "deprecated": false,
+        "source_location": "paths[\"/serviceaccounts/{serviceAccountId}/tokens/{tokenId}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.retrieveJWKS",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/signing-keys/keys",
+        "operation_id": "retrieveJWKS",
+        "deprecated": false,
+        "source_location": "paths[\"/signing-keys/keys\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSharingOptions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/snapshot/shared-options",
+        "operation_id": "getSharingOptions",
+        "deprecated": false,
+        "source_location": "paths[\"/snapshot/shared-options\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createDashboardSnapshot",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/snapshots",
+        "operation_id": "createDashboardSnapshot",
+        "deprecated": false,
+        "source_location": "paths[\"/snapshots\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteDashboardSnapshotByDeleteKey",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/snapshots-delete/{deleteKey}",
+        "operation_id": "deleteDashboardSnapshotByDeleteKey",
+        "deprecated": false,
+        "source_location": "paths[\"/snapshots-delete/{deleteKey}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteDashboardSnapshot",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/snapshots/{key}",
+        "operation_id": "deleteDashboardSnapshot",
+        "deprecated": false,
+        "source_location": "paths[\"/snapshots/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getDashboardSnapshot",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/snapshots/{key}",
+        "operation_id": "getDashboardSnapshot",
+        "deprecated": false,
+        "source_location": "paths[\"/snapshots/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.createTeam",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/teams",
+        "operation_id": "createTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchTeams",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams/search",
+        "operation_id": "searchTeams",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.removeTeamGroupApiQuery",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/teams/{teamId}/groups",
+        "operation_id": "removeTeamGroupApiQuery",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{teamId}/groups\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getTeamGroupsApi",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams/{teamId}/groups",
+        "operation_id": "getTeamGroupsApi",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{teamId}/groups\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addTeamGroupApi",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/teams/{teamId}/groups",
+        "operation_id": "addTeamGroupApi",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{teamId}/groups\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchTeamGroups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams/{teamId}/groups/search",
+        "operation_id": "searchTeamGroups",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{teamId}/groups/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.deleteTeamByID",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/teams/{team_id}",
+        "operation_id": "deleteTeamByID",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getTeamByID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams/{team_id}",
+        "operation_id": "getTeamByID",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateTeam",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/teams/{team_id}",
+        "operation_id": "updateTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getTeamMembers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams/{team_id}/members",
+        "operation_id": "getTeamMembers",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}/members\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.addTeamMember",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/teams/{team_id}/members",
+        "operation_id": "addTeamMember",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}/members\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.setTeamMemberships",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/teams/{team_id}/members",
+        "operation_id": "setTeamMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}/members\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.removeTeamMember",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/teams/{team_id}/members/{user_id}",
+        "operation_id": "removeTeamMember",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}/members/{user_id}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateTeamMember",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/teams/{team_id}/members/{user_id}",
+        "operation_id": "updateTeamMember",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}/members/{user_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getTeamPreferences",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/teams/{team_id}/preferences",
+        "operation_id": "getTeamPreferences",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}/preferences\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateTeamPreferences",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/teams/{team_id}/preferences",
+        "operation_id": "updateTeamPreferences",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_id}/preferences\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSignedInUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user",
+        "operation_id": "getSignedInUser",
+        "deprecated": false,
+        "source_location": "paths[\"/user\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateSignedInUser",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/user",
+        "operation_id": "updateSignedInUser",
+        "deprecated": false,
+        "source_location": "paths[\"/user\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserAuthTokens",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user/auth-tokens",
+        "operation_id": "getUserAuthTokens",
+        "deprecated": false,
+        "source_location": "paths[\"/user/auth-tokens\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateUserEmail",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user/email/update",
+        "operation_id": "updateUserEmail",
+        "deprecated": false,
+        "source_location": "paths[\"/user/email/update\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSignedInUserOrgList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user/orgs",
+        "operation_id": "getSignedInUserOrgList",
+        "deprecated": false,
+        "source_location": "paths[\"/user/orgs\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.changeUserPassword",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/user/password",
+        "operation_id": "changeUserPassword",
+        "deprecated": false,
+        "source_location": "paths[\"/user/password\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserPreferences",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user/preferences",
+        "operation_id": "getUserPreferences",
+        "deprecated": true,
+        "source_location": "paths[\"/user/preferences\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.patchUserPreferences",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/user/preferences",
+        "operation_id": "patchUserPreferences",
+        "deprecated": true,
+        "source_location": "paths[\"/user/preferences\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateUserPreferences",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/user/preferences",
+        "operation_id": "updateUserPreferences",
+        "deprecated": true,
+        "source_location": "paths[\"/user/preferences\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserQuotas",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user/quotas",
+        "operation_id": "getUserQuotas",
+        "deprecated": false,
+        "source_location": "paths[\"/user/quotas\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.revokeUserAuthToken",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user/revoke-auth-token",
+        "operation_id": "revokeUserAuthToken",
+        "deprecated": false,
+        "source_location": "paths[\"/user/revoke-auth-token\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.unstarDashboardByUID",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/user/stars/dashboard/uid/{dashboard_uid}",
+        "operation_id": "unstarDashboardByUID",
+        "deprecated": false,
+        "source_location": "paths[\"/user/stars/dashboard/uid/{dashboard_uid}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.starDashboardByUID",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user/stars/dashboard/uid/{dashboard_uid}",
+        "operation_id": "starDashboardByUID",
+        "deprecated": false,
+        "source_location": "paths[\"/user/stars/dashboard/uid/{dashboard_uid}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getSignedInUserTeamList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/user/teams",
+        "operation_id": "getSignedInUserTeamList",
+        "deprecated": false,
+        "source_location": "paths[\"/user/teams\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.userSetUsingOrg",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/user/using/{org_id}",
+        "operation_id": "userSetUsingOrg",
+        "deprecated": false,
+        "source_location": "paths[\"/user/using/{org_id}\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchUsers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users",
+        "operation_id": "searchUsers",
+        "deprecated": false,
+        "source_location": "paths[\"/users\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserByLoginOrEmail",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users/lookup",
+        "operation_id": "getUserByLoginOrEmail",
+        "deprecated": false,
+        "source_location": "paths[\"/users/lookup\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.searchUsersWithPaging",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users/search",
+        "operation_id": "searchUsersWithPaging",
+        "deprecated": false,
+        "source_location": "paths[\"/users/search\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserByID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users/{user_id}",
+        "operation_id": "getUserByID",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_id}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateUser",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/users/{user_id}",
+        "operation_id": "updateUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_id}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserOrgList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users/{user_id}/orgs",
+        "operation_id": "getUserOrgList",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_id}/orgs\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getUserTeams",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/users/{user_id}/teams",
+        "operation_id": "getUserTeams",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_id}/teams\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetAlertRules",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/alert-rules",
+        "operation_id": "RouteGetAlertRules",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/alert-rules\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePostAlertRule",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/provisioning/alert-rules",
+        "operation_id": "RoutePostAlertRule",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/alert-rules\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetAlertRulesExport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/alert-rules/export",
+        "operation_id": "RouteGetAlertRulesExport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/provisioning/alert-rules/export\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteDeleteAlertRule",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/provisioning/alert-rules/{UID}",
+        "operation_id": "RouteDeleteAlertRule",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/alert-rules/{UID}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetAlertRule",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/alert-rules/{UID}",
+        "operation_id": "RouteGetAlertRule",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/alert-rules/{UID}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePutAlertRule",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/provisioning/alert-rules/{UID}",
+        "operation_id": "RoutePutAlertRule",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/alert-rules/{UID}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetAlertRuleExport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/alert-rules/{UID}/export",
+        "operation_id": "RouteGetAlertRuleExport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/provisioning/alert-rules/{UID}/export\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetContactpoints",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/contact-points",
+        "operation_id": "RouteGetContactpoints",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/contact-points\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePostContactpoints",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/provisioning/contact-points",
+        "operation_id": "RoutePostContactpoints",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/contact-points\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetContactpointsExport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/contact-points/export",
+        "operation_id": "RouteGetContactpointsExport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/provisioning/contact-points/export\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteDeleteContactpoints",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/provisioning/contact-points/{UID}",
+        "operation_id": "RouteDeleteContactpoints",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/contact-points/{UID}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePutContactpoint",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/provisioning/contact-points/{UID}",
+        "operation_id": "RoutePutContactpoint",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/contact-points/{UID}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteDeleteAlertRuleGroup",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}",
+        "operation_id": "RouteDeleteAlertRuleGroup",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetAlertRuleGroup",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}",
+        "operation_id": "RouteGetAlertRuleGroup",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePutAlertRuleGroup",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}",
+        "operation_id": "RoutePutAlertRuleGroup",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetAlertRuleGroupExport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}/export",
+        "operation_id": "RouteGetAlertRuleGroupExport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}/export\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetMuteTimings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/mute-timings",
+        "operation_id": "RouteGetMuteTimings",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/mute-timings\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePostMuteTiming",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/provisioning/mute-timings",
+        "operation_id": "RoutePostMuteTiming",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/mute-timings\"].post",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteExportMuteTimings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/mute-timings/export",
+        "operation_id": "RouteExportMuteTimings",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/provisioning/mute-timings/export\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteDeleteMuteTiming",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/provisioning/mute-timings/{name}",
+        "operation_id": "RouteDeleteMuteTiming",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/mute-timings/{name}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetMuteTiming",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/mute-timings/{name}",
+        "operation_id": "RouteGetMuteTiming",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/mute-timings/{name}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePutMuteTiming",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/provisioning/mute-timings/{name}",
+        "operation_id": "RoutePutMuteTiming",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/mute-timings/{name}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteExportMuteTiming",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/mute-timings/{name}/export",
+        "operation_id": "RouteExportMuteTiming",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/provisioning/mute-timings/{name}/export\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteResetPolicyTree",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/provisioning/policies",
+        "operation_id": "RouteResetPolicyTree",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/policies\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetPolicyTree",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/policies",
+        "operation_id": "RouteGetPolicyTree",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/policies\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePutPolicyTree",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/provisioning/policies",
+        "operation_id": "RoutePutPolicyTree",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/policies\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetPolicyTreeExport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/policies/export",
+        "operation_id": "RouteGetPolicyTreeExport",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/provisioning/policies/export\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetTemplates",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/templates",
+        "operation_id": "RouteGetTemplates",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/templates\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteDeleteTemplate",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/provisioning/templates/{name}",
+        "operation_id": "RouteDeleteTemplate",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/templates/{name}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RouteGetTemplate",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/provisioning/templates/{name}",
+        "operation_id": "RouteGetTemplate",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/templates/{name}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.RoutePutTemplate",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/provisioning/templates/{name}",
+        "operation_id": "RoutePutTemplate",
+        "deprecated": true,
+        "source_location": "paths[\"/v1/provisioning/templates/{name}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.listAllProvidersSettings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/sso-settings",
+        "operation_id": "listAllProvidersSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/sso-settings\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.removeProviderSettings",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/sso-settings/{key}",
+        "operation_id": "removeProviderSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/sso-settings/{key}\"].delete",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.getProviderSettings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/sso-settings/{key}",
+        "operation_id": "getProviderSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/sso-settings/{key}\"].get",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.patchProviderSettings",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/sso-settings/{key}",
+        "operation_id": "patchProviderSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/sso-settings/{key}\"].patch",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      },
+      {
+        "id": "grafana.rest.updateProviderSettings",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/sso-settings/{key}",
+        "operation_id": "updateProviderSettings",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/sso-settings/{key}\"].put",
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    ],
+    "counts": {
+      "total": 314,
+      "by_kind": {
+        "rest": 314
+      },
+      "by_method": {
+        "DELETE": 44,
+        "GET": 143,
+        "PATCH": 11,
+        "POST": 81,
+        "PUT": 35
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
+  },
+  "counts": {
+    "rest": 314,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 314
+  }
+}

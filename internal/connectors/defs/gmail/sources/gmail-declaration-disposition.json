@@ -1,0 +1,3349 @@
+{
+  "schema_version": 1,
+  "connector": "gmail",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/gmail-operation-source-lock.json",
+    "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+    "source_sha256": "dccd8e614f0836e264faa6216ba031301fb9361f3f1ef224c9b89945f02e45f9",
+    "source_bytes": 217687,
+    "operations_found": 79,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
+  },
+  "summary": {
+    "api_surface_rows": 79,
+    "exact_source_rows": 79,
+    "operations_found": 79,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
+    "enabled_operations": 56,
+    "enabled_percent": 70.89,
+    "disabled_operations": 23,
+    "documented_deletes": 10,
+    "enabled_deletes": 9,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 20
+      },
+      {
+        "key": "direct_write",
+        "count": 49
+      },
+      {
+        "key": "etl",
+        "count": 10
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 10,
+    "writes_actions": 40,
+    "terminal_commands": 56,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 40,
+        "scope": "destination_transport"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 23
+      }
+    ],
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "typed_direct_write_operations": 40,
+      "foundation_gap": {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+      }
+    },
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/gmail/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-source-definition-gmail",
+      "typed-operation-contract-gmail"
+    ],
+    "declaration_pending": [
+      {
+        "id": "sync-transport-source-definition-gmail",
+        "count": 10
+      },
+      {
+        "id": "typed-operation-contract-gmail",
+        "count": 13
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/users/{userId}/profile",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/profile",
+        "covered_by": {
+          "stream": "profile"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.getProfile",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.getProfile\"",
+        "operation_id": "gmail.users.getProfile",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/profile.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/profile."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/watch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/watch",
+        "covered_by": {
+          "write": "watch_mailbox"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.watch",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.watch\"",
+        "operation_id": "gmail.users.watch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "watch_mailbox"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/stop",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/stop",
+        "covered_by": {
+          "write": "stop_mailbox_watch"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.stop",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.stop\"",
+        "operation_id": "gmail.users.stop",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "stop_mailbox_watch"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages/{id}/untrash",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/{id}/untrash",
+        "covered_by": {
+          "write": "untrash_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.untrash",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.untrash\"",
+        "operation_id": "gmail.users.messages.untrash",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "untrash_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages/batchModify",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/batchModify",
+        "covered_by": null,
+        "operation": {
+          "model": "sensitive_reverse_etl",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Takes a top-level ids[] array as the entire request body. The engine's write dialect is one-request-per-record and has no schema-gated top-level JSON array body type. Named dependency: issue #514 (schema-gated top-level JSON array request bodies).",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: #514. Bulk ids[] variant."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.batchModify",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.batchModify\"",
+        "operation_id": "gmail.users.messages.batchModify",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/messages/batchModify is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/messages/batchModify is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/send",
+        "covered_by": {
+          "write": "send_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.send",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.send\"",
+        "operation_id": "gmail.users.messages.send",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "send_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages/{id}/trash",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/{id}/trash",
+        "covered_by": {
+          "write": "trash_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.trash",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.trash\"",
+        "operation_id": "gmail.users.messages.trash",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "trash_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages/import",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/import",
+        "covered_by": {
+          "write": "import_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.import",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.import\"",
+        "operation_id": "gmail.users.messages.import",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "import_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/messages/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/messages/{id}",
+        "covered_by": {
+          "direct_read": "messages get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.get\"",
+        "operation_id": "gmail.users.messages.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "messages get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages/{id}/modify",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/{id}/modify",
+        "covered_by": {
+          "write": "modify_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.modify",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.modify\"",
+        "operation_id": "gmail.users.messages.modify",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "modify_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages/batchDelete",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/batchDelete",
+        "covered_by": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Takes a top-level ids[] array as the entire request body. The engine's write dialect is one-request-per-record and has no schema-gated top-level JSON array body type. Named dependency: issue #514 (schema-gated top-level JSON array request bodies).",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: #514. Bulk ids[] variant."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.batchDelete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.batchDelete\"",
+        "operation_id": "gmail.users.messages.batchDelete",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/messages/batchDelete is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/messages/batchDelete is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/messages/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/messages/{id}",
+        "covered_by": {
+          "write": "delete_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.delete\"",
+        "operation_id": "gmail.users.messages.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/messages",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/messages",
+        "covered_by": {
+          "write": "insert_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.insert",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.insert\"",
+        "operation_id": "gmail.users.messages.insert",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "insert_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/messages",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/messages",
+        "covered_by": {
+          "stream": "messages"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.list\"",
+        "operation_id": "gmail.users.messages.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/messages.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/messages."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/messages/{messageId}/attachments/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/messages/{messageId}/attachments/{id}",
+        "covered_by": {
+          "direct_read": "messages attachments download"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.messages.attachments.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.messages.attachments.get\"",
+        "operation_id": "gmail.users.messages.attachments.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "messages attachments download"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/labels",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/labels",
+        "covered_by": {
+          "write": "create_label"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.labels.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.labels.create\"",
+        "operation_id": "gmail.users.labels.create",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_label"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/labels/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/labels/{id}",
+        "covered_by": {
+          "write": "update_label"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.labels.update",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.labels.update\"",
+        "operation_id": "gmail.users.labels.update",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_label"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/labels/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/labels/{id}",
+        "covered_by": {
+          "write": "delete_label"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.labels.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.labels.delete\"",
+        "operation_id": "gmail.users.labels.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_label"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/{userId}/labels/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/users/{userId}/labels/{id}",
+        "covered_by": {
+          "write": "patch_label"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.labels.patch",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.labels.patch\"",
+        "operation_id": "gmail.users.labels.patch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "patch_label"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/labels/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/labels/{id}",
+        "covered_by": {
+          "direct_read": "labels get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.labels.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.labels.get\"",
+        "operation_id": "gmail.users.labels.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "labels get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/labels",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/labels",
+        "covered_by": {
+          "stream": "labels"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.labels.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.labels.list\"",
+        "operation_id": "gmail.users.labels.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/labels.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/labels."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/drafts/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/drafts/send",
+        "covered_by": {
+          "write": "send_draft"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.drafts.send",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.drafts.send\"",
+        "operation_id": "gmail.users.drafts.send",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "send_draft"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/drafts/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/drafts/{id}",
+        "covered_by": {
+          "direct_read": "drafts get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.drafts.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.drafts.get\"",
+        "operation_id": "gmail.users.drafts.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "drafts get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/drafts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/drafts",
+        "covered_by": {
+          "stream": "drafts"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.drafts.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.drafts.list\"",
+        "operation_id": "gmail.users.drafts.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/drafts.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/drafts."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/drafts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/drafts/{id}",
+        "covered_by": {
+          "write": "delete_draft"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.drafts.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.drafts.delete\"",
+        "operation_id": "gmail.users.drafts.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_draft"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/drafts",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/drafts",
+        "covered_by": {
+          "write": "create_draft"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.drafts.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.drafts.create\"",
+        "operation_id": "gmail.users.drafts.create",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_draft"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/drafts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/drafts/{id}",
+        "covered_by": {
+          "write": "update_draft"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.drafts.update",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.drafts.update\"",
+        "operation_id": "gmail.users.drafts.update",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_draft"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/history",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/history",
+        "covered_by": {
+          "stream": "history"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.history.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.history.list\"",
+        "operation_id": "gmail.users.history.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/history.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/history."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/threads/{id}/untrash",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/threads/{id}/untrash",
+        "covered_by": {
+          "write": "untrash_thread"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.threads.untrash",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.threads.untrash\"",
+        "operation_id": "gmail.users.threads.untrash",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "untrash_thread"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/threads/{id}/modify",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/threads/{id}/modify",
+        "covered_by": {
+          "write": "modify_thread"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.threads.modify",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.threads.modify\"",
+        "operation_id": "gmail.users.threads.modify",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "modify_thread"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/threads/{id}/trash",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/threads/{id}/trash",
+        "covered_by": {
+          "write": "trash_thread"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.threads.trash",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.threads.trash\"",
+        "operation_id": "gmail.users.threads.trash",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "trash_thread"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/threads/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/threads/{id}",
+        "covered_by": {
+          "write": "delete_thread"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.threads.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.threads.delete\"",
+        "operation_id": "gmail.users.threads.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_thread"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/threads/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/threads/{id}",
+        "covered_by": {
+          "direct_read": "threads get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.threads.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.threads.get\"",
+        "operation_id": "gmail.users.threads.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "threads get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/threads",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/threads",
+        "covered_by": {
+          "stream": "threads"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.threads.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.threads.list\"",
+        "operation_id": "gmail.users.threads.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/threads.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/threads."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/settings/imap",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/settings/imap",
+        "covered_by": {
+          "write": "update_imap"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.updateImap",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.updateImap\"",
+        "operation_id": "gmail.users.settings.updateImap",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_imap"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/pop",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/pop",
+        "covered_by": {
+          "direct_read": "settings pop get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.getPop",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.getPop\"",
+        "operation_id": "gmail.users.settings.getPop",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings pop get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/imap",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/imap",
+        "covered_by": {
+          "direct_read": "settings imap get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.getImap",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.getImap\"",
+        "operation_id": "gmail.users.settings.getImap",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings imap get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/vacation",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/vacation",
+        "covered_by": {
+          "direct_read": "settings vacation get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.getVacation",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.getVacation\"",
+        "operation_id": "gmail.users.settings.getVacation",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings vacation get"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/settings/vacation",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/settings/vacation",
+        "covered_by": {
+          "write": "update_vacation"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.updateVacation",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.updateVacation\"",
+        "operation_id": "gmail.users.settings.updateVacation",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_vacation"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/settings/pop",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/settings/pop",
+        "covered_by": {
+          "write": "update_pop"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.updatePop",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.updatePop\"",
+        "operation_id": "gmail.users.settings.updatePop",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_pop"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/settings/autoForwarding",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/settings/autoForwarding",
+        "covered_by": {
+          "write": "update_auto_forwarding"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.updateAutoForwarding",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.updateAutoForwarding\"",
+        "operation_id": "gmail.users.settings.updateAutoForwarding",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_auto_forwarding"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/settings/language",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/settings/language",
+        "covered_by": {
+          "write": "update_language"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.updateLanguage",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.updateLanguage\"",
+        "operation_id": "gmail.users.settings.updateLanguage",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_language"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/autoForwarding",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/autoForwarding",
+        "covered_by": {
+          "direct_read": "settings auto-forwarding get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.getAutoForwarding",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.getAutoForwarding\"",
+        "operation_id": "gmail.users.settings.getAutoForwarding",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings auto-forwarding get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/language",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/language",
+        "covered_by": {
+          "direct_read": "settings language get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.getLanguage",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.getLanguage\"",
+        "operation_id": "gmail.users.settings.getLanguage",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings language get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/sendAs",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/sendAs",
+        "covered_by": {
+          "write": "create_send_as"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.create\"",
+        "operation_id": "gmail.users.settings.sendAs.create",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_send_as"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+        "covered_by": {
+          "write": "update_send_as"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.update",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.update\"",
+        "operation_id": "gmail.users.settings.sendAs.update",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_send_as"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/sendAs",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/sendAs",
+        "covered_by": {
+          "stream": "send_as"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.list\"",
+        "operation_id": "gmail.users.settings.sendAs.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/sendAs.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/sendAs."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+        "covered_by": {
+          "direct_read": "settings send-as get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.get\"",
+        "operation_id": "gmail.users.settings.sendAs.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings send-as get"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+        "covered_by": {
+          "write": "patch_send_as"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.patch",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.patch\"",
+        "operation_id": "gmail.users.settings.sendAs.patch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "patch_send_as"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+        "covered_by": {
+          "write": "delete_send_as"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.delete\"",
+        "operation_id": "gmail.users.settings.sendAs.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_send_as"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/verify",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/verify",
+        "covered_by": {
+          "write": "verify_send_as"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.verify",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.verify\"",
+        "operation_id": "gmail.users.settings.sendAs.verify",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "verify_send_as"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault",
+        "covered_by": {
+          "write": "set_default_smime_info"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.setDefault",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.setDefault\"",
+        "operation_id": "gmail.users.settings.sendAs.smimeInfo.setDefault",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "set_default_smime_info"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+        "covered_by": {
+          "direct_read": "settings send-as smime list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.list\"",
+        "operation_id": "gmail.users.settings.sendAs.smimeInfo.list",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings send-as smime list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+        "covered_by": {
+          "direct_read": "settings send-as smime get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.get\"",
+        "operation_id": "gmail.users.settings.sendAs.smimeInfo.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings send-as smime get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+        "covered_by": {
+          "write": "insert_smime_info"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.insert",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.insert\"",
+        "operation_id": "gmail.users.settings.sendAs.smimeInfo.insert",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "insert_smime_info"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+        "covered_by": {
+          "write": "delete_smime_info"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.delete\"",
+        "operation_id": "gmail.users.settings.sendAs.smimeInfo.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_smime_info"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/filters",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/filters",
+        "covered_by": {
+          "stream": "filters"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.filters.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.filters.list\"",
+        "operation_id": "gmail.users.settings.filters.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/filters.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/filters."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/filters/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/filters/{id}",
+        "covered_by": {
+          "direct_read": "settings filters get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.filters.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.filters.get\"",
+        "operation_id": "gmail.users.settings.filters.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings filters get"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/settings/filters/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/settings/filters/{id}",
+        "covered_by": {
+          "write": "delete_filter"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.filters.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.filters.delete\"",
+        "operation_id": "gmail.users.settings.filters.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_filter"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/filters",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/filters",
+        "covered_by": {
+          "write": "create_filter"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.filters.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.filters.create\"",
+        "operation_id": "gmail.users.settings.filters.create",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_filter"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+        "covered_by": null,
+        "operation": {
+          "model": "admin_reverse_etl",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.identities.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.identities.delete\"",
+        "operation_id": "gmail.users.settings.cse.identities.delete",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: DELETE /users/{userId}/settings/cse/identities/{cseEmailAddress} is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: DELETE /users/{userId}/settings/cse/identities/{cseEmailAddress} is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/{userId}/settings/cse/identities/{emailAddress}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/users/{userId}/settings/cse/identities/{emailAddress}",
+        "covered_by": null,
+        "operation": {
+          "model": "admin_reverse_etl",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.identities.patch",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.identities.patch\"",
+        "operation_id": "gmail.users.settings.cse.identities.patch",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: PATCH /users/{userId}/settings/cse/identities/{emailAddress} is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: PATCH /users/{userId}/settings/cse/identities/{emailAddress} is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+        "covered_by": null,
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.identities.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.identities.get\"",
+        "operation_id": "gmail.users.settings.cse.identities.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/identities/{cseEmailAddress} is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/identities/{cseEmailAddress} is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/identities",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/identities",
+        "covered_by": null,
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.identities.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.identities.list\"",
+        "operation_id": "gmail.users.settings.cse.identities.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/identities is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/identities is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/cse/identities",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/identities",
+        "covered_by": null,
+        "operation": {
+          "model": "admin_reverse_etl",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.identities.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.identities.create\"",
+        "operation_id": "gmail.users.settings.cse.identities.create",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/identities is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/identities is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+        "covered_by": null,
+        "operation": {
+          "model": "admin_reverse_etl",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.keypairs.disable",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.keypairs.disable\"",
+        "operation_id": "gmail.users.settings.cse.keypairs.disable",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs/{keyPairId}:disable is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs/{keyPairId}:disable is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}",
+        "covered_by": null,
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.keypairs.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.keypairs.get\"",
+        "operation_id": "gmail.users.settings.cse.keypairs.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/keypairs/{keyPairId} is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/keypairs/{keyPairId} is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/keypairs",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/keypairs",
+        "covered_by": null,
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.keypairs.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.keypairs.list\"",
+        "operation_id": "gmail.users.settings.cse.keypairs.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/keypairs is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: GET /users/{userId}/settings/cse/keypairs is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/cse/keypairs",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs",
+        "covered_by": null,
+        "operation": {
+          "model": "admin_reverse_etl",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.keypairs.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.keypairs.create\"",
+        "operation_id": "gmail.users.settings.cse.keypairs.create",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+        "covered_by": null,
+        "operation": {
+          "model": "admin_reverse_etl",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.keypairs.enable",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.keypairs.enable\"",
+        "operation_id": "gmail.users.settings.cse.keypairs.enable",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs/{keyPairId}:enable is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs/{keyPairId}:enable is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+        "covered_by": null,
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
+        }
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.cse.keypairs.obliterate",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.cse.keypairs.obliterate\"",
+        "operation_id": "gmail.users.settings.cse.keypairs.obliterate",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gmail",
+          "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate is source-bound but has no runnable connector-local typed contract.",
+          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gmail/api_surface.json: POST /users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate is source-bound but has no runnable connector-local typed contract."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/delegates",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/delegates",
+        "covered_by": {
+          "stream": "delegates"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.delegates.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.delegates.list\"",
+        "operation_id": "gmail.users.settings.delegates.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/delegates.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/delegates."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/delegates/{delegateEmail}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/delegates/{delegateEmail}",
+        "covered_by": {
+          "direct_read": "settings delegates get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.delegates.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.delegates.get\"",
+        "operation_id": "gmail.users.settings.delegates.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings delegates get"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/settings/delegates/{delegateEmail}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/settings/delegates/{delegateEmail}",
+        "covered_by": {
+          "write": "delete_delegate"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.delegates.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.delegates.delete\"",
+        "operation_id": "gmail.users.settings.delegates.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_delegate"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/delegates",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/delegates",
+        "covered_by": {
+          "write": "create_delegate"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.delegates.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.delegates.create\"",
+        "operation_id": "gmail.users.settings.delegates.create",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_delegate"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+        "covered_by": {
+          "write": "delete_forwarding_address"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.forwardingAddresses.delete",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.delete\"",
+        "operation_id": "gmail.users.settings.forwardingAddresses.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_forwarding_address"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/forwardingAddresses",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/forwardingAddresses",
+        "covered_by": {
+          "stream": "forwarding_addresses"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.forwardingAddresses.list",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.list\"",
+        "operation_id": "gmail.users.settings.forwardingAddresses.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-gmail",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/forwardingAddresses.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gmail/sync_transport.json is absent for GET /users/{userId}/settings/forwardingAddresses."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-gmail",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+        "covered_by": {
+          "direct_read": "settings forwarding-addresses get"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.forwardingAddresses.get",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.get\"",
+        "operation_id": "gmail.users.settings.forwardingAddresses.get",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "settings forwarding-addresses get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/settings/forwardingAddresses",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/forwardingAddresses",
+        "covered_by": {
+          "write": "create_forwarding_address"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/gmail-operation-source-lock.json",
+        "source_id": "gmail.rest.gmail.users.settings.forwardingAddresses.create",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.create\"",
+        "operation_id": "gmail.users.settings.forwardingAddresses.create",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_forwarding_address"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    }
+  ]
+}

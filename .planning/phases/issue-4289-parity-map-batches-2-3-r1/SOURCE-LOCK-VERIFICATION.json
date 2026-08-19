@@ -1,0 +1,480 @@
+{
+  "generated_at": "2026-08-19T00:00:00Z",
+  "checks": [
+    {
+      "connector": "grafana",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 11,
+        "new": 315,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 314,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 0,
+      "disabled_operations": 314,
+      "documented_deletes": 44,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 790237,
+        "sha256": "8d54e6ceb1aeef72ef8fe31213eed910d82d264b0d8328b7e53670ce4c88b46c",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "trello",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 7,
+        "new": 263,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 261,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 0,
+      "disabled_operations": 261,
+      "documented_deletes": 37,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 261671,
+        "sha256": "b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "slack",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 10,
+        "new": 176,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 174,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 0,
+      "disabled_operations": 174,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 1237332,
+        "sha256": "742a5c977180a829df8767cf57bc417d99b3713583aee83741efb9c08ca731e7",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "n8n",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 67,
+        "new": 108,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 100,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 26,
+      "disabled_operations": 74,
+      "documented_deletes": 15,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 8956,
+        "sha256": "ff35172ab6ea789c2d3d9effd48964d51bb420f7f66f52e6f7757262d3eb8c0f",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "google-calendar",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 38,
+        "new": 38,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 38,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 27,
+      "disabled_operations": 11,
+      "documented_deletes": 4,
+      "enabled_deletes": 4,
+      "source_lock": {
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 169810,
+        "sha256": "55537f18631fa45e5458c46b0c9a6f9cc288f38a8f4657ebc2bca87b0874be49",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "gmail",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 79,
+        "new": 79,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 79,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 56,
+      "disabled_operations": 23,
+      "documented_deletes": 10,
+      "enabled_deletes": 9,
+      "source_lock": {
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 217687,
+        "sha256": "dccd8e614f0836e264faa6216ba031301fb9361f3f1ef224c9b89945f02e45f9",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "twilio",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 197,
+        "new": 197,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 197,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 94,
+      "disabled_operations": 103,
+      "documented_deletes": 32,
+      "enabled_deletes": 32,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 1877530,
+        "sha256": "6b6ffccef14cd55fd6d2fd38c3fde68585e1937eead4c099a92c5efe696b882c",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "amazon-sqs",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 23,
+        "new": 23,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 23,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 22,
+      "disabled_operations": 1,
+      "documented_deletes": 0,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 157139,
+        "sha256": "282d08c85a2003ab91ed400a81339fe81952e446ae40a599877705903e870c0f",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "elasticsearch",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 5,
+        "new": 818,
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "operations_found": 845,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+      },
+      "enabled_operations": 0,
+      "disabled_operations": 845,
+      "documented_deletes": 72,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 6458869,
+        "sha256": "9b2ad824cfc8c8c4ea1b942ef6797da63ac6306c69f7e30e108b11a1e527dde9",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "gong",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 69,
+        "new": 69,
+        "basis": "provider-published OpenAPI document"
+      },
+      "operations_found": 69,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published OpenAPI document"
+      },
+      "enabled_operations": 57,
+      "disabled_operations": 12,
+      "documented_deletes": 3,
+      "enabled_deletes": 3,
+      "source_lock": {
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 453797,
+        "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "google-ads",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 164,
+        "new": 162,
+        "basis": "provider-published Google Discovery document"
+      },
+      "operations_found": 163,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Google Discovery document"
+      },
+      "enabled_operations": 28,
+      "disabled_operations": 135,
+      "documented_deletes": 1,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 2937930,
+        "sha256": "f3d688798e8477a8ebc50397c829af79c717647b9f0eb4279a6ab93916adc03a",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "facebook-marketing",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 36,
+        "new": 1446,
+        "basis": "all current provider-published Facebook Business SDK code-generation API declarations; Graph routes are explicitly documented as object-ID node/edge templates, so totals count named owner-type/method/edge declarations rather than fabricated runtime identifiers"
+      },
+      "operations_found": 1445,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "all current provider-published Facebook Business SDK code-generation API declarations; Graph routes are explicitly documented as object-ID node/edge templates, so totals count named owner-type/method/edge declarations rather than fabricated runtime identifiers"
+      },
+      "enabled_operations": 3,
+      "disabled_operations": 1442,
+      "documented_deletes": 112,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://codeload.github.com/facebook/facebook-business-sdk-codegen/tar.gz/refs/heads/main",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 1183653,
+        "sha256": "a13fa8cf5b5b6df41623e42035d3dbf1d55fbc77a6e00f2a07977dd8a3d3a8ea",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "linkedin-ads",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 10,
+        "new": 287,
+        "basis": "provider sitemap plus every current LinkedIn Marketing rendered-reference page"
+      },
+      "operations_found": 272,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider sitemap plus every current LinkedIn Marketing rendered-reference page"
+      },
+      "enabled_operations": 0,
+      "disabled_operations": 272,
+      "documented_deletes": 35,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://learn.microsoft.com/_sitemaps/linkedin_en-us_1.xml",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 12985424,
+        "sha256": "81414999acf61956363b465ee1d60632d5accc5053071398d8f0678117cfc307",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "aircall",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 93,
+        "new": 123,
+        "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
+      },
+      "operations_found": 93,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
+      },
+      "enabled_operations": 19,
+      "disabled_operations": 74,
+      "documented_deletes": 13,
+      "enabled_deletes": 6,
+      "source_lock": {
+        "source_url": "https://developers.aircall.io/api-references",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 875367,
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "xero",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 235,
+        "new": 235,
+        "basis": "provider-published Xero Accounting OpenAPI document"
+      },
+      "operations_found": 235,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Xero Accounting OpenAPI document"
+      },
+      "enabled_operations": 87,
+      "disabled_operations": 148,
+      "documented_deletes": 10,
+      "enabled_deletes": 10,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 929720,
+        "sha256": "f980dbcfc317b9ea60c5095f1861f9e60fe05e5f8059781c4f2c2a816e918746",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "paypal-transaction",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 10,
+        "new": 120,
+        "basis": "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository"
+      },
+      "operations_found": 115,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository"
+      },
+      "enabled_operations": 0,
+      "disabled_operations": 115,
+      "documented_deletes": 8,
+      "enabled_deletes": 0,
+      "source_lock": {
+        "source_url": "https://codeload.github.com/paypal/paypal-rest-api-specifications/tar.gz/refs/heads/main",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 421176,
+        "sha256": "dda4b70942c2b45281d7d3330c2fb203d6e0097e84aeacc012d28d6581b5e1bf",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "gocardless",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 142,
+        "new": 142,
+        "basis": "provider-published GoCardless OpenAPI document served to its public API reference"
+      },
+      "operations_found": 137,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published GoCardless OpenAPI document served to its public API reference"
+      },
+      "enabled_operations": 75,
+      "disabled_operations": 62,
+      "documented_deletes": 1,
+      "enabled_deletes": 1,
+      "source_lock": {
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 2698693,
+        "sha256": "ae14f0631bb2b33d1403b159c25464e82b91fbb8187a5124866e30eed34a1a3c",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "amazon-seller-partner",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 353,
+        "new": 370,
+        "basis": "all provider-published Selling Partner OpenAPI model documents under models/"
+      },
+      "operations_found": 370,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "all provider-published Selling Partner OpenAPI model documents under models/"
+      },
+      "enabled_operations": 98,
+      "disabled_operations": 272,
+      "documented_deletes": 13,
+      "enabled_deletes": 8,
+      "source_lock": {
+        "source_url": "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 1732664,
+        "sha256": "924a416722b10a967708a94bbe49bc7f7d92f799922c5d2704313166b646b3d0",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    },
+    {
+      "connector": "miro",
+      "api_surface_counts": {
+        "baseline_revision": "acb85dc03",
+        "old": 197,
+        "new": 197,
+        "basis": "provider-published Miro OpenAPI document linked by the API reference"
+      },
+      "operations_found": 197,
+      "coverage_confidence": {
+        "level": "complete",
+        "basis": "provider-published Miro OpenAPI document linked by the API reference"
+      },
+      "enabled_operations": 104,
+      "disabled_operations": 93,
+      "documented_deletes": 34,
+      "enabled_deletes": 34,
+      "source_lock": {
+        "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+        "captured_at": "2026-08-19T00:00:00Z",
+        "bytes": 1065633,
+        "sha256": "f0e17b5b43c92ff2d85c7fbe9a84301e39df1d3c14e6738cd939a6d7142f44dd",
+        "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
+      }
+    }
+  ]
+}

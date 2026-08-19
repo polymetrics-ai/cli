@@ -1,0 +1,979 @@
+{
+  "schema_version": 2,
+  "connector": "aircall",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.aircall.io/api-references",
+    "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+    "bytes": 875367,
+    "format": "text/html; rendered-aircall-reference",
+    "inventory_basis": "parsed from every rendered endpoint-index entry in Aircall's complete Public API reference",
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates"
+    },
+    "counts": {
+      "total": 93,
+      "by_kind": {
+        "rest": 93
+      },
+      "by_method": {
+        "DELETE": 13,
+        "GET": 40,
+        "POST": 31,
+        "PUT": 9
+      }
+    },
+    "operation_counts": {
+      "DELETE": 13,
+      "GET": 40,
+      "POST": 31,
+      "PUT": 9
+    },
+    "operations": [
+      {
+        "id": "aircall.rest.get.v1_users.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/users",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_users_id.2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/users/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_users.3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/users",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_users_id.4",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/users/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/users/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_users_id.5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/users/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/users/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_users_availabilities.6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/availabilities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/users/availabilities",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_users_id_availability.7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/:id/availability",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/users/:id/availability",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_users_id_calls.8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/users/:id/calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/users/:id/calls",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_users_id_dial.9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/users/:id/dial",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/users/:id/dial",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v2_users.10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v2/users",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v2_users_id.11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v2/users/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v2_users.12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v2/users",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v2_users_id.13",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v2/users/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v2/users/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v2_users_id_numbers.14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users/:id/numbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v2/users/:id/numbers",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_teams.15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/teams",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_teams_id.16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/teams/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/teams/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_teams.17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/teams",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_teams_id.18",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/teams/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/teams/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_teams_team_id_users_user_id.19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/teams/:team_id/users/:user_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/teams/:team_id/users/:user_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_teams_team_id_users_user_id.20",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/teams/:team_id/users/:user_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/teams/:team_id/users/:user_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls.21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_id.22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_search.23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/search",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_calls_id_transfers.24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/calls/:id/transfers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/calls/:id/transfers",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_calls_id_comments.25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/calls/:id/comments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/calls/:id/comments",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_calls_id_tags.26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/calls/:id/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/calls/:id/tags",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_calls_id_archive.27",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/calls/:id/archive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/calls/:id/archive",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_calls_id_unarchive.28",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/calls/:id/unarchive",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/calls/:id/unarchive",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_calls_id_pause_recording.29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/calls/:id/pause_recording",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/calls/:id/pause_recording",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_calls_id_resume_recording.30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/calls/:id/resume_recording",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/calls/:id/resume_recording",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_calls_id_recording.31",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/calls/:id/recording",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/calls/:id/recording",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_calls_id_voicemail.32",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/calls/:id/voicemail",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/calls/:id/voicemail",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_calls_id_insight_cards.33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/calls/:id/insight_cards",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/calls/:id/insight_cards",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_transcription.34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/transcription",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/transcription",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_realtime_transcription.35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/realtime_transcription",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/realtime_transcription",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_sentiments.36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/sentiments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/sentiments",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_predicted_csat.37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/predicted_csat",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/predicted_csat",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_topics.38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/topics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/topics",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_summary.39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/summary",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/summary",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_custom_summary_result.40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/custom_summary_result",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/custom_summary_result",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_action_items.41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/action_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/action_items",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_playbook_result.42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/playbook_result",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/playbook_result",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_calls_call_id_evaluations.43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/calls/:call_id/evaluations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/calls/:call_id/evaluations",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_users_user_id_dialer_campaign.44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/:user_id/dialer_campaign",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/users/:user_id/dialer_campaign",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_users_user_id_dialer_campaign.45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/users/:user_id/dialer_campaign",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/users/:user_id/dialer_campaign",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_users_user_id_dialer_campaign.46",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/users/:user_id/dialer_campaign",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_users_user_id_dialer_campaign_phone_numbers.47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/users/:user_id/dialer_campaign/phone_numbers",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_users_user_id_dialer_campaign_phone_numbers.48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/users/:user_id/dialer_campaign/phone_numbers",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_users_user_id_dialer_campaign_phone_numbers_id.49",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_numbers.50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/numbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/numbers",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_numbers_id.51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/numbers/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/numbers/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_numbers_id.52",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/numbers/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/numbers/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_numbers_id_registration_status.53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/numbers/:id/registration_status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/registration_status",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_numbers_id_templates.54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/numbers/:id/templates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/templates",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_numbers_id_whatsapp_status.55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/numbers/:id/whatsapp_status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/whatsapp_status",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_numbers_id_messages_native_send.56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/native/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/native/send",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_numbers_id_messages_group_native_send.57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/group/native/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/group/native/send",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_numbers_id_messages_configuration.58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/configuration",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_numbers_id_messages_configuration.59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/numbers/:id/messages/configuration",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_numbers_id_messages_configuration.60",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/numbers/:id/messages/configuration",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_numbers_id_messages_send.61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/send",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_numbers_id_messages_group_send.62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/group/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/numbers/:id/messages/group/send",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_messages_send_whatsapp_native.63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/messages/send/whatsapp/native",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/messages/send/whatsapp/native",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_messages_whatsapp_send.64",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/messages/whatsapp/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/messages/whatsapp/send",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_contacts.65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/contacts",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_contacts_search.66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/contacts/search",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_contacts_id.67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/contacts/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_contacts.68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/contacts",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_contacts_id.69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/contacts/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_contacts_id.70",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/contacts/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/contacts/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_contacts_id_phone_details.71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts/:id/phone_details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/contacts/:id/phone_details",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_contacts_id_phone_details_phone_number_id.72",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/contacts/:id/phone_details/:phone_number_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_contacts_id_phone_details_phone_number_id.73",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/contacts/:id/phone_details/:phone_number_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_contacts_id_email_details.74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts/:id/email_details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/contacts/:id/email_details",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_contacts_id_email_details_email_id.75",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/contacts/:id/email_details/:email_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/contacts/:id/email_details/:email_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_contacts_id_email_details_email_id.76",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/contacts/:id/email_details/:email_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/contacts/:id/email_details/:email_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_tags.77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/tags",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_tags_id.78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/tags/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/tags/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_tags.79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/tags",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_tags_id.80",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/tags/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/tags/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_tags_id.81",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/tags/:id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/tags/:id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_webhooks.82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/webhooks",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_webhooks_webhook_id.83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/webhooks/:webhook_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/webhooks/:webhook_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_webhooks.84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/webhooks",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.put.v1_webhooks_webhook_id.85",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/webhooks/:webhook_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index PUT /v1/webhooks/:webhook_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.delete.v1_webhooks_webhook_id.86",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/webhooks/:webhook_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index DELETE /v1/webhooks/:webhook_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_company.87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/company",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/company",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_integrations_me.88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/integrations/me",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/integrations/me",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_integrations_enable.89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/integrations/enable",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/integrations/enable",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_integrations_disable.90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/integrations/disable",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/integrations/disable",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_outbound_calls_agents_agent_id.91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/outbound-calls/agents/:agent_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/outbound-calls/agents/:agent_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.post.v1_analytics_report_export.92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/analytics/report/export",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index POST /v1/analytics/report/export",
+        "source_url": "https://developers.aircall.io/api-references"
+      },
+      {
+        "id": "aircall.rest.get.v1_analytics_report_export_export_id.93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/analytics/report/export/:export_id",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "rendered endpoint index GET /v1/analytics/report/export/:export_id",
+        "source_url": "https://developers.aircall.io/api-references"
+      }
+    ],
+    "source_documents": [
+      {
+        "source_url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367
+      }
+    ]
+  },
+  "counts": {
+    "rest": 93,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 93
+  }
+}

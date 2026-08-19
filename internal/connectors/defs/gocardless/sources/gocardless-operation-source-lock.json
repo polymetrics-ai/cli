@@ -1,0 +1,1412 @@
+{
+  "schema_version": 2,
+  "connector": "gocardless",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+    "sha256": "ae14f0631bb2b33d1403b159c25464e82b91fbb8187a5124866e30eed34a1a3c",
+    "bytes": 2698693,
+    "format": "application/json",
+    "inventory_basis": "parsed from the pinned provider machine-readable source artifact",
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published GoCardless OpenAPI document served to its public API reference"
+    },
+    "counts": {
+      "total": 137,
+      "by_kind": {
+        "rest": 137
+      },
+      "by_method": {
+        "DELETE": 1,
+        "GET": 62,
+        "POST": 62,
+        "PUT": 12
+      }
+    },
+    "operation_counts": {
+      "DELETE": 1,
+      "GET": 62,
+      "POST": 62,
+      "PUT": 12
+    },
+    "operations": [
+      {
+        "id": "gocardless.rest.get.balances.1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/balances",
+        "operation_id": "list_balance",
+        "deprecated": false,
+        "source_location": "paths[\"/balances\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.bank_account_details_customer_bank_account_id.2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bank_account_details/{customer_bank_account_id}",
+        "operation_id": "get_bank_account_details",
+        "deprecated": false,
+        "source_location": "paths[\"/bank_account_details/{customer_bank_account_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.bank_account_holder_verifications.3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bank_account_holder_verifications",
+        "operation_id": "create_bank_account_holder_verification",
+        "deprecated": false,
+        "source_location": "paths[\"/bank_account_holder_verifications\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.bank_account_holder_verifications_bank_account_holder_verification_id.4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bank_account_holder_verifications/{bank_account_holder_verification_id}",
+        "operation_id": "get_bank_account_holder_verifications",
+        "deprecated": false,
+        "source_location": "paths[\"/bank_account_holder_verifications/{bank_account_holder_verification_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.bank_authorisations.5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bank_authorisations",
+        "operation_id": "create_bank_authorisation",
+        "deprecated": false,
+        "source_location": "paths[\"/bank_authorisations\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.bank_authorisations_bank_authorisation_id.6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bank_authorisations/{bank_authorisation_id}",
+        "operation_id": "get_bank_authorisations",
+        "deprecated": false,
+        "source_location": "paths[\"/bank_authorisations/{bank_authorisation_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.bank_details_lookups.7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bank_details_lookups",
+        "operation_id": "create_bank_details_lookup",
+        "deprecated": false,
+        "source_location": "paths[\"/bank_details_lookups\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests.8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests",
+        "operation_id": "create_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.billing_requests.9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/billing_requests",
+        "operation_id": "list_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_collect_customer_details.10",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/collect_customer_details",
+        "operation_id": "collect_customer_details_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/collect_customer_details\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_collect_bank_account.11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/collect_bank_account",
+        "operation_id": "collect_bank_account_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/collect_bank_account\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_confirm_payer_details.12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/confirm_payer_details",
+        "operation_id": "confirm_payer_details_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/confirm_payer_details\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_fulfil.13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/fulfil",
+        "operation_id": "fulfil_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/fulfil\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_cancel.14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/cancel",
+        "operation_id": "cancel_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/cancel\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.billing_requests_billing_request_id.15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/billing_requests/{billing_request_id}",
+        "operation_id": "get_billing_requests",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_notify.16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/notify",
+        "operation_id": "notify_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/notify\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_fallback.17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/fallback",
+        "operation_id": "fallback_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/fallback\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_choose_currency.18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/choose_currency",
+        "operation_id": "choose_currency_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/choose_currency\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_billing_request_id_actions_select_institution.19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/{billing_request_id}/actions/select_institution",
+        "operation_id": "select_institution_billing_request",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/actions/select_institution\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_request_flows.20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_request_flows",
+        "operation_id": "create_billing_request_flow",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_request_flows\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_request_flows_billing_request_flow_id_actions_initialise.21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_request_flows/{billing_request_flow_id}/actions/initialise",
+        "operation_id": "initialise_billing_request_flow",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_request_flows/{billing_request_flow_id}/actions/initialise\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.billing_request_templates.22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/billing_request_templates",
+        "operation_id": "list_billing_request_template",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_request_templates\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_request_templates.23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_request_templates",
+        "operation_id": "create_billing_request_template",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_request_templates\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.billing_request_templates_billing_request_template_id.24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/billing_request_templates/{billing_request_template_id}",
+        "operation_id": "get_billing_request_templates",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_request_templates/{billing_request_template_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.billing_request_templates_billing_request_template_id.25",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/billing_request_templates/{billing_request_template_id}",
+        "operation_id": "update_billing_request_templates",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_request_templates/{billing_request_template_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.billing_requests_create_with_actions.26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/billing_requests/create_with_actions",
+        "operation_id": "create_with_actions_billing_requests",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/create_with_actions\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.blocks.27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/blocks",
+        "operation_id": "create_block",
+        "deprecated": false,
+        "source_location": "paths[\"/blocks\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.blocks.28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/blocks",
+        "operation_id": "list_block",
+        "deprecated": false,
+        "source_location": "paths[\"/blocks\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.blocks_block_id.29",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/blocks/{block_id}",
+        "operation_id": "get_blocks",
+        "deprecated": false,
+        "source_location": "paths[\"/blocks/{block_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.blocks_block_id_actions_disable.30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/blocks/{block_id}/actions/disable",
+        "operation_id": "disable_block",
+        "deprecated": false,
+        "source_location": "paths[\"/blocks/{block_id}/actions/disable\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.blocks_block_id_actions_enable.31",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/blocks/{block_id}/actions/enable",
+        "operation_id": "enable_block",
+        "deprecated": false,
+        "source_location": "paths[\"/blocks/{block_id}/actions/enable\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.blocks_block_by_ref.32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/blocks/block_by_ref",
+        "operation_id": "block_by_ref_blocks",
+        "deprecated": false,
+        "source_location": "paths[\"/blocks/block_by_ref\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.creditors.33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/creditors",
+        "operation_id": "create_creditor",
+        "deprecated": false,
+        "source_location": "paths[\"/creditors\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.creditors.34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/creditors",
+        "operation_id": "list_creditor",
+        "deprecated": false,
+        "source_location": "paths[\"/creditors\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.creditors_creditor_id.35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/creditors/{creditor_id}",
+        "operation_id": "get_creditors",
+        "deprecated": false,
+        "source_location": "paths[\"/creditors/{creditor_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.creditors_creditor_id.36",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/creditors/{creditor_id}",
+        "operation_id": "update_creditors",
+        "deprecated": false,
+        "source_location": "paths[\"/creditors/{creditor_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.creditor_bank_accounts.37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/creditor_bank_accounts",
+        "operation_id": "create_creditor_bank_account",
+        "deprecated": false,
+        "source_location": "paths[\"/creditor_bank_accounts\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.creditor_bank_accounts.38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/creditor_bank_accounts",
+        "operation_id": "list_creditor_bank_account",
+        "deprecated": false,
+        "source_location": "paths[\"/creditor_bank_accounts\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.creditor_bank_accounts_creditor_bank_account_id.39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/creditor_bank_accounts/{creditor_bank_account_id}",
+        "operation_id": "get_creditor_bank_accounts",
+        "deprecated": false,
+        "source_location": "paths[\"/creditor_bank_accounts/{creditor_bank_account_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.creditor_bank_accounts_creditor_bank_account_id_actions_disable.40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/creditor_bank_accounts/{creditor_bank_account_id}/actions/disable",
+        "operation_id": "disable_creditor_bank_account",
+        "deprecated": false,
+        "source_location": "paths[\"/creditor_bank_accounts/{creditor_bank_account_id}/actions/disable\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.currency_exchange_rates.41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/currency_exchange_rates",
+        "operation_id": "list_currency_exchange_rate",
+        "deprecated": false,
+        "source_location": "paths[\"/currency_exchange_rates\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.customers.42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customers",
+        "operation_id": "create_customer",
+        "deprecated": false,
+        "source_location": "paths[\"/customers\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.customers.43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customers",
+        "operation_id": "list_customer",
+        "deprecated": false,
+        "source_location": "paths[\"/customers\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.customers_customer_id.44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customers/{customer_id}",
+        "operation_id": "get_customers",
+        "deprecated": false,
+        "source_location": "paths[\"/customers/{customer_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.customers_customer_id.45",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/customers/{customer_id}",
+        "operation_id": "update_customers",
+        "deprecated": false,
+        "source_location": "paths[\"/customers/{customer_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.delete.customers_customer_id.46",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/customers/{customer_id}",
+        "operation_id": "delete_customers",
+        "deprecated": false,
+        "source_location": "paths[\"/customers/{customer_id}\"].delete",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.customer_bank_accounts.47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customer_bank_accounts",
+        "operation_id": "create_customer_bank_account",
+        "deprecated": false,
+        "source_location": "paths[\"/customer_bank_accounts\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.customer_bank_accounts.48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customer_bank_accounts",
+        "operation_id": "list_customer_bank_account",
+        "deprecated": false,
+        "source_location": "paths[\"/customer_bank_accounts\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.customer_bank_accounts_customer_bank_account_id.49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/customer_bank_accounts/{customer_bank_account_id}",
+        "operation_id": "get_customer_bank_accounts",
+        "deprecated": false,
+        "source_location": "paths[\"/customer_bank_accounts/{customer_bank_account_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.customer_bank_accounts_customer_bank_account_id.50",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/customer_bank_accounts/{customer_bank_account_id}",
+        "operation_id": "update_customer_bank_accounts",
+        "deprecated": false,
+        "source_location": "paths[\"/customer_bank_accounts/{customer_bank_account_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.customer_bank_accounts_customer_bank_account_id_actions_disable.51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customer_bank_accounts/{customer_bank_account_id}/actions/disable",
+        "operation_id": "disable_customer_bank_account",
+        "deprecated": false,
+        "source_location": "paths[\"/customer_bank_accounts/{customer_bank_account_id}/actions/disable\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.customer_notifications_customer_notification_id_actions_handle.52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/customer_notifications/{customer_notification_id}/actions/handle",
+        "operation_id": "handle_customer_notification",
+        "deprecated": false,
+        "source_location": "paths[\"/customer_notifications/{customer_notification_id}/actions/handle\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.events.53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/events",
+        "operation_id": "list_event",
+        "deprecated": false,
+        "source_location": "paths[\"/events\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.events_event_id.54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/events/{event_id}",
+        "operation_id": "get_events",
+        "deprecated": false,
+        "source_location": "paths[\"/events/{event_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.exports_export_id.55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/exports/{export_id}",
+        "operation_id": "get_exports",
+        "deprecated": false,
+        "source_location": "paths[\"/exports/{export_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.exports.56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/exports",
+        "operation_id": "list_export",
+        "deprecated": false,
+        "source_location": "paths[\"/exports\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.funds_availability_mandate_id.57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/funds_availability/{mandate_id}",
+        "operation_id": "get_funds_availability",
+        "deprecated": false,
+        "source_location": "paths[\"/funds_availability/{mandate_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.instalment_schedules.58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/instalment_schedules",
+        "operation_id": "create_instalment_schedule",
+        "deprecated": false,
+        "source_location": "paths[\"/instalment_schedules\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.instalment_schedules.59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/instalment_schedules",
+        "operation_id": "list_instalment_schedule",
+        "deprecated": false,
+        "source_location": "paths[\"/instalment_schedules\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.instalment_schedules_instalment_schedule_id.60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/instalment_schedules/{instalment_schedule_id}",
+        "operation_id": "get_instalment_schedules",
+        "deprecated": false,
+        "source_location": "paths[\"/instalment_schedules/{instalment_schedule_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.instalment_schedules_instalment_schedule_id.61",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/instalment_schedules/{instalment_schedule_id}",
+        "operation_id": "update_instalment_schedules",
+        "deprecated": false,
+        "source_location": "paths[\"/instalment_schedules/{instalment_schedule_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.instalment_schedules_instalment_schedule_id_actions_cancel.62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/instalment_schedules/{instalment_schedule_id}/actions/cancel",
+        "operation_id": "cancel_instalment_schedule",
+        "deprecated": false,
+        "source_location": "paths[\"/instalment_schedules/{instalment_schedule_id}/actions/cancel\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.institutions.63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/institutions",
+        "operation_id": "list_institution",
+        "deprecated": false,
+        "source_location": "paths[\"/institutions\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.billing_requests_billing_request_id_institutions.64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/billing_requests/{billing_request_id}/institutions",
+        "operation_id": "get_institutions_from_institution",
+        "deprecated": false,
+        "source_location": "paths[\"/billing_requests/{billing_request_id}/institutions\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.branding_logos.65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/branding/logos",
+        "operation_id": "logos_branding",
+        "deprecated": false,
+        "source_location": "paths[\"/branding/logos\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandates.66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandates",
+        "operation_id": "create_mandate",
+        "deprecated": false,
+        "source_location": "paths[\"/mandates\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.mandates.67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/mandates",
+        "operation_id": "list_mandate",
+        "deprecated": false,
+        "source_location": "paths[\"/mandates\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.mandates_mandate_id.68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/mandates/{mandate_id}",
+        "operation_id": "get_mandates",
+        "deprecated": false,
+        "source_location": "paths[\"/mandates/{mandate_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.mandates_mandate_id.69",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/mandates/{mandate_id}",
+        "operation_id": "update_mandates",
+        "deprecated": false,
+        "source_location": "paths[\"/mandates/{mandate_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandates_mandate_id_actions_cancel.70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandates/{mandate_id}/actions/cancel",
+        "operation_id": "cancel_mandate",
+        "deprecated": false,
+        "source_location": "paths[\"/mandates/{mandate_id}/actions/cancel\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandates_mandate_id_actions_reinstate.71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandates/{mandate_id}/actions/reinstate",
+        "operation_id": "reinstate_mandate",
+        "deprecated": false,
+        "source_location": "paths[\"/mandates/{mandate_id}/actions/reinstate\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandate_imports.72",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandate_imports",
+        "operation_id": "create_mandate_import",
+        "deprecated": false,
+        "source_location": "paths[\"/mandate_imports\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.mandate_imports_mandate_import_id.73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/mandate_imports/{mandate_import_id}",
+        "operation_id": "get_mandate_imports",
+        "deprecated": false,
+        "source_location": "paths[\"/mandate_imports/{mandate_import_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandate_imports_mandate_import_id_actions_submit.74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandate_imports/{mandate_import_id}/actions/submit",
+        "operation_id": "submit_mandate_import",
+        "deprecated": false,
+        "source_location": "paths[\"/mandate_imports/{mandate_import_id}/actions/submit\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandate_imports_mandate_import_id_actions_cancel.75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandate_imports/{mandate_import_id}/actions/cancel",
+        "operation_id": "cancel_mandate_import",
+        "deprecated": false,
+        "source_location": "paths[\"/mandate_imports/{mandate_import_id}/actions/cancel\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandate_import_entries.76",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandate_import_entries",
+        "operation_id": "create_mandate_import_entry",
+        "deprecated": false,
+        "source_location": "paths[\"/mandate_import_entries\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.mandate_import_entries.77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/mandate_import_entries",
+        "operation_id": "list_mandate_import_entry",
+        "deprecated": false,
+        "source_location": "paths[\"/mandate_import_entries\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.mandate_pdfs.78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/mandate_pdfs",
+        "operation_id": "create_mandate_pdf",
+        "deprecated": false,
+        "source_location": "paths[\"/mandate_pdfs\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.negative_balance_limits.79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/negative_balance_limits",
+        "operation_id": "list_negative_balance_limit",
+        "deprecated": false,
+        "source_location": "paths[\"/negative_balance_limits\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.outbound_payments.80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/outbound_payments",
+        "operation_id": "create_outbound_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.outbound_payments.81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outbound_payments",
+        "operation_id": "list_outbound_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.outbound_payments_withdrawal.82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/outbound_payments/withdrawal",
+        "operation_id": "withdrawal_outbound_payments",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments/withdrawal\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.outbound_payments_outbound_payment_id_actions_cancel.83",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/outbound_payments/{outbound_payment_id}/actions/cancel",
+        "operation_id": "cancel_outbound_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments/{outbound_payment_id}/actions/cancel\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.outbound_payments_outbound_payment_id_actions_approve.84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/outbound_payments/{outbound_payment_id}/actions/approve",
+        "operation_id": "approve_outbound_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments/{outbound_payment_id}/actions/approve\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.outbound_payments_outbound_payment_id.85",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outbound_payments/{outbound_payment_id}",
+        "operation_id": "get_outbound_payments",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments/{outbound_payment_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.outbound_payments_outbound_payment_id.86",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/outbound_payments/{outbound_payment_id}",
+        "operation_id": "update_outbound_payments",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments/{outbound_payment_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.outbound_payments_stats.87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outbound_payments/stats",
+        "operation_id": "list_outbound_payments_stats",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payments/stats\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.outbound_payment_imports.88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/outbound_payment_imports",
+        "operation_id": "create_outbound_payment_import",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payment_imports\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.outbound_payment_imports.89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outbound_payment_imports",
+        "operation_id": "list_outbound_payment_import",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payment_imports\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.outbound_payment_imports_outbound_payment_import_id.90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outbound_payment_imports/{outbound_payment_import_id}",
+        "operation_id": "get_outbound_payment_imports",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payment_imports/{outbound_payment_import_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.outbound_payment_import_entries.91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outbound_payment_import_entries",
+        "operation_id": "list_outbound_payment_import_entry",
+        "deprecated": false,
+        "source_location": "paths[\"/outbound_payment_import_entries\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payer_authorisations_payer_authorisation_id.92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payer_authorisations/{payer_authorisation_id}",
+        "operation_id": "get_payer_authorisations",
+        "deprecated": true,
+        "source_location": "paths[\"/payer_authorisations/{payer_authorisation_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.payer_authorisations_payer_authorisation_id.93",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/payer_authorisations/{payer_authorisation_id}",
+        "operation_id": "update_payer_authorisations",
+        "deprecated": true,
+        "source_location": "paths[\"/payer_authorisations/{payer_authorisation_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.payer_authorisations.94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/payer_authorisations",
+        "operation_id": "create_payer_authorisation",
+        "deprecated": true,
+        "source_location": "paths[\"/payer_authorisations\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.payer_authorisations_payer_authorisation_id_actions_submit.95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/payer_authorisations/{payer_authorisation_id}/actions/submit",
+        "operation_id": "submit_payer_authorisation",
+        "deprecated": true,
+        "source_location": "paths[\"/payer_authorisations/{payer_authorisation_id}/actions/submit\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.payer_authorisations_payer_authorisation_id_actions_confirm.96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/payer_authorisations/{payer_authorisation_id}/actions/confirm",
+        "operation_id": "confirm_payer_authorisation",
+        "deprecated": true,
+        "source_location": "paths[\"/payer_authorisations/{payer_authorisation_id}/actions/confirm\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.branding_payer_themes.97",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/branding/payer_themes",
+        "operation_id": "payer_themes_branding",
+        "deprecated": false,
+        "source_location": "paths[\"/branding/payer_themes\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.payments.98",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/payments",
+        "operation_id": "create_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/payments\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payments.99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payments",
+        "operation_id": "list_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/payments\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payments_payment_id.100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payments/{payment_id}",
+        "operation_id": "get_payments",
+        "deprecated": false,
+        "source_location": "paths[\"/payments/{payment_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.payments_payment_id.101",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/payments/{payment_id}",
+        "operation_id": "update_payments",
+        "deprecated": false,
+        "source_location": "paths[\"/payments/{payment_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.payments_payment_id_actions_cancel.102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/payments/{payment_id}/actions/cancel",
+        "operation_id": "cancel_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/payments/{payment_id}/actions/cancel\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.payments_payment_id_actions_retry.103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/payments/{payment_id}/actions/retry",
+        "operation_id": "retry_payment",
+        "deprecated": false,
+        "source_location": "paths[\"/payments/{payment_id}/actions/retry\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payment_accounts_payment_account_id.104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payment_accounts/{payment_account_id}",
+        "operation_id": "get_payment_accounts",
+        "deprecated": false,
+        "source_location": "paths[\"/payment_accounts/{payment_account_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payment_accounts.105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payment_accounts",
+        "operation_id": "list_payment_account",
+        "deprecated": false,
+        "source_location": "paths[\"/payment_accounts\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payment_account_transactions_payment_account_transaction_id.106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payment_account_transactions/{payment_account_transaction_id}",
+        "operation_id": "get_payment_account_transactions",
+        "deprecated": false,
+        "source_location": "paths[\"/payment_account_transactions/{payment_account_transaction_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payment_accounts_payment_account_transaction_id_transactions.107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payment_accounts/{payment_account_transaction_id}/transactions",
+        "operation_id": "get_transactions_from_payment_account_transaction",
+        "deprecated": false,
+        "source_location": "paths[\"/payment_accounts/{payment_account_transaction_id}/transactions\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payouts.108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payouts",
+        "operation_id": "list_payout",
+        "deprecated": false,
+        "source_location": "paths[\"/payouts\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payouts_payout_id.109",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payouts/{payout_id}",
+        "operation_id": "get_payouts",
+        "deprecated": false,
+        "source_location": "paths[\"/payouts/{payout_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.payouts_payout_id.110",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/payouts/{payout_id}",
+        "operation_id": "update_payouts",
+        "deprecated": false,
+        "source_location": "paths[\"/payouts/{payout_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.payout_items.111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/payout_items",
+        "operation_id": "list_payout_item",
+        "deprecated": false,
+        "source_location": "paths[\"/payout_items\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.redirect_flows.112",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/redirect_flows",
+        "operation_id": "create_redirect_flow",
+        "deprecated": true,
+        "source_location": "paths[\"/redirect_flows\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.redirect_flows_redirect_flow_id.113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/redirect_flows/{redirect_flow_id}",
+        "operation_id": "get_redirect_flows",
+        "deprecated": true,
+        "source_location": "paths[\"/redirect_flows/{redirect_flow_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.redirect_flows_redirect_flow_id_actions_complete.114",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/redirect_flows/{redirect_flow_id}/actions/complete",
+        "operation_id": "complete_redirect_flow",
+        "deprecated": true,
+        "source_location": "paths[\"/redirect_flows/{redirect_flow_id}/actions/complete\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.refunds.115",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/refunds",
+        "operation_id": "create_refund",
+        "deprecated": false,
+        "source_location": "paths[\"/refunds\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.refunds.116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/refunds",
+        "operation_id": "list_refund",
+        "deprecated": false,
+        "source_location": "paths[\"/refunds\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.refunds_refund_id.117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/refunds/{refund_id}",
+        "operation_id": "get_refunds",
+        "deprecated": false,
+        "source_location": "paths[\"/refunds/{refund_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.refunds_refund_id.118",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/refunds/{refund_id}",
+        "operation_id": "update_refunds",
+        "deprecated": false,
+        "source_location": "paths[\"/refunds/{refund_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.scenario_simulators_scenario_simulator_id_actions_run.119",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scenario_simulators/{scenario_simulator_id}/actions/run",
+        "operation_id": "run_scenario_simulator",
+        "deprecated": false,
+        "source_location": "paths[\"/scenario_simulators/{scenario_simulator_id}/actions/run\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.scheme_identifiers.120",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scheme_identifiers",
+        "operation_id": "create_scheme_identifier",
+        "deprecated": false,
+        "source_location": "paths[\"/scheme_identifiers\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.scheme_identifiers.121",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheme_identifiers",
+        "operation_id": "list_scheme_identifier",
+        "deprecated": false,
+        "source_location": "paths[\"/scheme_identifiers\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.scheme_identifiers_scheme_identifier_id.122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheme_identifiers/{scheme_identifier_id}",
+        "operation_id": "get_scheme_identifiers",
+        "deprecated": false,
+        "source_location": "paths[\"/scheme_identifiers/{scheme_identifier_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.subscriptions.123",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions",
+        "operation_id": "create_subscription",
+        "deprecated": false,
+        "source_location": "paths[\"/subscriptions\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.subscriptions.124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/subscriptions",
+        "operation_id": "list_subscription",
+        "deprecated": false,
+        "source_location": "paths[\"/subscriptions\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.subscriptions_subscription_id.125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/subscriptions/{subscription_id}",
+        "operation_id": "get_subscriptions",
+        "deprecated": false,
+        "source_location": "paths[\"/subscriptions/{subscription_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.put.subscriptions_subscription_id.126",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/subscriptions/{subscription_id}",
+        "operation_id": "update_subscriptions",
+        "deprecated": false,
+        "source_location": "paths[\"/subscriptions/{subscription_id}\"].put",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.subscriptions_subscription_id_actions_pause.127",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/actions/pause",
+        "operation_id": "pause_subscription",
+        "deprecated": false,
+        "source_location": "paths[\"/subscriptions/{subscription_id}/actions/pause\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.subscriptions_subscription_id_actions_resume.128",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/actions/resume",
+        "operation_id": "resume_subscription",
+        "deprecated": false,
+        "source_location": "paths[\"/subscriptions/{subscription_id}/actions/resume\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.subscriptions_subscription_id_actions_cancel.129",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscriptions/{subscription_id}/actions/cancel",
+        "operation_id": "cancel_subscription",
+        "deprecated": false,
+        "source_location": "paths[\"/subscriptions/{subscription_id}/actions/cancel\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.tax_rates.130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax_rates",
+        "operation_id": "list_tax_rate",
+        "deprecated": false,
+        "source_location": "paths[\"/tax_rates\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.tax_rates_tax_rate_id.131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tax_rates/{tax_rate_id}",
+        "operation_id": "get_tax_rates",
+        "deprecated": false,
+        "source_location": "paths[\"/tax_rates/{tax_rate_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.transferred_mandates_mandate_id.132",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/transferred_mandates/{mandate_id}",
+        "operation_id": "get_transferred_mandates",
+        "deprecated": false,
+        "source_location": "paths[\"/transferred_mandates/{mandate_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.verification_details.133",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/verification_details",
+        "operation_id": "create_verification_detail",
+        "deprecated": false,
+        "source_location": "paths[\"/verification_details\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.verification_details.134",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/verification_details",
+        "operation_id": "list_verification_detail",
+        "deprecated": false,
+        "source_location": "paths[\"/verification_details\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.webhooks.135",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhooks",
+        "operation_id": "list_webhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.get.webhooks_webhook_id.136",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhooks/{webhook_id}",
+        "operation_id": "get_webhooks",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks/{webhook_id}\"].get",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      },
+      {
+        "id": "gocardless.rest.post.webhooks_webhook_id_actions_retry.137",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhooks/{webhook_id}/actions/retry",
+        "operation_id": "retry_webhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks/{webhook_id}/actions/retry\"].post",
+        "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 137,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 137
+  }
+}

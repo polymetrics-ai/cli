@@ -1,0 +1,1778 @@
+{
+  "schema_version": 2,
+  "connector": "slack",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json",
+    "sha256": "742a5c977180a829df8767cf57bc417d99b3713583aee83741efb9c08ca731e7",
+    "bytes": 1237332,
+    "openapi": "2.0",
+    "info_version": "1.7.0",
+    "operation_counts": {
+      "GET": 80,
+      "POST": 94
+    },
+    "operations": [
+      {
+        "id": "slack.rest.admin_apps_approve",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.apps.approve",
+        "operation_id": "admin_apps_approve",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.apps.approve\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_apps_approved_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.apps.approved.list",
+        "operation_id": "admin_apps_approved_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.apps.approved.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_apps_requests_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.apps.requests.list",
+        "operation_id": "admin_apps_requests_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.apps.requests.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_apps_restrict",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.apps.restrict",
+        "operation_id": "admin_apps_restrict",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.apps.restrict\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_apps_restricted_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.apps.restricted.list",
+        "operation_id": "admin_apps_restricted_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.apps.restricted.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_archive",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.archive",
+        "operation_id": "admin_conversations_archive",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.archive\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_convertToPrivate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.convertToPrivate",
+        "operation_id": "admin_conversations_convertToPrivate",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.convertToPrivate\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_create",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.create",
+        "operation_id": "admin_conversations_create",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.create\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_delete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.delete",
+        "operation_id": "admin_conversations_delete",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_disconnectShared",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.disconnectShared",
+        "operation_id": "admin_conversations_disconnectShared",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.disconnectShared\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_ekm_listOriginalConnectedChannelInfo",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.conversations.ekm.listOriginalConnectedChannelInfo",
+        "operation_id": "admin_conversations_ekm_listOriginalConnectedChannelInfo",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.ekm.listOriginalConnectedChannelInfo\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_getConversationPrefs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.conversations.getConversationPrefs",
+        "operation_id": "admin_conversations_getConversationPrefs",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.getConversationPrefs\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_getTeams",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.conversations.getTeams",
+        "operation_id": "admin_conversations_getTeams",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.getTeams\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_invite",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.invite",
+        "operation_id": "admin_conversations_invite",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.invite\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_rename",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.rename",
+        "operation_id": "admin_conversations_rename",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.rename\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_restrictAccess_addGroup",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.restrictAccess.addGroup",
+        "operation_id": "admin_conversations_restrictAccess_addGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.restrictAccess.addGroup\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_restrictAccess_listGroups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.conversations.restrictAccess.listGroups",
+        "operation_id": "admin_conversations_restrictAccess_listGroups",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.restrictAccess.listGroups\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_restrictAccess_removeGroup",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.restrictAccess.removeGroup",
+        "operation_id": "admin_conversations_restrictAccess_removeGroup",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.restrictAccess.removeGroup\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_search",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.conversations.search",
+        "operation_id": "admin_conversations_search",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.search\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_setConversationPrefs",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.setConversationPrefs",
+        "operation_id": "admin_conversations_setConversationPrefs",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.setConversationPrefs\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_setTeams",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.setTeams",
+        "operation_id": "admin_conversations_setTeams",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.setTeams\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_conversations_unarchive",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.conversations.unarchive",
+        "operation_id": "admin_conversations_unarchive",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.conversations.unarchive\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_emoji_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.emoji.add",
+        "operation_id": "admin_emoji_add",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.emoji.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_emoji_addAlias",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.emoji.addAlias",
+        "operation_id": "admin_emoji_addAlias",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.emoji.addAlias\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_emoji_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.emoji.list",
+        "operation_id": "admin_emoji_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.emoji.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_emoji_remove",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.emoji.remove",
+        "operation_id": "admin_emoji_remove",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.emoji.remove\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_emoji_rename",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.emoji.rename",
+        "operation_id": "admin_emoji_rename",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.emoji.rename\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_inviteRequests_approve",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.inviteRequests.approve",
+        "operation_id": "admin_inviteRequests_approve",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.inviteRequests.approve\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_inviteRequests_approved_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.inviteRequests.approved.list",
+        "operation_id": "admin_inviteRequests_approved_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.inviteRequests.approved.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_inviteRequests_denied_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.inviteRequests.denied.list",
+        "operation_id": "admin_inviteRequests_denied_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.inviteRequests.denied.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_inviteRequests_deny",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.inviteRequests.deny",
+        "operation_id": "admin_inviteRequests_deny",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.inviteRequests.deny\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_inviteRequests_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.inviteRequests.list",
+        "operation_id": "admin_inviteRequests_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.inviteRequests.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_admins_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.teams.admins.list",
+        "operation_id": "admin_teams_admins_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.admins.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_create",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.teams.create",
+        "operation_id": "admin_teams_create",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.create\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.teams.list",
+        "operation_id": "admin_teams_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_owners_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.teams.owners.list",
+        "operation_id": "admin_teams_owners_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.owners.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_settings_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.teams.settings.info",
+        "operation_id": "admin_teams_settings_info",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.settings.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_settings_setDefaultChannels",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.teams.settings.setDefaultChannels",
+        "operation_id": "admin_teams_settings_setDefaultChannels",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.settings.setDefaultChannels\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_settings_setDescription",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.teams.settings.setDescription",
+        "operation_id": "admin_teams_settings_setDescription",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.settings.setDescription\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_settings_setDiscoverability",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.teams.settings.setDiscoverability",
+        "operation_id": "admin_teams_settings_setDiscoverability",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.settings.setDiscoverability\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_settings_setIcon",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.teams.settings.setIcon",
+        "operation_id": "admin_teams_settings_setIcon",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.settings.setIcon\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_teams_settings_setName",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.teams.settings.setName",
+        "operation_id": "admin_teams_settings_setName",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.teams.settings.setName\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_usergroups_addChannels",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.usergroups.addChannels",
+        "operation_id": "admin_usergroups_addChannels",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.usergroups.addChannels\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_usergroups_addTeams",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.usergroups.addTeams",
+        "operation_id": "admin_usergroups_addTeams",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.usergroups.addTeams\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_usergroups_listChannels",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.usergroups.listChannels",
+        "operation_id": "admin_usergroups_listChannels",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.usergroups.listChannels\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_usergroups_removeChannels",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.usergroups.removeChannels",
+        "operation_id": "admin_usergroups_removeChannels",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.usergroups.removeChannels\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_assign",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.assign",
+        "operation_id": "admin_users_assign",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.assign\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_invite",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.invite",
+        "operation_id": "admin_users_invite",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.invite\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admin.users.list",
+        "operation_id": "admin_users_list",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_remove",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.remove",
+        "operation_id": "admin_users_remove",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.remove\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_session_invalidate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.session.invalidate",
+        "operation_id": "admin_users_session_invalidate",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.session.invalidate\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_session_reset",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.session.reset",
+        "operation_id": "admin_users_session_reset",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.session.reset\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_setAdmin",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.setAdmin",
+        "operation_id": "admin_users_setAdmin",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.setAdmin\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_setExpiration",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.setExpiration",
+        "operation_id": "admin_users_setExpiration",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.setExpiration\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_setOwner",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.setOwner",
+        "operation_id": "admin_users_setOwner",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.setOwner\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.admin_users_setRegular",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/admin.users.setRegular",
+        "operation_id": "admin_users_setRegular",
+        "deprecated": false,
+        "source_location": "paths[\"/admin.users.setRegular\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.api_test",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api.test",
+        "operation_id": "api_test",
+        "deprecated": false,
+        "source_location": "paths[\"/api.test\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_event_authorizations_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.event.authorizations.list",
+        "operation_id": "apps_event_authorizations_list",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.event.authorizations.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_permissions_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.permissions.info",
+        "operation_id": "apps_permissions_info",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.permissions.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_permissions_request",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.permissions.request",
+        "operation_id": "apps_permissions_request",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.permissions.request\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_permissions_resources_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.permissions.resources.list",
+        "operation_id": "apps_permissions_resources_list",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.permissions.resources.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_permissions_scopes_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.permissions.scopes.list",
+        "operation_id": "apps_permissions_scopes_list",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.permissions.scopes.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_permissions_users_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.permissions.users.list",
+        "operation_id": "apps_permissions_users_list",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.permissions.users.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_permissions_users_request",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.permissions.users.request",
+        "operation_id": "apps_permissions_users_request",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.permissions.users.request\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.apps_uninstall",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/apps.uninstall",
+        "operation_id": "apps_uninstall",
+        "deprecated": false,
+        "source_location": "paths[\"/apps.uninstall\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.auth_revoke",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/auth.revoke",
+        "operation_id": "auth_revoke",
+        "deprecated": false,
+        "source_location": "paths[\"/auth.revoke\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.auth_test",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/auth.test",
+        "operation_id": "auth_test",
+        "deprecated": false,
+        "source_location": "paths[\"/auth.test\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.bots_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bots.info",
+        "operation_id": "bots_info",
+        "deprecated": false,
+        "source_location": "paths[\"/bots.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.calls_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/calls.add",
+        "operation_id": "calls_add",
+        "deprecated": false,
+        "source_location": "paths[\"/calls.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.calls_end",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/calls.end",
+        "operation_id": "calls_end",
+        "deprecated": false,
+        "source_location": "paths[\"/calls.end\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.calls_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/calls.info",
+        "operation_id": "calls_info",
+        "deprecated": false,
+        "source_location": "paths[\"/calls.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.calls_participants_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/calls.participants.add",
+        "operation_id": "calls_participants_add",
+        "deprecated": false,
+        "source_location": "paths[\"/calls.participants.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.calls_participants_remove",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/calls.participants.remove",
+        "operation_id": "calls_participants_remove",
+        "deprecated": false,
+        "source_location": "paths[\"/calls.participants.remove\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.calls_update",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/calls.update",
+        "operation_id": "calls_update",
+        "deprecated": false,
+        "source_location": "paths[\"/calls.update\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_delete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.delete",
+        "operation_id": "chat_delete",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_deleteScheduledMessage",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.deleteScheduledMessage",
+        "operation_id": "chat_deleteScheduledMessage",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.deleteScheduledMessage\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_getPermalink",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/chat.getPermalink",
+        "operation_id": "chat_getPermalink",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.getPermalink\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_meMessage",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.meMessage",
+        "operation_id": "chat_meMessage",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.meMessage\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_postEphemeral",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.postEphemeral",
+        "operation_id": "chat_postEphemeral",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.postEphemeral\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_postMessage",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.postMessage",
+        "operation_id": "chat_postMessage",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.postMessage\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_scheduleMessage",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.scheduleMessage",
+        "operation_id": "chat_scheduleMessage",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.scheduleMessage\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_scheduledMessages_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/chat.scheduledMessages.list",
+        "operation_id": "chat_scheduledMessages_list",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.scheduledMessages.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_unfurl",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.unfurl",
+        "operation_id": "chat_unfurl",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.unfurl\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.chat_update",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/chat.update",
+        "operation_id": "chat_update",
+        "deprecated": false,
+        "source_location": "paths[\"/chat.update\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_archive",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.archive",
+        "operation_id": "conversations_archive",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.archive\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_close",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.close",
+        "operation_id": "conversations_close",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.close\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_create",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.create",
+        "operation_id": "conversations_create",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.create\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_history",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations.history",
+        "operation_id": "conversations_history",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.history\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations.info",
+        "operation_id": "conversations_info",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_invite",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.invite",
+        "operation_id": "conversations_invite",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.invite\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_join",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.join",
+        "operation_id": "conversations_join",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.join\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_kick",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.kick",
+        "operation_id": "conversations_kick",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.kick\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_leave",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.leave",
+        "operation_id": "conversations_leave",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.leave\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations.list",
+        "operation_id": "conversations_list",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_mark",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.mark",
+        "operation_id": "conversations_mark",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.mark\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_members",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations.members",
+        "operation_id": "conversations_members",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.members\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_open",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.open",
+        "operation_id": "conversations_open",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.open\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_rename",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.rename",
+        "operation_id": "conversations_rename",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.rename\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_replies",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations.replies",
+        "operation_id": "conversations_replies",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.replies\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_setPurpose",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.setPurpose",
+        "operation_id": "conversations_setPurpose",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.setPurpose\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_setTopic",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.setTopic",
+        "operation_id": "conversations_setTopic",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.setTopic\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.conversations_unarchive",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations.unarchive",
+        "operation_id": "conversations_unarchive",
+        "deprecated": false,
+        "source_location": "paths[\"/conversations.unarchive\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.dialog_open",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dialog.open",
+        "operation_id": "dialog_open",
+        "deprecated": false,
+        "source_location": "paths[\"/dialog.open\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.dnd_endDnd",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/dnd.endDnd",
+        "operation_id": "dnd_endDnd",
+        "deprecated": false,
+        "source_location": "paths[\"/dnd.endDnd\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.dnd_endSnooze",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/dnd.endSnooze",
+        "operation_id": "dnd_endSnooze",
+        "deprecated": false,
+        "source_location": "paths[\"/dnd.endSnooze\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.dnd_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dnd.info",
+        "operation_id": "dnd_info",
+        "deprecated": false,
+        "source_location": "paths[\"/dnd.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.dnd_setSnooze",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/dnd.setSnooze",
+        "operation_id": "dnd_setSnooze",
+        "deprecated": false,
+        "source_location": "paths[\"/dnd.setSnooze\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.dnd_teamInfo",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dnd.teamInfo",
+        "operation_id": "dnd_teamInfo",
+        "deprecated": false,
+        "source_location": "paths[\"/dnd.teamInfo\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.emoji_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/emoji.list",
+        "operation_id": "emoji_list",
+        "deprecated": false,
+        "source_location": "paths[\"/emoji.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_comments_delete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.comments.delete",
+        "operation_id": "files_comments_delete",
+        "deprecated": false,
+        "source_location": "paths[\"/files.comments.delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_delete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.delete",
+        "operation_id": "files_delete",
+        "deprecated": false,
+        "source_location": "paths[\"/files.delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/files.info",
+        "operation_id": "files_info",
+        "deprecated": false,
+        "source_location": "paths[\"/files.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/files.list",
+        "operation_id": "files_list",
+        "deprecated": false,
+        "source_location": "paths[\"/files.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_remote_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.remote.add",
+        "operation_id": "files_remote_add",
+        "deprecated": false,
+        "source_location": "paths[\"/files.remote.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_remote_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/files.remote.info",
+        "operation_id": "files_remote_info",
+        "deprecated": false,
+        "source_location": "paths[\"/files.remote.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_remote_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/files.remote.list",
+        "operation_id": "files_remote_list",
+        "deprecated": false,
+        "source_location": "paths[\"/files.remote.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_remote_remove",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.remote.remove",
+        "operation_id": "files_remote_remove",
+        "deprecated": false,
+        "source_location": "paths[\"/files.remote.remove\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_remote_share",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/files.remote.share",
+        "operation_id": "files_remote_share",
+        "deprecated": false,
+        "source_location": "paths[\"/files.remote.share\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_remote_update",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.remote.update",
+        "operation_id": "files_remote_update",
+        "deprecated": false,
+        "source_location": "paths[\"/files.remote.update\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_revokePublicURL",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.revokePublicURL",
+        "operation_id": "files_revokePublicURL",
+        "deprecated": false,
+        "source_location": "paths[\"/files.revokePublicURL\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_sharedPublicURL",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.sharedPublicURL",
+        "operation_id": "files_sharedPublicURL",
+        "deprecated": false,
+        "source_location": "paths[\"/files.sharedPublicURL\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.files_upload",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files.upload",
+        "operation_id": "files_upload",
+        "deprecated": false,
+        "source_location": "paths[\"/files.upload\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.migration_exchange",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/migration.exchange",
+        "operation_id": "migration_exchange",
+        "deprecated": false,
+        "source_location": "paths[\"/migration.exchange\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.oauth_access",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/oauth.access",
+        "operation_id": "oauth_access",
+        "deprecated": false,
+        "source_location": "paths[\"/oauth.access\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.oauth_token",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/oauth.token",
+        "operation_id": "oauth_token",
+        "deprecated": false,
+        "source_location": "paths[\"/oauth.token\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.oauth_v2_access",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/oauth.v2.access",
+        "operation_id": "oauth_v2_access",
+        "deprecated": false,
+        "source_location": "paths[\"/oauth.v2.access\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.pins_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/pins.add",
+        "operation_id": "pins_add",
+        "deprecated": false,
+        "source_location": "paths[\"/pins.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.pins_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pins.list",
+        "operation_id": "pins_list",
+        "deprecated": false,
+        "source_location": "paths[\"/pins.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.pins_remove",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/pins.remove",
+        "operation_id": "pins_remove",
+        "deprecated": false,
+        "source_location": "paths[\"/pins.remove\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reactions_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reactions.add",
+        "operation_id": "reactions_add",
+        "deprecated": false,
+        "source_location": "paths[\"/reactions.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reactions_get",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reactions.get",
+        "operation_id": "reactions_get",
+        "deprecated": false,
+        "source_location": "paths[\"/reactions.get\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reactions_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reactions.list",
+        "operation_id": "reactions_list",
+        "deprecated": false,
+        "source_location": "paths[\"/reactions.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reactions_remove",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reactions.remove",
+        "operation_id": "reactions_remove",
+        "deprecated": false,
+        "source_location": "paths[\"/reactions.remove\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reminders_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reminders.add",
+        "operation_id": "reminders_add",
+        "deprecated": false,
+        "source_location": "paths[\"/reminders.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reminders_complete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reminders.complete",
+        "operation_id": "reminders_complete",
+        "deprecated": false,
+        "source_location": "paths[\"/reminders.complete\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reminders_delete",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/reminders.delete",
+        "operation_id": "reminders_delete",
+        "deprecated": false,
+        "source_location": "paths[\"/reminders.delete\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reminders_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reminders.info",
+        "operation_id": "reminders_info",
+        "deprecated": false,
+        "source_location": "paths[\"/reminders.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.reminders_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reminders.list",
+        "operation_id": "reminders_list",
+        "deprecated": false,
+        "source_location": "paths[\"/reminders.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.rtm_connect",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/rtm.connect",
+        "operation_id": "rtm_connect",
+        "deprecated": false,
+        "source_location": "paths[\"/rtm.connect\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.search_messages",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/search.messages",
+        "operation_id": "search_messages",
+        "deprecated": false,
+        "source_location": "paths[\"/search.messages\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.stars_add",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/stars.add",
+        "operation_id": "stars_add",
+        "deprecated": false,
+        "source_location": "paths[\"/stars.add\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.stars_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/stars.list",
+        "operation_id": "stars_list",
+        "deprecated": false,
+        "source_location": "paths[\"/stars.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.stars_remove",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/stars.remove",
+        "operation_id": "stars_remove",
+        "deprecated": false,
+        "source_location": "paths[\"/stars.remove\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.team_accessLogs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/team.accessLogs",
+        "operation_id": "team_accessLogs",
+        "deprecated": false,
+        "source_location": "paths[\"/team.accessLogs\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.team_billableInfo",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/team.billableInfo",
+        "operation_id": "team_billableInfo",
+        "deprecated": false,
+        "source_location": "paths[\"/team.billableInfo\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.team_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/team.info",
+        "operation_id": "team_info",
+        "deprecated": false,
+        "source_location": "paths[\"/team.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.team_integrationLogs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/team.integrationLogs",
+        "operation_id": "team_integrationLogs",
+        "deprecated": false,
+        "source_location": "paths[\"/team.integrationLogs\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.team_profile_get",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/team.profile.get",
+        "operation_id": "team_profile_get",
+        "deprecated": false,
+        "source_location": "paths[\"/team.profile.get\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.usergroups_create",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/usergroups.create",
+        "operation_id": "usergroups_create",
+        "deprecated": false,
+        "source_location": "paths[\"/usergroups.create\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.usergroups_disable",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/usergroups.disable",
+        "operation_id": "usergroups_disable",
+        "deprecated": false,
+        "source_location": "paths[\"/usergroups.disable\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.usergroups_enable",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/usergroups.enable",
+        "operation_id": "usergroups_enable",
+        "deprecated": false,
+        "source_location": "paths[\"/usergroups.enable\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.usergroups_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/usergroups.list",
+        "operation_id": "usergroups_list",
+        "deprecated": false,
+        "source_location": "paths[\"/usergroups.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.usergroups_update",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/usergroups.update",
+        "operation_id": "usergroups_update",
+        "deprecated": false,
+        "source_location": "paths[\"/usergroups.update\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.usergroups_users_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/usergroups.users.list",
+        "operation_id": "usergroups_users_list",
+        "deprecated": false,
+        "source_location": "paths[\"/usergroups.users.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.usergroups_users_update",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/usergroups.users.update",
+        "operation_id": "usergroups_users_update",
+        "deprecated": false,
+        "source_location": "paths[\"/usergroups.users.update\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_conversations",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users.conversations",
+        "operation_id": "users_conversations",
+        "deprecated": false,
+        "source_location": "paths[\"/users.conversations\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_deletePhoto",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users.deletePhoto",
+        "operation_id": "users_deletePhoto",
+        "deprecated": false,
+        "source_location": "paths[\"/users.deletePhoto\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_getPresence",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users.getPresence",
+        "operation_id": "users_getPresence",
+        "deprecated": false,
+        "source_location": "paths[\"/users.getPresence\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_identity",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users.identity",
+        "operation_id": "users_identity",
+        "deprecated": false,
+        "source_location": "paths[\"/users.identity\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_info",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users.info",
+        "operation_id": "users_info",
+        "deprecated": false,
+        "source_location": "paths[\"/users.info\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_list",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users.list",
+        "operation_id": "users_list",
+        "deprecated": false,
+        "source_location": "paths[\"/users.list\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_lookupByEmail",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users.lookupByEmail",
+        "operation_id": "users_lookupByEmail",
+        "deprecated": false,
+        "source_location": "paths[\"/users.lookupByEmail\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_profile_get",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users.profile.get",
+        "operation_id": "users_profile_get",
+        "deprecated": false,
+        "source_location": "paths[\"/users.profile.get\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_profile_set",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users.profile.set",
+        "operation_id": "users_profile_set",
+        "deprecated": false,
+        "source_location": "paths[\"/users.profile.set\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_setActive",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users.setActive",
+        "operation_id": "users_setActive",
+        "deprecated": false,
+        "source_location": "paths[\"/users.setActive\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_setPhoto",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users.setPhoto",
+        "operation_id": "users_setPhoto",
+        "deprecated": false,
+        "source_location": "paths[\"/users.setPhoto\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.users_setPresence",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users.setPresence",
+        "operation_id": "users_setPresence",
+        "deprecated": false,
+        "source_location": "paths[\"/users.setPresence\"].post",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.views_open",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/views.open",
+        "operation_id": "views_open",
+        "deprecated": false,
+        "source_location": "paths[\"/views.open\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.views_publish",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/views.publish",
+        "operation_id": "views_publish",
+        "deprecated": false,
+        "source_location": "paths[\"/views.publish\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.views_push",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/views.push",
+        "operation_id": "views_push",
+        "deprecated": false,
+        "source_location": "paths[\"/views.push\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.views_update",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/views.update",
+        "operation_id": "views_update",
+        "deprecated": false,
+        "source_location": "paths[\"/views.update\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.workflows_stepCompleted",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workflows.stepCompleted",
+        "operation_id": "workflows_stepCompleted",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows.stepCompleted\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.workflows_stepFailed",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workflows.stepFailed",
+        "operation_id": "workflows_stepFailed",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows.stepFailed\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      },
+      {
+        "id": "slack.rest.workflows_updateStep",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workflows.updateStep",
+        "operation_id": "workflows_updateStep",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows.updateStep\"].get",
+        "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json"
+      }
+    ],
+    "counts": {
+      "total": 174,
+      "by_kind": {
+        "rest": 174
+      },
+      "by_method": {
+        "GET": 80,
+        "POST": 94
+      }
+    },
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
+  },
+  "counts": {
+    "rest": 174,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 174
+  }
+}
