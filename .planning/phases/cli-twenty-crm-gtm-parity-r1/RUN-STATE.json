@@ -53,5 +53,12 @@
     "required_change": "reject empty credentials add --value-stdin input after newline normalization and before vault persistence",
     "required_tests": ["non-empty stdin accepted", "empty stdin rejected", "newline-only stdin rejected"],
     "lane_action": "blocked without foundation change or token replacement"
+  },
+  "captain_foundation_gap_ledger": {
+    "path": ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-GAPS.json",
+    "status": "open_gaps_block_merge_ready_verdict",
+    "deduplicated_open_gap_count": 6,
+    "known_provider_operations_enabled_for_merge_verdict_count": 0,
+    "dynamic_workspace_inventory": "pending_not_not_applicable"
   }
 }

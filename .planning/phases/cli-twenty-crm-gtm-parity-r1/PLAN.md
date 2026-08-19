@@ -98,6 +98,13 @@ while continuing to exclude credentials, transport secrets, session material,
 and identifiers from durable artifacts. No merge-ready claim is permitted until
 the dynamic inventory and all applicable six-surface proofs are complete.
 
+`FOUNDATION-GAPS.json` is the machine-readable companion to this gate. It
+deduplicates every currently known provider-neutral missing capability, locks
+each affected Twenty operation set to a source-file hash and selector, and
+contains per-batch plus portfolio rollups. A row whose status is open makes all
+of its selected operations ineligible for a merge-ready verdict; it is never a
+reason to hide an operation as disabled or N/A.
+
 ## TDD slices
 
 1. Add a Twenty-local source contract test that fails while the recovered bundle
