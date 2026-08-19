@@ -30,8 +30,8 @@ contacted.
 
 ## Validation and review
 
-`VERIFICATION.md` contains the exact command set and results. The final full
-`internal/cli` package run passed in 1184.608s, golden transcripts passed, and
+`VERIFICATION.md` contains the exact command set and results. The final
+rebased-head full `internal/cli` package run passed in 596.926s, golden transcripts passed, and
 the freshly rebuilt binary completed a count-only authenticated live read of
 three records. Manual code review found no actionable issues; automatic Claude
 review is requested by opening the non-draft PR.
