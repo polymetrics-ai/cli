@@ -18,7 +18,8 @@ Base: `main`.
 - Regenerated `github/certification-sweep.json` from this branch and added one
   read-only GitHub schema-v2 proof record from the authorized live run.
 - Added architecture and AGENTS guidance plus a worktree-local pre-push
-  `make verify` guard.
+  `make verify` guard that clears hook-local Git variables before nested
+  temporary-repository tests run.
 
 ## Deliberate Exclusions
 

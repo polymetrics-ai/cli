@@ -11,8 +11,8 @@
 - [x] `git diff --check`
 - [x] release-metadata and trace assertions are empty before commit; repeat with the final merge-base diff after commit
 - [x] no deletion below `.planning/traces/` relative to `origin/main`
-- [x] pre-push hook delegates to `make verify` through worktree-local
-  `core.hooksPath=.githooks`
+- [x] pre-push hook clears Git hook-local variables and its inherited-environment
+  exercise passed the full `make verify` gate; confirm again on the branch push
 - [x] `make verify` — pass (full suite and every required gate)
 - [x] inline review found no actionable issue; PR route is `claude_auto`
 
