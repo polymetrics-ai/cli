@@ -10,8 +10,8 @@
 
 ## Pending checks
 
-- [ ] Record focused red loader test failure before the block-map edit.
-- [ ] Record focused green loader test success after the edit.
+- [x] Record focused red loader test failure before the block-map edit.
+- [x] Record focused green loader test success after the edit: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestBundleLoadRegistersStatusAndTextExportOperations|TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations)$'` (pass).
 - [ ] Run changed-package tests, formatting, vet, build, generated/schema checks, lint/docs/smoke/contract/boundary/release gates, and GSD workflow check.
 - [ ] Record manual inline `verify-work` and code-review findings.
 - [ ] Rebase on `origin/main`, push only the working branch, open the PR, and verify its API base is `main`.

@@ -2466,13 +2466,13 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 
 func expectedOperationBlock(kind string) string {
 	switch kind {
-	case "rest_read", "rest_write", "provider_search":
+	case "rest_read", "rest_status", "rest_write", "provider_search":
 		return "rest"
 	case "graphql_query", "graphql_mutation":
 		return "graphql"
 	case "xml_export", "xml_import":
 		return "xml"
-	case "binary_download":
+	case "binary_download", "text_export":
 		return "binary"
 	case "file_upload":
 		return "file"
