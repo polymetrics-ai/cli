@@ -194,6 +194,17 @@ func paginatedOperationBundle(baseURL string, pagination *PaginationSpec, endpoi
 	}
 }
 
+// operationPaginatedBundle declares pagination on the operation itself. A
+// connector can have both offset/page and index/count endpoints, so the
+// connector-wide ETL paginator is not a truthful source for either operation
+// direct read.
+func operationPaginatedBundle(baseURL string, pagination *PaginationSpec, sourceParameters []OperationParameter, endpointPath string) Bundle {
+	b := paginatedOperationBundle(baseURL, nil, endpointPath)
+	b.Operations[0].REST.Pagination = pagination
+	b.Operations[0].REST.PaginationParameters = sourceParameters
+	return b
+}
+
 func paginatedDirectReadBundle(baseURL string, pagination *PaginationSpec, endpointPath string) Bundle {
 	b := directReadBundle(baseURL, http.MethodGet, endpointPath)
 	b.HTTP.Pagination = pagination
@@ -266,6 +277,60 @@ func TestOperationDirectReadPageOneUsesDeclaredPageSize(t *testing.T) {
 		if size != strconv.Itoa(fixtureMaxPage) {
 			t.Fatalf("page size requested = %q, want the declared %d", size, fixtureMaxPage)
 		}
+	}
+}
+
+func TestOperationDirectReadUsesOperationDeclaredPagination(t *testing.T) {
+	fx, srv := startPagedFixture(t, "array")
+	b := operationPaginatedBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "page_size",
+		PageSize:  fixtureMaxPage,
+	}, []OperationParameter{
+		{Name: "page", In: "query", Type: "integer"},
+		{Name: "page_size", In: "query", Type: "integer"},
+	}, "/v2/audit-logs")
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.list"}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if got := rootArrayLen(t, result.Body); got != fixtureMaxPage {
+		t.Fatalf("records = %d, want operation declared page of %d", got, fixtureMaxPage)
+	}
+	if result.Page.Strategy != "page_number" || !result.Page.HasMore {
+		t.Fatalf("page = %+v, want operation page_number with more records", result.Page)
+	}
+	if fx.count() != 1 {
+		t.Fatalf("requests = %d, want exactly one", fx.count())
+	}
+}
+
+func TestOperationDirectReadRejectsPaginationThatDisagreesWithSourceBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[]`))
+	}))
+	t.Cleanup(srv.Close)
+	b := operationPaginatedBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "page_size",
+		PageSize:  2,
+	}, []OperationParameter{
+		{Name: "offset", In: "query", Type: "integer"},
+		{Name: "limit", In: "query", Type: "integer"},
+	}, "/v2/audit-logs")
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.list"}, nil)
+	if err == nil || !strings.Contains(err.Error(), "pagination") || !strings.Contains(err.Error(), "source") {
+		t.Fatalf("OperationDirectRead() error = %v, want source pagination refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("requests = %d, want source disagreement rejected before I/O", requests)
 	}
 }
 

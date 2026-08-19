@@ -708,6 +708,14 @@ func buildGraphQLOperationPayload(op OperationSpec, variables map[string]any, ma
 // queries surface partial data truthfully, while mutations use the same parser
 // but their caller fails closed if Errors is non-empty.
 func graphQLOperationResponse(raw []byte, maxBytes int) (map[string]any, *connectors.GraphQLResponseMetadata, error) {
+	return graphQLOperationResponseWithRuntimeErrorPolicy(raw, maxBytes, false)
+}
+
+// graphQLOperationResponseWithRuntimeErrorPolicy decodes a bounded GraphQL
+// response. The secret-operation path retains provider error text in full;
+// credentials are protected by its declared encrypted store rather than by
+// removing data from runtime diagnostics.
+func graphQLOperationResponseWithRuntimeErrorPolicy(raw []byte, maxBytes int, retainRuntimeErrors bool) (map[string]any, *connectors.GraphQLResponseMetadata, error) {
 	if len(raw) > maxBytes {
 		return nil, nil, fmt.Errorf("GraphQL response too large: %d bytes exceeds limit %d", len(raw), maxBytes)
 	}
@@ -723,7 +731,7 @@ func graphQLOperationResponse(raw []byte, maxBytes int) (map[string]any, *connec
 		return nil, nil, fmt.Errorf("GraphQL response is not JSON: %w", err)
 	}
 
-	metadata := &connectors.GraphQLResponseMetadata{Errors: boundedGraphQLErrorMetadata(envelope.Errors)}
+	metadata := &connectors.GraphQLResponseMetadata{Errors: boundedGraphQLErrorMetadata(envelope.Errors, retainRuntimeErrors)}
 	var data map[string]any
 	if len(bytes.TrimSpace(envelope.Data)) != 0 && string(bytes.TrimSpace(envelope.Data)) != "null" {
 		decoded, err := decodeDirectReadBody(envelope.Data, maxBytes)
@@ -743,13 +751,17 @@ func graphQLOperationResponse(raw []byte, maxBytes int) (map[string]any, *connec
 
 func boundedGraphQLErrorMetadata(items []struct {
 	Message string `json:"message"`
-}) []connectors.GraphQLResultError {
+}, retainRuntimeErrors bool) []connectors.GraphQLResultError {
 	if len(items) == 0 {
 		return nil
 	}
 	out := make([]connectors.GraphQLResultError, 0, min(len(items), maxGraphQLOperationErrors))
 	for _, item := range items {
-		out = append(out, connectors.GraphQLResultError{Message: sanitizeGraphQLErrorMessage(item.Message)})
+		message := sanitizeGraphQLErrorMessage(item.Message)
+		if retainRuntimeErrors {
+			message = item.Message
+		}
+		out = append(out, connectors.GraphQLResultError{Message: message})
 		if len(out) == maxGraphQLOperationErrors {
 			break
 		}

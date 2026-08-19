@@ -21,6 +21,7 @@
             "enum": [
               "stream_etl",
               "rest_read",
+              "rest_status",
               "rest_write",
               "provider_search",
               "graphql_query",
@@ -28,6 +29,7 @@
               "xml_export",
               "xml_import",
               "binary_download",
+              "text_export",
               "file_upload",
               "local_git",
               "local_file",
@@ -83,7 +85,9 @@
               "approval_mode": {
                 "type": "string",
                 "enum": ["none", "typed_confirmation"]
-              }
+              },
+              "response_secret_field": { "type": "string" },
+              "response_secret_store_key": { "type": "string" }
             }
           },
           "audit_event": { "type": "string" },
@@ -96,6 +100,47 @@
               "path": { "type": "string" },
               "content_type": { "type": "string" },
               "max_bytes": { "type": "integer" },
+              "pagination": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "type": { "type": "string" },
+                  "size_param": { "type": "string" },
+                  "page_param": { "type": "string" },
+                  "start_page": { "type": "integer" },
+                  "limit_param": { "type": "string" },
+                  "offset_param": { "type": "string" },
+                  "cursor_param": { "type": "string" },
+                  "token_path": { "type": "string" },
+                  "last_record_field": { "type": "string" },
+                  "stop_path": { "type": "string" },
+                  "next_url_path": { "type": "string" },
+                  "start_index_param": { "type": "string" },
+                  "count_param": { "type": "string" },
+                  "total_path": { "type": "string" },
+                  "start_index_path": { "type": "string" },
+                  "start_index_base": { "type": "integer" },
+                  "page_size": { "type": "integer" },
+                  "max_pages": { "type": "integer" },
+                  "allow_cross_host": { "type": "boolean" }
+                }
+              },
+              "pagination_parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "in"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string" },
+                    "in": { "type": "string", "enum": ["query"] },
+                    "type": { "type": "string" },
+                    "required": { "type": "boolean" },
+                    "values": { "type": "array", "items": { "type": "string" } },
+                    "summary": { "type": "string" }
+                  }
+                }
+              },
               "parameters": {
                 "type": "array",
                 "items": {

@@ -738,6 +738,11 @@ func TestSupportedDirectWriteContentTypeRequiresTypedMultipart(t *testing.T) {
 			rest: &engine.RESTOperationSpec{ContentType: "application/json"},
 			want: true,
 		},
+		{
+			name: "closed SCIM JSON content type is supported",
+			rest: &engine.RESTOperationSpec{ContentType: "application/scim+json"},
+			want: true,
+		},
 	}
 
 	for _, tt := range tests {
