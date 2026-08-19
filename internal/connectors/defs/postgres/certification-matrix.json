@@ -1,0 +1,1611 @@
+{
+  "schema_version": 1,
+  "generated_command": "go run ./cmd/connectorgen certification-matrix --connector postgres",
+  "connector": {
+    "name": "postgres",
+    "integration_type": "database",
+    "capability_complete": false,
+    "cells": [
+      {
+        "function_kind": "capability:catalog",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "capability:cdc",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_cdc_r1-capability-cdc.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:18:21Z",
+            "run_id": "postgres_cdc_r1-capability_cdc",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:852b9f027186f46da48d0b8eb0865fd273e5b2b79fa9e61c0ff5b35aafef0cc4}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:b55999c5cd0f589b61f3d0796764efc17187cc94913e680a23e09fe671cbc3b4}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_change_capture_capability_cdc",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:2caf4c2aed624d7857fe3f964be29cd84c9de7406e9563b2948234a45153841f}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "bounded_durable_staging": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "independent_warehouse_readback": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "warehouse_receipt_persisted": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}"
+                      },
+                      "original_bytes": 149,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "function_kind": "capability:check",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "capability:dynamic_schema",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "capability:query",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "capability_not_exposed",
+          "reason": "connector \"postgres\" neither declares capability \"query\" nor exposes its runtime method"
+        }
+      },
+      {
+        "function_kind": "capability:read",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "capability:write",
+        "applicable": true,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:binary_download",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"binary_download\""
+        }
+      },
+      {
+        "function_kind": "operation:browser_open",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"browser_open\""
+        }
+      },
+      {
+        "function_kind": "operation:composite",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"composite\""
+        }
+      },
+      {
+        "function_kind": "operation:file_upload",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"file_upload\""
+        }
+      },
+      {
+        "function_kind": "operation:graphql_mutation",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"graphql_mutation\""
+        }
+      },
+      {
+        "function_kind": "operation:graphql_query",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"graphql_query\""
+        }
+      },
+      {
+        "function_kind": "operation:local_file",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"local_file\""
+        }
+      },
+      {
+        "function_kind": "operation:local_git",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"local_git\""
+        }
+      },
+      {
+        "function_kind": "operation:provider_search",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"provider_search\""
+        }
+      },
+      {
+        "function_kind": "operation:rest_read",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"rest_read\""
+        }
+      },
+      {
+        "function_kind": "operation:rest_write",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"rest_write\""
+        }
+      },
+      {
+        "function_kind": "operation:stream_etl",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"stream_etl\""
+        }
+      },
+      {
+        "function_kind": "operation:xml_export",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"xml_export\""
+        }
+      },
+      {
+        "function_kind": "operation:xml_import",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"xml_import\""
+        }
+      }
+    ]
+  },
+  "function_kinds": [
+    {
+      "id": "capability:catalog",
+      "category": "capability",
+      "name": "catalog",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Catalog"
+    },
+    {
+      "id": "capability:cdc",
+      "category": "capability",
+      "name": "cdc",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.CDC"
+    },
+    {
+      "id": "capability:check",
+      "category": "capability",
+      "name": "check",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Check"
+    },
+    {
+      "id": "capability:dynamic_schema",
+      "category": "capability",
+      "name": "dynamic_schema",
+      "discovery_source": "internal/connectors/engine/bundle.go:Capabilities.DynamicSchema"
+    },
+    {
+      "id": "capability:query",
+      "category": "capability",
+      "name": "query",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Query"
+    },
+    {
+      "id": "capability:read",
+      "category": "capability",
+      "name": "read",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Read"
+    },
+    {
+      "id": "capability:write",
+      "category": "capability",
+      "name": "write",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Write"
+    },
+    {
+      "id": "operation:binary_download",
+      "category": "operation",
+      "name": "binary_download",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=binary_download)",
+      "executor_source": "internal/connectors/engine/binary_read.go:OperationBinaryDownload"
+    },
+    {
+      "id": "operation:browser_open",
+      "category": "operation",
+      "name": "browser_open",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=browser_open)"
+    },
+    {
+      "id": "operation:composite",
+      "category": "operation",
+      "name": "composite",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=composite)"
+    },
+    {
+      "id": "operation:file_upload",
+      "category": "operation",
+      "name": "file_upload",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=file_upload)"
+    },
+    {
+      "id": "operation:graphql_mutation",
+      "category": "operation",
+      "name": "graphql_mutation",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=graphql_mutation)",
+      "executor_source": "internal/connectors/engine/direct_write.go:OperationDirectWrite"
+    },
+    {
+      "id": "operation:graphql_query",
+      "category": "operation",
+      "name": "graphql_query",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=graphql_query)",
+      "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
+    },
+    {
+      "id": "operation:local_file",
+      "category": "operation",
+      "name": "local_file",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=local_file)"
+    },
+    {
+      "id": "operation:local_git",
+      "category": "operation",
+      "name": "local_git",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=local_git)"
+    },
+    {
+      "id": "operation:provider_search",
+      "category": "operation",
+      "name": "provider_search",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=provider_search)",
+      "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
+    },
+    {
+      "id": "operation:rest_read",
+      "category": "operation",
+      "name": "rest_read",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_read)",
+      "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
+    },
+    {
+      "id": "operation:rest_write",
+      "category": "operation",
+      "name": "rest_write",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_write)",
+      "executor_source": "internal/connectors/engine/direct_write.go:OperationDirectWrite"
+    },
+    {
+      "id": "operation:stream_etl",
+      "category": "operation",
+      "name": "stream_etl",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=stream_etl)"
+    },
+    {
+      "id": "operation:xml_export",
+      "category": "operation",
+      "name": "xml_export",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=xml_export)"
+    },
+    {
+      "id": "operation:xml_import",
+      "category": "operation",
+      "name": "xml_import",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=xml_import)"
+    }
+  ],
+  "flow_kinds": [
+    {
+      "id": "api_to_api",
+      "source_role": "api_source",
+      "destination_role": "api_destination"
+    },
+    {
+      "id": "api_to_database",
+      "source_role": "api_source",
+      "destination_role": "database_destination"
+    },
+    {
+      "id": "database_to_api",
+      "source_role": "database_source",
+      "destination_role": "api_destination"
+    },
+    {
+      "id": "database_to_database",
+      "source_role": "database_source",
+      "destination_role": "database_destination"
+    }
+  ],
+  "workflow_kinds": [
+    {
+      "id": "etl",
+      "discovery_source": "internal/cli/cli.go:runETL"
+    },
+    {
+      "id": "flow_authoring",
+      "discovery_source": "internal/cli/flow_cli.go:runFlow"
+    },
+    {
+      "id": "reverse_etl",
+      "discovery_source": "internal/cli/cli.go:runReverse"
+    },
+    {
+      "id": "schedule",
+      "discovery_source": "internal/cli/schedule.go:runSchedule"
+    }
+  ],
+  "workflow": {
+    "connector": "postgres",
+    "complete": false,
+    "cells": [
+      {
+        "workflow_kind": "etl",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": null,
+        "live_evidence": []
+      },
+      {
+        "workflow_kind": "flow_authoring",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "workflow_kind": "reverse_etl",
+        "applicable": true,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": null,
+        "live_evidence": []
+      },
+      {
+        "workflow_kind": "schedule",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      }
+    ]
+  },
+  "sync_mode_kinds": [
+    {
+      "id": "full_overwrite",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "full_append",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_append",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_upsert",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_dedupe",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_dedupe_history",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "change_capture",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    }
+  ],
+  "sync_primitives": [
+    {
+      "id": "api_read_into_warehouse",
+      "integration_type": "api",
+      "capability": "read",
+      "warehouse_direction": "into_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    },
+    {
+      "id": "api_write_from_warehouse",
+      "integration_type": "api",
+      "capability": "write",
+      "warehouse_direction": "from_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    },
+    {
+      "id": "database_read_into_warehouse",
+      "integration_type": "database",
+      "capability": "read",
+      "warehouse_direction": "into_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    },
+    {
+      "id": "database_write_from_warehouse",
+      "integration_type": "database",
+      "capability": "write",
+      "warehouse_direction": "from_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    }
+  ],
+  "sync_mode_cells": {
+    "connector": "postgres",
+    "complete": false,
+    "cells": [
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "database_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_overwrite-database_read_into_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-full_overwrite-database_read_into_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_full_overwrite_database_read_into_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:f02a5059c7bdeb74db8ad82a0c7ebb35c145adc399c006e9f1c6ecc3f764c231}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:31d810ba8dbc08a2510c03f46ecf5c6954b262e2bc379e143c8bd4f962c2fca0}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:dd379f30be3f66c681fc6480f61e79490b24d6cb0fbcef3bea89e9dce19e5315}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a28520fe6c24a78e0fdc0923f97d5737d42a3cb32ff96181fa5a98b825b0ce0e}}",
+                        "target_relation": "{{pmcertfp:v1:eee72ce5e5ed1a11cadab6131c66c31264be3d82942e1b665eaaf8f2d20ab35d}}"
+                      },
+                      "original_bytes": 252,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "database_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_overwrite-database_write_from_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-full_overwrite-database_write_from_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_full_overwrite_database_write_from_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:f02a5059c7bdeb74db8ad82a0c7ebb35c145adc399c006e9f1c6ecc3f764c231}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:31d810ba8dbc08a2510c03f46ecf5c6954b262e2bc379e143c8bd4f962c2fca0}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:dd379f30be3f66c681fc6480f61e79490b24d6cb0fbcef3bea89e9dce19e5315}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a28520fe6c24a78e0fdc0923f97d5737d42a3cb32ff96181fa5a98b825b0ce0e}}",
+                        "target_relation": "{{pmcertfp:v1:eee72ce5e5ed1a11cadab6131c66c31264be3d82942e1b665eaaf8f2d20ab35d}}"
+                      },
+                      "original_bytes": 252,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "database_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_append-database_read_into_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-full_append-database_read_into_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_full_append_database_read_into_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:0ff1e3676d1c63c2566f39dd6ffa6a3715807f21eb3615dc72c202c05988f1d5}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:439b7b6d89f7c43702aecca0cd41035e099a29ef2d276f0e77828f0ea9d98a92}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:6c3f41db5e71b87ea8163dafec4e82269d0816c1696e416b940cbea424bf51bd}}",
+                        "target_relation": "{{pmcertfp:v1:1f7019d5eb2e8c5346c7d5140543f269c124b651a5d8c23c015e5761950c6078}}"
+                      },
+                      "original_bytes": 248,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "database_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_append-database_write_from_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-full_append-database_write_from_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_full_append_database_write_from_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:0ff1e3676d1c63c2566f39dd6ffa6a3715807f21eb3615dc72c202c05988f1d5}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:439b7b6d89f7c43702aecca0cd41035e099a29ef2d276f0e77828f0ea9d98a92}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:6c3f41db5e71b87ea8163dafec4e82269d0816c1696e416b940cbea424bf51bd}}",
+                        "target_relation": "{{pmcertfp:v1:1f7019d5eb2e8c5346c7d5140543f269c124b651a5d8c23c015e5761950c6078}}"
+                      },
+                      "original_bytes": 248,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "database_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_append-database_read_into_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_append-database_read_into_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_append_database_read_into_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:1b0ff91220d81648bb680bcf4e08f3d2bcb7b9202af33b4c9b4188ecf8bb86f5}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:22d46d899969fa5899397ee1ee172d70c8a9334e594d54f7a96563a0c333e17e}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:b51c57f8e3c45fbccc5158ea16b170f690001a6fda9175b60b17d10eff945bc1}}",
+                        "target_relation": "{{pmcertfp:v1:9c019e72fbd9237d4f6c0676cf2fe9461d414d69481ebdc4cb77f97f249cd5bb}}"
+                      },
+                      "original_bytes": 255,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "database_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_append-database_write_from_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_append-database_write_from_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_append_database_write_from_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:1b0ff91220d81648bb680bcf4e08f3d2bcb7b9202af33b4c9b4188ecf8bb86f5}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:22d46d899969fa5899397ee1ee172d70c8a9334e594d54f7a96563a0c333e17e}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:b51c57f8e3c45fbccc5158ea16b170f690001a6fda9175b60b17d10eff945bc1}}",
+                        "target_relation": "{{pmcertfp:v1:9c019e72fbd9237d4f6c0676cf2fe9461d414d69481ebdc4cb77f97f249cd5bb}}"
+                      },
+                      "original_bytes": 255,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "database_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_upsert-database_read_into_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_upsert-database_read_into_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_upsert_database_read_into_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:a7fd21d188892253f4eead7ae4d898ee226c2ad30e269053927b639e97d8ca15}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:7af8d3bce5d61b4d05822cd4b26f4f95105bee3d441810d359fb5df2e0d7e6ee}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:72aa6292184da9dcb1fa85115d81adb0af2e8b1e6f8b521f7fe5a92c6a9be783}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:774467f6b4388a038a2d57f869eb3c5fcdeabb94fc8b2037c9c4ede68c5125da}}",
+                        "target_relation": "{{pmcertfp:v1:df8d6faffcb40b9f5f59ac75eafb464677c09698169f5d5fc3ca2490f3e7e7e8}}"
+                      },
+                      "original_bytes": 254,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "database_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_upsert-database_write_from_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_upsert-database_write_from_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_upsert_database_write_from_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:a7fd21d188892253f4eead7ae4d898ee226c2ad30e269053927b639e97d8ca15}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:7af8d3bce5d61b4d05822cd4b26f4f95105bee3d441810d359fb5df2e0d7e6ee}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:72aa6292184da9dcb1fa85115d81adb0af2e8b1e6f8b521f7fe5a92c6a9be783}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:774467f6b4388a038a2d57f869eb3c5fcdeabb94fc8b2037c9c4ede68c5125da}}",
+                        "target_relation": "{{pmcertfp:v1:df8d6faffcb40b9f5f59ac75eafb464677c09698169f5d5fc3ca2490f3e7e7e8}}"
+                      },
+                      "original_bytes": 254,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "database_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe-database_read_into_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_dedupe-database_read_into_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_dedupe_database_read_into_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:dc0bcebe0026ab3dbc9ec8bb25330612fc24a353c23ef5915630694e085b9abb}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:62b0297f87b9c1554c757f9b5b0e9e9a1d2ed0647a994e3cf2f9a71b3144684a}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:76a20a5c048f94f495aa3da71d4da2df33418506f3f6c11b6695f5e164dfa8b8}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:5255ada3ba6a14e44f76b715b48e2a6d18251e5049f5606984af476ed22da346}}",
+                        "target_relation": "{{pmcertfp:v1:d06969eaf5527922f4926437ecf76d631d9edd83627b25463c4479c7e5acb8a8}}"
+                      },
+                      "original_bytes": 255,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "database_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe-database_write_from_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_dedupe-database_write_from_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_dedupe_database_write_from_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:dc0bcebe0026ab3dbc9ec8bb25330612fc24a353c23ef5915630694e085b9abb}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:62b0297f87b9c1554c757f9b5b0e9e9a1d2ed0647a994e3cf2f9a71b3144684a}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:76a20a5c048f94f495aa3da71d4da2df33418506f3f6c11b6695f5e164dfa8b8}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:5255ada3ba6a14e44f76b715b48e2a6d18251e5049f5606984af476ed22da346}}",
+                        "target_relation": "{{pmcertfp:v1:d06969eaf5527922f4926437ecf76d631d9edd83627b25463c4479c7e5acb8a8}}"
+                      },
+                      "original_bytes": 255,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "database_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe_history-database_read_into_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_dedupe_history-database_read_into_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_dedupe_history_database_read_into_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:895a33657cb733e6ae9edc8675a3ec0559dd2420422a0e94f9435ca644453f1a}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:62658a52bdc836d4bc8f6bee4d7b3bb93c28a8e94647a51beba119b7d5900cb2}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:10259edaa74b2bc14adb9d42e07f4744e3c74569e031fd2e46e0ab9e70942900}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a2042cd1ae5621e3ea50eb9373629fb1c101af46520f294ae5b0597e47aa1a43}}",
+                        "target_relation": "{{pmcertfp:v1:e18e8ff014345d01b1fa9f774e32b2bdf9b75ed820cf43f2cac0fbd99ff275a2}}"
+                      },
+                      "original_bytes": 271,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "database_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe_history-database_write_from_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:17:13Z",
+            "run_id": "postgres_transport_r1-incremental_dedupe_history-database_write_from_warehouse",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_transport_incremental_dedupe_history_database_write_from_warehouse",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:895a33657cb733e6ae9edc8675a3ec0559dd2420422a0e94f9435ca644453f1a}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "apply_strategy": "{{pmcertfp:v1:62658a52bdc836d4bc8f6bee4d7b3bb93c28a8e94647a51beba119b7d5900cb2}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:10259edaa74b2bc14adb9d42e07f4744e3c74569e031fd2e46e0ab9e70942900}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a2042cd1ae5621e3ea50eb9373629fb1c101af46520f294ae5b0597e47aa1a43}}",
+                        "target_relation": "{{pmcertfp:v1:e18e8ff014345d01b1fa9f774e32b2bdf9b75ed820cf43f2cac0fbd99ff275a2}}"
+                      },
+                      "original_bytes": 271,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_api_connector",
+          "reason": "connector \"postgres\" integration_type \"database\" cannot execute primitive \"api_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "database_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": true,
+        "fixture_evidence": [],
+        "live_evidence": [
+          {
+            "record": "internal/connectors/certifications/evidence/postgres_cdc_r1-change_capture-database_read_into_warehouse.json",
+            "provider": "postgres_container",
+            "executed_at": "2026-08-17T12:18:21Z",
+            "run_id": "postgres_cdc_r1-change_capture_database_read",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
+            "proof": {
+              "redaction_strategy": "repository_salted_hmac_sha256_v1",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:852b9f027186f46da48d0b8eb0865fd273e5b2b79fa9e61c0ff5b35aafef0cc4}}",
+              "credential_fingerprints": [
+                "{{pmcertfp:v1:b55999c5cd0f589b61f3d0796764efc17187cc94913e680a23e09fe671cbc3b4}}"
+              ],
+              "http_exchanges": [],
+              "database_exchanges": [
+                {
+                  "operation": "postgres_change_capture_change_capture_database_read",
+                  "protocol": "postgres_wire",
+                  "request": {
+                    "statement": "{{pmcertfp:v1:2caf4c2aed624d7857fe3f964be29cd84c9de7406e9563b2948234a45153841f}}",
+                    "parameters": []
+                  },
+                  "response": {
+                    "status": "completed",
+                    "body": {
+                      "encoding": "json",
+                      "value": {
+                        "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "bounded_durable_staging": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "independent_warehouse_readback": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "warehouse_receipt_persisted": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}"
+                      },
+                      "original_bytes": 149,
+                      "truncated": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "change_capture_requires_database_read",
+          "reason": "sync mode \"change_capture\" applies only to the database_read_into_warehouse primitive"
+        }
+      }
+    ]
+  },
+  "connector_roles": {
+    "connector": "postgres",
+    "roles": [
+      {
+        "role": "api_source",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "not_applicable": {
+          "code": "integration_type_not_api",
+          "reason": "connector integration_type \"database\" cannot occupy the api_source role"
+        }
+      },
+      {
+        "role": "api_destination",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "not_applicable": {
+          "code": "integration_type_not_api",
+          "reason": "connector integration_type \"database\" cannot occupy the api_destination role"
+        }
+      },
+      {
+        "role": "database_source",
+        "applicable": true,
+        "declared": true,
+        "implemented": true
+      },
+      {
+        "role": "database_destination",
+        "applicable": true,
+        "declared": false,
+        "implemented": false
+      }
+    ]
+  },
+  "pair_overrides": []
+}

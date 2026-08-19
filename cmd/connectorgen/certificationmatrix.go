@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -57,18 +58,19 @@ type notApplicableReason struct {
 	Reason string `json:"reason"`
 }
 
-// evidencePointer repeats the accepted record's publishable proof inside the
-// generated matrix. Transcript values are already repository-salted
-// fingerprints, so a matrix can be read and checked without loading an
+// evidencePointer repeats the accepted record's publishable proof inside a
+// generated certification shard. Transcript values are already repository-salted
+// fingerprints, so a shard can be read and checked without loading an
 // untrusted sidecar or ever becoming a credential/provider-data store.
 type evidencePointer struct {
-	Record          string                `json:"record"`
-	Provider        string                `json:"provider"`
-	ExecutedAt      string                `json:"executed_at"`
-	RunID           string                `json:"run_id"`
-	CredentialScope string                `json:"credential_scope"`
-	CredentialNote  string                `json:"credential_note"`
-	Proof           embeddedEvidenceProof `json:"proof"`
+	Record               string                `json:"record"`
+	Provider             string                `json:"provider"`
+	ExecutedAt           string                `json:"executed_at"`
+	RunID                string                `json:"run_id"`
+	CredentialScope      string                `json:"credential_scope"`
+	CredentialNote       string                `json:"credential_note"`
+	CredentialScopeProof string                `json:"credential_scope_proof,omitempty"`
+	Proof                embeddedEvidenceProof `json:"proof"`
 }
 
 // certificationCell records the four facts that must all be true for an
@@ -85,9 +87,9 @@ type certificationCell struct {
 	NotApplicable   *notApplicableReason `json:"not_applicable,omitempty"`
 }
 
-// capabilityConnector is the per-connector portion of the capability matrix.
+// capabilityConnector is the connector-local capability payload.
 // CapabilityComplete intentionally does not claim final connector
-// certification; flow-matrix generation adds pair requirements later.
+// certification; reconstructed flow records add pair requirements later.
 type capabilityConnector struct {
 	Name               string              `json:"name"`
 	IntegrationType    string              `json:"integration_type"`
@@ -122,8 +124,9 @@ type capabilityBaseline struct {
 	PerKind            []kindBaseline `json:"per_kind"`
 }
 
-// capabilityMatrix is the generated artifact. Fields are deliberately slices,
-// not maps, so json.MarshalIndent produces stable, reviewable ordering.
+// capabilityMatrix is the in-memory aggregate view used to assemble and
+// validate connector-local shards. Fields are deliberately slices, not maps,
+// so json.MarshalIndent produces stable, reviewable ordering.
 type capabilityMatrix struct {
 	SchemaVersion             int                          `json:"schema_version"`
 	GeneratedCommand          string                       `json:"generated_command"`
@@ -133,29 +136,57 @@ type capabilityMatrix struct {
 	Baseline                  capabilityBaseline           `json:"baseline"`
 }
 
+// certificationShard is the connector-owned proof-bearing record. It repeats
+// only source inventories needed to validate this connector's cells; it
+// deliberately excludes global baselines, counts, and position-dependent
+// data. Pair sets are reconstructed from connector roles when needed rather
+// than becoming a cross-connector write dependency.
+type certificationShard struct {
+	SchemaVersion    int                  `json:"schema_version"`
+	GeneratedCommand string               `json:"generated_command"`
+	Connector        capabilityConnector  `json:"connector"`
+	FunctionKinds    []functionKind       `json:"function_kinds"`
+	FlowKinds        []flowKind           `json:"flow_kinds"`
+	WorkflowKinds    []workflowKind       `json:"workflow_kinds"`
+	Workflow         connectorWorkflowSet `json:"workflow"`
+	SyncModeKinds    []syncModeKind       `json:"sync_mode_kinds"`
+	SyncPrimitives   []syncPrimitive      `json:"sync_primitives"`
+	SyncModeCells    connectorSyncModeSet `json:"sync_mode_cells"`
+	ConnectorRoles   connectorFlowRoles   `json:"connector_roles"`
+	PairOverrides    []flowPairOverride   `json:"pair_overrides"`
+}
+
 // acceptedEvidence is the only record shape from which live_tested can be
 // derived. No existing bundle certification contract or fixture filename uses
 // this schema or directory, so filename matches cannot promote a connector.
 type acceptedEvidence struct {
-	SchemaVersion   int                   `json:"schema_version"`
-	Scope           string                `json:"scope"`
-	Status          string                `json:"status"`
-	CredentialScope string                `json:"credential_scope"`
-	CredentialNote  string                `json:"credential_note"`
-	Connector       string                `json:"connector,omitempty"`
-	FunctionKind    string                `json:"function_kind,omitempty"`
-	WorkflowKind    string                `json:"workflow_kind,omitempty"`
-	SyncMode        string                `json:"sync_mode,omitempty"`
-	Primitive       string                `json:"primitive,omitempty"`
-	Source          string                `json:"source,omitempty"`
-	Destination     string                `json:"destination,omitempty"`
-	FlowKind        string                `json:"flow_kind,omitempty"`
-	Provider        string                `json:"provider"`
-	ExecutedAt      string                `json:"executed_at"`
-	RunID           string                `json:"run_id"`
-	Proof           embeddedEvidenceProof `json:"proof"`
+	SchemaVersion        int                   `json:"schema_version"`
+	Scope                string                `json:"scope"`
+	Status               string                `json:"status"`
+	CredentialScope      string                `json:"credential_scope"`
+	CredentialNote       string                `json:"credential_note"`
+	CredentialScopeProof string                `json:"credential_scope_proof,omitempty"`
+	Connector            string                `json:"connector,omitempty"`
+	FunctionKind         string                `json:"function_kind,omitempty"`
+	WorkflowKind         string                `json:"workflow_kind,omitempty"`
+	SyncMode             string                `json:"sync_mode,omitempty"`
+	Primitive            string                `json:"primitive,omitempty"`
+	Source               string                `json:"source,omitempty"`
+	Destination          string                `json:"destination,omitempty"`
+	FlowKind             string                `json:"flow_kind,omitempty"`
+	Provider             string                `json:"provider"`
+	ExecutedAt           string                `json:"executed_at"`
+	RunID                string                `json:"run_id"`
+	Proof                embeddedEvidenceProof `json:"proof"`
 
 	recordPath string
+}
+
+type acceptedEvidenceScopeIdentity struct {
+	Scope       string `json:"scope"`
+	Connector   string `json:"connector"`
+	Source      string `json:"source"`
+	Destination string `json:"destination"`
 }
 
 type matrixConnectorSource struct {
@@ -166,15 +197,44 @@ type matrixConnectorSource struct {
 	conformance     *conformance.Report
 }
 
+// scopedPostgresMatrixConnector preserves PostgreSQL's native unsupported
+// Write stub for matrix introspection while sourcing every other method from
+// the bundle the scoped generator has already validated.
+type scopedPostgresMatrixConnector struct {
+	*engine.Connector
+}
+
+func (scopedPostgresMatrixConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
+}
+
+func (scopedPostgresMatrixConnector) ReadCDC(context.Context, connectors.CDCReadRequest, func(connectors.CDCEvent) error) error {
+	return nil
+}
+
 // runCertificationMatrix implements the source-controlled generation and
 // byte-for-byte drift gate. It deliberately never runs a provider request.
 func runCertificationMatrix(args []string, stdout, stderr io.Writer) int {
 	root := "."
 	check := false
-	for _, arg := range args[1:] {
+	all := false
+	connector := ""
+	for index := 1; index < len(args); index++ {
+		arg := args[index]
 		switch {
 		case arg == "--check":
 			check = true
+		case arg == "--all":
+			all = true
+		case strings.HasPrefix(arg, "--connector="):
+			connector = strings.TrimPrefix(arg, "--connector=")
+		case arg == "--connector":
+			if index+1 >= len(args) || strings.HasPrefix(args[index+1], "-") {
+				logln(stderr, "connectorgen certification-matrix: --connector requires a name")
+				return 2
+			}
+			index++
+			connector = args[index]
 		case strings.HasPrefix(arg, "-"):
 			logf(stderr, "connectorgen certification-matrix: unknown flag %q\n", arg)
 			return 2
@@ -185,108 +245,565 @@ func runCertificationMatrix(args []string, stdout, stderr io.Writer) int {
 			return 2
 		}
 	}
+	if check && all {
+		logln(stderr, "connectorgen certification-matrix: --check cannot be combined with --all")
+		return 2
+	}
+	if !check && !all && connector == "" {
+		logln(stderr, "connectorgen certification-matrix: require --connector <name> for an incremental run, or --all for deliberate regeneration")
+		return 2
+	}
+	if connector != "" && !certificationConnectorAllowed(connector) {
+		logf(stderr, "connectorgen certification-matrix: connector %q is not certification-allowlisted\n", connector)
+		return 2
+	}
+	if all && connector != "" {
+		logln(stderr, "connectorgen certification-matrix: --all and --connector cannot be combined")
+		return 2
+	}
 
 	absRoot, err := filepath.Abs(root)
 	if err != nil {
 		logf(stderr, "connectorgen certification-matrix: resolve repository root: %v\n", err)
 		return 1
 	}
-	path := filepath.Join(absRoot, capabilityMatrixPath)
-	flowPath := filepath.Join(absRoot, flowMatrixPath)
-	statusPath := filepath.Join(absRoot, certificationStatusPath)
-	// A certification checker deliberately reads and validates the committed
-	// record before it inspects current source. This ordering makes a malformed
-	// or proofless certificate an error in its own right rather than something
-	// code reachability could paper over.
-	if check {
-		if err := validateCapabilityMatrixArtifactFile(path); err != nil {
-			logf(stderr, "connectorgen certification-matrix: %v\n", err)
-			return 1
-		}
-		if err := validateFlowMatrixArtifactFile(flowPath); err != nil {
-			logf(stderr, "connectorgen certification-matrix: %v\n", err)
-			return 1
-		}
-		if err := validateCertificationStatusArtifactFile(statusPath); err != nil {
-			logf(stderr, "connectorgen certification-matrix: %v\n", err)
-			return 1
-		}
-	}
-	matrix, err := buildCapabilityMatrix(absRoot)
+	result, err := generateCertificationMatrix(absRoot, absRoot, check, all, connector)
 	if err != nil {
 		logf(stderr, "connectorgen certification-matrix: %v\n", err)
 		return 1
 	}
-	flows, err := buildFlowMatrix(absRoot, matrix)
-	if err != nil {
-		logf(stderr, "connectorgen certification-matrix: build flow matrix: %v\n", err)
-		return 1
-	}
-	payload, err := marshalGeneratedJSON(matrix)
-	if err != nil {
-		logf(stderr, "connectorgen certification-matrix: render capability matrix: %v\n", err)
-		return 1
-	}
-	flowPayload, err := marshalGeneratedJSON(flows)
-	if err != nil {
-		logf(stderr, "connectorgen certification-matrix: render flow matrix: %v\n", err)
-		return 1
-	}
-	statusPayload, err := marshalGeneratedJSON(buildCertificationStatusArtifact(flows))
-	if err != nil {
-		logf(stderr, "connectorgen certification-matrix: render certification status: %v\n", err)
-		return 1
-	}
 	if check {
-		if err := checkGeneratedArtifact(path, payload); err != nil {
-			logf(stderr, "connectorgen certification-matrix: %v\n", err)
-			return 1
-		}
-		if err := checkFlowGeneratedArtifact(flowPath, flowPayload); err != nil {
-			logf(stderr, "connectorgen certification-matrix: %v\n", err)
-			return 1
-		}
-		if err := checkCertificationStatusGeneratedArtifact(statusPath, statusPayload); err != nil {
-			logf(stderr, "connectorgen certification-matrix: %v\n", err)
-			return 1
-		}
-		logf(stdout, "certification matrices are current: connectors=%d capability_complete=%d certified=%d\n", matrix.Baseline.Connectors, matrix.Baseline.CapabilityComplete, flows.Baseline.Certified)
+		logf(stdout, "certification shards are current: connectors=%d capability_complete=%d certified=%d\n", result.capabilities.Baseline.Connectors, result.capabilities.Baseline.CapabilityComplete, result.flows.Baseline.Certified)
 		return 0
 	}
-	if err := writeGeneratedArtifact(path, payload); err != nil {
-		logf(stderr, "connectorgen certification-matrix: write capability matrix: %v\n", err)
-		return 1
+	if all {
+		logf(stdout, "generated certification shards: scope=%s connectors=%d capability_complete=%d certified=%d\n", strings.Join(result.scope, ","), result.capabilities.Baseline.Connectors, result.capabilities.Baseline.CapabilityComplete, result.flows.Baseline.Certified)
+		return 0
 	}
-	if err := writeGeneratedArtifact(flowPath, flowPayload); err != nil {
-		logf(stderr, "connectorgen certification-matrix: write flow matrix: %v\n", err)
-		return 1
-	}
-	if err := writeGeneratedArtifact(statusPath, statusPayload); err != nil {
-		logf(stderr, "connectorgen certification-matrix: write certification status: %v\n", err)
-		return 1
-	}
-	logf(stdout, "generated certification matrices: connectors=%d capability_complete=%d certified=%d\n", matrix.Baseline.Connectors, matrix.Baseline.CapabilityComplete, flows.Baseline.Certified)
+	logf(stdout, "generated certification shard: connector=%s\n", connector)
 	return 0
 }
 
+type certificationMatrixGenerationResult struct {
+	scope        []string
+	capabilities capabilityMatrix
+	flows        flowMatrix
+}
+
+// generateCertificationMatrix is the generator core. Source and output roots
+// are separate so the incremental-output contract is directly testable: a
+// scoped run writes only its requested shard.
+func generateCertificationMatrix(sourceRoot, outputRoot string, check, all bool, connector string) (certificationMatrixGenerationResult, error) {
+	result := certificationMatrixGenerationResult{}
+	statusPath := filepath.Join(outputRoot, certificationStatusPath)
+	if check && connector == "" {
+		if err := checkRetiredCertificationArtifactsAbsent(outputRoot); err != nil {
+			return result, err
+		}
+		committedShards, err := readCertificationShards(outputRoot)
+		if err != nil {
+			return result, err
+		}
+		if _, _, err := reconstructCertificationMatrices(committedShards); err != nil {
+			return result, fmt.Errorf("reconstruct committed shard union: %w", err)
+		}
+		if err := validateCertificationStatusArtifactFile(statusPath); err != nil {
+			return result, err
+		}
+	}
+	// A normal scoped run writes only its requested connector. The all-shard
+	// sweep is reserved for the deliberate status-projection refresh and drift
+	// gate, so concurrent connector lanes never touch each other's output.
+	generationScope := certificationConnectorAllowlist
+	if connector != "" {
+		generationScope = []string{connector}
+	}
+	shards, err := buildCertificationShards(sourceRoot, generationScope)
+	if err != nil {
+		return result, err
+	}
+	payloads, err := marshalCertificationShards(shards)
+	if err != nil {
+		return result, fmt.Errorf("render shards: %w", err)
+	}
+	if check {
+		capabilities, flows, err := reconstructCertificationMatrices(shards)
+		if err != nil {
+			return result, fmt.Errorf("reconstruct shard union: %w", err)
+		}
+		if connector == "" {
+			statusPayload, err := marshalGeneratedJSON(buildCertificationStatusArtifact(flows))
+			if err != nil {
+				return result, fmt.Errorf("render certification status: %w", err)
+			}
+			if err := checkCertificationShards(outputRoot, payloads); err != nil {
+				return result, err
+			}
+			if err := checkCertificationStatusGeneratedArtifact(statusPath, statusPayload); err != nil {
+				return result, err
+			}
+		} else if err := checkCertificationShardScope(outputRoot, payloads, generationScope); err != nil {
+			return result, err
+		}
+		result.scope = generationScope
+		result.capabilities = capabilities
+		result.flows = flows
+		return result, nil
+	}
+	if err := writeCertificationShardScope(outputRoot, payloads, generationScope); err != nil {
+		return result, fmt.Errorf("write certification shards: %w", err)
+	}
+	result.scope = generationScope
+	if all {
+		capabilities, flows, err := reconstructCertificationMatrices(shards)
+		if err != nil {
+			return result, fmt.Errorf("reconstruct shard union: %w", err)
+		}
+		statusPayload, err := marshalGeneratedJSON(buildCertificationStatusArtifact(flows))
+		if err != nil {
+			return result, fmt.Errorf("render certification status: %w", err)
+		}
+		if err := writeGeneratedArtifact(statusPath, statusPayload); err != nil {
+			return result, fmt.Errorf("write certification status: %w", err)
+		}
+		if err := removeRetiredCertificationArtifacts(outputRoot); err != nil {
+			return result, err
+		}
+		result.capabilities = capabilities
+		result.flows = flows
+	}
+	return result, nil
+}
+
+func certificationShardPath(repoRoot, connector string) string {
+	return filepath.Join(repoRoot, "internal", "connectors", "defs", connector, "certification-matrix.json")
+}
+
+func buildCertificationShards(repoRoot string, names []string) (map[string]certificationShard, error) {
+	if err := validateCertificationConnectorScope(names); err != nil {
+		return nil, err
+	}
+	capabilities, err := buildCapabilityMatrixForConnectors(repoRoot, certificationConnectorAllowlist)
+	if err != nil {
+		return nil, err
+	}
+	flows, err := buildFlowMatrixForConnectors(repoRoot, capabilities, certificationConnectorAllowlist)
+	if err != nil {
+		return nil, err
+	}
+	shards := make(map[string]certificationShard, len(names))
+	for _, name := range names {
+		connector, found := capabilityConnectorByName(capabilities, name)
+		if !found {
+			return nil, fmt.Errorf("certification scope %q has no capability connector", name)
+		}
+		workflow, found := workflowSetByConnector(flows.Workflows, name)
+		if !found {
+			return nil, fmt.Errorf("certification scope %q has no workflow cells", name)
+		}
+		syncCells, found := syncModeSetByConnector(flows.SyncModeCells, name)
+		if !found {
+			return nil, fmt.Errorf("certification scope %q has no sync-mode cells", name)
+		}
+		roles, found := rolesByConnector(flows.ConnectorRoles, name)
+		if !found {
+			return nil, fmt.Errorf("certification scope %q has no flow roles", name)
+		}
+		shards[name] = certificationShard{
+			SchemaVersion:    certificationSchemaVersion,
+			GeneratedCommand: "go run ./cmd/connectorgen certification-matrix --connector " + name,
+			Connector:        connector,
+			FunctionKinds:    append([]functionKind(nil), capabilities.FunctionKinds...),
+			FlowKinds:        append([]flowKind(nil), flows.FlowKinds...),
+			WorkflowKinds:    append([]workflowKind(nil), flows.WorkflowKinds...),
+			Workflow:         workflow,
+			SyncModeKinds:    append([]syncModeKind(nil), flows.SyncModeKinds...),
+			SyncPrimitives:   append([]syncPrimitive(nil), flows.SyncPrimitives...),
+			SyncModeCells:    syncCells,
+			ConnectorRoles:   roles,
+			PairOverrides:    pairOverridesForSource(flows.PairOverrides, name),
+		}
+	}
+	return shards, nil
+}
+
+func validateCertificationConnectorScope(names []string) error {
+	if len(names) == 0 {
+		return errors.New("certification connector scope is empty")
+	}
+	seen := make(map[string]bool, len(names))
+	for _, name := range names {
+		if !certificationConnectorAllowed(name) {
+			return fmt.Errorf("connector %q is not certification-allowlisted", name)
+		}
+		if seen[name] {
+			return fmt.Errorf("certification connector scope duplicates %q", name)
+		}
+		seen[name] = true
+	}
+	return nil
+}
+
+func capabilityConnectorByName(matrix capabilityMatrix, name string) (capabilityConnector, bool) {
+	for _, connector := range matrix.Connectors {
+		if connector.Name == name {
+			return connector, true
+		}
+	}
+	return capabilityConnector{}, false
+}
+
+func workflowSetByConnector(sets []connectorWorkflowSet, name string) (connectorWorkflowSet, bool) {
+	for _, set := range sets {
+		if set.Connector == name {
+			return set, true
+		}
+	}
+	return connectorWorkflowSet{}, false
+}
+
+func syncModeSetByConnector(sets []connectorSyncModeSet, name string) (connectorSyncModeSet, bool) {
+	for _, set := range sets {
+		if set.Connector == name {
+			return set, true
+		}
+	}
+	return connectorSyncModeSet{}, false
+}
+
+func rolesByConnector(sets []connectorFlowRoles, name string) (connectorFlowRoles, bool) {
+	for _, set := range sets {
+		if set.Connector == name {
+			return set, true
+		}
+	}
+	return connectorFlowRoles{}, false
+}
+
+func pairOverridesForSource(overrides []flowPairOverride, source string) []flowPairOverride {
+	out := make([]flowPairOverride, 0)
+	for _, override := range overrides {
+		if override.Source == source {
+			out = append(out, override)
+		}
+	}
+	return out
+}
+
+func marshalCertificationShards(shards map[string]certificationShard) (map[string][]byte, error) {
+	payloads := make(map[string][]byte, len(shards))
+	for _, name := range certificationConnectorAllowlist {
+		shard, found := shards[name]
+		if !found {
+			continue
+		}
+		payload, err := marshalGeneratedJSON(shard)
+		if err != nil {
+			return nil, fmt.Errorf("marshal connector %q shard: %w", name, err)
+		}
+		payloads[name] = payload
+	}
+	return payloads, nil
+}
+
+func writeCertificationShardScope(repoRoot string, payloads map[string][]byte, names []string) error {
+	if err := validateCertificationConnectorScope(names); err != nil {
+		return err
+	}
+	for _, name := range names {
+		payload, found := payloads[name]
+		if !found {
+			return fmt.Errorf("connector %q has no generated shard payload", name)
+		}
+		if err := writeGeneratedArtifact(certificationShardPath(repoRoot, name), payload); err != nil {
+			return fmt.Errorf("connector %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func readCertificationShards(repoRoot string) (map[string]certificationShard, error) {
+	shards := make(map[string]certificationShard, len(certificationConnectorAllowlist))
+	for _, name := range certificationConnectorAllowlist {
+		path := certificationShardPath(repoRoot, name)
+		raw, err := os.ReadFile(path)
+		if err != nil {
+			if errors.Is(err, fs.ErrNotExist) {
+				return nil, fmt.Errorf("generated certification shard %q is missing; run `go run ./cmd/connectorgen certification-matrix --connector %s`", filepath.ToSlash(path), name)
+			}
+			return nil, fmt.Errorf("read certification shard %q: %w", filepath.ToSlash(path), err)
+		}
+		var shard certificationShard
+		if err := decodeStrictJSON(raw, &shard); err != nil {
+			return nil, fmt.Errorf("parse certification shard %q: %w", filepath.ToSlash(path), err)
+		}
+		if err := validateCertificationShard(shard); err != nil {
+			return nil, fmt.Errorf("invalid certification shard %q: %w", filepath.ToSlash(path), err)
+		}
+		if shard.Connector.Name != name {
+			return nil, fmt.Errorf("certification shard %q owns connector %q, want %q", filepath.ToSlash(path), shard.Connector.Name, name)
+		}
+		shards[name] = shard
+	}
+	return shards, nil
+}
+
+func checkCertificationShards(repoRoot string, expected map[string][]byte) error {
+	if _, err := readCertificationShards(repoRoot); err != nil {
+		return err
+	}
+	return checkCertificationShardScope(repoRoot, expected, certificationConnectorAllowlist)
+}
+
+// checkCertificationShardScope is deliberately narrower than the global
+// status check: a connector evidence reducer may verify its freshly generated
+// shard while other connectors and status.json remain owned by final fan-in.
+func checkCertificationShardScope(repoRoot string, expected map[string][]byte, names []string) error {
+	if err := validateCertificationConnectorScope(names); err != nil {
+		return err
+	}
+	for _, name := range names {
+		payload, found := expected[name]
+		if !found {
+			return fmt.Errorf("connector %q has no expected certification shard", name)
+		}
+		path := certificationShardPath(repoRoot, name)
+		existing, err := os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("read certification shard %q: %w", filepath.ToSlash(path), err)
+		}
+		if !bytes.Equal(existing, payload) {
+			return fmt.Errorf("generated certification shard %q has drift; run `go run ./cmd/connectorgen certification-matrix --connector %s`", filepath.ToSlash(path), name)
+		}
+	}
+	return nil
+}
+
+func checkRetiredCertificationArtifactsAbsent(repoRoot string) error {
+	for _, relative := range []string{capabilityMatrixPath, flowMatrixPath} {
+		path := filepath.Join(repoRoot, relative)
+		if _, err := os.Stat(path); err == nil {
+			return fmt.Errorf("retired aggregate %q is present; run `go run ./cmd/connectorgen certification-matrix --all`", filepath.ToSlash(path))
+		} else if !errors.Is(err, fs.ErrNotExist) {
+			return fmt.Errorf("inspect retired aggregate %q: %w", filepath.ToSlash(path), err)
+		}
+	}
+	return nil
+}
+
+func removeRetiredCertificationArtifacts(repoRoot string) error {
+	for _, relative := range []string{capabilityMatrixPath, flowMatrixPath} {
+		path := filepath.Join(repoRoot, relative)
+		if err := os.Remove(path); err != nil && !errors.Is(err, fs.ErrNotExist) {
+			return fmt.Errorf("remove %q: %w", filepath.ToSlash(path), err)
+		}
+	}
+	return nil
+}
+
+// reconstructCertificationMatrices derives the former aggregate views only in
+// memory. It is used for validation and the compact runtime status projection;
+// the aggregate JSON files are intentionally never written again.
+func reconstructCertificationMatrices(shards map[string]certificationShard) (capabilityMatrix, flowMatrix, error) {
+	if len(shards) == 0 {
+		return capabilityMatrix{}, flowMatrix{}, errors.New("certification shard union is empty")
+	}
+	names := make([]string, 0, len(shards))
+	for name := range shards {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	first := shards[names[0]]
+	capabilities := capabilityMatrix{
+		SchemaVersion:    certificationSchemaVersion,
+		GeneratedCommand: "go run ./cmd/connectorgen certification-matrix --check",
+		FunctionKinds:    append([]functionKind(nil), first.FunctionKinds...),
+		Connectors:       make([]capabilityConnector, 0, len(names)),
+		LegacyCertificationInputs: legacyCertificationInventory{
+			Ignored: true,
+			Files:   []legacyCertificationFile{},
+		},
+	}
+	flows := flowMatrix{
+		SchemaVersion:     certificationSchemaVersion,
+		GeneratedCommand:  "go run ./cmd/connectorgen certification-matrix --check",
+		Mediator:          localWarehouseMediator,
+		FlowKinds:         append([]flowKind(nil), first.FlowKinds...),
+		WorkflowKinds:     append([]workflowKind(nil), first.WorkflowKinds...),
+		Workflows:         make([]connectorWorkflowSet, 0, len(names)),
+		SyncModeKinds:     append([]syncModeKind(nil), first.SyncModeKinds...),
+		SyncPrimitives:    append([]syncPrimitive(nil), first.SyncPrimitives...),
+		SyncModeCells:     make([]connectorSyncModeSet, 0, len(names)),
+		ConnectorRoles:    make([]connectorFlowRoles, 0, len(names)),
+		PairOverrides:     []flowPairOverride{},
+		ConnectorStatuses: []connectorCertificationStatus{},
+	}
+	for _, name := range names {
+		shard := shards[name]
+		if err := validateCertificationShard(shard); err != nil {
+			return capabilityMatrix{}, flowMatrix{}, fmt.Errorf("connector %q: %w", name, err)
+		}
+		if shard.Connector.Name != name {
+			return capabilityMatrix{}, flowMatrix{}, fmt.Errorf("connector %q shard has mismatched owner %q", name, shard.Connector.Name)
+		}
+		if !reflect.DeepEqual(first.FunctionKinds, shard.FunctionKinds) || !reflect.DeepEqual(first.FlowKinds, shard.FlowKinds) || !reflect.DeepEqual(first.WorkflowKinds, shard.WorkflowKinds) || !reflect.DeepEqual(first.SyncModeKinds, shard.SyncModeKinds) || !reflect.DeepEqual(first.SyncPrimitives, shard.SyncPrimitives) {
+			return capabilityMatrix{}, flowMatrix{}, fmt.Errorf("connector %q shard inventory differs from %q", name, names[0])
+		}
+		capabilities.Connectors = append(capabilities.Connectors, shard.Connector)
+		flows.Workflows = append(flows.Workflows, shard.Workflow)
+		flows.SyncModeCells = append(flows.SyncModeCells, shard.SyncModeCells)
+		flows.ConnectorRoles = append(flows.ConnectorRoles, shard.ConnectorRoles)
+		flows.PairOverrides = append(flows.PairOverrides, shard.PairOverrides...)
+	}
+	capabilities.Baseline = deriveCapabilityBaseline(capabilities.Connectors, capabilities.FunctionKinds)
+	rolesByConnector := make(map[string]map[string]connectorFlowRole, len(flows.ConnectorRoles))
+	for _, roles := range flows.ConnectorRoles {
+		byRole := make(map[string]connectorFlowRole, len(roles.Roles))
+		for _, role := range roles.Roles {
+			byRole[role.Role] = role
+		}
+		rolesByConnector[roles.Connector] = byRole
+	}
+	pairSets, err := buildFlowPairSets(flows.FlowKinds, rolesByConnector)
+	if err != nil {
+		return capabilityMatrix{}, flowMatrix{}, err
+	}
+	flows.PairSets = pairSets
+	flows.ConnectorStatuses = deriveConnectorStatuses(capabilities, flows)
+	flows.Baseline = deriveFlowBaseline(flows)
+	if err := validateFlowMatrix(flows); err != nil {
+		return capabilityMatrix{}, flowMatrix{}, err
+	}
+	return capabilities, flows, nil
+}
+
+func validateCertificationShard(shard certificationShard) error {
+	if shard.SchemaVersion != certificationSchemaVersion {
+		return fmt.Errorf("schema_version %d is unsupported", shard.SchemaVersion)
+	}
+	if !certificationConnectorAllowed(shard.Connector.Name) {
+		return fmt.Errorf("connector %q is not certification-allowlisted", shard.Connector.Name)
+	}
+	if shard.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --connector "+shard.Connector.Name {
+		return fmt.Errorf("generated_command %q does not identify connector %q", shard.GeneratedCommand, shard.Connector.Name)
+	}
+	for _, kind := range shard.FunctionKinds {
+		if err := validateSymbolSourceAnchor(kind.DiscoverySource); err != nil {
+			return fmt.Errorf("function kind %q discovery_source: %w", kind.ID, err)
+		}
+		if kind.ExecutorSource != "" {
+			if err := validateSymbolSourceAnchor(kind.ExecutorSource); err != nil {
+				return fmt.Errorf("function kind %q executor_source: %w", kind.ID, err)
+			}
+		}
+	}
+	for _, kind := range shard.WorkflowKinds {
+		if err := validateSymbolSourceAnchor(kind.DiscoverySource); err != nil {
+			return fmt.Errorf("workflow kind %q discovery_source: %w", kind.ID, err)
+		}
+	}
+	for _, kind := range shard.SyncModeKinds {
+		if err := validateSymbolSourceAnchor(kind.DiscoverySource); err != nil {
+			return fmt.Errorf("sync mode %q discovery_source: %w", kind.ID, err)
+		}
+	}
+	for _, primitive := range shard.SyncPrimitives {
+		if err := validateSymbolSourceAnchor(primitive.DiscoverySource); err != nil {
+			return fmt.Errorf("sync primitive %q discovery_source: %w", primitive.ID, err)
+		}
+	}
+	capabilities := capabilityMatrix{FunctionKinds: shard.FunctionKinds, Connectors: []capabilityConnector{shard.Connector}}
+	if err := validateCapabilityMatrix(capabilities); err != nil {
+		return err
+	}
+	flows := flowMatrix{
+		FlowKinds:         shard.FlowKinds,
+		WorkflowKinds:     shard.WorkflowKinds,
+		Workflows:         []connectorWorkflowSet{shard.Workflow},
+		SyncModeKinds:     shard.SyncModeKinds,
+		SyncPrimitives:    shard.SyncPrimitives,
+		SyncModeCells:     []connectorSyncModeSet{shard.SyncModeCells},
+		ConnectorRoles:    []connectorFlowRoles{shard.ConnectorRoles},
+		PairOverrides:     []flowPairOverride{},
+		ConnectorStatuses: []connectorCertificationStatus{},
+	}
+	// Full flow validation requires derived pair sets and statuses. Build them
+	// from this singleton's roles before validating the complete structure.
+	rolesByConnector := map[string]map[string]connectorFlowRole{shard.Connector.Name: {}}
+	for _, role := range shard.ConnectorRoles.Roles {
+		rolesByConnector[shard.Connector.Name][role.Role] = role
+	}
+	pairSets, err := buildFlowPairSets(flows.FlowKinds, rolesByConnector)
+	if err != nil {
+		return err
+	}
+	flows.SchemaVersion = certificationSchemaVersion
+	flows.GeneratedCommand = "go run ./cmd/connectorgen certification-matrix --check"
+	flows.Mediator = localWarehouseMediator
+	flows.PairSets = pairSets
+	flows.ConnectorStatuses = deriveConnectorStatuses(capabilities, flows)
+	flows.Baseline = deriveFlowBaseline(flows)
+	if err := validateFlowMatrix(flows); err != nil {
+		return err
+	}
+	seenOverrides := make(map[string]bool, len(shard.PairOverrides))
+	knownFlowKinds := make(map[string]flowKind, len(shard.FlowKinds))
+	for _, kind := range shard.FlowKinds {
+		knownFlowKinds[kind.ID] = kind
+	}
+	for _, override := range shard.PairOverrides {
+		key := strings.Join([]string{override.FlowKind, override.Source, override.Destination}, "\x00")
+		if seenOverrides[key] {
+			return fmt.Errorf("pair override %q is duplicated", key)
+		}
+		seenOverrides[key] = true
+		kind, known := knownFlowKinds[override.FlowKind]
+		if override.Source != shard.Connector.Name || !certificationConnectorAllowed(override.Destination) || !known || override.Mediator != localWarehouseMediator {
+			return fmt.Errorf("pair override %q has an invalid shard-local identity", key)
+		}
+		if err := validateConnectorFlowRole(override.DestinationRole); err != nil || override.DestinationRole.Role != kind.DestinationRole {
+			return fmt.Errorf("pair override %q has invalid destination role context", key)
+		}
+		sourceRole, found := flowRoleForConnector([]connectorFlowRoles{shard.ConnectorRoles}, shard.Connector.Name, kind.SourceRole)
+		if !found {
+			return fmt.Errorf("pair override %q cannot target an inapplicable source or destination role", key)
+		}
+		base := baseFlowCell(sourceRole, override.DestinationRole)
+		if !base.Applicable {
+			return fmt.Errorf("pair override %q cannot target an inapplicable source or destination role", key)
+		}
+		if !flowCellMatchesRoleBase(override.Cell, base) {
+			return fmt.Errorf("pair override %q facts do not match its source and destination roles", key)
+		}
+		if err := validateFlowCertificationCell(override.Cell); err != nil {
+			return fmt.Errorf("pair override %q: %w", key, err)
+		}
+	}
+	return nil
+}
+
 // buildCapabilityMatrix derives every matrix fact from source, registered
-// runtime types, recorded fixtures, or an accepted evidence record. It is
-// intentionally exported only inside connectorgen to keep the developer tool
-// as the sole owner of its generated artifact format.
+// runtime types, recorded fixtures, or an accepted evidence record. It remains
+// inside connectorgen so the developer tool is the sole owner of the generated
+// shard format.
 func buildCapabilityMatrix(repoRoot string) (capabilityMatrix, error) {
+	return buildCapabilityMatrixForConnectors(repoRoot, nil)
+}
+
+func buildCapabilityMatrixForConnectors(repoRoot string, names []string) (capabilityMatrix, error) {
 	kinds, err := discoverFunctionKinds(repoRoot)
 	if err != nil {
 		return capabilityMatrix{}, err
 	}
-	bundles, err := loadSourceBundles(repoRoot)
+	bundles, err := loadSourceBundlesForConnectors(repoRoot, names)
 	if err != nil {
 		return capabilityMatrix{}, err
 	}
-	evidence, err := loadAcceptedEvidence(repoRoot)
+	evidence, err := loadAcceptedEvidence(repoRoot, names)
 	if err != nil {
 		return capabilityMatrix{}, err
 	}
-	sources, err := matrixConnectorSources(bundles)
+	sources, err := matrixConnectorSourcesForNames(bundles, names)
 	if err != nil {
 		return capabilityMatrix{}, err
 	}
@@ -336,19 +853,130 @@ func loadSourceBundles(repoRoot string) ([]engine.Bundle, error) {
 	return bundles, nil
 }
 
-func matrixConnectorSources(bundles []engine.Bundle) ([]matrixConnectorSource, error) {
+func loadSourceBundlesForConnectors(repoRoot string, names []string) ([]engine.Bundle, error) {
+	if len(names) == 0 {
+		return loadSourceBundles(repoRoot)
+	}
+	defsRoot := filepath.Join(repoRoot, "internal", "connectors", "defs")
+	sourceFS := os.DirFS(defsRoot)
+	bundles := make([]engine.Bundle, 0, len(names))
+	for _, name := range names {
+		scopedFS, err := scopedRuntimeOperationEndpointLedgerForCertification(sourceFS, name)
+		if err != nil {
+			return nil, fmt.Errorf("scope source connector bundle %q runtime operation endpoint ledger: %w", name, err)
+		}
+		bundle, err := engine.Load(scopedFS, name)
+		if err != nil {
+			return nil, fmt.Errorf("load source connector bundle %q: %w", name, err)
+		}
+		bundles = append(bundles, bundle)
+	}
+	return bundles, nil
+}
+
+// scopedRuntimeOperationEndpointLedgerForCertification presents one connector's
+// generated ledger entry to the certification generator. Runtime loading still
+// validates the complete shipped ledger; this isolated view exists only so a
+// connector-local certification shard is independent of unrelated entries.
+func scopedRuntimeOperationEndpointLedgerForCertification(source fs.FS, connector string) (fs.FS, error) {
+	raw, err := fs.ReadFile(source, engine.RuntimeOperationEndpointLedgerFile)
+	if errors.Is(err, fs.ErrNotExist) {
+		return source, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("read %s: %w", engine.RuntimeOperationEndpointLedgerFile, err)
+	}
+	var entries map[string]json.RawMessage
+	if err := decodeStrictJSON(raw, &entries); err != nil {
+		return nil, fmt.Errorf("parse %s: %w", engine.RuntimeOperationEndpointLedgerFile, err)
+	}
+	scopedEntries := make(map[string]json.RawMessage, 1)
+	if entry, found := entries[connector]; found {
+		scopedEntries[connector] = entry
+	}
+	scopedRaw, err := json.Marshal(scopedEntries)
+	if err != nil {
+		return nil, fmt.Errorf("encode %s: %w", engine.RuntimeOperationEndpointLedgerFile, err)
+	}
+	return certificationRuntimeOperationEndpointLedgerFS{FS: source, raw: scopedRaw}, nil
+}
+
+type certificationRuntimeOperationEndpointLedgerFS struct {
+	fs.FS
+	raw []byte
+}
+
+func (f certificationRuntimeOperationEndpointLedgerFS) Open(name string) (fs.File, error) {
+	if name == engine.RuntimeOperationEndpointLedgerFile {
+		return &certificationRuntimeOperationEndpointLedgerFile{
+			Reader: bytes.NewReader(f.raw),
+			size:   int64(len(f.raw)),
+		}, nil
+	}
+	return f.FS.Open(name)
+}
+
+type certificationRuntimeOperationEndpointLedgerFile struct {
+	*bytes.Reader
+	size int64
+}
+
+func (f *certificationRuntimeOperationEndpointLedgerFile) Close() error {
+	return nil
+}
+
+func (f *certificationRuntimeOperationEndpointLedgerFile) Stat() (fs.FileInfo, error) {
+	return certificationRuntimeOperationEndpointLedgerFileInfo{size: f.size}, nil
+}
+
+type certificationRuntimeOperationEndpointLedgerFileInfo struct {
+	size int64
+}
+
+func (info certificationRuntimeOperationEndpointLedgerFileInfo) Name() string {
+	return engine.RuntimeOperationEndpointLedgerFile
+}
+
+func (info certificationRuntimeOperationEndpointLedgerFileInfo) Size() int64 {
+	return info.size
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) Mode() fs.FileMode {
+	return 0o444
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) ModTime() time.Time {
+	return time.Time{}
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) IsDir() bool {
+	return false
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) Sys() any {
+	return nil
+}
+
+func matrixConnectorSourcesForNames(bundles []engine.Bundle, scope []string) ([]matrixConnectorSource, error) {
 	bundleByName := make(map[string]*engine.Bundle, len(bundles))
 	for i := range bundles {
 		bundleByName[bundles[i].Name] = &bundles[i]
 	}
 
-	registry := bundleregistry.New()
-	names := make(map[string]bool, len(bundleByName)+len(registry.List()))
-	for name := range bundleByName {
-		names[name] = true
-	}
-	for _, metadata := range registry.List() {
-		names[metadata.Name] = true
+	names := make(map[string]bool, len(bundleByName))
+	var registry *connectors.Registry
+	if len(scope) != 0 {
+		for _, name := range scope {
+			names[name] = true
+		}
+	} else {
+		registry = bundleregistry.New()
+		for name := range bundleByName {
+			names[name] = true
+		}
+		for _, metadata := range registry.List() {
+			names[metadata.Name] = true
+		}
 	}
 
 	sortedNames := make([]string, 0, len(names))
@@ -360,7 +988,13 @@ func matrixConnectorSources(bundles []engine.Bundle) ([]matrixConnectorSource, e
 	out := make([]matrixConnectorSource, 0, len(sortedNames))
 	for _, name := range sortedNames {
 		bundle := bundleByName[name]
-		connector, registered := registry.Get(name)
+		var connector connectors.Connector
+		var registered bool
+		if registry != nil {
+			connector, registered = registry.Get(name)
+		} else {
+			connector, registered = scopedMatrixConnector(name, bundle)
+		}
 		integrationType := ""
 		if bundle != nil {
 			integrationType = bundle.Metadata.IntegrationType
@@ -386,6 +1020,21 @@ func matrixConnectorSources(bundles []engine.Bundle) ([]matrixConnectorSource, e
 		})
 	}
 	return out, nil
+}
+
+func scopedMatrixConnector(name string, bundle *engine.Bundle) (connectors.Connector, bool) {
+	if bundle == nil {
+		return nil, false
+	}
+	if name == "postgres" {
+		// Certification has already loaded this bundle through its scoped ledger
+		// filesystem. Calling the native factory here would reload defs.FS and
+		// make an unrelated, non-allowlisted ledger entry able to break this
+		// generator. Preserve PostgreSQL's native unsupported Write shape while
+		// keeping the source bundle that the scoped generator actually validated.
+		return scopedPostgresMatrixConnector{Connector: engine.New(*bundle, nil)}, true
+	}
+	return engine.New(*bundle, nil), true
 }
 
 func buildCertificationCell(repoRoot string, source matrixConnectorSource, kind functionKind, evidence []acceptedEvidence) (certificationCell, error) {
@@ -575,7 +1224,7 @@ func isEngineConnector(connector connectors.Connector) bool {
 }
 
 // methodDirectlyReturnsUnsupported inspects only the concrete registered
-// method's source. It avoids calling Write/Read while generating a matrix and
+// method's source. It avoids calling Write/Read while generating a shard and
 // therefore cannot accidentally make a network request or mutate a provider.
 func methodDirectlyReturnsUnsupported(repoRoot string, connector connectors.Connector, method string) (bool, error) {
 	typ := reflect.TypeOf(connector)
@@ -586,10 +1235,18 @@ func methodDirectlyReturnsUnsupported(repoRoot string, connector connectors.Conn
 		typ = typ.Elem()
 	}
 	const modulePrefix = "polymetrics.ai/"
-	if !strings.HasPrefix(typ.PkgPath(), modulePrefix) {
-		return false, nil
+	var dir string
+	if typ.PkgPath() == "main" {
+		// The scoped PostgreSQL matrix view is generator-local. `go run` records
+		// its runtime type under main, unlike a test build which retains the
+		// module path, so resolve its real source directory explicitly.
+		dir = filepath.Join(repoRoot, "cmd", "connectorgen")
+	} else {
+		if !strings.HasPrefix(typ.PkgPath(), modulePrefix) {
+			return false, nil
+		}
+		dir = filepath.Join(repoRoot, strings.TrimPrefix(typ.PkgPath(), modulePrefix))
 	}
-	dir := filepath.Join(repoRoot, strings.TrimPrefix(typ.PkgPath(), modulePrefix))
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return false, fmt.Errorf("read runtime implementation source %q: %w", dir, err)
@@ -741,13 +1398,14 @@ func matchingCapabilityEvidence(evidence []acceptedEvidence, connectorName, kind
 			continue
 		}
 		matched = append(matched, evidencePointer{
-			Record:          item.recordPath,
-			Provider:        item.Provider,
-			ExecutedAt:      item.ExecutedAt,
-			RunID:           item.RunID,
-			CredentialScope: item.CredentialScope,
-			CredentialNote:  item.CredentialNote,
-			Proof:           item.Proof,
+			Record:               item.recordPath,
+			Provider:             item.Provider,
+			ExecutedAt:           item.ExecutedAt,
+			RunID:                item.RunID,
+			CredentialScope:      item.CredentialScope,
+			CredentialNote:       item.CredentialNote,
+			CredentialScopeProof: item.CredentialScopeProof,
+			Proof:                item.Proof,
 		})
 	}
 	sort.Slice(matched, func(i, j int) bool {
@@ -826,7 +1484,7 @@ func validateEvidencePointer(evidence evidencePointer) error {
 	if err := validateEvidenceRunID(evidence.RunID); err != nil {
 		return fmt.Errorf("run_id: %w", err)
 	}
-	if err := validateFullParityCredential(evidence.CredentialScope, evidence.CredentialNote); err != nil {
+	if err := validateCredentialScopeClaim(evidence.CredentialScope, evidence.CredentialNote, evidence.CredentialScopeProof); err != nil {
 		return fmt.Errorf("credential: %w", err)
 	}
 	if err := validateEmbeddedEvidenceProof(evidence.Proof); err != nil {
@@ -848,14 +1506,14 @@ func validateNotApplicableReason(reason notApplicableReason) error {
 }
 
 func validateAcceptedEvidence(evidence acceptedEvidence) error {
-	if evidence.SchemaVersion != certificationSchemaVersion {
+	if evidence.SchemaVersion != acceptedEvidenceSchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", evidence.SchemaVersion)
+	}
+	if err := validateCredentialScopeClaim(evidence.CredentialScope, evidence.CredentialNote, evidence.CredentialScopeProof); err != nil {
+		return fmt.Errorf("credential: %w", err)
 	}
 	if evidence.Status != evidenceStatusPassed {
 		return fmt.Errorf("status %q is not accepted", evidence.Status)
-	}
-	if err := validateFullParityCredential(evidence.CredentialScope, evidence.CredentialNote); err != nil {
-		return fmt.Errorf("credential: %w", err)
 	}
 	if err := validateEvidenceProvider(evidence.Provider); err != nil {
 		return fmt.Errorf("provider: %w", err)
@@ -927,7 +1585,31 @@ func validateFullParityCredential(scope, note string) error {
 	return nil
 }
 
-func loadAcceptedEvidence(repoRoot string) ([]acceptedEvidence, error) {
+func validateCredentialScopeClaim(scope, note, proof string) error {
+	switch scope {
+	case credentialScopeFullParity:
+		// Preserve the exact legacy validator as a distinct guard, then prove
+		// the new record says which report fact established that claim.
+		if err := validateFullParityCredential(scope, note); err != nil {
+			return err
+		}
+		if proof != credentialScopeProofFullParityStage {
+			return fmt.Errorf("full-parity scope proof %q must be %q", proof, credentialScopeProofFullParityStage)
+		}
+	case credentialScopeObservedOperations:
+		if note != observedOperationsCredentialNote {
+			return errors.New("observed-operations note must state the bounded protocol-exchange claim exactly")
+		}
+		if proof != credentialScopeProofProtocolExchanges {
+			return fmt.Errorf("observed-operations scope proof %q must be %q", proof, credentialScopeProofProtocolExchanges)
+		}
+	default:
+		return fmt.Errorf("scope %q is unsupported", scope)
+	}
+	return nil
+}
+
+func loadAcceptedEvidence(repoRoot string, scope []string) ([]acceptedEvidence, error) {
 	dir := filepath.Join(repoRoot, acceptedEvidenceDirectory)
 	entries, err := os.ReadDir(dir)
 	if errors.Is(err, fs.ErrNotExist) {
@@ -953,12 +1635,25 @@ func loadAcceptedEvidence(repoRoot string) ([]acceptedEvidence, error) {
 		if err != nil {
 			return nil, fmt.Errorf("read accepted evidence %q: %w", entry.Name(), err)
 		}
+		if err := validateAcceptedEvidenceScopeIdentityKeys(raw); err != nil {
+			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
+		}
+		var identity acceptedEvidenceScopeIdentity
+		if err := json.Unmarshal(raw, &identity); err != nil {
+			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
+		}
+		if len(scope) != 0 && acceptedEvidenceScopeIdentityIsConclusiveNonallowlisted(identity) {
+			continue
+		}
 		var evidence acceptedEvidence
 		if err := decodeStrictJSON(raw, &evidence); err != nil {
 			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
 		}
 		if err := validateAcceptedEvidence(evidence); err != nil {
 			return nil, fmt.Errorf("accepted evidence %q: %w", entry.Name(), err)
+		}
+		if len(scope) != 0 && !acceptedEvidenceWithinScope(evidence, scope) {
+			continue
 		}
 		relative, err := filepath.Rel(repoRoot, path)
 		if err != nil {
@@ -969,6 +1664,89 @@ func loadAcceptedEvidence(repoRoot string) ([]acceptedEvidence, error) {
 	}
 	sort.Slice(items, func(i, j int) bool { return items[i].recordPath < items[j].recordPath })
 	return items, nil
+}
+
+func validateAcceptedEvidenceScopeIdentityKeys(raw []byte) error {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	token, err := decoder.Token()
+	if err != nil {
+		return err
+	}
+	opening, ok := token.(json.Delim)
+	if !ok || opening != '{' {
+		return nil
+	}
+
+	seen := make(map[string]struct{}, 4)
+	for decoder.More() {
+		token, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		field, ok := token.(string)
+		if !ok {
+			return errors.New("accepted evidence object key is not a string")
+		}
+		if canonicalField, identityField := acceptedEvidenceScopeIdentityField(field); identityField {
+			if _, found := seen[canonicalField]; found {
+				return fmt.Errorf("duplicate accepted evidence identity field %q", canonicalField)
+			}
+			seen[canonicalField] = struct{}{}
+		}
+		var value json.RawMessage
+		if err := decoder.Decode(&value); err != nil {
+			return err
+		}
+	}
+	_, err = decoder.Token()
+	return err
+}
+
+func acceptedEvidenceScopeIdentityField(field string) (string, bool) {
+	for _, identityField := range []string{"scope", "connector", "source", "destination"} {
+		if bytes.EqualFold([]byte(field), []byte(identityField)) {
+			return identityField, true
+		}
+	}
+	return "", false
+}
+
+func acceptedEvidenceWithinScope(evidence acceptedEvidence, scope []string) bool {
+	return acceptedEvidenceScopeIdentityWithinScope(acceptedEvidenceScopeIdentity{
+		Scope:       evidence.Scope,
+		Connector:   evidence.Connector,
+		Source:      evidence.Source,
+		Destination: evidence.Destination,
+	}, scope)
+}
+
+func acceptedEvidenceScopeIdentityWithinScope(identity acceptedEvidenceScopeIdentity, scope []string) bool {
+	inScope := make(map[string]bool, len(scope))
+	for _, name := range scope {
+		inScope[name] = true
+	}
+	switch identity.Scope {
+	case evidenceScopeCapability, evidenceScopeWorkflow, evidenceScopeSyncMode:
+		return inScope[identity.Connector]
+	case evidenceScopeFlow:
+		return inScope[identity.Source] && certificationConnectorAllowed(identity.Destination)
+	default:
+		return false
+	}
+}
+
+func acceptedEvidenceScopeIdentityIsConclusiveNonallowlisted(identity acceptedEvidenceScopeIdentity) bool {
+	if certificationConnectorAllowed(identity.Connector) || certificationConnectorAllowed(identity.Source) || certificationConnectorAllowed(identity.Destination) {
+		return false
+	}
+	switch identity.Scope {
+	case evidenceScopeCapability, evidenceScopeWorkflow, evidenceScopeSyncMode:
+		return identity.Connector != ""
+	case evidenceScopeFlow:
+		return identity.Source != "" && identity.Destination != ""
+	default:
+		return false
+	}
 }
 
 func deriveCapabilityBaseline(connectorsIn []capabilityConnector, kinds []functionKind) capabilityBaseline {
@@ -1148,7 +1926,7 @@ func capabilityFieldsFromSource(repoRoot, path string) (map[string]string, error
 			}
 			for _, field := range structure.Fields.List {
 				for _, name := range field.Names {
-					found[snakeIdentifier(name.Name)] = sourceAt(repoRoot, path, fileSet.Position(name.Pos()).Line)
+					found[snakeIdentifier(name.Name)] = sourceSymbol(repoRoot, path, typeSpec.Name.Name+"."+name.Name)
 				}
 			}
 		}
@@ -1192,7 +1970,10 @@ func operationKindsFromSource(repoRoot, path string) (map[string]string, error) 
 					}
 					value, err := strconv.Unquote(literal.Value)
 					if err == nil {
-						found[value] = sourceAt(repoRoot, path, fileSet.Position(literal.Pos()).Line)
+						// The literal itself is not a source construct. The enclosing
+						// function plus its operation discriminator is stable across
+						// line insertions and distinguishes sibling case clauses.
+						found[value] = sourceSymbol(repoRoot, path, fn.Name.Name+"(kind="+value+")")
 					}
 				}
 			}
@@ -1228,7 +2009,7 @@ func operationExecutorAnnotations(repoRoot string) (map[string]string, error) {
 				continue
 			}
 			for _, kind := range executorKindsFromDoc(fn.Doc) {
-				source := sourceAt(repoRoot, path, fileSet.Position(fn.Pos()).Line)
+				source := sourceSymbol(repoRoot, path, functionSymbol(fn))
 				if existing, found := annotations[kind]; found && existing != source {
 					return nil, fmt.Errorf("operation kind %q has multiple executor annotations (%s, %s)", kind, existing, source)
 				}
@@ -1338,12 +2119,61 @@ func toLower(r rune) rune {
 	return r
 }
 
-func sourceAt(repoRoot, path string, line int) string {
+func sourceSymbol(repoRoot, path, symbol string) string {
 	relative, err := filepath.Rel(repoRoot, path)
 	if err != nil {
-		return filepath.ToSlash(path)
+		return filepath.ToSlash(path) + ":" + symbol
 	}
-	return fmt.Sprintf("%s:%d", filepath.ToSlash(relative), line)
+	return filepath.ToSlash(relative) + ":" + symbol
+}
+
+func functionSymbol(fn *ast.FuncDecl) string {
+	if receiver := receiverTypeName(fn); receiver != "" {
+		return receiver + "." + fn.Name.Name
+	}
+	return fn.Name.Name
+}
+
+func validateSymbolSourceAnchor(anchor string) error {
+	path, symbol, found := strings.Cut(anchor, ":")
+	if !found || filepath.IsAbs(path) || strings.HasPrefix(filepath.ToSlash(path), "../") || !strings.HasSuffix(path, ".go") || strings.TrimSpace(symbol) == "" {
+		return fmt.Errorf("source anchor %q must be relative/path.go:Symbol", anchor)
+	}
+	if _, err := strconv.Atoi(symbol); err == nil {
+		return fmt.Errorf("source anchor %q uses a line number rather than a symbol", anchor)
+	}
+	if strings.HasPrefix(symbol, "expectedOperationBlock(kind=") && strings.HasSuffix(symbol, ")") {
+		kind := strings.TrimSuffix(strings.TrimPrefix(symbol, "expectedOperationBlock(kind="), ")")
+		if isSafeProofIdentifier(kind) {
+			return nil
+		}
+	}
+	parts := strings.Split(symbol, ".")
+	if len(parts) > 2 {
+		return fmt.Errorf("source anchor %q has an ambiguous symbol", anchor)
+	}
+	for _, part := range parts {
+		if !isSourceIdentifier(part) {
+			return fmt.Errorf("source anchor %q has an invalid symbol", anchor)
+		}
+	}
+	return nil
+}
+
+func isSourceIdentifier(value string) bool {
+	if value == "" {
+		return false
+	}
+	for index, r := range value {
+		if r == '_' || r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' {
+			continue
+		}
+		if index > 0 && r >= '0' && r <= '9' {
+			continue
+		}
+		return false
+	}
+	return true
 }
 
 func marshalGeneratedJSON(value any) ([]byte, error) {
@@ -1381,20 +2211,6 @@ func checkGeneratedArtifact(path string, generated []byte) error {
 	return nil
 }
 
-func validateCapabilityMatrixArtifactFile(path string) error {
-	raw, err := os.ReadFile(path)
-	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return fmt.Errorf("generated artifact %q is missing; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
-		}
-		return fmt.Errorf("read generated artifact %q: %w", filepath.ToSlash(path), err)
-	}
-	if err := validateCapabilityMatrixArtifactJSON(raw); err != nil {
-		return fmt.Errorf("generated certification artifact %q is invalid: %w", filepath.ToSlash(path), err)
-	}
-	return nil
-}
-
 // validateCapabilityMatrixArtifactJSON validates the committed, proof-bearing
 // record independently of source generation. The later byte comparison is the
 // code cross-check; it is intentionally not a substitute for this check.
@@ -1406,6 +2222,13 @@ func validateCapabilityMatrixArtifactJSON(raw []byte) error {
 	if matrix.SchemaVersion != certificationSchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", matrix.SchemaVersion)
 	}
+	return validateCapabilityMatrix(matrix)
+}
+
+func validateCapabilityMatrix(matrix capabilityMatrix) error {
+	if matrix.SchemaVersion != 0 && matrix.SchemaVersion != certificationSchemaVersion {
+		return fmt.Errorf("schema_version %d is unsupported", matrix.SchemaVersion)
+	}
 	seenKinds := make(map[string]bool, len(matrix.FunctionKinds))
 	for _, kind := range matrix.FunctionKinds {
 		if strings.TrimSpace(kind.ID) == "" {
@@ -1413,6 +2236,16 @@ func validateCapabilityMatrixArtifactJSON(raw []byte) error {
 		}
 		if seenKinds[kind.ID] {
 			return fmt.Errorf("function_kinds duplicates %q", kind.ID)
+		}
+		if kind.DiscoverySource != "" {
+			if err := validateSymbolSourceAnchor(kind.DiscoverySource); err != nil {
+				return fmt.Errorf("function kind %q discovery_source: %w", kind.ID, err)
+			}
+		}
+		if kind.ExecutorSource != "" {
+			if err := validateSymbolSourceAnchor(kind.ExecutorSource); err != nil {
+				return fmt.Errorf("function kind %q executor_source: %w", kind.ID, err)
+			}
 		}
 		seenKinds[kind.ID] = true
 	}

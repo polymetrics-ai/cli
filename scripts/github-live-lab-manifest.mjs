@@ -6,26 +6,28 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
+import { assertPersistedArtifactSafe, stableJSONString } from "./github-live-artifact-guard.mjs";
+import { buildCases } from "./github-live-cases.mjs";
 import { assertPMOnly } from "./github-live-lab.mjs";
 
-const EXPECTED_PRE_SKIPPED_CASES = 957;
 const COHORTS = Object.freeze([
-  "personal_repo",
-  "sandbox_org_free",
-  "github_app_or_marketplace",
-  "unavailable_entitlement",
-]);
-const CLEANUP_STRATEGIES = new Set([
-  "not_applicable",
-  "delete",
-  "neutralize_and_retain",
-  "explicit_retention_required",
+  "run_owned_repository",
+  "run_owned_organization",
+  "github_app_installation",
+  "feature_or_entitlement",
 ]);
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/cli_surface.json");
 const CASES_PATH = path.join(ROOT, ".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json");
 const DEFAULT_OUTPUT = path.join(ROOT, ".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json");
+const MANIFEST_CLASSIFIER_BOUNDARY = Object.freeze({
+  owner: "polymetrics-cert",
+  owner_id: "O_manifest_classifier",
+  repo: "pm-live-lab-manifest",
+  repo_id: "R_manifest_classifier",
+  organization_id: "O_manifest_classifier",
+});
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -62,9 +64,9 @@ function entitlementFor(apiPath, commandPath) {
 }
 
 /**
- * Classify by the provider capability that must exist before a safe fixture can
- * be attempted. The sequence is intentional: App authentication and named plan
- * features override otherwise ordinary organization/repository routing.
+ * Classify a current-surface command by the run-owned boundary or provider
+ * feature it requires. These are fixture cohorts, not pre-skip reasons: a
+ * cohort remains subject to real provider admission and read-back.
  */
 export function classifyLabCohort(command) {
   if (!isPlainObject(command)) throw new Error("manifest command must be an object");
@@ -73,40 +75,40 @@ export function classifyLabCohort(command) {
   const value = `${commandPath} ${api.path}`.toLowerCase();
   if (commandPath.startsWith("apps ") || commandPath === "installation view" || api.path === "/app" || api.path.includes("/app/") || api.path.includes("/installation") || api.path.includes("/marketplace_listing/")) {
     return {
-      cohort: "github_app_or_marketplace",
+      cohort: "github_app_installation",
       credential: { class: "github_app_or_installation", requirement: "GitHub App JWT or installation credential" },
       plan_feature: api.path.includes("marketplace") ? "GitHub App with draft Marketplace listing" : "GitHub App or installation authentication",
-      target_allowlist_entry: "github_app_or_installation",
-      target_kind: "github_app_or_installation",
-      external_prerequisite: "Register/install the dedicated lab GitHub App through a documented PM surface, or record the exact interactive bootstrap impossibility.",
+      target_allowlist_entry: "run_owned_github_app_installation",
+      target_kind: "github_app_installation",
+      external_prerequisite: "Bind the captain-provided App installation to the run and prove its immutable installation identity before dispatch.",
     };
   }
   if (/(?:\/enterprises?\/|enterprise|codespaces|copilot|code-scanning|code-quality|secret-scanning|dependabot|vulnerability-alert|private-vulnerability|security-advisories|\/billing\/|\/settings\/billing\/)/u.test(value)) {
     return {
-      cohort: "unavailable_entitlement",
-      credential: { class: "user_or_installation_with_feature", requirement: "credential with the named GitHub feature entitlement" },
+      cohort: "feature_or_entitlement",
+      credential: { class: "github_app_installation", requirement: "captain-provided GitHub App installation credential with the named feature entitlement" },
       plan_feature: entitlementFor(api.path, commandPath),
-      target_allowlist_entry: "entitlement_scoped_lab_target",
+      target_allowlist_entry: "run_owned_entitlement_target",
       target_kind: "entitlement_scoped_resource",
-      external_prerequisite: `Enable or trial ${entitlementFor(api.path, commandPath)} on an isolated lab target with the least required permission.`,
+      external_prerequisite: `Verify ${entitlementFor(api.path, commandPath)} on the run-owned Polymetrics-Cert boundary before dispatch.`,
     };
   }
   if (hasOrgTarget(command, api.path)) {
     return {
-      cohort: "sandbox_org_free",
-      credential: { class: "organization_admin_user", requirement: "GitHub Free sandbox organization owner/admin credential" },
-      plan_feature: "GitHub Free sandbox organization",
-      target_allowlist_entry: "sandbox_org",
+      cohort: "run_owned_organization",
+      credential: { class: "github_app_installation", requirement: "captain-provided GitHub App installation credential" },
+      plan_feature: "run-owned Polymetrics-Cert organization",
+      target_allowlist_entry: "run_owned_organization",
       target_kind: "organization",
-      external_prerequisite: "Create or name the dedicated GitHub Free sandbox organization and resolve its immutable organization ID through pm github.",
+      external_prerequisite: "Resolve the immutable Polymetrics-Cert organization ID into the run boundary before dispatch.",
     };
   }
   return {
-    cohort: "personal_repo",
-    credential: { class: "personal_user", requirement: "dedicated personal lab credential scoped to a private lab repository" },
-    plan_feature: "GitHub Free personal private repository",
-    target_allowlist_entry: "personal_repo",
-    target_kind: "repository_or_personal_account",
+    cohort: "run_owned_repository",
+    credential: { class: "github_app_installation", requirement: "captain-provided GitHub App installation credential" },
+    plan_feature: "run-owned Polymetrics-Cert repository",
+    target_allowlist_entry: "run_owned_repository",
+    target_kind: "repository",
     external_prerequisite: null,
   };
 }
@@ -115,41 +117,29 @@ function isWrite(command) {
   return command.intent === "reverse_etl" || command.intent === "direct_write";
 }
 
-function cleanupPlan(command, commands) {
+function cleanupPlan(command) {
   if (!isWrite(command)) return { command: null, strategy: "not_applicable" };
-  if (command.path === "issue create") {
-    const closeIssue = commands.find((item) => item.path === "issue close" && item.availability === "implemented");
-    if (!closeIssue) throw new Error("issue create requires implemented issue close neutralization");
-    return { command: closeIssue.path, strategy: "neutralize_and_retain" };
-  }
-  const namespace = String(command.path || "").split(" ")[0];
-  const deleteCandidates = commands
-    .filter((item) => isWrite(item) && item.availability === "implemented" && /\bdelete\b/u.test(String(item.path || "")))
-    .sort((left, right) => String(left.path).localeCompare(String(right.path)));
-  const sameNamespace = deleteCandidates.find((item) => String(item.path).startsWith(`${namespace} `));
-  if (sameNamespace) return { command: sameNamespace.path, strategy: "delete" };
   return { command: null, strategy: "explicit_retention_required" };
 }
 
-function setupPM(cohort) {
-  if (cohort === "github_app_or_marketplace") {
-    return ["pm github apps get-authenticated --credential {{credential_name}} --root {{project_root}} --json"];
+function lifecyclePlan(command, classifierCase) {
+  if (typeof classifierCase?.untestable_reason === "string") {
+    return {
+      status: isWrite(command) && classifierCase.untestable_reason.includes("no per-operation fixture/read-back/inverse-cleanup resolver")
+        ? "requires_typed_lifecycle"
+        : "untestable",
+      reason: classifierCase.untestable_reason,
+    };
   }
-  if (cohort === "sandbox_org_free") {
-    return ["pm github repo view --credential {{credential_name}} --root {{project_root}} --json"];
-  }
-  if (cohort === "unavailable_entitlement") {
-    return ["pm github rate-limit get --credential {{credential_name}} --root {{project_root}} --json"];
-  }
-  return ["pm github repo view --credential {{credential_name}} --root {{project_root}} --json"];
+  return {
+    status: "ready_for_provider_result",
+    reason: null,
+  };
 }
 
-function assertionPM(command, classification) {
-  if (classification.cohort === "github_app_or_marketplace") {
-    return "pm github apps get-authenticated --credential {{credential_name}} --root {{project_root}} --json";
-  }
-  if (isWrite(command)) {
-    return "pm github repo view --credential {{credential_name}} --root {{project_root}} --json";
+function assertionPM(command, lifecycle) {
+  if (lifecycle.status !== "ready_for_provider_result") {
+    return null;
   }
   return `pm github ${command.path} {{assertion_flags}} --credential {{credential_name}} --root {{project_root}} --json`;
 }
@@ -162,29 +152,34 @@ function residualState(command, cleanup) {
   if (cleanup.strategy === "neutralize_and_retain") {
     return "Independent PM read-back must show the fixture neutralized; the append-only cleanup ledger must retain it with the reason deletion is unavailable.";
   }
-  return "Independent PM read-back must show the run-owned fixture absent, neutralized, or explicitly retained with a reason.";
+  return "No generic read-back or cleanup assertion is valid: this write remains untestable until a typed fixture lifecycle is declared.";
 }
 
-function earliestDivergence(historicalReason, classification) {
-  if (classification.cohort === "github_app_or_marketplace") {
-    return "Historical classifier stopped before PM dispatch because only a user credential was available; the App/installation boundary and credential class are the first new branch.";
+function earliestDivergence(baselineReason, classification) {
+  if (classification.cohort === "github_app_installation") {
+    return "The prior user-token classifier did not have the captain-provided App installation identity; bind that identity and then require a real PM response/read-back.";
   }
-  if (classification.cohort === "unavailable_entitlement") {
-    return "Historical classifier stopped before PM dispatch because the target feature/plan was unavailable; entitlement resolution is the first new branch.";
+  if (classification.cohort === "feature_or_entitlement") {
+    return "The trial and App credentials make provider admission observable; retain the named feature requirement and record its actual provider result rather than pre-skipping it.";
   }
-  if (/outside the pinned|no approved cleanup-safe fixture|already exists|retain/i.test(historicalReason)) {
-    return "Historical classifier stopped before PM dispatch at the pinned-repository cleanup boundary; immutable lab target resolution and fixture provisioning are the first new branch.";
+  if (/outside the pinned|no approved cleanup-safe fixture|already exists|retain/i.test(baselineReason)) {
+    return "The frozen personal-repository restriction is removed; resolve the immutable run-owned Polymetrics-Cert target and prove fixture lifecycle before dispatch.";
   }
-  return "Historical classifier stopped before PM dispatch because a resource/read-back fixture was absent; the parameterized PM fixture resolver is the first new branch.";
+  return "The command remains in the current surface; generate a run-bound input and require its real provider result/read-back rather than relying on the historical classification.";
 }
 
-function rowFor({ command, caseItem, commands, index }) {
+function rowFor({ command, archivedCase, classifierCase, index }) {
   const classification = classifyLabCohort(command);
   const api = firstAPI(command);
-  const cleanup = cleanupPlan(command, commands);
+  const cleanup = cleanupPlan(command);
+  const lifecycle = lifecyclePlan(command, classifierCase);
   const destructive = isWrite(command) && (/\bdelete\b/u.test(command.path) || command.risk === "destructive");
-  const historicalReason = String(caseItem.untestable_reason);
-  const testPM = `pm github ${command.path} {{command_flags}} --credential {{credential_name}} --root {{project_root}} --json`;
+  const baselineReason = typeof archivedCase?.untestable_reason === "string"
+    ? archivedCase.untestable_reason
+    : "not pre-skipped in the frozen case ledger; current surface membership is the source of truth";
+  const testPM = lifecycle.status === "ready_for_provider_result"
+    ? `pm github ${command.path} {{command_flags}} --credential {{credential_name}} --root {{project_root}} --json`
+    : null;
   const cleanupPM = cleanup.command
     ? `pm github ${cleanup.command} {{cleanup_flags}} --credential {{credential_name}} --root {{project_root}} --json`
     : null;
@@ -193,135 +188,108 @@ function rowFor({ command, caseItem, commands, index }) {
     command: command.path,
     intent: command.intent || "",
     api,
-    historical_reason: historicalReason,
+    baseline_reason: baselineReason,
     cohort: classification.cohort,
     target: { kind: classification.target_kind, lifecycle: "resolve_slug_and_immutable_id_before_write" },
     target_allowlist_entry: classification.target_allowlist_entry,
     credential: classification.credential,
     plan_feature: classification.plan_feature,
-    setup_pm: setupPM(classification.cohort),
+    setup_pm: null,
     test_pm: testPM,
-    assert_pm: assertionPM(command, classification),
+    assert_pm: assertionPM(command, lifecycle),
     cleanup_pm: cleanupPM,
     cleanup_strategy: cleanup.strategy,
+    lifecycle_status: lifecycle.status,
+    ...(lifecycle.reason ? { lifecycle_reason: lifecycle.reason } : {}),
     destructive_acknowledgement: destructive
       ? "required: use the connector-provided typed destructive confirmation after preview"
       : "not required by the current command contract; reverse-ETL approval still applies to writes",
     residual_state_check: residualState(command, cleanup),
-    earliest_divergence: earliestDivergence(historicalReason, classification),
+    earliest_divergence: earliestDivergence(baselineReason, classification),
     external_prerequisite: classification.external_prerequisite,
   };
 }
 
-/** Build one reproducible row for every preserved historical pre-skip. */
-export function buildLabManifest({ surface, cases }) {
+/** Build one reproducible row for every currently implemented command. */
+export function buildLabManifest({ surface, cases, boundary = MANIFEST_CLASSIFIER_BOUNDARY }) {
   if (!isPlainObject(surface) || !Array.isArray(surface.commands)) {
     throw new Error("GitHub CLI surface must contain commands");
   }
   if (!isPlainObject(cases) || !Array.isArray(cases.cases)) {
-    throw new Error("preserved live case ledger must contain cases");
+    throw new Error("baseline live case ledger must contain cases");
   }
-  const commandsByPath = new Map();
+  assertPersistedArtifactSafe(cases, "archived live case ledger");
+  const classifierCases = buildCases(surface, boundary);
+  const commandPaths = new Set();
   for (const command of surface.commands) {
     const commandPath = String(command?.path || "").trim();
-    if (commandPath === "" || commandsByPath.has(commandPath)) {
+    if (commandPath === "" || commandPaths.has(commandPath)) {
       throw new Error("GitHub CLI surface has missing or duplicate command path");
     }
-    commandsByPath.set(commandPath, command);
+    commandPaths.add(commandPath);
   }
-  const historical = cases.cases
-    .filter((item) => typeof item?.untestable_reason === "string")
-    .sort((left, right) => String(left.command).localeCompare(String(right.command)));
-  if (historical.length !== EXPECTED_PRE_SKIPPED_CASES) {
-    throw new Error(`preserved case ledger has ${historical.length} pre-skipped rows, expected ${EXPECTED_PRE_SKIPPED_CASES}`);
+  const baselineByCommand = new Map();
+  for (const item of cases.cases) {
+    const commandPath = String(item?.command || "").trim();
+    if (commandPath === "" || baselineByCommand.has(commandPath)) {
+      throw new Error("baseline case ledger has missing or duplicate command paths");
+    }
+    baselineByCommand.set(commandPath, item);
   }
-  const seen = new Set();
-  const rows = historical.map((caseItem, index) => {
-    const commandPath = String(caseItem.command || "").trim();
-    if (seen.has(commandPath)) throw new Error(`preserved case ledger duplicates ${JSON.stringify(commandPath)}`);
-    const command = commandsByPath.get(commandPath);
-    if (!command) throw new Error(`preserved case ledger names unknown command ${JSON.stringify(commandPath)}`);
-    seen.add(commandPath);
-    return rowFor({ command, caseItem, commands: surface.commands, index });
-  });
+  const classifierByCommand = new Map(classifierCases.cases.map((item) => [item.command, item]));
+  const implemented = surface.commands
+    .filter((command) => command.availability === "implemented")
+    .sort((left, right) => String(left.path).localeCompare(String(right.path)));
+  const rows = implemented.map((command, index) =>
+    rowFor({
+      command,
+      archivedCase: baselineByCommand.get(command.path),
+      classifierCase: classifierByCommand.get(command.path),
+      index,
+    }),
+  );
   const classTally = Object.fromEntries(COHORTS.map((cohort) => [cohort, 0]));
   for (const row of rows) classTally[row.cohort] += 1;
-  return {
-    schema_version: 1,
+  const manifest = {
+    schema_version: 3,
     connector: "github",
     source: {
-      case_ledger: ".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json",
-      case_ledger_sha256: stableHash(cases),
+      archived_case_ledger: ".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json",
+      archived_case_ledger_sha256: stableHash(cases),
       cli_surface: "internal/connectors/defs/github/cli_surface.json",
       cli_surface_sha256: stableHash(surface),
-      historical_pre_skipped_rows: historical.length,
+      implemented_rows: rows.length,
+      canonical_case_digest: classifierCases.case_digest,
+      current_classification: classifierCases.classification,
+      static_movement: classifierCases.measurement,
     },
     policy: {
       provider_lifecycle: "pm_github_only",
-      live_terminal_policy: "provider result required; no pre-skip is proof",
+      live_terminal_policy: "provider result is required for executable rows; untyped writes are withheld rather than counted as proof",
+      write_lifecycle_policy: "a write requires a typed fixture, resource-specific read-back, and inverse cleanup contract before dispatch",
       classes: COHORTS,
     },
     class_tally: classTally,
     rows,
   };
+  assertPersistedArtifactSafe(manifest, "lab manifest");
+  return manifest;
 }
 
 /** Validate the generated artifact against both preserved input sources. */
-export function validateLabManifest({ manifest, surface, cases }) {
-  if (!isPlainObject(manifest) || manifest.schema_version !== 1 || manifest.connector !== "github") {
-    throw new Error("lab manifest must be a schema-versioned GitHub artifact");
+export function validateLabManifest({ manifest, surface, cases, boundary = MANIFEST_CLASSIFIER_BOUNDARY }) {
+  assertPersistedArtifactSafe(manifest, "lab manifest");
+  const expected = buildLabManifest({ surface, cases, boundary });
+  if (stableJSONString(manifest) !== stableJSONString(expected)) {
+    throw new Error("lab manifest must exactly match the canonical classifier-derived artifact");
   }
-  if (!Array.isArray(manifest.rows)) throw new Error("lab manifest must contain rows");
-  const expected = buildLabManifest({ surface, cases });
-  if (manifest.rows.length !== EXPECTED_PRE_SKIPPED_CASES) {
-    throw new Error(`lab manifest rows must total ${EXPECTED_PRE_SKIPPED_CASES}`);
-  }
-  const seenCommands = new Set();
-  const seenCaseIDs = new Set();
-  const tally = Object.fromEntries(COHORTS.map((cohort) => [cohort, 0]));
   for (const row of manifest.rows) {
-    if (!isPlainObject(row)) throw new Error("lab manifest row must be an object");
-    const command = String(row.command || "").trim();
-    const caseID = String(row.case_id || "").trim();
-    if (command === "" || caseID === "") throw new Error("lab manifest row must have command and case_id");
-    if (seenCommands.has(command) || seenCaseIDs.has(caseID)) throw new Error("lab manifest duplicates command or case_id");
-    seenCommands.add(command);
-    seenCaseIDs.add(caseID);
-    if (!COHORTS.includes(row.cohort)) throw new Error(`lab manifest row ${JSON.stringify(command)} has unknown cohort`);
-    tally[row.cohort] += 1;
-    if (!Array.isArray(row.setup_pm) || row.setup_pm.length === 0) {
-      throw new Error(`lab manifest row ${JSON.stringify(command)} needs PM setup commands`);
-    }
-    row.setup_pm.forEach(assertPMOnly);
-    assertPMOnly(row.test_pm);
-    assertPMOnly(row.assert_pm);
+    if (row.setup_pm !== null) row.setup_pm.forEach(assertPMOnly);
+    if (row.test_pm !== null) assertPMOnly(row.test_pm);
+    if (row.assert_pm !== null) assertPMOnly(row.assert_pm);
     if (row.cleanup_pm !== null) assertPMOnly(row.cleanup_pm);
-    if (!CLEANUP_STRATEGIES.has(row.cleanup_strategy)) {
-      throw new Error(`lab manifest row ${JSON.stringify(command)} has an invalid cleanup_strategy`);
-    }
-    if (["delete", "neutralize_and_retain"].includes(row.cleanup_strategy) && row.cleanup_pm === null) {
-      throw new Error(`lab manifest row ${JSON.stringify(command)} requires a PM cleanup command`);
-    }
-    for (const field of ["historical_reason", "target_allowlist_entry", "plan_feature", "destructive_acknowledgement", "residual_state_check", "earliest_divergence"]) {
-      if (typeof row[field] !== "string" || row[field].trim() === "") {
-        throw new Error(`lab manifest row ${JSON.stringify(command)} is missing ${field}`);
-      }
-    }
-    if (!isPlainObject(row.credential) || typeof row.credential.class !== "string") {
-      throw new Error(`lab manifest row ${JSON.stringify(command)} is missing credential class`);
-    }
   }
-  if (JSON.stringify(tally) !== JSON.stringify(manifest.class_tally)) {
-    throw new Error("lab manifest class tally does not match its rows");
-  }
-  if (JSON.stringify(tally) !== JSON.stringify(expected.class_tally)) {
-    throw new Error("lab manifest classes drift from the source-derived classification");
-  }
-  const expectedCommands = expected.rows.map((row) => row.command).sort();
-  if (JSON.stringify([...seenCommands].sort()) !== JSON.stringify(expectedCommands)) {
-    throw new Error("lab manifest command set does not match preserved pre-skipped cases");
-  }
-  return { rows: manifest.rows.length, class_tally: tally };
+  return { rows: expected.rows.length, class_tally: expected.class_tally };
 }
 
 function parseArgs(args) {
@@ -352,6 +320,7 @@ async function main() {
     JSON.parse(await readFile(CASES_PATH, "utf8")),
   ]);
   const manifest = buildLabManifest({ surface, cases });
+  const result = validateLabManifest({ manifest, surface, cases });
   const content = `${JSON.stringify(manifest, null, 2)}\n`;
   if (options.check) {
     const existing = await readFile(output, "utf8");
@@ -359,8 +328,7 @@ async function main() {
   } else {
     await writeFile(output, content, { encoding: "utf8", mode: 0o600 });
   }
-  const result = validateLabManifest({ manifest, surface, cases });
-  process.stdout.write(`github live lab manifest: rows=${result.rows} personal_repo=${result.class_tally.personal_repo} sandbox_org_free=${result.class_tally.sandbox_org_free} github_app_or_marketplace=${result.class_tally.github_app_or_marketplace} unavailable_entitlement=${result.class_tally.unavailable_entitlement}\n`);
+  process.stdout.write(`github live lab manifest: rows=${result.rows} run_owned_repository=${result.class_tally.run_owned_repository} run_owned_organization=${result.class_tally.run_owned_organization} github_app_installation=${result.class_tally.github_app_installation} feature_or_entitlement=${result.class_tally.feature_or_entitlement}\n`);
 }
 
 if (path.resolve(process.argv[1] || "") === fileURLToPath(import.meta.url)) {

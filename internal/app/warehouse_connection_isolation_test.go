@@ -69,16 +69,90 @@ func warehouseRowIDs(rows []warehouseTableRow) []string {
 	return ids
 }
 
+func requireSameOwnerCaseEquivalentTableError(t *testing.T, err error, owner string) {
+	t.Helper()
+	var collision *warehouse.SameOwnerCaseEquivalentTableError
+	if !errors.As(err, &collision) {
+		t.Fatalf("error = %T %v, want *warehouse.SameOwnerCaseEquivalentTableError", err, err)
+	}
+	var ambiguous *warehouse.AmbiguousTableError
+	if errors.As(err, &ambiguous) {
+		t.Fatalf("error = %T %v, must not use *warehouse.AmbiguousTableError for one owner", err, err)
+	}
+	for _, want := range []string{owner, "RECORDS", "records"} {
+		if !strings.Contains(collision.Error(), want) {
+			t.Fatalf("collision error %q does not name %q", collision.Error(), want)
+		}
+	}
+	if strings.Contains(collision.Error(), "acme-token") {
+		t.Fatalf("collision error leaks credential material: %q", collision.Error())
+	}
+	if !strings.Contains(collision.Error(), "exact resolver-visible table spelling") || !strings.Contains(collision.Error(), "replacement connections") {
+		t.Fatalf("collision error %q omits the direct-read/replacement remedy", collision.Error())
+	}
+}
+
+func warehouseTree(t *testing.T, root string) []string {
+	t.Helper()
+	paths := make([]string, 0)
+	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, relErr := filepath.Rel(root, path)
+		if relErr != nil {
+			return relErr
+		}
+		if rel != "." {
+			paths = append(paths, rel)
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("walk warehouse tree: %v", err)
+	}
+	sort.Strings(paths)
+	return paths
+}
+
+// persistLegacySameOwnerCaseEquivalentInventory creates only test-owned state
+// that a previous version could have stored. Production creation must reject
+// this shape, while Open must preserve it until an operator changes it.
+func persistLegacySameOwnerCaseEquivalentInventory(t *testing.T, a *App, connection string) {
+	t.Helper()
+	for index := range a.state.Connections {
+		if a.state.Connections[index].Name != connection {
+			continue
+		}
+		base, ok := a.state.Connections[index].Streams["records"]
+		if !ok {
+			t.Fatalf("connection %q has no records stream", connection)
+		}
+		base.DestinationTable = "RECORDS"
+		// A legacy table collision is independent from the structural stream
+		// identity introduced by the current base. Give the copied stream a
+		// distinct persisted identity so Open preserves this inventory instead
+		// of correctly rejecting an unrelated duplicate-identity fixture.
+		base.StreamID = "stream_legacy_case_records"
+		a.state.Connections[index].Streams["case-records"] = base
+		if err := a.save(); err != nil {
+			t.Fatalf("persist legacy same-owner inventory: %v", err)
+		}
+		return
+	}
+	t.Fatalf("connection %q not found", connection)
+}
+
 // TestSecondConnectionDoesNotDestroyFirstConnectionRows is the regression proof
 // for the silent cross-connection data loss: two connections with distinct
-// credentials, both incremental_append_deduped, both materializing a table
+// credentials, both incremental_append, both materializing a table
 // named "records". Before the fix the second sync rebuilt the shared final
 // table from its own raw log and renamed it over the first connection's rows,
 // with no error and exit status 0.
 func TestSecondConnectionDoesNotDestroyFirstConnectionRows(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("multi_tenant_source", nil)
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
@@ -114,9 +188,8 @@ func TestSecondConnectionDoesNotDestroyFirstConnectionRows(t *testing.T) {
 		}
 	}
 
-	// One table file must never hold two connections' rows. Deduped modes lose
-	// data outright; append modes interleave tenants into one table instead.
-	// Both are the same defect, so both are asserted here.
+	// One table file must never hold two connections' rows. Append modes would
+	// interleave tenants into one table, so the files must remain separated.
 	owner := map[string]string{"a1": "acme", "a2": "acme", "g1": "globex"}
 	perFile := map[string]map[string]struct{}{}
 	for _, row := range rows {
@@ -149,7 +222,7 @@ func TestSecondConnectionDoesNotDestroyFirstConnectionRows(t *testing.T) {
 func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("multi_tenant_readback", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
@@ -199,16 +272,58 @@ func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 	}
 }
 
-// TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the honesty half
-// for every surface that reads through SQL rather than through a table
-// selector — flow query steps and an action step's source table both reach the
-// warehouse this way, and a flow manifest step carries no connection field.
-// Those surfaces cannot resolve the ambiguity today, so the refusal must not
-// promise a flag they do not have. Naming one would be worse than naming none.
+func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("scoped_sql_query", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
+
+	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+	source.records = []connectors.Record{{"id": "g1", "updated_at": "2026-08-06T00:00:02Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "globex", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+	if err := warehouse.WriteTable(ctx, filepath.Join(warehouseDir, "records"+warehouse.TableFileExt), []warehouse.Row{{"id": "root-1"}}); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, tc := range []struct {
+		name       string
+		connection string
+		wantID     string
+	}{
+		{name: "acme", connection: "acme", wantID: "a1"},
+		{name: "globex", connection: "globex", wantID: "g1"},
+		{name: "root", connection: warehouse.UnattributedConnection, wantID: "root-1"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			rows, err := a.QuerySQL(ctx, QuerySQLRequest{
+				SQL:        "SELECT id FROM records",
+				Connection: tc.connection,
+			})
+			if err != nil {
+				t.Fatalf("QuerySQL(%q) error = %v", tc.connection, err)
+			}
+			if len(rows) != 1 {
+				t.Fatalf("QuerySQL(%q) rows = %d, want 1: %v", tc.connection, len(rows), rows)
+			}
+			if got := toComparableString(rows[0]["id"]); got != tc.wantID {
+				t.Fatalf("QuerySQL(%q) id = %q, want %q", tc.connection, got, tc.wantID)
+			}
+		})
+	}
+}
+
+// TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the default
+// honesty rule for generic SQL callers: unlike a flow manifest, this method
+// cannot describe which recovery syntax its caller exposes. Flow query and
+// action steps attach a manifest-field remedy at their own boundary.
 func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("flow_query_ambiguity", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
@@ -219,22 +334,170 @@ func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err := a.QuerySQL(ctx, "SELECT * FROM records", 0)
+	_, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT * FROM records"})
 	if err == nil {
 		t.Fatal("QuerySQL(shared table name) error = nil, want the read refused rather than answered from one tenant")
 	}
 	if strings.Contains(err.Error(), "--") {
 		t.Fatalf("QuerySQL refusal %q names a flag this surface does not accept", err)
 	}
-	if a.QueryEngineName() == "jsonl" {
-		var ambiguous *warehouse.AmbiguousTableError
-		if !errors.As(err, &ambiguous) {
-			t.Fatalf("QuerySQL() error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("QuerySQL() error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	}
+	for _, want := range []string{"acme", "globex"} {
+		if !strings.Contains(ambiguous.Error(), want) {
+			t.Fatalf("ambiguity error %q does not name %q", ambiguous.Error(), want)
 		}
-		for _, want := range []string{"acme", "globex"} {
-			if !strings.Contains(ambiguous.Error(), want) {
-				t.Fatalf("ambiguity error %q does not name %q", ambiguous.Error(), want)
+	}
+}
+
+func TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_unreadable_owner", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "records", []warehouse.Row{{"id": "acme-record"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", "records", []warehouse.Row{{"id": "globex-record"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "unrelated", []warehouse.Row{{"id": "acme-unrelated"}})
+
+	globex, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, "globex"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(globex.OwnerPath(), []byte("{"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM records"})
+	var faulted *warehouse.FaultError
+	if !errors.As(err, &faulted) {
+		t.Fatalf("QuerySQL(unscoped records) error = %T %v, want *warehouse.FaultError", err, err)
+	}
+	if !faulted.Undecided {
+		t.Fatalf("QuerySQL(unscoped records) fault = %#v, want an undecided owner collision", faulted)
+	}
+
+	rows, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM records", Connection: "acme"})
+	if err != nil {
+		t.Fatalf("QuerySQL(acme records) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-record" {
+		t.Fatalf("QuerySQL(acme records) rows = %v, want only acme-record", rows)
+	}
+
+	rows, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM unrelated"})
+	if err != nil {
+		t.Fatalf("QuerySQL(unrelated) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-unrelated" {
+		t.Fatalf("QuerySQL(unrelated) rows = %v, want only acme-unrelated", rows)
+	}
+}
+
+func TestQuerySQLBindsQuotedConnectionScopedWarehouseNames(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("quoted_warehouse_tables", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	for _, table := range []string{"1orders", "orders-2026", "orders.2026"} {
+		writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", table, []warehouse.Row{{"id": "acme-" + table}})
+		writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", table, []warehouse.Row{{"id": "globex-" + table}})
+	}
+
+	for _, table := range []string{"1orders", "orders-2026", "orders.2026"} {
+		t.Run(table, func(t *testing.T) {
+			query := fmt.Sprintf("SELECT id FROM %s", quoteDuckDBIdentifier(table))
+			rows, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: query, Connection: "acme"})
+			if err != nil {
+				t.Fatalf("QuerySQL(selected %q) error = %v", table, err)
 			}
+			if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-"+table {
+				t.Fatalf("QuerySQL(selected %q) rows = %v, want only acme row", table, rows)
+			}
+
+			_, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: query})
+			var ambiguous *warehouse.AmbiguousTableError
+			if !errors.As(err, &ambiguous) {
+				t.Fatalf("QuerySQL(unscoped %q) error = %T %v, want *warehouse.AmbiguousTableError", table, err, err)
+			}
+		})
+	}
+}
+
+func TestQuerySQLReusesOneWarehouseResolverPerQuery(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_resolver_snapshot", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "orders", []warehouse.Row{{"id": "order-1"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "customers", []warehouse.Row{{"id": "customer-1"}})
+
+	resolverBuilds := 0
+	engine := duckdbEngine{
+		warehouseDir: warehouseDir,
+		newTableResolver: func(root string) (*warehouse.TableResolver, error) {
+			resolverBuilds++
+			return warehouse.NewTableResolver(root)
+		},
+	}
+	rows, err := engine.QuerySQL(ctx, QuerySQLRequest{
+		SQL:        "SELECT orders.id AS order_id, customers.id AS customer_id FROM orders CROSS JOIN customers",
+		Connection: "acme",
+	})
+	if err != nil {
+		t.Fatalf("QuerySQL(multiple tables) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["order_id"]) != "order-1" || toComparableString(rows[0]["customer_id"]) != "customer-1" {
+		t.Fatalf("QuerySQL(multiple tables) rows = %v, want joined acme rows", rows)
+	}
+	if resolverBuilds != 1 {
+		t.Fatalf("warehouse resolver builds = %d, want one inventory snapshot per query", resolverBuilds)
+	}
+}
+
+func TestQuerySQLReusesWarehouseResolverForReplacementScans(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_replacement_snapshot", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "shared", []warehouse.Row{{"id": "acme-shared"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", "shared", []warehouse.Row{{"id": "globex-shared"}})
+
+	resolverBuilds := 0
+	engine := duckdbEngine{
+		warehouseDir: warehouseDir,
+		newTableResolver: func(root string) (*warehouse.TableResolver, error) {
+			resolverBuilds++
+			return warehouse.NewTableResolver(root)
+		},
+	}
+	_, err := engine.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM shared"})
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("QuerySQL(shared) error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	}
+	if resolverBuilds != 1 {
+		t.Fatalf("warehouse resolver builds = %d, want one inventory snapshot per query", resolverBuilds)
+	}
+}
+
+func TestWarehouseQueryIdentifierQuotingAndIdentityValidation(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		want string
+	}{
+		{name: "orders", want: `"orders"`},
+		{name: `orders"2026`, want: `"orders""2026"`},
+		{name: `"; select * from records`, want: `"""; select * from records"`},
+	} {
+		if got := quoteDuckDBIdentifier(tc.name); got != tc.want {
+			t.Fatalf("quoteDuckDBIdentifier(%q) = %q, want %q", tc.name, got, tc.want)
+		}
+	}
+	for _, name := range []string{"", ".", "../records", `orders"2026`, "orders;drop", "orders records"} {
+		if warehouse.SafePathPart(name) {
+			t.Fatalf("SafePathPart(%q) = true, want unsafe identity rejected", name)
 		}
 	}
 }
@@ -248,7 +511,7 @@ func TestSyncRefusesWhenAnotherConnectionOwnsTheDirectory(t *testing.T) {
 	source := newScriptedSyncSource("ownership_guard", []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatal(err)
 	}
@@ -295,7 +558,7 @@ func TestSyncRefusesLegacyFlatWarehouse(t *testing.T) {
 	source := newScriptedSyncSource("legacy_layout", []connectors.Record{
 		{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	legacyRaw := filepath.Join(warehouseDir, warehouse.LegacyRawDirName)
 	if err := os.MkdirAll(legacyRaw, 0o700); err != nil {
@@ -331,7 +594,7 @@ func TestSyncRefusesLegacyFlatWarehouse(t *testing.T) {
 func TestCreateConnectionRejectsAmbiguousNames(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("name_validation", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	request := func(name string) CreateConnectionRequest {
 		return CreateConnectionRequest{
@@ -339,7 +602,7 @@ func TestCreateConnectionRejectsAmbiguousNames(t *testing.T) {
 			Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
 			Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
 			Streams: map[string]StreamConfig{
-				"records": {SyncMode: "incremental_append_deduped", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: "records"},
+				"records": {SyncMode: "incremental_append", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: "records"},
 			},
 		}
 	}
@@ -365,7 +628,7 @@ func TestCreateConnectionRejectsAmbiguousNames(t *testing.T) {
 func TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("stream_name_validation", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	request := func(name, stream, table string) CreateConnectionRequest {
 		return CreateConnectionRequest{
@@ -373,7 +636,7 @@ func TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize(t *te
 			Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
 			Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
 			Streams: map[string]StreamConfig{
-				stream: {SyncMode: "incremental_append_deduped", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: table},
+				stream: {SyncMode: "incremental_append", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: table},
 			},
 		}
 	}
@@ -408,6 +671,63 @@ func TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize(t *te
 	}
 }
 
+// TestCreateConnectionRejectsSameOwnerCaseEquivalentDestinationTables keeps
+// a new local-warehouse configuration from becoming impossible for DuckDB to
+// name deterministically. Exact duplicate destination spellings retain their
+// historical meaning and are intentionally not rejected by this new gate.
+func TestCreateConnectionRejectsSameOwnerCaseEquivalentDestinationTables(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("same_owner_case_destination", nil)
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	request := func(name string, secondTable string) CreateConnectionRequest {
+		return CreateConnectionRequest{
+			Name:        name,
+			Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
+			Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
+			Streams: map[string]StreamConfig{
+				"records": {
+					SyncMode:         "incremental_append_deduped",
+					CursorField:      "updated_at",
+					PrimaryKey:       []string{"id"},
+					DestinationTable: "records",
+				},
+				"case-records": {
+					SyncMode:         "incremental_append_deduped",
+					CursorField:      "updated_at",
+					PrimaryKey:       []string{"id"},
+					DestinationTable: secondTable,
+				},
+			},
+		}
+	}
+
+	_, err := a.CreateConnection(ctx, request("same-owner-case-rejected", "RECORDS"))
+	if err == nil {
+		t.Fatal("CreateConnection() accepted case-equivalent destination tables for one warehouse owner")
+	}
+	requireSameOwnerCaseEquivalentTableError(t, err, "same-owner-case-rejected")
+	if _, ok := a.findConnection("same-owner-case-rejected"); ok {
+		t.Fatal("rejected connection was stored")
+	}
+
+	if _, err := a.CreateConnection(ctx, request("same-owner-exact-spelling", "records")); err != nil {
+		t.Fatalf("CreateConnection() rejected identical destination spellings: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{
+		Name:      "same-owner-outbox",
+		Connector: "outbox",
+		Config:    map[string]string{"path": filepath.Join(a.ProjectDir(), "outbox")},
+	}); err != nil {
+		t.Fatalf("AddCredential(outbox) error = %v", err)
+	}
+	nonLocal := request("same-owner-nonlocal", "RECORDS")
+	nonLocal.Destination = EndpointConfig{Connector: "outbox", Credential: "same-owner-outbox"}
+	if _, err := a.CreateConnection(ctx, nonLocal); err != nil {
+		t.Fatalf("CreateConnection() rejected non-local destination collision: %v", err)
+	}
+}
+
 // TestReversePlanRefusesAnUnwritableWarehouseTableAtPlanTime keeps the same
 // rule on the reverse side: a plan is approved before it is written, and a
 // stored plan cannot be edited, so a table name the warehouse could never
@@ -417,7 +737,7 @@ func TestReversePlanRefusesAnUnwritableWarehouseTableAtPlanTime(t *testing.T) {
 	source := newScriptedSyncSource("reverse_table_validation", []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatal(err)
 	}
@@ -455,7 +775,7 @@ func TestConnectionIdentityIsOpaqueAndNotDerivedFromNameOrCredential(t *testing.
 	source := newScriptedSyncSource("identity_shape", []connectors.Record{
 		{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatal(err)
 	}
@@ -509,7 +829,7 @@ func TestConnectionIdentityIsOpaqueAndNotDerivedFromNameOrCredential(t *testing.
 func TestReversePlanPinsItsSourceConnection(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("reverse_pinning", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.AddCredential(ctx, AddCredentialRequest{
 		Name:      "outbox",
 		Connector: "outbox",
@@ -631,4 +951,277 @@ func setupTwoConnectionWarehouseApp(t *testing.T, source *scriptedSyncSource, mo
 		}
 	}
 	return a, warehouseDir
+}
+
+func writeConnectionWarehouseTable(t *testing.T, ctx context.Context, a *App, warehouseDir, connection, table string, rows []warehouse.Row) {
+	t.Helper()
+	location, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, connection))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := location.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	path, err := location.TablePath(table)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := warehouse.WriteTable(ctx, path, rows); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation
+// models a state file written before the creation-time admission existed. Open
+// must leave it alone, but a later sync must be refused before it starts a run
+// or creates any warehouse state.
+func TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("legacy_same_owner_preflight", []connectors.Record{{
+		"id": "would-write", "updated_at": "2026-08-12T00:00:00Z",
+	}})
+	created, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	persistLegacySameOwnerCaseEquivalentInventory(t, created, "acme")
+
+	statePath := filepath.Join(created.ProjectDir(), "state", "state.json")
+	beforeOpen, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read persisted legacy state: %v", err)
+	}
+	reopened, err := Open(created.root)
+	if err != nil {
+		t.Fatalf("Open() legacy state error = %v", err)
+	}
+	reopened.registry = created.registry
+	afterOpen, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state after Open: %v", err)
+	}
+	if string(afterOpen) != string(beforeOpen) {
+		t.Fatal("Open() rewrote legacy same-owner warehouse configuration")
+	}
+	legacy, ok := reopened.findConnection("acme")
+	if !ok || legacy.Streams["case-records"].DestinationTable != "RECORDS" {
+		t.Fatalf("Open() lost legacy same-owner destination inventory: %#v", legacy)
+	}
+	beforeTree := warehouseTree(t, warehouseDir)
+
+	_, err = reopened.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 1})
+	if err == nil {
+		t.Fatal("RunETL() accepted legacy same-owner case-equivalent destination tables")
+	}
+	requireSameOwnerCaseEquivalentTableError(t, err, "acme")
+	afterRun, readErr := os.ReadFile(statePath)
+	if readErr != nil {
+		t.Fatalf("read state after refused run: %v", readErr)
+	}
+	if string(afterRun) != string(beforeOpen) {
+		t.Fatal("refused legacy sync created or changed run/checkpoint state")
+	}
+	if got := warehouseTree(t, warehouseDir); !reflect.DeepEqual(got, beforeTree) {
+		t.Fatalf("refused legacy sync changed warehouse tree: %v -> %v", beforeTree, got)
+	}
+	if len(reopened.state.Runs) != 0 || len(reopened.state.StreamStates) != 0 {
+		t.Fatalf("refused legacy sync stored run or checkpoint state: runs=%#v states=%#v", reopened.state.Runs, reopened.state.StreamStates)
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("refused legacy sync reached the source read: %#v", source.requests)
+	}
+}
+
+func TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("legacy_local_collision_nonlocal_etl", []connectors.Record{{
+		"id": "external", "updated_at": "2026-08-12T00:00:00Z",
+	}})
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	destination := &batchDestination{}
+	a.registry.Register(destination)
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{
+		Name:      "nonlocal-destination",
+		Connector: destination.Name(),
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "records_to_nonlocal",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
+		Destination: EndpointConfig{Connector: destination.Name(), Credential: "nonlocal-destination"},
+		Streams: map[string]StreamConfig{
+			"records": {
+				SyncMode:         "full_refresh_overwrite",
+				PrimaryKey:       []string{"id"},
+				DestinationTable: "records",
+			},
+		},
+	}); err != nil {
+		t.Fatal(err)
+	}
+	persistLegacySameOwnerCaseEquivalentInventory(t, a, "acme")
+
+	run, err := a.RunETL(ctx, RunETLRequest{Connection: "records_to_nonlocal", Stream: "records", BatchSize: 1})
+	if err != nil {
+		t.Fatalf("RunETL(non-local) error = %v", err)
+	}
+	if run.RecordsLoaded != 1 {
+		t.Fatalf("non-local RunETL records loaded = %d, want 1", run.RecordsLoaded)
+	}
+	if destination.acknowledgements != 1 {
+		t.Fatalf("non-local destination acknowledgements = %d, want 1", destination.acknowledgements)
+	}
+	if len(source.requests) != 1 {
+		t.Fatalf("non-local RunETL source reads = %d, want 1", len(source.requests))
+	}
+}
+
+// TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames proves
+// that direct table/action/reverse reads remain resolver-backed. On APFS only
+// one spelling may physically survive; on a case-sensitive filesystem both can
+// survive. Neither environment may alias a missing exact spelling to the other.
+func TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("legacy_same_owner_direct_reads", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	persistLegacySameOwnerCaseEquivalentInventory(t, a, "acme")
+
+	acme := mustFindConnection(t, a, "acme")
+	location, err := a.warehouseLocation(warehouseDir, acme)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := location.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	for _, fixture := range []struct {
+		table string
+		id    string
+	}{
+		{table: "records", id: "lower-physical"},
+		{table: "RECORDS", id: "upper-physical"},
+	} {
+		path, pathErr := location.TablePath(fixture.table)
+		if pathErr != nil {
+			t.Fatal(pathErr)
+		}
+		if writeErr := warehouse.WriteTable(ctx, path, []warehouse.Row{{"id": fixture.id}}); writeErr != nil {
+			t.Fatal(writeErr)
+		}
+	}
+
+	resolver, err := warehouse.NewTableResolver(warehouseDir)
+	if err != nil {
+		t.Fatalf("NewTableResolver() error = %v", err)
+	}
+	physical := make(map[string]struct{})
+	for _, table := range resolver.Tables() {
+		if table.Connection == "acme" {
+			physical[table.Name] = struct{}{}
+		}
+	}
+	if len(physical) == 0 {
+		t.Fatal("test setup produced no resolver-visible acme table")
+	}
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{
+		Name:      "same-owner-outbox",
+		Connector: "outbox",
+		Config:    map[string]string{"path": filepath.Join(a.ProjectDir(), "outbox")},
+	}); err != nil {
+		t.Fatalf("AddCredential(outbox) error = %v", err)
+	}
+
+	for _, table := range []string{"records", "RECORDS"} {
+		_, exists := physical[table]
+		t.Run(table, func(t *testing.T) {
+			rows, queryErr := a.QueryTable(ctx, QueryTableRequest{Table: table, Connection: "acme", Limit: 10})
+			if !exists {
+				if queryErr == nil {
+					t.Fatalf("QueryTable(%q) aliased a non-physical case variant: %v", table, rows)
+				}
+				if _, actionErr := a.ReadActionSource(ctx, ActionSourceReadRequest{Table: table, Connection: "acme"}); actionErr == nil {
+					t.Fatalf("ReadActionSource(%q) aliased a non-physical case variant", table)
+				}
+				if _, planErr := a.PlanReverseETL(ctx, PlanReverseETLRequest{
+					Name:                  "missing_" + strings.ToLower(table),
+					SourceTable:           table,
+					SourceConnection:      "acme",
+					DestinationConnector:  "outbox",
+					DestinationCredential: "same-owner-outbox",
+					Action:                "upsert",
+					Mappings:              map[string]string{"id": "external_id"},
+				}); planErr == nil {
+					t.Fatalf("PlanReverseETL(%q) aliased a non-physical case variant", table)
+				}
+				return
+			}
+			if queryErr != nil {
+				t.Fatalf("QueryTable(%q) exact physical table error = %v", table, queryErr)
+			}
+			if len(rows) != 1 {
+				t.Fatalf("QueryTable(%q) rows = %v, want one resolver-visible row", table, rows)
+			}
+			if actionRows, actionErr := a.ReadActionSource(ctx, ActionSourceReadRequest{Table: table, Connection: "acme"}); actionErr != nil || len(actionRows) != 1 {
+				t.Fatalf("ReadActionSource(%q) rows=%v error=%v, want one exact physical row", table, actionRows, actionErr)
+			}
+			plan, planErr := a.PlanReverseETL(ctx, PlanReverseETLRequest{
+				Name:                  "physical_" + strings.ToLower(table),
+				SourceTable:           table,
+				SourceConnection:      "acme",
+				DestinationConnector:  "outbox",
+				DestinationCredential: "same-owner-outbox",
+				Action:                "upsert",
+				Mappings:              map[string]string{"id": "external_id"},
+			})
+			if planErr != nil || plan.RecordCount != 1 {
+				t.Fatalf("PlanReverseETL(%q) plan=%#v error=%v, want exact physical row", table, plan, planErr)
+			}
+		})
+	}
+}
+
+// TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory makes the policy
+// depend on both the immutable resolver snapshot and the connection's declared
+// destinations. A case-insensitive filesystem can expose only one physical
+// spelling, so the resolver alone cannot safely answer these SQL references.
+func TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("legacy_same_owner_sql", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "records", []warehouse.Row{{"id": "physical-lower"}})
+	persistLegacySameOwnerCaseEquivalentInventory(t, a, "acme")
+
+	rows, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT 1 AS n"})
+	if err != nil || len(rows) != 1 || toComparableString(rows[0]["n"]) != "1" {
+		t.Fatalf("QuerySQL(SELECT 1) rows=%v error=%v, want unrelated generic SQL to remain available", rows, err)
+	}
+
+	acme := mustFindConnection(t, a, "acme")
+	for _, tc := range []struct {
+		name       string
+		connection string
+		sql        string
+	}{
+		{name: "generic bare", sql: "SELECT id FROM records"},
+		{name: "generic quoted", sql: `SELECT id FROM "RECORDS"`},
+		{name: "selected bare", connection: "acme", sql: "SELECT id FROM records"},
+		{name: "selected quoted", connection: "acme", sql: `SELECT id FROM "RECORDS"`},
+		{name: "generated alias", sql: "SELECT id FROM records__" + acme.ID},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, queryErr := a.QuerySQL(ctx, QuerySQLRequest{SQL: tc.sql, Connection: tc.connection})
+			requireSameOwnerCaseEquivalentTableError(t, queryErr, "acme")
+			if strings.Contains(queryErr.Error(), "Catalog Error") || strings.Contains(queryErr.Error(), "duplicate") {
+				t.Fatalf("SQL collision leaked a DuckDB catalog error: %v", queryErr)
+			}
+		})
+	}
+
+	// The generated alias is not reserved. A resolver-visible real table with
+	// the same DuckDB identifier key must remain the real table, even while the
+	// invalid destination inventory suppresses the invented owner alias.
+	realAlias := "RECORDS__" + acme.ID
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", realAlias, []warehouse.Row{{"id": "real-owner-alias"}})
+	rows, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: `SELECT id FROM "records__` + acme.ID + `"`})
+	if err != nil || len(rows) != 1 || toComparableString(rows[0]["id"]) != "real-owner-alias" {
+		t.Fatalf("QuerySQL(real case-equivalent owner alias) rows=%v error=%v, want resolver-visible real table", rows, err)
+	}
 }

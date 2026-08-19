@@ -1,0 +1,8 @@
+$ go run ./cmd/connectorgen validate internal/connectors/defs/postgres
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres -run '^TestPostgresCertificationProfileRunsBuiltBinaryLive$' -count=1 -v
+--- FAIL: TestPostgresCertificationProfileRunsBuiltBinaryLive
+    certification_cli_integration_test.go:108: built PostgreSQL certification binary exit=2; the declared transport, catalog, and credential stages failed after the schema-valid scratch default `sslmode=bananas` reached the live runtime.
+
+The scratch-only `sslmode=bananas` value was restored to `sslmode=disabled` before further work. No runtime or container configuration was changed.

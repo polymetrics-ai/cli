@@ -1,0 +1,49 @@
+{
+  "phase": "issue-4015-api-to-api-github-github-r1",
+  "delivery_mode": "direct-pr",
+  "status": "verified_pending_direct_pr",
+  "base_commit": "2c48e4deb34128339fccbe5d4b7daad4e13a23e7",
+  "gsd": {
+    "inline_manual_fallback": true,
+    "reason": "the canonical single-worker contract forbids compatible GSD role spawning",
+    "resolved": [
+      "scripts/gsd prompt discuss-phase issue-4015-api-to-api-github-github-r1 --auto",
+      "scripts/gsd prompt plan-phase issue-4015-api-to-api-github-github-r1 --tdd --skip-research --auto",
+      "scripts/gsd prompt execute-phase issue-4015-api-to-api-github-github-r1 --auto",
+      "scripts/gsd prompt verify-work issue-4015-api-to-api-github-github-r1 --auto",
+      "scripts/gsd prompt code-review issue-4015-api-to-api-github-github-r1 --auto"
+    ]
+  },
+  "scope": {
+    "connector": "github",
+    "source_stream": "issues",
+    "mode": "full_append",
+    "strategy": "append",
+    "destination_action": "add_issue_labels"
+  },
+  "authentication": {
+    "recorded_token": "revoked; not retried",
+    "repository": "karthik-sivadas/pm-parity-proof-api-to-api",
+    "repository_state": "private, retained for independent verification; source issue #1 and destination issue #2 retained; proof label was applied, independently read back, replayed, then removed through its explicit approved inverse",
+    "selected_path": "supported GitHub token bearer credential from the already-authenticated karthik-sivadas GitHub CLI identity",
+    "app_installation": "not required for this two-action issue-label route proof",
+    "reason": "the connector selects secrets.token before app_id and the closed destination delegates both paths to the same generic declarative engine runtime"
+  },
+  "resolved_blocker": {
+    "key": "repeated-credential-handoff",
+    "resolution": "the existing authenticated GitHub CLI token is captured only into an exported child-process environment variable for the supported pm --from-env credential path, then unset; no secret is displayed or placed in argv"
+  },
+  "live_proof": {
+    "repository": "karthik-sivadas/pm-parity-proof-api-to-api",
+    "source_stream": "issues",
+    "source_issue": 1,
+    "mode": "full_append",
+    "apply_strategy": "append",
+    "destination_action": "add_issue_labels",
+    "destination_issue": 2,
+    "label": "pm-api-to-api-route-r1",
+    "happy_result": "one-record completed ETL run, durable receipt/checkpoint, independent GitHub label read-back",
+    "replay_result": "completed with one exact GitHub label; no duplicate/corruption",
+    "cleanup_result": "explicit approved inverse removed label; missing-label inverse succeeded; replayed cleanup approval refused"
+  }
+}

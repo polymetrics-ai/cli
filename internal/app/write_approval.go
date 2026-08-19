@@ -2,6 +2,7 @@ package app
 
 import (
 	"crypto/hmac"
+	"crypto/rand"
 	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/hex"
@@ -32,6 +33,7 @@ type projectWriteApprovalEvidence struct {
 	target        connectors.WriteApprovalTarget
 	previewDigest string
 	expiresAt     time.Time
+	authorization *AuthorizationScope
 	use           *projectWriteApprovalUse
 }
 
@@ -45,6 +47,23 @@ func newProjectWriteApprovalAuthority(projectDir string) (*projectWriteApprovalA
 	if err != nil {
 		return nil, fmt.Errorf("open project write approval authority: %w", err)
 	}
+	return newProjectWriteApprovalAuthorityFromKey(vaultDir, vaultKey)
+}
+
+// newEphemeralProjectWriteApprovalAuthority supplies certification's
+// process-local credentials with the revision and configuration fingerprinting
+// required by RuntimeConfig. Its root key is random and never written to the
+// project; write-approval consumption remains rooted in the ephemeral project
+// only if a certification scenario explicitly exercises a write.
+func newEphemeralProjectWriteApprovalAuthority(projectDir string) (*projectWriteApprovalAuthority, error) {
+	var rootKey [sha256.Size]byte
+	if _, err := rand.Read(rootKey[:]); err != nil {
+		return nil, fmt.Errorf("generate ephemeral write approval key: %w", err)
+	}
+	return newProjectWriteApprovalAuthorityFromKey(projectDir, rootKey[:])
+}
+
+func newProjectWriteApprovalAuthorityFromKey(dir string, vaultKey []byte) (*projectWriteApprovalAuthority, error) {
 	if len(vaultKey) != sha256.Size {
 		return nil, fmt.Errorf("project write approval key must be %d bytes", sha256.Size)
 	}
@@ -56,7 +75,7 @@ func newProjectWriteApprovalAuthority(projectDir string) (*projectWriteApprovalA
 	if err != nil {
 		return nil, err
 	}
-	return &projectWriteApprovalAuthority{dir: vaultDir, key: rootKey, signer: signer}, nil
+	return &projectWriteApprovalAuthority{dir: dir, key: rootKey, signer: signer}, nil
 }
 
 func (a *projectWriteApprovalAuthority) CredentialRevision(credentialID string, secrets map[string]string) (string, error) {
@@ -162,12 +181,12 @@ func (a *projectWriteApprovalAuthority) IssueWriteGrant(req connectors.WriteAppr
 	return a.signer.IssueWriteGrant(req)
 }
 
-func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteApprovalGrant, expected connectors.WriteApprovalExpectation, seal *connectors.WritePlanSeal) (*connectors.WriteApprovalEvidence, error) {
+func (a *projectWriteApprovalAuthority) ValidateWriteGrant(grant connectors.WriteApprovalGrant, expected connectors.WriteApprovalExpectation, seal *connectors.WritePlanSeal) error {
 	if a == nil || a.signer == nil {
-		return nil, errors.New("project write approval authority is required")
+		return errors.New("project write approval authority is required")
 	}
 	if seal == nil {
-		return nil, errors.New("authenticated write plan seal is required")
+		return errors.New("authenticated write plan seal is required")
 	}
 	expectedSeal := connectors.WritePlanSealExpectation{
 		PlanID: expected.PlanID, PlanHash: expected.PlanHash, Mode: expected.Mode,
@@ -176,16 +195,30 @@ func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteA
 		Batchable: expected.Target.Batchable, Scope: expected.Target.Scope, Confirmation: expected.Confirmation,
 	}
 	if err := a.VerifyWritePlanSeal(*seal, expectedSeal); err != nil {
-		return nil, err
+		return err
 	}
 	if !projectApprovalStringEqual(grant.PlanSealMAC, seal.MAC) {
-		return nil, errors.New("write approval grant does not match the authenticated plan seal")
+		return errors.New("write approval grant does not match the authenticated plan seal")
 	}
-	if _, err := a.signer.VerifyWriteGrant(grant, expected); err != nil {
-		return nil, err
+	if err := a.signer.ValidateWriteGrant(grant, expected); err != nil {
+		return err
 	}
 	if grant.Target.Scope != connectors.WriteApprovalScopeProject {
-		return nil, errors.New("write approval grant is not project-owned")
+		return errors.New("write approval grant is not project-owned")
+	}
+	consumed, err := a.consumed(projectWriteApprovalConsumptionID(grant.PlanID, grant.PlanHash, grant.Mode))
+	if err != nil {
+		return err
+	}
+	if consumed {
+		return connectors.ErrWriteApprovalConsumed
+	}
+	return nil
+}
+
+func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteApprovalGrant, expected connectors.WriteApprovalExpectation, seal *connectors.WritePlanSeal) (*connectors.WriteApprovalEvidence, error) {
+	if err := a.ValidateWriteGrant(grant, expected, seal); err != nil {
+		return nil, err
 	}
 	if err := a.consume(projectWriteApprovalConsumptionID(grant.PlanID, grant.PlanHash, grant.Mode), grant.Nonce, grant.MAC, time.Now().UTC()); err != nil {
 		return nil, fmt.Errorf("consume write approval grant: %w", err)
@@ -198,9 +231,26 @@ func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteA
 	})
 }
 
-func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.WriteApprovalTarget, previewDigest string, now time.Time) error {
+func (e *projectWriteApprovalEvidence) ValidateProjectWrite(target connectors.WriteApprovalTarget, previewDigest string, now time.Time) error {
 	if e == nil || e.use == nil {
 		return errors.New("consumed project write approval evidence is required")
+	}
+	if e.authorization != nil {
+		scope := e.authorization
+		if target.Scope != connectors.WriteApprovalScopeProject ||
+			target.Operation != scope.WriteAction ||
+			!projectApprovalStringEqual(target.CredentialRevision, scope.DestinationCredentialRevision) ||
+			!projectApprovalStringEqual(target.ConfigurationDigest, scope.DestinationConfigurationDigest) ||
+			target.Confirmation.Kind != scope.ConfirmationPolicy.Kind {
+			return errors.New("durable authorization evidence does not match the prepared write")
+		}
+		if now.UTC().IsZero() {
+			now = time.Now().UTC()
+		}
+		if !now.UTC().Before(scope.ExpiresAt.UTC()) {
+			return errors.New("durable authorization evidence has expired")
+		}
+		return nil
 	}
 	if target.Scope != connectors.WriteApprovalScopeProject || !sameProjectApprovalTarget(e.target, target) || !projectApprovalStringEqual(e.previewDigest, previewDigest) {
 		return errors.New("write approval evidence does not match the prepared write")
@@ -211,10 +261,32 @@ func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.W
 	if !now.UTC().Before(e.expiresAt) {
 		return errors.New("write approval evidence has expired")
 	}
+	return nil
+}
+
+func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.WriteApprovalTarget, previewDigest string, now time.Time) error {
+	if err := e.ValidateProjectWrite(target, previewDigest, now); err != nil {
+		return err
+	}
 	if !e.use.consumed.CompareAndSwap(false, true) {
+		if e.authorization != nil {
+			return errors.New("durable authorization evidence has already been consumed")
+		}
 		return errors.New("write approval evidence has already been consumed")
 	}
 	return nil
+}
+
+// durableAuthorizationEvidence adapts a pre-validated standing App scope to
+// the closed connector write gate. It carries no token or raw credential and
+// intentionally leaves the per-run preview digest unbound: payload is excluded
+// from durable authorization by contract.
+func durableAuthorizationEvidence(scope AuthorizationScope) (*connectors.WriteApprovalEvidence, error) {
+	canonical := canonicalAuthorizationScope(scope)
+	return connectors.BindProjectWriteApprovalEvidence(&projectWriteApprovalEvidence{
+		authorization: &canonical,
+		use:           &projectWriteApprovalUse{},
+	})
 }
 
 func validateProjectPlanSealRequest(req connectors.WritePlanSealRequest) error {

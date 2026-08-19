@@ -1,0 +1,31 @@
+{
+  "issue": 3974,
+  "phase": "issue-3974-typed-database-foundation-recovery",
+  "mode": "manual-inline-gsd-fallback",
+  "status": "no-mistakes-passed-awaiting-push",
+  "base": "8242bedee0cfa75fc61d1fb0e47d73251605162d",
+  "range": "0be21e1293a9e5c913d9b4e23a846237594630c7^..9e763fe07a69b48f8ed88484ccb18580c63ae160",
+  "discuss_phase": "generated-and-recorded",
+  "plan_phase_tdd": "generated-and-recorded",
+  "execute_phase": "completed-inline-replay",
+  "verify_work": "completed-inline-after-4026",
+  "shepherd_3995": {
+    "implementation_ref": "ef66991350a5de137ab17e492acf2640feecf5c3",
+    "integrated_into_child_or_parent": false,
+    "transition": "integrate_sub_pr",
+    "decision": "RETRY-compatible-not-automatic",
+    "evidence": "SHEPHERD-COMPATIBILITY.json"
+  },
+  "code_review": "completed-inline-pass",
+  "no_mistakes": {
+    "run_id": "01KZPXF5VNSD89NNBWJT74BD00",
+    "decision": "passed",
+    "findings": 0,
+    "submitted_head": "6700a67a3944f79d44d5ea35cbc7cff27574ba07",
+    "pipeline_head": "72c507523d7de2c41f81c714df351e9a044f3eee",
+    "custody": "returned via no-mistakes axi sync --recover",
+    "skipped_by_canonical_child_contract": ["push", "pr", "ci"]
+  },
+  "correction_loops": 1,
+  "fallback_reason": "#3974 is not a numbered roadmap phase and the canonical contract requires one inline worker without GSD role spawning."
+}

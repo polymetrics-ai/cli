@@ -45,7 +45,7 @@ ETL STREAMS
     fields: Col(string), FullAddress(string), Lot(string), Lot_type(string), MarId(string), SSL(string), Square(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Open Data DC (MAR 2) API read of public address/parcel data

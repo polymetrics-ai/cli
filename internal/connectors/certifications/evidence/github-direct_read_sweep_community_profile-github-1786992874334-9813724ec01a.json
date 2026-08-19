@@ -1,0 +1,67 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:direct_read_sweep_community_profile",
+  "provider": "github",
+  "executed_at": "2026-08-17T18:55:24.280Z",
+  "run_id": "github-1786992874334-9813724ec01a-direct_read_sweep_community_profile",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "3558077d962c8e6861d05b9b97666033d68ab77d9a81e744a94b31c2bf16d73c",
+    "pm_command_fingerprint": "{{pmcertfp:v1:c586ce2648b0faa432b17ca01f1630b488d3edbee3c8ce615297e05b735c127d}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:70f375b2a27949330aec3c2553a85898978c9edd930630921f77673b8cf92446}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "direct_read_sweep_community_profile",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:55f9147bb774dc1132227a6ae5bc21656b7d6227ebab1807274474a9038d9157}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "content_reports_enabled": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "description": null,
+              "documentation": null,
+              "files": {
+                "code_of_conduct": null,
+                "code_of_conduct_file": null,
+                "contributing": null,
+                "issue_template": null,
+                "license": null,
+                "pull_request_template": null,
+                "readme": {
+                  "html_url": "{{pmcertfp:v1:5f42ba8e4582871884750e56a2108c43f95325f008703d1a61e59a7ad3b4e4fc}}",
+                  "url": "{{pmcertfp:v1:41b2278f46ec20af52039c5f81ee9a424e8d1407f115028ae2fd28dcaee3ea7d}}"
+                }
+              },
+              "health_percentage": "{{pmcertfp:v1:00c7982c9b91af8cef4828d8f8ade0c3ee01667cbdfe967d8c55bc9eb2a06c03}}",
+              "updated_at": null
+            },
+            "original_bytes": 472,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

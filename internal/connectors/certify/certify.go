@@ -1,5 +1,9 @@
 package certify
 
+import "time"
+
+const defaultCertificationRateLimitAdmissionTimeout = 30 * time.Second
+
 // Options configures a single-connector certification Runner (certification
 // design §A command spec, single-connector subset only — batch/--all,
 // --sweep flags are out of scope here; see credsfile.go for the batch-mode
@@ -12,6 +16,12 @@ type Options struct {
 	Config    map[string]string // connector config for credentials add
 	SecretEnv map[string]string // field -> ENV name
 	KeepWork  bool
+	// LedgerRoot is the durable, caller-owned location for the append-only
+	// write lifecycle ledger. An empty value retains the self-contained
+	// workdir behaviour used by fixture tests; production CLI callers set it
+	// below .polymetrics/certifications/ledger/<connector> so --sweep and a
+	// resumed run see the same checkpoints after the ephemeral workdir exits.
+	LedgerRoot string
 
 	// Write enables the create-then-cleanup write protocol (stages 12-17,
 	// design §C). When false, or when the connector has no available
@@ -21,6 +31,13 @@ type Options struct {
 	// must never fail the report).
 	Write bool
 
+	// WriteOnly executes a selected, self-cleaning live write scenario through
+	// the normal certification entry point. It retains credential setup and the
+	// reverse plan/preview/run path but omits unrelated source/schedule checks,
+	// allowing rate-bounded repository waves to resume independently. It is
+	// intentionally incompatible with full-parity claims.
+	WriteOnly bool
+
 	// Full enables the comprehensive sweep: every stream (not just the
 	// first), every write pairing (not just the first), binary downloads,
 	// and direct reads. The existing single-pairing write stages still run
@@ -28,6 +45,46 @@ type Options struct {
 	// remaining pairings. See
 	// docs/plans/connector-complete-testing-and-mail-setup-plan.md.
 	Full bool
+
+	// RequireFullParity is set only by the public --full-parity request. It
+	// implies Full and Write, then requires the completed report to prove every
+	// applicable stage/action rather than merely rendering a full-run-shaped
+	// artifact.
+	RequireFullParity bool
+	// DirectReadOnly runs the credential preflight plus declaration-owned
+	// direct-read candidates, without folding unrelated stream/ETL evidence
+	// into a read-command certification claim.
+	DirectReadOnly bool
+
+	// Resume reuses only completed direct-read candidates from the safe
+	// checkpoint at DirectReadCheckpointPath. It is meaningful only for a
+	// full certification run: interrupted provider sweeps resume at the first
+	// candidate that has not already recorded a passing real invocation.
+	Resume                   bool
+	DirectReadCheckpointPath string
+
+	// ObserveHTTP retains bounded, exact HTTP exchanges in process memory for
+	// an external-binary proof. It is deliberately not a user-facing capture
+	// switch: the CLI enables it only inside a freshly built child process.
+	ObserveHTTP bool
+
+	// RuntimeObservation receives a secret-safe child-process audit request
+	// immediately after the runner resolves credential values into memory. It
+	// is set only by the external-proof child when an integration test requests
+	// a self-observation artifact; it is never a user-facing capture option.
+	RuntimeObservation func(RuntimeObservationInput) error
+
+	// RateLimitAdmissionTimeout bounds a single provider-budget wait. A zero
+	// value uses the certification default; it does not shorten normal stages.
+	RateLimitAdmissionTimeout time.Duration
+}
+
+// RuntimeObservationInput carries the minimum in-memory state required for a
+// child process to audit itself at the credential-live boundary. Consumers
+// must never render or persist SecretValues directly.
+type RuntimeObservationInput struct {
+	Workdir      string
+	SecretValues []string
 }
 
 // Runner orchestrates certification stages for exactly one connector,
@@ -48,6 +105,7 @@ type Runner struct {
 	stdoutLeakSabotage    *stdoutLeakSabotage
 	cleanupVerifySabotage bool
 	lastWorkdir           string
+	observedHTTP          []ObservedHTTPExchange
 }
 
 // NewRunner constructs a Runner for the given Options. Validation of
@@ -55,4 +113,18 @@ type Runner struct {
 // never fails.
 func NewRunner(o Options) *Runner {
 	return &Runner{opts: o}
+}
+
+// ObservedHTTPExchanges returns the last run's defensive observation snapshot.
+// It contains raw process-memory values and must be passed directly to
+// WriteExternalProof rather than logged or serialized by a caller.
+func (r *Runner) ObservedHTTPExchanges() []ObservedHTTPExchange {
+	if r == nil {
+		return nil
+	}
+	out := make([]ObservedHTTPExchange, len(r.observedHTTP))
+	for index, exchange := range r.observedHTTP {
+		out[index] = cloneObservedHTTPExchange(exchange)
+	}
+	return out
 }

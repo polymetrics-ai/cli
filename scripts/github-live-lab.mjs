@@ -6,6 +6,12 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
+import {
+  assertPersistedArtifactSafe,
+  assertSafePersistedScalar,
+  redactPersistedText,
+} from "./github-live-artifact-guard.mjs";
+
 const SCHEMA_VERSION = 1;
 const RESOURCE_TYPES = new Set(["repository", "organization"]);
 const TERMINAL_STATES = new Set([
@@ -37,30 +43,23 @@ const LEDGER_FIELDS = new Set([
   "note",
 ]);
 const SENSITIVE_KEY = /(?:approval|authorization|credential|grant|password|private[_-]?key|secret|token|value)/i;
-const TOKEN_PATTERNS = [
-  /\bgh[pousr]_[A-Za-z0-9_-]+\b/i,
-  /\bgithub_pat_[A-Za-z0-9_-]+\b/i,
-  /\b(?:bearer|token)\s+[A-Za-z0-9._~+/-]{12,}\b/i,
-];
+const SAFE_BOUNDARY_IDENTIFIER = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$/u;
+const GITHUB_SLUG = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98})$/u;
+const BOUNDARY_FIELDS = new Set([
+  "schema_version",
+  "run_id",
+  "default_deny",
+  "protected_owners",
+  "protected_repositories",
+  "working_repositories",
+  "allowed_targets",
+  "historical_runs",
+  "bootstrap_principals",
+]);
 const OUTPUT_LIMIT_BYTES = 2 * 1024 * 1024;
 const ISSUE_READBACK_MAX_ATTEMPTS = 6;
 const ISSUE_READBACK_RETRY_DELAY_MS = 1000;
-const ACCOUNT_BOOTSTRAP_PROBES = Object.freeze([
-  Object.freeze({
-    id: "github_app_authentication",
-    command: "apps get-authenticated",
-    method: "GET",
-    path: "/app",
-    credential_requirement: "GitHub App JWT or installation credential",
-  }),
-  Object.freeze({
-    id: "marketplace_user_subscriptions",
-    command: "apps list-subscriptions-for-authenticated-user",
-    method: "GET",
-    path: "/user/marketplace_purchases",
-    credential_requirement: "GitHub Marketplace user entitlement credential",
-  }),
-]);
+const TARGETLESS_ACCOUNT_PROBE_ERROR = "targetless account bootstrap probes are untestable; only the App installation repository preflight may use an installation credential";
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -78,8 +77,32 @@ function requireString(value, label) {
   return value.trim();
 }
 
+function requireSafeString(value, label) {
+  if (typeof value !== "string" || value.trim() === "") {
+    throw new Error(`${label} must be a non-empty string`);
+  }
+  assertSafePersistedScalar(value, label);
+  return value.trim();
+}
+
+function requireBoundaryIdentifier(value, label) {
+  const text = requireSafeString(value, label);
+  if (!SAFE_BOUNDARY_IDENTIFIER.test(text)) {
+    throw new Error(`${label} must be a well-formed immutable identifier`);
+  }
+  return text;
+}
+
+function requireKnownFields(value, fields, label) {
+  const object = requirePlainObject(value, label);
+  if (Object.keys(object).some((key) => !fields.has(key))) {
+    throw new Error(`${label} contains an unsupported field`);
+  }
+  return object;
+}
+
 function requireProviderID(value, label) {
-  if (typeof value === "string") return requireString(value, label);
+  if (typeof value === "string") return requireBoundaryIdentifier(value, label);
   if (typeof value === "number" && Number.isSafeInteger(value) && value > 0) return String(value);
   throw new Error(`${label} must be a non-empty immutable provider ID`);
 }
@@ -88,7 +111,7 @@ function requireStringArray(value, label) {
   if (!Array.isArray(value) || value.some((item) => typeof item !== "string" || item.trim() === "")) {
     throw new Error(`${label} must be an array of non-empty strings`);
   }
-  const normalized = value.map((item) => item.trim());
+  const normalized = value.map((item) => requireSafeString(item, label));
   if (new Set(normalized.map((item) => item.toLowerCase())).size !== normalized.length) {
     throw new Error(`${label} must not contain duplicate values`);
   }
@@ -96,14 +119,17 @@ function requireStringArray(value, label) {
 }
 
 function normalizedSlug(value) {
-  return requireString(value, "target slug").toLowerCase();
+  const slug = requireSafeString(value, "target slug");
+  if (!GITHUB_SLUG.test(slug)) {
+    throw new Error("target slug must be a well-formed GitHub slug");
+  }
+  return slug.toLowerCase();
 }
 
 function ensureNoSensitiveData(value, label = "lab value") {
+  assertPersistedArtifactSafe(value, label);
   if (typeof value === "string") {
-    if (TOKEN_PATTERNS.some((pattern) => pattern.test(value))) {
-      throw new Error(`${label} contains credential-shaped data`);
-    }
+    requireSafeString(value, label);
     return;
   }
   if (Array.isArray(value)) {
@@ -113,26 +139,31 @@ function ensureNoSensitiveData(value, label = "lab value") {
   if (!isPlainObject(value)) return;
   for (const [key, nested] of Object.entries(value)) {
     if (SENSITIVE_KEY.test(key)) {
-      throw new Error(`${label} contains forbidden sensitive field ${JSON.stringify(key)}`);
+      throw new Error(`${label} contains a forbidden sensitive field`);
     }
     ensureNoSensitiveData(nested, `${label}.${key}`);
   }
 }
 
 function normalizeRepositoryReference(value, label) {
-  const target = requirePlainObject(value, label);
+  const target = requireKnownFields(value, new Set(["owner_slug", "repo_slug"]), label);
   return {
     owner_slug: normalizedSlug(target.owner_slug),
     repo_slug: normalizedSlug(target.repo_slug),
   };
 }
 
-function normalizeLabTarget(value, label = "lab target") {
+function normalizeLabTarget(value, label = "lab target", { allowKey = false } = {}) {
+  ensureNoSensitiveData(value, label);
   const target = requirePlainObject(value, label);
-  const resourceType = requireString(target.resource_type, `${label}.resource_type`);
+  const resourceType = requireSafeString(target.resource_type, `${label}.resource_type`);
   if (!RESOURCE_TYPES.has(resourceType)) {
     throw new Error(`${label}.resource_type must be repository or organization`);
   }
+  const fields = resourceType === "repository"
+    ? new Set(["resource_type", "owner_slug", "owner_id", "repo_slug", "repo_id", "run_owned", ...(allowKey ? ["key"] : [])])
+    : new Set(["resource_type", "org_slug", "org_id", "run_owned", ...(allowKey ? ["key"] : [])]);
+  requireKnownFields(target, fields, label);
   if (target.run_owned !== undefined && target.run_owned !== true) {
     throw new Error(`${label}.run_owned must be true when present`);
   }
@@ -140,29 +171,29 @@ function normalizeLabTarget(value, label = "lab target") {
     return {
       resource_type: resourceType,
       owner_slug: normalizedSlug(target.owner_slug),
-      owner_id: requireString(target.owner_id, `${label}.owner_id (immutable ID)`),
+      owner_id: requireProviderID(target.owner_id, `${label}.owner_id (immutable ID)`),
       repo_slug: normalizedSlug(target.repo_slug),
-      repo_id: requireString(target.repo_id, `${label}.repo_id (immutable ID)`),
+      repo_id: requireProviderID(target.repo_id, `${label}.repo_id (immutable ID)`),
       ...(target.run_owned === true ? { run_owned: true } : {}),
     };
   }
   return {
     resource_type: resourceType,
     org_slug: normalizedSlug(target.org_slug),
-    org_id: requireString(target.org_id, `${label}.org_id (immutable ID)`),
+    org_id: requireProviderID(target.org_id, `${label}.org_id (immutable ID)`),
     ...(target.run_owned === true ? { run_owned: true } : {}),
   };
 }
 
 /** Historical runs are audit-only and never enter the executable allowlist. */
 function normalizeHistoricalRun(value, label) {
-  const run = requirePlainObject(value, label);
-  const target = normalizeLabTarget(run.target, `${label}.target`);
+  const run = requireKnownFields(value, new Set(["run_id", "target"]), label);
+  const target = normalizeLabTarget(run.target, `${label}.target`, { allowKey: true });
   if (target.run_owned !== true) {
     throw new Error(`${label}.target must be marked run_owned`);
   }
   return {
-    run_id: requireString(run.run_id, `${label}.run_id`),
+    run_id: requireBoundaryIdentifier(run.run_id, `${label}.run_id`),
     target,
   };
 }
@@ -188,11 +219,21 @@ function targetLabel(target) {
 }
 
 function normalizeBootstrapPrincipal(value, label) {
-  const principal = requirePlainObject(value, label);
-  if (requireString(principal.resource_type, `${label}.resource_type`) !== "authenticated_user") {
+  const principal = requireKnownFields(value, new Set([
+    "key",
+    "resource_type",
+    "user_slug",
+    "user_id",
+    "allowed_command",
+    "requested_repo_slug",
+    "required_private",
+    "required_auto_init",
+    "purpose",
+  ]), label);
+  if (requireSafeString(principal.resource_type, `${label}.resource_type`) !== "authenticated_user") {
     throw new Error(`${label}.resource_type must be authenticated_user`);
   }
-  if (requireString(principal.allowed_command, `${label}.allowed_command`) !== "repo create") {
+  if (requireSafeString(principal.allowed_command, `${label}.allowed_command`) !== "repo create") {
     throw new Error(`${label}.allowed_command must be repo create`);
   }
   const requestedRepo = normalizedSlug(principal.requested_repo_slug);
@@ -203,15 +244,15 @@ function normalizeBootstrapPrincipal(value, label) {
     throw new Error(`${label} must require a private auto-initialized repository`);
   }
   return {
-    key: requireString(principal.key, `${label}.key`),
+    key: requireBoundaryIdentifier(principal.key, `${label}.key`),
     resource_type: "authenticated_user",
     user_slug: normalizedSlug(principal.user_slug),
-    user_id: requireString(principal.user_id, `${label}.user_id (immutable ID)`),
+    user_id: requireProviderID(principal.user_id, `${label}.user_id (immutable ID)`),
     allowed_command: "repo create",
     requested_repo_slug: requestedRepo,
     required_private: true,
     required_auto_init: true,
-    purpose: requireString(principal.purpose, `${label}.purpose`),
+    purpose: requireSafeString(principal.purpose, `${label}.purpose`),
   };
 }
 
@@ -234,17 +275,17 @@ function isProtectedTarget(boundary, target) {
  * happens before a PM command or provider request is constructed.
  */
 export function validateLabBoundary(candidate) {
-  const boundary = requirePlainObject(candidate, "lab boundary");
+  const boundary = requireKnownFields(candidate, BOUNDARY_FIELDS, "lab boundary");
   ensureNoSensitiveData(boundary, "lab boundary");
   if (boundary.schema_version !== SCHEMA_VERSION) {
     throw new Error(`lab boundary schema_version must be ${SCHEMA_VERSION}`);
   }
-  requireString(boundary.run_id, "lab boundary.run_id");
+  const runID = requireBoundaryIdentifier(boundary.run_id, "lab boundary.run_id");
   if (boundary.default_deny !== true) {
     throw new Error("lab boundary must set default_deny=true");
   }
   const protectedOwners = requireStringArray(boundary.protected_owners, "lab boundary.protected_owners")
-    .map((owner) => owner.toLowerCase());
+    .map((owner) => normalizedSlug(owner));
   if (!protectedOwners.includes("polymetrics-ai")) {
     throw new Error("lab boundary must explicitly deny the polymetrics-ai owner");
   }
@@ -268,11 +309,11 @@ export function validateLabBoundary(candidate) {
     throw new Error("lab boundary.allowed_targets must be an array");
   }
   const allowedTargets = boundary.allowed_targets.map((entry, index) => {
-    const normalized = normalizeLabTarget(entry, `lab boundary.allowed_targets[${index}]`);
+    const normalized = normalizeLabTarget(entry, `lab boundary.allowed_targets[${index}]`, { allowKey: true });
     if (normalized.run_owned !== true) {
       throw new Error(`lab boundary allowed target ${targetLabel(normalized)} is not marked run_owned`);
     }
-    return { key: requireString(entry.key, `lab boundary.allowed_targets[${index}].key`), ...normalized };
+    return { key: requireBoundaryIdentifier(entry.key, `lab boundary.allowed_targets[${index}].key`), ...normalized };
   });
   const byIdentity = new Set();
   const keys = new Set();
@@ -295,7 +336,7 @@ export function validateLabBoundary(candidate) {
   );
   const historicalRunIDs = new Set();
   for (const historical of historicalRuns) {
-    if (historical.run_id === boundary.run_id.trim() || historicalRunIDs.has(historical.run_id)) {
+    if (historical.run_id === runID || historicalRunIDs.has(historical.run_id)) {
       throw new Error(`lab boundary has an ambiguous historical run ${historical.run_id}`);
     }
     historicalRunIDs.add(historical.run_id);
@@ -327,7 +368,7 @@ export function validateLabBoundary(candidate) {
   }
   return {
     schema_version: SCHEMA_VERSION,
-    run_id: boundary.run_id.trim(),
+    run_id: runID,
     default_deny: true,
     protected_owners: protectedOwners,
     protected_repositories: protectedRepositories,
@@ -341,7 +382,7 @@ export function validateLabBoundary(candidate) {
 /** Refuse a target unless both its human slug and immutable provider identity match. */
 export function authorizeLabTarget(boundaryCandidate, targetCandidate) {
   const boundary = validateLabBoundary(boundaryCandidate);
-  const target = normalizeLabTarget(targetCandidate);
+  const target = normalizeLabTarget(targetCandidate, "lab target", { allowKey: true });
   if (isProtectedTarget(boundary, target)) {
     throw new Error(`lab target denied: ${targetLabel(target)} is protected`);
   }
@@ -411,66 +452,18 @@ export function capturePMErrorEnvelope({ invocation, envelope }) {
   };
 }
 
-/**
- * Account-level bootstrap reads are deliberately not a generic escape hatch:
- * they have no target selector and can address only the two evidence probes
- * named in the PM-only external-cohort plan.
- */
 export function authorizeAccountBootstrapProbe(candidate) {
   const probe = requirePlainObject(candidate, "account bootstrap probe");
   for (const key of Object.keys(probe)) {
     if (key !== "command") throw new Error(`account bootstrap probe forbids ${JSON.stringify(key)}`);
   }
-  const command = requireString(probe.command, "account bootstrap probe.command");
-  const match = ACCOUNT_BOOTSTRAP_PROBES.find((entry) => entry.command === command);
-  if (!match) {
-    throw new Error("account bootstrap probe must be one fixed PM direct read; writes and unlisted commands are not allowed");
-  }
-  return { ...match };
+  requireString(probe.command, "account bootstrap probe.command");
+  throw new Error(TARGETLESS_ACCOUNT_PROBE_ERROR);
 }
 
-/**
- * Parse a fixed account probe invocation. The generated call shape has no
- * `--config`, connection, owner, repository, or provider-target argument.
- */
 export function assertAccountBootstrapProbeInvocation(invocation) {
-  const command = assertPMOnly(invocation);
-  const fields = command.trim().split(/\s+/u);
-  const probe = ACCOUNT_BOOTSTRAP_PROBES.find((entry) => {
-    const prefix = ["pm", "github", ...entry.command.split(" ")];
-    return fields.length >= prefix.length && prefix.every((part, index) => fields[index] === part);
-  });
-  if (!probe) throw new Error("account bootstrap probe invocation must be one fixed PM direct read");
-  const prefixLength = 2 + probe.command.split(" ").length;
-  const values = { credential: [], root: [], json: 0 };
-  for (let index = prefixLength; index < fields.length; index += 1) {
-    const field = fields[index];
-    if (field === "--json" || field === "--json=true") {
-      values.json += 1;
-      continue;
-    }
-    const match = /^--(credential|root)=(.+)$/u.exec(field);
-    if (match) {
-      values[match[1]].push(match[2]);
-      continue;
-    }
-    if (field === "--credential" || field === "--root") {
-      const value = fields[index + 1];
-      if (!value || value.startsWith("--")) {
-        throw new Error(`account bootstrap probe invocation ${field} requires a value`);
-      }
-      values[field.slice(2)].push(value);
-      index += 1;
-      continue;
-    }
-    throw new Error(`account bootstrap probe invocation forbids ${field}; its shape is fixed and targetless`);
-  }
-  if (values.credential.length !== 1 || values.root.length !== 1 || values.json !== 1) {
-    throw new Error("account bootstrap probe invocation requires exactly one --credential, --root, and --json");
-  }
-  safeCredentialName(values.credential[0]);
-  requireString(values.root[0], "account bootstrap probe root");
-  return command;
+  assertPMOnly(invocation);
+  throw new Error(TARGETLESS_ACCOUNT_PROBE_ERROR);
 }
 
 /**
@@ -948,7 +941,7 @@ function validateRecordArgs(args) {
   if (!Array.isArray(args) || args.some((argument) => typeof argument !== "string" || /\r|\n|\0/u.test(argument))) {
     throw new Error("planned PM write record arguments must be a string array");
   }
-  const forbidden = new Set(["--approve", "--confirm", "--connection", "--credential", "--plan", "--root"]);
+  const forbidden = new Set(["--approve", "--approval-token-stdin", "--confirm", "--connection", "--credential", "--plan", "--root"]);
   if (args.some((argument) => forbidden.has(argument) || [...forbidden].some((flag) => argument.startsWith(`${flag}=`)))) {
     throw new Error("planned PM write record arguments may not override lifecycle or credential flags");
   }
@@ -984,7 +977,7 @@ function scopedWriteArguments(args) {
     if (separator < 1) throw new Error("--config requires key=value in a planned PM write");
     const key = raw.slice(0, separator).trim();
     const value = raw.slice(separator + 1);
-    if (SENSITIVE_KEY.test(key)) throw new Error(`planned PM write config ${JSON.stringify(key)} is sensitive`);
+    if (SENSITIVE_KEY.test(key)) throw new Error("planned PM write configuration is sensitive");
     const values = config.get(key) || [];
     values.push(value);
     config.set(key, values);
@@ -1025,13 +1018,12 @@ function assertRepositoryWriteScope(target, args) {
 
 function redactText(value) {
   let text = String(value ?? "");
-  for (const pattern of TOKEN_PATTERNS) text = text.replace(pattern, "<redacted>");
-  return text;
+  return redactPersistedText(text);
 }
 
-async function runPMProcess(binary, args) {
+export async function runPMProcess(binary, args, stdin = "") {
   return new Promise((resolve, reject) => {
-    const child = spawn(binary, args, { stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(binary, args, { stdio: ["pipe", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
     let bytes = 0;
@@ -1048,8 +1040,10 @@ async function runPMProcess(binary, args) {
     };
     child.stdout.on("data", (chunk) => consume("stdout", chunk));
     child.stderr.on("data", (chunk) => consume("stderr", chunk));
+    child.stdin.on("error", reject);
     child.on("error", reject);
     child.on("close", (code, signal) => resolve({ code, signal, stdout, stderr, overflow }));
+    child.stdin.end(stdin);
   });
 }
 
@@ -1065,60 +1059,8 @@ function normalizeProcessResult(result, step) {
   return result;
 }
 
-function providerStatusFromProcess(result) {
-  const match = /\b(?:http|status)\s+(\d{3})\b/iu.exec(`${result.stdout}\n${result.stderr}`);
-  return match ? Number(match[1]) : undefined;
-}
-
-function accountProbeOutcome(status) {
-  if (status === 401 || status === 403) return "credential_or_entitlement_rejected";
-  if (status === 404) return "resource_or_entitlement_rejected";
-  if (Number.isInteger(status) && status >= 400) return "provider_rejected";
-  return "success";
-}
-
-/**
- * Execute one of the fixed account-level PM reads and return only a sanitized
- * outcome. Provider response bodies, stderr, credential names, and target data
- * remain process-local so this cannot become an account data collector.
- */
-export async function runPMAccountBootstrapProbe({ binary, root, credentialName, probe, run }) {
-  const definition = authorizeAccountBootstrapProbe(probe);
-  const pmBinary = requireString(binary, "PM binary");
-  const projectRoot = requireString(root, "PM project root");
-  const credential = safeCredentialName(credentialName);
-  const processArgs = ["github", ...definition.command.split(" "), "--credential", credential, "--root", projectRoot, "--json"];
-  assertAccountBootstrapProbeInvocation(["pm", ...processArgs].join(" "));
-  const runner = run || ((argsForProcess) => runPMProcess(pmBinary, argsForProcess));
-  if (typeof runner !== "function") throw new Error("PM account bootstrap probe executor must be a function");
-  const result = await runner(processArgs);
-  if (!isPlainObject(result) || typeof result.code !== "number" || typeof result.stdout !== "string" || typeof result.stderr !== "string") {
-    throw new Error("PM account bootstrap probe executor returned an invalid result");
-  }
-  if (result.overflow === true) throw new Error("PM account bootstrap probe exceeded bounded output");
-  const status = providerStatusFromProcess(result);
-  if (result.code !== 0) {
-    return {
-      command: definition.command,
-      outcome: status === undefined ? "pm_failure_without_safe_provider_status" : accountProbeOutcome(status),
-      ...(status === undefined ? {} : { http_status: status }),
-    };
-  }
-  let envelope;
-  try {
-    envelope = JSON.parse(result.stdout);
-  } catch {
-    throw new Error("PM account bootstrap probe did not produce machine-readable JSON");
-  }
-  if (!isPlainObject(envelope) || envelope.connector !== "github" || envelope.command !== definition.command) {
-    throw new Error("PM account bootstrap probe response does not identify the requested GitHub command");
-  }
-  const envelopeStatus = Number.isInteger(envelope.status) ? envelope.status : undefined;
-  return {
-    command: definition.command,
-    outcome: accountProbeOutcome(envelopeStatus),
-    ...(envelopeStatus === undefined ? {} : { http_status: envelopeStatus }),
-  };
+export async function runPMAccountBootstrapProbe({ probe }) {
+  authorizeAccountBootstrapProbe(probe);
 }
 
 function planIdentity(stdout) {
@@ -1154,7 +1096,7 @@ export async function runPMPlannedWrite({ binary, root, credentialName, command,
     assertRepositoryWriteScope(allowedTarget, args);
   }
   const credential = safeCredentialName(credentialName);
-  const runner = run || ((processArgs) => runPMProcess(pmBinary, processArgs));
+  const runner = run || ((processArgs, stdin) => runPMProcess(pmBinary, processArgs, stdin));
   if (typeof runner !== "function") throw new Error("PM write executor must be a function");
 
   const planArgs = ["github", ...parts, ...args, "--credential", credential, "--root", projectRoot];
@@ -1181,15 +1123,14 @@ export async function runPMPlannedWrite({ binary, root, credentialName, command,
     ...parts,
     "--plan",
     planID,
-    "--approve",
-    grant,
+    "--approval-token-stdin",
     ...(challenge ? ["--confirm", challenge] : []),
     ...args,
     "--root",
     projectRoot,
     "--json",
   ];
-  const execution = normalizeProcessResult(await runner(executeArgs), "write execution");
+  const execution = normalizeProcessResult(await runner(executeArgs, grant + "\n"), "write execution");
   let envelope;
   try {
     envelope = JSON.parse(execution.stdout);
@@ -1265,7 +1206,7 @@ function sanitizeCleanupEntry(candidate) {
     return out;
   }
   out.fixture_id = requireString(entry.fixture_id, "cleanup ledger entry.fixture_id");
-  out.target = normalizeLabTarget(entry.target, "cleanup ledger entry.target");
+  out.target = normalizeLabTarget(entry.target, "cleanup ledger entry.target", { allowKey: true });
   out.pm_command = assertPMOnly(entry.pm_command);
   if (entry.provider_id !== undefined) out.provider_id = requireString(entry.provider_id, "cleanup ledger entry.provider_id");
   if (entry.residual_state !== undefined) out.residual_state = requireString(entry.residual_state, "cleanup ledger entry.residual_state");
@@ -1310,7 +1251,7 @@ export async function readCleanupLedger(ledgerPath) {
 function authorizeHistoricalLedgerTarget(boundary, runID, targetCandidate) {
   const historical = boundary.historical_runs.find((entry) => entry.run_id === runID);
   if (!historical) return undefined;
-  const target = normalizeLabTarget(targetCandidate, "historical cleanup ledger target");
+  const target = normalizeLabTarget(targetCandidate, "historical cleanup ledger target", { allowKey: true });
   if (targetIdentity(target) !== targetIdentity(historical.target)) {
     throw new Error(`historical cleanup ledger target does not match archived run ${runID}`);
   }

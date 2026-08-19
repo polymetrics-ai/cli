@@ -169,7 +169,7 @@ ETL STREAMS
     fields: _pm_id(string), balances(array), candidate_id(string), categories(array), category_id(string), code(string), created_at(string), email(string), employee_id(string), files(array), from_date(string), id(string), job(object), key(string), name(string), permissions(object), questions(array), shortcode(string), slug(string), starts_at(string), state(string), title(string), type(string), updated_at(string), uuid(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_department:

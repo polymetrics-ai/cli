@@ -1,0 +1,81 @@
+{
+  "connector": "github",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope": "observed_operations",
+  "credential_scope_proof": "protocol_exchanges",
+  "executed_at": "2026-08-17T22:16:24Z",
+  "function_kind": "command:direct_read_agent_derived_gists_list_commits",
+  "proof": {
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:55e5f89de740395a0f8358c4fcf9f8af4b94a6b98aca6df23ab856eccb2bea77}}"
+    ],
+    "database_exchanges": [],
+    "http_exchanges": [
+      {
+        "operation": "direct_read_agent_derived_gists_list_commits",
+        "request": {
+          "body": {
+            "encoding": "none",
+            "original_bytes": 0,
+            "truncated": false,
+            "value": null
+          },
+          "headers": [],
+          "method": "GET",
+          "query": [],
+          "target": "{{pmcertfp:v1:7f3f46027cd9f942e409072f149691b761116810e99ee6085b76d5d5c1826803}}"
+        },
+        "response": {
+          "body": {
+            "encoding": "json",
+            "original_bytes": 1218,
+            "truncated": false,
+            "value": [
+              {
+                "change_status": {
+                  "additions": "{{pmcertfp:v1:e29fa3f425ea8d913a5ec2f845ee3b5ff097b229051ba1b4ab2ae9299f2e0a77}}",
+                  "deletions": "{{pmcertfp:v1:3765f06eb58bbb19d8da6d33b081ad9b55fc00e563ff78d410054954800ab59a}}",
+                  "total": "{{pmcertfp:v1:e29fa3f425ea8d913a5ec2f845ee3b5ff097b229051ba1b4ab2ae9299f2e0a77}}"
+                },
+                "committed_at": "{{pmcertfp:v1:28129415f194d681052b2e84d58c826c68cfcc8ee3df89d6d6ef42b41bcb3cc5}}",
+                "url": "{{pmcertfp:v1:2e3672fa64b3612f41a0484ebf06abe348130c40e29b6cebe3a147df16ffab43}}",
+                "user": {
+                  "avatar_url": "{{pmcertfp:v1:f7d2ace658cc4dfe8973f8b226beb9d399a5f1c49fef2796516a94d50226f86d}}",
+                  "events_url": "{{pmcertfp:v1:6599729edf8eaf1c9ea03e5946bbeb4cf90419349360b5ec286e18d3cb7b0813}}",
+                  "followers_url": "{{pmcertfp:v1:3fac2c9f817c2bcaa43936a5ad163d002aa5f8203cf4a366531b1024720bcd7b}}",
+                  "following_url": "{{pmcertfp:v1:61f8735bfd6edec80e1b5c1446dbc439e43fed7b39ab0fd43772e19b4b9ea549}}",
+                  "gists_url": "{{pmcertfp:v1:1737ec7e2fa09467900cdf31b0d43c681593c68dcc691df6a739f47c7af5f64a}}",
+                  "gravatar_id": "{{pmcertfp:v1:593602acc51a8a1ce653d742831ee412215de4cd729f2250aafde286bea44ff6}}",
+                  "html_url": "{{pmcertfp:v1:099933c228ab03739039fe2f2024365c340cdc9175bd4c8c5974f8d87526dd56}}",
+                  "id": "{{pmcertfp:v1:bd2dec153adf477865a9db05575f9f34fda9b2721175ae6392ed3f4ac6087e52}}",
+                  "login": "{{pmcertfp:v1:64d2dab2d6863dab516fed69196b0ed031a55df6046c79df55af7b74c92bd19e}}",
+                  "node_id": "{{pmcertfp:v1:79ccc3e4e5126d388cccc8bd3bdaae7dadfd526bec7109cb33e5e58e0f587e1d}}",
+                  "organizations_url": "{{pmcertfp:v1:85884b717936de4112041b13391b0a7e34f7886292f6d3387a73a6cbed6b6625}}",
+                  "received_events_url": "{{pmcertfp:v1:c52d0738d34d1d36e5dce8ad5b6c795e344c6d969367137ad628e23eba34624a}}",
+                  "repos_url": "{{pmcertfp:v1:45191c65cbb9285d955387140b0fdf2da0ca8fbfc866e4620095d6f103511171}}",
+                  "site_admin": "{{pmcertfp:v1:b6d29b064aa48931f408acb282f4a1a009b1662d9e86ee4738a0ac95096cc0aa}}",
+                  "starred_url": "{{pmcertfp:v1:ff5c7d49b0b1e7ce897684d5e3c0d639222ce707f851d7bfa0dc6be668177695}}",
+                  "subscriptions_url": "{{pmcertfp:v1:d357ad4061ee6227e3b8f68cb99aab9bd2d62c62369c7285324defbd61839be6}}",
+                  "type": "{{pmcertfp:v1:5ed9f0367fddaf5df0ff38674687444998c1ac6aef9e4d48b22aac5d5a74d2ee}}",
+                  "url": "{{pmcertfp:v1:9e4fc1972fe8464db450f2e1e224bfca3d1dfda18fe48447725ea4c15052cec5}}",
+                  "user_view_type": "{{pmcertfp:v1:038a84bddb9aabd2b29e3c0c72b44134c546001b9180b97f1aa7677cdb1be4cb}}"
+                },
+                "version": "{{pmcertfp:v1:a62109dbcbf73457686fa866f0ade75172932e9a3fcbe02520242eb20d56b11d}}"
+              }
+            ]
+          },
+          "headers": [],
+          "status": 200
+        }
+      }
+    ],
+    "pm_binary_sha256": "5d7e676587d8e62a2b9efed88892f22ef445a3ced30fb344c41bd44ab477b098",
+    "pm_command_fingerprint": "{{pmcertfp:v1:36f96e94664d5ba754011266f97e1257cbd4c873781b232807c92da7425c9d39}}",
+    "redaction_strategy": "repository_salted_hmac_sha256_v1"
+  },
+  "provider": "github",
+  "run_id": "github-live-20260817t221624z-gists_list_commits",
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed"
+}

@@ -1,0 +1,11 @@
+# T19–T22 GREEN — discard durability and held recovery
+
+Command:
+go test -count=1 -timeout 20m ./internal/connectors/database
+
+Result: PASS
+The dual discard-control write and cleanup failure reopens as recovery-held:
+direct commit makes zero receiver calls and produces no receipt or
+acknowledgement. The package suite also proves failed marker writes with
+durable cleanup, retained renamed markers, and indeterminate cleanup cannot
+admit delivery, while explicit admission resumes a verified sealed transaction.

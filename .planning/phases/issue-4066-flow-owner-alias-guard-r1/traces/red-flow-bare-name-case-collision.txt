@@ -1,0 +1,14 @@
+# #4066 case-equivalent bare-name RED evidence
+
+Production head: `4923b17648575d8947887139bb8058d2a5805a78`
+
+Command:
+
+`go test -timeout 20m ./internal/cli -run '^TestFlowCaseVariantBareTableAmbiguity$' -count=1`
+
+Result: expected RED, exit 1.
+
+- All quoted and unquoted lowercase and uppercase omitted-flow forms returned
+  successful reads from the uppercase real `RECORDS` table.
+- The generic controls remained available, proving the bypass was scoped to
+  unscoped flow view registration and replacement scanning.

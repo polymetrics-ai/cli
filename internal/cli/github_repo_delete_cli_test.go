@@ -105,13 +105,13 @@ func TestGitHubRepoDeleteScriptedRunCannotObtainAGrant(t *testing.T) {
 	token := extractReverseField(t, humanPreview.String(), `Approval token: (\S+)`)
 
 	var deniedStdout, deniedStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "repo", "delete",
 		"--plan", planned.Plan.ID,
-		"--approve", token,
+		"--approval-token-stdin",
 		"--root", root,
 		"--json",
-	}, &deniedStdout, &deniedStderr)
+	}, token+"\n", &deniedStdout, &deniedStderr)
 	if code == 0 || !strings.Contains(strings.ToLower(deniedStdout.String()+deniedStderr.String()), "confirmation") {
 		t.Fatalf("repo delete ran without --confirm: code=%d stdout=%s stderr=%s", code, deniedStdout.String(), deniedStderr.String())
 	}
@@ -120,14 +120,14 @@ func TestGitHubRepoDeleteScriptedRunCannotObtainAGrant(t *testing.T) {
 	}
 
 	var runStdout, runStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "repo", "delete",
 		"--plan", planned.Plan.ID,
-		"--approve", token,
+		"--approval-token-stdin",
 		"--confirm", "destructive",
 		"--root", root,
 		"--json",
-	}, &runStdout, &runStderr)
+	}, token+"\n", &runStdout, &runStderr)
 	if code != 0 {
 		t.Fatalf("confirmed repo delete code=%d stdout=%s stderr=%s", code, runStdout.String(), runStderr.String())
 	}
@@ -136,14 +136,14 @@ func TestGitHubRepoDeleteScriptedRunCannotObtainAGrant(t *testing.T) {
 	}
 
 	var replayStdout, replayStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "repo", "delete",
 		"--plan", planned.Plan.ID,
-		"--approve", token,
+		"--approval-token-stdin",
 		"--confirm", "destructive",
 		"--root", root,
 		"--json",
-	}, &replayStdout, &replayStderr)
+	}, token+"\n", &replayStdout, &replayStderr)
 	if code == 0 {
 		t.Fatalf("repo delete replayed a spent grant: stdout=%s", replayStdout.String())
 	}

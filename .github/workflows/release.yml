@@ -107,7 +107,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Build pm natively
@@ -161,7 +161,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Install nfpm
@@ -242,7 +242,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Build pm natively
@@ -257,9 +257,9 @@ jobs:
           version="${TAG_NAME#v}"
           binary=pm
           mkdir -p "binaries/${GOOS}_${GOARCH}"
-          # ldflags match .goreleaser.yaml's build block exactly, so a binary
-          # from this matrix reports the same version, commit and date the
-          # previous single-host build produced.
+          # This native build step is the source of truth for release ldflags;
+          # the asset assembler packages these uploaded binaries without
+          # rebuilding them.
           go build -trimpath \
             -ldflags "-s -w -X polymetrics.ai/internal/cli.version=$version -X polymetrics.ai/internal/cli.commit=$(git rev-parse HEAD) -X polymetrics.ai/internal/cli.buildDate=$(git log -1 --format=%cI)" \
             -o "binaries/${GOOS}_${GOARCH}/$binary" ./cmd/pm
@@ -414,7 +414,7 @@ jobs:
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Download natively built release binaries

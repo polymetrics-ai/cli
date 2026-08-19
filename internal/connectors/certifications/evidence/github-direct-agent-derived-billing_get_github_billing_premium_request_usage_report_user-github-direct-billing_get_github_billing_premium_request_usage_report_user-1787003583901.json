@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:billing_get_github_billing_premium_request_usage_report_user",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:53:06.541Z",
+  "run_id": "github-direct-billing_get_github_billing_premium_request_usage_report_user-1787003583901",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:1330d557771663f5af459cda8b169775b05b7d530ca5627406b432f5e2d22ba6}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:billing_get_github_billing_premium_request_usage_report_user",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:8086a80d7d2a2bae57b17a0ecf97f38bddcf465c545237080e52e43af5292753}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "timePeriod": {
+                "month": "{{pmcertfp:v1:4b0b47580b9c469c60e0b594eeaf0241bd375b2970fea61b8e8edb7ad68590eb}}",
+                "year": "{{pmcertfp:v1:6d0586e44339b9b790687ad85744f1ff8de942bbd72edc330e20b156ae51f1e5}}"
+              },
+              "usageItems": [],
+              "user": "{{pmcertfp:v1:e2cb9dc65e1599781947d323e93f5289277dc203eb50a4630b12eb0fbbd8f52e}}"
+            },
+            "original_bytes": 92,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

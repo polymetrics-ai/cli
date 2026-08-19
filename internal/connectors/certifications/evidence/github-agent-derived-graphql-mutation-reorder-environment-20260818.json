@@ -1,0 +1,164 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_reorder_environment",
+  "provider": "github",
+  "executed_at": "2026-08-18T06:23:08.526138000Z",
+  "run_id": "rrun_db53343dcb0bd0f6",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:3ac6835bcd881016b99735ab2f08a05e215402c7087dee69b79e179fdc3a958f}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_reorder_environment",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:cbf0aeb570bfdbdb923f5e10658a6d6bbd31bc79a6122c893da4aac91f7e0464}}",
+              "query": "{{pmcertfp:v1:f37d6f64ea4e88fea6e36fc56e0c87d4b15bf5b10d8103b8b0d37165616bb240}}",
+              "variables": {
+                "input": {
+                  "environmentId": "{{pmcertfp:v1:763824532b704211b1fda3d5ccbcdfb7ff0df11a36bee7f9539113e712a4b7bc}}",
+                  "position": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}"
+                }
+              }
+            },
+            "original_bytes": 272,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "reorderEnvironment": {
+                "__typename": "{{pmcertfp:v1:8653d4d5d14b90edd322abdce455d534bd9a35aacc1ef072eb0cc195722c11d4}}"
+              }
+            },
+            "original_bytes": 65,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_exact_position_wrong_previous_position_rejected",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:925c257ae51ace943e2e5338c11dd4f2af63bcd47bc52408c3b52fbf68b08498}}",
+              "variables": {
+                "a": "{{pmcertfp:v1:1725a417fc2477be5e0166df9bea17fe972e5b72a9412358f50f5829192dcb44}}",
+                "b": "{{pmcertfp:v1:763824532b704211b1fda3d5ccbcdfb7ff0df11a36bee7f9539113e712a4b7bc}}"
+              }
+            },
+            "original_bytes": 227,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "a": {
+                  "id": "{{pmcertfp:v1:1725a417fc2477be5e0166df9bea17fe972e5b72a9412358f50f5829192dcb44}}",
+                  "name": "{{pmcertfp:v1:0abe23f44946e29a4b9c94451a3254a1ff771b7f947aed9681dc98f80d7413ec}}",
+                  "pinnedPosition": "{{pmcertfp:v1:2073640a1d69a4a387360f051abee1514ba01312e9a3d26d1d262570cc30a197}}"
+                },
+                "b": {
+                  "id": "{{pmcertfp:v1:763824532b704211b1fda3d5ccbcdfb7ff0df11a36bee7f9539113e712a4b7bc}}",
+                  "name": "{{pmcertfp:v1:b875cd0714022209b4b3af83f15a717dcc37cf478ef696d364d09e730d4ff262}}",
+                  "pinnedPosition": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}"
+                }
+              }
+            },
+            "original_bytes": 198,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_unpin_and_delete_environment_containers",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:b790998690782d105eb1f17353f3cb970cb683c757f3a20cca05b0d84a95144e}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {},
+            "original_bytes": 2,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 204,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "first_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "second_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "verified_absent": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+            },
+            "original_bytes": 67,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:b790998690782d105eb1f17353f3cb970cb683c757f3a20cca05b0d84a95144e}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {},
+            "original_bytes": 2,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "first_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "second_status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}",
+              "verified_absent": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+            },
+            "original_bytes": 67,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

@@ -484,7 +484,7 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
@@ -723,7 +723,7 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - --json (boolean): Emit machine-readable JSON output.
   - --limit (integer): Maximum ETL records to emit.
   - --preview (boolean): Preview a reverse-ETL write without executing it.
-  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   - --confirm (string): Typed confirmation for destructive reverse-ETL writes.
 - Repositories
   - repositories list - List public Bitbucket repositories as paginated ETL records. [intent=etl availability=implemented stream=repositories]

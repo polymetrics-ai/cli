@@ -6,6 +6,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 )
 
 type AddCredentialRequest struct {
@@ -43,6 +44,54 @@ type ApprovalConsumptionUncertainError struct {
 	err        error
 }
 
+// AuthorizationScopeChangedError reports the exact durable authorization
+// property that differs from the scope approved by the operator. It is typed
+// so callers can require a new plan/preview/proceed without parsing text.
+type AuthorizationScopeChangedError struct {
+	Reference string
+	Property  string
+}
+
+func (e *AuthorizationScopeChangedError) Error() string {
+	if e == nil {
+		return "authorization scope changed"
+	}
+	return fmt.Sprintf("authorization %q scope changed: %s requires re-approval", e.Reference, e.Property)
+}
+
+// AuthorizationRevokedError reports an explicit per-connection authorization
+// revocation before a destination dispatch can occur.
+type AuthorizationRevokedError struct{ Reference string }
+
+func (e *AuthorizationRevokedError) Error() string {
+	if e == nil {
+		return "authorization has been revoked"
+	}
+	return fmt.Sprintf("authorization %q has been revoked", e.Reference)
+}
+
+// AuthorizationExpiredError reports a standing authorization whose approved
+// scope expiry has elapsed before a destination dispatch can occur.
+type AuthorizationExpiredError struct{ Reference string }
+
+func (e *AuthorizationExpiredError) Error() string {
+	if e == nil {
+		return "authorization has expired"
+	}
+	return fmt.Sprintf("authorization %q has expired", e.Reference)
+}
+
+// AuthorizationTokenReplayError reports use of the one-time plan token after
+// it created a durable authorization record.
+type AuthorizationTokenReplayError struct{ Reference string }
+
+func (e *AuthorizationTokenReplayError) Error() string {
+	if e == nil {
+		return "authorization token has already been consumed"
+	}
+	return fmt.Sprintf("authorization token for %q has already been consumed", e.Reference)
+}
+
 func (e *ApprovalConsumptionUncertainError) Error() string {
 	if e == nil {
 		return "reverse plan approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying"
@@ -77,11 +126,20 @@ type EndpointConfig struct {
 }
 
 type StreamConfig struct {
+	// StreamID is allocated and persisted once when the stream is attached to a
+	// connection. It is structural identity for managed destinations; map keys,
+	// display names, and destination tables remain mutable configuration.
+	StreamID            string   `json:"stream_id,omitempty"`
 	SyncMode            string   `json:"sync_mode"`
 	LegacyCompatibility bool     `json:"legacy_compatibility,omitempty"`
 	CursorField         string   `json:"cursor_field,omitempty"`
 	PrimaryKey          []string `json:"primary_key,omitempty"`
 	DestinationTable    string   `json:"destination_table,omitempty"`
+	// TransformPlan is normalized TransformPlanV1 JSON. It never stores a
+	// source filename, arbitrary SQL, or raw user formatting; TransformPlanHash
+	// binds the persisted closed form into later plans and approvals.
+	TransformPlan     string `json:"transform_plan,omitempty"`
+	TransformPlanHash string `json:"transform_plan_hash,omitempty"`
 }
 
 type StreamState struct {
@@ -95,22 +153,63 @@ type StreamState struct {
 }
 
 type CreateConnectionRequest struct {
-	Name        string                  `json:"name"`
-	Source      EndpointConfig          `json:"source"`
-	Destination EndpointConfig          `json:"destination"`
-	Streams     map[string]StreamConfig `json:"streams"`
+	Name              string                  `json:"name"`
+	Source            EndpointConfig          `json:"source"`
+	Destination       EndpointConfig          `json:"destination"`
+	Streams           map[string]StreamConfig `json:"streams"`
+	TargetCopyWorkers int                     `json:"target_copy_workers,omitempty"`
 }
 
 type Connection struct {
 	// ID is the opaque generated identifier used as a warehouse path
 	// component. Name is a display value and never becomes a path.
-	ID          string                  `json:"id,omitempty"`
-	Name        string                  `json:"name"`
-	Source      EndpointConfig          `json:"source"`
-	Destination EndpointConfig          `json:"destination"`
-	Streams     map[string]StreamConfig `json:"streams"`
-	CreatedAt   time.Time               `json:"created_at"`
-	UpdatedAt   time.Time               `json:"updated_at"`
+	ID                string                  `json:"id,omitempty"`
+	Name              string                  `json:"name"`
+	Source            EndpointConfig          `json:"source"`
+	Destination       EndpointConfig          `json:"destination"`
+	Streams           map[string]StreamConfig `json:"streams"`
+	TargetCopyWorkers int                     `json:"target_copy_workers,omitempty"`
+	CreatedAt         time.Time               `json:"created_at"`
+	UpdatedAt         time.Time               `json:"updated_at"`
+}
+
+func cloneEndpointConfig(config EndpointConfig) EndpointConfig {
+	clone := config
+	clone.Config = cloneStringMap(config.Config)
+	return clone
+}
+
+func cloneStreamConfig(config StreamConfig) StreamConfig {
+	clone := config
+	clone.PrimaryKey = append([]string(nil), config.PrimaryKey...)
+	return clone
+}
+
+func cloneStreamConfigs(configs map[string]StreamConfig) map[string]StreamConfig {
+	if configs == nil {
+		return nil
+	}
+	clone := make(map[string]StreamConfig, len(configs))
+	for name, config := range configs {
+		clone[name] = cloneStreamConfig(config)
+	}
+	return clone
+}
+
+func cloneCreateConnectionRequest(req CreateConnectionRequest) CreateConnectionRequest {
+	clone := req
+	clone.Source = cloneEndpointConfig(req.Source)
+	clone.Destination = cloneEndpointConfig(req.Destination)
+	clone.Streams = cloneStreamConfigs(req.Streams)
+	return clone
+}
+
+func cloneConnection(connection Connection) Connection {
+	clone := connection
+	clone.Source = cloneEndpointConfig(connection.Source)
+	clone.Destination = cloneEndpointConfig(connection.Destination)
+	clone.Streams = cloneStreamConfigs(connection.Streams)
+	return clone
 }
 
 type CatalogSnapshot struct {
@@ -133,6 +232,11 @@ type RunETLRequest struct {
 	Connection string `json:"connection"`
 	Stream     string `json:"stream"`
 	BatchSize  int    `json:"batch_size,omitempty"`
+	// MaxInFlightBatches is an optional ordered Arrow full-overwrite pipeline
+	// bound. Zero means the caller did not select the CLI/app capability
+	// control; admitted fast paths choose their documented default of two.
+	MaxInFlightBatches  int                               `json:"max_in_flight_batches,omitempty"`
+	DestinationApproval synctransport.DestinationApproval `json:"-"`
 }
 
 type Run struct {
@@ -147,9 +251,47 @@ type Run struct {
 	RecordsFailed      int               `json:"records_failed"`
 	BatchCount         int               `json:"batch_count,omitempty"`
 	Checkpoint         map[string]string `json:"checkpoint,omitempty"`
-	Error              string            `json:"error,omitempty"`
-	StartedAt          time.Time         `json:"started_at"`
-	CompletedAt        time.Time         `json:"completed_at,omitempty"`
+	// TransportPhaseMeasurement is emitted with the terminal run transition on
+	// closed source -> warehouse -> destination transports. It deliberately
+	// contains counts and elapsed times only, never records, paths, tokens, or
+	// connector configuration.
+	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
+	Error                     string                     `json:"error,omitempty"`
+	StartedAt                 time.Time                  `json:"started_at"`
+	CompletedAt               time.Time                  `json:"completed_at,omitempty"`
+}
+
+type TransportPhaseMeasurement struct {
+	// Legacy fields remain for existing non-fast transport readers.
+	ExtractedRecords         int   `json:"extracted_records"`
+	WarehouseParquetRecords  int   `json:"warehouse_parquet_records"`
+	PostgreSQLAppliedRecords int   `json:"postgresql_applied_records"`
+	ExtractElapsedNanos      int64 `json:"extract_elapsed_ns"`
+	WarehouseElapsedNanos    int64 `json:"warehouse_elapsed_ns"`
+	PostgreSQLElapsedNanos   int64 `json:"postgresql_elapsed_ns"`
+
+	// Generic fast-path counters report input as logical source bytes (the
+	// source Arrow buffer bytes before transformation), never Parquet, pgwire,
+	// or target-storage bytes. Phase intervals may overlap; critical_path_ns is
+	// the run wall clock used for both throughput rates.
+	SourceRecords                    int     `json:"source_records"`
+	TransformedRecords               int     `json:"transformed_records"`
+	CopyAppliedRecords               int     `json:"copy_applied_records"`
+	SourceLogicalBytes               int64   `json:"source_logical_bytes"`
+	TransformedLogicalBytes          int64   `json:"transformed_logical_bytes"`
+	ParquetBytes                     int64   `json:"parquet_bytes"`
+	SourceReadElapsedNanos           int64   `json:"source_read_elapsed_ns"`
+	TransformElapsedNanos            int64   `json:"transform_elapsed_ns"`
+	ParquetCloseElapsedNanos         int64   `json:"parquet_close_fsync_elapsed_ns"`
+	BinaryCOPYElapsedNanos           int64   `json:"binary_copy_elapsed_ns"`
+	IndexConstraintBuildElapsedNanos int64   `json:"index_constraint_build_elapsed_ns"`
+	PublishReceiptElapsedNanos       int64   `json:"publish_receipt_elapsed_ns"`
+	CheckpointElapsedNanos           int64   `json:"checkpoint_elapsed_ns"`
+	CriticalPathElapsedNanos         int64   `json:"critical_path_elapsed_ns"`
+	PeakCreditBytes                  int64   `json:"peak_credit_bytes"`
+	ByteCreditWaitElapsedNanos       int64   `json:"byte_credit_wait_elapsed_ns"`
+	InputDecimalMBPerSecond          float64 `json:"input_decimal_mb_per_second"`
+	InputMiBPerSecond                float64 `json:"input_mib_per_second"`
 }
 
 type QueryTableRequest struct {
@@ -158,6 +300,39 @@ type QueryTableRequest struct {
 	// only when more than one connection materializes the same table name.
 	Connection string `json:"connection,omitempty"`
 	Limit      int    `json:"limit"`
+}
+
+// ActionSourceReadRequest identifies the warehouse table an action step reads.
+// Connection selects one owner's materialization; the `_unattributed` sentinel
+// selects a root-owned table. An empty selector preserves typed ambiguity when
+// several owners materialize the same name.
+type ActionSourceReadRequest struct {
+	Table      string `json:"table"`
+	Connection string `json:"connection,omitempty"`
+}
+
+type QuerySQLOrigin uint8
+
+const (
+	QuerySQLOriginGeneric QuerySQLOrigin = iota
+	QuerySQLOriginFlow
+)
+
+// QuerySQLRequest describes a read-only analytical query over the local
+// warehouse. Connection scopes every table view available to the query, so a
+// flow or other caller cannot silently resolve a same-named table from another
+// connection. UnattributedConnection selects only root-owned tables.
+type QuerySQLRequest struct {
+	SQL        string         `json:"sql"`
+	Connection string         `json:"connection,omitempty"`
+	Limit      int            `json:"limit"`
+	Origin     QuerySQLOrigin `json:"-"`
+
+	// sameOwnerCaseEquivalentDestinationCollisions is an App-owned immutable
+	// configuration snapshot. It stays private so callers cannot manufacture a
+	// warehouse policy; QuerySQL adds it beside the resolver snapshot used by
+	// DuckDB for this one request.
+	sameOwnerCaseEquivalentDestinationCollisions []warehouseDestinationCollision
 }
 
 type PlanReverseETLRequest struct {
@@ -237,8 +412,29 @@ type ReversePlan struct {
 	ApprovalToken       string                         `json:"approval_token,omitempty"`
 	ApprovalConsumedAt  time.Time                      `json:"approval_consumed_at,omitempty"`
 	ApprovalUncertainAt time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
-	CreatedAt           time.Time                      `json:"created_at"`
-	ExpiresAt           time.Time                      `json:"expires_at"`
+	// AuthorizationReference identifies the durable, non-secret scope record
+	// minted by the single-use approval. It is safe to persist in a schedule or
+	// print as a reference; the scope record never carries the token.
+	AuthorizationReference string `json:"authorization_reference,omitempty"`
+	// TransportConnectionID and TransportBindingSHA256 are used by closed
+	// definition-selected transport writes. They bind a pre-run approval to
+	// one connection configuration; neither field is caller-selectable write
+	// input and neither contains an approval token or credential material.
+	TransportConnectionID  string `json:"transport_connection_id,omitempty"`
+	TransportStream        string `json:"transport_stream,omitempty"`
+	TransportBindingSHA256 string `json:"transport_binding_sha256,omitempty"`
+	TransportForwardPlanID string `json:"transport_forward_plan_id,omitempty"`
+	// AuthorizationLifetime is a bounded day-scale lifetime requested when a
+	// PostgreSQL managed-target transport plan is created. It is included in
+	// the sealed plan hash before its single-use approval token is issued.
+	AuthorizationLifetime time.Duration `json:"authorization_lifetime_ns,omitempty"`
+	// TargetCopyWorkers and TargetCopyWorkerMaximum are safe, persisted
+	// connection-policy evidence for the target's bounded immutable COPY
+	// capacity. They carry neither a credential nor a target identifier.
+	TargetCopyWorkers       int       `json:"target_copy_workers,omitempty"`
+	TargetCopyWorkerMaximum int       `json:"target_copy_worker_maximum,omitempty"`
+	CreatedAt               time.Time `json:"created_at"`
+	ExpiresAt               time.Time `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {
@@ -248,6 +444,72 @@ type RunReverseETLRequest struct {
 	// WithheldFlags carries the command flags an operator re-supplies for
 	// fields the plan withheld from disk. It is never persisted.
 	WithheldFlags map[string][]string `json:"-"`
+}
+
+// FlowActionExecutionRequest is the fully resolved, connector-backed action
+// request emitted by a flow step. Records are supplied by the flow engine only
+// after its connection-scoped source read; they are never persisted here.
+// AuthorizationReference is the durable, content-free record minted by an
+// earlier plan → preview → approval → execute lifecycle.
+type FlowActionExecutionRequest struct {
+	FlowName               string
+	StepID                 string
+	RunID                  string
+	ManifestDigest         string
+	SourceTable            string
+	SourceConnection       string
+	DestinationTable       string
+	DestinationConnector   string
+	DestinationCredential  string
+	DestinationConfig      map[string]string
+	Action                 string
+	Mappings               map[string]string
+	AuthorizationReference string
+	ReadBackStream         string
+	Records                []connectors.Record
+}
+
+// PreparedFlowAction is an in-memory, payload-bound execution prepared from a
+// standing authorization. Its exported fields are safe opaque evidence, not
+// authority. Request, mapped payload, and preview remain process-private.
+type PreparedFlowAction struct {
+	Identity string
+	FiringID string
+
+	request        FlowActionExecutionRequest
+	mappedRecords  []connectors.Record
+	preview        connectors.WritePreview
+	sealedIdentity string
+	scopeIdentity  string
+}
+
+// FlowActionExecutionResult contains only observable delivery accounting and
+// an opaque receipt identifier. It deliberately excludes source records,
+// payload content, credentials, and destination configuration.
+type FlowActionExecutionResult struct {
+	RecordsAttempted          int
+	RecordsSucceeded          int
+	RecordsFailed             int
+	ReceiptID                 string
+	PreparedExecutionIdentity string
+	FiringID                  string
+}
+
+// FlowActionReceipt is durable evidence that a connector acknowledged a flow
+// action and its configured target stream was read back successfully. It is
+// recorded only after both events, so it is safe for flow checkpointing.
+type FlowActionReceipt struct {
+	ID                        string    `json:"id"`
+	RunID                     string    `json:"run_id"`
+	FiringID                  string    `json:"firing_id"`
+	PreparedExecutionIdentity string    `json:"prepared_execution_identity"`
+	FlowName                  string    `json:"flow_name"`
+	StepID                    string    `json:"step_id"`
+	AuthorizationReference    string    `json:"authorization_reference"`
+	DestinationConnector      string    `json:"destination_connector"`
+	Action                    string    `json:"action"`
+	AcknowledgedAt            time.Time `json:"acknowledged_at"`
+	ReadBackAt                time.Time `json:"read_back_at"`
 }
 
 type ReverseRun struct {

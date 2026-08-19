@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "integration_type": "api",
+  "run_id": "github-1786999165620-3670de6c6be3",
+  "started_at": "2026-08-17T20:39:25.620Z",
+  "credential_scope": "observed_operations",
+  "records": [
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_for_user",
+      "command": "copilot-spaces get-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "get-for-user",
+        "--credential",
+        "github-cert-github-1786999165620-3670de6c6be3",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-yEJZX0"
+      ],
+      "executed": true,
+      "outcome": "no_object",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /users/{username}/copilot-spaces/{space_number}: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1: {\\\"message\\\":\\\"Not Found\\\",\\\"documentation_url\\\":\\\"https://docs.github.com/rest/copilot-spaces/copilot-spaces\\\",\\\"status\\\":\\\"404\\\"}: repository not found or not visible to the configured credentials\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /users/{username}/copilot-spaces/{space_number}: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/copilot-spaces/copilot-spaces\",\"status\":\"404\"}: repository not found or not visible to the configured credentials"
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_resource_for_user",
+      "command": "copilot-spaces get-resource-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "get-resource-for-user",
+        "--credential",
+        "github-cert-github-1786999165620-3670de6c6be3",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "1",
+        "--space-resource-id",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-yEJZX0"
+      ],
+      "executed": true,
+      "outcome": "no_object",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /users/{username}/copilot-spaces/{space_number}/resources/{space_resource_id}: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1/resources/1: {\\\"message\\\":\\\"Not Found\\\",\\\"documentation_url\\\":\\\"https://docs.github.com/rest/copilot-spaces/resources\\\",\\\"status\\\":\\\"404\\\"}: repository not found or not visible to the configured credentials\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /users/{username}/copilot-spaces/{space_number}/resources/{space_resource_id}: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1/resources/1: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/copilot-spaces/resources\",\"status\":\"404\"}: repository not found or not visible to the configured credentials"
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_collaborators_for_user",
+      "command": "copilot-spaces list-collaborators-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-collaborators-for-user",
+        "--credential",
+        "github-cert-github-1786999165620-3670de6c6be3",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-yEJZX0"
+      ],
+      "executed": true,
+      "outcome": "no_object",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /users/{username}/copilot-spaces/{space_number}/collaborators: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1/collaborators: {\\\"message\\\":\\\"Not Found\\\",\\\"documentation_url\\\":\\\"https://docs.github.com/rest/copilot-spaces/collaborators\\\",\\\"status\\\":\\\"404\\\"}: repository not found or not visible to the configured credentials\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /users/{username}/copilot-spaces/{space_number}/collaborators: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1/collaborators: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/copilot-spaces/collaborators\",\"status\":\"404\"}: repository not found or not visible to the configured credentials"
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_resources_for_user",
+      "command": "copilot-spaces list-resources-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-resources-for-user",
+        "--credential",
+        "github-cert-github-1786999165620-3670de6c6be3",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-yEJZX0"
+      ],
+      "executed": true,
+      "outcome": "no_object",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /users/{username}/copilot-spaces/{space_number}/resources: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1/resources: {\\\"message\\\":\\\"Not Found\\\",\\\"documentation_url\\\":\\\"https://docs.github.com/rest/copilot-spaces/resources\\\",\\\"status\\\":\\\"404\\\"}: repository not found or not visible to the configured credentials\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /users/{username}/copilot-spaces/{space_number}/resources: http 404 for https://api.github.com/users/polymetrics-ai-certification/copilot-spaces/1/resources: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/copilot-spaces/resources\",\"status\":\"404\"}: repository not found or not visible to the configured credentials"
+    }
+  ],
+  "summary": {
+    "executed": 4,
+    "certified": 0,
+    "no_object": 4,
+    "wrong_credential": 0,
+    "entitlement": 0,
+    "product_defect": 0
+  },
+  "local_cleanup": {
+    "credential_removed": true
+  },
+  "updated_at": "2026-08-17T20:39:35.669Z"
+}

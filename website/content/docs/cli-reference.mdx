@@ -89,18 +89,18 @@ schedule:
 | `pm credentials` | `pm credentials add`, `pm credentials link`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
-| `pm etl` | `pm etl check`, `pm etl catalog`, `pm etl read`, `pm etl run`, `pm etl status` | [/docs/etl](/docs/etl) |
+| `pm etl` | `pm etl check`, `pm etl catalog`, `pm etl read`, `pm etl run`, `pm etl status`, `pm etl transport github-issue-label` | [/docs/etl](/docs/etl) |
 | `pm query` | `pm query run` | [/docs/query](/docs/query) |
 | `pm reverse` | `pm reverse list`, `pm reverse plan`, `pm reverse preview`, `pm reverse run`, `pm reverse status` | [/docs/reverse-etl](/docs/reverse-etl) |
 | `pm agent` | `pm agent plan`, `pm agent image build`, `pm agent image pull`, `pm agent image ensure` | [/docs/agent-guide](/docs/agent-guide) |
 | `pm runtime` | `pm runtime doctor` | [/docs/architecture](/docs/architecture) |
-| `pm flow` | `pm flow plan`, `pm flow preview`, `pm flow run`, `pm flow status`, `pm flow list` | [/docs/architecture](/docs/architecture) |
+| `pm flow` | `pm flow create`, `pm flow plan`, `pm flow preview`, `pm flow run`, `pm flow status`, `pm flow list` | [/docs/architecture](/docs/architecture) |
 | `pm extract` | request routing | [/docs/agent-guide](/docs/agent-guide) |
 | `pm perf` | `pm perf compare`, `pm perf sync-modes` | this page |
 | `pm docs` | `pm docs generate`, `pm docs validate` | this page |
 | `pm skills` | `pm skills generate` | [/docs/agent-guide](/docs/agent-guide) |
 | `pm rlm` | `pm rlm run` | [/docs/architecture](/docs/architecture) |
-| `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule install`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
+| `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule inspect`, `pm schedule status`, `pm schedule install`, `pm schedule fire`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
 | `pm worker` | `pm worker serve`, `pm worker status` | [/docs/architecture](/docs/architecture) |
 
 ## Connector command surfaces
@@ -187,14 +187,24 @@ pm connections create github_to_warehouse \
   --stream pull_requests \
   --primary-key node_id \
   --cursor updated_at \
-  --sync-mode incremental_append_deduped \
+  --sync-mode incremental_append \
   --table github_pull_requests \
   --json
 
 pm connections list --json
 ```
 
-Connections bind credentials, a stream, table, sync mode, cursor, and primary key.
+Connections bind credentials, a stream, table, sync mode, cursor, and primary key. Add
+`--transform-file plan.json` to create an eligible typed database transport with a
+closed `TransformPlanV1`; the file is catalog-validated and persisted only as
+normalized JSON plus its hash. It supports typed projection/rename, timestamp/date,
+checked integer multiply/cast, uppercase, modulo, and a `not_equal` filter—never
+arbitrary SQL.
+
+An immutable transformed PostgreSQL full-overwrite target additionally accepts
+`--target-copy-workers <n>`. It defaults to `2` and is bounded by `min(8,
+target-declared pool maximum)`; the saved policy appears in the closed target
+plan and preview rather than becoming an unconstrained ETL run flag.
 
 Connection names accept letters, digits, `-` and `_`, must start with a letter or digit, and must
 differ by more than letter case. Ambiguous names are rejected at creation rather than rewritten,
@@ -204,6 +214,9 @@ display value only — the warehouse keys its directories on a generated identif
 Against the local warehouse destination, `--stream` and `--table` become path components, so each
 accepts only letters, digits, `.`, `-` and `_`. Both are checked when the connection is created,
 because a name the warehouse cannot materialize would otherwise fail every sync of that connection.
+The [connection manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/connections.md)
+owns the local-warehouse destination-table rule and recovery for invalid legacy
+inventories.
 
 ### `pm catalog`
 
@@ -226,6 +239,7 @@ pm connectors port-plan postgres --json
 pm connectors inspect 100ms --json
 pm connectors help 100ms
 pm connectors certify sample --full --json
+pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
 ```
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
@@ -236,6 +250,14 @@ a visible warning, not an availability gate; users can still run the connector.
 Certification is based on proof-bearing live records, not whether a command is
 reachable or a legacy certification filename exists.
 
+For connectors with a declared rate-limit policy, inspection reports rate-limit coordination
+provenance. `process_local` protects requests inside the current `pm` process only; it is not a
+cross-process claim. A policy explicitly declared `require_shared` refuses before sending a request
+if its optional shared coordinator is unavailable. A connector with both ordinary policies reports
+`mixed` policy-scoped provenance. A certification-only `require_shared` overlay preserves the
+`process_local` default label and explicitly states the certification boundary. Neither human nor JSON
+inspection exposes a scope, coordinator address, or credential.
+
 From a source checkout, `pm connectors certify <connector> --full --json` runs the legacy test
 harness and includes an API-surface
 inventory. Its `capabilities.surface.provenance` block reports provider-artifact evidence separately
@@ -244,6 +266,65 @@ cited endpoint count, and a status. Existing version-1 and pre-ledger inventorie
 `legacy_unverified` during the staged migration; invalid version-2 provenance fails certification.
 Provenance never supplies a `covered_by` binding, enables a command, or sets
 the generated certification quality signal.
+
+`--direct-read-only` is the bounded direct-command certification mode. It
+retains preflight, live credential validation, serialized rate-limit handling,
+declaration-owned output assertions, and secret scans, but does not run
+unrelated stream/ETL stages. After an admitted rate-limit stop, `--resume`
+reuses only matching credential-free checkpoints and marks those rows as
+resumed; it never represents them as fresh provider calls. A direct-read pass
+states its candidate count and does not claim the connector's entire command or
+stream surface. This mode cannot be combined with `--write`; with
+`--external-proof`, it produces an observed-operations proof rather than a
+full-parity claim.
+
+For a full-fidelity live HTTPS proof, add `--external-proof` and supply
+credentials only with `--from-env` or `--value-stdin`. This source-checkout
+mode builds a fresh `pm` child binary, keeps the credential session in memory,
+and writes only salted fingerprints of the observed process transcript and
+complete bounded exchanges. Its schema-v2 credential scope is derived from
+the completed report and transcript: a verified `--full-parity` run claims
+`full_parity`; any other completed run claims only
+`observed_operations` with `protocol_exchanges` as its scope proof. A bounded
+artifact preserves the certification run's actual exit and requires an
+observed successful provider response; it never turns a failed stage into pass
+coverage. It refuses an incomplete or truncated exchange before creating a
+proof artifact.
+
+`--write-only` is a bounded GitHub repository-fixture wave rather than a
+full-parity claim. It is restricted to the captain-approved run-owned fixture
+`Polymetrics-Cert/pm-cert-3993-20260810-wz0fru` and reports any unavailable
+action distinctly. In the current boundary, commit-comment
+actions need GitHub's **Metadata — Read-only** repository permission for their
+item read-back; without it they are `blocked`, not `pass`.
+After that permission is granted, enable their bounded re-run explicitly with
+`--config certification_commit_comment_item_read=enabled`; the default avoids
+creating a further unverified commit comment while the permission remains
+missing.
+
+```bash
+pm connectors certify github --direct-read-only --external-proof \
+  --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
+```
+
+For connectors with coordinated provider budgets, the JSON report may include
+`rate_limit_events`. These report safe attempt, wait, reset, and not-sent
+outcomes so a stopped request is distinguishable from a provider response. They
+never include credentials, rendered requests, or rate-scope subjects.
+
+PostgreSQL's full database proof requires `--write` plus an explicit
+`--stream schema.table` and `cursor_field` configuration. It certifies live
+catalog discovery, one bounded typed relation read, and PostgreSQL's six
+declared polling-to-managed-target modes with independent target read-back. It
+does not claim every relation in a dynamic database or a direct `writes.json`
+action surface.
+
+```bash
+pm connectors certify postgres --full --write --stream public.events \
+  --config host=DB_HOST --config port=5432 --config database=DB_NAME \
+  --config username=DB_USER --config schema=public --config cursor_field=sequence \
+  --from-env password=POSTGRES_PASSWORD --json
+```
 
 ## Extract, query, and write
 
@@ -270,7 +351,7 @@ Queries run on embedded DuckDB over the warehouse's Parquet tables, so read-only
 pm reverse list --json
 pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-local --action create_pull_request --map title:title --map head:head --map base:base --json
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 pm reverse status <run-id> --json
 ```
 
@@ -298,19 +379,44 @@ pm worker serve --json
 RLM agent mode is optional and runtime-backed. It uses Temporal plus a Podman-managed agent image; it is not part of the dependency-free quickstart.
 
 ```bash
+pm flow create --file flow.json --json
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --force --json
+pm flow run nightly_leads --force --json
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 
 pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
 pm schedule list --json
+pm schedule inspect nightly --json
+pm schedule status nightly --json
 pm schedule install nightly --crontab --json
+pm schedule fire nightly --json
 pm schedule remove nightly --crontab --json
 ```
 
-Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend.
+Approve each reverse-ETL job once at connection, schema, preview, mapping,
+destination-action, credential-revision, and confirmation-policy granularity.
+`pm flow create` then composes existing ETL connections and approved reverse-ETL
+jobs; missing, malformed, unrecognised, or unapproved references are refused
+before a flow file is written. RLM flow steps reuse the same analyzers as
+`pm rlm run` and resolve relative `spec` paths from the flow manifest file.
+
+Schedules accept only an existing valid flow. The installed crontab payload is
+exactly `pm --root <root> flow run <name> --json`: it contains no approval token
+or authorization reference. Each unattended firing reloads the jobs and
+revalidates credential revision, manifest/schema, source scope, mappings,
+destination action, confirmation policy, expiry, and revocation. Drift and
+failed, ambiguous, rate-limited, or cleanup-failed writes park or halt without
+automatic replay. `inspect` and `status` show only terminal status, prepared
+execution identities, and opaque receipt IDs.
+
+The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
+owns job references and flow source selection. An action derives its standing
+authorization and executable scope from the referenced approved job; flow and
+schedule commands do not accept an authorization carrier. Typed connector
+validation/write, target read-back, a prepared-execution identity, and a
+persisted receipt all precede a successful checkpoint.
 
 ## Operational commands
 
@@ -321,7 +427,7 @@ pm perf compare --iterations 25 --runtime --json
 pm perf sync-modes --records 1000 --json
 ```
 
-Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default.
+Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default. `pm perf sync-modes` excludes typed compatibility names that refuse before source I/O.
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors

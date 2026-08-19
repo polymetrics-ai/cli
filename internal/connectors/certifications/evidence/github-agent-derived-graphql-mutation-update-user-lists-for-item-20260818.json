@@ -1,0 +1,218 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_update_user_lists_for_item",
+  "provider": "github",
+  "executed_at": "2026-08-18T07:38:43.496Z",
+  "run_id": "rrun_d3ca569b21f3d46c",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:1a9ae23282819dd13633dc30cecb91b9e28e677f1c019b445745f360ea0a3931}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_update_user_lists_for_item",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:6c20e9eade92e51f2f52dd337415dc9dee3591f863ae39a5d27ee90ec646b120}}",
+              "variables": {
+                "input": {
+                  "itemId": "{{pmcertfp:v1:525123886aea9839b1aaf7e84394a9a8c25dd5134d73e1d48bd242b80884f4b6}}",
+                  "listIds": [
+                    "{{pmcertfp:v1:9b99077809ddabe3ef4464afd78d5a6e795b83624a504ed6618fc177030527d7}}"
+                  ],
+                  "suggestedListIds": []
+                }
+              }
+            },
+            "original_bytes": 150,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "api_version": "{{pmcertfp:v1:115e2da5c14c636730e5d968f312bc6751d6dfbdee0ede0b576db0feae65b6d4}}",
+              "kind": "{{pmcertfp:v1:7fa3c95edcdf37c05cc52ac7d73081b525c26c8ebe90a09e8d0c815116e68108}}",
+              "run": {
+                "id": "{{pmcertfp:v1:548957d991be4d2193bab1ca0ea8a77847c23b102be14c9a02dc99c99092a679}}",
+                "plan_id": "{{pmcertfp:v1:acc71334e17c9288474e1e59c2b86c412092b444a0219b4c85e0cc8177023b09}}",
+                "status": "{{pmcertfp:v1:8ae328c389dd980a18e408a535073608b7b398cd0d24cb9f984ddf1f850d3a19}}",
+                "records_staged": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                "records_succeeded": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                "records_failed": "{{pmcertfp:v1:10b99bf4cebac4343df7bfc3a523fcf64975a5e5e82cea7cc1afc7099fe353b8}}",
+                "operation_direct_write": {
+                  "connector": "{{pmcertfp:v1:858be923a317cf1426b5d07bb435549c5ebdeef10fc0cd4c81a6dcd09e600e0d}}",
+                  "operation": "{{pmcertfp:v1:3b298a8f432a7664a194772a32418227202567d2fb7e466c501e32b11f19c56d}}",
+                  "method": "{{pmcertfp:v1:cb476389832647c1c2ac56ea0a1ba7844074ed323862a1303c798a75cb3e6d1b}}",
+                  "path": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+                  "status": "{{pmcertfp:v1:8aa420187b404889cfc2d044c663915e35d75122b5a56640b5e748d441e30b79}}",
+                  "body": {
+                    "updateUserListsForItem": {
+                      "__typename": "{{pmcertfp:v1:ecd6cbf270bc6ad5cf03c7dafe93608dcf35af3414cfa1d97feca9ee482d1d98}}"
+                    }
+                  },
+                  "graphql": {}
+                },
+                "started_at": "{{pmcertfp:v1:d14a838a4d77e4c8e41ac0df5cb6de43563ef2c435bca0b10e3946dfdf8dc9e7}}",
+                "completed_at": "{{pmcertfp:v1:e49868b630b92b27963cf66551874c2849fdd2dbcb2997f648b227c7a2f1cf7b}}"
+              }
+            },
+            "original_bytes": 550,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_exact_item_in_list_wrong_empty_rejected",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:ce8da4e2cfb7588db5cfb688017f16c2ac5fb022e0450f607660774bc20ee7d2}}",
+              "variables": {
+                "listId": "{{pmcertfp:v1:9b99077809ddabe3ef4464afd78d5a6e795b83624a504ed6618fc177030527d7}}",
+                "itemId": "{{pmcertfp:v1:525123886aea9839b1aaf7e84394a9a8c25dd5134d73e1d48bd242b80884f4b6}}"
+              }
+            },
+            "original_bytes": 95,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": {
+                  "id": "{{pmcertfp:v1:9b99077809ddabe3ef4464afd78d5a6e795b83624a504ed6618fc177030527d7}}",
+                  "items": {
+                    "nodes": [
+                      {
+                        "id": "{{pmcertfp:v1:525123886aea9839b1aaf7e84394a9a8c25dd5134d73e1d48bd242b80884f4b6}}",
+                        "nameWithOwner": "{{pmcertfp:v1:6a000027068a02718d5f9df715dc8d5a9f5b91b291cba32a6ee2c89a197b7b45}}"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "original_bytes": 152,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_user_list_container",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:659a5477879ca4d51301eb0aba4a75fb7efbf1e9f71422904ff1a2dbbf905a1b}}",
+              "variables": {
+                "input": {
+                  "listId": "{{pmcertfp:v1:9b99077809ddabe3ef4464afd78d5a6e795b83624a504ed6618fc177030527d7}}"
+                }
+              }
+            },
+            "original_bytes": 81,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "deleteUserList": {
+                  "__typename": "{{pmcertfp:v1:6783b35696a86cb703cbfbc291c0a1376b92138adeead028b0798e7cbda293bc}}"
+                }
+              }
+            },
+            "original_bytes": 66,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:49a984c519dca042efa76efa85bb7c6452f50c314d9b6154be6436ada06cf8ea}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:9b99077809ddabe3ef4464afd78d5a6e795b83624a504ed6618fc177030527d7}}"
+              }
+            },
+            "original_bytes": 60,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:89e394bfc46a1867469c432711e35bcb664f023b779e295729dab0a2fce0f39c}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:a2945dcf842da3bdb8b6ac38faee74d120b5779ce69e3490fe95e4df1355978c}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:fa355cf3ffa756745756dd4df2f9a66d59336b2f2282b6bb4772540d592a8f26}}"
+                }
+              ]
+            },
+            "original_bytes": 192,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

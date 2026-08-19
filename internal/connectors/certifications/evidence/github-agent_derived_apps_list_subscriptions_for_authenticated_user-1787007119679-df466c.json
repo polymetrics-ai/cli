@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_apps_list_subscriptions_for_authenticated_user",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:51:59.679Z",
+  "run_id": "github-1787007119679-agent_derived_apps_list_subscriptions_for_authenticated_user",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "a66a2bf9f537d5d668b06609c129eee5e6ac3425414b04dc4287f508d9df4f81",
+    "pm_command_fingerprint": "{{pmcertfp:v1:976f0b54d224b35d01906137513f4565be2177839d219091d0c88cc146ac47de}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c7f0540a05d7b341f50ff33e2e48106c7b66d080325cb8a732852ef5d446b98b}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_apps_list_subscriptions_for_authenticated_user",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:4906afc90254e68f51e9ed557e3153bded3fa21cced58c228fa88a4ca166535c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

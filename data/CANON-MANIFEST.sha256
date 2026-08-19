@@ -1,7 +1,7 @@
 # Source-pinned reports used by docs/connector-canon/INDEX.md.
 # Verify with: shasum -a 256 -c data/CANON-MANIFEST.sha256
 ba104fa3886ac1006546724520c6c0e76830aff2e0ab425b5b77d58846e8716a  data/captain.md
-e8690d350b68afb9e3bd38fefa40130fd3226ecad8bc60da5568e3ebd519cf63  data/cli-database-connector-framework-design-r1/report.md
+791f560147633e2eab650e8ded4f7e008d1ad012bda9fe1c4acfe7a879e243eb  data/cli-database-connector-framework-design-r1/report.md
 5a77b60e99323702cfe4d417f73e74c423881ae5899cd7b81fdea5d4a88ce624  data/cli-cdc-large-transaction-strategy-r1/report.md
 73c47cf610d8f5e33eedaeb7ad36f65f2e0530a9a7c6d58786f5952a8466d8df  data/cli-cdc-bidirectional-changefeed-design-r1/report.md
 5fc05a7f14570fd93aa59deec7258a32f45acbf77a79cf01d64a5d30946d625b  data/archive/cli-postgres-parity-issue-tree-r1/report.md

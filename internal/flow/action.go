@@ -25,11 +25,12 @@ import (
 
 // ActionResult summarises a single action step execution.
 type ActionResult struct {
-	RecordsAttempted int
-	RecordsSucceeded int
-	RecordsFailed    int
-	DLQPath          string
-	ReceiptIDs       []string
+	RecordsAttempted          int
+	RecordsSucceeded          int
+	RecordsFailed             int
+	DLQPath                   string
+	ReceiptIDs                []string
+	PreparedExecutionIdentity string
 }
 
 // ---------------------------------------------------------------------------
@@ -37,9 +38,17 @@ type ActionResult struct {
 // ---------------------------------------------------------------------------
 
 // StepActionRunner executes a single action step.
-// Implemented by HTTPActionRunner; stubbed in tests via stubActionRunner.
+// Production uses the connector-backed runner from internal/cli. HTTPActionRunner
+// remains only as a legacy fixture for flow package tests.
 type StepActionRunner interface {
 	ExecuteStep(ctx context.Context, step FlowStep, records []map[string]any, token, runID string) (ActionResult, error)
+}
+
+// StepActionPreflight is implemented by production runners that can verify a
+// durable authorization scope before the flow touches a provider. Legacy test
+// runners without this capability remain subject to Engine's token guard.
+type StepActionPreflight interface {
+	PreflightStep(ctx context.Context, step FlowStep, token string) error
 }
 
 // ---------------------------------------------------------------------------
@@ -54,12 +63,12 @@ type SchemaSnapshot struct {
 }
 
 // ---------------------------------------------------------------------------
-// HTTPActionRunner — concrete implementation of all 7 safety features
+// HTTPActionRunner — legacy test fixture
 // ---------------------------------------------------------------------------
 
-// HTTPActionRunner sends records to an HTTP destination with all safety invariants.
-// The DestURL endpoint must accept a JSON array POST at /write and return a JSON
-// object with "accepted" and optionally "external_ids" fields.
+// HTTPActionRunner sends records to an HTTP destination for legacy flow tests.
+// It is not constructed by the production flow route; connector-backed action
+// delivery is the supported runtime path.
 type HTTPActionRunner struct {
 	FlowName   string
 	StepID     string
@@ -287,10 +296,10 @@ func deterministicRecordID(flowName, stepID string, record map[string]any) strin
 	sort.Strings(keys)
 
 	h := sha256.New()
-	fmt.Fprintf(h, "%s/%s:", flowName, stepID)
+	_, _ = fmt.Fprintf(h, "%s/%s:", flowName, stepID)
 	for _, k := range keys {
 		v, _ := json.Marshal(record[k])
-		fmt.Fprintf(h, "%s=%s;", k, v)
+		_, _ = fmt.Fprintf(h, "%s=%s;", k, v)
 	}
 	return hex.EncodeToString(h.Sum(nil))
 }
@@ -319,7 +328,7 @@ func (r *HTTPActionRunner) writeDLQ(runID string, entries []dlqEntry) (string, e
 	if err != nil {
 		return "", err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	enc := json.NewEncoder(f)
 	for _, e := range entries {
 		if err := enc.Encode(e); err != nil {
@@ -404,7 +413,7 @@ func (r *HTTPActionRunner) sendBatch(ctx context.Context, records []map[string]a
 		}
 
 		body, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
-		resp.Body.Close()
+		_ = resp.Body.Close()
 
 		if resp.StatusCode == http.StatusTooManyRequests {
 			// Honor Retry-After if present.

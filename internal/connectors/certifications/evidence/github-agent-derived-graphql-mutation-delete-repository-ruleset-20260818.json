@@ -1,0 +1,136 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_delete_repository_ruleset",
+  "provider": "github",
+  "executed_at": "2026-08-18T05:15:59.801648Z",
+  "run_id": "github-mut-slice1-delete-repository-ruleset-rrun_dd2bdbd7e5211254",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:16270992d11c77f51f9dca7733c860f83fa10ae3ea6774597991424eb353aa21}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_delete_repository_ruleset",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:408950b615e20cdfcc8684da739703db0e09aad50ea5a7967d90b2b1359c05e3}}",
+              "query": "{{pmcertfp:v1:d183aba1ac1fbc7799e901b069acd7cfaef65914994b544213ae320af454d297}}",
+              "variables": {
+                "input": {
+                  "repositoryRulesetId": "{{pmcertfp:v1:3265f9fac38fc9f5eef55f69d25d99ebed5babfc403d73bbe3ac2661bc149d78}}"
+                }
+              }
+            },
+            "original_bytes": 295,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "deleteRepositoryRuleset": {
+                "__typename": "{{pmcertfp:v1:4a12256b865be1b249966010d69987763e8a818fb2c2b703095484db0d827a39}}"
+              }
+            },
+            "original_bytes": 75,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_deleted_repository_ruleset",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:0712a70c3c34de2364e4f8c0809122eae02decab619b8ef09e6ba379c8f3b312}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_repository_ruleset_terminal_disposal",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:0712a70c3c34de2364e4f8c0809122eae02decab619b8ef09e6ba379c8f3b312}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:0712a70c3c34de2364e4f8c0809122eae02decab619b8ef09e6ba379c8f3b312}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

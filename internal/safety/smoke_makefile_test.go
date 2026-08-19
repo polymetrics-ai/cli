@@ -19,7 +19,7 @@ var smokeReverseExpectedStatements = []smokeReverseStatement{
 	{name: "plan id extraction", statement: `PLAN_ID=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Created reverse plan/ {print $$4}')`},
 	{name: "reverse preview", statement: `./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null`},
 	{name: "approval extraction", statement: `APPROVAL=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Approval token:/ {print $$3}')`},
-	{name: "reverse run", statement: `./pm reverse run "$$PLAN_ID" --approve "$$APPROVAL" --root "$$SMOKE_DIR" --json >/dev/null`},
+	{name: "reverse run", statement: `printf '%s\n' "$$APPROVAL" | ./pm reverse run "$$PLAN_ID" --approval-token-stdin --root "$$SMOKE_DIR" --json >/dev/null`},
 }
 
 func TestSmokeNoBuildReversePlanPreviewRunOrdering(t *testing.T) {

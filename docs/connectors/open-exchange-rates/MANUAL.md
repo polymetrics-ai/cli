@@ -37,7 +37,7 @@ ETL STREAMS
     fields: app_id(string), daily_average(integer), days_elapsed(integer), days_remaining(integer), plan(string), requests(integer), requests_quota(integer), requests_remaining(integer), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Open Exchange Rates API read of account usage/plan status

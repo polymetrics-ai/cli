@@ -1,0 +1,9 @@
+{
+  "connector": "github",
+  "stage_names": [
+    "generated_direct_read_copilot_spaces_get_for_org",
+    "generated_direct_read_copilot_spaces_list_collaborators_for_org",
+    "generated_direct_read_copilot_spaces_list_resources_for_org"
+  ],
+  "selection_basis": "After an owned pm-cert- organization Copilot Space is created through the declared reverse-ETL approval flow, these declared direct reads can use its returned space number. The resource-by-id read is excluded until a separately created owned resource supplies a verified resource id."
+}

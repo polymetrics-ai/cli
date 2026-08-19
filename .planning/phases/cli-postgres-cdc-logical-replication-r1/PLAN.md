@@ -97,12 +97,12 @@ concrete reasons:
    `internal/connectors` runtime contract, which the issue-first connector
    contract requires be split into a foundation issue/PR rather than absorbed
    here.
-2. The merged `native/dbtest` harness is explicitly Podman-only: its `Config`
-   takes a direct local Podman endpoint and its runner invokes Podman. It has
-   no Docker/Colima target or safety/cleanup implementation. The captain's
-   required Docker-via-Colima proof therefore needs a separate shared harness
-   foundation; a hand-rolled Docker command path would bypass the harness's
-   resource-ownership and cleanup contract.
+2. At this plan's 2026-08-10 baseline, the merged `native/dbtest` harness was
+   explicitly Podman-only. The separate #4083 foundation now supplies the
+   current explicit Docker-or-Podman direct-local-Unix contract, including the
+   Docker/Colima capacity proof; its [maintainer guide](../../../internal/connectors/native/dbtest/README.md)
+   owns the current details. A hand-rolled Docker command path would still
+   bypass the harness's resource-ownership and cleanup contract.
 
 With `POLYMETRICS_INTEGRATION=1`, the retained historical conformance test
 still exits at its unconditional planned-CDC skip before it can contact a

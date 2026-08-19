@@ -1,0 +1,297 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_delete_project_v2_status_update",
+  "provider": "github",
+  "executed_at": "2026-08-18T05:05:46.691412Z",
+  "run_id": "github-mut-slice1-delete-project-v2-status-update-rrun_8d19c1d8131c9e6c",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:3e5289cabeed4adc614e1ef6d6ce6d0a3cb4321b346d776362cb113be7cf4fca}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_delete_project_v2_status_update",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:254b7540d35847dc4be9b3910c5dd1b055862cd4cf30b7773a6a583578072a43}}",
+              "query": "{{pmcertfp:v1:dd788f0d844dd39387c6bd9f238cdde713d074028d0791037f905946b369f565}}",
+              "variables": {
+                "input": {
+                  "statusUpdateId": "{{pmcertfp:v1:175c26bff8498f309f44d8270b41146d2096338392fce45568c22da4bf1b19da}}"
+                }
+              }
+            },
+            "original_bytes": 300,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "deleteProjectV2StatusUpdate": {
+                "__typename": "{{pmcertfp:v1:99810b386f3f6c2339305852a6de12c589393d8dcf88d5161dcb124e37a08627}}"
+              }
+            },
+            "original_bytes": 83,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_deleted_project_v2_status_update",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:ccbb7a331aadde5f6ed6ff5256b8314ad335b52eca6cadfa6e2de440df5a7fa8}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:175c26bff8498f309f44d8270b41146d2096338392fce45568c22da4bf1b19da}}"
+              }
+            },
+            "original_bytes": 125,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:89e394bfc46a1867469c432711e35bcb664f023b779e295729dab0a2fce0f39c}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:493495dce1b4bde4acd9d9d0dce83d79ab150aab3a075ec849d8d63a2b74d26e}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:a6629958787f54a72637a3ae2bae51e2b226a001ac72a87ea42429981924e6a2}}"
+                }
+              ]
+            },
+            "original_bytes": 202,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_project_v2_status_update_terminal_disposal",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:00ae9fd8e344b99866b7575a865d86b75ac94a1ef1d6524d4baf1ad95c104608}}",
+              "variables": {
+                "input": {
+                  "statusUpdateId": "{{pmcertfp:v1:175c26bff8498f309f44d8270b41146d2096338392fce45568c22da4bf1b19da}}"
+                }
+              }
+            },
+            "original_bytes": 218,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "deleteProjectV2StatusUpdate": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:c64f23637ca15432d56d0eb2de919789d3be293caa8c2f805e89a9c4a83d443b}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:54935b9f8aac18dec41633b8a814278a6bf5b8feb9f952c4f421a18506b600ea}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:a6629958787f54a72637a3ae2bae51e2b226a001ac72a87ea42429981924e6a2}}"
+                }
+              ]
+            },
+            "original_bytes": 248,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:ccbb7a331aadde5f6ed6ff5256b8314ad335b52eca6cadfa6e2de440df5a7fa8}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:175c26bff8498f309f44d8270b41146d2096338392fce45568c22da4bf1b19da}}"
+              }
+            },
+            "original_bytes": 125,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:89e394bfc46a1867469c432711e35bcb664f023b779e295729dab0a2fce0f39c}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:493495dce1b4bde4acd9d9d0dce83d79ab150aab3a075ec849d8d63a2b74d26e}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:a6629958787f54a72637a3ae2bae51e2b226a001ac72a87ea42429981924e6a2}}"
+                }
+              ]
+            },
+            "original_bytes": 202,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_disposable_project_v2_container",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:576212b55ebf3c8e17fc992a5ba5e9f54d80dd2f3c5c9a930ecddefbc9488739}}",
+              "variables": {
+                "input": {
+                  "projectId": "{{pmcertfp:v1:8e51f48fa34605d46798ec1a83a839304f03425fd7e28230cd55e8c5fa41600e}}"
+                }
+              }
+            },
+            "original_bytes": 174,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "deleteProjectV2": {
+                  "__typename": "{{pmcertfp:v1:325960252a88d3c53f45291e388f6dde8b3398516c38fbb7e202e1b55b102ebb}}"
+                }
+              }
+            },
+            "original_bytes": 68,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "project_v2_container_cleanup_verified_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:ccbb7a331aadde5f6ed6ff5256b8314ad335b52eca6cadfa6e2de440df5a7fa8}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:8e51f48fa34605d46798ec1a83a839304f03425fd7e28230cd55e8c5fa41600e}}"
+              }
+            },
+            "original_bytes": 116,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:89e394bfc46a1867469c432711e35bcb664f023b779e295729dab0a2fce0f39c}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:493495dce1b4bde4acd9d9d0dce83d79ab150aab3a075ec849d8d63a2b74d26e}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:87567463aeaa83abad08092ddb45e21e91757d3d2a929ff5f90bbc36d89ce3e4}}"
+                }
+              ]
+            },
+            "original_bytes": 193,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

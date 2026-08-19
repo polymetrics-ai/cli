@@ -31,6 +31,11 @@ jobs:
               ;;
           esac
 
+          integration_pattern='^integration/[1-9][0-9]*-[a-z0-9][a-z0-9._-]*$'
+          if [[ "$HEAD_REF" =~ $integration_pattern ]]; then
+            exit 0
+          fi
+
           pattern='^(feat|fix|docs|chore|ci|test|refactor|perf|build|release|revert|deps)/[a-z0-9][a-z0-9._-]*$'
           if [[ ! "$HEAD_REF" =~ $pattern ]]; then
             {

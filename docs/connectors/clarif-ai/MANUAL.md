@@ -57,7 +57,7 @@ ETL STREAMS
     fields: app_id(string), created_at(string), id(string), modified_at(string), user_id(string), version(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_application:

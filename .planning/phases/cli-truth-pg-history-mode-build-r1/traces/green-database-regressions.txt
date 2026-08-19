@@ -1,0 +1,458 @@
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_directory_creation_disk_full
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_write
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_file_sync
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_rename
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_parent_sync
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_write_disk_full
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_file_sync
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_rename
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_parent_sync
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_write
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_file_sync
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_rename
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_parent_sync
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_write
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_file_sync
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_rename
+=== RUN   TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_parent_sync
+--- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState (0.93s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_directory_creation_disk_full (0.02s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_write (0.03s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_file_sync (0.03s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_rename (0.03s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/begin_state_parent_sync (0.03s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_write_disk_full (0.05s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_file_sync (0.07s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_rename (0.06s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_chunk_parent_sync (0.06s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_write (0.06s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_file_sync (0.06s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_rename (0.06s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/append_manifest_parent_sync (0.06s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_write (0.07s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_file_sync (0.07s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_rename (0.08s)
+    --- PASS: TestCommittedTransactionStageBeginAppendAndSealFaultBoundariesCleanIncompleteState/seal_state_parent_sync (0.08s)
+=== RUN   TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless
+=== RUN   TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receiver_failure_leaves_sealed_retryable_transaction
+=== RUN   TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_write_disk_full
+=== RUN   TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_file_sync
+=== RUN   TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_rename
+=== RUN   TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_parent_sync
+--- PASS: TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless (0.32s)
+    --- PASS: TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receiver_failure_leaves_sealed_retryable_transaction (0.06s)
+    --- PASS: TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_write_disk_full (0.06s)
+    --- PASS: TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_file_sync (0.06s)
+    --- PASS: TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_rename (0.07s)
+    --- PASS: TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless/receipt_parent_sync (0.07s)
+=== RUN   TestCommittedTransactionStageFailedAppendCleanupStaysTerminalUntilAbortRetries
+--- PASS: TestCommittedTransactionStageFailedAppendCleanupStaysTerminalUntilAbortRetries (0.06s)
+=== RUN   TestCommittedTransactionStageDiscardedSealedStageNeverRecoversOrDelivers
+--- PASS: TestCommittedTransactionStageDiscardedSealedStageNeverRecoversOrDelivers (0.07s)
+=== RUN   TestCommittedTransactionStageDiscardIntentWriteFailureAndCleanupFailureHaltsRecovery
+--- PASS: TestCommittedTransactionStageDiscardIntentWriteFailureAndCleanupFailureHaltsRecovery (0.06s)
+=== RUN   TestCommittedTransactionStageDiscardIntentWriteFailureWithDurableCleanupNeverRecovers
+--- PASS: TestCommittedTransactionStageDiscardIntentWriteFailureWithDurableCleanupNeverRecovers (0.06s)
+=== RUN   TestCommittedTransactionStageDiscardIntentParentSyncFailureRetainsExternalMarker
+--- PASS: TestCommittedTransactionStageDiscardIntentParentSyncFailureRetainsExternalMarker (0.07s)
+=== RUN   TestCommittedTransactionStageDiscardCleanupParentSyncFailureNeverAdmitsRecovery
+--- PASS: TestCommittedTransactionStageDiscardCleanupParentSyncFailureNeverAdmitsRecovery (0.08s)
+=== RUN   TestCommittedTransactionStageDiscardControlRetentionIsBounded
+--- PASS: TestCommittedTransactionStageDiscardControlRetentionIsBounded (0.12s)
+=== RUN   TestCommittedTransactionStageRecoveryReapsOnlyOwnedDiscardTemps
+--- PASS: TestCommittedTransactionStageRecoveryReapsOnlyOwnedDiscardTemps (0.03s)
+=== RUN   TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls
+=== RUN   TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/corrupt_final
+=== RUN   TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/oversized_final
+=== RUN   TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/temporary_lookalike
+=== RUN   TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/directory
+=== RUN   TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/symlink
+--- PASS: TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls (0.13s)
+    --- PASS: TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/corrupt_final (0.02s)
+    --- PASS: TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/oversized_final (0.02s)
+    --- PASS: TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/temporary_lookalike (0.02s)
+    --- PASS: TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/directory (0.02s)
+    --- PASS: TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls/symlink (0.03s)
+=== RUN   TestCommittedTransactionStageDiscardRetirementCrashMatrix
+--- PASS: TestCommittedTransactionStageDiscardRetirementCrashMatrix (0.08s)
+=== RUN   TestCommittedTransactionStageDiscardFinalRetirementFailuresPoisonRoot
+=== RUN   TestCommittedTransactionStageDiscardFinalRetirementFailuresPoisonRoot/final_remove
+=== RUN   TestCommittedTransactionStageDiscardFinalRetirementFailuresPoisonRoot/final_directory_sync
+--- PASS: TestCommittedTransactionStageDiscardFinalRetirementFailuresPoisonRoot (0.12s)
+    --- PASS: TestCommittedTransactionStageDiscardFinalRetirementFailuresPoisonRoot/final_remove (0.06s)
+    --- PASS: TestCommittedTransactionStageDiscardFinalRetirementFailuresPoisonRoot/final_directory_sync (0.05s)
+=== RUN   TestCommittedTransactionStageDiscardControlCleanupFailurePoisonsRoot
+--- PASS: TestCommittedTransactionStageDiscardControlCleanupFailurePoisonsRoot (0.12s)
+=== RUN   TestCommittedTransactionStagePostReceiptCleanupFailurePreservesOnlyDurableReceipt
+--- PASS: TestCommittedTransactionStagePostReceiptCleanupFailurePreservesOnlyDurableReceipt (0.09s)
+=== RUN   TestCommittedTransactionStageDiscardControlTempCleanupRetainsSlotUntilReconciled
+--- PASS: TestCommittedTransactionStageDiscardControlTempCleanupRetainsSlotUntilReconciled (0.09s)
+=== RUN   TestCommittedTransactionStageDiscardControlTempRemovalRequiresDirectorySync
+--- PASS: TestCommittedTransactionStageDiscardControlTempRemovalRequiresDirectorySync (0.08s)
+=== RUN   TestCommittedTransactionStageRecoveredOverCapacityCannotClearPoisonOrDeliver
+--- PASS: TestCommittedTransactionStageRecoveredOverCapacityCannotClearPoisonOrDeliver (0.11s)
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/one_to_one
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/two_to_two
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/two_to_one
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/two_to_one_to_two
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/receipt_backed_residue
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/reversed_transaction_key_order
+=== RUN   TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/repeated_reopen_and_reconcile
+--- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix (0.69s)
+    --- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/one_to_one (0.06s)
+    --- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/two_to_two (0.11s)
+    --- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/two_to_one (0.10s)
+    --- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/two_to_one_to_two (0.10s)
+    --- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/receipt_backed_residue (0.11s)
+    --- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/reversed_transaction_key_order (0.10s)
+    --- PASS: TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/repeated_reopen_and_reconcile (0.10s)
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_create
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_write
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_file_sync
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_close
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_rename
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_remove
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_parent_sync
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/transaction_remove
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/transaction_parent_sync
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/final_remove
+=== RUN   TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/final_parent_sync
+--- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix (0.52s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_create (0.04s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_write (0.04s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_file_sync (0.04s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_close (0.05s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_rename (0.05s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_remove (0.05s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_parent_sync (0.04s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/transaction_remove (0.06s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/transaction_parent_sync (0.05s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/final_remove (0.05s)
+    --- PASS: TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/final_parent_sync (0.06s)
+=== RUN   TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt
+=== PAUSE TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt
+=== RUN   TestCommittedTransactionStageAbortRemovesPrivateChunks
+--- PASS: TestCommittedTransactionStageAbortRemovesPrivateChunks (0.11s)
+=== RUN   TestCommittedTransactionStageDiscardIntentDoesNotBlockReusedIdentity
+--- PASS: TestCommittedTransactionStageDiscardIntentDoesNotBlockReusedIdentity (0.13s)
+=== RUN   TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue
+=== RUN   TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue/transaction_bytes
+=== RUN   TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue/transaction_records
+=== RUN   TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue/transaction_age
+--- PASS: TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue (0.17s)
+    --- PASS: TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue/transaction_bytes (0.05s)
+    --- PASS: TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue/transaction_records (0.07s)
+    --- PASS: TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue/transaction_age (0.05s)
+=== RUN   TestCommittedTransactionStageRetainsRecoveredBytesAgainstRootQuota
+--- PASS: TestCommittedTransactionStageRetainsRecoveredBytesAgainstRootQuota (0.14s)
+=== RUN   TestCommittedTransactionStageBoundsControlSlotsBeforeDurableBegin
+--- PASS: TestCommittedTransactionStageBoundsControlSlotsBeforeDurableBegin (0.08s)
+=== RUN   TestCommittedTransactionStageSaturatesUntrustedRecordQuotaDiagnostics
+--- PASS: TestCommittedTransactionStageSaturatesUntrustedRecordQuotaDiagnostics (0.05s)
+=== RUN   TestCommittedTransactionStageStreamsWithABoundedBuffer
+--- PASS: TestCommittedTransactionStageStreamsWithABoundedBuffer (0.07s)
+=== RUN   TestCommittedTransactionStageCancellationLeavesNoFinalChunkOrReceipt
+=== RUN   TestCommittedTransactionStageCancellationLeavesNoFinalChunkOrReceipt/during_append
+=== RUN   TestCommittedTransactionStageCancellationLeavesNoFinalChunkOrReceipt/after_receiver_delivery_before_receipt
+--- PASS: TestCommittedTransactionStageCancellationLeavesNoFinalChunkOrReceipt (0.14s)
+    --- PASS: TestCommittedTransactionStageCancellationLeavesNoFinalChunkOrReceipt/during_append (0.06s)
+    --- PASS: TestCommittedTransactionStageCancellationLeavesNoFinalChunkOrReceipt/after_receiver_delivery_before_receipt (0.08s)
+=== RUN   TestCommittedTransactionStageRestartRecoveryRetainsOnlySealedReceiptlessWork
+--- PASS: TestCommittedTransactionStageRestartRecoveryRetainsOnlySealedReceiptlessWork (0.08s)
+=== RUN   TestCommittedTransactionStageRecoveryCleansIncompleteAndOrphanState
+--- PASS: TestCommittedTransactionStageRecoveryCleansIncompleteAndOrphanState (0.08s)
+=== RUN   TestCommittedTransactionStageRejectsReceiverThatDoesNotConsumeWholeTransaction
+--- PASS: TestCommittedTransactionStageRejectsReceiverThatDoesNotConsumeWholeTransaction (0.06s)
+=== RUN   TestTransactionReceiptCannotForgeAcknowledgementEligibility
+--- PASS: TestTransactionReceiptCannotForgeAcknowledgementEligibility (0.00s)
+=== RUN   TestCommittedTransactionStageOpaqueIdentityNeverBecomesPath
+--- PASS: TestCommittedTransactionStageOpaqueIdentityNeverBecomesPath (0.23s)
+=== RUN   TestCommittedTransactionStageConcurrentTransactionsStayIsolated
+--- PASS: TestCommittedTransactionStageConcurrentTransactionsStayIsolated (0.40s)
+=== RUN   TestTransformArrowRecordEvaluatesClosedProjectionAndFilter
+--- PASS: TestTransformArrowRecordEvaluatesClosedProjectionAndFilter (0.01s)
+=== RUN   TestTransformArrowRecordRefusesMissingInputFieldBeforeDuckDBIO
+--- PASS: TestTransformArrowRecordRefusesMissingInputFieldBeforeDuckDBIO (0.00s)
+=== RUN   TestTransformArrowRecordPreservesZeroRowBatch
+--- PASS: TestTransformArrowRecordPreservesZeroRowBatch (0.00s)
+=== RUN   TestArrowTransformerReusesOneDuckDBConnectionForMultipleBatches
+--- PASS: TestArrowTransformerReusesOneDuckDBConnectionForMultipleBatches (0.00s)
+=== RUN   TestCatalogFromConnectorCatalogProjectsSealedAPIStream
+--- PASS: TestCatalogFromConnectorCatalogProjectsSealedAPIStream (0.00s)
+=== RUN   TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream
+=== RUN   TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream/missing_schema
+=== RUN   TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream/missing_stream
+=== RUN   TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream/duplicate_stream
+--- PASS: TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream (0.00s)
+    --- PASS: TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream/missing_schema (0.00s)
+    --- PASS: TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream/missing_stream (0.00s)
+    --- PASS: TestCatalogFromConnectorCatalogRefusesUnsealedOrAmbiguousStream/duplicate_stream (0.00s)
+=== RUN   TestDatabaseWriteExecutorRefusesApprovalPlanMismatchBeforeSessionMutation
+--- PASS: TestDatabaseWriteExecutorRefusesApprovalPlanMismatchBeforeSessionMutation (0.00s)
+=== RUN   TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation
+=== RUN   TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/target_identity
+=== RUN   TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/schema_fingerprint
+=== RUN   TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/mode_and_canonical_strategy
+=== RUN   TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/stable_keys
+=== RUN   TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/record_count
+--- PASS: TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation (0.00s)
+    --- PASS: TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/target_identity (0.00s)
+    --- PASS: TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/schema_fingerprint (0.00s)
+    --- PASS: TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/mode_and_canonical_strategy (0.00s)
+    --- PASS: TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/stable_keys (0.00s)
+    --- PASS: TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation/record_count (0.00s)
+=== RUN   TestDatabaseWriteExecutorConsumesApprovalBeforeOnePinnedBoundedSession
+--- PASS: TestDatabaseWriteExecutorConsumesApprovalBeforeOnePinnedBoundedSession (0.00s)
+=== RUN   TestDatabaseWriteExecutorRollsBackFailuresAndCancellationWithoutCheckpointAuthority
+=== RUN   TestDatabaseWriteExecutorRollsBackFailuresAndCancellationWithoutCheckpointAuthority/batch_failure
+=== RUN   TestDatabaseWriteExecutorRollsBackFailuresAndCancellationWithoutCheckpointAuthority/cancellation_between_batches
+--- PASS: TestDatabaseWriteExecutorRollsBackFailuresAndCancellationWithoutCheckpointAuthority (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRollsBackFailuresAndCancellationWithoutCheckpointAuthority/batch_failure (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRollsBackFailuresAndCancellationWithoutCheckpointAuthority/cancellation_between_batches (0.00s)
+=== RUN   TestDatabaseWriteExecutorTreatsUnknownCommitAsTerminalWithoutRetryOrRollback
+--- PASS: TestDatabaseWriteExecutorTreatsUnknownCommitAsTerminalWithoutRetryOrRollback (0.00s)
+=== RUN   TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies
+=== RUN   TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/non_atomic_overwrite_refuses_before_mutation
+=== RUN   TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/atomic_overwrite_publishes_once_after_batches
+=== RUN   TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/append_uses_one_pinned_canonical_strategy
+=== RUN   TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/upsert_uses_one_pinned_canonical_strategy
+=== RUN   TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/dedupe_uses_one_pinned_canonical_strategy
+--- PASS: TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/non_atomic_overwrite_refuses_before_mutation (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/atomic_overwrite_publishes_once_after_batches (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/append_uses_one_pinned_canonical_strategy (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/upsert_uses_one_pinned_canonical_strategy (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRequiresAtomicOverwriteAndPinsCanonicalStrategies/dedupe_uses_one_pinned_canonical_strategy (0.00s)
+=== RUN   TestDatabaseWriteExecutorRequiresDefinitionCompatibleDriverAndRegistryAdmission
+=== RUN   TestDatabaseWriteExecutorRequiresDefinitionCompatibleDriverAndRegistryAdmission/mismatched_descriptor_cannot_preview_or_mutate
+=== RUN   TestDatabaseWriteExecutorRequiresDefinitionCompatibleDriverAndRegistryAdmission/registry_resolves_only_explicit_write_port
+--- PASS: TestDatabaseWriteExecutorRequiresDefinitionCompatibleDriverAndRegistryAdmission (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRequiresDefinitionCompatibleDriverAndRegistryAdmission/mismatched_descriptor_cannot_preview_or_mutate (0.00s)
+    --- PASS: TestDatabaseWriteExecutorRequiresDefinitionCompatibleDriverAndRegistryAdmission/registry_resolves_only_explicit_write_port (0.00s)
+=== RUN   TestFullOverwriteReceiptV1IsDeterministicAndPayloadFree
+--- PASS: TestFullOverwriteReceiptV1IsDeterministicAndPayloadFree (0.00s)
+=== RUN   TestFullOverwriteReceiptV1RefusesMalformedHashesBeforeStore
+--- PASS: TestFullOverwriteReceiptV1RefusesMalformedHashesBeforeStore (0.00s)
+=== RUN   TestFullOverwriteReceiptV1RejectsNegativeRecordCount
+--- PASS: TestFullOverwriteReceiptV1RejectsNegativeRecordCount (0.00s)
+=== RUN   TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation
+=== RUN   TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation/api_source_to_postgres_destination
+=== RUN   TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation/postgres_source_to_mysql_destination
+=== RUN   TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation/api_source_to_mysql_destination
+--- PASS: TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation (0.00s)
+    --- PASS: TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation/api_source_to_postgres_destination (0.00s)
+    --- PASS: TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation/postgres_source_to_mysql_destination (0.00s)
+    --- PASS: TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation/api_source_to_mysql_destination (0.00s)
+=== RUN   TestManagedTargetDeliveryLedgerRenameAndRestart
+--- PASS: TestManagedTargetDeliveryLedgerRenameAndRestart (0.00s)
+=== RUN   TestManagedTargetDeliveryLedgerSeparatesRelations
+--- PASS: TestManagedTargetDeliveryLedgerSeparatesRelations (0.00s)
+=== RUN   TestManagedTargetDeliveryLedgerRejectsInvalidKeyBeforeStoreMutation
+--- PASS: TestManagedTargetDeliveryLedgerRejectsInvalidKeyBeforeStoreMutation (0.00s)
+=== RUN   TestManagedTargetDeliveryLedgerKeyBindsOwnerAndTargetDatabase
+--- PASS: TestManagedTargetDeliveryLedgerKeyBindsOwnerAndTargetDatabase (0.00s)
+=== RUN   TestManagedTargetProvisioningTruthTable
+=== RUN   TestManagedTargetProvisioningTruthTable/absent_namespace_creates_a_new_managed_target
+=== RUN   TestManagedTargetProvisioningTruthTable/owned_namespace_allows_second_stream_relation
+=== RUN   TestManagedTargetProvisioningTruthTable/namespace_without_an_owner_record_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/foreign_namespace_owner_record_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/unreadable_namespace_owner_record_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/replaced_namespace_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/moved_target_database_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/first_create_reasserts_exact_control_state
+=== RUN   TestManagedTargetProvisioningTruthTable/post-create_foreign_control_record_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/repeat_with_correct_owner_is_idempotently_asserted
+=== RUN   TestManagedTargetProvisioningTruthTable/relation_with_missing_owner_record_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/foreign_owner_record_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/unreadable_owner_record_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/name_collision_is_refused_rather_than_adopted
+=== RUN   TestManagedTargetProvisioningTruthTable/native_identity_replacement_is_refused
+=== RUN   TestManagedTargetProvisioningTruthTable/schema_hash_or_version_drift_is_refused_rather_than_evolved
+=== RUN   TestManagedTargetProvisioningTruthTable/orphaned_control_record_never_recreates_a_target
+=== RUN   TestManagedTargetProvisioningTruthTable/untyped_plan_cannot_mutate_a_target
+=== RUN   TestManagedTargetProvisioningTruthTable/cancelled_provisioning_fails_before_mutation
+=== RUN   TestManagedTargetProvisioningTruthTable/concurrent_provisioning_creates_once_then_asserts
+=== RUN   TestManagedTargetProvisioningTruthTable/cancellation_while_another_provision_owns_the_target_lock_fails_closed
+=== RUN   TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock
+=== RUN   TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/cancellation_after_a_committed_create_is_reasserted_before_returning
+=== RUN   TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/driver_error_after_a_committed_create_is_reasserted_before_returning
+=== RUN   TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/cancellation_after_a_foreign_mutation_returns_the_ownership_classification
+=== RUN   TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/driver_error_after_a_foreign_mutation_returns_the_ownership_classification
+--- PASS: TestManagedTargetProvisioningTruthTable (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/absent_namespace_creates_a_new_managed_target (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/owned_namespace_allows_second_stream_relation (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/namespace_without_an_owner_record_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/foreign_namespace_owner_record_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/unreadable_namespace_owner_record_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/replaced_namespace_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/moved_target_database_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/first_create_reasserts_exact_control_state (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/post-create_foreign_control_record_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/repeat_with_correct_owner_is_idempotently_asserted (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/relation_with_missing_owner_record_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/foreign_owner_record_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/unreadable_owner_record_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/name_collision_is_refused_rather_than_adopted (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/native_identity_replacement_is_refused (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/schema_hash_or_version_drift_is_refused_rather_than_evolved (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/orphaned_control_record_never_recreates_a_target (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/untyped_plan_cannot_mutate_a_target (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/cancelled_provisioning_fails_before_mutation (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/concurrent_provisioning_creates_once_then_asserts (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/cancellation_while_another_provision_owns_the_target_lock_fails_closed (0.00s)
+    --- PASS: TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock (0.00s)
+        --- PASS: TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/cancellation_after_a_committed_create_is_reasserted_before_returning (0.00s)
+        --- PASS: TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/driver_error_after_a_committed_create_is_reasserted_before_returning (0.00s)
+        --- PASS: TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/cancellation_after_a_foreign_mutation_returns_the_ownership_classification (0.00s)
+        --- PASS: TestManagedTargetProvisioningTruthTable/post-create_outcomes_are_reasserted_under_the_target_lock/driver_error_after_a_foreign_mutation_returns_the_ownership_classification (0.00s)
+=== RUN   TestManagedTargetProvisioningConcurrentStreamsShareNamespaceOwner
+--- PASS: TestManagedTargetProvisioningConcurrentStreamsShareNamespaceOwner (0.00s)
+=== RUN   TestManagedTargetProvisioningPlanCarriesSharedMapping
+--- PASS: TestManagedTargetProvisioningPlanCarriesSharedMapping (0.00s)
+=== RUN   TestMappingContractV1ProjectsLosslessValuesAndRoundTrips
+--- PASS: TestMappingContractV1ProjectsLosslessValuesAndRoundTrips (0.00s)
+=== RUN   TestMappingContractV1CanonicalizesStructuredJSONValue
+--- PASS: TestMappingContractV1CanonicalizesStructuredJSONValue (0.00s)
+=== RUN   TestMappingContractV1RefusesUnrepresentableMappingsAndValues
+--- PASS: TestMappingContractV1RefusesUnrepresentableMappingsAndValues (0.00s)
+=== RUN   TestMappingContractV1MapsOnlyDeclaredTombstoneKeys
+--- PASS: TestMappingContractV1MapsOnlyDeclaredTombstoneKeys (0.00s)
+=== RUN   TestDatabaseWritePlanSealsMappingBeforeSessionMutation
+--- PASS: TestDatabaseWritePlanSealsMappingBeforeSessionMutation (0.00s)
+=== RUN   TestDatabaseWriteExecutorDeletesOnlyExplicitTombstones
+--- PASS: TestDatabaseWriteExecutorDeletesOnlyExplicitTombstones (0.00s)
+=== RUN   TestDatabaseWriteExecutorRefusesTombstoneMismatchBeforeSessionMutation
+--- PASS: TestDatabaseWriteExecutorRefusesTombstoneMismatchBeforeSessionMutation (0.00s)
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/valid
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unknown_field_is_rejected_without_echoing_its_value
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unknown_logical_type_is_rejected
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unsupported_schema_version_is_rejected
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/nested_unknown_field_is_rejected
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/explicit_null_is_rejected
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/nested_opaque_logical_mapping_is_rejected
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unbounded_page_policy_is_rejected
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/overflowing_connect_timeout_is_rejected
+=== RUN   TestDatabaseDefinitionStrictLoadAndDefensiveProjection/overflowing_operation_timeout_is_rejected
+--- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/valid (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unknown_field_is_rejected_without_echoing_its_value (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unknown_logical_type_is_rejected (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unsupported_schema_version_is_rejected (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/nested_unknown_field_is_rejected (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/explicit_null_is_rejected (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/nested_opaque_logical_mapping_is_rejected (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/unbounded_page_policy_is_rejected (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/overflowing_connect_timeout_is_rejected (0.00s)
+    --- PASS: TestDatabaseDefinitionStrictLoadAndDefensiveProjection/overflowing_operation_timeout_is_rejected (0.00s)
+=== RUN   TestDatabaseDefinitionRejectsAmbiguousMembers
+=== RUN   TestDatabaseDefinitionRejectsAmbiguousMembers/repeated_strict_member
+=== RUN   TestDatabaseDefinitionRejectsAmbiguousMembers/case-aliased_member_alongside_canonical_member
+=== RUN   TestDatabaseDefinitionRejectsAmbiguousMembers/case-aliased_root_strict_member
+--- PASS: TestDatabaseDefinitionRejectsAmbiguousMembers (0.00s)
+    --- PASS: TestDatabaseDefinitionRejectsAmbiguousMembers/repeated_strict_member (0.00s)
+    --- PASS: TestDatabaseDefinitionRejectsAmbiguousMembers/case-aliased_member_alongside_canonical_member (0.00s)
+    --- PASS: TestDatabaseDefinitionRejectsAmbiguousMembers/case-aliased_root_strict_member (0.00s)
+=== RUN   TestDatabaseDefinitionEnforcesSchemaNumericConstraints
+=== RUN   TestDatabaseDefinitionEnforcesSchemaNumericConstraints/logical_minimum
+=== RUN   TestDatabaseDefinitionEnforcesSchemaNumericConstraints/identifier_maximum
+=== RUN   TestDatabaseDefinitionEnforcesSchemaNumericConstraints/schema_version_enum
+--- PASS: TestDatabaseDefinitionEnforcesSchemaNumericConstraints (0.00s)
+    --- PASS: TestDatabaseDefinitionEnforcesSchemaNumericConstraints/logical_minimum (0.00s)
+    --- PASS: TestDatabaseDefinitionEnforcesSchemaNumericConstraints/identifier_maximum (0.00s)
+    --- PASS: TestDatabaseDefinitionEnforcesSchemaNumericConstraints/schema_version_enum (0.00s)
+=== RUN   TestResourcePolicyBoundsEveryDatabaseResource
+=== RUN   TestResourcePolicyBoundsEveryDatabaseResource/zero_max_parameters
+=== RUN   TestResourcePolicyBoundsEveryDatabaseResource/zero_connect_timeout
+=== RUN   TestResourcePolicyBoundsEveryDatabaseResource/zero_operation_timeout
+=== RUN   TestResourcePolicyBoundsEveryDatabaseResource/unbounded_page_maximum
+=== RUN   TestResourcePolicyBoundsEveryDatabaseResource/unbounded_batch_maximum
+=== RUN   TestResourcePolicyBoundsEveryDatabaseResource/unbounded_pool_maximum
+--- PASS: TestResourcePolicyBoundsEveryDatabaseResource (0.00s)
+    --- PASS: TestResourcePolicyBoundsEveryDatabaseResource/zero_max_parameters (0.00s)
+    --- PASS: TestResourcePolicyBoundsEveryDatabaseResource/zero_connect_timeout (0.00s)
+    --- PASS: TestResourcePolicyBoundsEveryDatabaseResource/zero_operation_timeout (0.00s)
+    --- PASS: TestResourcePolicyBoundsEveryDatabaseResource/unbounded_page_maximum (0.00s)
+    --- PASS: TestResourcePolicyBoundsEveryDatabaseResource/unbounded_batch_maximum (0.00s)
+    --- PASS: TestResourcePolicyBoundsEveryDatabaseResource/unbounded_pool_maximum (0.00s)
+=== RUN   TestLogicalTypeCompatibilityIsLosslessOrRejected
+=== RUN   TestLogicalTypeCompatibilityIsLosslessOrRejected/direct_opaque_native
+=== RUN   TestLogicalTypeCompatibilityIsLosslessOrRejected/nested_opaque_native
+--- PASS: TestLogicalTypeCompatibilityIsLosslessOrRejected (0.00s)
+    --- PASS: TestLogicalTypeCompatibilityIsLosslessOrRejected/direct_opaque_native (0.00s)
+    --- PASS: TestLogicalTypeCompatibilityIsLosslessOrRejected/nested_opaque_native (0.00s)
+=== RUN   TestDeriveChangeDeliveryWorksetImmutableIdentity
+--- PASS: TestDeriveChangeDeliveryWorksetImmutableIdentity (0.10s)
+=== RUN   TestDeriveChangeDeliveryWorksetDerivesRealParquetDeltaAndExplicitTombstones
+--- PASS: TestDeriveChangeDeliveryWorksetDerivesRealParquetDeltaAndExplicitTombstones (0.03s)
+=== RUN   TestDeriveChangeDeliveryWorksetRefusesWithoutPublishing
+=== RUN   TestDeriveChangeDeliveryWorksetRefusesWithoutPublishing/duplicate_composite_source_key
+=== RUN   TestDeriveChangeDeliveryWorksetRefusesWithoutPublishing/null_composite_source_key
+--- PASS: TestDeriveChangeDeliveryWorksetRefusesWithoutPublishing (0.05s)
+    --- PASS: TestDeriveChangeDeliveryWorksetRefusesWithoutPublishing/duplicate_composite_source_key (0.02s)
+    --- PASS: TestDeriveChangeDeliveryWorksetRefusesWithoutPublishing/null_composite_source_key (0.02s)
+=== RUN   TestDeriveChangeDeliveryWorksetCancellationDoesNotCreateArtifacts
+--- PASS: TestDeriveChangeDeliveryWorksetCancellationDoesNotCreateArtifacts (0.02s)
+=== RUN   TestDeriveChangeDeliveryWorksetCancellationCleansStagingArtifacts
+--- PASS: TestDeriveChangeDeliveryWorksetCancellationCleansStagingArtifacts (0.02s)
+=== RUN   TestDeriveChangeDeliveryWorksetRejectsArtifactBeyondDeclaredBound
+--- PASS: TestDeriveChangeDeliveryWorksetRejectsArtifactBeyondDeclaredBound (0.02s)
+=== RUN   TestDeriveChangeDeliveryWorksetRejectsCorruptReuseWithoutReplacingIt
+--- PASS: TestDeriveChangeDeliveryWorksetRejectsCorruptReuseWithoutReplacingIt (0.03s)
+=== RUN   TestDeriveChangeDeliveryWorksetAcceptsWarehouseEmptyParquet
+--- PASS: TestDeriveChangeDeliveryWorksetAcceptsWarehouseEmptyParquet (0.03s)
+=== RUN   TestStructuredCatalogIdentityAndReadPlanAreStable
+--- PASS: TestStructuredCatalogIdentityAndReadPlanAreStable (0.00s)
+=== RUN   TestDatabaseLoadAndReadPlanHonorCancellation
+--- PASS: TestDatabaseLoadAndReadPlanHonorCancellation (0.00s)
+=== RUN   TestDatabaseLoadChecksCancellationBeforeReturningProjection
+--- PASS: TestDatabaseLoadChecksCancellationBeforeReturningProjection (0.00s)
+=== RUN   TestReadPlanChecksCancellationBeforeReturningProjection
+--- PASS: TestReadPlanChecksCancellationBeforeReturningProjection (0.00s)
+=== RUN   TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission
+--- PASS: TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission (0.00s)
+=== RUN   TestDatabaseNativeAdmissionIsBoundToOneWarehouseLeg
+--- PASS: TestDatabaseNativeAdmissionIsBoundToOneWarehouseLeg (0.00s)
+=== RUN   TestDriverRegistryRejectsSharedNativeContractAcrossWarehouseLegs
+--- PASS: TestDriverRegistryRejectsSharedNativeContractAcrossWarehouseLegs (0.00s)
+=== RUN   TestDriverRegistryRejectsCrossDriverNativeContractReuse
+--- PASS: TestDriverRegistryRejectsCrossDriverNativeContractReuse (0.00s)
+=== RUN   TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs
+--- PASS: TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs (0.00s)
+=== RUN   TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact
+--- PASS: TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact (0.00s)
+=== RUN   TestTransformPlanV1NormalizesAndValidatesTypedProjectedFilter
+--- PASS: TestTransformPlanV1NormalizesAndValidatesTypedProjectedFilter (0.00s)
+=== RUN   TestTransformPlanV1RefusesUnknownOperationBeforeConnectionIO
+--- PASS: TestTransformPlanV1RefusesUnknownOperationBeforeConnectionIO (0.00s)
+=== RUN   TestTransformPlanV1PreservesTypedTimestampDirectly
+--- PASS: TestTransformPlanV1PreservesTypedTimestampDirectly (0.00s)
+=== RUN   TestTransformPlanV1RejectsDuplicateTargetAndSchemaDrift
+=== RUN   TestTransformPlanV1RejectsDuplicateTargetAndSchemaDrift/duplicate_target
+=== RUN   TestTransformPlanV1RejectsDuplicateTargetAndSchemaDrift/missing_source_field
+--- PASS: TestTransformPlanV1RejectsDuplicateTargetAndSchemaDrift (0.00s)
+    --- PASS: TestTransformPlanV1RejectsDuplicateTargetAndSchemaDrift/duplicate_target (0.00s)
+    --- PASS: TestTransformPlanV1RejectsDuplicateTargetAndSchemaDrift/missing_source_field (0.00s)
+=== RUN   TestChangeDeliveryPlanSealsWorksetTargetBindings
+--- PASS: TestChangeDeliveryPlanSealsWorksetTargetBindings (0.04s)
+=== RUN   TestChangeDeliveryExecutorPersistsCandidateBaselineAfterReceipt
+--- PASS: TestChangeDeliveryExecutorPersistsCandidateBaselineAfterReceipt (0.06s)
+=== RUN   TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery
+=== RUN   TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery/batch_failure
+=== RUN   TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery/unknown_commit
+=== RUN   TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery/ledger_receipt_failure
+--- PASS: TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery (0.06s)
+    --- PASS: TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery/batch_failure (0.01s)
+    --- PASS: TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery/unknown_commit (0.01s)
+    --- PASS: TestChangeDeliveryExecutorRetainsBaselineOnUncertainOrFailedDelivery/ledger_receipt_failure (0.01s)
+=== RUN   TestFileChangeDeliveryBaselineStoreSeparatesConcurrentDestinations
+--- PASS: TestFileChangeDeliveryBaselineStoreSeparatesConcurrentDestinations (0.11s)
+=== RUN   TestChangeDeliveryExecutorRefusesStaleWorksetApprovalBeforeSessionMutation
+--- PASS: TestChangeDeliveryExecutorRefusesStaleWorksetApprovalBeforeSessionMutation (0.08s)
+=== CONT  TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt
+--- PASS: TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt (0.09s)
+PASS
+ok  	polymetrics.ai/internal/connectors/database	6.876s

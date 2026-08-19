@@ -15,7 +15,7 @@ import (
 // A safe write does not require a preview. PlanConnectorCommand mints the
 // approval token at plan time for any command with no typed confirmation and no
 // bound operation, and RunReverseETL's planRequiresPersistedPreview is false for
-// exactly that command, so `plan` then `--approve <token>` executes. Telling the
+// exactly that command, so `plan` then the stdin approval marker executes. Telling the
 // operator a preview is required is not a harmless over-statement: it describes
 // a gate that is not there, which is the same class of error as describing a
 // gate that is there as absent.

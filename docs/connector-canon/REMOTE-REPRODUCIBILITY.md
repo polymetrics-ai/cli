@@ -51,9 +51,10 @@ change checklist.
    non-secret credential injection, bounded data, and a cleanup/receipt record.
    None belongs in this repository.
 3. **Database and CDC live checks need infrastructure.** Native database tests
-   are opt-in and require a local Unix Podman endpoint under the documented
-   harness rules. Runtime-backed checks need their documented local services;
-   they are not part of the default local path.
+   are opt-in and require the [dbtest maintainer guide's](../../internal/connectors/native/dbtest/README.md)
+   explicit Docker-or-Podman runtime and direct local Unix endpoint. Runtime-backed
+   checks need their documented local services; they are not part of the default
+   local path.
 4. **Parity lanes are still independent evidence streams.** PostgreSQL (#3972,
    including warehouse-flow/mode gate #3987) and GitHub parity must be
    evaluated on their own reviewed branches. The current GitHub source lock is

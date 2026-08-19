@@ -3,6 +3,7 @@ package app
 import (
 	"bufio"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -21,13 +22,22 @@ import (
 )
 
 type etlExecutionResult struct {
-	RecordsRead        int
-	RecordsTransformed int
-	RecordsLoaded      int
-	RecordsFailed      int
-	BatchCount         int
-	Checkpoint         map[string]string
-	PendingStreamState *pendingStreamState
+	RecordsRead               int
+	RecordsTransformed        int
+	RecordsLoaded             int
+	RecordsFailed             int
+	BatchCount                int
+	Checkpoint                map[string]string
+	TransportPhaseMeasurement *TransportPhaseMeasurement
+	PendingStreamState        *pendingStreamState
+}
+
+func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *TransportPhaseMeasurement {
+	if measurement == nil {
+		return nil
+	}
+	clone := *measurement
+	return &clone
 }
 
 type pendingStreamState struct {
@@ -388,6 +398,125 @@ func materializeFinalTable(ctx context.Context, rawPath, finalPath string, dedup
 	}
 	committed = true
 	return count, nil
+}
+
+// materializeHistoryFinalTable rebuilds a local SCD2 projection from the WAL.
+// A source version is keyed by its primary key, cursor, delete marker, and
+// canonical record bytes, so replaying the same provider version never creates
+// a second interval. Distinct versions are ordered by the source cursor and a
+// stable source-version identity; WAL sequence is deliberately not the tie
+// breaker because retry timing must not change the history table.
+func materializeHistoryFinalTable(ctx context.Context, rawPath, finalPath string) (int, error) {
+	writer, err := warehouse.NewTableWriter(finalPath)
+	if err != nil {
+		return 0, err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			writer.Abort()
+		}
+	}()
+
+	versions, err := readLocalHistoryVersions(ctx, rawPath)
+	if err != nil {
+		return 0, err
+	}
+	keys := make([]string, 0, len(versions))
+	for key := range versions {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		series := versions[key]
+		for index, version := range series {
+			if err := ctx.Err(); err != nil {
+				return 0, err
+			}
+			if version.record.Deleted {
+				continue
+			}
+			row := cloneRecord(version.record.Record)
+			row["_valid_from"] = version.record.Cursor
+			if index+1 < len(series) {
+				row["_valid_to"] = series[index+1].record.Cursor
+			} else {
+				row["_valid_to"] = nil
+			}
+			row["_is_current"] = index+1 == len(series)
+			row["_polymetrics_source_version"] = version.identity
+			if err := writer.Write(row); err != nil {
+				return 0, err
+			}
+		}
+	}
+	count := writer.Rows()
+	if err := writer.Commit(ctx); err != nil {
+		return 0, err
+	}
+	committed = true
+	return count, nil
+}
+
+type localHistoryVersion struct {
+	record   localRawRecord
+	identity string
+}
+
+func readLocalHistoryVersions(ctx context.Context, path string) (map[string][]localHistoryVersion, error) {
+	byKey := make(map[string][]localHistoryVersion)
+	seen := make(map[string]struct{})
+	err := forEachLocalRawRecord(ctx, path, func(record localRawRecord) error {
+		if record.PrimaryKey == "" {
+			return fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
+		}
+		if record.Cursor == "" {
+			return fmt.Errorf("raw record %s is missing source cursor metadata", record.RawID)
+		}
+		identity, err := localHistoryVersionIdentity(record)
+		if err != nil {
+			return err
+		}
+		seenKey := record.PrimaryKey + "\x00" + identity
+		if _, duplicate := seen[seenKey]; duplicate {
+			return nil
+		}
+		seen[seenKey] = struct{}{}
+		byKey[record.PrimaryKey] = append(byKey[record.PrimaryKey], localHistoryVersion{record: record, identity: identity})
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	for key := range byKey {
+		sort.Slice(byKey[key], func(i, j int) bool {
+			left, right := byKey[key][i], byKey[key][j]
+			if cmp := compareCursor(left.record.Cursor, right.record.Cursor); cmp != 0 {
+				return cmp < 0
+			}
+			return left.identity < right.identity
+		})
+	}
+	return byKey, nil
+}
+
+func localHistoryVersionIdentity(record localRawRecord) (string, error) {
+	payload, err := json.Marshal(struct {
+		PrimaryKey string            `json:"primary_key"`
+		Cursor     string            `json:"cursor"`
+		Deleted    bool              `json:"deleted"`
+		Record     connectors.Record `json:"record"`
+	}{
+		PrimaryKey: record.PrimaryKey,
+		Cursor:     record.Cursor,
+		Deleted:    record.Deleted,
+		Record:     record.Record,
+	})
+	if err != nil {
+		return "", fmt.Errorf("marshal local warehouse source version: %w", err)
+	}
+	digest := sha256.Sum256(payload)
+	return fmt.Sprintf("sha256:%x", digest[:]), nil
 }
 
 func localRawCursorStateFor(state connectors.OpaqueCursorState) *localRawCursorState {

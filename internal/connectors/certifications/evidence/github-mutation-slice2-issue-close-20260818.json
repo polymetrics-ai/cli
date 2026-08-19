@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:issue_close",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:17:58Z",
+  "run_id": "github-mutation-slice2-issue-close-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "dcb76d2068e6b2d043770ad174910fcf5182364a9af3778b1489ae3cc6d45773",
+    "pm_command_fingerprint": "{{pmcertfp:v1:718cee1cb9544980b9cfe2355554d349b38ca1ba60a21af967699d3c7cfbc0de}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"],
+    "http_exchanges": [
+      {
+        "operation": "issue_close_graphql_cleanup_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:ab5a3df93d46f0e5b9e9768ba3046aa70cfc3fe9b7e0b854425049e8b9d17b68}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 410, "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:billing_get_github_billing_usage_summary_report_org",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:53:20.624Z",
+  "run_id": "github-direct-billing_get_github_billing_usage_summary_report_org-1787003597971",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:d2d38339544c2767d2f0fa7a3a715afc73b412085f2433f018a73be0d466af32}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:billing_get_github_billing_usage_summary_report_org",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:921846c2d1453296a5f2097b012406c79a523059020af2ff4fe664d7cdd9a48f}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "organization": "{{pmcertfp:v1:9583b74c88191bf0987d0f2cfa0750e3e4db4c7565629f817390b771dc2aa8cb}}",
+              "timePeriod": {
+                "month": "{{pmcertfp:v1:4b0b47580b9c469c60e0b594eeaf0241bd375b2970fea61b8e8edb7ad68590eb}}",
+                "year": "{{pmcertfp:v1:6d0586e44339b9b790687ad85744f1ff8de942bbd72edc330e20b156ae51f1e5}}"
+              },
+              "usageItems": [
+                {
+                  "discountAmount": "{{pmcertfp:v1:826e496cf489102a7a81dfaf5069705a1302e1e51d17060ae584eef0b2d53949}}",
+                  "discountQuantity": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+                  "grossAmount": "{{pmcertfp:v1:826e496cf489102a7a81dfaf5069705a1302e1e51d17060ae584eef0b2d53949}}",
+                  "grossQuantity": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+                  "netAmount": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                  "netQuantity": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                  "pricePerUnit": "{{pmcertfp:v1:826e496cf489102a7a81dfaf5069705a1302e1e51d17060ae584eef0b2d53949}}",
+                  "product": "{{pmcertfp:v1:4e2a2536141e20e1b155ed549f97799d2a5f95be54e96b9929d554e78fe52dbb}}",
+                  "sku": "{{pmcertfp:v1:b9b7ab8a84a42fa816bec5864588159fe71c521da26a0f290f6206d3edb1cae1}}",
+                  "unitType": "{{pmcertfp:v1:76272061e436970d96551490351affae47461cc11ec65e0d7451b9341501c4aa}}"
+                }
+              ]
+            },
+            "original_bytes": 285,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

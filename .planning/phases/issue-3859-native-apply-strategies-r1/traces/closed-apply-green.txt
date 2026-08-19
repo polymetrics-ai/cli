@@ -1,0 +1,13 @@
+Command:
+
+```sh
+go test -timeout 20m -count=1 ./internal/connectors/engine
+```
+
+Result: PASS.
+
+The new tests observe exactly one registered target invocation and a durable
+acknowledgement for a valid page. They also prove an unregistered target,
+record-limit overflow, byte-limit overflow, and cancellation produce zero
+target calls. The successful target's record-map mutation does not affect the
+caller-owned page.

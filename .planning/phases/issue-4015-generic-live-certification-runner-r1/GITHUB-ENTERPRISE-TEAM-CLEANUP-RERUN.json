@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "fixture_cleanup": {
+    "fixture_name": "pm-cert-enterprise-team-1786996936",
+    "team_slug": "pm-cert-enterprise-team-1786996936",
+    "plan_id": "rplan_274ddf1ac52a9d23",
+    "exit_code": "0",
+    "output_sha256": "c6864f10d0a9e666433a474de976342ed43ee5d331b422f0c0080526f01befb3",
+    "preview_sha256": "334cfe524820a8abd31d5acf745c4359fe52f97c08d60fdd7f47e4d093b8323c",
+    "verified_absent": true
+  },
+  "updated_at": "2026-08-17T20:04:05.103Z"
+}

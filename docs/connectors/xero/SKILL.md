@@ -709,6 +709,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - --credential (string): Named Xero credential; secrets are loaded from the credential store and never from prompt text.
   - --json (boolean): Emit machine-readable JSON output.
   - --max-bytes (integer): Clamp direct-read response size; report reads are capped by the operation definition.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Bounded report direct reads
 - ETL stream shortcuts
 - Other Commands

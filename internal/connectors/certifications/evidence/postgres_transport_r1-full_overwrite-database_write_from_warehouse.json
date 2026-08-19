@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "scope": "sync_mode",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "postgres",
+  "sync_mode": "full_overwrite",
+  "primitive": "database_write_from_warehouse",
+  "provider": "postgres_container",
+  "executed_at": "2026-08-17T12:17:13Z",
+  "run_id": "postgres_transport_r1-full_overwrite-database_write_from_warehouse",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+    "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
+    ],
+    "http_exchanges": [],
+    "database_exchanges": [
+      {
+        "operation": "postgres_transport_full_overwrite_database_write_from_warehouse",
+        "protocol": "postgres_wire",
+        "request": {
+          "statement": "{{pmcertfp:v1:f02a5059c7bdeb74db8ad82a0c7ebb35c145adc399c006e9f1c6ecc3f764c231}}",
+          "parameters": []
+        },
+        "response": {
+          "status": "completed",
+          "body": {
+            "encoding": "json",
+            "value": {
+              "apply_strategy": "{{pmcertfp:v1:31d810ba8dbc08a2510c03f46ecf5c6954b262e2bc379e143c8bd4f962c2fca0}}",
+              "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+              "mode": "{{pmcertfp:v1:dd379f30be3f66c681fc6480f61e79490b24d6cb0fbcef3bea89e9dce19e5315}}",
+              "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+              "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+              "target_namespace": "{{pmcertfp:v1:a28520fe6c24a78e0fdc0923f97d5737d42a3cb32ff96181fa5a98b825b0ce0e}}",
+              "target_relation": "{{pmcertfp:v1:eee72ce5e5ed1a11cadab6131c66c31264be3d82942e1b665eaaf8f2d20ab35d}}"
+            },
+            "original_bytes": 252,
+            "truncated": false
+          }
+        }
+      }
+    ]
+  }
+}

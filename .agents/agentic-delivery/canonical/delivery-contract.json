@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "contract_version": "1.3.0",
+  "contract_version": "1.4.0",
   "source_id": "pm-issue-first-delivery",
   "ownership": {
     "source_path": ".agents/agentic-delivery/canonical/delivery-contract.json",
@@ -133,7 +133,7 @@
       },
       {
         "id": "integrate_sub_pr",
-        "instruction": "Integrate the sub-PR only after required checks pass, actionable findings are resolved, and automated review coverage satisfies the stacked-PR contract."
+        "instruction": "Integrate the sub-PR only after required checks pass, actionable findings are resolved, automated review coverage satisfies the stacked-PR contract, and an in-scope connector certification Shepherd verdict is PROCEED."
       },
       {
         "id": "integrated_parent_gates",
@@ -141,7 +141,7 @@
       },
       {
         "id": "ready_parent",
-        "instruction": "Mark the draft parent PR ready only when every child is integrated, full parent checks are green, and required review coverage is complete. Ready is not merge approval."
+        "instruction": "Mark the draft parent PR ready only when every child is integrated, full parent checks are green, required review coverage is complete, and every in-scope connector certification Shepherd verdict is PROCEED. Ready is not merge approval."
       },
       {
         "id": "captain_merge",
@@ -204,6 +204,105 @@
       "config_basics": "https://developers.openai.com/codex/config-basic/"
     }
   },
+  "opencode": {
+    "project_agent_directory": ".opencode/agents",
+    "file_format": "markdown_yaml_frontmatter",
+    "required_fields": [
+      "description",
+      "mode",
+      "permission"
+    ],
+    "mode": "subagent",
+    "permissions": [
+      {
+        "tool": "edit",
+        "access": "allow"
+      },
+      {
+        "tool": "bash",
+        "access": "allow"
+      },
+      {
+        "tool": "skill",
+        "access": "deny"
+      },
+      {
+        "tool": "task",
+        "access": "deny"
+      },
+      {
+        "tool": "external_directory",
+        "access": "deny"
+      }
+    ],
+    "discovery": "OpenCode discovers project agents from Markdown files under .opencode/agents; the filename determines the agent name.",
+    "documentation_url": "https://opencode.ai/docs/agents/",
+    "delegation_guarantee": "The generated permission map denies task and skill while retaining only bounded edit and bash access, so this worker cannot delegate to ambient agents or invoke an adapter-local skill surface."
+  },
+  "connector_certification_gate": {
+    "schema_version": 1,
+    "name": "connector-certification-shepherd",
+    "input_schema_version": 1,
+    "verdict_schema_version": 1,
+    "accepted_evidence_schema_version": 2,
+    "proof_redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "read_only": true,
+    "generated_command": "go run ./cmd/connectorgen certification-matrix --check",
+    "command": {
+      "argv": [
+        "go",
+        "run",
+        "./cmd/agentcontractgen",
+        "certification-gate",
+        "--root",
+        "<repository-root>",
+        "--connector",
+        "<connector>",
+        "--transition",
+        "<transition>"
+      ],
+      "instruction": "Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition."
+    },
+    "inputs": {
+      "certification_shards": "internal/connectors/defs",
+      "status": "internal/connectors/certifications/status.json",
+      "evidence_directory": "internal/connectors/certifications/evidence"
+    },
+    "input_fields": [
+      "schema_version",
+      "connector",
+      "transition",
+      "inputs.certification_shards",
+      "inputs.status",
+      "inputs.evidence_directory"
+    ],
+    "verdict_fields": [
+      "schema_version",
+      "connector",
+      "transition",
+      "decision",
+      "failures"
+    ],
+    "binding_criteria": [
+      "declared",
+      "implemented",
+      "fixture_tested",
+      "live_tested",
+      "live_evidence"
+    ],
+    "enforced_transitions": [
+      "integrate_sub_pr",
+      "accepted",
+      "ready_parent",
+      "human_ready"
+    ],
+    "verdicts": [
+      "PROCEED",
+      "RETRY",
+      "HALT"
+    ],
+    "unsupported_proof_schema_behavior": "HALT"
+  },
   "tracker": {
     "draft_parent_before_production": true,
     "parent_seed": "Use a deliberate roadmap or status scaffold when useful; otherwise use an empty seed commit solely to make the draft parent PR possible.",
@@ -213,13 +312,15 @@
       "CI checks pass",
       "automated review findings are resolved and required coverage exists",
       "the diff stays inside the sub-issue scope",
-      "no requested-changes review or human gate remains"
+      "no requested-changes review or human gate remains",
+      "connector certification Shepherd verdict is PROCEED before an in-scope certification transition"
     ],
     "ready_when": [
       "all children are integrated",
       "full parent verification is green",
       "integrated review coverage is complete",
-      "no actionable finding remains"
+      "no actionable finding remains",
+      "connector certification Shepherd verdict is PROCEED before an in-scope certification transition"
     ],
     "final_merge": "Explicit captain approval is mandatory, approval is valid only while the parent is green, and no worker may merge red."
   },
@@ -482,6 +583,20 @@
       "path": ".pi/agents/pm-connector-worker.md",
       "required": true,
       "render_mode": "full"
+    },
+    {
+      "harness": "opencode",
+      "role": "pm-delivery-worker",
+      "path": ".opencode/agents/pm-delivery-worker.md",
+      "render_mode": "opencode_markdown_yaml_frontmatter",
+      "required": true
+    },
+    {
+      "harness": "opencode",
+      "role": "pm-connector-worker",
+      "path": ".opencode/agents/pm-connector-worker.md",
+      "render_mode": "opencode_markdown_yaml_frontmatter",
+      "required": true
     }
   ]
 }

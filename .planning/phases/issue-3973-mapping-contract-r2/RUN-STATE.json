@@ -1,0 +1,10 @@
+{
+  "issue": 3973,
+  "phase": "issue-3973-mapping-contract-r2",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-3973-mapping-contract-r2",
+  "state": "review_green_pending_pr",
+  "execution": "inline_manual_gsd_fallback",
+  "reason": "Issue foundation is outside numbered roadmap phases and the canonical single-worker contract forbids role spawning.",
+  "scope": "shared MappingContractV1, tombstone envelope, and DeliveryReceiptV1 only"
+}

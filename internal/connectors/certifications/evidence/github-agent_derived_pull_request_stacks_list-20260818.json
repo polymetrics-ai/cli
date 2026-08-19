@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_pull_request_stacks_list",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:03:38.037Z",
+  "run_id": "github-1787004218038-agent_derived_pull_request_stacks_list",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "34237212e88fc3db2aa84fa8e82a2d6862db5632f260be2dc85e9d087197c56a",
+    "pm_command_fingerprint": "{{pmcertfp:v1:3827a4acb7aaab49a33b5feb7f42818261c9c1846ac5bfd841250f64f286398a}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:3e91b3e7f98955374e9bc12c710075406e8c11f2d3c8e7025b2829126de68191}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_pull_request_stacks_list",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:d1764d73f2b6e1ab7b40b9752373911d76812836e36a46cc7907ca97c12ea1aa}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

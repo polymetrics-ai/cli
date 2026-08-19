@@ -11,7 +11,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
-func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {
+func TestGithubPullRequestsETLSupportsLegacyExecutableModes(t *testing.T) {
 	tests := []struct {
 		name string
 		mode string
@@ -47,19 +47,6 @@ func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {
 			},
 		},
 		{
-			name: "full refresh overwrite deduped keeps latest duplicate",
-			mode: "full_refresh_overwrite_deduped",
-			run: func(t *testing.T, a *App, connection string, setRecords func([]map[string]any)) {
-				setRecords([]map[string]any{
-					githubPRFixture("PR_1", 1, "first old", "2026-01-01T00:00:00Z"),
-					githubPRFixture("PR_1", 1, "first latest", "2026-01-03T00:00:00Z"),
-					githubPRFixture("PR_2", 2, "second", "2026-01-02T00:00:00Z"),
-				})
-				runGithubETL(t, a, connection)
-				assertGithubRows(t, a, 2, map[string]string{"PR_1": "first latest", "PR_2": "second"})
-			},
-		},
-		{
 			name: "incremental append filters older cursor and appends inclusive cursor",
 			mode: "incremental_append",
 			run: func(t *testing.T, a *App, connection string, setRecords func([]map[string]any)) {
@@ -80,23 +67,6 @@ func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {
 				assertGithubRows(t, a, 4, map[string]string{})
 			},
 		},
-		{
-			name: "incremental append deduped materializes latest PR rows",
-			mode: "incremental_append_deduped",
-			run: func(t *testing.T, a *App, connection string, setRecords func([]map[string]any)) {
-				setRecords([]map[string]any{
-					githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z"),
-					githubPRFixture("PR_2", 2, "second", "2026-01-02T00:00:00Z"),
-				})
-				runGithubETL(t, a, connection)
-				setRecords([]map[string]any{
-					githubPRFixture("PR_1", 1, "first updated", "2026-01-03T00:00:00Z"),
-					githubPRFixture("PR_3", 3, "third", "2026-01-04T00:00:00Z"),
-				})
-				runGithubETL(t, a, connection)
-				assertGithubRows(t, a, 3, map[string]string{"PR_1": "first updated", "PR_2": "second", "PR_3": "third"})
-			},
-		},
 	}
 
 	for _, tt := range tests {
@@ -105,6 +75,49 @@ func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {
 			tt.run(t, a, connection, setRecords)
 		})
 	}
+}
+
+func TestGithubContractDedupeModesMaterializeCurrentAndHistoryRows(t *testing.T) {
+	t.Run("incremental dedupe retains one current row for a repeated key", func(t *testing.T) {
+		a, connection, setRecords := setupGithubSyncModeApp(t, "incremental_dedupe")
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "second", "2026-01-02T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		assertGithubRows(t, a, 1, map[string]string{"PR_1": "second"})
+	})
+
+	t.Run("incremental dedupe history retains source versions and ignores replay", func(t *testing.T) {
+		a, connection, setRecords := setupGithubSyncModeApp(t, "incremental_dedupe_history")
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "second", "2026-01-02T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		runGithubETL(t, a, connection)
+
+		rows, err := a.QueryTable(context.Background(), QueryTableRequest{Table: "github_prs", Limit: 10})
+		if err != nil {
+			t.Fatalf("QueryTable() error = %v", err)
+		}
+		if len(rows) != 2 {
+			t.Fatalf("history rows = %#v, want exactly the two source versions after replay", rows)
+		}
+		byTitle := map[string]connectors.Record{}
+		for _, row := range rows {
+			byTitle[toComparableString(row["title"])] = row
+		}
+		first, found := byTitle["first"]
+		if !found || first["_valid_from"] != "2026-01-01T00:00:00Z" || first["_valid_to"] != "2026-01-02T00:00:00Z" || first["_is_current"] != false {
+			t.Fatalf("closed history row = %#v, want the first version closed at the second source cursor", first)
+		}
+		second, found := byTitle["second"]
+		if !found || second["_valid_from"] != "2026-01-02T00:00:00Z" || second["_valid_to"] != nil || second["_is_current"] != true {
+			t.Fatalf("current history row = %#v, want the second version open and current", second)
+		}
+		if toComparableString(first["_polymetrics_source_version"]) == "" || toComparableString(first["_polymetrics_source_version"]) == toComparableString(second["_polymetrics_source_version"]) {
+			t.Fatalf("history source versions = %q, %q; want stable distinct identities", first["_polymetrics_source_version"], second["_polymetrics_source_version"])
+		}
+	})
 }
 
 func setupGithubSyncModeApp(t *testing.T, mode string) (*App, string, func([]map[string]any)) {

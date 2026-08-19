@@ -13,6 +13,12 @@ var metadataSchemaJSON string
 //go:embed schema/changefeed.schema.json
 var changefeedSchemaJSON string
 
+//go:embed schema/polling_watermark.schema.json
+var pollingWatermarkSchemaJSON string
+
+//go:embed schema/sync_transport.schema.json
+var syncTransportSchemaJSON string
+
 //go:embed schema/spec.schema.json
 var specSchemaJSON string
 

@@ -15,6 +15,8 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"polymetrics.ai/internal/connectors/certify"
 )
 
 const (
@@ -22,9 +24,14 @@ const (
 	fingerprintPrefix      = "{{pmcertfp:v1:"
 	fingerprintSuffix      = "}}"
 
-	credentialScopeFullParity = "full_parity"
-	fullParityCredentialNote  = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
-	localWarehouseMediator    = "local_parquet_warehouse"
+	acceptedEvidenceSchemaVersion         = 2
+	credentialScopeFullParity             = "full_parity"
+	credentialScopeObservedOperations     = "observed_operations"
+	credentialScopeProofFullParityStage   = "full_parity_stage"
+	credentialScopeProofProtocolExchanges = "protocol_exchanges"
+	fullParityCredentialNote              = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
+	observedOperationsCredentialNote      = "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed."
+	localWarehouseMediator                = "local_parquet_warehouse"
 
 	// repositoryFingerprintSaltPath is intentionally ignored by git.  A clone
 	// creates a new value, while replay on the same checkout uses the same
@@ -162,16 +169,40 @@ type completedLiveEvidence struct {
 	PMBinarySHA256 string
 	PMCommand      string
 	Passed         bool
-	// CredentialFullParity is an explicit attestation from the live-test
-	// runner. A narrow credential can prove a subset of behavior, but it can
-	// never produce a connector certification record.
-	CredentialFullParity bool
 
 	RepositorySalt    []byte
 	PreparedValues    []string
 	HTTPExchanges     []completedHTTPExchange
 	DatabaseExchanges []completedDatabaseExchange
 	Flow              *completedFlowRoundTrip
+}
+
+// credentialScopeClaim is intentionally constructed only from proof-bearing
+// run state. Callers cannot provide arbitrary scope strings, notes, or proof
+// discriminators to an accepted-evidence record.
+type credentialScopeClaim struct {
+	scope string
+	note  string
+	proof string
+}
+
+func observedOperationsCredentialScope() credentialScopeClaim {
+	return credentialScopeClaim{
+		scope: credentialScopeObservedOperations,
+		note:  observedOperationsCredentialNote,
+		proof: credentialScopeProofProtocolExchanges,
+	}
+}
+
+func fullParityCredentialScope(report certify.Report) (credentialScopeClaim, error) {
+	if !report.FullParityVerified() {
+		return credentialScopeClaim{}, errors.New("completed certification report did not pass the full-parity stage")
+	}
+	return credentialScopeClaim{
+		scope: credentialScopeFullParity,
+		note:  fullParityCredentialNote,
+		proof: credentialScopeProofFullParityStage,
+	}, nil
 }
 
 type completedHTTPExchange struct {
@@ -214,6 +245,21 @@ type completedFlowRoundTrip struct {
 // it can be persisted. A caller never receives a serializable type containing
 // a raw credential or response body.
 func newProofBearingEvidence(completed completedLiveEvidence) (acceptedEvidence, error) {
+	return newProofBearingEvidenceForCredentialScope(completed, observedOperationsCredentialScope())
+}
+
+// newFullParityProofBearingEvidence is the sole construction path for a
+// full-parity claim. The claim is derived from the executed report's passing
+// stage, not from a caller attestation or command-line spelling.
+func newFullParityProofBearingEvidence(completed completedLiveEvidence, report certify.Report) (acceptedEvidence, error) {
+	claim, err := fullParityCredentialScope(report)
+	if err != nil {
+		return acceptedEvidence{}, err
+	}
+	return newProofBearingEvidenceForCredentialScope(completed, claim)
+}
+
+func newProofBearingEvidenceForCredentialScope(completed completedLiveEvidence, claim credentialScopeClaim) (acceptedEvidence, error) {
 	if !completed.Passed {
 		return acceptedEvidence{}, errors.New("completed live test did not pass")
 	}
@@ -225,9 +271,6 @@ func newProofBearingEvidence(completed completedLiveEvidence) (acceptedEvidence,
 	}
 	if len(completed.HTTPExchanges)+len(completed.DatabaseExchanges) == 0 {
 		return acceptedEvidence{}, errors.New("completed live test has no protocol exchanges")
-	}
-	if !completed.CredentialFullParity {
-		return acceptedEvidence{}, errors.New("completed live test did not use a full-parity credential")
 	}
 	if strings.TrimSpace(completed.PMCommand) == "" {
 		return acceptedEvidence{}, errors.New("completed live test has no pm command")
@@ -264,23 +307,24 @@ func newProofBearingEvidence(completed completedLiveEvidence) (acceptedEvidence,
 	}
 
 	evidence := acceptedEvidence{
-		SchemaVersion:   completed.SchemaVersion,
-		Scope:           completed.Scope,
-		Status:          evidenceStatusPassed,
-		CredentialScope: credentialScopeFullParity,
-		CredentialNote:  fullParityCredentialNote,
-		Connector:       completed.Connector,
-		FunctionKind:    completed.FunctionKind,
-		WorkflowKind:    completed.WorkflowKind,
-		SyncMode:        completed.SyncMode,
-		Primitive:       completed.Primitive,
-		Source:          completed.Source,
-		Destination:     completed.Destination,
-		FlowKind:        completed.FlowKind,
-		Provider:        completed.Provider,
-		ExecutedAt:      completed.ExecutedAt,
-		RunID:           completed.RunID,
-		Proof:           proof,
+		SchemaVersion:        acceptedEvidenceSchemaVersion,
+		Scope:                completed.Scope,
+		Status:               evidenceStatusPassed,
+		CredentialScope:      claim.scope,
+		CredentialNote:       claim.note,
+		CredentialScopeProof: claim.proof,
+		Connector:            completed.Connector,
+		FunctionKind:         completed.FunctionKind,
+		WorkflowKind:         completed.WorkflowKind,
+		SyncMode:             completed.SyncMode,
+		Primitive:            completed.Primitive,
+		Source:               completed.Source,
+		Destination:          completed.Destination,
+		FlowKind:             completed.FlowKind,
+		Provider:             completed.Provider,
+		ExecutedAt:           completed.ExecutedAt,
+		RunID:                completed.RunID,
+		Proof:                proof,
 	}
 	if err := validateAcceptedEvidence(evidence); err != nil {
 		return acceptedEvidence{}, err
@@ -288,43 +332,238 @@ func newProofBearingEvidence(completed completedLiveEvidence) (acceptedEvidence,
 	return evidence, nil
 }
 
-// writeProofBearingEvidence is deliberately fed only a completed run. It owns
-// the repository-local salt and marshals the sanitized result in memory before
-// it opens the destination file, so raw request, response, or credential data
-// has no persistence path.
-func writeProofBearingEvidence(repoRoot, path string, completed completedLiveEvidence) (acceptedEvidence, error) {
+// preparedAcceptedEvidence is a fully rendered and validated record whose
+// destination is safe for publication. Preparing every record before calling
+// publishPreparedAcceptedEvidence keeps validation failures from producing a
+// prefix of a multi-record import.
+type preparedAcceptedEvidence struct {
+	outputPath string
+	evidence   acceptedEvidence
+	payload    []byte
+}
+
+// prepareProofBearingEvidence is deliberately fed only a completed run. It
+// owns the repository-local salt and renders the sanitized result in memory;
+// raw request, response, or credential data has no persistence path.
+func prepareProofBearingEvidence(repoRoot, path string, completed completedLiveEvidence) (preparedAcceptedEvidence, error) {
 	outputPath, err := acceptedEvidenceOutputPath(repoRoot, path)
 	if err != nil {
-		return acceptedEvidence{}, err
+		return preparedAcceptedEvidence{}, err
 	}
 	salt, err := repositoryFingerprintSalt(repoRoot)
 	if err != nil {
-		return acceptedEvidence{}, err
+		return preparedAcceptedEvidence{}, err
 	}
 	completed.RepositorySalt = salt
 	evidence, err := newProofBearingEvidence(completed)
 	if err != nil {
+		return preparedAcceptedEvidence{}, err
+	}
+	return prepareAcceptedEvidence(outputPath, evidence, "render proof-bearing evidence")
+}
+
+func writeProofBearingEvidence(repoRoot, path string, completed completedLiveEvidence) (acceptedEvidence, error) {
+	prepared, err := prepareProofBearingEvidence(repoRoot, path, completed)
+	if err != nil {
 		return acceptedEvidence{}, err
+	}
+	if err := publishPreparedAcceptedEvidence([]preparedAcceptedEvidence{prepared}, nil); err != nil {
+		return acceptedEvidence{}, err
+	}
+	return prepared.evidence, nil
+}
+
+// importedLiveEvidence contains only values that ReadExternalProof has already
+// proved are fingerprints or structural metadata. Unlike completedLiveEvidence
+// it deliberately has no raw credentials, request values, or response bodies.
+type importedLiveEvidence struct {
+	SchemaVersion          int
+	Scope                  string
+	Connector              string
+	FunctionKind           string
+	WorkflowKind           string
+	SyncMode               string
+	Primitive              string
+	Source                 string
+	Destination            string
+	FlowKind               string
+	Provider               string
+	ExecutedAt             string
+	RunID                  string
+	PMBinarySHA256         string
+	PMCommandFingerprint   string
+	CredentialFingerprints []string
+	HTTPExchanges          []certifiedHTTPExchange
+}
+
+// newImportedProofBearingEvidence accepts the safe projection from a completed
+// external proof. It still validates the whole accepted-record contract before
+// a file can be opened, so a future importer cannot turn an unredacted proof
+// field into committed evidence by bypassing the raw-value sanitizer.
+func newImportedProofBearingEvidence(completed importedLiveEvidence) (acceptedEvidence, error) {
+	proof := embeddedEvidenceProof{
+		RedactionStrategy:      proofRedactionStrategy,
+		PMBinarySHA256:         completed.PMBinarySHA256,
+		PMCommandFingerprint:   completed.PMCommandFingerprint,
+		CredentialFingerprints: append([]string(nil), completed.CredentialFingerprints...),
+		HTTPExchanges:          append([]certifiedHTTPExchange(nil), completed.HTTPExchanges...),
+		DatabaseExchanges:      []certifiedDatabaseExchange{},
+	}
+	evidence := acceptedEvidence{
+		SchemaVersion:        acceptedEvidenceSchemaVersion,
+		Scope:                completed.Scope,
+		Status:               evidenceStatusPassed,
+		CredentialScope:      credentialScopeObservedOperations,
+		CredentialNote:       observedOperationsCredentialNote,
+		CredentialScopeProof: credentialScopeProofProtocolExchanges,
+		Connector:            completed.Connector,
+		FunctionKind:         completed.FunctionKind,
+		WorkflowKind:         completed.WorkflowKind,
+		SyncMode:             completed.SyncMode,
+		Primitive:            completed.Primitive,
+		Source:               completed.Source,
+		Destination:          completed.Destination,
+		FlowKind:             completed.FlowKind,
+		Provider:             completed.Provider,
+		ExecutedAt:           completed.ExecutedAt,
+		RunID:                completed.RunID,
+		Proof:                proof,
+	}
+	if err := validateAcceptedEvidence(evidence); err != nil {
+		return acceptedEvidence{}, err
+	}
+	return evidence, nil
+}
+
+func prepareImportedProofBearingEvidence(repoRoot, path string, completed importedLiveEvidence) (preparedAcceptedEvidence, error) {
+	outputPath, err := acceptedEvidenceOutputPath(repoRoot, path)
+	if err != nil {
+		return preparedAcceptedEvidence{}, err
+	}
+	evidence, err := newImportedProofBearingEvidence(completed)
+	if err != nil {
+		return preparedAcceptedEvidence{}, err
+	}
+	return prepareAcceptedEvidence(outputPath, evidence, "render imported proof-bearing evidence")
+}
+
+func prepareAcceptedEvidence(outputPath string, evidence acceptedEvidence, renderContext string) (preparedAcceptedEvidence, error) {
+	if err := validateAcceptedEvidence(evidence); err != nil {
+		return preparedAcceptedEvidence{}, err
 	}
 	payload, err := marshalGeneratedJSON(evidence)
 	if err != nil {
-		return acceptedEvidence{}, fmt.Errorf("render proof-bearing evidence: %w", err)
+		return preparedAcceptedEvidence{}, fmt.Errorf("%s: %w", renderContext, err)
 	}
-	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
-		return acceptedEvidence{}, fmt.Errorf("create proof evidence directory: %w", err)
+	return preparedAcceptedEvidence{outputPath: outputPath, evidence: evidence, payload: payload}, nil
+}
+
+// publishPreparedAcceptedEvidence writes each complete payload to a private
+// file on the target filesystem, fsyncs it, and atomically links it into the
+// evidence directory. os.Link refuses an existing destination, so publication
+// is both no-replace and invisible to matrix readers until the complete JSON is
+// durable. Callers must prepare the entire batch before publishing it.
+//
+// beforePublish is only used by the concurrent-reader regression test. It runs
+// after every record has been staged but before any final name exists.
+func publishPreparedAcceptedEvidence(records []preparedAcceptedEvidence, beforePublish func() error) error {
+	if len(records) == 0 {
+		return errors.New("no prepared evidence records to publish")
 	}
-	file, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	seen := make(map[string]struct{}, len(records))
+	for _, record := range records {
+		if record.outputPath == "" || len(record.payload) == 0 {
+			return errors.New("prepared evidence requires a destination and complete payload")
+		}
+		if _, exists := seen[record.outputPath]; exists {
+			return fmt.Errorf("prepared evidence has duplicate destination %q", filepath.ToSlash(record.outputPath))
+		}
+		seen[record.outputPath] = struct{}{}
+		if err := os.MkdirAll(filepath.Dir(record.outputPath), 0o755); err != nil {
+			return fmt.Errorf("create proof evidence directory: %w", err)
+		}
+		if _, err := os.Lstat(record.outputPath); err == nil {
+			return fmt.Errorf("publish proof-bearing evidence %q: destination already exists", filepath.ToSlash(record.outputPath))
+		} else if !errors.Is(err, os.ErrNotExist) {
+			return fmt.Errorf("inspect proof-bearing evidence destination %q: %w", filepath.ToSlash(record.outputPath), err)
+		}
+	}
+
+	staged := make([]string, len(records))
+	for index, record := range records {
+		path, err := stageEvidencePayload(record.outputPath, record.payload)
+		if err != nil {
+			for _, stagedPath := range staged[:index] {
+				_ = os.Remove(stagedPath)
+			}
+			return err
+		}
+		staged[index] = path
+	}
+	defer func() {
+		for _, stagedPath := range staged {
+			_ = os.Remove(stagedPath)
+		}
+	}()
+	if beforePublish != nil {
+		if err := beforePublish(); err != nil {
+			return err
+		}
+	}
+	for index, record := range records {
+		if err := os.Link(staged[index], record.outputPath); err != nil {
+			return fmt.Errorf("publish proof-bearing evidence %q without replacement: %w", filepath.ToSlash(record.outputPath), err)
+		}
+		if err := syncEvidenceDirectory(filepath.Dir(record.outputPath)); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func stageEvidencePayload(outputPath string, payload []byte) (string, error) {
+	file, err := os.CreateTemp(filepath.Dir(outputPath), "."+filepath.Base(outputPath)+".tmp-*")
 	if err != nil {
-		return acceptedEvidence{}, fmt.Errorf("create proof-bearing evidence: %w", err)
+		return "", fmt.Errorf("stage proof-bearing evidence: %w", err)
 	}
-	if _, err := file.Write(payload); err != nil {
+	path := file.Name()
+	if err := file.Chmod(0o600); err != nil {
 		_ = file.Close()
-		return acceptedEvidence{}, fmt.Errorf("write proof-bearing evidence: %w", err)
+		_ = os.Remove(path)
+		return "", fmt.Errorf("protect staged proof-bearing evidence: %w", err)
 	}
-	if err := file.Close(); err != nil {
-		return acceptedEvidence{}, fmt.Errorf("close proof-bearing evidence: %w", err)
+	written, err := file.Write(payload)
+	if err == nil && written != len(payload) {
+		err = io.ErrShortWrite
 	}
-	return evidence, nil
+	if err == nil {
+		err = file.Sync()
+	}
+	closeErr := file.Close()
+	if err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		_ = os.Remove(path)
+		return "", fmt.Errorf("write staged proof-bearing evidence: %w", err)
+	}
+	return path, nil
+}
+
+func syncEvidenceDirectory(directory string) error {
+	file, err := os.Open(directory)
+	if err != nil {
+		return fmt.Errorf("open proof evidence directory: %w", err)
+	}
+	err = file.Sync()
+	closeErr := file.Close()
+	if err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		return fmt.Errorf("sync proof evidence directory: %w", err)
+	}
+	return nil
 }
 
 func acceptedEvidenceOutputPath(repoRoot, path string) (string, error) {
@@ -854,7 +1093,7 @@ func validateDeliveryGuarantees(delivery deliveryGuarantees) error {
 
 func validateCertifiedQuery(query []certifiedQuery) error {
 	for _, item := range query {
-		if !isSafeProofFieldName(item.Name) {
+		if !isSafeProofFieldName(item.Name) && !isFingerprintSequence(item.Name) {
 			return errors.New("query name is invalid")
 		}
 		if !isFingerprintSequence(item.Value) {

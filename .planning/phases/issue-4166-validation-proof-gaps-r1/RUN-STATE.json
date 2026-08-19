@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "issue": 4166,
+  "phase": "issue-4166-validation-proof-gaps-r1",
+  "status": "verified",
+  "workflow": {
+    "mode": "inline_manual_fallback",
+    "discuss_phase": "complete",
+    "plan_phase_tdd": "complete",
+    "execute_phase": "complete",
+    "verify_work": "complete",
+    "code_review": "complete"
+  },
+  "gaps": {
+    "write_action_failure_proof": "green_focused",
+    "declared_transport_execution_proof": "green_focused",
+    "fresh_binary_flow_round_trip": "green_hermetic",
+    "fresh_binary_live_flow_round_trip": "green_live_github_zero_residue"
+  }
+}

@@ -1,0 +1,17 @@
+Commands and results:
+
+go test -timeout 20m -count=1 ./internal/connectors/database -run 'TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation|TestMappingContractV1MapsOnlyDeclaredTombstoneKeys'
+ok polymetrics.ai/internal/connectors/database 0.383s
+
+go test -timeout 20m -count=1 ./internal/connectors/native/postgres -run 'TestCDCDeleteTombstone'
+ok polymetrics.ai/internal/connectors/native/postgres 0.753s
+
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -run '^TestPostgresManagedTargetWorksetDeliveryLive$' -v ./internal/connectors/native/postgres
+=== RUN   TestPostgresManagedTargetWorksetDeliveryLive
+--- PASS: TestPostgresManagedTargetWorksetDeliveryLive (7.07s)
+PASS
+ok polymetrics.ai/internal/connectors/native/postgres 7.817s
+
+Observable assertions include exact typed history-route reasons with zero fake
+session/ledger mutations, exact CDC key projection, and live target read-back
+showing omission retention followed by the explicit tombstone's keyed delete.

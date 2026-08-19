@@ -1,0 +1,15 @@
+{
+  "issues": [4171, 3862],
+  "phase": "issue-4171-3976-3862-transport-eligibility-r1",
+  "status": "verified_reviewed_pending_direct_pr",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-transport-stream-eligibility-club-r1",
+  "manual_gsd_fallback": true,
+  "delivery_mode": "direct_pr",
+  "red_complete": true,
+  "green_complete": true,
+  "verified": true,
+  "reviewed": true,
+  "scope_correction": "#3976 deconflicted to PR 4175; polling declaration stays planned until real production preflight binding exists",
+  "external_live_evidence": "pending: GitHub certification credential rotation incomplete"
+}

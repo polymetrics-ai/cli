@@ -1,6 +1,10 @@
 package connectors
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"polymetrics.ai/internal/synccontract"
+)
 
 // Definition is the unified connector descriptor introduced by architecture
 // v2 (design doc §C.1). In wave0 it coexists with Metadata/Manifest, added
@@ -8,20 +12,21 @@ import "encoding/json"
 // interfaces; wave6 folds Metadata/ManifestProvider into it and joins
 // Definition() to the core Connector interface. See API-CONTRACT.md §1.
 type Definition struct {
-	Name            string                   `json:"name"`
-	DisplayName     string                   `json:"display_name"`
-	Description     string                   `json:"description,omitempty"`
-	IntegrationType string                   `json:"integration_type"`
-	DocsURL         string                   `json:"docs_url,omitempty"`
-	ReleaseStage    string                   `json:"release_stage"`
-	Capabilities    Capabilities             `json:"capabilities"`
-	Changefeed      *ChangefeedDescriptor    `json:"changefeed,omitempty"`
-	SyncTransport   *SyncTransportDescriptor `json:"sync_transport,omitempty"`
-	Spec            json.RawMessage          `json:"spec"`
-	Streams         []StreamSummary          `json:"streams"`
-	WriteActions    []WriteActionInfo        `json:"write_actions,omitempty"`
-	Risk            RiskSpec                 `json:"risk"`
-	Icon            *ConnectorIcon           `json:"icon,omitempty"`
+	Name             string                      `json:"name"`
+	DisplayName      string                      `json:"display_name"`
+	Description      string                      `json:"description,omitempty"`
+	IntegrationType  string                      `json:"integration_type"`
+	DocsURL          string                      `json:"docs_url,omitempty"`
+	ReleaseStage     string                      `json:"release_stage"`
+	Capabilities     Capabilities                `json:"capabilities"`
+	Changefeed       *ChangefeedDescriptor       `json:"changefeed,omitempty"`
+	PollingWatermark *PollingWatermarkDescriptor `json:"polling_watermark,omitempty"`
+	SyncTransport    *SyncTransportDescriptor    `json:"sync_transport,omitempty"`
+	Spec             json.RawMessage             `json:"spec"`
+	Streams          []StreamSummary             `json:"streams"`
+	WriteActions     []WriteActionInfo           `json:"write_actions,omitempty"`
+	Risk             RiskSpec                    `json:"risk"`
+	Icon             *ConnectorIcon              `json:"icon,omitempty"`
 }
 
 // StreamSummary is one Definition.Streams entry. SyncModes is always DERIVED
@@ -37,15 +42,54 @@ type StreamSummary struct {
 
 // WriteActionInfo is one Definition.WriteActions entry.
 type WriteActionInfo struct {
-	Name   string `json:"name"`
-	Kind   string `json:"kind"`
-	Method string `json:"method"`
-	Path   string `json:"path"`
-	Risk   string `json:"risk"`
+	Name             string                  `json:"name"`
+	Kind             string                  `json:"kind"`
+	Method           string                  `json:"method"`
+	Path             string                  `json:"path"`
+	Risk             string                  `json:"risk"`
+	TransportBinding *TransportActionBinding `json:"transport_binding,omitempty"`
 	// Batchable mirrors the bundle's "batchable" declaration; nil means
 	// undeclared and therefore batchable. See WriteActionSpec.IsBatchable.
 	Batchable *bool  `json:"batchable,omitempty"`
 	Confirm   string `json:"confirm,omitempty"`
+}
+
+const (
+	TransportCapabilityIssueLabel = "issue_label"
+	TransportActionRoleApply      = "apply"
+	TransportActionRoleReplace    = "replace"
+	TransportActionRoleCleanup    = "cleanup"
+	TransportInputTargetIssue     = "target_issue"
+	TransportInputLabel           = "label"
+	TransportInputShapeScalar     = "scalar"
+	TransportInputShapeList       = "singleton_array"
+)
+
+// TransportActionBinding declares how a closed transport capability selects a
+// write action and constructs its provider record.
+type TransportActionBinding struct {
+	Capability string                  `json:"capability"`
+	Role       string                  `json:"role"`
+	Modes      []synccontract.Mode     `json:"modes"`
+	Inputs     []TransportInputBinding `json:"inputs"`
+}
+
+// TransportInputBinding maps one typed transport input into an action record.
+type TransportInputBinding struct {
+	Input string `json:"input"`
+	Field string `json:"field"`
+	Shape string `json:"shape"`
+}
+
+// Clone returns an independent copy of b.
+func (b *TransportActionBinding) Clone() *TransportActionBinding {
+	if b == nil {
+		return nil
+	}
+	copied := *b
+	copied.Modes = append([]synccontract.Mode(nil), b.Modes...)
+	copied.Inputs = append([]TransportInputBinding(nil), b.Inputs...)
+	return &copied
 }
 
 // IsBatchable reports whether the action may run from a bulk reverse ETL plan.
@@ -71,9 +115,13 @@ func DefinitionOf(c Connector) (Definition, bool) {
 	if def.Changefeed != nil {
 		def.Changefeed = def.Changefeed.Clone()
 	}
+	if def.PollingWatermark != nil {
+		def.PollingWatermark = def.PollingWatermark.Clone()
+	}
 	if def.SyncTransport != nil {
 		def.SyncTransport = def.SyncTransport.Clone()
 	}
+	def.WriteActions = cloneWriteActionInfos(def.WriteActions)
 	def.Capabilities.CDC = HasImplementedChangefeed(c, def.Changefeed)
 	def.Icon = MetadataWithIcon(c.Metadata()).Icon
 	return def, true
@@ -116,6 +164,19 @@ func cloneBoolPtr(v *bool) *bool {
 	}
 	copied := *v
 	return &copied
+}
+
+func cloneWriteActionInfos(actions []WriteActionInfo) []WriteActionInfo {
+	if actions == nil {
+		return nil
+	}
+	copied := make([]WriteActionInfo, len(actions))
+	for i, action := range actions {
+		copied[i] = action
+		copied[i].Batchable = cloneBoolPtr(action.Batchable)
+		copied[i].TransportBinding = action.TransportBinding.Clone()
+	}
+	return copied
 }
 
 func writeActionInfosFromManifest(manifest Manifest) []WriteActionInfo {

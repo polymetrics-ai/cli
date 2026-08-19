@@ -1,10 +1,15 @@
 package cli
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -13,14 +18,38 @@ import (
 	"polymetrics.ai/internal/safety"
 )
 
+const certificationExternalChildEnv = "PM_CERTIFICATION_EXTERNAL_CHILD"
+
+// certificationExternalRuntimeObservationEnv requests one secret-safe
+// self-observation artifact from a fresh external-proof child. It is an
+// integration-test seam, not a command-line option and never skips a proof.
+const certificationExternalRuntimeObservationEnv = "PM_CERTIFICATION_EXTERNAL_RUNTIME_OBSERVATION"
+
 // runCertify dispatches `pm connectors certify ...` (certification design §A
 // command spec): a single connector by name, `--all --credentials-file`
 // batch mode (§B), or `--sweep` orphan cleanup (§C). Purely additive to the
 // existing `connectors` subcommand family in cli.go — no other connectors
 // subcommand's behavior changes.
-func runCertify(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runCertify(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
+	if flags.first("external-proof") == "true" && os.Getenv(certificationExternalChildEnv) != "1" {
+		if flags.first("all") == "true" || flags.first("sweep") == "true" || len(positionals) != 1 {
+			return usageErrorf("pm connectors certify --external-proof requires one connector")
+		}
+		opts, err := certifyOptionsFromFlags(positionals[0], flags)
+		if err != nil {
+			return err
+		}
+		if err := rejectCertificationSecretArgv(args, opts); err != nil {
+			return err
+		}
+		childArgs, childEnv, preparedValues, err := prepareExternalCertifyCredentialInput(args, flags, opts)
+		if err != nil {
+			return err
+		}
+		return runExternalCertifyChild(ctx, root, childArgs, stdout, stderr, preparedValues, childEnv)
+	}
 
 	switch {
 	case flags.first("sweep") == "true":
@@ -46,6 +75,30 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	if err != nil {
 		return err
 	}
+	// A certification workdir is intentionally ephemeral. Its write-ahead
+	// lifecycle ledger is not: persist it where --sweep discovers it so a
+	// crash or rate-limit restart can reconcile tagged resources rather than
+	// replaying a create from scratch.
+	opts.LedgerRoot = filepath.Join(root, ".polymetrics", "certifications", "ledger", connector)
+	if opts.Full {
+		opts.Resume = flags.first("resume") == "true"
+		opts.DirectReadCheckpointPath = filepath.Join(root, ".polymetrics", "certifications", "progress", connector+"-direct-read.json")
+	}
+	externalProof := flags.first("external-proof") == "true"
+	if externalProof {
+		if os.Getenv(certificationExternalChildEnv) != "1" {
+			return errors.New("external certification proof must execute in a fresh child process")
+		}
+		if err := rejectCertificationSecretArgv(os.Args[1:], opts); err != nil {
+			return err
+		}
+		opts.ObserveHTTP = true
+		if observationPath := os.Getenv(certificationExternalRuntimeObservationEnv); observationPath != "" {
+			opts.RuntimeObservation = func(input certify.RuntimeObservationInput) error {
+				return writeExternalRuntimeObservation(observationPath, root, input)
+			}
+		}
+	}
 
 	runner := certify.NewRunner(opts)
 	rep, err := runner.Run(ctx)
@@ -57,11 +110,306 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	saveDir := filepath.Join(root, ".polymetrics")
 	_ = rep.Save(saveDir) // best-effort: a report-persistence failure must not mask the certification result itself.
 
-	if err := writeCertifyReport(stdout, jsonOut, rep); err != nil {
+	var rendered bytes.Buffer
+	if err := writeCertifyReport(&rendered, jsonOut, rep); err != nil {
+		return err
+	}
+	if externalProof {
+		binarySHA256, err := currentBinarySHA256()
+		if err != nil {
+			return err
+		}
+		flowReferences := []string(nil)
+		if rep.FullParityVerified() {
+			flowReferences, err = certificationFlowRoundTripReferences(rep, certificationPreparedValues(opts))
+			if err != nil {
+				return fmt.Errorf("certify external proof: %w", err)
+			}
+		}
+		runID := fmt.Sprintf("external-%d", rep.StartedAt.UTC().UnixNano())
+		if _, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+			Connector:               connector,
+			RunID:                   runID,
+			BinarySHA256:            binarySHA256,
+			Command:                 append([]string(nil), os.Args...),
+			Stdout:                  rendered.String(),
+			ExitCode:                exitCodeForReport(rep),
+			Passed:                  rep.Passed,
+			FullParity:              rep.FullParityVerified(),
+			PreparedValues:          certificationPreparedValues(opts),
+			HTTPExchanges:           runner.ObservedHTTPExchanges(),
+			FlowRoundTripReferences: flowReferences,
+		}); err != nil {
+			if !rep.Passed {
+				diagnostic, diagnosticErr := certificationFailedReportDiagnostic(rep, certificationPreparedValues(opts))
+				if diagnosticErr == nil {
+					return fmt.Errorf("certify external proof: %w; fingerprint-redacted diagnostic: %s", err, diagnostic)
+				}
+			}
+			return fmt.Errorf("certify external proof: %w", err)
+		}
+	}
+	if _, err := io.Copy(stdout, &rendered); err != nil {
 		return err
 	}
 
 	return exitForReport(rep)
+}
+
+// certificationFlowRoundTripReferences turns the successful in-process flow
+// read-back stages into safe proof references. Accepted external evidence must
+// name the completed plan, preview, execution, and status/read-back steps
+// rather than treating a source-only HTTP transcript as a complete workflow.
+func certificationFlowRoundTripReferences(rep certify.Report, preparedValues []string) ([]string, error) {
+	required := []string{"flow_plan", "flow_preview", "flow_run", "flow_status"}
+	for _, name := range required {
+		stagePassed := false
+		var failed *certify.StageResult
+		for index := range rep.Stages {
+			stage := &rep.Stages[index]
+			if stage.Name != name {
+				continue
+			}
+			if stage.Passed {
+				stagePassed = true
+				break
+			}
+			failed = stage
+		}
+		if stagePassed {
+			continue
+		}
+		if failed == nil {
+			aggregate := certificationStageResult(rep, "flow_roundtrip")
+			if aggregate == nil {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: no passing stage result", name)
+			}
+			redacted, err := certificationStageDiagnostic(*aggregate, preparedValues)
+			if err != nil {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: fingerprint-redacted aggregate diagnostic unavailable", name)
+			}
+			predecessor := certificationStageResult(rep, "etl_full_refresh_append")
+			if predecessor == nil || predecessor.Passed {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: no named stage result; flow_roundtrip aggregate: %s", name, redacted)
+			}
+			predecessorRedacted, err := certificationStageDiagnostic(*predecessor, preparedValues)
+			if err != nil {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: fingerprint-redacted prerequisite diagnostic unavailable", name)
+			}
+			return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: no named stage result; flow_roundtrip aggregate: %s; etl_full_refresh_append prerequisite: %s", name, redacted, predecessorRedacted)
+		}
+		redacted, err := certificationStageDiagnostic(*failed, preparedValues)
+		if err != nil {
+			return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: fingerprint-redacted diagnostic unavailable", name)
+		}
+		return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: %s", name, redacted)
+	}
+	return required, nil
+}
+
+func certificationStageResult(rep certify.Report, name string) *certify.StageResult {
+	for index := range rep.Stages {
+		if rep.Stages[index].Name == name {
+			return &rep.Stages[index]
+		}
+	}
+	return nil
+}
+
+func certificationStageDiagnostic(stage certify.StageResult, preparedValues []string) (string, error) {
+	diagnostic := fmt.Sprintf("stage=%q status=%q exit_code=%d kind=%q error=%s", stage.Name, stage.Status, stage.CLI.ExitCode, stage.CLI.Kind, stage.Error)
+	return certify.RedactExternalProofDiagnostic(diagnostic, preparedValues)
+}
+
+// certificationFailedReportDiagnostic exposes the one actionable stage from a
+// completed but unsuccessful external certification report. It deliberately
+// redacts before returning because the report's Error fields may originate in
+// provider responses and must never reach terminal output unfiltered.
+func certificationFailedReportDiagnostic(rep certify.Report, preparedValues []string) (string, error) {
+	for _, stage := range rep.Stages {
+		if stage.Passed || stage.Status == "skipped" {
+			continue
+		}
+		redacted, err := certificationStageDiagnostic(stage, preparedValues)
+		if err != nil {
+			return "", err
+		}
+		return "first non-passing stage: " + redacted, nil
+	}
+	return "report passed=false without a non-passing stage result", nil
+}
+
+func runExternalCertifyChild(ctx context.Context, root string, args []string, stdout, stderr io.Writer, preparedValues, childEnv []string) error {
+	moduleRoot, err := certificationModuleRoot()
+	if err != nil {
+		return err
+	}
+	buildDir, err := os.MkdirTemp("", "pm-certify-external-")
+	if err != nil {
+		return fmt.Errorf("certify external proof: create build directory: %w", err)
+	}
+	defer func() { _ = os.RemoveAll(buildDir) }()
+	binaryPath := filepath.Join(buildDir, "pm")
+	build := exec.CommandContext(ctx, "go", "build", "-o", binaryPath, "./cmd/pm")
+	build.Dir = moduleRoot
+	build.Stderr = &bytes.Buffer{}
+	if err := build.Run(); err != nil {
+		return fmt.Errorf("certify external proof: build fresh pm binary: %w", err)
+	}
+
+	childArgs := append([]string{"connectors", "certify"}, args...)
+	childArgs = append(childArgs, "--root", root)
+	child := exec.CommandContext(ctx, binaryPath, childArgs...)
+	child.Env = append(os.Environ(), certificationExternalChildEnv+"=1")
+	child.Env = append(child.Env, childEnv...)
+	var childStdout, childStderr bytes.Buffer
+	child.Stdout = &childStdout
+	child.Stderr = &childStderr
+	err = child.Run()
+	if relayErr := relayExternalCertifyChildOutput(stdout, stderr, childStdout.String(), childStderr.String(), preparedValues); relayErr != nil {
+		return relayErr
+	}
+	if err == nil {
+		return nil
+	}
+	var exitErr *exec.ExitError
+	if errors.As(err, &exitErr) {
+		connector := "unknown"
+		if len(args) > 0 {
+			connector = args[0]
+		}
+		return certifyExitErrorf(exitErr.ExitCode(), "external certification %s: exit %d", connector, exitErr.ExitCode())
+	}
+	return fmt.Errorf("certify external proof: run fresh pm binary: %w", err)
+}
+
+const certificationStdinSecretEnv = "PM_CERTIFICATION_STDIN_SECRET"
+
+// prepareExternalCertifyCredentialInput converts the one supported stdin
+// credential into a child-only environment value. The parent command line
+// keeps only a field name; the raw stdin value is never written, serialized
+// into argv, or handed to an ordinary credential profile.
+func prepareExternalCertifyCredentialInput(args []string, flags parsedFlags, opts certify.Options) ([]string, []string, []string, error) {
+	prepared := certificationPreparedValues(opts)
+	stdinValues := flags.values["value-stdin"]
+	if len(stdinValues) == 0 {
+		return append([]string(nil), args...), nil, prepared, nil
+	}
+	if len(stdinValues) != 1 || flags.isBare("value-stdin") {
+		return nil, nil, nil, usageErrorf("pm connectors certify --external-proof accepts exactly one --value-stdin field")
+	}
+	field := stdinValues[0]
+	if err := safety.ValidateIdentifier(field, "stdin credential field"); err != nil {
+		return nil, nil, nil, validationErrorf("%v", err)
+	}
+	payload, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("read stdin certification credential: %w", err)
+	}
+	value := strings.TrimRight(string(payload), "\r\n")
+	if value == "" {
+		return nil, nil, nil, errors.New("stdin certification credential is empty")
+	}
+	childArgs := replaceCertificationStdinArg(args, field)
+	prepared = append(prepared, value)
+	return childArgs, []string{certificationStdinSecretEnv + "=" + value}, prepared, nil
+}
+
+func replaceCertificationStdinArg(args []string, field string) []string {
+	out := make([]string, 0, len(args)+2)
+	for index := 0; index < len(args); index++ {
+		arg := args[index]
+		if arg == "--value-stdin" {
+			index++
+			continue
+		}
+		if strings.HasPrefix(arg, "--value-stdin=") {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return append(out, "--from-env", field+"="+certificationStdinSecretEnv)
+}
+
+// relayExternalCertifyChildOutput is the parent-side final credential boundary:
+// the child has no terminal attached, so neither stream may reach the invoking
+// process until both have been checked against the prepared credential values.
+// On a refusal it writes neither raw stream; it returns only a separately
+// fingerprint-redacted diagnostic so an external-proof failure stays
+// diagnosable without exposing a credential.
+func relayExternalCertifyChildOutput(stdout, stderr io.Writer, childStdout, childStderr string, preparedValues []string) error {
+	if len(certify.ScanForSecrets(childStdout, preparedValues)) != 0 || len(certify.ScanForSecrets(childStderr, preparedValues)) != 0 {
+		diagnostic, err := certify.RedactExternalProofDiagnostic(
+			"external certification child stdout:\n"+childStdout+"\nexternal certification child stderr:\n"+childStderr,
+			preparedValues,
+		)
+		if err != nil {
+			return errors.New("external certification child output contained credential material; refusing to relay captured streams and diagnostic")
+		}
+		return fmt.Errorf("external certification child output contained credential material; refusing to relay captured streams; fingerprint-redacted diagnostic:\n%s", diagnostic)
+	}
+	if _, err := io.WriteString(stdout, childStdout); err != nil {
+		return err
+	}
+	if _, err := io.WriteString(stderr, childStderr); err != nil {
+		return err
+	}
+	return nil
+}
+
+func rejectCertificationSecretArgv(args []string, opts certify.Options) error {
+	prepared := certificationPreparedValues(opts)
+	if len(prepared) == 0 {
+		return nil
+	}
+	if len(certify.ScanForSecrets(strings.Join(args, "\x00"), prepared)) != 0 {
+		return validationErrorf("certification credentials must be supplied through --from-env or stdin, never process arguments")
+	}
+	return nil
+}
+
+func certificationPreparedValues(opts certify.Options) []string {
+	values := make([]string, 0, len(opts.SecretEnv))
+	for _, envName := range opts.SecretEnv {
+		if value := os.Getenv(envName); value != "" {
+			values = append(values, value)
+		}
+	}
+	return values
+}
+
+func certificationModuleRoot() (string, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: determine working directory: %w", err)
+	}
+	for {
+		if _, statErr := os.Stat(filepath.Join(dir, "go.mod")); statErr == nil {
+			return dir, nil
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", errors.New("certify external proof: could not find module root to build a fresh pm binary")
+		}
+		dir = parent
+	}
+}
+
+func currentBinarySHA256() (string, error) {
+	path, err := os.Executable()
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: locate current binary: %w", err)
+	}
+	payload, err := os.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: read current binary: %w", err)
+	}
+	sum := sha256.Sum256(payload)
+	return hex.EncodeToString(sum[:]), nil
+}
+
+func exitCodeForReport(rep certify.Report) int {
+	return certify.ExitCodeFor(rep)
 }
 
 // certifyOptionsFromFlags builds certify.Options from `pm connectors certify
@@ -89,24 +437,39 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 	}
 
 	skip := parseCSVFlags(flags.values["skip"])
-	write := flags.first("write") == "true"
-	full := flags.first("full") == "true"
+	fullParity := flags.first("full-parity") == "true"
+	writeOnly := flags.first("write-only") == "true"
+	directReadOnly := flags.first("direct-read-only") == "true"
+	write := flags.first("write") == "true" || fullParity || writeOnly
+	full := flags.first("full") == "true" || fullParity || directReadOnly
+	if writeOnly && fullParity {
+		return certify.Options{}, usageErrorf("--write-only cannot be combined with --full-parity")
+	}
+	if directReadOnly && write {
+		return certify.Options{}, usageErrorf("pm connectors certify --direct-read-only cannot be combined with --write")
+	}
 	for _, s := range skip {
 		if s == "write" {
+			if fullParity {
+				return certify.Options{}, usageErrorf("--full-parity cannot skip write")
+			}
 			write = false
 		}
 	}
 
 	return certify.Options{
-		Connector: connector,
-		Stream:    flags.first("stream"),
-		Limit:     limit,
-		Modes:     parseCSVFlags(flags.values["modes"]),
-		Config:    config,
-		SecretEnv: secretEnv,
-		KeepWork:  flags.first("keep-workdir") == "true",
-		Write:     write,
-		Full:      full,
+		Connector:         connector,
+		Stream:            flags.first("stream"),
+		Limit:             limit,
+		Modes:             parseCSVFlags(flags.values["modes"]),
+		Config:            config,
+		SecretEnv:         secretEnv,
+		KeepWork:          flags.first("keep-workdir") == "true",
+		Write:             write,
+		WriteOnly:         writeOnly,
+		Full:              full,
+		RequireFullParity: fullParity,
+		DirectReadOnly:    directReadOnly,
 	}, nil
 }
 
@@ -170,7 +533,7 @@ func runCertifySweep(ctx context.Context, root string, flags parsedFlags, stdout
 	results := make(map[string]certify.SweepResult, len(connectors))
 	for _, name := range connectors {
 		ledgerRoot := filepath.Join(root, ".polymetrics", "certifications", "ledger", name)
-		sweeper := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, OlderThan: olderThan})
+		sweeper := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, ProjectRoot: root, OlderThan: olderThan})
 		res, err := sweeper.Sweep(ctx)
 		if err != nil {
 			return fmt.Errorf("certify: sweep %s: %w", name, err)
@@ -234,6 +597,9 @@ func renderCertifyReportText(rep certify.Report) string {
 	if rep.Passed {
 		status = "PASS"
 	}
+	if rep.Mode == "partial_live" {
+		status = "PARTIAL"
+	}
 	fmt.Fprintf(&b, "Legacy certification run: %s [%s]\n", rep.Connector, status)
 	fmt.Fprintln(&b, "  This run does not set the generated connector certification status.")
 	fmt.Fprintf(&b, "  check:    %s\n", rep.Capabilities.Check.Result)
@@ -241,6 +607,20 @@ func renderCertifyReportText(rep certify.Report) string {
 	fmt.Fprintf(&b, "  read:     %s (stream=%s records=%d)\n", rep.Capabilities.Read.Result, rep.Capabilities.Read.Stream, rep.Capabilities.Read.Records)
 	fmt.Fprintf(&b, "  resume:   %s\n", rep.Capabilities.Resume.Result)
 	fmt.Fprintf(&b, "  redaction:%s\n", rep.Capabilities.SecretRedaction.Result)
+	if directRead := rep.Capabilities.DirectRead; directRead != nil {
+		fmt.Fprintf(&b, "  direct-read: %s", directRead.Result)
+		if directRead.StagesChecked > 0 {
+			fmt.Fprintf(&b, " (candidates=%d", directRead.StagesChecked)
+			if directRead.ResumedStages > 0 {
+				fmt.Fprintf(&b, " resumed=%d", directRead.ResumedStages)
+			}
+			fmt.Fprint(&b, ")")
+		}
+		if directRead.Reason != "" {
+			fmt.Fprintf(&b, "; %s", directRead.Reason)
+		}
+		fmt.Fprintln(&b)
+	}
 	if surface := rep.Capabilities.Surface; surface != nil {
 		fmt.Fprintf(&b, "  surface:  %s", surface.Result)
 		if provenance := surface.Provenance; provenance != nil {
@@ -274,6 +654,10 @@ func renderCertifyReportText(rep certify.Report) string {
 		// so the text summary must not label them FAILED too.
 		if stage.Name == "fixture_conformance" || strings.HasPrefix(stage.Error, "skipped: ") {
 			fmt.Fprintf(&b, "  stage %s: skipped: %s\n", stage.Name, strings.TrimPrefix(stage.Error, "skipped: "))
+			continue
+		}
+		if strings.HasPrefix(stage.Error, "not_live: ") {
+			fmt.Fprintf(&b, "  stage %s: not live: %s\n", stage.Name, strings.TrimPrefix(stage.Error, "not_live: "))
 			continue
 		}
 		fmt.Fprintf(&b, "  stage %s: FAILED: %s\n", stage.Name, stage.Error)

@@ -17,7 +17,148 @@ var errTransportStreamStateConflict = errors.New("transport stream state changed
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
 	_, destinationDeclared := connectors.SyncTransportDescriptorOf(destination)
-	return sourceDeclared || destinationDeclared
+	// A transport is a closed pair: registry preflight needs a source and a
+	// destination declaration. Requiring both here prevents a newly declared
+	// primitive destination from rerouting an existing legacy source before that
+	// source has declared and registered its own transport role. Invalid
+	// two-sided declarations still reach preflight and fail closed there.
+	return sourceDeclared && destinationDeclared
+}
+
+// shouldRunTransport keeps the closed issue-label transport opt-in at the
+// persisted connection boundary. Its definition owns the admitted source
+// executors, streams, and record mappings. Open installs the exact
+// definition-owned composition so it can be preflighted, but that must not
+// turn every existing JSON ETL connection into a transport run merely because
+// its connector advertises a closed descriptor.
+//
+// Other externally declared transport pairs retain the normal descriptor-led
+// dispatch. The walking slice participates only when the connection itself
+// satisfies its fixed issues/source-issue/target-issue/label contract. The
+// definition selects the allowed destination action for each declared mode;
+// non-additive modes are additionally gated by the persisted connection.
+func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
+	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
+	destinationIssueLabel := isIssueLabelTransportConnector(destination)
+	if destinationIssueLabel {
+		if a == nil || a.transports == nil {
+			return false
+		}
+		if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode}); err != nil {
+			return false
+		}
+	} else if !sourceDeclarative {
+		return hasDeclaredSyncTransport(source, destination)
+	} else if !hasDeclaredSyncTransport(source, destination) {
+		return false
+	} else {
+		// A definition-selected source may pair with another definition-selected
+		// destination. Its own eligible stream/mode and the destination strategy
+		// remain enforced by registry preflight. Only the semantic managed-target
+		// destination marker admits this cross-definition route, so legacy API-to-
+		// warehouse connections are not diverted from their established ETL path.
+		if a == nil || a.transports == nil {
+			return false
+		}
+		resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+			Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
+		})
+		if err != nil {
+			return false
+		}
+		_, managedTarget := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
+		if managedTarget {
+			return true
+		}
+		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
+		return localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode)
+	}
+	transportConn, err := a.issueLabelTransportConnection(conn.ID)
+	if err != nil {
+		return false
+	}
+	configuredStream, _, err := issueLabelTransportStream(transportConn)
+	if err != nil || streamName != configuredStream {
+		return false
+	}
+	contract, err := a.issueLabelTransportContract(transportConn)
+	if err != nil {
+		return false
+	}
+	_, err = contract.actionForSyncMode(mode.ContractMode)
+	return err == nil
+}
+
+func isWarehouseDedupeContractMode(mode synccontract.Mode) bool {
+	return mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
+}
+
+func isIssueLabelTransportConnector(connector connectors.Connector) bool {
+	descriptor, ok := connectors.SyncTransportDescriptorOf(connector)
+	if !ok || descriptor.Source == nil || descriptor.Destination == nil {
+		return false
+	}
+	definition, ok := connectors.DefinitionOf(connector)
+	if !ok {
+		return false
+	}
+	contract, err := issueLabelTransportContractForDefinition(definition)
+	if err != nil {
+		return false
+	}
+	if !isDeclarativeStreamTransportConnector(connector) || descriptor.Destination.Executor != issueLabelDestinationReference {
+		return false
+	}
+	wantModes := contract.modes()
+	if len(descriptor.Destination.Modes) != len(wantModes) {
+		return false
+	}
+	for i, mode := range wantModes {
+		if descriptor.Destination.Modes[i] != mode || !transportContainsMode(descriptor.Source.Modes, mode) {
+			return false
+		}
+	}
+	wantActions := contract.destinationActionNames()
+	if len(descriptor.Destination.EligibleActions) != len(wantActions) || len(descriptor.Destination.ApplyStrategies) != len(wantModes) {
+		return false
+	}
+	strategies, err := contract.applyStrategies()
+	if err != nil {
+		return false
+	}
+	for i := range wantActions {
+		if descriptor.Destination.EligibleActions[i] != wantActions[i] || descriptor.Destination.ApplyStrategies[i] != strategies[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func isDeclarativeStreamTransportConnector(connector connectors.Connector) bool {
+	descriptor, ok := connectors.SyncTransportDescriptorOf(connector)
+	if !ok || descriptor.Source == nil || descriptor.Source.Executor != declarativeStreamSourceReference {
+		return false
+	}
+	definition, ok := connectors.DefinitionOf(connector)
+	if !ok {
+		return false
+	}
+	return validateDeclarativeStreamEligibility(definition.Streams, descriptor.Source.EligibleStreams) == nil
+}
+
+func validateClosedTransportBatchSize(source, destination connectors.Connector, batchSize int) error {
+	// The provider-mutating issue-label destination binds every source record
+	// to one configured target issue and therefore remains singleton-only. The
+	// same definition-selected source may deliver a bounded collection to a
+	// semantic managed database destination, whose own executor provides the
+	// batch transaction and replay contract.
+	if isIssueLabelTransportConnector(destination) && batchSize != 1 {
+		return errors.New("closed issue-label transport requires batch size 1")
+	}
+	if isDeclarativeStreamTransportConnector(source) && batchSize > issueCollectionTransportMaxRecords {
+		return fmt.Errorf("bounded declarative collection batch size must not exceed %d", issueCollectionTransportMaxRecords)
+	}
+	return nil
 }
 
 // runTransportETL is the bounded bridge from persisted connection state to
@@ -26,16 +167,37 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
+	emptyResult := etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}
 	if a.transports == nil {
-		return etlExecutionResult{}, fmt.Errorf("closed transport registry is unavailable")
+		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
+	}
+	if err := a.reconcileCommittedTransportStages(ctx); err != nil {
+		return emptyResult, err
+	}
+	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
+	})
+	if err != nil {
+		return emptyResult, err
+	}
+	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
+	if err := validateClosedTransportBatchSize(source, destination, batchSize); err != nil {
+		return emptyResult, err
+	}
+	if requiresManagedTargetApproval {
+		var err error
+		approval, err = a.authorizePostgresManagedTargetTransport(ctx, conn, streamName, approval, destRuntime)
+		if err != nil {
+			return emptyResult, err
+		}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior, priorPresent := a.state.StreamStates[stateKey]
 	prior = cloneStreamState(prior)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
-			return etlExecutionResult{}, err
+			return emptyResult, err
 		}
 	}
 	generationID := prior.GenerationID
@@ -47,15 +209,30 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	expectedPresent := priorPresent
 	var committed *synccontract.CheckpointEnvelope
 	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, synctransport.RunRequest{
+		ConnectionID:       conn.ID,
+		Generation:         generationID,
 		Source:             source,
 		SourceRuntime:      sourceRuntime,
 		Destination:        destination,
 		DestinationRuntime: destRuntime,
+		DestinationBinding: synctransport.DestinationBinding{
+			WorkspaceID:       a.state.WorkspaceID,
+			SourceConnectorID: source.Name(),
+			ConnectionID:      conn.ID,
+			StreamID:          stream.StreamID,
+			PrimaryKey:        append([]string(nil), stream.PrimaryKey...),
+		},
 		Stream:             streamName,
+		CursorField:        stream.CursorField,
 		Mode:               mode.ContractMode,
 		BatchSize:          batchSize,
+		MaxInFlightBatches: maxInFlightBatches,
+		TransformPlanJSON:  stream.TransformPlan,
+		TransformPlanHash:  stream.TransformPlanHash,
+		FastSegments:       &connectionArrowSegmentStore{app: a, connectionID: conn.ID, stream: streamName},
 		Resume:             sourceExpectation,
 		Checkpoint:         prior.Checkpoint,
+		Approval:           approval,
 		Stage:              a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
@@ -91,11 +268,34 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return nil
 		},
 	})
+	transportMeasurement := transportPhaseMeasurement(transportResult)
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
-			return etlExecutionResult{}, err
+			return etlExecutionResult{
+				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
+				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
+			}, err
 		}
-		return etlExecutionResult{}, fmt.Errorf("closed transport completed without a durable committed checkpoint")
+		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
+			if requiresManagedTargetApproval {
+				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+					return emptyResult, err
+				}
+			}
+			updated := cloneStreamState(prior)
+			updated.Connection = conn.Name
+			updated.Stream = streamName
+			updated.GenerationID = generationID
+			updated.LastSuccessfulRunID = runID
+			updated.RecordsLoaded = 0
+			updated.UpdatedAt = time.Now().UTC()
+			result := etlExecutionResult{
+				PendingStreamState: &pendingStreamState{Key: stateKey, State: updated}, TransportPhaseMeasurement: transportMeasurement,
+			}
+			result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+			return result, nil
+		}
+		return emptyResult, fmt.Errorf("closed transport completed without a durable committed checkpoint")
 	}
 
 	updated := StreamState{
@@ -108,9 +308,10 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		UpdatedAt:           *committed.CommittedAt,
 	}
 	result := etlExecutionResult{
-		RecordsRead:   transportResult.RecordsRead,
-		RecordsLoaded: transportResult.RecordsApplied,
-		BatchCount:    transportResult.Pages,
+		RecordsRead:               transportResult.RecordsRead,
+		RecordsLoaded:             transportResult.RecordsApplied,
+		BatchCount:                transportResult.Pages,
+		TransportPhaseMeasurement: transportMeasurement,
 		PendingStreamState: &pendingStreamState{
 			Key:   stateKey,
 			State: updated,
@@ -120,7 +321,49 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	if err != nil {
 		return result, err
 	}
+	if requiresManagedTargetApproval {
+		if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+			return result, err
+		}
+	}
 	return result, nil
+}
+
+// reconcileCommittedTransportStages retires only previously committed,
+// connection-owned worksets before the next closed transport can reach source
+// I/O. Ordinary Open deliberately leaves an accepted receipt observable for
+// recovery and certification evidence; a stage that needs eager disposal may
+// separately opt into synctransport.RetirableWarehouseStage.
+func (a *App) reconcileCommittedTransportStages(ctx context.Context) error {
+	stage, ok := a.transportStage.(interface{ ReconcileCommitted(context.Context) error })
+	if !ok {
+		return nil
+	}
+	if err := stage.ReconcileCommitted(ctx); err != nil {
+		return fmt.Errorf("reconcile committed transport stages: %w", err)
+	}
+	return nil
+}
+
+func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasurement {
+	measurement := &TransportPhaseMeasurement{
+		ExtractedRecords: result.RecordsRead, WarehouseParquetRecords: result.RecordsStaged, PostgreSQLAppliedRecords: result.RecordsApplied,
+		ExtractElapsedNanos: result.ExtractElapsed.Nanoseconds(), WarehouseElapsedNanos: result.StageElapsed.Nanoseconds(), PostgreSQLElapsedNanos: result.ApplyElapsed.Nanoseconds(),
+		SourceRecords: result.RecordsRead, TransformedRecords: result.RecordsStaged, CopyAppliedRecords: result.RecordsApplied,
+		SourceLogicalBytes: result.SourceLogicalBytes, TransformedLogicalBytes: result.TransformedBytes, ParquetBytes: result.ParquetBytes,
+		SourceReadElapsedNanos: result.ExtractElapsed.Nanoseconds(), TransformElapsedNanos: result.TransformElapsed.Nanoseconds(),
+		ParquetCloseElapsedNanos: result.ParquetElapsed.Nanoseconds(), BinaryCOPYElapsedNanos: result.ApplyElapsed.Nanoseconds(),
+		IndexConstraintBuildElapsedNanos: result.IndexConstraintElapsed.Nanoseconds(),
+		PublishReceiptElapsedNanos:       result.PublishElapsed.Nanoseconds(), CheckpointElapsedNanos: result.CheckpointElapsed.Nanoseconds(),
+		CriticalPathElapsedNanos: result.WallElapsed.Nanoseconds(), PeakCreditBytes: result.PeakCreditBytes,
+		ByteCreditWaitElapsedNanos: result.CreditWaitElapsed.Nanoseconds(),
+	}
+	if result.SourceLogicalBytes > 0 && result.WallElapsed > 0 {
+		seconds := result.WallElapsed.Seconds()
+		measurement.InputDecimalMBPerSecond = float64(result.SourceLogicalBytes) / 1_000_000 / seconds
+		measurement.InputMiBPerSecond = float64(result.SourceLogicalBytes) / (1024 * 1024) / seconds
+	}
+	return measurement
 }
 
 func transportStreamStateEqual(left, right StreamState) bool {

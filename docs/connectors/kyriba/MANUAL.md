@@ -48,7 +48,7 @@ ETL STREAMS
     fields: amount(number), currency(string), id(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Kyriba tenant REST API read of bank accounts/transactions/statements/payments

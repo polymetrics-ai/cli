@@ -93,6 +93,9 @@ func validateRateLimitPolicy(policy connsdk.RateLimitPolicy, spec *Schema) error
 	if err := validateRateLimitScope(policy.Scope, spec); err != nil {
 		return err
 	}
+	if policy.Coordination != "" && policy.Coordination != connsdk.RateLimitCoordinationRequireShared {
+		return fmt.Errorf("coordination must be require_shared when present")
+	}
 	if len(policy.Budgets) == 0 {
 		return fmt.Errorf("budgets must contain at least one provider budget")
 	}
@@ -307,7 +310,23 @@ func validateRateLimitBudget(budget connsdk.RateLimitBudget) error {
 	default:
 		return fmt.Errorf("model must be fixed_window, sliding_window, token_bucket, or leaky_bucket")
 	}
-	return validateRateLimitCost(budget.Cost)
+	if err := validateRateLimitCost(budget.Cost); err != nil {
+		return err
+	}
+	if budget.Unit != connsdk.RateLimitBudgetPoints || budget.Cost == nil || budget.Cost.DefaultCost == nil {
+		return nil
+	}
+	capacity := 0
+	switch budget.Model {
+	case connsdk.RateLimitBudgetFixedWindow, connsdk.RateLimitBudgetSlidingWindow:
+		capacity = *budget.Limit
+	case connsdk.RateLimitBudgetTokenBucket, connsdk.RateLimitBudgetLeakyBucket:
+		capacity = *budget.Capacity
+	}
+	if *budget.Cost.DefaultCost > float64(capacity) {
+		return fmt.Errorf("cost.default_cost must not exceed the declared budget capacity")
+	}
+	return nil
 }
 
 func requirePositiveRateLimitInt(field string, value *int) error {
@@ -328,8 +347,8 @@ func validateRateLimitCost(cost *connsdk.RateLimitCost) error {
 	if cost == nil {
 		return nil
 	}
-	if cost.DefaultCost == nil && strings.TrimSpace(cost.ResponseHeader) == "" {
-		return fmt.Errorf("cost must declare default_cost or response_header")
+	if cost.DefaultCost == nil && strings.TrimSpace(cost.ResponseHeader) == "" && strings.TrimSpace(cost.ResponseBody) == "" {
+		return fmt.Errorf("cost must declare default_cost, response_header, or response_body")
 	}
 	if err := requirePositiveRateLimitFloat("cost.default_cost", cost.DefaultCost); err != nil && cost.DefaultCost != nil {
 		return err
@@ -339,6 +358,12 @@ func validateRateLimitCost(cost *connsdk.RateLimitCost) error {
 		if header == "" || header != cost.ResponseHeader || !httpHeaderNamePattern.MatchString(header) {
 			return fmt.Errorf("cost.response_header must be an HTTP field name")
 		}
+	}
+	if cost.ResponseBody != "" && cost.ResponseBody != string(connsdk.RateLimitCostSourceGraphQLRateLimit) {
+		return fmt.Errorf("cost.response_body must be graphql_rate_limit")
+	}
+	if cost.ResponseHeader != "" && cost.ResponseBody != "" {
+		return fmt.Errorf("cost must not combine response_header and response_body")
 	}
 	return nil
 }
