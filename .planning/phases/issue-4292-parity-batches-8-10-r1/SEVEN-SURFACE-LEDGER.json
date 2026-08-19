@@ -10176,7 +10176,7 @@
             "databases",
             "users"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -10216,10 +10216,10 @@
             "notifications",
             "ssh_tunnels"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_job",
           "exact_record_driven_actions": [
             "create_job",
@@ -10533,7 +10533,7 @@
             "looks",
             "dashboards"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -10568,7 +10568,7 @@
             "groups",
             "memberships"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -10603,10 +10603,10 @@
             "users",
             "roles"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_user",
           "exact_record_driven_actions": [
             "create_user",

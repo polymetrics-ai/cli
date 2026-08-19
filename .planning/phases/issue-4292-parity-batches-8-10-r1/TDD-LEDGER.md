@@ -51,6 +51,21 @@
   --check` pass. The generated 30-row ledger keeps generic App/CLI dispatch
   explicitly pending foundation integration.
 
+### Seven-surface declaration proof — second increment
+
+- **Red:** `node traces/reconcile-seven-surfaces.mjs --check metabase dbt
+  looker mode dremio` failed with `metabase: source transport declaration
+  missing` before any declaration was written.
+- **Green:** generated connector-owned source declarations for Metabase, dbt
+  Cloud, Looker, Mode, and Dremio. dbt Cloud and Dremio each have existing
+  exact-record actions, so their destination declarations list every such
+  action and select only one initial `full_append` proof. Metabase, Looker,
+  and Mode have no existing typed actions; no destination contract or request
+  schema was invented.
+- The focused checker, `connectorgen validate`, and `surface-sync --check`
+  pass. Generic App/CLI dispatch and multi-action selection remain foundation
+  dependencies, recorded rather than claimed as deployed.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "projects",
+      "runs",
+      "repositories",
+      "users",
+      "environments",
+      "jobs",
+      "invites",
+      "licenses",
+      "notifications",
+      "ssh_tunnels"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport_static",
+      "run_id": "dbt_source_definition_v1"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_typed_destination"
+    },
+    "eligible_actions": [
+      "create_job",
+      "update_job",
+      "delete_job",
+      "create_notification",
+      "update_notification",
+      "delete_notification",
+      "create_ssh_tunnel",
+      "update_ssh_tunnel",
+      "delete_ssh_tunnel"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_typed_destination_static",
+      "run_id": "dbt_create_job_full_append_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "mode": "full_append",
+        "strategy": "append",
+        "action": "create_job"
+      }
+    ],
+    "source_bindings": [
+      {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "jobs"
+        ],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {
+              "input": "project_id",
+              "field": "project_id"
+            },
+            {
+              "input": "environment_id",
+              "field": "environment_id"
+            },
+            {
+              "input": "name",
+              "field": "name"
+            },
+            {
+              "input": "execute_steps",
+              "field": "execute_steps"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
