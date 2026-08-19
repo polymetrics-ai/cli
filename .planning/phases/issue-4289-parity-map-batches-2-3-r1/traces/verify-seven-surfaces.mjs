@@ -83,10 +83,13 @@ for (const connector of connectors) {
   const missingDestinationActions = writes.map((action) => action.name).filter((action) => !destinationActions.includes(action));
   const sourceInputPending = writes.map((action) => actionDispositionByName.get(action.name)).filter((disposition) => disposition?.source_input_binding?.state !== "source-bound").length;
   const reverseCommands = commands.filter((command) =>
-    command.availability === "implemented" &&
+    (command.availability === "implemented" || command.availability === "partial") &&
     command.intent === "reverse_etl" &&
     typeof command.write === "string",
   );
+  const partialReverseCommandActions = new Set(reverseCommands
+    .filter((command) => command.availability === "partial")
+    .map((command) => command.write));
   const reverseCommandActions = new Set(reverseCommands.map((command) => command.write));
   const missingReverseCommandActions = writes.map((action) => action.name).filter((action) => !reverseCommandActions.has(action));
   const duplicateReverseCommandActions = reverseCommands.length - reverseCommandActions.size;
@@ -98,6 +101,8 @@ for (const connector of connectors) {
         eligible_actions: 0,
         source_input_bindings_pending: 0,
         installed_command_actions: 0,
+        implemented_installed_command_actions: 0,
+        partial_installed_command_actions: 0,
         missing_installed_command_actions: 0,
         duplicate_installed_command_actions: 0,
         orphan_installed_command_actions: 0,
@@ -110,6 +115,8 @@ for (const connector of connectors) {
         missing_actions: missingDestinationActions.length,
         source_input_bindings_pending: sourceInputPending,
         installed_command_actions: reverseCommandActions.size,
+        implemented_installed_command_actions: reverseCommandActions.size - partialReverseCommandActions.size,
+        partial_installed_command_actions: partialReverseCommandActions.size,
         missing_installed_command_actions: missingReverseCommandActions.length,
         duplicate_installed_command_actions: duplicateReverseCommandActions,
         orphan_installed_command_actions: orphanReverseCommandActions.length,

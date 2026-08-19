@@ -24,6 +24,8 @@
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
         "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -53,6 +55,8 @@
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
         "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -82,6 +86,8 @@
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
         "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -112,14 +118,16 @@
         "bound_actions": 0,
         "missing_actions": 29,
         "source_input_bindings_pending": 29,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 29,
+        "installed_command_actions": 26,
+        "implemented_installed_command_actions": 26,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 3,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 0
+      "executable_commands": 26
     },
     {
       "connector": "google-calendar",
@@ -145,6 +153,8 @@
         "missing_actions": 26,
         "source_input_bindings_pending": 26,
         "installed_command_actions": 26,
+        "implemented_installed_command_actions": 26,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -176,14 +186,16 @@
         "bound_actions": 0,
         "missing_actions": 40,
         "source_input_bindings_pending": 40,
-        "installed_command_actions": 37,
-        "missing_installed_command_actions": 3,
+        "installed_command_actions": 40,
+        "implemented_installed_command_actions": 40,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 63
+      "executable_commands": 66
     },
     {
       "connector": "twilio",
@@ -208,14 +220,16 @@
         "bound_actions": 0,
         "missing_actions": 94,
         "source_input_bindings_pending": 94,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 94,
+        "installed_command_actions": 94,
+        "implemented_installed_command_actions": 60,
+        "partial_installed_command_actions": 34,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 0
+      "executable_commands": 60
     },
     {
       "connector": "amazon-sqs",
@@ -241,6 +255,8 @@
         "missing_actions": 16,
         "source_input_bindings_pending": 16,
         "installed_command_actions": 16,
+        "implemented_installed_command_actions": 16,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -271,6 +287,8 @@
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
         "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -301,14 +319,16 @@
         "bound_actions": 0,
         "missing_actions": 27,
         "source_input_bindings_pending": 27,
-        "installed_command_actions": 3,
-        "missing_installed_command_actions": 24,
+        "installed_command_actions": 27,
+        "implemented_installed_command_actions": 27,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 45
+      "executable_commands": 69
     },
     {
       "connector": "google-ads",
@@ -333,14 +353,16 @@
         "bound_actions": 0,
         "missing_actions": 7,
         "source_input_bindings_pending": 7,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 7,
+        "installed_command_actions": 7,
+        "implemented_installed_command_actions": 7,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 21
+      "executable_commands": 28
     },
     {
       "connector": "facebook-marketing",
@@ -365,14 +387,16 @@
         "bound_actions": 0,
         "missing_actions": 3,
         "source_input_bindings_pending": 3,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 3,
+        "installed_command_actions": 3,
+        "implemented_installed_command_actions": 3,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 0
+      "executable_commands": 3
     },
     {
       "connector": "linkedin-ads",
@@ -396,6 +420,8 @@
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
         "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -426,14 +452,16 @@
         "bound_actions": 0,
         "missing_actions": 20,
         "source_input_bindings_pending": 20,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 20,
+        "installed_command_actions": 19,
+        "implemented_installed_command_actions": 19,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 1,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 0
+      "executable_commands": 19
     },
     {
       "connector": "xero",
@@ -458,14 +486,16 @@
         "bound_actions": 0,
         "missing_actions": 87,
         "source_input_bindings_pending": 87,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 87,
+        "installed_command_actions": 87,
+        "implemented_installed_command_actions": 84,
+        "partial_installed_command_actions": 3,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 23
+      "executable_commands": 107
     },
     {
       "connector": "paypal-transaction",
@@ -489,6 +519,8 @@
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
         "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
         "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
@@ -519,14 +551,16 @@
         "bound_actions": 0,
         "missing_actions": 76,
         "source_input_bindings_pending": 76,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 76,
+        "installed_command_actions": 75,
+        "implemented_installed_command_actions": 30,
+        "partial_installed_command_actions": 45,
+        "missing_installed_command_actions": 1,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 0
+      "executable_commands": 30
     },
     {
       "connector": "amazon-seller-partner",
@@ -551,14 +585,16 @@
         "bound_actions": 0,
         "missing_actions": 98,
         "source_input_bindings_pending": 98,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 98,
+        "installed_command_actions": 98,
+        "implemented_installed_command_actions": 98,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 0
+      "executable_commands": 98
     },
     {
       "connector": "miro",
@@ -583,14 +619,16 @@
         "bound_actions": 0,
         "missing_actions": 98,
         "source_input_bindings_pending": 98,
-        "installed_command_actions": 0,
-        "missing_installed_command_actions": 98,
+        "installed_command_actions": 98,
+        "implemented_installed_command_actions": 98,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 0
+      "executable_commands": 98
     }
   ]
 }

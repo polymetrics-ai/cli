@@ -28,7 +28,7 @@ Refs #4289
 ## Classification and Safety
 
 - Unauthored operations are `declaration-pending`, not `foundation-gap`.
-- Typed writes remain enabled `direct_write`. All 621 existing schema-backed write actions are semantically eligible and individually representable as closed destination action shapes; their exact stream-to-required-input routes are still declaration-pending. Reverse-ETL eligibility remains foundation-pending on persisted App/CLI dispatch and exact multi-action selection; no source field, transport binding, selector, or action is invented.
+- Typed writes remain enabled `direct_write`. All 621 existing schema-backed write actions are semantically eligible and individually representable as closed destination action shapes; their exact stream-to-required-input routes are still declaration-pending. The connector command projection exposes 534 actions as installed `implemented` reverse-ETL commands, 82 as directly CLI-reachable but technically `partial` scalar-union commands, and retains five without exact source provenance as `declaration-pending`. The partial reasons are declaration-bound: current closed flags cannot encode documented string/null or string/integer fields; no raw request body or generic writer is added. Reverse-ETL destination deployment remains foundation-pending on persisted App/CLI dispatch and exact multi-action selection; no source field, transport binding, selector, or action is invented.
 - ETL is declaration-pending until a connector authors `sync_transport.json`; no engine code, credential, provider call, schema, runtime contract, or executable command changed.
 - All provider artifacts were retrieved credential-free from public documentation/source URLs. No live provider operation was executed.
 
@@ -38,13 +38,14 @@ Refs #4289
 - Red: selected bundles lacked the source lock and corrected parity ledger; source coverage also lacked total counts and confidence accounting.
 - Green: generated inventories map all 5,127 source rows with required provenance and classification invariants.
 - `scripts/gsd sources code-review` and `scripts/gsd prompt code-review` were resolved. The Pi workflow runtime was unavailable in this shell, so the documented inline/manual review fallback was recorded in `REVIEW.md`; no finding remains.
-- Required skills used: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-safety`, and `golang-security`. CLI help/manual/website parity is not applicable: this PR changes only connector definition data and generated parity evidence, not CLI parsing, flags, or help content.
+- Required skills used: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-safety`, and `golang-security`. Connector command metadata changed, so runtime help and the installed command path will be exercised after composing the current typed-destination foundation. Static CLI and website docs do not enumerate connector action entries; `make docs-check` and a docs/website reference check remain final gates rather than a claim that generic documentation was rewritten.
 
 ## Verification
 
 - `node .planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/verify-parity-maps.mjs` → PASS (19 connectors / 5,127 operations).
 - `go run ./cmd/connectorgen validate --json` → PASS (552 checked, 0 findings).
 - `go run ./cmd/connectorgen surface-sync --check` → PASS (552 scanned, 0 drift corrections).
+- `node .planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/generate-installed-write-commands.mjs` → command coverage 621 actions: 534 implemented, 82 partial scalar-union holds, 5 exact-provenance holds.
 - Held-PR PayPal/root-count repair reran `connectorgen validate`, `surface-sync --check`, targeted conformance, commandrunner runtime preflight, `internal/cli`, generated/snapshot checks, detached `connector-boundary`, build, vet, and `git diff --check` → PASS; the boundary trace is `traces/connector-boundary-held-pr-repair.stdout`.
 - Targeted connector conformance, implemented-command runtime preflight, and `go test -timeout 20m ./internal/cli` → PASS.
 - `go build ./cmd/pm`, `go vet ./...`, `git diff --check` → PASS.

@@ -3,7 +3,7 @@
   "branch": "fm/cli-map-batch23-repair-r1",
   "publish_branch": "fm/cli-map-batch23-r1",
   "base": "fm/cli-reverse-etl-destination-r1",
-  "state": "reconciliation-planned-after-typed-destination-stack",
+  "state": "connector-command-projection-complete-foundation-held",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "commands_reviewed": [
@@ -29,6 +29,6 @@
     "connector_boundary": "green: clean / 292 files / 552 connectors",
     "repository_gates": "source-map, connectorgen validate, surface-sync, targeted conformance/runtime preflight, internal/cli, build, vet, generated checks, and connector-boundary green after source-lock remediation",
     "source_lock_remediation": "all 19 locks carry root counts.total, nested per-kind/method counts, operations_found, old/new api_surface report, and complete confidence basis; PayPal maps all 13 official OpenAPI documents and provider inventories are no longer bounded by the prior api_surface",
-    "reconciliation": "red: seven-surface executable contract and installed-binary reachability are not yet proven; green requires connector-local direct action, ETL source, typed destination, binary-transfer separation, and generated CLI evidence"
+    "reconciliation": "red: seven-surface execution remains held on direct operation/source/destination work, but typed-write command coverage is now exact: 621 actions = 534 implemented commands + 82 explicitly partial scalar-union commands + 5 declaration-pending provenance holds; App dispatch and multi-action selection remain foundation-held"
   }
 }
