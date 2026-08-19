@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "ci-verify-gap-fixed-local-validation",
+  "state": "ci-verify-repair-verified-local",
   "delivery_mode": "declarations-and-complete-map; non-live-certification-only",
   "connectors": [
     "dockerhub",
@@ -17,6 +17,6 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Run static declaration checks with the provider audits, rebase onto current origin/main, push the audit commits plus CI verify assertion repair, and wait for the required Verify check. Do not use provider credentials or provider I/O.",
+  "next": "Push the source-completeness audit, provider-surface audit, generated documentation, and CI verify assertion repair; then wait for the required Verify check. Do not use provider credentials or provider I/O.",
   "updated_at": "2026-08-19T00:00:00Z"
 }
