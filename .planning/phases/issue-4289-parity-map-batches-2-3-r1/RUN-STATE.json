@@ -1,0 +1,20 @@
+{
+  "issue": 4289,
+  "branch": "fm/cli-map-batch23-r1",
+  "base": "main",
+  "state": "planned",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "commands_reviewed": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "batches": {
+    "batch_2": ["grafana", "trello", "slack", "n8n", "google-calendar", "gmail", "twilio", "amazon-sqs", "elasticsearch"],
+    "batch_3": ["gong", "google-ads", "facebook-marketing", "linkedin-ads", "aircall", "xero", "paypal-transaction", "gocardless", "amazon-seller-partner", "miro"]
+  }
+}
