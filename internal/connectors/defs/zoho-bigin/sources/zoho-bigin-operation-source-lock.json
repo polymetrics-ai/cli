@@ -3,438 +3,439 @@
   "connector": "zoho-bigin",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
-    "sha256": "f06704251737d3330153c8e39bf428abfa1d099a920f2356c25e7a0454dbf80e",
-    "bytes": 8018,
-    "openapi": "public-provider-description",
-    "info_version": "Zoho Bigin API v2 (https://www.zohoapis.com/bigin/v2)",
+    "source_url": "https://www.bigin.com/sitemap.xml",
+    "source_kind": "complete_rendered_reference",
+    "sha256": "5cad32ecc4bfa4ad482d7321809537412781b18cb6053887b00eee8aec991317",
+    "bytes": 3152332,
+    "openapi": "complete rendered reference",
+    "info_version": "Zoho Bigin ordinary and bulk v2 API-reference endpoint inventory",
     "operation_counts": {
-      "*": 3,
-      "DELETE": 6,
-      "GET": 28,
-      "POST": 9,
-      "PUT": 4
+      "DELETE": 11,
+      "GET": 32,
+      "POST": 22,
+      "PUT": 9,
+      "PATCH": 1
     },
     "operations": [
       {
-        "id": "zoho-bigin.rest.get.Pipelines0",
+        "id": "zoho-bigin.rest.delete.ModuleApiName0",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/Pipelines",
+        "method": "DELETE",
+        "path": "/{module_api_name}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[0]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html: displayed DELETE /{module_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html"
       },
       {
-        "id": "zoho-bigin.rest.get.ModuleName1",
+        "id": "zoho-bigin.rest.delete.ModuleApiNameRecordId1",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/{module_name}",
+        "method": "DELETE",
+        "path": "/{module_api_name}/{record_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[1]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html: displayed DELETE /{module_api_name}/{record_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Contacts2",
+        "id": "zoho-bigin.rest.delete.ModuleApiNameRecordIdRelatedListApiName2",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/Contacts",
+        "method": "DELETE",
+        "path": "/{module_api_name}/{record_id}/{related_list_api_name}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[2]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delink.html: displayed DELETE /{module_api_name}/{record_id}/{related_list_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delink.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Accounts3",
+        "id": "zoho-bigin.rest.delete.ModuleApiNameRecordIdRelatedListApiNameRelatedRecordId3",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/Accounts",
+        "method": "DELETE",
+        "path": "/{module_api_name}/{record_id}/{related_list_api_name}/{related_record_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[3]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delink.html: displayed DELETE /{module_api_name}/{record_id}/{related_list_api_name}/{related_record_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delink.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Products4",
+        "id": "zoho-bigin.rest.delete.ModuleApiNameRecordIdAttachmentsAttachmentId4",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/Products",
+        "method": "DELETE",
+        "path": "/{module_api_name}/{record_id}/Attachments/{attachment_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[4]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-attachments.html: displayed DELETE /{module_api_name}/{record_id}/Attachments/{attachment_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-attachments.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Tasks5",
+        "id": "zoho-bigin.rest.delete.ModuleApiNameRecordIdNotesNoteId5",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/Tasks",
+        "method": "DELETE",
+        "path": "/{module_api_name}/{record_id}/Notes/{note_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[5]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html: displayed DELETE /{module_api_name}/{record_id}/Notes/{note_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Events6",
+        "id": "zoho-bigin.rest.delete.ModuleApiNameRecordIdPhoto6",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/Events",
+        "method": "DELETE",
+        "path": "/{module_api_name}/{record_id}/photo",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[6]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-image.html: displayed DELETE /{module_api_name}/{record_id}/photo",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-image.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Calls7",
+        "id": "zoho-bigin.rest.delete.ActionsWatch7",
         "protocol": "rest",
-        "method": "GET",
-        "path": "/Calls",
+        "method": "DELETE",
+        "path": "/actions/watch",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[7]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/notifications/disable.html: displayed DELETE /actions/watch",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/disable.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Notes8",
+        "id": "zoho-bigin.rest.delete.Notes8",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/Notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html: displayed DELETE /Notes",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html"
+      },
+      {
+        "id": "zoho-bigin.rest.delete.SettingsTagsTagId9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/settings/tags/{tag_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-tags.html: displayed DELETE /settings/tags/{tag_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-tags.html"
+      },
+      {
+        "id": "zoho-bigin.rest.delete.UsersUserId10",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{user_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/delete-user.html: displayed DELETE /users/{user_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-user.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiName11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-records.html: displayed GET /{module_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameContactIdModuleApiName12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{contact_id}/{module_api_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-team-pipeline-records-related-to-contact.html: displayed GET /{module_api_name}/{contact_id}/{module_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-team-pipeline-records-related-to-contact.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameRecordId13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{record_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-records.html: displayed GET /{module_api_name}/{record_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameRecordIdRelatedListApiName14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{record_id}/{related_list_api_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-related-records.html: displayed GET /{module_api_name}/{record_id}/{related_list_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-related-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameRecordIdAttachments15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{record_id}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-attachments.html: displayed GET /{module_api_name}/{record_id}/Attachments",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-attachments.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameRecordIdAttachmentsAttachmentId16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{record_id}/Attachments/{attachment_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/download-attachments.html: displayed GET /{module_api_name}/{record_id}/Attachments/{attachment_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/download-attachments.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameRecordIdDeleted17",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{record_id}/deleted",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-deleted-records.html: displayed GET /{module_api_name}/{record_id}/deleted",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-deleted-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameRecordIdNotes18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{record_id}/Notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html: displayed GET /{module_api_name}/{record_id}/Notes",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameRecordIdPhoto19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/{record_id}/photo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/download-image.html: displayed GET /{module_api_name}/{record_id}/photo",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/download-image.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameActionsCount20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/actions/count",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/module-records-count.html: displayed GET /{module_api_name}/actions/count",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/module-records-count.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ModuleApiNameSearch21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/{module_api_name}/search",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/search-records.html: displayed GET /{module_api_name}/search",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/search-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.ActionsWatch22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/actions/watch",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/notifications/get-details.html: displayed GET /actions/watch",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/get-details.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.BiginBulkV2ReadJobId23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bigin/bulk/v2/read/{job_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/job-details.html: displayed GET /bigin/bulk/v2/read/{job_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/job-details.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.BiginBulkV2ReadJobIdResult24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bigin/bulk/v2/read/{job_id}/result",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/download-result.html: displayed GET /bigin/bulk/v2/read/{job_id}/result",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/download-result.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.BiginBulkV2WriteJobId25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bigin/bulk/v2/write/{job_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/job-details.html: displayed GET /bigin/bulk/v2/write/{job_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/job-details.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.Files26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/files",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-files.html: displayed GET /files",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-files.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.Notes27",
         "protocol": "rest",
         "method": "GET",
         "path": "/Notes",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[8]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html: displayed GET /Notes",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html"
       },
       {
-        "id": "zoho-bigin.rest.get.Users9",
+        "id": "zoho-bigin.rest.get.Org28",
         "protocol": "rest",
         "method": "GET",
-        "path": "/users",
+        "path": "/org",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[9]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-org-data.html: displayed GET /org",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-org-data.html"
       },
       {
-        "id": "zoho-bigin.rest.get.SettingsTags10",
+        "id": "zoho-bigin.rest.get.SettingsCustomViews29",
         "protocol": "rest",
         "method": "GET",
-        "path": "/settings/tags",
+        "path": "/settings/custom_views",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[10]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/custom-view-meta.html: displayed GET /settings/custom_views",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/custom-view-meta.html"
       },
       {
-        "id": "zoho-bigin.rest.get.SettingsModules11",
+        "id": "zoho-bigin.rest.get.SettingsCustomViewsCustomViewId30",
         "protocol": "rest",
         "method": "GET",
-        "path": "/settings/modules",
+        "path": "/settings/custom_views/{custom_view_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[11]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/custom-view-meta.html: displayed GET /settings/custom_views/{custom_view_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/custom-view-meta.html"
       },
       {
-        "id": "zoho-bigin.rest.get.SettingsFields12",
+        "id": "zoho-bigin.rest.get.SettingsEmailsActionsFromAddresses31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/settings/emails/actions/from_addresses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-from-addresses.html: displayed GET /settings/emails/actions/from_addresses",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-from-addresses.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.SettingsFields32",
         "protocol": "rest",
         "method": "GET",
         "path": "/settings/fields",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[12]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/field-meta.html: displayed GET /settings/fields",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/field-meta.html"
       },
       {
-        "id": "zoho-bigin.rest.post.ModuleName13",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/{module_name}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[13]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.put.ModuleName14",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/{module_name}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[14]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.post.ModuleNameUpsert15",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/{module_name}/upsert",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[15]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.delete.ModuleNameRecordId16",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/{module_name}/{record_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[16]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.post.ModuleNameRecordIdNotes17",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/{module_name}/{record_id}/Notes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[17]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.delete.ModuleNameRecordIdNotesNoteId18",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/{module_name}/{record_id}/Notes/{note_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[18]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.ModuleNameRecordId19",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/{module_name}/{record_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[19]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.ModuleNameRecordIdRelatedListApiName20",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/{module_name}/{record_id}/{related_list_api_name}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[20]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.ModuleNameSearch21",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/{module_name}/search",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[21]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.ModuleNameRecordIdAttachments22",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/{module_name}/{record_id}/Attachments",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[22]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.ModuleNameRecordIdPhoto23",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/{module_name}/{record_id}/photo",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[23]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.post.ModuleNameRecordIdAttachments24",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/{module_name}/{record_id}/Attachments",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[24]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.post.ModuleNameRecordIdPhoto25",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/{module_name}/{record_id}/photo",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[25]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.delete.ModuleNameRecordIdAttachmentsAttachmentId26",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/{module_name}/{record_id}/Attachments/{attachment_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[26]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.delete.ModuleNameRecordIdPhoto27",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/{module_name}/{record_id}/photo",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[27]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.SettingsFieldsModuleModule28",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/settings/fields?module={module}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[28]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.SettingsRelatedLists29",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/settings/related_lists",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[29]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.SettingsLayouts30",
+        "id": "zoho-bigin.rest.get.SettingsLayouts33",
         "protocol": "rest",
         "method": "GET",
         "path": "/settings/layouts",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[30]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/layouts-meta-data.html: displayed GET /settings/layouts",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/layouts-meta-data.html"
       },
       {
-        "id": "zoho-bigin.rest.get.SettingsPipelines31",
+        "id": "zoho-bigin.rest.get.SettingsModules34",
         "protocol": "rest",
         "method": "GET",
-        "path": "/settings/pipelines",
+        "path": "/settings/modules",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[31]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html: displayed GET /settings/modules",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html"
       },
       {
-        "id": "zoho-bigin.rest.get.SettingsCurrencies32",
+        "id": "zoho-bigin.rest.get.SettingsModulesModuleApiName35",
         "protocol": "rest",
         "method": "GET",
-        "path": "/settings/currencies",
+        "path": "/settings/modules/{module_api_name}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[32]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/module-meta.html: displayed GET /settings/modules/{module_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/module-meta.html"
       },
       {
-        "id": "zoho-bigin.rest.get.SettingsRoles33",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/settings/roles",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[33]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.SettingsProfiles34",
+        "id": "zoho-bigin.rest.get.SettingsProfiles36",
         "protocol": "rest",
         "method": "GET",
         "path": "/settings/profiles",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[34]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-profiles.html: displayed GET /settings/profiles",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-profiles.html"
       },
       {
-        "id": "zoho-bigin.rest.get.SettingsTerritories35",
+        "id": "zoho-bigin.rest.get.SettingsRelatedLists37",
         "protocol": "rest",
         "method": "GET",
-        "path": "/settings/territories",
+        "path": "/settings/related_lists",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[35]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/related-list-meta.html: displayed GET /settings/related_lists",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/related-list-meta.html"
       },
       {
-        "id": "zoho-bigin.rest.post.SettingsTags36",
+        "id": "zoho-bigin.rest.get.SettingsRoles38",
         "protocol": "rest",
-        "method": "POST",
+        "method": "GET",
+        "path": "/settings/roles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-roles.html: displayed GET /settings/roles",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-roles.html"
+      },
+      {
+        "id": "zoho-bigin.rest.get.SettingsTags39",
+        "protocol": "rest",
+        "method": "GET",
         "path": "/settings/tags",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[36]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html: displayed GET /settings/tags",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html"
       },
       {
-        "id": "zoho-bigin.rest.put.SettingsTagsTagId37",
+        "id": "zoho-bigin.rest.get.SettingsTagsTagIdActionsRecordsCount40",
         "protocol": "rest",
-        "method": "PUT",
-        "path": "/settings/tags/{tag_id}",
+        "method": "GET",
+        "path": "/settings/tags/{tag_id}/actions/records_count",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[37]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-record-count-specific-tag.html: displayed GET /settings/tags/{tag_id}/actions/records_count",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-record-count-specific-tag.html"
       },
       {
-        "id": "zoho-bigin.rest.delete.SettingsTagsTagId38",
+        "id": "zoho-bigin.rest.get.Users41",
         "protocol": "rest",
-        "method": "DELETE",
-        "path": "/settings/tags/{tag_id}",
+        "method": "GET",
+        "path": "/users",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[38]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.post.ModuleNameActionsAddTags39",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/{module_name}/actions/add_tags",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[39]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.post.ModuleNameActionsRemoveTags40",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/{module_name}/actions/remove_tags",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[40]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.put.NotesNoteId41",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/Notes/{note_id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[41]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-users.html: displayed GET /users",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html"
       },
       {
         "id": "zoho-bigin.rest.get.UsersUserId42",
@@ -443,85 +444,345 @@
         "path": "/users/{user_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[42]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-users.html: displayed GET /users/{user_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html"
       },
       {
-        "id": "zoho-bigin.rest.post.Users43",
+        "id": "zoho-bigin.rest.post.ModuleApiName43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/insert-records.html: displayed POST /{module_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/insert-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameRecordIdActionsAddTags44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/{record_id}/actions/add_tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/add-tags-records.html: displayed POST /{module_api_name}/{record_id}/actions/add_tags",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/add-tags-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameRecordIdActionsChangeOwner45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/{record_id}/actions/change_owner",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/change-record-owner.html: displayed POST /{module_api_name}/{record_id}/actions/change_owner",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/change-record-owner.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameRecordIdActionsRemoveTags46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/{record_id}/actions/remove_tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/remove-tags.html: displayed POST /{module_api_name}/{record_id}/actions/remove_tags",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/remove-tags.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameRecordIdActionsSendMail47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/{record_id}/actions/send_mail",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/send-mail.html: displayed POST /{module_api_name}/{record_id}/actions/send_mail",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/send-mail.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameRecordIdAttachments48",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/{record_id}/Attachments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/upload-attachment.html: displayed POST /{module_api_name}/{record_id}/Attachments",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-attachment.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameRecordIdNotes49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/{record_id}/Notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html: displayed POST /{module_api_name}/{record_id}/Notes",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameRecordIdPhoto50",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/{record_id}/photo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/upload-image.html: displayed POST /{module_api_name}/{record_id}/photo",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-image.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameActionsAddTags51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/actions/add_tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/add-tags-records.html: displayed POST /{module_api_name}/actions/add_tags",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/add-tags-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameActionsChangeOwner52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/actions/change_owner",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/change-record-owner.html: displayed POST /{module_api_name}/actions/change_owner",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/change-record-owner.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameActionsRemoveTags53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/actions/remove_tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/remove-tags.html: displayed POST /{module_api_name}/actions/remove_tags",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/remove-tags.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ModuleApiNameUpsert54",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/{module_api_name}/upsert",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/upsert-records.html: displayed POST /{module_api_name}/upsert",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/upsert-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.ActionsWatch55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/actions/watch",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/notifications/enable.html: displayed POST /actions/watch",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/enable.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.BiginBulkV2Read56",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bigin/bulk/v2/read",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/create-job.html: displayed POST /bigin/bulk/v2/read",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/create-job.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.BiginBulkV2Write57",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bigin/bulk/v2/write",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/create-job.html: displayed POST /bigin/bulk/v2/write",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/create-job.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.Coql58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/coql",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/get-records-coql.html: displayed POST /coql",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records-coql.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.Files59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/upload-files.html: displayed POST /files",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-files.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.Notes60",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/Notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html: displayed POST /Notes",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.OrgPhoto61",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/org/photo",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/upload-org-img.html: displayed POST /org/photo",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-org-img.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.SettingsTags62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/settings/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/create-tags.html: displayed POST /settings/tags",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-tags.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.Upload63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/upload",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/upload-file.html: displayed POST /upload",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/upload-file.html"
+      },
+      {
+        "id": "zoho-bigin.rest.post.Users64",
         "protocol": "rest",
         "method": "POST",
         "path": "/users",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[43]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/add-user.html: displayed POST /users",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/add-user.html"
       },
       {
-        "id": "zoho-bigin.rest.put.UsersUserId44",
+        "id": "zoho-bigin.rest.put.ModuleApiName65",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/{module_api_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-records.html: displayed PUT /{module_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.ModuleApiNameRecordId66",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/{module_api_name}/{record_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-records.html: displayed PUT /{module_api_name}/{record_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.ModuleApiNameRecordIdRelatedListApiName67",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/{module_api_name}/{record_id}/{related_list_api_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-related-records.html: displayed PUT /{module_api_name}/{record_id}/{related_list_api_name}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-related-records.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.ModuleApiNameRecordIdNotesNoteId68",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/{module_api_name}/{record_id}/Notes/{note_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-notes.html: displayed PUT /{module_api_name}/{record_id}/Notes/{note_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-notes.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.ActionsWatch69",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/actions/watch",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/notifications/update-details.html: displayed PUT /actions/watch",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/update-details.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.SettingsTags70",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/settings/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-tags.html: displayed PUT /settings/tags",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-tags.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.SettingsTagsTagId71",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/settings/tags/{tag_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-tags.html: displayed PUT /settings/tags/{tag_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-tags.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.Users72",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-user.html: displayed PUT /users",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-user.html"
+      },
+      {
+        "id": "zoho-bigin.rest.put.UsersUserId73",
         "protocol": "rest",
         "method": "PUT",
         "path": "/users/{user_id}",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[44]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/update-user.html: displayed PUT /users/{user_id}",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-user.html"
       },
       {
-        "id": "zoho-bigin.rest.delete.UsersUserId45",
+        "id": "zoho-bigin.rest.patch.ActionsWatch74",
         "protocol": "rest",
-        "method": "DELETE",
-        "path": "/users/{user_id}",
+        "method": "PATCH",
+        "path": "/actions/watch",
         "operation_id": null,
         "deprecated": false,
-        "source_location": "api_surface.json:endpoints[45]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest.get.Org46",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/org",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[46]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest._.BulkV147",
-        "protocol": "rest",
-        "method": "*",
-        "path": "/bulk/v1/*",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[47]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest._.Notifications48",
-        "protocol": "rest",
-        "method": "*",
-        "path": "/notifications/*",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[48]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
-      },
-      {
-        "id": "zoho-bigin.rest._.Coql49",
-        "protocol": "rest",
-        "method": "*",
-        "path": "/coql",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "api_surface.json:endpoints[49]",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/"
+        "source_location": "https://www.bigin.com/developer/docs/apis/v2/notifications/update-info.html: displayed PATCH /actions/watch",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/update-info.html"
       }
     ]
   },
   "counts": {
-    "rest": 50,
+    "rest": 75,
     "graphql_query": 0,
     "graphql_mutation": 0,
-    "total": 50
+    "total": 75
+  },
+  "operations_found": {
+    "rest": 75,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 75
+  },
+  "coverage_confidence": {
+    "level": "complete_rendered_reference",
+    "basis": "Retrieved every Bigin v2 reference page enumerated by the provider sitemap at https://www.bigin.com/sitemap.xml, including the separately hosted /bigin/bulk/v2 endpoint family; normalized regional host variants, illustrative module examples, and query parameter variants to provider endpoint templates."
   }
 }

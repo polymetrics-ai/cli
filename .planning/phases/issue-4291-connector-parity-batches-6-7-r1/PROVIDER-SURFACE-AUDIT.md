@@ -8,7 +8,7 @@ The source-lock recovery audit covers every connector owned by this issue. A row
 | outreach | 259 | 259 | complete machine-readable OpenAPI plus provider-rendered fixed generic custom-object supplement; per-account object schemas are dynamic | complete — remapped, count unchanged |
 | salesloft | 12 | 211 | complete rendered reference: all 315 public API pages in provider sitemap | complete — remapped |
 | copper | 5 | 89 | complete rendered reference: all 637 provider-published MkDocs search-index documentation nodes | complete — remapped |
-| zoho-bigin | 50 | — | pending provider-surface audit | pending |
+| zoho-bigin | 50 | 75 | complete rendered reference: all 98 Bigin v2 pages in the provider sitemap, including the separate `/bigin/bulk/v2` endpoint family | complete — remapped |
 | klaviyo | 9 | 345 | official OpenAPI 3.0.2 full GA specification | complete — remapped |
 | braze | 95 | — | pending provider-surface audit | pending |
 | customer-io | 159 | 166 | official OpenAPI 3.1.0 application API specification | complete — remapped |

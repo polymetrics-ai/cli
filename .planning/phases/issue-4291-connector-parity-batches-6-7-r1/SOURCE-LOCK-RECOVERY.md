@@ -49,6 +49,12 @@ Freshdesk’s complete rendered-reference pass is also green: all 171 endpoint s
 
 Copper’s provider-published MkDocs `search_index.json` contains its complete **637-document** rendered reference corpus. The persisted, resumable parse completed all 637 documents and found **89** unique declaration-form REST operations (32 GET, 35 POST, 11 PUT, 11 DELETE), replacing the legacy five synthetic `HOOK` labels. Its five ETL streams are now bound to the provider-documented `POST /v1/<resource>/search` operations, with exact routing evidence in `internal/connectors/native/copper/streams.go:5-25`; no source operation is enabled without a runnable command or typed write action.
 
+## Zoho Bigin — complete rendered-reference recovery
+
+Bigin's 8KB landing page is not a usable operation source. Its provider sitemap enumerates **98** pages under `/developer/docs/apis/v2/`; the resumable crawler fetched every page and persisted its URL, response bytes, SHA-256, and extracted operations before advancing the checkpoint. It also includes the separate documented `/bigin/bulk/v2` API family, which a base-v2-only parser would otherwise omit. Regional host replicas, query variants, and illustrative concrete-module examples are normalized to their documented endpoint templates.
+
+The recovered denominator is **75** operations: 32 GET, 22 POST, 9 PUT, 1 PATCH, and 11 DELETE. The regenerated source lock, `api_surface.json`, and disposition ledger reconcile at 75 rows with `counts.total` and `operations_found.total` both 75 and `coverage_confidence: complete_rendered_reference`. The legacy 50-row surface is discarded. Six pre-existing exact typed actions remain enabled `direct_write`; the other 37 direct writes are declaration-pending but retain the neutral-destination foundation gap as an attribute, never a `reverse_etl` primary class.
+
 ## Remaining full-batch audit
 
 All 20 owned connectors are in the recovery audit—not only the eight whose initial counts were visibly implausible. Each will receive a comprehensive provider-surface review: source lock, API surface, and every disposition row are regenerated from the authoritative source when the legacy source understates it. ServiceNow is dynamic-schema: its fixed platform surface must be pinned separately from its instance-dependent schema basis. A connector whose complete source proves the legacy count correct is an explicit no-change result, with source count and confidence basis recorded. A small number alone will never be presented as complete coverage.

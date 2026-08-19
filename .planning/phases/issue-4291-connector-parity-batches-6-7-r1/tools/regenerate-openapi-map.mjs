@@ -102,13 +102,18 @@ const configs = {
       },
     ],
   },
+  'zoho-bigin': {
+    sourceURL: 'https://www.bigin.com/sitemap.xml',
+    artifact: 'zoho-bigin-v2-rendered-reference-2026-08-19',
+    api: 'Zoho Bigin API v2 complete rendered reference',
+    info: 'Zoho Bigin ordinary and bulk v2 API-reference endpoint inventory',
+    docs: 'https://www.bigin.com/developer/docs/apis/v2/',
+    parser: 'bigin-rendered-reference',
+  },
 };
 const config = configs[connector];
 if (!config) throw new Error(`unsupported connector ${connector}; add an authoritative-source config`);
 const base = `internal/connectors/defs/${connector}`;
-const response = await fetch(config.sourceURL);
-const bytes = Buffer.from(await response.arrayBuffer());
-if (!response.ok) throw new Error(`HTTP ${response.status} ${config.sourceURL}`);
 const parseRedocState = artifact => {
   const prefix = 'const __redoc_state = JSON.parse(';
   const suffix = ');';
@@ -118,9 +123,43 @@ const parseRedocState = artifact => {
   if (!state?.definition?.data) throw new Error(`${config.sourceURL} has no embedded OpenAPI definition`);
   return state.definition.data;
 };
-const document = config.parser === 'redoc-state' ? parseRedocState(bytes) : JSON.parse(bytes.toString('utf8'));
-if (!document.paths || (!document.openapi && !document.swagger)) throw new Error(`${config.sourceURL} is not an OpenAPI document`);
-const sourceHash = createHash('sha256').update(bytes).digest('hex');
+let bytes;
+let document;
+let sourceHash;
+let sourceBytes;
+let sourceOperations;
+if (config.parser === 'bigin-rendered-reference') {
+  const crawl = readJSON('.planning/phases/issue-4291-connector-parity-batches-6-7-r1/bigin-reference-crawl-progress.json');
+  if (crawl.state !== 'complete' || crawl.pages_retrieved !== crawl.pages_total || crawl.coverage_confidence?.level !== 'complete_rendered_reference') {
+    throw new Error('Zoho Bigin rendered-reference crawl is partial; resume it before regenerating the map');
+  }
+  const manifest = {
+    sitemap: crawl.sitemap,
+    pages: Object.entries(crawl.pages).map(([url, page]) => ({ url, status: page.status, sha256: page.sha256, bytes: page.bytes })),
+    operations: crawl.operations,
+  };
+  bytes = Buffer.from(JSON.stringify(manifest));
+  sourceHash = createHash('sha256').update(bytes).digest('hex');
+  sourceBytes = crawl.sitemap.bytes + Object.values(crawl.pages).reduce((total, page) => total + page.bytes, 0);
+  document = { openapi: 'complete rendered reference', paths: {} };
+  sourceOperations = crawl.operations.map(operation => ({
+    method: operation.method,
+    path: operation.path,
+    source_path: operation.path,
+    source_url: operation.source_url,
+    source_location: `${operation.source_url}: displayed ${operation.method} ${operation.path}`,
+    operation_id: null,
+    deprecated: false,
+  }));
+} else {
+  const response = await fetch(config.sourceURL);
+  bytes = Buffer.from(await response.arrayBuffer());
+  if (!response.ok) throw new Error(`HTTP ${response.status} ${config.sourceURL}`);
+  document = config.parser === 'redoc-state' ? parseRedocState(bytes) : JSON.parse(bytes.toString('utf8'));
+  if (!document.paths || (!document.openapi && !document.swagger)) throw new Error(`${config.sourceURL} is not an OpenAPI document`);
+  sourceHash = createHash('sha256').update(bytes).digest('hex');
+  sourceBytes = bytes.length;
+}
 const supplementArtifacts = await Promise.all((config.supplements ?? []).map(async supplement => {
   const response = await fetch(supplement.source_url);
   const body = Buffer.from(await response.arrayBuffer());
@@ -132,16 +171,19 @@ const methods = Object.keys(methodOrder);
 const declaredServer = document.servers?.[0]?.url;
 const serverPath = config.serverPath ?? (declaredServer && /^https?:\/\//.test(declaredServer) ? new URL(declaredServer).pathname.replace(/\/$/, '') : '');
 const surfacePath = path => serverPath && serverPath !== '/' && !path.startsWith(serverPath + '/') ? `${serverPath}${path}` : path;
-const sourceOperations = Object.entries(document.paths).flatMap(([path, item]) => methods
-  .filter(method => item?.[method] && typeof item[method] === 'object')
-  .map(method => ({ method: method.toUpperCase(), path: surfacePath(path), source_path: path, source_url: config.sourceURL, operation_id: item[method].operationId ?? null, deprecated: item[method].deprecated === true })))
-  .concat((config.supplements ?? []).flatMap(supplement => supplement.operations.map(([method, path]) => ({ method, path, source_url: supplement.source_url, source_location: supplement.source_location, operation_id: null, deprecated: false }))))
-  .sort((left, right) => methodOrder[left.method.toLowerCase()] - methodOrder[right.method.toLowerCase()] || left.path.localeCompare(right.path));
+if (!sourceOperations) {
+  sourceOperations = Object.entries(document.paths).flatMap(([path, item]) => methods
+    .filter(method => item?.[method] && typeof item[method] === 'object')
+    .map(method => ({ method: method.toUpperCase(), path: surfacePath(path), source_path: path, source_url: config.sourceURL, operation_id: item[method].operationId ?? null, deprecated: item[method].deprecated === true })))
+    .concat((config.supplements ?? []).flatMap(supplement => supplement.operations.map(([method, path]) => ({ method, path, source_url: supplement.source_url, source_location: supplement.source_location, operation_id: null, deprecated: false }))));
+}
+sourceOperations.sort((left, right) => methodOrder[left.method.toLowerCase()] - methodOrder[right.method.toLowerCase()] || left.path.localeCompare(right.path));
 const baselineRef = process.env.SOURCE_MAP_BASELINE;
 const oldSurface = baselineRef
   ? JSON.parse(execFileSync('git', ['show', `${baselineRef}:${base}/api_surface.json`], { encoding: 'utf8' }))
   : readJSON(`${base}/api_surface.json`);
-const oldByKey = new Map(oldSurface.endpoints.map(endpoint => [`${endpoint.method} ${endpoint.path}`, endpoint]));
+const coveragePath = path => config.parser === 'bigin-rendered-reference' ? path.replaceAll('{module_name}', '{module_api_name}') : path;
+const oldByKey = new Map(oldSurface.endpoints.map(endpoint => [`${endpoint.method} ${coveragePath(endpoint.path)}`, endpoint]));
 const streams = new Set(readJSON(`${base}/streams.json`).streams.map(stream => stream.name));
 const writesPath = new URL(`${base}/writes.json`, root);
 const writes = existsSync(writesPath) ? readJSON(`${base}/writes.json`).actions ?? [] : [];
@@ -158,7 +200,7 @@ const validCoverage = endpoint => {
   return null;
 };
 const authoritativeCoverage = new Map((config.authoritativeBindings ?? []).map(binding => [
-  `${binding.method} ${binding.path}`,
+  `${binding.method} ${coveragePath(binding.path)}`,
   validCoverage({ covered_by: binding.covered_by }),
 ]));
 const sluggify = value => value.replace(/[^a-zA-Z0-9]+/g, ' ').trim().split(/\s+/).map(part => part[0]?.toUpperCase() + part.slice(1)).join('');
@@ -170,12 +212,17 @@ const restOperations = sourceOperations.map((operation, index) => ({
   source_location: operation.source_location ?? `.paths[${JSON.stringify(operation.source_path)}].${operation.method.toLowerCase()}`,
   source_url: operation.source_url,
 }));
-const coverage = config.supplements?.length
+const coverage = config.parser === 'bigin-rendered-reference'
+  ? { level: 'complete_rendered_reference', basis: 'Retrieved every Bigin v2 reference page enumerated by the provider sitemap at https://www.bigin.com/sitemap.xml, including the separately hosted /bigin/bulk/v2 endpoint family; normalized regional host variants, illustrative module examples, and query parameter variants to provider endpoint templates.' }
+  : config.supplements?.length
   ? { level: 'complete_machine_readable_specification_with_rendered_dynamic_supplement', basis: `Parsed every operation in the provider-published OpenAPI ${document.openapi ?? document.swagger} document at ${config.sourceURL}, then added the provider’s documented generic custom-object routes from ${config.supplements.map(supplement => supplement.source_url).join(', ')}. Outreach documents that per-account custom-object schemas are dynamic, while these six generic route shapes are fixed.` }
   : { level: 'complete_machine_readable_specification', basis: `Parsed every operation in the provider-published OpenAPI ${document.openapi ?? document.swagger} document at ${config.sourceURL}.` };
+const sourceDescription = config.parser === 'bigin-rendered-reference'
+  ? 'complete rendered provider reference'
+  : `OpenAPI ${document.openapi ?? document.swagger} document`;
 const sourceLock = {
   schema_version: 2, connector, captured_at: '2026-08-19T00:00:00Z',
-  rest: { source_url: config.sourceURL, source_kind: config.supplements?.length ? 'complete_machine_readable_specification_with_rendered_dynamic_supplement' : 'complete_machine_readable_specification', sha256: sourceHash, bytes: bytes.length, openapi: document.openapi ?? document.swagger, info_version: config.info, operation_counts: operationCounts, ...(supplementArtifacts.length ? { supplements: supplementArtifacts.map(supplement => ({ source_url: supplement.source_url, source_location: supplement.source_location, operation_count: supplement.operations.length, bytes: supplement.bytes, sha256: supplement.sha256 })) } : {}), operations: restOperations },
+  rest: { source_url: config.sourceURL, source_kind: config.parser === 'bigin-rendered-reference' ? 'complete_rendered_reference' : config.supplements?.length ? 'complete_machine_readable_specification_with_rendered_dynamic_supplement' : 'complete_machine_readable_specification', sha256: sourceHash, bytes: sourceBytes, openapi: document.openapi ?? document.swagger, info_version: config.info, operation_counts: operationCounts, ...(supplementArtifacts.length ? { supplements: supplementArtifacts.map(supplement => ({ source_url: supplement.source_url, source_location: supplement.source_location, operation_count: supplement.operations.length, bytes: supplement.bytes, sha256: supplement.sha256 })) } : {}), operations: restOperations },
   counts: { rest: sourceOperations.length, graphql_query: 0, graphql_mutation: 0, total: sourceOperations.length },
   operations_found: { rest: sourceOperations.length, graphql_query: 0, graphql_mutation: 0, total: sourceOperations.length },
   coverage_confidence: coverage,
@@ -188,9 +235,9 @@ const operationSpec = operation => {
   return { model: 'direct_read', status: 'blocked', risk: 'medium', blocked_by_default: true, reason: 'Documented provider read has no connector-owned bounded operation contract and runnable command binding.' };
 };
 const rows = sourceOperations.map((operation, index) => {
-  const preserved = authoritativeCoverage.get(`${operation.method} ${operation.path}`) ?? validCoverage(oldByKey.get(`${operation.method} ${operation.path}`));
+  const preserved = authoritativeCoverage.get(`${operation.method} ${coveragePath(operation.path)}`) ?? validCoverage(oldByKey.get(`${operation.method} ${coveragePath(operation.path)}`));
   const parityClass = preserved?.stream ? 'etl' : isMutation(operation.method) ? 'direct_write' : 'direct_read';
-  const endpoint = { method: operation.method, path: operation.path, provenance: { artifact: operation.source_url === config.sourceURL ? config.artifact : `${connector}-rendered-dynamic-supplement-1-2026-08-19`, source_url: operation.source_url } };
+  const endpoint = { method: operation.method, path: operation.path, provenance: { artifact: config.parser === 'bigin-rendered-reference' || operation.source_url === config.sourceURL ? config.artifact : `${connector}-rendered-dynamic-supplement-1-2026-08-19`, source_url: operation.source_url } };
   if (preserved) endpoint.covered_by = preserved; else endpoint.operation = operationSpec(operation);
   return { endpoint, source: restOperations[index], parityClass, coverage: preserved };
 });
@@ -220,7 +267,7 @@ const endpointBoundWrites = ledger.filter(row => row.api_surface.covered_by?.wri
 const endpointBoundCommands = ledger.filter(row => row.api_surface.covered_by?.direct_read).length;
 const disposition = {
   schema_version: 1, connector, generated_at: '2026-08-19T00:00:00Z',
-  source_basis: { source_lock: `sources/${connector}-operation-source-lock.json`, source_url: config.sourceURL, source_sha256: sourceHash, source_bytes: bytes.length, source_operation_count: sourceOperations.length, operations_found: sourceOperations.length, coverage_confidence: coverage },
+  source_basis: { source_lock: `sources/${connector}-operation-source-lock.json`, source_url: config.sourceURL, source_sha256: sourceHash, source_bytes: sourceBytes, source_operation_count: sourceOperations.length, operations_found: sourceOperations.length, coverage_confidence: coverage },
   summary: {
     api_surface_rows: sourceOperations.length, exact_source_rows: sourceOperations.length, declared_operations: sourceOperations.length, operations_found: sourceOperations.length, coverage_confidence: coverage,
     enabled_operations: enabled, enabled_percent: Number((enabled * 100 / sourceOperations.length).toFixed(2)), disabled_operations: sourceOperations.length - enabled,
@@ -234,13 +281,13 @@ const disposition = {
   ledger_dispositions: ledger, source_only_dispositions: [],
   ...(config.legacyDeclarationRemovals?.length ? { legacy_declaration_removals: config.legacyDeclarationRemovals } : {}),
   notes: [
-    `Complete six-class source-locked map regenerated from the provider OpenAPI ${document.openapi ?? document.swagger} document; every ${sourceOperations.length} pinned operation has exactly one primary parity class.`,
+    `Complete six-class source-locked map regenerated from the provider ${sourceDescription}; every ${sourceOperations.length} pinned operation has exactly one primary parity class.`,
     'An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.',
     'Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.',
     ...(config.legacyDeclarationRemovals ?? []).map(removal => `Legacy ${removal.kind} ${removal.name} (${removal.method} ${removal.path}) is ${removal.state}: ${removal.reason}.`),
   ],
 };
 writeJSON(`${base}/sources/${connector}-operation-source-lock.json`, sourceLock);
-writeJSON(`${base}/api_surface.json`, { api: config.api, docs: config.docs, reviewed_at: '2026-08-19', operation_ledger_version: 2, scope: `Complete provider-reference inventory generated from every operation in the cited OpenAPI ${document.openapi ?? document.swagger} document${config.supplements?.length ? ' plus its fixed generic dynamic-resource routes from the cited rendered provider reference' : ''} (${sourceOperations.length} HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.${config.legacyDeclarationRemovals?.length ? ' Legacy declarations absent from the authoritative source are explicitly recorded as REMOVED in the source lock and disposition ledger.' : ''}`, artifacts: [{ id: config.artifact, url: config.sourceURL, retrieved_at: '2026-08-19', sha256: sourceHash }, ...supplementArtifacts.map((supplement, index) => ({ id: `${connector}-rendered-dynamic-supplement-${index + 1}-2026-08-19`, url: supplement.source_url, retrieved_at: '2026-08-19', sha256: supplement.sha256 }))], endpoints: rows.map(row => row.endpoint) });
+writeJSON(`${base}/api_surface.json`, { api: config.api, docs: config.docs, reviewed_at: '2026-08-19', operation_ledger_version: 2, scope: `Complete provider-reference inventory generated from every operation in the cited ${sourceDescription}${config.supplements?.length ? ' plus its fixed generic dynamic-resource routes from the cited rendered provider reference' : ''} (${sourceOperations.length} HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.${config.legacyDeclarationRemovals?.length ? ' Legacy declarations absent from the authoritative source are explicitly recorded as REMOVED in the source lock and disposition ledger.' : ''}`, artifacts: [{ id: config.artifact, url: config.sourceURL, retrieved_at: '2026-08-19', sha256: sourceHash }, ...supplementArtifacts.map((supplement, index) => ({ id: `${connector}-rendered-dynamic-supplement-${index + 1}-2026-08-19`, url: supplement.source_url, retrieved_at: '2026-08-19', sha256: supplement.sha256 }))], endpoints: rows.map(row => row.endpoint) });
 writeJSON(`${base}/sources/${connector}-declaration-disposition.json`, disposition);
 console.log(`${connector}: ${sourceOperations.length} source rows; enabled=${enabled}, writes=${endpointBoundWrites}, commands=${endpointBoundCommands}`);
