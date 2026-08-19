@@ -11,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"polymetrics.ai/internal/credential"
 )
 
 // Authenticator applies credentials to an outgoing request. Implementations must
@@ -26,41 +28,76 @@ func (f AuthFunc) Apply(ctx context.Context, req *http.Request) error { return f
 
 // staticHeader sets a fixed request header.
 type staticHeader struct {
-	name  string
-	value string
+	name          string
+	value         string
+	required      [2]requiredCredential
+	requiredCount int
 }
 
 func (a staticHeader) Apply(_ context.Context, req *http.Request) error {
+	for index := 0; index < a.requiredCount; index++ {
+		required := a.required[index]
+		if err := credential.RequireAuthenticationValue(required.field, required.value); err != nil {
+			return err
+		}
+	}
 	if a.value != "" {
 		req.Header.Set(a.name, a.value)
 	}
 	return nil
 }
 
+type requiredCredential struct {
+	field string
+	value string
+}
+
 // Bearer authenticates with an Authorization: Bearer <token> header.
 func Bearer(token string) Authenticator {
-	return staticHeader{name: "Authorization", value: "Bearer " + strings.TrimSpace(token)}
+	return staticHeader{
+		name:          "Authorization",
+		value:         "Bearer " + strings.TrimSpace(token),
+		required:      [2]requiredCredential{{field: "bearer token", value: token}},
+		requiredCount: 1,
+	}
 }
 
 // APIKeyHeader authenticates with an arbitrary header (e.g. X-API-Key: <value>).
 // An optional prefix is prepended to the value (e.g. "Token ").
 func APIKeyHeader(header, value, prefix string) Authenticator {
-	return staticHeader{name: header, value: prefix + strings.TrimSpace(value)}
+	return staticHeader{
+		name:          header,
+		value:         prefix + strings.TrimSpace(value),
+		required:      [2]requiredCredential{{field: "API key", value: value}},
+		requiredCount: 1,
+	}
 }
 
 // Basic authenticates with HTTP Basic auth.
 func Basic(username, password string) Authenticator {
 	creds := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
-	return staticHeader{name: "Authorization", value: "Basic " + creds}
+	return staticHeader{
+		name:  "Authorization",
+		value: "Basic " + creds,
+		required: [2]requiredCredential{
+			{field: "basic username", value: username},
+			{field: "basic password", value: password},
+		},
+		requiredCount: 2,
+	}
 }
 
 // apiKeyQuery authenticates by adding a query parameter to the request URL.
 type apiKeyQuery struct {
-	param string
-	value string
+	param    string
+	value    string
+	required requiredCredential
 }
 
 func (a apiKeyQuery) Apply(_ context.Context, req *http.Request) error {
+	if err := credential.RequireAuthenticationValue(a.required.field, a.required.value); err != nil {
+		return err
+	}
 	q := req.URL.Query()
 	q.Set(a.param, a.value)
 	req.URL.RawQuery = q.Encode()
@@ -69,7 +106,11 @@ func (a apiKeyQuery) Apply(_ context.Context, req *http.Request) error {
 
 // APIKeyQuery authenticates by adding ?param=value to every request.
 func APIKeyQuery(param, value string) Authenticator {
-	return apiKeyQuery{param: param, value: strings.TrimSpace(value)}
+	return apiKeyQuery{
+		param:    param,
+		value:    strings.TrimSpace(value),
+		required: requiredCredential{field: "API key", value: value},
+	}
 }
 
 // OAuth2ClientCredentials fetches and caches a bearer token using the OAuth2
@@ -117,6 +158,12 @@ func (a *OAuth2ClientCredentials) accessToken(ctx context.Context) (string, erro
 	}
 	if strings.TrimSpace(a.TokenURL) == "" {
 		return "", errors.New("oauth2: TokenURL is required")
+	}
+	if err := credential.RequireAuthenticationValue("OAuth2 client ID", a.ClientID); err != nil {
+		return "", fmt.Errorf("oauth2: %w", err)
+	}
+	if err := credential.RequireAuthenticationValue("OAuth2 client secret", a.ClientSecret); err != nil {
+		return "", fmt.Errorf("oauth2: %w", err)
 	}
 
 	form := url.Values{}

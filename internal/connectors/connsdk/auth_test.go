@@ -2,11 +2,14 @@ package connsdk
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"polymetrics.ai/internal/credential"
 )
 
 func newReq(t *testing.T) *http.Request {
@@ -59,6 +62,80 @@ func TestAPIKeyQueryAddsParam(t *testing.T) {
 	}
 	if got := req.URL.Query().Get("a"); got != "1" {
 		t.Fatalf("existing query param dropped: a = %q", got)
+	}
+}
+
+func TestRequiredAuthenticatorsRejectEmptyCredentialBeforeRequestMutation(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		auth Authenticator
+	}{
+		{name: "bearer", auth: Bearer("")},
+		{name: "basic", auth: Basic("user", "")},
+		{name: "API key header", auth: APIKeyHeader("X-API-Key", "", "Token ")},
+		{name: "API key query", auth: APIKeyQuery("api_key", "")},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			req := newReq(t)
+			if err := tt.auth.Apply(context.Background(), req); err == nil {
+				t.Fatal("Apply() accepted an empty required credential")
+			} else {
+				var empty *credential.EmptySecretError
+				if !errors.As(err, &empty) {
+					t.Fatalf("Apply() error is not typed empty-secret classification: %T", err)
+				}
+			}
+			if got := req.Header.Get("Authorization"); got != "" {
+				t.Fatalf("Authorization header emitted for empty credential: %q", got)
+			}
+			if got := req.Header.Get("X-API-Key"); got != "" {
+				t.Fatalf("API-key header emitted for empty credential: %q", got)
+			}
+			if got := req.URL.Query().Get("api_key"); got != "" {
+				t.Fatal("API-key query parameter emitted for empty credential")
+			}
+		})
+	}
+}
+
+func TestOAuth2ClientCredentialsRejectsEmptyRequiredMaterialBeforeTokenRequest(t *testing.T) {
+	for _, tt := range []struct {
+		name         string
+		clientID     string
+		clientSecret string
+	}{
+		{name: "client ID", clientSecret: "synthetic-client-secret"},
+		{name: "client secret", clientID: "synthetic-client-id"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var tokenCalls int32
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				atomic.AddInt32(&tokenCalls, 1)
+				w.WriteHeader(http.StatusInternalServerError)
+			}))
+			defer srv.Close()
+
+			auth := &OAuth2ClientCredentials{
+				TokenURL:     srv.URL,
+				ClientID:     tt.clientID,
+				ClientSecret: tt.clientSecret,
+			}
+			req := newReq(t)
+			err := auth.Apply(context.Background(), req)
+			if err == nil {
+				t.Fatal("Apply() accepted empty required OAuth2 material")
+			}
+			var empty *credential.EmptySecretError
+			if !errors.As(err, &empty) {
+				t.Fatalf("Apply() error is not typed empty-secret classification: %T", err)
+			}
+			if got := atomic.LoadInt32(&tokenCalls); got != 0 {
+				t.Fatalf("token endpoint calls = %d, want 0", got)
+			}
+			if got := req.Header.Get("Authorization"); got != "" {
+				t.Fatalf("Authorization header emitted for empty OAuth2 material: %q", got)
+			}
+		})
 	}
 }
 

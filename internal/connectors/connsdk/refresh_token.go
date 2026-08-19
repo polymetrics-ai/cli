@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -256,8 +257,8 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 		a.refreshToken = strings.TrimSpace(a.RefreshToken)
 		a.seeded = true
 	}
-	if a.refreshToken == "" {
-		return "", errors.New("oauth2 refresh: refresh_token is required")
+	if err := credential.RequireAuthenticationValue("OAuth2 refresh token", a.refreshToken); err != nil {
+		return "", fmt.Errorf("oauth2 refresh: %w", err)
 	}
 
 	form := url.Values{}

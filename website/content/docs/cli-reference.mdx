@@ -157,7 +157,7 @@ pm credentials test github-local --json
 pm credentials remove github-local
 ```
 
-Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs.
+Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs. For `--value-stdin`, `pm` removes at most one final LF or CRLF transport delimiter, preserves every other byte (including multiline content), and refuses empty input before encryption.
 
 When omitted, `--provider-family` defaults to the connector name and
 `--auth-profile` defaults to `default`. Existing credentials receive the same

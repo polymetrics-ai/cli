@@ -3,12 +3,141 @@ package cli_test
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"io"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/cli"
 )
+
+func TestCredentialsAddStdinPreservesSingleTerminalDelimiterAndRoundTrips(t *testing.T) {
+	base := strings.Repeat("stdin-credential-canary-", 32)
+	long := strings.Repeat("long-stdin-credential-canary-", 8192)
+
+	for _, tt := range []struct {
+		name  string
+		stdin string
+		want  string
+	}{
+		{name: "terminal LF", stdin: base + "\n", want: base},
+		{name: "terminal CRLF", stdin: base + "\r\n", want: base},
+		{name: "preserves earlier newline", stdin: base + "\n\n", want: base + "\n"},
+		{name: "long credential", stdin: long + "\n", want: long},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			root := t.TempDir()
+			var stdout, stderr bytes.Buffer
+			if code := cli.Run([]string{"init", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
+				t.Fatalf("init code = %d", code)
+			}
+
+			stdout.Reset()
+			stderr.Reset()
+			args := []string{"credentials", "add", "stdin-canary", "--connector", "sample", "--value-stdin", "token", "--root", root, "--json"}
+			if code := runCLIWithCredentialStdin(t, args, tt.stdin, &stdout, &stderr); code != 0 {
+				t.Fatalf("credentials add code = %d", code)
+			}
+			if strings.Contains(strings.Join(args, "\x00"), tt.want) {
+				t.Fatal("credential bytes reached argv")
+			}
+
+			fresh, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("open fresh app: %v", err)
+			}
+			_, runtime, err := fresh.ResolveConnectorCredential(context.Background(), "sample", "stdin-canary", nil)
+			if err != nil {
+				t.Fatalf("resolve persisted credential: %v", err)
+			}
+			got := runtime.Secrets["token"]
+			if gotLength, wantLength := len(got), len(tt.want); gotLength != wantLength {
+				t.Fatalf("round-trip credential length = %d, want %d", gotLength, wantLength)
+			}
+			if gotHash, wantHash := sha256.Sum256([]byte(got)), sha256.Sum256([]byte(tt.want)); gotHash != wantHash {
+				t.Fatalf("round-trip credential SHA-256 = %x, want %x", gotHash, wantHash)
+			}
+		})
+	}
+}
+
+func TestCredentialsAddStdinRejectsEmptyNormalizedSecretBeforePersistence(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		stdin string
+	}{
+		{name: "empty", stdin: ""},
+		{name: "LF only", stdin: "\n"},
+		{name: "CRLF only", stdin: "\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			root := t.TempDir()
+			var stdout, stderr bytes.Buffer
+			if code := cli.Run([]string{"init", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
+				t.Fatalf("init code = %d", code)
+			}
+
+			stdout.Reset()
+			stderr.Reset()
+			args := []string{"credentials", "add", "stdin-empty", "--connector", "sample", "--value-stdin", "token", "--root", root, "--json"}
+			if code := runCLIWithCredentialStdin(t, args, tt.stdin, &stdout, &stderr); code != 3 {
+				t.Fatalf("credentials add code = %d, want validation exit 3", code)
+			}
+			if !strings.Contains(stdout.String(), `"category": "validation"`) {
+				t.Fatal("empty stdin credential did not produce validation classification")
+			}
+
+			fresh, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("open fresh app: %v", err)
+			}
+			if got := len(fresh.ListCredentials()); got != 0 {
+				t.Fatalf("persisted credential count = %d, want 0", got)
+			}
+			entries, err := os.ReadDir(filepath.Join(root, ".polymetrics", "vault"))
+			if err != nil {
+				t.Fatalf("read vault: %v", err)
+			}
+			for _, entry := range entries {
+				if strings.HasSuffix(entry.Name(), ".enc") {
+					t.Fatal("empty stdin credential created encrypted persistence")
+				}
+			}
+		})
+	}
+}
+
+func runCLIWithCredentialStdin(t *testing.T, args []string, stdin string, stdout, stderr *bytes.Buffer) int {
+	t.Helper()
+	reader, writer, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("create credential stdin pipe: %v", err)
+	}
+	original := os.Stdin
+	os.Stdin = reader
+	t.Cleanup(func() {
+		os.Stdin = original
+		_ = reader.Close()
+	})
+	writeResult := make(chan error, 1)
+	go func() {
+		_, writeErr := io.WriteString(writer, stdin)
+		closeErr := writer.Close()
+		if writeErr != nil {
+			writeResult <- writeErr
+			return
+		}
+		writeResult <- closeErr
+	}()
+	code := cli.Run(args, stdout, stderr)
+	if err := <-writeResult; err != nil {
+		t.Fatalf("write credential stdin: %v", err)
+	}
+	return code
+}
 
 func TestCredentialsCoordinationLinkCLIAndHelp(t *testing.T) {
 	root := t.TempDir()

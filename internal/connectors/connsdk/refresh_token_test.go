@@ -2,6 +2,7 @@ package connsdk
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -11,6 +12,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"polymetrics.ai/internal/credential"
 )
 
 // tokenServer is a scriptable OAuth2 token endpoint. Each request increments
@@ -88,6 +91,28 @@ func TestOAuth2RefreshTokenFirstExchangeSetsBearer(t *testing.T) {
 	}
 	if gotForm["client_id"] != "cid" || gotForm["client_secret"] != "csecret" {
 		t.Fatalf("client credentials not sent: %+v", gotForm)
+	}
+}
+
+func TestOAuth2RefreshTokenRejectsEmptyRequiredTokenBeforeExchange(t *testing.T) {
+	ts := newTokenServer(t, func(_ int, _ map[string]string, w http.ResponseWriter) {
+		w.WriteHeader(http.StatusInternalServerError)
+	})
+	auth := &OAuth2RefreshToken{TokenURL: ts.URL}
+	req := newReq(t)
+	err := auth.Apply(context.Background(), req)
+	if err == nil {
+		t.Fatal("Apply() accepted an empty refresh token")
+	}
+	var empty *credential.EmptySecretError
+	if !errors.As(err, &empty) {
+		t.Fatalf("Apply() error is not typed empty-secret classification: %T", err)
+	}
+	if got := atomic.LoadInt32(&ts.calls); got != 0 {
+		t.Fatalf("token endpoint calls = %d, want 0", got)
+	}
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatalf("Authorization header emitted for empty refresh token: %q", got)
 	}
 }
 

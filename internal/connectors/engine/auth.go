@@ -9,6 +9,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -114,6 +115,9 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		if err != nil {
 			return nil, fmt.Errorf("bearer: %w", err)
 		}
+		if err := credential.RequireAuthenticationValue("bearer token", token); err != nil {
+			return nil, fmt.Errorf("bearer: %w", err)
+		}
 		return connsdk.Bearer(token), nil
 
 	case "basic":
@@ -125,6 +129,12 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		if err != nil {
 			return nil, fmt.Errorf("basic: password: %w", err)
 		}
+		if err := credential.RequireAuthenticationValue("basic username", username); err != nil {
+			return nil, fmt.Errorf("basic: %w", err)
+		}
+		if err := credential.RequireAuthenticationValue("basic password", password); err != nil {
+			return nil, fmt.Errorf("basic: %w", err)
+		}
 		return connsdk.Basic(username, password), nil
 
 	case "api_key_header":
@@ -132,11 +142,17 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		if err != nil {
 			return nil, fmt.Errorf("api_key_header: %w", err)
 		}
+		if err := credential.RequireAuthenticationValue("API key", value); err != nil {
+			return nil, fmt.Errorf("api_key_header: %w", err)
+		}
 		return connsdk.APIKeyHeader(spec.Header, value, spec.Prefix), nil
 
 	case "api_key_query":
 		value, err := Interpolate(spec.Value, vars)
 		if err != nil {
+			return nil, fmt.Errorf("api_key_query: %w", err)
+		}
+		if err := credential.RequireAuthenticationValue("API key", value); err != nil {
 			return nil, fmt.Errorf("api_key_query: %w", err)
 		}
 		return connsdk.APIKeyQuery(spec.Param, value), nil
@@ -167,6 +183,12 @@ func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticat
 	clientSecret, err := Interpolate(spec.ClientSecret, vars)
 	if err != nil {
 		return nil, fmt.Errorf("oauth2_client_credentials: client_secret: %w", err)
+	}
+	if err := credential.RequireAuthenticationValue("OAuth2 client ID", clientID); err != nil {
+		return nil, fmt.Errorf("oauth2_client_credentials: %w", err)
+	}
+	if err := credential.RequireAuthenticationValue("OAuth2 client secret", clientSecret); err != nil {
+		return nil, fmt.Errorf("oauth2_client_credentials: %w", err)
 	}
 
 	var scopes []string
@@ -254,6 +276,9 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 	refreshToken, err := Interpolate(spec.RefreshToken, vars)
 	if err != nil {
 		return nil, fmt.Errorf("%s: refresh_token: %w", mode, err)
+	}
+	if err := credential.RequireAuthenticationValue("OAuth2 refresh token", refreshToken); err != nil {
+		return nil, fmt.Errorf("%s: %w", mode, err)
 	}
 
 	var scopes []string

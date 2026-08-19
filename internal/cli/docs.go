@@ -361,7 +361,9 @@ DESCRIPTION
   Credentials combine non-secret connector config with encrypted secret fields.
   Secrets should be supplied through environment variables or stdin, not shell
   arguments. Use --from-env field=ENV for non-interactive setup. Use
-  --value-stdin field for multiline secrets such as GitHub App PEM keys.
+  --value-stdin field for multiline secrets such as GitHub App PEM keys. pm
+  removes one terminal LF or CRLF transport delimiter, preserves all other
+  bytes, and refuses empty input before encrypting it.
 
   Provider family defaults to the connector name and auth profile to default
   when omitted. Existing credentials receive the same defaults when their
@@ -377,7 +379,8 @@ OPTIONS
   --link-credential id   join a compatible credential's binding on add
   --to credential        join a compatible credential's binding
   --from-env field=ENV   read one secret field from an environment variable
-  --value-stdin field    read one secret field from standard input
+  --value-stdin field    read one secret field from standard input; one final
+                         LF or CRLF is transport-only and empty input is refused
   --config key=value     store non-secret connector config
   --root path            project root containing .polymetrics
   --json                 render machine-readable JSON
