@@ -245,8 +245,8 @@ func runCertificationMatrix(args []string, stdout, stderr io.Writer) int {
 			return 2
 		}
 	}
-	if check && (all || connector != "") {
-		logln(stderr, "connectorgen certification-matrix: --check cannot be combined with --all or --connector")
+	if check && all {
+		logln(stderr, "connectorgen certification-matrix: --check cannot be combined with --all")
 		return 2
 	}
 	if !check && !all && connector == "" {
@@ -296,7 +296,7 @@ type certificationMatrixGenerationResult struct {
 func generateCertificationMatrix(sourceRoot, outputRoot string, check, all bool, connector string) (certificationMatrixGenerationResult, error) {
 	result := certificationMatrixGenerationResult{}
 	statusPath := filepath.Join(outputRoot, certificationStatusPath)
-	if check {
+	if check && connector == "" {
 		if err := checkRetiredCertificationArtifactsAbsent(outputRoot); err != nil {
 			return result, err
 		}
@@ -331,14 +331,18 @@ func generateCertificationMatrix(sourceRoot, outputRoot string, check, all bool,
 		if err != nil {
 			return result, fmt.Errorf("reconstruct shard union: %w", err)
 		}
-		statusPayload, err := marshalGeneratedJSON(buildCertificationStatusArtifact(flows))
-		if err != nil {
-			return result, fmt.Errorf("render certification status: %w", err)
-		}
-		if err := checkCertificationShards(outputRoot, payloads); err != nil {
-			return result, err
-		}
-		if err := checkCertificationStatusGeneratedArtifact(statusPath, statusPayload); err != nil {
+		if connector == "" {
+			statusPayload, err := marshalGeneratedJSON(buildCertificationStatusArtifact(flows))
+			if err != nil {
+				return result, fmt.Errorf("render certification status: %w", err)
+			}
+			if err := checkCertificationShards(outputRoot, payloads); err != nil {
+				return result, err
+			}
+			if err := checkCertificationStatusGeneratedArtifact(statusPath, statusPayload); err != nil {
+				return result, err
+			}
+		} else if err := checkCertificationShardScope(outputRoot, payloads, generationScope); err != nil {
 			return result, err
 		}
 		result.scope = generationScope
@@ -548,7 +552,17 @@ func checkCertificationShards(repoRoot string, expected map[string][]byte) error
 	if _, err := readCertificationShards(repoRoot); err != nil {
 		return err
 	}
-	for _, name := range certificationConnectorAllowlist {
+	return checkCertificationShardScope(repoRoot, expected, certificationConnectorAllowlist)
+}
+
+// checkCertificationShardScope is deliberately narrower than the global
+// status check: a connector evidence reducer may verify its freshly generated
+// shard while other connectors and status.json remain owned by final fan-in.
+func checkCertificationShardScope(repoRoot string, expected map[string][]byte, names []string) error {
+	if err := validateCertificationConnectorScope(names); err != nil {
+		return err
+	}
+	for _, name := range names {
 		payload, found := expected[name]
 		if !found {
 			return fmt.Errorf("connector %q has no expected certification shard", name)

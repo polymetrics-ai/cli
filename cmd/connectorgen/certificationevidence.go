@@ -22,7 +22,7 @@ import (
 // provider lookup and accepted-evidence validation path.
 func runCertificationEvidence(args []string, stdout, stderr io.Writer) int {
 	if len(args) < 2 {
-		logln(stderr, "connectorgen certification-evidence: require transport, change-capture, or report")
+		logln(stderr, "connectorgen certification-evidence: require transport, change-capture, report, or draft")
 		return 2
 	}
 	switch args[1] {
@@ -32,10 +32,96 @@ func runCertificationEvidence(args []string, stdout, stderr io.Writer) int {
 		return runChangeCaptureCertificationEvidence(args[2:], stdout, stderr)
 	case "report":
 		return runReportCertificationEvidence(args[2:], stdout, stderr)
+	case "draft":
+		return runDraftCertificationEvidence(args[2:], stdout, stderr)
 	default:
-		logln(stderr, "connectorgen certification-evidence: require transport, change-capture, or report")
+		logln(stderr, "connectorgen certification-evidence: require transport, change-capture, report, or draft")
 		return 2
 	}
+}
+
+// runDraftCertificationEvidence imports a runner-produced accepted-evidence
+// draft through the same validator and atomic publisher used by all other
+// evidence paths. The draft is deliberately restricted to the run-local
+// staging directory; it is not another evidence authority.
+func runDraftCertificationEvidence(args []string, stdout, stderr io.Writer) int {
+	options, err := parseDraftEvidenceOptions(args)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 2
+	}
+	raw, err := os.ReadFile(options.draftPath)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: read draft: %v\n", err)
+		return 1
+	}
+	var evidence acceptedEvidence
+	if err := decodeStrictJSON(raw, &evidence); err != nil {
+		logf(stderr, "connectorgen certification-evidence: parse draft: %v\n", err)
+		return 1
+	}
+	if err := validateAcceptedEvidence(evidence); err != nil {
+		logf(stderr, "connectorgen certification-evidence: draft evidence: %v\n", err)
+		return 1
+	}
+	output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordName+".json")
+	prepared, err := prepareAcceptedEvidence(output, evidence, "render drafted proof-bearing evidence")
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: prepare draft: %v\n", err)
+		return 1
+	}
+	if err := publishPreparedAcceptedEvidence([]preparedAcceptedEvidence{prepared}, nil); err != nil {
+		logf(stderr, "connectorgen certification-evidence: publish draft: %v\n", err)
+		return 1
+	}
+	logf(stdout, "published drafted evidence record: %s\n", filepath.ToSlash(filepath.Join(acceptedEvidenceDirectory, options.recordName+".json")))
+	return 0
+}
+
+type draftEvidenceOptions struct {
+	draftPath  string
+	recordName string
+	repoRoot   string
+}
+
+func parseDraftEvidenceOptions(args []string) (draftEvidenceOptions, error) {
+	options := draftEvidenceOptions{repoRoot: "."}
+	for index := 0; index < len(args); index++ {
+		flag := args[index]
+		if !strings.HasPrefix(flag, "--") || index+1 >= len(args) {
+			return draftEvidenceOptions{}, fmt.Errorf("invalid flag %q", flag)
+		}
+		index++
+		value := args[index]
+		switch flag {
+		case "--draft":
+			options.draftPath = value
+		case "--repo-root":
+			options.repoRoot = value
+		default:
+			return draftEvidenceOptions{}, fmt.Errorf("unknown flag %q", flag)
+		}
+	}
+	if strings.TrimSpace(options.draftPath) == "" {
+		return draftEvidenceOptions{}, errors.New("--draft is required")
+	}
+	root, err := filepath.Abs(options.repoRoot)
+	if err != nil {
+		return draftEvidenceOptions{}, fmt.Errorf("resolve repository root: %w", err)
+	}
+	draft, err := filepath.Abs(options.draftPath)
+	if err != nil {
+		return draftEvidenceOptions{}, fmt.Errorf("resolve draft path: %w", err)
+	}
+	draftDirectory := filepath.Join(root, ".tmp", "live-certification", "drafts")
+	recordName := strings.TrimSuffix(filepath.Base(draft), ".json")
+	if filepath.Dir(draft) != draftDirectory || filepath.Ext(draft) != ".json" || !isSafeProofIdentifier(recordName) {
+		return draftEvidenceOptions{}, fmt.Errorf("--draft must be a JSON record directly under %q", filepath.ToSlash(draftDirectory))
+	}
+	options.repoRoot = root
+	options.draftPath = draft
+	options.recordName = recordName
+	return options, nil
 }
 
 func runTransportCertificationEvidence(args []string, stdout, stderr io.Writer) int {
@@ -72,7 +158,7 @@ func runTransportCertificationEvidence(args []string, stdout, stderr io.Writer) 
 	databaseProof := evidenceImport.Database
 	modes := append([]certify.DeclaredTransportModeResult(nil), report.Capabilities.DeclaredTransport.Modes...)
 	sort.Slice(modes, func(i, j int) bool { return modes[i].Mode < modes[j].Mode })
-	written := 0
+	preparedRecords := make([]preparedAcceptedEvidence, 0, len(modes)*2)
 	for _, mode := range modes {
 		for _, primitive := range []string{"database_read_into_warehouse", "database_write_from_warehouse"} {
 			output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordPrefix+"-"+mode.Mode+"-"+primitive+".json")
@@ -93,7 +179,7 @@ func runTransportCertificationEvidence(args []string, stdout, stderr io.Writer) 
 				logf(stderr, "connectorgen certification-evidence: encode %s/%s: %v\n", mode.Mode, primitive, err)
 				return 1
 			}
-			_, err = writeProofBearingEvidence(options.repoRoot, output, completedLiveEvidence{
+			record, err := prepareProofBearingEvidence(options.repoRoot, output, completedLiveEvidence{
 				SchemaVersion: certificationSchemaVersion, Scope: evidenceScopeSyncMode, Connector: options.connector,
 				SyncMode: mode.Mode, Primitive: primitive, Provider: provider,
 				ExecutedAt:     report.CompletedAt.UTC().Format("2006-01-02T15:04:05Z"),
@@ -107,13 +193,17 @@ func runTransportCertificationEvidence(args []string, stdout, stderr io.Writer) 
 				}},
 			})
 			if err != nil {
-				logf(stderr, "connectorgen certification-evidence: write %s/%s: %v\n", mode.Mode, primitive, err)
+				logf(stderr, "connectorgen certification-evidence: prepare %s/%s: %v\n", mode.Mode, primitive, err)
 				return 1
 			}
-			written++
+			preparedRecords = append(preparedRecords, record)
 		}
 	}
-	logf(stdout, "wrote declared transport evidence records: %d\n", written)
+	if err := publishPreparedAcceptedEvidence(preparedRecords, nil); err != nil {
+		logf(stderr, "connectorgen certification-evidence: publish declared transport evidence: %v\n", err)
+		return 1
+	}
+	logf(stdout, "wrote declared transport evidence records: %d\n", len(preparedRecords))
 	return 0
 }
 
@@ -211,11 +301,18 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 		}
 		pending = append(pending, pendingEvidence{path: output, identity: identity})
 	}
+	preparedRecords := make([]preparedAcceptedEvidence, 0, len(pending))
 	for index, record := range pending {
-		if _, err := writeImportedProofBearingEvidence(options.repoRoot, record.path, record.identity); err != nil {
-			logf(stderr, "connectorgen certification-evidence: write binding %d: %v\n", index+1, err)
+		prepared, err := prepareImportedProofBearingEvidence(options.repoRoot, record.path, record.identity)
+		if err != nil {
+			logf(stderr, "connectorgen certification-evidence: prepare binding %d: %v\n", index+1, err)
 			return 1
 		}
+		preparedRecords = append(preparedRecords, prepared)
+	}
+	if err := publishPreparedAcceptedEvidence(preparedRecords, nil); err != nil {
+		logf(stderr, "connectorgen certification-evidence: publish report evidence: %v\n", err)
+		return 1
 	}
 	logf(stdout, "wrote report evidence records: %d\n", len(pending))
 	return 0
@@ -449,11 +546,18 @@ func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writ
 		{name: options.recordPrefix + "-capability-cdc.json", completed: completed(evidenceScopeCapability, "capability:cdc", "", "", "capability_cdc")},
 		{name: options.recordPrefix + "-change_capture-database_read_into_warehouse.json", completed: completed(evidenceScopeSyncMode, "", "change_capture", "database_read_into_warehouse", "change_capture_database_read")},
 	}
+	preparedRecords := make([]preparedAcceptedEvidence, 0, len(records))
 	for _, record := range records {
-		if _, err := writeProofBearingEvidence(options.repoRoot, filepath.Join(options.repoRoot, acceptedEvidenceDirectory, record.name), record.completed); err != nil {
-			logf(stderr, "connectorgen certification-evidence: write %s: %v\n", record.name, err)
+		prepared, err := prepareProofBearingEvidence(options.repoRoot, filepath.Join(options.repoRoot, acceptedEvidenceDirectory, record.name), record.completed)
+		if err != nil {
+			logf(stderr, "connectorgen certification-evidence: prepare %s: %v\n", record.name, err)
 			return 1
 		}
+		preparedRecords = append(preparedRecords, prepared)
+	}
+	if err := publishPreparedAcceptedEvidence(preparedRecords, nil); err != nil {
+		logf(stderr, "connectorgen certification-evidence: publish change-capture evidence: %v\n", err)
+		return 1
 	}
 	logf(stdout, "wrote change-capture evidence records: %d\n", len(records))
 	return 0

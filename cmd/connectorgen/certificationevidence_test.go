@@ -499,6 +499,120 @@ func isSanitizedJSONValueMust(t *testing.T, raw json.RawMessage) bool {
 	return isSanitizedJSONValue(value)
 }
 
+func TestPreparedEvidenceBatchPrevalidatesEveryDestinationBeforePublication(t *testing.T) {
+	root := t.TempDir()
+	directory := filepath.Join(root, acceptedEvidenceDirectory)
+	if err := os.MkdirAll(directory, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	first := filepath.Join(directory, "first.json")
+	collision := filepath.Join(directory, "collision.json")
+	if err := os.WriteFile(collision, []byte("existing"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	payload := certificationAtomicPublicationPayload(t)
+	err := publishPreparedAcceptedEvidence([]preparedAcceptedEvidence{
+		{outputPath: first, payload: payload},
+		{outputPath: collision, payload: payload},
+	}, nil)
+	if err == nil {
+		t.Fatal("publishPreparedAcceptedEvidence() error = nil, want collision before publication")
+	}
+	if _, err := os.Stat(first); !os.IsNotExist(err) {
+		t.Fatalf("prevalidation published prefix record %q, stat error=%v", first, err)
+	}
+	got, err := os.ReadFile(collision)
+	if err != nil || string(got) != "existing" {
+		t.Fatalf("collision record = %q err=%v, want unchanged existing bytes", got, err)
+	}
+}
+
+func TestPreparedEvidencePublicationIsAtomicForConcurrentMatrixReaders(t *testing.T) {
+	root := t.TempDir()
+	target := filepath.Join(root, acceptedEvidenceDirectory, "github_concurrent_reader.json")
+	payload := certificationAtomicPublicationPayload(t)
+
+	err := publishPreparedAcceptedEvidence([]preparedAcceptedEvidence{{outputPath: target, payload: payload}}, func() error {
+		items, err := loadAcceptedEvidence(root, []string{"github"})
+		if err != nil {
+			return fmt.Errorf("concurrent matrix reader observed malformed evidence: %w", err)
+		}
+		if len(items) != 0 {
+			return fmt.Errorf("concurrent matrix reader observed staged evidence before publication: %d records", len(items))
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("publishPreparedAcceptedEvidence() error = %v", err)
+	}
+	items, err := loadAcceptedEvidence(root, []string{"github"})
+	if err != nil || len(items) != 1 {
+		t.Fatalf("matrix reader after publication = %#v err=%v, want one valid record", items, err)
+	}
+}
+
+func TestPreparedEvidencePublicationDoesNotReplaceAnExistingRecord(t *testing.T) {
+	root := t.TempDir()
+	target := filepath.Join(root, acceptedEvidenceDirectory, "github_no_replace.json")
+	if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(target, []byte("original"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	err := publishPreparedAcceptedEvidence([]preparedAcceptedEvidence{{outputPath: target, payload: certificationAtomicPublicationPayload(t)}}, nil)
+	if err == nil {
+		t.Fatal("publishPreparedAcceptedEvidence() error = nil, want no-replace failure")
+	}
+	got, err := os.ReadFile(target)
+	if err != nil || string(got) != "original" {
+		t.Fatalf("existing record = %q err=%v, want unchanged original", got, err)
+	}
+}
+
+func TestLiveCertificationScriptImportsDraftBeforeScopedGenerationWithoutDeletingEvidence(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join(repoRootForCertificationTest(t), "scripts", "certify-connector-live.mjs"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := string(raw)
+	draft := strings.Index(source, "await writeEvidenceDraft(")
+	imported := strings.Index(source, "await importEvidenceDraft(")
+	generated := strings.Index(source, "await generateConnectorMatrix(")
+	checked := strings.Index(source, "await checkConnectorMatrix(")
+	if draft < 0 || imported < draft || generated < imported || checked < generated {
+		t.Fatalf("live certification ordering draft=%d import=%d generated=%d checked=%d, want draft -> import -> scoped generation -> check", draft, imported, generated, checked)
+	}
+	if strings.Contains(source, "unlink(evidencePath)") {
+		t.Fatal("live certification script still deletes accepted evidence after a matrix check failure")
+	}
+}
+
+func certificationAtomicPublicationPayload(t *testing.T) []byte {
+	t.Helper()
+	root := repoRootForCertificationTest(t)
+	directory := filepath.Join(root, acceptedEvidenceDirectory)
+	entries, err := os.ReadDir(directory)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+		payload, err := os.ReadFile(filepath.Join(directory, entry.Name()))
+		if err != nil {
+			t.Fatal(err)
+		}
+		var evidence acceptedEvidence
+		if err := decodeStrictJSON(payload, &evidence); err == nil && validateAcceptedEvidence(evidence) == nil && evidence.Connector == "github" {
+			return payload
+		}
+	}
+	t.Fatal("no valid GitHub accepted evidence fixture found")
+	return nil
+}
+
 func postgresChangeCaptureEvidenceTestReport() changeCaptureEvidenceReport {
 	return changeCaptureEvidenceReport{
 		Kind:                              "ChangeCaptureCertification",

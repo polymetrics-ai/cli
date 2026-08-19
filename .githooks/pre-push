@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Git supplies these local-repository variables to hooks. The verification
+# suite intentionally creates nested temporary repositories, so do not let the
+# outer push repository leak into those child Git commands.
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_COMMON_DIR
+
+exec make verify
