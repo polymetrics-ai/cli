@@ -10886,8 +10886,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: table_id, rowIds"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): rowIds",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -10906,8 +10908,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: name, subtitle, iconName, imageUrl, parentPageId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): iconName, imageUrl, parentPageId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -12845,8 +12849,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: opportunity, noteId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): noteId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13036,40 +13042,17 @@
             "report_synchronous",
             "approval_list"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
-          "selected_initial_proof": "update_application",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
+          "selected_initial_proof": "create_candidate",
           "exact_record_driven_actions": [
-            "update_application",
-            "delete_application",
-            "change_application_stage",
-            "change_application_stage_2",
             "create_candidate",
-            "update_candidate",
-            "anonymize_candidate",
             "create_candidate_tag",
-            "update_job",
-            "set_job_status",
-            "archive_department",
-            "restore_department",
             "create_department",
-            "move_department",
-            "archive_location",
             "create_location",
-            "restore_location",
-            "update_location_address",
-            "update_location_external_name",
-            "start_offer_process",
-            "create_custom_field",
-            "update_user_interviewer_settings",
-            "create_user_interviewer_pause",
-            "create_interview_schedule",
-            "update_interview_schedule",
             "cancel_interview_schedule",
-            "create_survey_request",
-            "create_survey_submission",
             "create_interviewer_pool"
           ],
           "multiplicity_dependency": "one apply_strategy action is selectable per mode; remaining exact actions await foundation multi-action selection",
@@ -13085,8 +13068,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, jobId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, jobId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13100,17 +13085,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "application_feedback_list",
-                "inputs": [
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  }
-                ],
-                "required": [
-                  "applicationId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13124,17 +13102,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "application_feedback_list",
-                "inputs": [
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  }
-                ],
-                "required": [
-                  "applicationId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13148,8 +13119,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, teamMemberId, roleId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, teamMemberId, roleId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13163,8 +13136,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, teamMemberId, roleId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, teamMemberId, roleId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13178,22 +13153,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "interview_schedule_list",
-                "inputs": [
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  },
-                  {
-                    "input": "interviewStageId",
-                    "field": "interviewStageId"
-                  }
-                ],
-                "required": [
-                  "applicationId",
-                  "interviewStageId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, interviewStageId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13207,22 +13170,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "interview_schedule_list",
-                "inputs": [
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  },
-                  {
-                    "input": "interviewStageId",
-                    "field": "interviewStageId"
-                  }
-                ],
-                "required": [
-                  "applicationId",
-                  "interviewStageId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, interviewStageId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13236,8 +13187,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, sourceId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, sourceId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13251,8 +13204,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, sourceId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, sourceId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13266,8 +13221,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, jobId, interviewPlanId, interviewStageId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, jobId, interviewPlanId, interviewStageId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13281,8 +13238,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, applicationHistory"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, applicationHistory",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13296,8 +13255,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: feedbackForm, formDefinitionId, applicationId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): feedbackForm, formDefinitionId, applicationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13311,8 +13272,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, interviewId, interviewerUserId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, interviewId, interviewerUserId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13326,8 +13289,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: entityType, entityId, approvalStepDefinitions"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): entityType, entityId, approvalStepDefinitions",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13365,8 +13330,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, resumeHandle"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, resumeHandle",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13380,8 +13347,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, fileHandle"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, fileHandle",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13395,17 +13364,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "candidate_list_client_info",
-                "inputs": [
-                  {
-                    "input": "candidateId",
-                    "field": "candidateId"
-                  }
-                ],
-                "required": [
-                  "candidateId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13419,8 +13381,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, note"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13434,8 +13398,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, fraudStatus"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, fraudStatus",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13449,17 +13415,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "candidate_list_client_info",
-                "inputs": [
-                  {
-                    "input": "candidateId",
-                    "field": "candidateId"
-                  }
-                ],
-                "required": [
-                  "candidateId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13473,8 +13432,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, projectId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, projectId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13488,8 +13449,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, projectId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, projectId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13503,8 +13466,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, emailProviderEmailId, subject, from, to, body"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, emailProviderEmailId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13518,8 +13483,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, tagId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, tagId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13533,8 +13500,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, tagId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, tagId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13548,8 +13517,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: applicationId, externalSystem"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, externalSystem",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13587,8 +13558,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: tagId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): tagId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13602,8 +13575,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: jobPostingId, compensationTiers"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): jobPostingId, compensationTiers",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13617,8 +13592,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: jobPostingId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): jobPostingId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13632,8 +13609,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: jobPostingId, status"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): jobPostingId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13647,8 +13626,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: title, teamId, locationId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): teamId, locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13662,17 +13643,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "job_posting_list",
-                "inputs": [
-                  {
-                    "input": "jobId",
-                    "field": "jobId"
-                  }
-                ],
-                "required": [
-                  "jobId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): jobId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13686,8 +13660,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: jobId, compensationTiers"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): jobId, compensationTiers",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13701,22 +13677,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "job_posting_list",
-                "inputs": [
-                  {
-                    "input": "jobId",
-                    "field": "jobId"
-                  },
-                  {
-                    "input": "status",
-                    "field": "status"
-                  }
-                ],
-                "required": [
-                  "jobId",
-                  "status"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): jobId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13730,17 +13694,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "jobs",
-                "inputs": [
-                  {
-                    "input": "departmentId",
-                    "field": "departmentId"
-                  }
-                ],
-                "required": [
-                  "departmentId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): departmentId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13754,17 +13711,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "jobs",
-                "inputs": [
-                  {
-                    "input": "departmentId",
-                    "field": "departmentId"
-                  }
-                ],
-                "required": [
-                  "departmentId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): departmentId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13802,17 +13752,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "jobs",
-                "inputs": [
-                  {
-                    "input": "departmentId",
-                    "field": "departmentId"
-                  }
-                ],
-                "required": [
-                  "departmentId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): departmentId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13826,8 +13769,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: departmentId, name"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): departmentId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13841,17 +13786,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "jobs",
-                "inputs": [
-                  {
-                    "input": "locationId",
-                    "field": "locationId"
-                  }
-                ],
-                "required": [
-                  "locationId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13894,17 +13832,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "jobs",
-                "inputs": [
-                  {
-                    "input": "locationId",
-                    "field": "locationId"
-                  }
-                ],
-                "required": [
-                  "locationId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13918,8 +13849,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: locationId, parentLocationHierarchyId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): locationId, parentLocationHierarchyId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13933,17 +13866,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "jobs",
-                "inputs": [
-                  {
-                    "input": "locationId",
-                    "field": "locationId"
-                  }
-                ],
-                "required": [
-                  "locationId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13957,8 +13883,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: locationId, name"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13972,8 +13900,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: locationId, workplaceType"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): locationId, workplaceType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -13987,17 +13917,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "jobs",
-                "inputs": [
-                  {
-                    "input": "locationId",
-                    "field": "locationId"
-                  }
-                ],
-                "required": [
-                  "locationId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14011,8 +13934,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: offerVersionId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): offerVersionId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14026,8 +13951,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: offerProcessId, offerFormId, offerForm"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): offerProcessId, offerFormId, offerForm",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14041,8 +13968,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: offerProcessId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): offerProcessId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14056,8 +13985,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: offerVersionId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): offerVersionId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14071,8 +14002,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: offerId, offerForm"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): offerId, offerForm",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14086,8 +14019,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: offerId, acceptanceStatus"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): offerId, acceptanceStatus",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14101,8 +14036,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: offerId, decidedAt"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): offerId, decidedAt",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14116,17 +14053,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "application_feedback_list",
-                "inputs": [
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  }
-                ],
-                "required": [
-                  "applicationId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14140,8 +14070,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: identifier, description, teamId, locationIds, jobIds, targetHireDate, targetStartDate, isBackfill, employmentType, openingState"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): teamId, locationIds, jobIds, targetHireDate, targetStartDate, isBackfill, employmentType, openingState",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14155,8 +14087,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: openingId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): openingId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14170,8 +14104,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: openingId, archive"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): openingId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14185,8 +14121,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: openingId, openingState"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): openingId, openingState",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14200,8 +14138,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: openingId, jobId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): openingId, jobId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14215,8 +14155,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: openingId, jobId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): openingId, jobId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14230,8 +14172,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: openingId, locationId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): openingId, locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14245,8 +14189,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: openingId, locationId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): openingId, locationId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14260,27 +14206,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "custom_field_list",
-                "inputs": [
-                  {
-                    "input": "fieldType",
-                    "field": "fieldType"
-                  },
-                  {
-                    "input": "objectType",
-                    "field": "objectType"
-                  },
-                  {
-                    "input": "title",
-                    "field": "title"
-                  }
-                ],
-                "required": [
-                  "fieldType",
-                  "objectType",
-                  "title"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): fieldType, objectType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14294,8 +14223,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: objectId, objectType, fieldId, fieldValue"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): objectId, objectType, fieldId, fieldValue",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14309,8 +14240,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: objectId, objectType, values"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): objectId, objectType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14324,8 +14257,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: customFieldId, selectableValues"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): customFieldId, selectableValues",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14354,8 +14289,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: candidateId, partnerId, assessment, timestamp"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, partnerId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14369,8 +14306,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: teamMemberId, roleId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): teamMemberId, roleId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14384,8 +14323,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: teamMemberId, roleId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): teamMemberId, roleId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14399,17 +14340,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "user_list_interviewer_pauses",
-                "inputs": [
-                  {
-                    "input": "userId",
-                    "field": "userId"
-                  }
-                ],
-                "required": [
-                  "userId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): userId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14423,17 +14357,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "user_list_interviewer_pauses",
-                "inputs": [
-                  {
-                    "input": "userId",
-                    "field": "userId"
-                  }
-                ],
-                "required": [
-                  "userId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): userId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14447,8 +14374,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: interviewerPauseId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): interviewerPauseId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14462,8 +14391,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: userId, fieldId, fieldValue"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): userId, fieldId, fieldValue",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14477,8 +14408,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: userId, values"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): userId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14492,8 +14425,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: id, creditedToUserId, fieldSubmissions"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): creditedToUserId, fieldSubmissions",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14507,8 +14442,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: sequenceTemplateId, candidateId, start"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): sequenceTemplateId, candidateId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14522,8 +14459,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: sequenceId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): sequenceId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14537,8 +14476,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: sequenceId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): sequenceId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14552,8 +14493,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: sequenceId, stageId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): sequenceId, stageId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14567,8 +14510,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: sequenceId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): sequenceId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14582,22 +14527,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "interview_schedule_list",
-                "inputs": [
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  },
-                  {
-                    "input": "interviewEvents",
-                    "field": "interviewEvents"
-                  }
-                ],
-                "required": [
-                  "applicationId",
-                  "interviewEvents"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): applicationId, interviewEvents",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14611,17 +14544,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "interview_event_list",
-                "inputs": [
-                  {
-                    "input": "interviewScheduleId",
-                    "field": "interviewScheduleId"
-                  }
-                ],
-                "required": [
-                  "interviewScheduleId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): interviewScheduleId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14659,27 +14585,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "survey_request_list",
-                "inputs": [
-                  {
-                    "input": "candidateId",
-                    "field": "candidateId"
-                  },
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  },
-                  {
-                    "input": "surveyFormDefinitionId",
-                    "field": "surveyFormDefinitionId"
-                  }
-                ],
-                "required": [
-                  "candidateId",
-                  "applicationId",
-                  "surveyFormDefinitionId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): candidateId, applicationId, surveyFormDefinitionId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14693,32 +14602,10 @@
               ],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "survey_submission_list",
-                "inputs": [
-                  {
-                    "input": "surveyFormDefinitionId",
-                    "field": "surveyFormDefinitionId"
-                  },
-                  {
-                    "input": "candidateId",
-                    "field": "candidateId"
-                  },
-                  {
-                    "input": "applicationId",
-                    "field": "applicationId"
-                  },
-                  {
-                    "input": "submittedValues",
-                    "field": "submittedValues"
-                  }
-                ],
-                "required": [
-                  "surveyFormDefinitionId",
-                  "candidateId",
-                  "applicationId",
-                  "submittedValues"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): surveyFormDefinitionId, candidateId, applicationId, submittedValues",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14732,8 +14619,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: webhookType, requestUrl, secretToken"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): webhookType, requestUrl, secretToken",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14747,8 +14636,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: webhookId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): webhookId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14762,8 +14653,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: webhookId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): webhookId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14777,8 +14670,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: interviewerPoolId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): interviewerPoolId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14792,8 +14687,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: interviewerPoolId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): interviewerPoolId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14831,8 +14728,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: interviewerPoolId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): interviewerPoolId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14846,8 +14745,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: interviewerPoolId, userId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): interviewerPoolId, userId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -14861,8 +14762,10 @@
               ],
               "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: interviewerPoolId, userId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): interviewerPoolId, userId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             }
           ]
@@ -14930,10 +14833,10 @@
             "requisition",
             "offer"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_department",
           "exact_record_driven_actions": [
             "create_department",
@@ -15487,7 +15390,7 @@
             "sources",
             "tags"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -15520,7 +15423,7 @@
             "named_lists",
             "company_lists"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -15555,7 +15458,7 @@
             "leave_types",
             "locations"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -16638,53 +16541,27 @@
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
-          "selected_initial_proof": "create_api_v1_apps",
+          "selected_initial_proof": "create_api_v1_behaviors",
           "exact_record_driven_actions": [
-            "create_api_v1_apps",
-            "create_api_v1_authorization_servers",
             "create_api_v1_behaviors",
             "create_api_v1_bot_protection_configuration",
             "create_api_v1_brands",
-            "create_api_v1_captchas",
-            "create_api_v1_device_assurances",
-            "create_api_v1_device_posture_checks",
-            "create_api_v1_domains",
             "create_api_v1_dr_failback",
             "create_api_v1_dr_failover",
-            "create_api_v1_email_domains",
-            "create_api_v1_email_servers",
             "create_api_v1_event_hooks",
             "create_api_v1_groups",
             "create_api_v1_groups_rules",
             "create_api_v1_hook_keys",
             "update_api_v1_hook_keys_id",
             "delete_api_v1_hook_keys_id",
-            "create_api_v1_idps",
             "create_api_v1_idps_credentials_keys",
             "update_api_v1_idps_credentials_keys_kid",
             "delete_api_v1_idps_credentials_keys_kid",
             "create_api_v1_inline_hooks",
-            "create_api_v1_log_streams",
-            "create_api_v1_meta_schemas_group_default",
             "create_api_v1_meta_schemas_user_linked_objects",
-            "create_api_v1_meta_types_user",
-            "create_api_v1_meta_uischemas",
             "update_api_v1_meta_uischemas_id",
             "delete_api_v1_meta_uischemas_id",
-            "create_api_v1_org",
-            "update_api_v1_org",
-            "update_api_v1_org_captcha",
-            "create_api_v1_org_org_settings_third_party_admin_setting",
-            "create_api_v1_org_privacy_aerial_grant",
-            "execute_api_v1_org_privacy_aerial_revoke",
-            "create_api_v1_org_settings_auto_assign_admin_app_setting",
-            "update_api_v1_org_settings_client_privileges_setting",
             "create_api_v1_policies",
-            "create_api_v1_principal_rate_limits",
-            "create_api_v1_push_providers",
-            "update_api_v1_rate_limit_settings_admin_notifications",
-            "update_api_v1_rate_limit_settings_per_client",
-            "update_api_v1_rate_limit_settings_warning_threshold",
             "create_api_v1_realm_assignments",
             "create_api_v1_realms",
             "create_api_v1_security_events_providers",
@@ -16692,7 +16569,6 @@
             "update_api_v1_ssf_stream",
             "update_api_v1_ssf_stream_2",
             "create_api_v1_ssf_stream_verification",
-            "create_api_v1_templates_sms",
             "create_api_v1_threats_configuration",
             "create_api_v1_trusted_origins",
             "create_api_v1_users",
@@ -16709,14 +16585,9 @@
             "execute_api_v1_users_id_lifecycle_unlock",
             "execute_api_v1_users_id_lifecycle_unsuspend",
             "create_api_v1_zones",
-            "update_attack_protection_api_v1_authenticator_settings",
-            "update_attack_protection_api_v1_user_lockout_settings",
-            "create_integrations_api_v1_api_services",
             "update_okta_personal_settings_api_v1_export_blocklists",
-            "create_privileged_access_api_v1_okta_service_accounts",
             "update_privileged_access_api_v1_okta_service_accounts_id",
             "delete_privileged_access_api_v1_okta_service_accounts_id",
-            "create_privileged_access_api_v1_service_accounts",
             "update_privileged_access_api_v1_service_accounts_id",
             "delete_privileged_access_api_v1_service_accounts_id"
           ],
@@ -16738,8 +16609,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: pool_id, agentType"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): agentType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -16858,22 +16731,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_apps",
-                "inputs": [
-                  {
-                    "input": "signOnMode",
-                    "field": "signOnMode"
-                  },
-                  {
-                    "input": "label",
-                    "field": "label"
-                  }
-                ],
-                "required": [
-                  "signOnMode",
-                  "label"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): signOnMode",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -16882,8 +16743,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: app_id, signOnMode, label"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): signOnMode",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -17102,8 +16965,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: app_id, issuer, scopeId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): scopeId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -17122,8 +16987,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: app_id, sourceGroupId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): sourceGroupId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -17392,67 +17259,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_authorization_servers",
-                "inputs": [
-                  {
-                    "input": "accessTokenEncryptedResponseAlgorithm",
-                    "field": "accessTokenEncryptedResponseAlgorithm"
-                  },
-                  {
-                    "input": "audiences",
-                    "field": "audiences"
-                  },
-                  {
-                    "input": "created",
-                    "field": "created"
-                  },
-                  {
-                    "input": "credentials",
-                    "field": "credentials"
-                  },
-                  {
-                    "input": "description",
-                    "field": "description"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "issuer",
-                    "field": "issuer"
-                  },
-                  {
-                    "input": "issuerMode",
-                    "field": "issuerMode"
-                  },
-                  {
-                    "input": "jwks",
-                    "field": "jwks"
-                  },
-                  {
-                    "input": "jwks_uri",
-                    "field": "jwks_uri"
-                  },
-                  {
-                    "input": "lastUpdated",
-                    "field": "lastUpdated"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "status",
-                    "field": "status"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): accessTokenEncryptedResponseAlgorithm, issuerMode, lastUpdated",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18028,8 +17838,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: brand_id, theme_id, primaryColorHex, secondaryColorHex, signInPageTouchPointVariant, endUserDashboardTouchPointVariant, errorPageTouchPointVariant, emailTemplateTouchPointVariant"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): primaryColorHex, secondaryColorHex, signInPageTouchPointVariant, endUserDashboardTouchPointVariant, errorPageTouchPointVariant, emailTemplateTouchPointVariant",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18078,35 +17890,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_captchas",
-                "inputs": [
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "secretKey",
-                    "field": "secretKey"
-                  },
-                  {
-                    "input": "siteKey",
-                    "field": "siteKey"
-                  },
-                  {
-                    "input": "type",
-                    "field": "type"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): secretKey, siteKey",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18145,55 +17932,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_device_assurances",
-                "inputs": [
-                  {
-                    "input": "createdBy",
-                    "field": "createdBy"
-                  },
-                  {
-                    "input": "createdDate",
-                    "field": "createdDate"
-                  },
-                  {
-                    "input": "devicePostureChecks",
-                    "field": "devicePostureChecks"
-                  },
-                  {
-                    "input": "displayRemediationMode",
-                    "field": "displayRemediationMode"
-                  },
-                  {
-                    "input": "gracePeriod",
-                    "field": "gracePeriod"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdate",
-                    "field": "lastUpdate"
-                  },
-                  {
-                    "input": "lastUpdatedBy",
-                    "field": "lastUpdatedBy"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "platform",
-                    "field": "platform"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): createdBy, createdDate, devicePostureChecks, displayRemediationMode, gracePeriod, lastUpdate, lastUpdatedBy",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18242,67 +17984,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_device_posture_checks",
-                "inputs": [
-                  {
-                    "input": "createdBy",
-                    "field": "createdBy"
-                  },
-                  {
-                    "input": "createdDate",
-                    "field": "createdDate"
-                  },
-                  {
-                    "input": "description",
-                    "field": "description"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdate",
-                    "field": "lastUpdate"
-                  },
-                  {
-                    "input": "lastUpdatedBy",
-                    "field": "lastUpdatedBy"
-                  },
-                  {
-                    "input": "mappingType",
-                    "field": "mappingType"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "platform",
-                    "field": "platform"
-                  },
-                  {
-                    "input": "query",
-                    "field": "query"
-                  },
-                  {
-                    "input": "remediationSettings",
-                    "field": "remediationSettings"
-                  },
-                  {
-                    "input": "type",
-                    "field": "type"
-                  },
-                  {
-                    "input": "variableName",
-                    "field": "variableName"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): createdBy, createdDate, lastUpdate, lastUpdatedBy, mappingType, remediationSettings, variableName",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18401,22 +18086,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_domains_domain_id",
-                "inputs": [
-                  {
-                    "input": "certificateSourceType",
-                    "field": "certificateSourceType"
-                  },
-                  {
-                    "input": "domain",
-                    "field": "domain"
-                  }
-                ],
-                "required": [
-                  "certificateSourceType",
-                  "domain"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): certificateSourceType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18425,8 +18098,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: domain_id, brandId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): brandId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18445,8 +18120,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: domain_id, certificate, certificateChain, privateKey, type"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): certificateChain, privateKey",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18499,22 +18176,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_email_domains",
-                "inputs": [
-                  {
-                    "input": "displayName",
-                    "field": "displayName"
-                  },
-                  {
-                    "input": "userName",
-                    "field": "userName"
-                  }
-                ],
-                "required": [
-                  "displayName",
-                  "userName"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): displayName, userName",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18523,8 +18188,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: email_domain_id, displayName, userName"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): displayName, userName",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18553,42 +18220,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_email_servers_email_server_id",
-                "inputs": [
-                  {
-                    "input": "alias",
-                    "field": "alias"
-                  },
-                  {
-                    "input": "enabled",
-                    "field": "enabled"
-                  },
-                  {
-                    "input": "host",
-                    "field": "host"
-                  },
-                  {
-                    "input": "port",
-                    "field": "port"
-                  },
-                  {
-                    "input": "username",
-                    "field": "username"
-                  },
-                  {
-                    "input": "authType",
-                    "field": "authType"
-                  }
-                ],
-                "required": [
-                  "alias",
-                  "enabled",
-                  "host",
-                  "port",
-                  "username",
-                  "authType"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): authType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18597,8 +18232,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: email_server_id, authType"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): authType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -18617,8 +18254,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: email_server_id, fromAddress, toAddress"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): fromAddress, toAddress",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -19127,8 +18766,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: resource_set_id_or_label, resourceOrnOrUrl, conditions"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): resourceOrnOrUrl",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -19407,55 +19048,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_idps",
-                "inputs": [
-                  {
-                    "input": "created",
-                    "field": "created"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "issuerMode",
-                    "field": "issuerMode"
-                  },
-                  {
-                    "input": "lastUpdated",
-                    "field": "lastUpdated"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "policy",
-                    "field": "policy"
-                  },
-                  {
-                    "input": "properties",
-                    "field": "properties"
-                  },
-                  {
-                    "input": "protocol",
-                    "field": "protocol"
-                  },
-                  {
-                    "input": "status",
-                    "field": "status"
-                  },
-                  {
-                    "input": "type",
-                    "field": "type"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): issuerMode, lastUpdated",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -19690,47 +19286,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_authenticators",
-                "inputs": [
-                  {
-                    "input": "created",
-                    "field": "created"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdated",
-                    "field": "lastUpdated"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "status",
-                    "field": "status"
-                  },
-                  {
-                    "input": "type",
-                    "field": "type"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": [
-                  "created",
-                  "id",
-                  "lastUpdated",
-                  "name",
-                  "status",
-                  "type",
-                  "_links"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): lastUpdated",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -19799,55 +19358,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_meta_schemas_group_default",
-                "inputs": [
-                  {
-                    "input": "$schema",
-                    "field": "$schema"
-                  },
-                  {
-                    "input": "created",
-                    "field": "created"
-                  },
-                  {
-                    "input": "definitions",
-                    "field": "definitions"
-                  },
-                  {
-                    "input": "description",
-                    "field": "description"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdated",
-                    "field": "lastUpdated"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "properties",
-                    "field": "properties"
-                  },
-                  {
-                    "input": "title",
-                    "field": "title"
-                  },
-                  {
-                    "input": "type",
-                    "field": "type"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): lastUpdated",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -19901,22 +19415,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_authorization_servers_auth_server_id_scopes",
-                "inputs": [
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "displayName",
-                    "field": "displayName"
-                  }
-                ],
-                "required": [
-                  "name",
-                  "displayName"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): displayName",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -19935,8 +19437,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: type_id, name, displayName, description"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): displayName",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -19955,15 +19459,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_meta_uischemas",
-                "inputs": [
-                  {
-                    "input": "uiSchema",
-                    "field": "uiSchema"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): uiSchema",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20010,83 +19509,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org",
-                "inputs": [
-                  {
-                    "input": "address1",
-                    "field": "address1"
-                  },
-                  {
-                    "input": "address2",
-                    "field": "address2"
-                  },
-                  {
-                    "input": "city",
-                    "field": "city"
-                  },
-                  {
-                    "input": "companyName",
-                    "field": "companyName"
-                  },
-                  {
-                    "input": "country",
-                    "field": "country"
-                  },
-                  {
-                    "input": "created",
-                    "field": "created"
-                  },
-                  {
-                    "input": "endUserSupportHelpURL",
-                    "field": "endUserSupportHelpURL"
-                  },
-                  {
-                    "input": "expiresAt",
-                    "field": "expiresAt"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdated",
-                    "field": "lastUpdated"
-                  },
-                  {
-                    "input": "phoneNumber",
-                    "field": "phoneNumber"
-                  },
-                  {
-                    "input": "postalCode",
-                    "field": "postalCode"
-                  },
-                  {
-                    "input": "state",
-                    "field": "state"
-                  },
-                  {
-                    "input": "status",
-                    "field": "status"
-                  },
-                  {
-                    "input": "subdomain",
-                    "field": "subdomain"
-                  },
-                  {
-                    "input": "supportPhoneNumber",
-                    "field": "supportPhoneNumber"
-                  },
-                  {
-                    "input": "website",
-                    "field": "website"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): companyName, endUserSupportHelpURL, expiresAt, lastUpdated, phoneNumber, postalCode, supportPhoneNumber",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20095,83 +19521,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org",
-                "inputs": [
-                  {
-                    "input": "address1",
-                    "field": "address1"
-                  },
-                  {
-                    "input": "address2",
-                    "field": "address2"
-                  },
-                  {
-                    "input": "city",
-                    "field": "city"
-                  },
-                  {
-                    "input": "companyName",
-                    "field": "companyName"
-                  },
-                  {
-                    "input": "country",
-                    "field": "country"
-                  },
-                  {
-                    "input": "created",
-                    "field": "created"
-                  },
-                  {
-                    "input": "endUserSupportHelpURL",
-                    "field": "endUserSupportHelpURL"
-                  },
-                  {
-                    "input": "expiresAt",
-                    "field": "expiresAt"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdated",
-                    "field": "lastUpdated"
-                  },
-                  {
-                    "input": "phoneNumber",
-                    "field": "phoneNumber"
-                  },
-                  {
-                    "input": "postalCode",
-                    "field": "postalCode"
-                  },
-                  {
-                    "input": "state",
-                    "field": "state"
-                  },
-                  {
-                    "input": "status",
-                    "field": "status"
-                  },
-                  {
-                    "input": "subdomain",
-                    "field": "subdomain"
-                  },
-                  {
-                    "input": "supportPhoneNumber",
-                    "field": "supportPhoneNumber"
-                  },
-                  {
-                    "input": "website",
-                    "field": "website"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): companyName, endUserSupportHelpURL, expiresAt, lastUpdated, phoneNumber, postalCode, supportPhoneNumber",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20180,23 +19533,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org_captcha",
-                "inputs": [
-                  {
-                    "input": "captchaId",
-                    "field": "captchaId"
-                  },
-                  {
-                    "input": "enabledPages",
-                    "field": "enabledPages"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): captchaId, enabledPages",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20225,8 +19565,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: emailAddresses"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): emailAddresses",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20235,8 +19577,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: serialNumber, publicId, privateId, aesKey"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): serialNumber, publicId, privateId, aesKey",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20245,15 +19589,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org_org_settings_third_party_admin_setting",
-                "inputs": [
-                  {
-                    "input": "thirdPartyAdmin",
-                    "field": "thirdPartyAdmin"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): thirdPartyAdmin",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20282,17 +19621,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org_privacy_aerial",
-                "inputs": [
-                  {
-                    "input": "accountId",
-                    "field": "accountId"
-                  }
-                ],
-                "required": [
-                  "accountId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): accountId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20301,17 +19633,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org_privacy_aerial",
-                "inputs": [
-                  {
-                    "input": "accountId",
-                    "field": "accountId"
-                  }
-                ],
-                "required": [
-                  "accountId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): accountId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20380,15 +19705,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org_settings_auto_assign_admin_app_setting",
-                "inputs": [
-                  {
-                    "input": "autoAssignAdminAppSetting",
-                    "field": "autoAssignAdminAppSetting"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): autoAssignAdminAppSetting",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20397,15 +19717,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_org_settings_client_privileges_setting",
-                "inputs": [
-                  {
-                    "input": "clientPrivilegesSetting",
-                    "field": "clientPrivilegesSetting"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): clientPrivilegesSetting",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20568,22 +19883,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_principal_rate_limits",
-                "inputs": [
-                  {
-                    "input": "principalId",
-                    "field": "principalId"
-                  },
-                  {
-                    "input": "principalType",
-                    "field": "principalType"
-                  }
-                ],
-                "required": [
-                  "principalId",
-                  "principalType"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): principalId, principalType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20592,8 +19895,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: principal_rate_limit_id, principalId, principalType"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): principalId, principalType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20602,31 +19907,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_push_providers",
-                "inputs": [
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdatedDate",
-                    "field": "lastUpdatedDate"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "providerType",
-                    "field": "providerType"
-                  },
-                  {
-                    "input": "_links",
-                    "field": "_links"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): lastUpdatedDate, providerType",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20655,17 +19939,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_rate_limit_settings_admin_notifications",
-                "inputs": [
-                  {
-                    "input": "notificationsEnabled",
-                    "field": "notificationsEnabled"
-                  }
-                ],
-                "required": [
-                  "notificationsEnabled"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): notificationsEnabled",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20674,17 +19951,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_rate_limit_settings_per_client",
-                "inputs": [
-                  {
-                    "input": "defaultMode",
-                    "field": "defaultMode"
-                  }
-                ],
-                "required": [
-                  "defaultMode"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): defaultMode",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20693,17 +19963,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_rate_limit_settings_warning_threshold",
-                "inputs": [
-                  {
-                    "input": "warningThreshold",
-                    "field": "warningThreshold"
-                  }
-                ],
-                "required": [
-                  "warningThreshold"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): warningThreshold",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -20741,8 +20004,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: assignmentId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): assignmentId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -21038,8 +20303,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: providerAuthToken, providerCapability, providerName, providerSettings, providerSid"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): providerAuthToken, providerCapability, providerName, providerSettings, providerSid",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -21108,39 +20375,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "api_v1_templates_sms",
-                "inputs": [
-                  {
-                    "input": "created",
-                    "field": "created"
-                  },
-                  {
-                    "input": "id",
-                    "field": "id"
-                  },
-                  {
-                    "input": "lastUpdated",
-                    "field": "lastUpdated"
-                  },
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "template",
-                    "field": "template"
-                  },
-                  {
-                    "input": "translations",
-                    "field": "translations"
-                  },
-                  {
-                    "input": "type",
-                    "field": "type"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): lastUpdated",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -21710,8 +20948,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: user_id, riskLevel"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): riskLevel",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -21904,15 +21144,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "attack_protection_api_v1_authenticator_settings",
-                "inputs": [
-                  {
-                    "input": "verifyKnowledgeSecondWhen2faRequired",
-                    "field": "verifyKnowledgeSecondWhen2faRequired"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): verifyKnowledgeSecondWhen2faRequired",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -21921,15 +21156,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "attack_protection_api_v1_user_lockout_settings",
-                "inputs": [
-                  {
-                    "input": "preventBruteForceLockoutFromUnknownDevices",
-                    "field": "preventBruteForceLockoutFromUnknownDevices"
-                  }
-                ],
-                "required": []
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): preventBruteForceLockoutFromUnknownDevices",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -21938,22 +21168,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "integrations_api_v1_api_services",
-                "inputs": [
-                  {
-                    "input": "type",
-                    "field": "type"
-                  },
-                  {
-                    "input": "grantedScopes",
-                    "field": "grantedScopes"
-                  }
-                ],
-                "required": [
-                  "type",
-                  "grantedScopes"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): grantedScopes",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -22092,8 +21310,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: enableEnduserEntryPoints, enableExportApps"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): enableEnduserEntryPoints, enableExportApps",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -22119,22 +21339,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "privileged_access_api_v1_okta_service_accounts",
-                "inputs": [
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "oktaUserId",
-                    "field": "oktaUserId"
-                  }
-                ],
-                "required": [
-                  "name",
-                  "oktaUserId"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): oktaUserId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -22181,32 +21389,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "representable",
-                "stream": "privileged_access_api_v1_service_accounts",
-                "inputs": [
-                  {
-                    "input": "name",
-                    "field": "name"
-                  },
-                  {
-                    "input": "containerOrn",
-                    "field": "containerOrn"
-                  },
-                  {
-                    "input": "username",
-                    "field": "username"
-                  },
-                  {
-                    "input": "password",
-                    "field": "password"
-                  }
-                ],
-                "required": [
-                  "name",
-                  "containerOrn",
-                  "username",
-                  "password"
-                ]
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): containerOrn",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -22253,8 +21439,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: credResponses, fulfillmentProvider, pinResponseJwe, serial, userId, version, yubicoSigningJwks"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): credResponses, fulfillmentProvider, pinResponseJwe, userId, yubicoSigningJwks",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -22263,8 +21451,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: enrollmentRpIds, fulfillmentProvider, userId, yubicoTransportKeyJWK"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): enrollmentRpIds, fulfillmentProvider, userId, yubicoTransportKeyJWK",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -22273,8 +21463,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: fulfillmentData, fulfillmentProvider, userId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): fulfillmentData, fulfillmentProvider, userId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {
@@ -22283,8 +21475,10 @@
               "direct_write_cli": [],
               "direct_write_cli_status": "declaration-pending-cli-binding",
               "reverse_etl_eligibility": {
-                "state": "semantic-exclusion",
-                "reason": "no executable source-stream schema provides every typed action input: authenticatorEnrollmentId, fulfillmentProvider, userId"
+                "state": "foundation-gap",
+                "reason": "closed destination mapping rejects the provider's case-preserving input(s): authenticatorEnrollmentId, fulfillmentProvider, userId",
+                "refusing_location": "internal/connectors/sync_transport.go:673",
+                "minimal_change": "allow case-preserving concrete input_fields identifiers so action property names remain exact"
               }
             },
             {

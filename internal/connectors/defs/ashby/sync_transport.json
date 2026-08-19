@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "candidates",
+      "jobs",
+      "applications",
+      "users",
+      "api_key_info",
+      "audit_log_list",
+      "application_info",
+      "application_hiring_team_role_list",
+      "application_list_history",
+      "application_list_criteria_evaluations",
+      "application_feedback_list",
+      "candidate_info",
+      "candidate_list_client_info",
+      "candidate_list_fraud_checks",
+      "candidate_list_notes",
+      "candidate_list_projects",
+      "candidate_tag_list",
+      "communication_template_list",
+      "feedback_form_definition_list",
+      "feedback_form_definition_info",
+      "job_posting_list",
+      "job_posting_info",
+      "job_info",
+      "job_board_list",
+      "job_interview_plan_info",
+      "job_template_list",
+      "department_info",
+      "department_list",
+      "location_list",
+      "location_info",
+      "interview_plan_list",
+      "interview_stage_list",
+      "interview_stage_group_list",
+      "offer_list",
+      "offer_info",
+      "opening_info",
+      "opening_list",
+      "project_info",
+      "project_list",
+      "source_list",
+      "source_tracking_link_list",
+      "archive_reason_list",
+      "brand_list",
+      "custom_field_list",
+      "custom_field_info",
+      "hiring_team_role_list",
+      "user_info",
+      "user_list_interviewer_pauses",
+      "email_sender_list",
+      "sequence_info",
+      "sequence_list",
+      "sequence_template_info",
+      "sequence_template_list",
+      "interview_schedule_list",
+      "take_home_assignment_list",
+      "take_home_assignment_info",
+      "interview_event_list",
+      "interview_briefing_info",
+      "interview_info",
+      "interview_list",
+      "interview_stage_info",
+      "survey_form_definition_info",
+      "survey_form_definition_list",
+      "survey_request_list",
+      "survey_submission_list",
+      "webhook_info",
+      "interviewer_pool_list",
+      "interviewer_pool_info",
+      "close_reason_list",
+      "report_synchronous",
+      "approval_list"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport_static",
+      "run_id": "ashby_source_definition_v1"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_typed_destination"
+    },
+    "eligible_actions": [
+      "create_candidate",
+      "create_candidate_tag",
+      "create_department",
+      "create_location",
+      "cancel_interview_schedule",
+      "create_interviewer_pool"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_typed_destination_static",
+      "run_id": "ashby_create_candidate_full_append_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "mode": "full_append",
+        "strategy": "append",
+        "action": "create_candidate"
+      }
+    ],
+    "source_bindings": [
+      {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "candidates"
+        ],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {
+              "input": "name",
+              "field": "name"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

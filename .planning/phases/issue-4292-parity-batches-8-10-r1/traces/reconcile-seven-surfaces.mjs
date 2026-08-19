@@ -58,6 +58,19 @@ function candidateFor(action, streams, schemas) {
   if (fields.length === 0) {
     return { state: "semantic-exclusion", reason: "action has no typed record field available for the required input_fields mapping" };
   }
+  // The foundation validates names in the action-facing mapping as lowercase,
+  // underscore/dash identifiers. A provider's case-preserving action input
+  // cannot be changed here: the executor uses the input name to look up the
+  // action's actual typed property. Keep this as an explicit foundation gap
+  // rather than emitting a declaration the real loader rejects.
+  if (fields.some((field) => /[A-Z]/.test(field))) {
+    return {
+      state: "foundation-gap",
+      reason: `closed destination mapping rejects the provider's case-preserving input(s): ${fields.filter((field) => /[A-Z]/.test(field)).join(", ")}`,
+      refusing_location: "internal/connectors/sync_transport.go:673",
+      minimal_change: "allow case-preserving concrete input_fields identifiers so action property names remain exact",
+    };
+  }
   for (const stream of streams) {
     const properties = sourceSchema(stream, schemas).properties ?? {};
     if (fields.every((name) => Object.hasOwn(properties, name))) {

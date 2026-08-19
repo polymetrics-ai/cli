@@ -19,7 +19,7 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 9 | calendly | 61 | 27 | 22 | 0/0 | 12 | create_share | 1 | 0/0 |
 | 9 | greenhouse | skipped | 0 | 0 | 0/0 | 69 | add_application_to_candidate_prospect | 20 | 127/127 |
 | 9 | lever-hiring | 104 | 30 | 51 | 0/0 | 25 | reactivate_user | 2 | 60/60 |
-| 9 | ashby | 193 | 9 | 113 | 0/0 | 71 | update_application | 29 | 169/178 |
+| 9 | ashby | 193 | 9 | 113 | 0/0 | 71 | create_candidate | 6 | 169/178 |
 | 9 | workable | 84 | 45 | 39 | 0/0 | 42 | create_department | 13 | 0/0 |
 | 9 | recruitee | 938 | 370 | 563 | 0/0 | 5 | — | 0 | 0/0 |
 | 9 | hibob | 207 | 65 | 142 | 0/0 | 3 | — | 0 | 0/0 |
@@ -27,7 +27,7 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 10 | datadog | 1739 | 735 | 989 | 0/0 | 15 | create_monitor | 20 | 0/0 |
 | 10 | pagerduty | 465 | 207 | 254 | 0/0 | 4 | — | 0 | 0/0 |
 | 10 | auth0 | 469 | 192 | 270 | 0/0 | 7 | update_user | 7 | 0/0 |
-| 10 | okta | 734 | 6 | 444 | 0/0 | 284 | create_api_v1_apps | 79 | 0/0 |
+| 10 | okta | 734 | 6 | 444 | 0/0 | 284 | create_api_v1_behaviors | 47 | 0/0 |
 | 10 | firehydrant | 373 | 13 | 204 | 0/0 | 205 | create_connection | 25 | 0/0 |
 | 10 | adobe-commerce-magento | dynamic | 0 | 0 | 0/0 | 10 | update_product | 4 | 0/0 |
 | 10 | commercetools | 821 | 463 | 355 | 0/0 | 3 | — | 0 | 0/0 |

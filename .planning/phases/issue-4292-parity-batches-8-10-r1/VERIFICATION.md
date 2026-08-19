@@ -57,6 +57,20 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Fourth five-connector declaration increment
+
+- [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check ashby workable recruitee hibob factorial` failed before declarations with `ashby: source transport declaration missing`; initial generation also failed real `connectorgen validate` because the closed mapper rejects `applicationId`.
+- [x] Green: wrote only connector-owned `sync_transport.json` declarations
+  for Ashby, Workable, Recruitee, HiBob, and Factorial. The ledger records the
+  concrete mapper refusal at `internal/connectors/sync_transport.go:673` and
+  the minimal foundation change for every case-preserving input, while valid
+  lowercase mappings remain declared.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check ashby workable recruitee hibob factorial`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+
 ## Source-first map checks
 
 - [x] Red: initial maps rejected because their locks lacked complete provider

@@ -81,6 +81,24 @@
 - The focused checker, `connectorgen validate`, and `surface-sync --check`
   pass.
 
+### Seven-surface declaration proof — fourth increment
+
+- **Red:** `node traces/reconcile-seven-surfaces.mjs --check ashby workable
+  recruitee hibob factorial` failed with `ashby: source transport declaration
+  missing`. The first generated Ashby declaration then exercised the real
+  loader and failed `connectorgen validate`: `applicationId` violates the
+  closed mapping identifier rule.
+- **Green:** the reconciliation trace now gives every action with a
+  case-preserving provider input an explicit `foundation-gap` disposition:
+  `internal/connectors/sync_transport.go:673` refuses it, and the minimal
+  change is allowing case-preserving concrete `input_fields` names so action
+  property names remain exact. It does not rewrite or lowercase the provider
+  action input. Ashby's valid lowercase mappings are still declared; Workable
+  declares every valid record-driven action; Recruitee, HiBob, and Factorial
+  do not invent destinations without typed actions.
+- The regenerated declarations pass the focused checker, real
+  `connectorgen validate`, and `surface-sync --check`.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "jobs",
+      "candidates",
+      "members",
+      "accounts",
+      "account",
+      "collaboration_permissions",
+      "departments",
+      "disqualification_reasons",
+      "legal_entities",
+      "permission_sets",
+      "recruiters",
+      "stages",
+      "subscriptions",
+      "employee_fields",
+      "employees_orgchart",
+      "employees",
+      "employee",
+      "employee_documents",
+      "review_templates",
+      "review_template",
+      "time_entries",
+      "timeoff_balances",
+      "timeoff_categories",
+      "timeoff_requests",
+      "work_schedules",
+      "candidate_activities",
+      "candidate_files",
+      "candidate_offer",
+      "custom_attributes",
+      "events",
+      "event",
+      "job_activities",
+      "job_custom_attributes",
+      "job_members",
+      "job_questions",
+      "job_stages",
+      "job",
+      "job_application_form",
+      "job_recruiters",
+      "requisitions",
+      "requisition",
+      "offer"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport_static",
+      "run_id": "workable_source_definition_v1"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_typed_destination"
+    },
+    "eligible_actions": [
+      "create_department",
+      "update_department",
+      "invite_member",
+      "update_member",
+      "update_employee",
+      "create_review_template",
+      "create_time_entry",
+      "update_time_entry",
+      "archive_time_entry",
+      "create_timeoff_request",
+      "disqualify_candidate",
+      "revert_candidate_disqualification",
+      "update_candidate"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_typed_destination_static",
+      "run_id": "workable_create_department_full_append_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "mode": "full_append",
+        "strategy": "append",
+        "action": "create_department"
+      }
+    ],
+    "source_bindings": [
+      {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "jobs"
+        ],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {
+              "input": "name",
+              "field": "name"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
