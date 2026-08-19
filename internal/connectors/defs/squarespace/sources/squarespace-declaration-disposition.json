@@ -4,35 +4,44 @@
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
     "source_lock": "sources/squarespace-operation-source-lock.json",
-    "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-    "source_sha256": "f863ba8a9e888880adce6d4ba0f3d4586588e40aac5086cade3178c7969a824d",
-    "source_bytes": 74269,
-    "source_operation_count": 47,
-    "normalized_inventory_sha256": "bd92bbecb2ce846a94c92a658910454bffae4168fd8b0529d00c7079d0e7b6a0",
-    "source_retrieval": "fetched"
+    "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+    "source_sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc",
+    "source_bytes": 345839,
+    "operations_found": 53,
+    "mapped_operations": 53,
+    "old_api_surface_rows": 47,
+    "regenerated_api_surface_rows": 53,
+    "api_surface_regeneration": "provider-source-derived",
+    "normalized_inventory_sha256": "9868d788baa288ceb1da6f43c0266729ec626d1632c1a1c7bb8439f1e5820893",
+    "source_retrieval": "fetched",
+    "coverage_confidence": {
+      "level": "machine-readable-spec",
+      "basis": "Official Squarespace Commerce OpenAPI document has 53 HTTP method/path operations."
+    }
   },
   "summary": {
-    "api_surface_rows": 47,
-    "exact_source_rows": 47,
-    "declared_operations": 47,
-    "declared_percent": 100,
+    "old_api_surface_rows": 47,
+    "api_surface_rows": 53,
+    "exact_source_rows": 53,
+    "declared_operations": 53,
+    "operations_found": 53,
+    "coverage_confidence": {
+      "level": "machine-readable-spec",
+      "basis": "Official Squarespace Commerce OpenAPI document has 53 HTTP method/path operations."
+    },
     "enabled_operations": 2,
-    "declaration_pending_operations": 40,
-    "disabled_operations": 5,
-    "documented_deletes": 6,
+    "declaration_pending_operations": 51,
+    "disabled_operations": 0,
+    "documented_deletes": 7,
     "enabled_deletes": 1,
     "parity_class_counts": [
       {
-        "key": "binary_write",
-        "count": 1
-      },
-      {
         "key": "direct_read",
-        "count": 12
+        "count": 15
       },
       {
         "key": "direct_write",
-        "count": 26
+        "count": 30
       },
       {
         "key": "etl",
@@ -57,11 +66,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 40
-      },
-      {
-        "key": "provider-does-not-expose",
-        "count": 5
+        "count": 51
       }
     ],
     "transport": {
@@ -82,6 +87,217 @@
   "ledger_dispositions": [
     {
       "method": "GET",
+      "path": "/1.0/authorization/member",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/1.0/authorization/member",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns metadata about the Squarespace member who owns the OAuth token in use, not syncable site data",
+          "notes": "operation_id=getMemberProfile; operation_id=getMemberProfile; operation_id=getMemberProfile"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getmemberprofile-1",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/authorization/member.get",
+        "operation_id": "getMemberProfile",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1.0/authorization/website",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/1.0/authorization/website",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns metadata about the website that owns the API key/OAuth token in use, not syncable site data",
+          "notes": "operation_id=getWebsiteProfile; operation_id=getWebsiteProfile; operation_id=getWebsiteProfile"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getwebsiteprofile-2",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/authorization/website.get",
+        "operation_id": "getWebsiteProfile",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1.0/commerce/inventory",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/1.0/commerce/inventory",
+        "operation": null,
+        "covered_by": {
+          "stream": "inventory"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getinventoryitems-3",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/inventory.get",
+        "operation_id": "getInventoryItems",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1.0/commerce/inventory/{variantIdCsvs}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/1.0/commerce/inventory/{variantIdCsvs}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "batch inventory-item detail by variant id; identical record shape to the inventory list stream's per-item object, already covered by that stream",
+          "notes": "operation_id=getSpecificInventoryItems; operation_id=getSpecificInventoryItems; operation_id=getSpecificInventoryItems"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getspecificinventoryitems-4",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/inventory/{variantIdCsvs}.get",
+        "operation_id": "getSpecificInventoryItems",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1.0/commerce/inventory/adjustments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/1.0/commerce/inventory/adjustments",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "CreateInventoryAdjustmentRequest's body is 4 alternative named arrays (incrementOperations/decrementOperations/setFiniteOperations/setUnlimitedOperations) of {variantId,quantity} objects, not a flat record; the engine's default JSON write body cannot construct this nested array-of-operations shape without a Tier-2 WriteHook",
+          "notes": "operation_id=adjustInventoryStockLevels; operation_id=adjustInventoryStockLevels; operation_id=adjustInventoryStockLevels"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.adjustinventorystocklevels-5",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/inventory/adjustments.post",
+        "operation_id": "adjustInventoryStockLevels",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
       "path": "/1.0/commerce/orders",
       "parity_class": "etl",
       "api_surface": {
@@ -95,10 +311,10 @@
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-commerce-orders-1",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[0]",
-        "operation_id": "get-1-0-commerce-orders-1",
+        "source_id": "squarespace.provider.getorders-6",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders.get",
+        "operation_id": "getOrders",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -110,7 +326,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[0]"
+        "evidence": "api_surface.json:endpoints[5]"
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
@@ -130,19 +346,23 @@
       "api_surface": {
         "method": "POST",
         "path": "/1.0/commerce/orders",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Order.create's real body is a full order graph (lineItems, addresses, fulfillmentStatus, discountLines) with no flat-field shape suitable for reverse ETL; creating orders programmatically is also a rare/unsafe integration pattern for a data-sync connector",
+          "notes": "operation_id=createOrder; operation_id=createOrder; operation_id=createOrder"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "Order.create's real body is a full order graph (lineItems, addresses, fulfillmentStatus, discountLines) with no flat-field shape suitable for reverse ETL; creating orders programmatically is also a rare/unsafe integration pattern for a data-sync connector"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-1-0-commerce-orders-2",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[1]",
-        "operation_id": "post-1-0-commerce-orders-2",
+        "source_id": "squarespace.provider.createorder-7",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders.post",
+        "operation_id": "createOrder",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -154,7 +374,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[1]"
+        "evidence": "api_surface.json:endpoints[6]"
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
@@ -168,19 +388,23 @@
       "api_surface": {
         "method": "GET",
         "path": "/1.0/commerce/orders/{id}",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream",
+          "notes": "operation_id=getOrder; operation_id=getOrder; operation_id=getOrder"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-commerce-orders-id-3",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[2]",
-        "operation_id": "get-1-0-commerce-orders-id-3",
+        "source_id": "squarespace.provider.getorder-8",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders/{id}.get",
+        "operation_id": "getOrder",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -192,7 +416,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[2]"
+        "evidence": "api_surface.json:endpoints[7]"
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
@@ -206,19 +430,23 @@
       "api_surface": {
         "method": "POST",
         "path": "/1.0/commerce/orders/{id}/fulfillments",
-        "operation": null,
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "OrderFulfillmentRequest's body is a shipments[] array of nested CreateOrderShipmentRequest objects (carrierName/service/shipDate/trackingNumber each), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct a nested array-of-objects payload without a Tier-2 WriteHook",
+          "notes": "operation_id=fulfillOrder; operation_id=fulfillOrder; operation_id=fulfillOrder"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "OrderFulfillmentRequest's body is a shipments[] array of nested CreateOrderShipmentRequest objects (carrierName/service/shipDate/trackingNumber each), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct a nested array-of-objects payload without a Tier-2 WriteHook"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-1-0-commerce-orders-id-fulfillments-4",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[3]",
-        "operation_id": "post-1-0-commerce-orders-id-fulfillments-4",
+        "source_id": "squarespace.provider.fulfillorder-9",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders/{id}/fulfillments.post",
+        "operation_id": "fulfillOrder",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -230,7 +458,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[3]"
+        "evidence": "api_surface.json:endpoints[8]"
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
@@ -252,10 +480,10 @@
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-commerce-store-pages-5",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[4]",
-        "operation_id": "get-1-0-commerce-store-pages-5",
+        "source_id": "squarespace.provider.getstorepages-10",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/store_pages.get",
+        "operation_id": "getStorePages",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -267,7 +495,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[4]"
+        "evidence": "api_surface.json:endpoints[9]"
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
@@ -295,210 +523,10 @@
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-commerce-transactions-6",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[5]",
-        "operation_id": "get-1-0-commerce-transactions-6",
-        "deprecated": false
-      },
-      "state": "declaration-pending",
-      "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[5]"
-      },
-      "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
-        "transport": {
-          "source_transport": {
-            "state": "declaration-pending",
-            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
-          }
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/1.0/commerce/transactions/{documentIds}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/1.0/commerce/transactions/{documentIds}",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single/batch transaction detail by id; identical record shape to the transactions list stream's per-item object, already covered by that stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-commerce-transactions-documentids-7",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[6]",
-        "operation_id": "get-1-0-commerce-transactions-documentids-7",
-        "deprecated": false
-      },
-      "state": "declaration-pending",
-      "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[6]"
-      },
-      "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/1.0/commerce/inventory",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/1.0/commerce/inventory",
-        "operation": null,
-        "covered_by": {
-          "stream": "inventory"
-        },
-        "excluded": null
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-commerce-inventory-8",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[7]",
-        "operation_id": "get-1-0-commerce-inventory-8",
-        "deprecated": false
-      },
-      "state": "declaration-pending",
-      "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[7]"
-      },
-      "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
-        "transport": {
-          "source_transport": {
-            "state": "declaration-pending",
-            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
-          }
-        }
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/1.0/commerce/inventory/{variantIdCsvs}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/1.0/commerce/inventory/{variantIdCsvs}",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "batch inventory-item detail by variant id; identical record shape to the inventory list stream's per-item object, already covered by that stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-commerce-inventory-variantidcsvs-9",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[8]",
-        "operation_id": "get-1-0-commerce-inventory-variantidcsvs-9",
-        "deprecated": false
-      },
-      "state": "declaration-pending",
-      "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[8]"
-      },
-      "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/1.0/commerce/inventory/adjustments",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/1.0/commerce/inventory/adjustments",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "CreateInventoryAdjustmentRequest's body is 4 alternative named arrays (incrementOperations/decrementOperations/setFiniteOperations/setUnlimitedOperations) of {variantId,quantity} objects, not a flat record; the engine's default JSON write body cannot construct this nested array-of-operations shape without a Tier-2 WriteHook"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-1-0-commerce-inventory-adjustments-10",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[9]",
-        "operation_id": "post-1-0-commerce-inventory-adjustments-10",
-        "deprecated": false
-      },
-      "state": "declaration-pending",
-      "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[9]"
-      },
-      "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/1.0/profiles",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/1.0/profiles",
-        "operation": null,
-        "covered_by": {
-          "stream": "profiles"
-        },
-        "excluded": null
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-profiles-11",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[10]",
-        "operation_id": "get-1-0-profiles-11",
+        "source_id": "squarespace.provider.getdocumentsbyupdatedon-11",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/transactions.get",
+        "operation_id": "getDocumentsByUpdatedOn",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -525,24 +553,28 @@
     },
     {
       "method": "GET",
-      "path": "/1.0/profiles/{profileIdCsvs}",
+      "path": "/1.0/commerce/transactions/{documentIds}",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/1.0/profiles/{profileIdCsvs}",
-        "operation": null,
+        "path": "/1.0/commerce/transactions/{documentIds}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single/batch transaction detail by id; identical record shape to the transactions list stream's per-item object, already covered by that stream",
+          "notes": "operation_id=getDocumentsById; operation_id=getDocumentsById; operation_id=getDocumentsById"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "batch profile detail by id; identical record shape to the profiles list stream's per-item object, already covered by that stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-profiles-profileidcsvs-12",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[11]",
-        "operation_id": "get-1-0-profiles-profileidcsvs-12",
+        "source_id": "squarespace.provider.getdocumentsbyid-12",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/transactions/{documentIds}.get",
+        "operation_id": "getDocumentsById",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -555,6 +587,91 @@
         "recoverable": true,
         "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[11]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1.0/profiles",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/1.0/profiles",
+        "operation": null,
+        "covered_by": {
+          "stream": "profiles"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getprofiles-13",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/profiles.get",
+        "operation_id": "getProfiles",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[12]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1.0/profiles/{profileIdCsvs}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/1.0/profiles/{profileIdCsvs}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "batch profile detail by id; identical record shape to the profiles list stream's per-item object, already covered by that stream",
+          "notes": "operation_id=getSpecificProfiles; operation_id=getSpecificProfiles; operation_id=getSpecificProfiles"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getspecificprofiles-14",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/profiles/{profileIdCsvs}.get",
+        "operation_id": "getSpecificProfiles",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[13]"
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
@@ -576,10 +693,10 @@
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-webhook-subscriptions-13",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[12]",
-        "operation_id": "get-1-0-webhook-subscriptions-13",
+        "source_id": "squarespace.provider.getwebhooksubscriptions-15",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions.get",
+        "operation_id": "getWebhookSubscriptions",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -591,7 +708,7 @@
         "reason": "declaration-pending",
         "recoverable": true,
         "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[12]"
+        "evidence": "api_surface.json:endpoints[14]"
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
@@ -619,10 +736,10 @@
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-1-0-webhook-subscriptions-14",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[13]",
-        "operation_id": "post-1-0-webhook-subscriptions-14",
+        "source_id": "squarespace.provider.createwebhooksubscription-16",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions.post",
+        "operation_id": "createWebhookSubscription",
         "deprecated": false
       },
       "state": "enabled",
@@ -646,82 +763,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/1.0/webhook_subscriptions/{subscriptionId}",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single webhook-subscription detail; identical record shape to the webhook_subscriptions list stream's per-item object, already covered by that stream"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-webhook-subscriptions-subscriptionid-15",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[14]",
-        "operation_id": "get-1-0-webhook-subscriptions-subscriptionid-15",
-        "deprecated": false
-      },
-      "state": "declaration-pending",
-      "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[14]"
-      },
-      "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/1.0/webhook_subscriptions/{subscriptionId}",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "ExternalUpdateWebhookSubscriptionRequest wraps every changed field as {present:true,value:...} (Squarespace's own partial-update convention), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct this per-field wrapper without a Tier-2 WriteHook"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-1-0-webhook-subscriptions-subscriptionid-16",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[15]",
-        "operation_id": "post-1-0-webhook-subscriptions-subscriptionid-16",
-        "deprecated": false
-      },
-      "state": "declaration-pending",
-      "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[15]"
-      },
-      "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/1.0/webhook_subscriptions/{subscriptionId}",
       "parity_class": "direct_write",
@@ -736,10 +777,10 @@
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.delete-1-0-webhook-subscriptions-subscriptionid-17",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[16]",
-        "operation_id": "delete-1-0-webhook-subscriptions-subscriptionid-17",
+        "source_id": "squarespace.provider.deletewebhooksubscription-17",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.delete",
+        "operation_id": "deleteWebhookSubscription",
         "deprecated": false
       },
       "state": "enabled",
@@ -763,25 +804,29 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
-      "parity_class": "direct_write",
+      "method": "GET",
+      "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+      "parity_class": "direct_read",
       "api_surface": {
-        "method": "POST",
-        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
-        "operation": null,
+        "method": "GET",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single webhook-subscription detail; identical record shape to the webhook_subscriptions list stream's per-item object, already covered by that stream",
+          "notes": "operation_id=getWebhookSubscription; operation_id=getWebhookSubscription; operation_id=getWebhookSubscription"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "immediately invalidates the subscription's existing signing secret for every downstream consumer verifying webhook signatures; an operator-initiated security action, not a syncable data mutation"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-1-0-webhook-subscriptions-subscriptionid-actions-rotatesecret-18",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[17]",
-        "operation_id": "post-1-0-webhook-subscriptions-subscriptionid-actions-rotatesecret-18",
+        "source_id": "squarespace.provider.getwebhooksubscription-18",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.get",
+        "operation_id": "getWebhookSubscription",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -796,6 +841,90 @@
         "evidence": "api_surface.json:endpoints[17]"
       },
       "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "ExternalUpdateWebhookSubscriptionRequest wraps every changed field as {present:true,value:...} (Squarespace's own partial-update convention), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct this per-field wrapper without a Tier-2 WriteHook",
+          "notes": "operation_id=updateWebhookSubscription; operation_id=updateWebhookSubscription; operation_id=updateWebhookSubscription"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.updatewebhooksubscription-19",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.post",
+        "operation_id": "updateWebhookSubscription",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[18]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "immediately invalidates the subscription's existing signing secret for every downstream consumer verifying webhook signatures; an operator-initiated security action, not a syncable data mutation",
+          "notes": "operation_id=rotateSubscriptionSecret; operation_id=rotateSubscriptionSecret; operation_id=rotateSubscriptionSecret"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.rotatesubscriptionsecret-20",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret.post",
+        "operation_id": "rotateSubscriptionSecret",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[19]"
+      },
+      "declaration": {
         "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
         "command": null
       }
@@ -807,132 +936,65 @@
       "api_surface": {
         "method": "POST",
         "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "fires a synthetic test event at the configured endpoint for manual verification; no data is created, read, or mutated"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-1-0-webhook-subscriptions-subscriptionid-actions-sendtestnotification-19",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[18]",
-        "operation_id": "post-1-0-webhook-subscriptions-subscriptionid-actions-sendtestnotification-19",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
-      },
-      "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "fires a synthetic test event at the configured endpoint for manual verification; no data is created, read, or mutated",
-        "evidence": "api_surface.json:endpoints[18]"
-      },
-      "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/1.0/authorization/member",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/1.0/authorization/member",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "returns metadata about the Squarespace member who owns the OAuth token in use, not syncable site data"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-authorization-member-20",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[19]",
-        "operation_id": "get-1-0-authorization-member-20",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
-      },
-      "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "returns metadata about the Squarespace member who owns the OAuth token in use, not syncable site data",
-        "evidence": "api_surface.json:endpoints[19]"
-      },
-      "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/1.0/authorization/website",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/1.0/authorization/website",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "returns metadata about the website that owns the API key/OAuth token in use, not syncable site data"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-1-0-authorization-website-21",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[20]",
-        "operation_id": "get-1-0-authorization-website-21",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
-      },
-      "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "returns metadata about the website that owns the API key/OAuth token in use, not syncable site data",
-        "evidence": "api_surface.json:endpoints[20]"
-      },
-      "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/contacts",
-      "parity_class": "etl",
-      "api_surface": {
-        "method": "GET",
-        "path": "/v1/contacts",
-        "operation": null,
-        "covered_by": {
-          "stream": "contacts"
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "fires a synthetic test event at the configured endpoint for manual verification; no data is created, read, or mutated",
+          "notes": "operation_id=sendTestNotificationForWebhookSubscription; operation_id=sendTestNotificationForWebhookSubscription; operation_id=sendTestNotificationForWebhookSubscription"
         },
+        "covered_by": null,
         "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-v1-contacts-22",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[21]",
-        "operation_id": "get-v1-contacts-22",
+        "source_id": "squarespace.provider.sendtestnotificationforwebhooksubscription-21",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification.post",
+        "operation_id": "sendTestNotificationForWebhookSubscription",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[20]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/analytics/transaction-summaries",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/analytics/transaction-summaries",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns aggregated order/donation totals per contact for a caller-supplied contact-id batch, not a syncable object list",
+          "notes": "operation_id=getTransactionsSummaries; operation_id=getTransactionsSummaries; operation_id=getTransactionsSummaries"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.gettransactionssummaries-22",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/analytics/transaction-summaries.post",
+        "operation_id": "getTransactionsSummaries",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -947,36 +1009,34 @@
         "evidence": "api_surface.json:endpoints[21]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
-        "transport": {
-          "source_transport": {
-            "state": "declaration-pending",
-            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
-          }
-        }
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/contacts",
-      "parity_class": "direct_write",
+      "method": "GET",
+      "path": "/v1/commerce/discounts",
+      "parity_class": "direct_read",
       "api_surface": {
-        "method": "POST",
-        "path": "/v1/contacts",
-        "operation": null,
+        "method": "GET",
+        "path": "/v1/commerce/discounts",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=listDiscounts; operation_id=listDiscounts; operation_id=listDiscounts"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "the Contacts API v1 surface lives at a different version prefix (/v1/...) than every Commerce API write action's base_url (which bakes in the Commerce API's /1.0 segment); reaching it requires the same stream.path absolute-URL override the contacts READ stream uses, but write actions have no equivalent conformance skip-marker mechanism (write_request_shape's replay capture server always points at b.HTTP.URL, which an absolute-URL action.path bypasses entirely) — so an untestable write action was not added rather than shipping one that cannot be proven correct in this repo's conformance harness"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v1-contacts-23",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[22]",
-        "operation_id": "post-v1-contacts-23",
+        "source_id": "squarespace.provider.listdiscounts-23",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts.get",
+        "operation_id": "listDiscounts",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -991,30 +1051,34 @@
         "evidence": "api_surface.json:endpoints[22]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
       "method": "POST",
-      "path": "/v1/contacts/query",
+      "path": "/v1/commerce/discounts",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/contacts/query",
-        "operation": null,
+        "path": "/v1/commerce/discounts",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=createDiscount; operation_id=createDiscount; operation_id=createDiscount"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "filtered/sorted contact search returning the identical Contact record shape already covered by the contacts list stream; a POST-with-body search endpoint has no GET-list declarative equivalent in this dialect"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v1-contacts-query-24",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[23]",
-        "operation_id": "post-v1-contacts-query-24",
+        "source_id": "squarespace.provider.creatediscount-24",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts.post",
+        "operation_id": "createDiscount",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1034,25 +1098,29 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/contacts/{contactId}",
-      "parity_class": "direct_read",
+      "method": "DELETE",
+      "path": "/v1/commerce/discounts/{discountId}",
+      "parity_class": "direct_write",
       "api_surface": {
-        "method": "GET",
-        "path": "/v1/contacts/{contactId}",
-        "operation": null,
+        "method": "DELETE",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+          "notes": "operation_id=deleteDiscount; operation_id=deleteDiscount; operation_id=deleteDiscount"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-v1-contacts-contactid-25",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[24]",
-        "operation_id": "get-v1-contacts-contactid-25",
+        "source_id": "squarespace.provider.deletediscount-25",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts/{discountId}.delete",
+        "operation_id": "deleteDiscount",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1067,30 +1135,34 @@
         "evidence": "api_surface.json:endpoints[24]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
         "command": null
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/contacts/{contactId}",
-      "parity_class": "direct_write",
+      "method": "GET",
+      "path": "/v1/commerce/discounts/{discountId}",
+      "parity_class": "direct_read",
       "api_surface": {
-        "method": "PATCH",
-        "path": "/v1/contacts/{contactId}",
-        "operation": null,
+        "method": "GET",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=getDiscount; operation_id=getDiscount; operation_id=getDiscount"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "requires an application/merge-patch+json content type the engine's write dialect (json/form/none body_type) does not model"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.patch-v1-contacts-contactid-26",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[25]",
-        "operation_id": "patch-v1-contacts-contactid-26",
+        "source_id": "squarespace.provider.getdiscount-26",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts/{discountId}.get",
+        "operation_id": "getDiscount",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1105,30 +1177,34 @@
         "evidence": "api_surface.json:endpoints[25]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v1/contacts/{contactId}",
+      "method": "PUT",
+      "path": "/v1/commerce/discounts/{discountId}",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "DELETE",
-        "path": "/v1/contacts/{contactId}",
-        "operation": null,
+        "method": "PUT",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=updateDiscount; operation_id=updateDiscount; operation_id=updateDiscount"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "same Contacts API v1 version-prefix/conformance-testability gap as POST /v1/contacts above; not added as an untestable write action"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.delete-v1-contacts-contactid-27",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[26]",
-        "operation_id": "delete-v1-contacts-contactid-27",
+        "source_id": "squarespace.provider.updatediscount-27",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts/{discountId}.put",
+        "operation_id": "updateDiscount",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1149,24 +1225,23 @@
     },
     {
       "method": "GET",
-      "path": "/v1/contacts/{contactId}/address-book",
-      "parity_class": "direct_read",
+      "path": "/v1/contacts",
+      "parity_class": "etl",
       "api_surface": {
         "method": "GET",
-        "path": "/v1/contacts/{contactId}/address-book",
+        "path": "/v1/contacts",
         "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "sub-resource of an individual contact (address book entries); no parent-id fan-out stream is declared for contacts in this pass, so there is no id source to drive this per-contact sub-read"
-        }
+        "covered_by": {
+          "stream": "contacts"
+        },
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-v1-contacts-contactid-address-book-28",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[27]",
-        "operation_id": "get-v1-contacts-contactid-address-book-28",
+        "source_id": "squarespace.provider.getcontacts-28",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts.get",
+        "operation_id": "getContacts",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1181,30 +1256,40 @@
         "evidence": "api_surface.json:endpoints[27]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
       }
     },
     {
       "method": "POST",
-      "path": "/v1/contacts/{contactId}/address-book",
+      "path": "/v1/contacts",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v1/contacts/{contactId}/address-book",
-        "operation": null,
+        "path": "/v1/contacts",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "the Contacts API v1 surface lives at a different version prefix (/v1/...) than every Commerce API write action's base_url (which bakes in the Commerce API's /1.0 segment); reaching it requires the same stream.path absolute-URL override the contacts READ stream uses, but write actions have no equivalent conformance skip-marker mechanism (write_request_shape's replay capture server always points at b.HTTP.URL, which an absolute-URL action.path bypasses entirely) — so an untestable write action was not added rather than shipping one that cannot be proven correct in this repo's conformance harness",
+          "notes": "operation_id=createContact; operation_id=createContact; operation_id=createContact"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "creates an address-book entry under a specific contact; narrow sub-resource write with no corresponding read stream in this pass"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v1-contacts-contactid-address-book-29",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[28]",
-        "operation_id": "post-v1-contacts-contactid-address-book-29",
+        "source_id": "squarespace.provider.createcontact-29",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts.post",
+        "operation_id": "createContact",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1224,25 +1309,29 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
-      "parity_class": "direct_read",
+      "method": "DELETE",
+      "path": "/v1/contacts/{contactId}",
+      "parity_class": "direct_write",
       "api_surface": {
-        "method": "GET",
-        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
-        "operation": null,
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "same Contacts API v1 version-prefix/conformance-testability gap as POST /v1/contacts above; not added as an untestable write action",
+          "notes": "operation_id=deleteContact; operation_id=deleteContact; operation_id=deleteContact"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "single address-book-entry detail; no parent address-book stream is covered in this pass"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-v1-contacts-contactid-address-book-addressbookentryid-30",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[29]",
-        "operation_id": "get-v1-contacts-contactid-address-book-addressbookentryid-30",
+        "source_id": "squarespace.provider.deletecontact-30",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}.delete",
+        "operation_id": "deleteContact",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1257,30 +1346,34 @@
         "evidence": "api_surface.json:endpoints[29]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
         "command": null
       }
     },
     {
-      "method": "PUT",
-      "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
-      "parity_class": "direct_write",
+      "method": "GET",
+      "path": "/v1/contacts/{contactId}",
+      "parity_class": "direct_read",
       "api_surface": {
-        "method": "PUT",
-        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
-        "operation": null,
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream",
+          "notes": "operation_id=getContact; operation_id=getContact; operation_id=getContact"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "replaces a specific address-book entry; narrow sub-resource write with no corresponding read stream in this pass"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.put-v1-contacts-contactid-address-book-addressbookentryid-31",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[30]",
-        "operation_id": "put-v1-contacts-contactid-address-book-addressbookentryid-31",
+        "source_id": "squarespace.provider.getcontact-31",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}.get",
+        "operation_id": "getContact",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1295,30 +1388,34 @@
         "evidence": "api_surface.json:endpoints[30]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+      "method": "PATCH",
+      "path": "/v1/contacts/{contactId}",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "DELETE",
-        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
-        "operation": null,
+        "method": "PATCH",
+        "path": "/v1/contacts/{contactId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "requires an application/merge-patch+json content type the engine's write dialect (json/form/none body_type) does not model",
+          "notes": "operation_id=patchContact; operation_id=patchContact; operation_id=patchContact"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "deletes a specific address-book entry; narrow sub-resource write with no corresponding read stream in this pass"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.delete-v1-contacts-contactid-address-book-addressbookentryid-32",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[31]",
-        "operation_id": "delete-v1-contacts-contactid-address-book-addressbookentryid-32",
+        "source_id": "squarespace.provider.patchcontact-32",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}.patch",
+        "operation_id": "patchContact",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1338,62 +1435,71 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/analytics/transaction-summaries",
-      "parity_class": "direct_write",
-      "api_surface": {
-        "method": "POST",
-        "path": "/v1/analytics/transaction-summaries",
-        "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "returns aggregated order/donation totals per contact for a caller-supplied contact-id batch, not a syncable object list"
-        }
-      },
-      "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v1-analytics-transaction-summaries-33",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[32]",
-        "operation_id": "post-v1-analytics-transaction-summaries-33",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
-      },
-      "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "returns aggregated order/donation totals per contact for a caller-supplied contact-id batch, not a syncable object list",
-        "evidence": "api_surface.json:endpoints[32]"
-      },
-      "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
-      }
-    },
-    {
       "method": "GET",
-      "path": "/v2/commerce/products",
-      "parity_class": "etl",
+      "path": "/v1/contacts/{contactId}/address-book",
+      "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/v2/commerce/products",
-        "operation": null,
-        "covered_by": {
-          "stream": "products"
+        "path": "/v1/contacts/{contactId}/address-book",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "sub-resource of an individual contact (address book entries); no parent-id fan-out stream is declared for contacts in this pass, so there is no id source to drive this per-contact sub-read",
+          "notes": "operation_id=getAddressBook; operation_id=getAddressBook; operation_id=getAddressBook"
         },
+        "covered_by": null,
         "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-v2-commerce-products-34",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[33]",
-        "operation_id": "get-v2-commerce-products-34",
+        "source_id": "squarespace.provider.getaddressbook-33",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book.get",
+        "operation_id": "getAddressBook",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[32]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/{contactId}/address-book",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/contacts/{contactId}/address-book",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "creates an address-book entry under a specific contact; narrow sub-resource write with no corresponding read stream in this pass",
+          "notes": "operation_id=createAddressBookEntry; operation_id=createAddressBookEntry; operation_id=createAddressBookEntry"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.createaddressbookentry-34",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book.post",
+        "operation_id": "createAddressBookEntry",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1408,36 +1514,34 @@
         "evidence": "api_surface.json:endpoints[33]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
-        "transport": {
-          "source_transport": {
-            "state": "declaration-pending",
-            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
-          }
-        }
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
       }
     },
     {
-      "method": "POST",
-      "path": "/v2/commerce/products",
+      "method": "DELETE",
+      "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "POST",
-        "path": "/v2/commerce/products",
-        "operation": null,
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "deletes a specific address-book entry; narrow sub-resource write with no corresponding read stream in this pass",
+          "notes": "operation_id=deleteAddressBookEntry; operation_id=deleteAddressBookEntry; operation_id=deleteAddressBookEntry"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "CreateProductRequest's body includes nested variants[]/variantAttributes[] arrays required for most real product types; not expressible as the engine's default flat JSON write body without a Tier-2 WriteHook"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-35",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[34]",
-        "operation_id": "post-v2-commerce-products-35",
+        "source_id": "squarespace.provider.deleteaddressbookentry-35",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.delete",
+        "operation_id": "deleteAddressBookEntry",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1458,24 +1562,28 @@
     },
     {
       "method": "GET",
-      "path": "/v2/commerce/products/{productIdCsvs}",
+      "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
       "parity_class": "direct_read",
       "api_surface": {
         "method": "GET",
-        "path": "/v2/commerce/products/{productIdCsvs}",
-        "operation": null,
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "single address-book-entry detail; no parent address-book stream is covered in this pass",
+          "notes": "operation_id=getAddressBookEntry; operation_id=getAddressBookEntry; operation_id=getAddressBookEntry"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "duplicate_of",
-          "reason": "batch product detail by id; identical record shape to the products list stream's per-item object, already covered by that stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-v2-commerce-products-productidcsvs-36",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[35]",
-        "operation_id": "get-v2-commerce-products-productidcsvs-36",
+        "source_id": "squarespace.provider.getaddressbookentry-36",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.get",
+        "operation_id": "getAddressBookEntry",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1495,25 +1603,29 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v2/commerce/products/{productId}",
+      "method": "PUT",
+      "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "POST",
-        "path": "/v2/commerce/products/{productId}",
-        "operation": null,
+        "method": "PUT",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "replaces a specific address-book entry; narrow sub-resource write with no corresponding read stream in this pass",
+          "notes": "operation_id=updateAddressBookEntry; operation_id=updateAddressBookEntry; operation_id=updateAddressBookEntry"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "UpdateProductRequest wraps every changed field as {present:true,value:...} (Squarespace's own partial-update convention), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct this per-field wrapper without a Tier-2 WriteHook"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-productid-37",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[36]",
-        "operation_id": "post-v2-commerce-products-productid-37",
+        "source_id": "squarespace.provider.updateaddressbookentry-37",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.put",
+        "operation_id": "updateAddressBookEntry",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1533,25 +1645,29 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/commerce/products/{productId}",
+      "method": "POST",
+      "path": "/v1/contacts/query",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "DELETE",
-        "path": "/v2/commerce/products/{productId}",
-        "operation": null,
+        "method": "POST",
+        "path": "/v1/contacts/query",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "filtered/sorted contact search returning the identical Contact record shape already covered by the contacts list stream; a POST-with-body search endpoint has no GET-list declarative equivalent in this dialect",
+          "notes": "operation_id=queryContacts; operation_id=queryContacts; operation_id=queryContacts"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "destructive_admin",
-          "reason": "permanently deletes a product and all its variants/images from the merchant's live storefront; higher-risk storefront-content deletion, out of scope for this pass's reverse-ETL write set"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.delete-v2-commerce-products-productid-38",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[37]",
-        "operation_id": "delete-v2-commerce-products-productid-38",
+        "source_id": "squarespace.provider.querycontacts-38",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/query.post",
+        "operation_id": "queryContacts",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1571,25 +1687,29 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v2/commerce/products/{productId}/images",
-      "parity_class": "binary_write",
+      "method": "GET",
+      "path": "/v1/fulfillments/fulfillment-options",
+      "parity_class": "direct_read",
       "api_surface": {
-        "method": "POST",
-        "path": "/v2/commerce/products/{productId}/images",
-        "operation": null,
+        "method": "GET",
+        "path": "/v1/fulfillments/fulfillment-options",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=getFulfillmentOptions; operation_id=getFulfillmentOptions; operation_id=getFulfillmentOptions"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "binary_payload",
-          "reason": "multipart image upload; the engine's write dialect has no multipart/binary body construction"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-productid-images-39",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[38]",
-        "operation_id": "post-v2-commerce-products-productid-images-39",
+        "source_id": "squarespace.provider.getfulfillmentoptions-39",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/fulfillments/fulfillment-options.get",
+        "operation_id": "getFulfillmentOptions",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1604,30 +1724,29 @@
         "evidence": "api_surface.json:endpoints[38]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned binary_write command binds the normalized source endpoint",
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     },
     {
-      "method": "POST",
-      "path": "/v2/commerce/products/{productId}/images/{imageId}",
-      "parity_class": "direct_write",
+      "method": "GET",
+      "path": "/v2/commerce/products",
+      "parity_class": "etl",
       "api_surface": {
-        "method": "POST",
-        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "method": "GET",
+        "path": "/v2/commerce/products",
         "operation": null,
-        "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "updates image metadata (altText) only; narrow sub-resource write with no corresponding read stream"
-        }
+        "covered_by": {
+          "stream": "products"
+        },
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-productid-images-imageid-40",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[39]",
-        "operation_id": "post-v2-commerce-products-productid-images-imageid-40",
+        "source_id": "squarespace.provider.getproducts-40",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products.get",
+        "operation_id": "getProducts",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1642,30 +1761,40 @@
         "evidence": "api_surface.json:endpoints[39]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
+        "command": null,
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/commerce/products/{productId}/images/{imageId}",
+      "method": "POST",
+      "path": "/v2/commerce/products",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "DELETE",
-        "path": "/v2/commerce/products/{productId}/images/{imageId}",
-        "operation": null,
+        "method": "POST",
+        "path": "/v2/commerce/products",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "CreateProductRequest's body includes nested variants[]/variantAttributes[] arrays required for most real product types; not expressible as the engine's default flat JSON write body without a Tier-2 WriteHook",
+          "notes": "operation_id=createProduct; operation_id=createProduct; operation_id=createProduct"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "deletes a single product image; narrow sub-resource write with no corresponding read stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.delete-v2-commerce-products-productid-images-imageid-41",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[40]",
-        "operation_id": "delete-v2-commerce-products-productid-images-imageid-41",
+        "source_id": "squarespace.provider.createproduct-41",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products.post",
+        "operation_id": "createProduct",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1685,25 +1814,29 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v2/commerce/products/{productId}/images/{imageId}/order",
+      "method": "DELETE",
+      "path": "/v2/commerce/products/{productId}",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "POST",
-        "path": "/v2/commerce/products/{productId}/images/{imageId}/order",
-        "operation": null,
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "permanently deletes a product and all its variants/images from the merchant's live storefront; higher-risk storefront-content deletion, out of scope for this pass's reverse-ETL write set",
+          "notes": "operation_id=deleteProduct; operation_id=deleteProduct; operation_id=deleteProduct"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "reorders product images; narrow sub-resource write with no corresponding read stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-productid-images-imageid-order-42",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[41]",
-        "operation_id": "post-v2-commerce-products-productid-images-imageid-order-42",
+        "source_id": "squarespace.provider.deleteproduct-42",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}.delete",
+        "operation_id": "deleteProduct",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1723,63 +1856,71 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/v2/commerce/products/{productId}/images/{imageId}/status",
-      "parity_class": "direct_read",
+      "method": "POST",
+      "path": "/v2/commerce/products/{productId}",
+      "parity_class": "direct_write",
       "api_surface": {
-        "method": "GET",
-        "path": "/v2/commerce/products/{productId}/images/{imageId}/status",
-        "operation": null,
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "UpdateProductRequest wraps every changed field as {present:true,value:...} (Squarespace's own partial-update convention), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct this per-field wrapper without a Tier-2 WriteHook",
+          "notes": "operation_id=updateProduct; operation_id=updateProduct; operation_id=updateProduct"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "non_data_endpoint",
-          "reason": "returns async image-processing status only, not syncable product data"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.get-v2-commerce-products-productid-images-imageid-status-43",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[42]",
-        "operation_id": "get-v2-commerce-products-productid-images-imageid-status-43",
+        "source_id": "squarespace.provider.updateproduct-43",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}.post",
+        "operation_id": "updateProduct",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "declaration-pending",
       "foundation": {
         "state": "present",
-        "evidence": "The engine class is available; the provider endpoint is not a data-operation declaration."
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
       },
       "rejection": {
-        "reason": "provider-does-not-expose",
-        "recoverable": false,
-        "detail": "returns async image-processing status only, not syncable product data",
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
         "evidence": "api_surface.json:endpoints[42]"
       },
       "declaration": {
-        "status": "disabled; provider endpoint is not an executable data-operation declaration",
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
         "command": null
       }
     },
     {
       "method": "POST",
-      "path": "/v2/commerce/products/{productId}/variants",
+      "path": "/v2/commerce/products/{productId}/images",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v2/commerce/products/{productId}/variants",
-        "operation": null,
+        "path": "/v2/commerce/products/{productId}/images",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "multipart image upload; the engine's write dialect has no multipart/binary body construction",
+          "notes": "operation_id=uploadProductImage; operation_id=uploadProductImage; operation_id=uploadProductImage"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "CreateProductVariantRequest's body includes nested attributes/pricing/shippingMeasurements objects; narrow sub-resource write with no corresponding read stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-productid-variants-44",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[43]",
-        "operation_id": "post-v2-commerce-products-productid-variants-44",
+        "source_id": "squarespace.provider.uploadproductimage-44",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images.post",
+        "operation_id": "uploadProductImage",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1799,25 +1940,29 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+      "method": "DELETE",
+      "path": "/v2/commerce/products/{productId}/images/{imageId}",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "POST",
-        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
-        "operation": null,
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "deletes a single product image; narrow sub-resource write with no corresponding read stream",
+          "notes": "operation_id=deleteProductImage; operation_id=deleteProductImage; operation_id=deleteProductImage"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "UpdateProductVariantRequest uses the same present/value wrapper convention as update_product; narrow sub-resource write with no corresponding read stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-productid-variants-variantid-45",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[44]",
-        "operation_id": "post-v2-commerce-products-productid-variants-variantid-45",
+        "source_id": "squarespace.provider.deleteproductimage-45",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}.delete",
+        "operation_id": "deleteProductImage",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1837,25 +1982,29 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+      "method": "POST",
+      "path": "/v2/commerce/products/{productId}/images/{imageId}",
       "parity_class": "direct_write",
       "api_surface": {
-        "method": "DELETE",
-        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
-        "operation": null,
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "updates image metadata (altText) only; narrow sub-resource write with no corresponding read stream",
+          "notes": "operation_id=updateProductImage; operation_id=updateProductImage; operation_id=updateProductImage"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "deletes a single product variant; narrow sub-resource write with no corresponding read stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.delete-v2-commerce-products-productid-variants-variantid-46",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[45]",
-        "operation_id": "delete-v2-commerce-products-productid-variants-variantid-46",
+        "source_id": "squarespace.provider.updateproductimage-46",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}.post",
+        "operation_id": "updateProductImage",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1876,24 +2025,28 @@
     },
     {
       "method": "POST",
-      "path": "/v2/commerce/products/{productId}/variants/{variantId}/image",
+      "path": "/v2/commerce/products/{productId}/images/{imageId}/order",
       "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
-        "path": "/v2/commerce/products/{productId}/variants/{variantId}/image",
-        "operation": null,
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/order",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "reorders product images; narrow sub-resource write with no corresponding read stream",
+          "notes": "operation_id=updateProductImageOrder; operation_id=updateProductImageOrder; operation_id=updateProductImageOrder"
+        },
         "covered_by": null,
-        "excluded": {
-          "category": "out_of_scope",
-          "reason": "associates an existing image with a variant; narrow sub-resource write with no corresponding read stream"
-        }
+        "excluded": null
       },
       "source": {
         "source_lock": "sources/squarespace-operation-source-lock.json",
-        "source_id": "squarespace.api_surface.post-v2-commerce-products-productid-variants-variantid-image-47",
-        "source_url": "https://developers.squarespace.com/commerce-apis/overview",
-        "source_location": "api_surface.json:endpoints[46]",
-        "operation_id": "post-v2-commerce-products-productid-variants-variantid-image-47",
+        "source_id": "squarespace.provider.updateproductimageorder-47",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}/order.post",
+        "operation_id": "updateProductImageOrder",
         "deprecated": false
       },
       "state": "declaration-pending",
@@ -1909,6 +2062,258 @@
       },
       "declaration": {
         "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/commerce/products/{productId}/images/{imageId}/status",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/status",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "returns async image-processing status only, not syncable product data",
+          "notes": "operation_id=getProductImageProcessingStatus; operation_id=getProductImageProcessingStatus; operation_id=getProductImageProcessingStatus"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getproductimageprocessingstatus-48",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}/status.get",
+        "operation_id": "getProductImageProcessingStatus",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[47]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/commerce/products/{productId}/variants",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "CreateProductVariantRequest's body includes nested attributes/pricing/shippingMeasurements objects; narrow sub-resource write with no corresponding read stream",
+          "notes": "operation_id=createProductVariant; operation_id=createProductVariant; operation_id=createProductVariant"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.createproductvariant-49",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants.post",
+        "operation_id": "createProductVariant",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[48]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "deletes a single product variant; narrow sub-resource write with no corresponding read stream",
+          "notes": "operation_id=deleteProductVariant; operation_id=deleteProductVariant; operation_id=deleteProductVariant"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.deleteproductvariant-50",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}.delete",
+        "operation_id": "deleteProductVariant",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[49]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "UpdateProductVariantRequest uses the same present/value wrapper convention as update_product; narrow sub-resource write with no corresponding read stream",
+          "notes": "operation_id=updateProductVariant; operation_id=updateProductVariant; operation_id=updateProductVariant"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.updateproductvariant-51",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}.post",
+        "operation_id": "updateProductVariant",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[50]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/commerce/products/{productId}/variants/{variantId}/image",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}/image",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "associates an existing image with a variant; narrow sub-resource write with no corresponding read stream",
+          "notes": "operation_id=associateProductVariantImage; operation_id=associateProductVariantImage; operation_id=associateProductVariantImage"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.associateproductvariantimage-52",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}/image.post",
+        "operation_id": "associateProductVariantImage",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[51]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
+        "command": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/commerce/products/{productIdCsvs}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/commerce/products/{productIdCsvs}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "batch product detail by id; identical record shape to the products list stream's per-item object, already covered by that stream",
+          "notes": "operation_id=getSpecificProducts; operation_id=getSpecificProducts; operation_id=getSpecificProducts"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_id": "squarespace.provider.getspecificproducts-53",
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productIdCsvs}.get",
+        "operation_id": "getSpecificProducts",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[52]"
+      },
+      "declaration": {
+        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
         "command": null
       }
     }

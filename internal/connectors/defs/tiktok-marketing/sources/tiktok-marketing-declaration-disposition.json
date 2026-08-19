@@ -7,15 +7,28 @@
     "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
     "source_sha256": null,
     "source_bytes": null,
-    "source_operation_count": 7,
+    "operations_found": null,
+    "mapped_operations": 7,
+    "old_api_surface_rows": 7,
+    "regenerated_api_surface_rows": 7,
+    "api_surface_regeneration": "retained-pending-complete-source",
     "normalized_inventory_sha256": "0011d1c064e201aabca15e3f524e1f4733914a04dc74bc0f8019f8a16a367f9a",
-    "source_retrieval": "skipped"
+    "source_retrieval": "skipped",
+    "coverage_confidence": {
+      "level": "unavailable-public-source",
+      "basis": "Chrome returned ERR_SSL_PROTOCOL_ERROR; no public API description could be retrieved."
+    }
   },
   "summary": {
+    "old_api_surface_rows": 7,
     "api_surface_rows": 7,
     "exact_source_rows": 7,
     "declared_operations": 7,
-    "declared_percent": 100,
+    "operations_found": null,
+    "coverage_confidence": {
+      "level": "unavailable-public-source",
+      "basis": "Chrome returned ERR_SSL_PROTOCOL_ERROR; no public API description could be retrieved."
+    },
     "enabled_operations": 0,
     "declaration_pending_operations": 7,
     "disabled_operations": 0,
@@ -87,7 +100,7 @@
       },
       "source": {
         "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
-        "source_id": "tiktok-marketing.api_surface.get-advertiser-info-1",
+        "source_id": "tiktok-marketing.local-api-surface.get-advertiser-info-1",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[0]",
         "operation_id": "get-advertiser-info-1",
@@ -130,7 +143,7 @@
       },
       "source": {
         "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
-        "source_id": "tiktok-marketing.api_surface.get-campaign-get-2",
+        "source_id": "tiktok-marketing.local-api-surface.get-campaign-get-2",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[1]",
         "operation_id": "get-campaign-get-2",
@@ -173,7 +186,7 @@
       },
       "source": {
         "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
-        "source_id": "tiktok-marketing.api_surface.get-adgroup-get-3",
+        "source_id": "tiktok-marketing.local-api-surface.get-adgroup-get-3",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[2]",
         "operation_id": "get-adgroup-get-3",
@@ -216,7 +229,7 @@
       },
       "source": {
         "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
-        "source_id": "tiktok-marketing.api_surface.get-ad-get-4",
+        "source_id": "tiktok-marketing.local-api-surface.get-ad-get-4",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[3]",
         "operation_id": "get-ad-get-4",
@@ -260,7 +273,7 @@
       },
       "source": {
         "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
-        "source_id": "tiktok-marketing.api_surface.get-report-integrated-get-5",
+        "source_id": "tiktok-marketing.local-api-surface.get-report-integrated-get-5",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[4]",
         "operation_id": "get-report-integrated-get-5",
@@ -298,7 +311,7 @@
       },
       "source": {
         "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
-        "source_id": "tiktok-marketing.api_surface.post-campaign-create-6",
+        "source_id": "tiktok-marketing.local-api-surface.post-campaign-create-6",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[5]",
         "operation_id": "post-campaign-create-6",
@@ -336,7 +349,7 @@
       },
       "source": {
         "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
-        "source_id": "tiktok-marketing.api_surface.post-campaign-update-status-7",
+        "source_id": "tiktok-marketing.local-api-surface.post-campaign-update-status-7",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[6]",
         "operation_id": "post-campaign-update-status-7",

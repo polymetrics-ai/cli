@@ -1,6 +1,9 @@
 # ebay-fulfillment parity map
 
-- Documented endpoints: 11
+- API-surface rows: 11 old → 11 regenerated
+- Mapped operation rows: 11
+- Operations found in provider source: unknown
+- Coverage confidence: unavailable-public-source — Chrome returned the official eBay error page rather than API documentation.
 - Enabled: 0
 - Declaration pending: 11
 - Disabled: 0

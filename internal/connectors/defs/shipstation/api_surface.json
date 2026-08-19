@@ -1,75 +1,748 @@
 {
   "api": "ShipStation REST API v1 (https://www.shipstation.com/docs/api/)",
   "docs": "https://www.shipstation.com/docs/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (orders, shipments, products, customers); the full ShipStation surface (warehouses, carriers, webhooks, label purchasing, order creation) is out of scope until Pass B. ShipStation is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Provider-source inventory regenerated for issue #4290 from Official ShipStation V1 documentation download is an OpenAPI document with 47 HTTP method/path operations. Existing executable bindings are preserved only at an identical documented method/path; every other documented operation is a blocked ledger entry awaiting a connector-owned declaration.",
+  "artifacts": [
+    {
+      "id": "shipstation-provider-source-2026-08-19-1",
+      "url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "retrieved_at": "2026-08-19",
+      "sha256": "c71c20d26559b1d0dad5c3718889fc8d4063cfad3abeaf5f63cc1651bef32307"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/accounts/listtags",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/carriers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/carriers/addfunds",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers/getcarrier",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers/listpackages",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_packages; operation_id=list_packages; operation_id=list_packages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers/listservices",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_services; operation_id=list_services; operation_id=list_services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customerId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=get_customer; operation_id=get_customer; operation_id=get_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fulfillments",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/orders",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
       "covered_by": {
         "stream": "orders"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/orders/{orderId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "operation_id=delete_order; operation_id=delete_order; operation_id=delete_order"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/shipments",
-      "covered_by": {
-        "stream": "shipments"
+      "path": "/orders/{orderId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=get_order; operation_id=get_order; operation_id=get_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/addtag",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/assignuser",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/createlabelfororder",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/createorder",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented order creation",
+        "notes": "operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/createorders",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/holduntil",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/listbytag",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/markasshipped",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/removetag",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/restorefromhold",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/unassignuser",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order"
       }
     },
     {
       "method": "GET",
       "path": "/products",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
       "covered_by": {
         "stream": "products"
       }
     },
     {
       "method": "GET",
-      "path": "/customers",
-      "covered_by": {
-        "stream": "customers"
+      "path": "/products/{productId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=get_product; operation_id=get_product; operation_id=get_product"
       }
     },
     {
-      "method": "POST",
-      "path": "/orders/createorder",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented order creation"
+      "method": "PUT",
+      "path": "/products/{productId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=update_product; operation_id=update_product; operation_id=update_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipments",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "covered_by": {
+        "stream": "shipments"
       }
     },
     {
       "method": "POST",
       "path": "/shipments/createlabel",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented label purchasing"
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented label purchasing",
+        "notes": "operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipments/getrates",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=get_rates; operation_id=get_rates; operation_id=get_rates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipments/voidlabel",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=void_label; operation_id=void_label; operation_id=void_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_stores; operation_id=list_stores; operation_id=list_stores"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores/{storeId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=get_store; operation_id=get_store; operation_id=get_store"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/stores/{storeId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=update_store; operation_id=update_store; operation_id=update_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stores/deactivate",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores/getrefreshstatus",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores/marketplaces",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stores/reactivate",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stores/refreshstore",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_users; operation_id=list_users; operation_id=list_users"
       }
     },
     {
       "method": "GET",
       "path": "/warehouses",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/warehouses is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/warehouses is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/warehouses/{warehouseId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse"
       }
     },
     {
       "method": "GET",
-      "path": "/carriers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/carriers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/warehouses/{warehouseId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses/createwarehouse",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/warehouses/updatewarehouse",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+        "notes": "operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract.",
+        "notes": "operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook"
       }
     },
     {
       "method": "POST",
       "path": "/webhooks/subscribe",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/webhooks/subscribe is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      "provenance": {
+        "artifact": "shipstation-provider-source-2026-08-19-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/webhooks/subscribe is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+        "notes": "operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook"
       }
     }
   ]

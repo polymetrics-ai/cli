@@ -1,14 +1,1086 @@
 {
   "api": "LaunchDarkly REST API v2 (https://app.launchdarkly.com/api/v2)",
   "docs": "https://apidocs.launchdarkly.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: all 5 legacy-parity read streams (projects, members, auditlog, flags, environments); every other LaunchDarkly REST resource (segments, experiments, metrics, webhooks, integrations, approval requests, and all write/mutation endpoints) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-08-19",
+  "scope": "Provider-source inventory regenerated for issue #4290 from Official LaunchDarkly OpenAPI endpoint documents 397 HTTP method/path operations. It contains 397 documented provider operations plus 2 explicit local compatibility binding(s) retained solely because the current executor still dispatches them. The local bindings are not used to bound or count the provider source.",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/api/v2/projects",
+      "path": "/api/v2",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/account/ip-allowlist",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/account/ip-allowlist",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/account/ip-allowlist",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/account/ip-allowlist/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/account/ip-allowlist/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/account/relay-auto-configs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/account/relay-auto-configs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/account/relay-auto-configs/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/account/relay-auto-configs/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/account/relay-auto-configs/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/account/relay-auto-configs/{id}/reset",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/announcements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/announcements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/announcements/{announcementId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/announcements/{announcementId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/applications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/applications/{applicationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/applications/{applicationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/applications/{applicationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/applications/{applicationKey}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/applications/{applicationKey}/versions/{versionKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/applications/{applicationKey}/versions/{versionKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/approval-requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/approval-requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/approval-requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/approval-requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/approval-requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/approval-requests/{id}/apply",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/approval-requests/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/approval-requests/projects/{projectKey}/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/approval-requests/projects/{projectKey}/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/auditlog",
       "covered_by": {
-        "stream": "projects"
+        "stream": "auditlog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/auditlog",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/auditlog/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/auditlog/counts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/caller-identity",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/code-refs/extinctions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/code-refs/repositories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/code-refs/repositories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/code-refs/repositories/{repo}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/code-refs/repositories/{repo}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/code-refs/repositories/{repo}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/code-refs/repositories/{repo}/branch-delete-tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/code-refs/repositories/{repo}/branches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/code-refs/repositories/{repo}/branches/{branch}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/code-refs/repositories/{repo}/branches/{branch}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/code-refs/repositories/{repo}/branches/{branch}/extinction-events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/code-refs/statistics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/code-refs/statistics/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/destinations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/destinations/{projectKey}/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/destinations/{projectKey}/{environmentKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/destinations/{projectKey}/{environmentKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/destinations/{projectKey}/{environmentKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/destinations/generate-warehouse-destination-key-pair",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/destinations/projects/{projKey}/environments/{envKey}/generate-trust-policy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/destinations/projects/{projKey}/environments/{envKey}/generate-warehouse-destination-key-pair",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/destinations/projects/{projKey}/environments/{envKey}/kinds/{kind}/complete-setup",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/destinations/projects/{projKey}/environments/{envKey}/kinds/{kind}/setup",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/charts/deployments/frequency",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/charts/flags/stale",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/charts/flags/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/charts/lead-time",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/charts/releases/frequency",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/engineering-insights/deployment-events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/deployments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/deployments/{deploymentID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/engineering-insights/deployments/{deploymentID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/flag-events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/engineering-insights/insights/group",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/insights/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/engineering-insights/insights/groups/{insightGroupKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/insights/groups/{insightGroupKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/engineering-insights/insights/groups/{insightGroupKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/insights/scores",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/pull-requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/engineering-insights/repositories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/engineering-insights/repositories/{repositoryKey}/projects/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/engineering-insights/repositories/projects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flag-status/{projectKey}/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flag-statuses/{projectKey}/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/flags/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{environmentKey}/{featureFlagKey}/dependent-flags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/copy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/dependent-flags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/expiring-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/expiring-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/flags/{projectKey}/{flagKey}/release",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/flags/{projectKey}/{flagKey}/release",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/flags/{projectKey}/{flagKey}/release",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-capabilities/big-segment-store",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}/{integrationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}/{integrationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}/{integrationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-capabilities/featureStore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}/validate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-capabilities/flag-import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}/trigger",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/integration-configurations/{integrationConfigurationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-configurations/{integrationConfigurationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/integration-configurations/{integrationConfigurationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integration-configurations/keys/{integrationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/integration-configurations/keys/{integrationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integrations/{integrationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/integrations/{integrationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/integrations/{integrationKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/integrations/{integrationKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/integrations/{integrationKey}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
       }
     },
     {
@@ -19,10 +1091,2090 @@
       }
     },
     {
+      "method": "PATCH",
+      "path": "/api/v2/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/members/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
       "method": "GET",
-      "path": "/api/v2/auditlog",
+      "path": "/api/v2/members/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/members/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/members/{id}/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/metrics/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/metrics/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/metrics/{projectKey}/{metricKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/metrics/{projectKey}/{metricKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/metrics/{projectKey}/{metricKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oauth/clients",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/oauth/clients",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/oauth/clients/{clientId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oauth/clients/{clientId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/oauth/clients/{clientId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/openapi.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects",
       "covered_by": {
-        "stream": "auditlog"
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-graphs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/agent-graphs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/agent-graphs/{graphKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-graphs/{graphKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/agent-graphs/{graphKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/all-results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/results/{resultId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/runs/{runId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/runs/{runId}/results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/ai-configs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/metrics-by-variation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/targeting",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/targeting",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/variations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/variations/{variationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/variations/{variationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/{configKey}/variations/{variationKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs/restricted",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/model-configs/restricted",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/prompt-snippets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/prompt-snippets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}/references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/quick-stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/skills",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/skills",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}/references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-tools",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/ai-tools",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/ai-tools/{toolKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-tools/{toolKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/ai-tools/{toolKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-tools/{toolKey}/references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/ai-tools/{toolKey}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/context-kinds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/context-kinds/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/apiKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/context-attributes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/context-attributes/{attributeName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/context-instances/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/context-instances/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/context-instances/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/contexts/{contextKind}/{contextKey}/flags/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/contexts/{kind}/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/contexts/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/experiments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/experiments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/experiments/{experimentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/experiments/{experimentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/experiments/{experimentKey}/iterations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/flags/evaluate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/followers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts/{holdoutKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts/{holdoutKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts/id/{holdoutId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/mobileKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys/{sdkKeyKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys/{sdkKeyKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys/{sdkKeyKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/environments/{environmentKey}/segments/evaluate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/evaluations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/evaluations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/evaluations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/experimentation-settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/experimentation-settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/experiments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flag-defaults",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/flag-defaults",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/flag-defaults",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests-flag-copy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}/apply",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/followers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/followers/{memberId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/followers/{memberId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows/{workflowId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows/{workflowId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/flags/{flagKey}/environments/{environmentKey}/migration-safety-issues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/flags/{flagKey}/release",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/flags/{flagKey}/release/phases/{phaseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/layers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/layers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/layers/{layerKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/metric-groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/metric-groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/metric-groups/{metricGroupKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/metric-groups/{metricGroupKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/metric-groups/{metricGroupKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/release-pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/release-pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}/releases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/release-policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/release-policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/release-policies/{policyKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/release-policies/{policyKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{projectKey}/release-policies/{policyKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/release-policies/order",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/view-associations/{resourceType}/{resourceKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/views",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/views",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/views/{viewKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/views/{viewKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/projects/{projectKey}/views/{viewKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{projectKey}/views/{viewKey}/link/{resourceType}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{projectKey}/views/{viewKey}/link/{resourceType}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{projectKey}/views/{viewKey}/linked/{resourceType}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/public-ip-list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/roles/{customRoleKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles/{customRoleKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/roles/{customRoleKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/contexts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/contexts/{contextKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/exports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/exports/{exportID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/imports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/imports/{importID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/users/{userKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{segmentKey}/expiring-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/segments/{projectKey}/{segmentKey}/expiring-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/segments/{projectKey}/{segmentKey}/expiring-user-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/segments/{projectKey}/{segmentKey}/expiring-user-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/teams/{teamKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams/{teamKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/teams/{teamKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams/{teamKey}/maintainers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/teams/{teamKey}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams/{teamKey}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/templates/{templateKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tokens/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tokens/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/tokens/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tokens/{id}/reset",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/ai-runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/clientside-contexts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/clientside-mau",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/data-export-events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/evaluations/{projectKey}/{environmentKey}/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/events/{type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/experimentation-events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/experimentation-keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/mau",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/mau/bycategory",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/mau/sdks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/observability/errors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/observability/logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/observability/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/observability/sessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/observability/traces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/sdk-versions/all",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/sdk-versions/details",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/serverside-contexts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/service-connections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/streams/{source}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/streams/{source}/bysdkversion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/streams/{source}/sdkversions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/total-contexts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/total-mau",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/vega-ai",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/usage/warehouse-export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/user-search/{projectKey}/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{projectKey}/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{projectKey}/{environmentKey}/{userKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{projectKey}/{environmentKey}/{userKey}/flags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{projectKey}/{environmentKey}/{userKey}/flags/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/users/{projectKey}/{environmentKey}/{userKey}/flags/{featureFlagKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{projectKey}/{userKey}/expiring-user-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/users/{projectKey}/{userKey}/expiring-user-targets/{environmentKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/webhooks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/webhooks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
       }
     },
     {
@@ -37,22 +3189,6 @@
       "path": "/api/v2/projects/{project_key}/environments",
       "covered_by": {
         "stream": "environments"
-      }
-    },
-    {
-      "method": "*",
-      "path": "/api/v2/segments/*, /api/v2/metrics/*, /api/v2/experiments/*, /api/v2/webhooks/*, /api/v2/integrations/*, /api/v2/approval-requests/*",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented in this connector's current declared surface"
-      }
-    },
-    {
-      "method": "POST/PATCH/DELETE",
-      "path": "all LaunchDarkly mutation endpoints",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented in this bundle; legacy itself is read-only (capabilities.write: false)"
       }
     }
   ]

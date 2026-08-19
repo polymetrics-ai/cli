@@ -1,15 +1,4348 @@
 {
   "api": "Linear GraphQL API (https://api.linear.app/graphql)",
   "docs": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "Legacy-parity Linear GraphQL surface plus a typed Pass B blocker. The current bundle covers the 4 legacy root connections (issues, teams, projects, users). Full Linear GraphQL expansion is quarantined because every additional read connection and mutation shares POST /graphql and requires a fixed GraphQL request body plus cursor state in variables; the defs-only read path does not send stream.body, write actions cannot inject static GraphQL documents safely, and this workstream may not create or edit a hook package.",
+  "reviewed_at": "2026-08-19",
+  "scope": "Provider-source inventory regenerated for issue #4290 from Chrome-rendered public Apollo Linear schema reports 166 Query and 373 Mutation roots. Subscription roots are server-push schema members, not callable request operations. It contains 539 documented provider operations plus 4 explicit local compatibility binding(s) retained solely because the current executor still dispatches them. The local bindings are not used to bound or count the provider source.",
   "endpoints": [
-    { "method": "GET", "path": "/graphql (query: issues)", "covered_by": { "stream": "issues" } },
-    { "method": "GET", "path": "/graphql (query: teams)", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/graphql (query: projects)", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/graphql (query: users)", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/graphql (query: viewer)", "excluded": { "category": "non_data_endpoint", "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream" } },
-    { "method": "POST", "path": "/graphql (mutations: issueCreate, issueUpdate, commentCreate, ...)", "excluded": { "category": "out_of_scope", "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear mutations require fixed GraphQL query documents and variables in the JSON body; the write dialect can only send record-shaped bodies, and exposing a generic GraphQL mutation body would violate connector tool-surface rules." } },
-    { "method": "GET", "path": "/graphql (query: comments, cycles, labels, workflowStates, webhooks, other root connections)", "excluded": { "category": "out_of_scope", "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear read connections require POST request bodies and body-cursor pagination via variables, but the declarative read path currently sends nil body and this pass cannot add or edit a StreamHook." } }
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentActivityCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentActivityCreatePrompt",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentActivityDeleteQueued",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentActivitySendQueued",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSessionCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSessionCreateOnComment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSessionCreateOnIssue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSessionUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSessionUpdateExternalUrl",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSkillCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSkillDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.agentSkillUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.airbyteIntegrationConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkDiscord",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkFront",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkGitHubIssue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkGitHubPR",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkGitLabMR",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkIntercom",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkJiraIssue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkSalesforce",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkSlack",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkURL",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentLinkZendesk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentSyncToSlack",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.attachmentUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.commentCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.commentDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.commentResolve",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.commentUnresolve",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.commentUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.contactCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.contactSalesCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.createCsvExportReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.createInitiativeUpdateReminder",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.createOrganizationFromOnboarding",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.createProjectUpdateReminder",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerMerge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerNeedArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerNeedCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerNeedCreateFromAttachment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerNeedDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerNeedUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerNeedUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerStatusCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerStatusDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerStatusUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerTierCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerTierDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerTierUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerUnsync",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customerUpsert",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customViewCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customViewDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.customViewUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.cycleArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.cycleCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.cycleShiftAll",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.cycleStartUpcomingCycleToday",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.cycleUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.documentCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.documentDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.documentUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.documentUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailIntakeAddressCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailIntakeAddressDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailIntakeAddressRefreshSesDomainStatus",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailIntakeAddressRotate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailIntakeAddressUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailTokenUserAccountAuth",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailUnsubscribe",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emailUserAccountAuthChallenge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emojiCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.emojiDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.entityExternalLinkCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.entityExternalLinkDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.entityExternalLinkUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.favoriteCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.favoriteDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.favoriteUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.fileUpload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.fileUploadDangerouslyDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.gitAutomationStateCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.gitAutomationStateDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.gitAutomationStateUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.gitAutomationTargetBranchCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.gitAutomationTargetBranchDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.gitAutomationTargetBranchUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.googleUserAccountAuth",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.imageUploadFromUrl",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.importFileUpload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeAddLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeLabelCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeLabelDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeLabelRestore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeLabelRetire",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeLabelUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeLeadTeamUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeRelationCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeRelationDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeRelationUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeRemoveLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeToProjectCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeToProjectDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeToProjectUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeUpdateArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeUpdateCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeUpdateUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.initiativeUpdateUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationAsksConnectChannel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationCustomerDataAttributesRefresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationDiscord",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationFigma",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationFront",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGithubCommitCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGithubConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGitHubEnterpriseServerConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGithubImportConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGithubImportRefresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGitHubPersonal",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGithubRemoveCodeAccess",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGitlabConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGitlabTestConnection",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGong",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGoogleCalendarPersonalConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationGoogleSheets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationIntercom",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationIntercomDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationIntercomSettingsUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationJiraFetchProjectStatuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationJiraPersonal",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationJiraUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationLaunchDarklyConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationLaunchDarklyPersonalConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationLoom",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationMcpServerConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationMcpServerPersonalConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationMicrosoftPersonalConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationMicrosoftTeams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationMicrosoftTeamsProjectPost",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationOpsgenieConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationOpsgenieRefreshScheduleMappings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationPagerDutyConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationPagerDutyRefreshScheduleMappings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationRequest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSalesforce",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSalesforceMetadataRefresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSentryConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSettingsUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlack",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackAsks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackCustomerChannelLink",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackCustomViewNotifications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackImportEmojis",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackInitiativePost",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackOrAsksUpdateSlackTeamName",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackOrgInitiativeUpdatesPost",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackOrgProjectUpdatesPost",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackPersonal",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackPost",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackProjectPost",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationSlackWorkflowAccessUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationsSettingsCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationsSettingsUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationTemplateCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationTemplateDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.integrationZendesk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueAddLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueBatchCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueBatchUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueDescriptionUpdateFromFront",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueExternalSyncDisable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportCreateAsana",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportCreateClubhouse",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportCreateCSVJira",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportCreateGithub",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportCreateJira",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportCreateLinearV2",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportProcess",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueImportUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueLabelCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueLabelDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueLabelRestore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueLabelRetire",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueLabelUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueRelationCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueRelationDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueRelationUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueReminder",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueRemoveLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueShare",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueSubscribe",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueToReleaseCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueToReleaseDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueToReleaseDeleteByIssueAndRelease",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueUnshare",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueUnsubscribe",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.issueUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.jiraIntegrationConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.joinOrganizationFromOnboarding",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.leaveOrganization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.logout",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.logoutAllSessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.logoutOtherSessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.logoutSession",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationArchiveAll",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationCategoryChannelSubscriptionUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationMarkReadAll",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationMarkUnreadAll",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationSnoozeAll",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationSubscriptionCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationSubscriptionDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationSubscriptionUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationUnsnoozeAll",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.notificationUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.oauthApplicationArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.oauthApplicationCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.oauthApplicationRotateSecret",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.oauthApplicationRotateWebhookSecret",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.oauthApplicationUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationCancelDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationDeleteChallenge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationDomainClaim",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationDomainCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationDomainDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationDomainUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationDomainVerify",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationInviteCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationInviteDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationInviteUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationStartTrial",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationStartTrialForPlan",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.organizationUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.partnerApplicationCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.partnerOfferRedeem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.passkeyLoginFinish",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.passkeyLoginStart",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectAddLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectCreateSlackChannel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectDismissSlackChannelCreationFailure",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectExternalSyncDisable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectLabelCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectLabelDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectLabelRestore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectLabelRetire",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectLabelUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectMilestoneCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectMilestoneDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectMilestoneMove",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectMilestoneUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectReassignStatus",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectRelationCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectRelationDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectRelationUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectRemoveLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectStatusArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectStatusCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectStatusUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectStatusUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectUpdateArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectUpdateCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectUpdateDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectUpdateUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.projectUpdateUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.pushSubscriptionCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.pushSubscriptionDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.reactionCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.reactionDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.refreshGoogleSheetsData",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseComplete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseCompleteByAccessKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseNoteCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseNoteDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseNoteUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releasePipelineArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releasePipelineCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releasePipelineDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releasePipelineUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releasePipelineUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseStageArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseStageCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseStageUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseStageUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseSync",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseSyncByAccessKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseUpdateByPipeline",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.releaseUpdateByPipelineByAccessKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.resendOrganizationInvite",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.resendOrganizationInviteByEmail",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapToProjectCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapToProjectDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapToProjectUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.roadmapUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.samlTokenUserAccountAuth",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamCyclesDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamKeyDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamMembershipCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamMembershipDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamMembershipUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamUnarchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.teamUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.templateCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.templateDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.templateUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.timeScheduleCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.timeScheduleDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.timeScheduleRefreshIntegrationSchedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.timeScheduleUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.timeScheduleUpsertExternal",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.trackAnonymousEvent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.triageResponsibilityCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.triageResponsibilityDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.triageResponsibilityUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.updateIntegrationSlackScopes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userChangeRole",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userDiscordConnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userExternalUserDisconnect",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userFlagUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userRevokeAllSessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userRevokeSession",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userSettingsFlagsReset",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userSettingsUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userSuspend",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userUnlinkFromIdentityProvider",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userUnsuspend",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.userUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.viewPreferencesCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.viewPreferencesDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.viewPreferencesUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.webhookCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.webhookDelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.webhookRotateSecret",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.webhookUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.workflowStateArchive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.workflowStateCreate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Mutation.workflowStateUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.administrableTeams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.agentActivities",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.agentActivity",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.agentSession",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.agentSessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.agentSessionSandbox",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.agentSkill",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.agentSkills",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.applicationInfo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.archivedIntegrations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.archivedTeams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.attachment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.attachmentIssue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.attachmentsForURL",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.attachmentSources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.auditEntries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.auditEntryTypes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.auditLogWebhookFailureEvents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.authenticationSessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.availableUsers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.comment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customer",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customerNeed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customerNeeds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customerStatus",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customerStatuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customerTier",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customerTiers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customView",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customViewDetailsSuggestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customViewHasSubscribers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.customViews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.cycle",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.cycles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.diff",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.document",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.documentContentHistory",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.documentContentHistoryEntries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.documentContentHistoryTimeline",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.documents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.emailIntakeAddress",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.emoji",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.emojis",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.entityExternalLink",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.externalUser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.externalUsers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.failuresForOauthWebhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.favorite",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.fetchData",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiative",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeFilterSuggestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeLabels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeLeadTeamChangeImpact",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeRelation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeRelations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiatives",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeToProject",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeToProjects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.initiativeUpdates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.integration",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.integrationHasScopes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.integrations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.integrationsSettings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.integrationTemplate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.integrationTemplates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueFigmaFileKeySearch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueFilterSuggestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueImportCheckCSV",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueImportCheckSync",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueImportJqlCheck",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueLabels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issuePriorityValues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueRelation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueRelations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueRepositorySuggestions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueSearch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueTitleSuggestionFromCustomerRequest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueToRelease",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueToReleases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.issueVcsBranchSearch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.latestReleaseByAccessKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.microsoftTeamsChannels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.notification",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.notifications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.notificationSubscription",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.notificationSubscriptions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.notificationsUnreadCount",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.oauthApplication",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.oauthApplications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.organization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.organizationDomainClaimRequest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.organizationExists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.organizationInvite",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.organizationInviteDetails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.organizationInvites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.organizationMeta",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.partnerOfferDetails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.partnerOfferWorkspaces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.partnerProgramPartners",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.project",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectFilterSuggestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectLabel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectLabels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectMilestone",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectMilestones",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectRelation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectRelations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectStatus",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectStatuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectStatusProjectCount",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectUpdate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.projectUpdates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.pushSubscriptionTest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.rateLimitStatus",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.recentReleasesByAccessKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.release",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releaseNote",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releaseNotes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releasePipeline",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releasePipelineByAccessKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releasePipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releaseSearch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releaseStage",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.releaseStages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.roadmap",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.roadmaps",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.roadmapToProject",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.roadmapToProjects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.searchDocuments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.searchIssues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.searchProjects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.semanticSearch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.slaConfigurations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.ssoUrlFromEmail",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.team",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.teamMembership",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.teamMemberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.template",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.templatesForIntegration",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.timeSchedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.timeSchedules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.triageResponsibilities",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.triageResponsibility",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.user",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.userSessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.userSettings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.verifyGitHubEnterpriseServerInstallation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.viewer",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.webhook",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.workflowState",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GRAPHQL",
+      "path": "Query.workflowStates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: issues)",
+      "covered_by": {
+        "stream": "issues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: teams)",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: projects)",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/graphql (query: users)",
+      "covered_by": {
+        "stream": "users"
+      }
+    }
   ]
 }
