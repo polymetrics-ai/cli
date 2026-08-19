@@ -14,11 +14,11 @@
     "exact_source_rows": 95,
     "declared_operations": 95,
     "declared_percent": 100,
-    "enabled_operations": 21,
-    "enabled_percent": 22.11,
-    "disabled_operations": 74,
+    "enabled_operations": 50,
+    "enabled_percent": 52.63,
+    "disabled_operations": 45,
     "documented_deletes": 4,
-    "enabled_deletes": 0,
+    "enabled_deletes": 2,
     "parity_class_counts": [
       {
         "key": "direct_read",
@@ -26,7 +26,7 @@
       },
       {
         "key": "direct_write",
-        "count": 24
+        "count": 53
       },
       {
         "key": "etl",
@@ -34,7 +34,7 @@
       },
       {
         "key": "reverse_etl",
-        "count": 29
+        "count": 0
       },
       {
         "key": "binary_read",
@@ -55,17 +55,13 @@
     "foundation_gaps": [
       {
         "id": "generic-typed-destination-executor",
-        "count": 29
+        "count": 1
       }
     ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
         "count": 45
-      },
-      {
-        "key": "foundation-gap",
-        "count": 29
       }
     ],
     "transport": {
@@ -102,7 +98,7 @@
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
     "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
-    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+    "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
     {
@@ -402,7 +398,7 @@
     {
       "method": "POST",
       "path": "/catalogs",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/catalogs",
@@ -419,31 +415,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[8] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_catalog"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_catalog"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "DELETE",
       "path": "/catalogs/{catalog_name}",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
         "path": "/catalogs/{catalog_name}",
@@ -460,25 +460,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[9] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "delete_catalog"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "delete_catalog"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -523,7 +527,7 @@
     {
       "method": "POST",
       "path": "/catalogs/{catalog_name}/items",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/catalogs/{catalog_name}/items",
@@ -540,25 +544,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[11] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_catalog_items"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_catalog_items"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -597,13 +605,22 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "PATCH",
       "path": "/catalogs/{catalog_name}/items",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "PATCH",
         "path": "/catalogs/{catalog_name}/items",
@@ -620,25 +637,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[13] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_catalog_items"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_catalog_items"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -677,7 +698,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -755,7 +785,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -794,13 +833,22 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "PATCH",
       "path": "/catalogs/{catalog_name}/items/{item_id}",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "PATCH",
         "path": "/catalogs/{catalog_name}/items/{item_id}",
@@ -817,31 +865,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[18] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_catalog_item"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_catalog_item"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "DELETE",
       "path": "/catalogs/{catalog_name}/items/{item_id}",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "DELETE",
         "path": "/catalogs/{catalog_name}/items/{item_id}",
@@ -858,31 +910,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[19] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "delete_catalog_item"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "delete_catalog_item"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/content_blocks/create",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/content_blocks/create",
@@ -899,25 +955,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[20] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_content_block"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_content_block"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -998,7 +1058,7 @@
     {
       "method": "POST",
       "path": "/content_blocks/update",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/content_blocks/update",
@@ -1015,25 +1075,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[23] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_content_block"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_content_block"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1072,13 +1136,22 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/email/blocklist",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/email/blocklist",
@@ -1095,31 +1168,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[25] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_email_blocklist"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_email_blocklist"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/email/bounce/remove",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/email/bounce/remove",
@@ -1136,25 +1213,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[26] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "remove_email_hard_bounce"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "remove_email_hard_bounce"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1196,7 +1277,7 @@
     {
       "method": "POST",
       "path": "/email/spam/remove",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/email/spam/remove",
@@ -1213,31 +1294,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[28] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "remove_email_spam"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "remove_email_spam"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/email/status",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/email/status",
@@ -1254,25 +1339,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[29] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "set_email_subscription_status"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "set_email_subscription_status"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1683,7 +1772,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1722,7 +1820,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1761,7 +1868,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1800,7 +1916,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1842,7 +1967,7 @@
     {
       "method": "POST",
       "path": "/messages/send",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/messages/send",
@@ -1859,31 +1984,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[45] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "send_message"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "send_message"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/preference_center/v1",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/preference_center/v1",
@@ -1900,25 +2029,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[46] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_preference_center"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_preference_center"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -1999,7 +2132,7 @@
     {
       "method": "PUT",
       "path": "/preference_center/v1/{PreferenceCenterExternalID}",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "PUT",
         "path": "/preference_center/v1/{PreferenceCenterExternalID}",
@@ -2016,25 +2149,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[49] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_preference_center"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_preference_center"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -2268,7 +2405,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -2346,7 +2492,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -2385,7 +2540,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -2574,7 +2738,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -2652,7 +2825,7 @@
     {
       "method": "POST",
       "path": "/sms/invalid_phone_numbers/remove",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/sms/invalid_phone_numbers/remove",
@@ -2669,25 +2842,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[66] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "remove_sms_invalid_phone_numbers"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "remove_sms_invalid_phone_numbers"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -2765,13 +2942,22 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/v2/subscription/status/set",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/v2/subscription/status/set",
@@ -2788,25 +2974,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[69] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "set_subscription_status_v2"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "set_subscription_status_v2"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -2926,7 +3116,7 @@
     {
       "method": "POST",
       "path": "/templates/email/create",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/templates/email/create",
@@ -2943,31 +3133,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[73] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_email_template"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_email_template"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/templates/email/update",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/templates/email/update",
@@ -2984,25 +3178,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[74] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_email_template"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_email_template"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3041,13 +3239,22 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/alias/new",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/alias/new",
@@ -3064,31 +3271,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[76] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "create_user_alias"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "create_user_alias"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/alias/update",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/alias/update",
@@ -3105,31 +3316,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[77] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "update_user_alias"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "update_user_alias"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/delete",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/delete",
@@ -3146,25 +3361,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[78] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "delete_users"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "delete_users"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3203,7 +3422,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3242,7 +3470,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3281,13 +3518,22 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/external_ids/remove",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/external_ids/remove",
@@ -3304,31 +3550,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[82] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "remove_user_external_ids"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "remove_user_external_ids"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/external_ids/rename",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/external_ids/rename",
@@ -3345,31 +3595,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[83] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "rename_user_external_ids"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "rename_user_external_ids"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/identify",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/identify",
@@ -3386,31 +3640,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[84] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "identify_users"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "identify_users"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/merge",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/merge",
@@ -3427,31 +3685,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[85] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "merge_users"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "merge_users"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/users/track",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/users/track",
@@ -3468,31 +3730,35 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[86] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "track_users"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "track_users"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/campaigns/trigger/send",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/campaigns/trigger/send",
@@ -3509,25 +3775,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[87] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "trigger_campaign_send"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "trigger_campaign_send"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3566,7 +3836,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3605,7 +3884,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3644,13 +3932,22 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
       "method": "POST",
       "path": "/canvas/trigger/send",
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "api_surface": {
         "method": "POST",
         "path": "/canvas/trigger/send",
@@ -3667,25 +3964,29 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
-        "state": "absent",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[91] binds the pinned source operation to an existing direct_write declaration.",
+        "contract": {
+          "write": "trigger_canvas_send"
         }
       },
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; foundation-gap generic-typed-destination-executor",
-        "contract": null
+        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "contract": {
+          "write": "trigger_canvas_send"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3724,7 +4025,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3763,7 +4073,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -3802,7 +4121,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-braze",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     }
   ]

@@ -55,7 +55,7 @@
     "foundation_gaps": [
       {
         "id": "generic-typed-destination-executor",
-        "count": 0
+        "count": 1
       }
     ],
     "rejected_by_reason": [
@@ -98,7 +98,7 @@
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
     "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
-    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+    "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
     {
@@ -317,7 +317,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-intercom",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -356,7 +365,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-intercom",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -395,7 +413,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-intercom",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
@@ -434,7 +461,16 @@
       },
       "declaration": {
         "status": "disabled; declaration-pending typed-operation-contract-intercom",
-        "contract": null
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
       }
     },
     {
