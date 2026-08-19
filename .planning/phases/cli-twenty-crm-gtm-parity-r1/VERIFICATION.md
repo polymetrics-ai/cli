@@ -210,6 +210,22 @@ certification. The mandated built-binary plus persisted-App create/read/update/
 delete, ETL, reverse-ETL, and eligible binary proofs remain pending the final
 published #4304/#4305 application-dispatch foundation integration.
 
+### Dependency-independent live read smoke — blocked
+
+The approved bounded built-binary read did not authenticate. The actual
+`twenty companies list` command, using the encrypted `api_key` field and the
+loopback endpoint configuration, failed with HTTP 403. Its redacted diagnostic
+classification is `authentication_or_authorization` and its non-secret error
+fingerprint is `dd3dcab3ba4132eb599ce2857f643f96b22f85e26c52436a603815cfdb9dc901`.
+
+An independent browser request, made through the official authenticated UI
+session to the same lane-local `/rest/companies` route with a bounded window,
+returned HTTP 200 and two records. The response schema fingerprint was
+`ef6ed57dad7b61f2d7426674d8e2d1ed9a83c5e6eafb38916cca6ee3e23d4e45`.
+No payload values, identifier, credential, header, or browser session material
+was emitted. The unique Compose project, private volumes/network, local
+workspace, and encrypted credential remain intact for authorization-path repair.
+
 Redacted command/result evidence for this checkpoint:
 
 ```text

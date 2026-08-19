@@ -93,3 +93,10 @@
   validated by `pm credentials test` with `status: ok`. This is preparation
   only; comprehensive live certification remains gated on the final #4304/#4305
   dispatch foundation and must use the rebuilt binary plus persisted App path.
+- Dependency-independent read result (2026-08-20): the live stack itself is
+  reachable: an official authenticated UI session received HTTP 200 from a
+  bounded local REST companies request. The built CLI's equivalent bounded
+  command received HTTP 403 using its encrypted bearer credential. This is an
+  `authentication_or_authorization` blocker, not a route or instance-health
+  failure. Preserve all lane resources and the credential vault for repair;
+  never expose or regenerate the disposable token merely to diagnose it.
