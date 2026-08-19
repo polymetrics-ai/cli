@@ -281,3 +281,22 @@
   drift, runtime-evidence, surface, binary-direction, disabled-operation, and
   non-secret-output failures. Planning JSON is not evidence that this check
   exists or passes.
+
+## Missing-foundation mapping deliverable (2026-08-20)
+
+- [x] `MISSING-FOUNDATION-DELIVERABLE.json` has eight deduplicated stable gap
+  definitions and 3,366 source-operation plus 491 typed-action membership rows
+  with source identity, surface, evidence, owner/lane, closure, and fanout
+  join keys.
+- [x] Every current-batch membership row is
+  `open-foundation-gap-not-enabled`; it is neither a disabled callable
+  operation nor an `N/A` surface, and it contributes zero merge-ready credit.
+- [x] Twenty-eight unresolved typed-action source identities are explicit
+  F0/F1 rows; no provider operation identity is inferred.
+- [x] `jq empty MISSING-FOUNDATION-DELIVERABLE.json` and its structural
+  membership/fanout query — eight unique IDs, zero dangling references, zero
+  non-open rows, exact root-fanout agreement, and zero missing source/surface/
+  evidence fields for the resolved source-operation/action records.
+- [ ] The remaining 90 fixed-100 connectors emit equivalent rows and an
+  integration validator produces the final portfolio verdict after all
+  foundations publish.

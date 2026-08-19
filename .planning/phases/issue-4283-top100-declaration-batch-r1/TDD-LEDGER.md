@@ -522,3 +522,16 @@ fixture/conformance evidence, incorrect semantic surface, collapsed binary
 direction, a disabled callable operation, and a dropped non-secret output. Its
 green result is a passing repository command; the planning ledger alone is
 never green enforcement.
+
+### Missing-foundation fanout
+
+**Red:** a shared engine deficit could be recorded as a connector-local
+`disabled`/`N/A` decision, omit its source identity or exact closure evidence,
+or vanish from an aggregate when one provider operation fans out to another.
+
+**Green design:** `MISSING-FOUNDATION-DELIVERABLE.json` defines eight stable
+shared gaps and machine-joins their owning lane, closure verification, and
+fanout to 3,366 exact source operations and 491 typed actions. All rows remain
+open and not enabled; 28 unresolved action identities are visible F0/F1 rows,
+not fabricated source bindings. The batch rollup remains 10/100 and the
+portfolio rollup marks 90 connectors unmapped.

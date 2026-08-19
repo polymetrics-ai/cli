@@ -11976,5 +11976,10 @@
       "arbitrary JSON",
       "generic HTTP write"
     ]
+  },
+  "missing_foundation_deliverable": {
+    "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/MISSING-FOUNDATION-DELIVERABLE.json",
+    "state": "authoritative-open-gap-fanout",
+    "rule": "The deduplicated shared gap definitions own closure verification and issue/lane assignment; operation/action rows reference them and never use disabled or N/A as a substitute."
   }
 }

@@ -436,3 +436,20 @@ must fail for a missing source hash; missing or unreachable command; CLI/website
 drift; missing runtime fixture/conformance evidence; surface misclassification;
 binary download/upload collapse; a disabled callable operation; and omission of
 non-secret output. Only a passing validator result may satisfy this final gate.
+
+## Missing-foundation mapping deliverable — 2026-08-20
+
+`MISSING-FOUNDATION-DELIVERABLE.json` is the authoritative deduplicated
+foundation-gap mapping for the current ten-connector batch. Its eight stable
+gap definitions own capability, evidence, issue/lane, exact closure rule, and
+cross-connector fanout; operation/action membership rows supply the exact
+provider operation plus source URL/revision/hash and affected surface. It
+records 3,366 source-operation and 491 typed-action rows as open and not
+enabled. The 28 actions without a resolvable current source identity are
+explicit F0/F1 gaps, never inferred bindings.
+
+No open shared gap is a connector-specific workaround, `disabled`, or `N/A`,
+and none contributes merge-ready credit. The rollup is intentionally bounded:
+ten mapped connectors of the fixed 100, with the remaining 90 marked
+unmapped rather than fabricated. F2 has a zero-count pending fanout until F0
+imports exact required headers.

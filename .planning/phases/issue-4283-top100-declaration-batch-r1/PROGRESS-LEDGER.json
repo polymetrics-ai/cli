@@ -1757,6 +1757,16 @@
           "disabled callable operation",
           "non-secret output omission"
         ]
+      },
+      "missing_foundation_deliverable": {
+        "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/MISSING-FOUNDATION-DELIVERABLE.json",
+        "state": "blocked-unpublished-foundations",
+        "foundation_gap_count": 8,
+        "operation_gap_rows": 3366,
+        "action_gap_rows": 491,
+        "unresolved_action_source_identity_rows": 28,
+        "merge_credit": "zero for every open foundation gap row",
+        "portfolio": "fixed 100 target; only the current ten-connector batch is mapped, and the remaining ninety are explicitly not fabricated"
       }
     }
   }

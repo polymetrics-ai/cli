@@ -96,3 +96,19 @@ missing or unreachable command, CLI/website drift, absent fixture/conformance
 evidence, surface misclassification, binary-direction collapse, a disabled
 callable operation, and omission of non-secret output. No planning JSON can be
 used as a substitute for that executable validator or its passing CI result.
+
+### Missing-foundation deliverable
+
+`MISSING-FOUNDATION-DELIVERABLE.json` is the machine-readable shared-gap
+record for this batch. It deduplicates eight foundation gaps and joins them to
+3,366 exact source operations and 491 typed actions, including source URL,
+revision, hash, surface, runtime/validator evidence, owner, and closure rule.
+The 28 typed actions whose current source identity cannot be resolved are
+explicit F0/F1 rows; no source operation is inferred.
+
+An open gap is neither `disabled` nor `N/A`: every affected row is
+`open-foundation-gap-not-enabled` and receives zero merge-ready credit. The
+per-batch rollup covers the current ten connectors; the portfolio rollup is
+explicitly incomplete (10 of 100 mapped, 90 not fabricated). F2 header fanout
+is separately retained at zero until F0 imports the exact provider header
+requirements.

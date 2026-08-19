@@ -3737,6 +3737,22 @@
         "non-secret provider output omission"
       ],
       "success_condition": "CI runs the validator over all fixed-100 connectors and accepts merge readiness only when every connector and the aggregate verdict pass."
+    },
+    "missing_foundation_deliverable": {
+      "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/MISSING-FOUNDATION-DELIVERABLE.json",
+      "state": "blocked-unpublished-foundations",
+      "rule": "Every operation or action with an open foundation-gap row is not enabled and contributes zero to a merge-ready verdict. Shared gaps are deduplicated by stable_gap_id; per-operation/action fan-out is explicit.",
+      "current_batch": {
+        "foundation_gaps": 8,
+        "operation_gap_rows": 3366,
+        "action_gap_rows": 491,
+        "unresolved_action_source_identity_rows": 28
+      },
+      "portfolio": {
+        "target_connectors": 100,
+        "connectors_mapped": 10,
+        "status": "incomplete-paused-no-fabricated-portfolio-data"
+      }
     }
   }
 }

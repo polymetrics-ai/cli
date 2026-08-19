@@ -24,5 +24,10 @@
     "ledger": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json#pre_merge_gate",
     "merge_ready": false,
     "enforcement": "not-implemented-deferred-until-foundations-publish"
+  },
+  "missing_foundation_deliverable": {
+    "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/MISSING-FOUNDATION-DELIVERABLE.json",
+    "state": "blocked-unpublished-foundations",
+    "merge_ready": false
   }
 }
