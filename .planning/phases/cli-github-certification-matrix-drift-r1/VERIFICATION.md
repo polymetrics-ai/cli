@@ -1,19 +1,19 @@
 # GitHub Certification Matrix Drift — Verification Checklist
 
-**Status:** Planned
+**Status:** Blocked by a non-reproducing task premise; no generated artifact or
+runtime change is justified.
 
 ## Required evidence
 
-- [ ] Mandatory RED drift command and inspected root cause recorded.
-- [ ] Canonical GitHub-only regeneration recorded; no hand-authored JSON.
-- [ ] Semantic audit confirms provenance, stable ordering, operation reachability, and unchanged certification truth.
-- [ ] Canonical matrix check is GREEN.
-- [ ] Second generation is byte-stable.
-- [ ] Focused generator happy, stale-artifact, and deterministic tests pass (or a focused regression supplies missing coverage).
-- [ ] Focused GitHub connector checks pass.
-- [ ] Connector validate, surface sync, boundary, generated docs/artifact checks, and required scoped repository verification pass.
-- [ ] Inline manual-GSD verify-work and code review record no unresolved finding.
-- [ ] `git diff --check` passes and final changed paths stay within the scope fence.
+- [x] Mandatory RED command was run at `origin/main` `51dd6d468e4a40ece70c36efb81df4fdede8a8b6`; it unexpectedly passed before any generated write.
+- [x] Canonical GitHub-only generator ran twice; no hand-authored JSON and no artifact diff.
+- [x] Generator audit confirms declaration-bundle and scoped runtime-endpoint-ledger inputs, deterministic ordering, and an unchanged GitHub certification shard.
+- [x] Canonical matrix check is GREEN.
+- [x] Second generation is byte-stable.
+- [x] Existing focused generator happy, stale-artifact, and scope/determinism tests pass.
+- [ ] Further connector/repository gates are not run: no code or generated-artifact correction exists to validate, and a no-op PR would violate the task's minimal-scope requirement.
+- [ ] Inline verify-work and code review are not applicable until an exact failing base is supplied.
+- [x] `git diff --check` passes; no GitHub certification artifact changed.
 
 ## Explicitly not applicable
 
