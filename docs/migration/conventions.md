@@ -1504,3 +1504,29 @@ wave-close after the path-guard (`git status --porcelain` limited to assigned di
    never inherit fixture conveniences. Fixture request values for templated config are the literal
    `"synthetic-conformance-value"`; page-1 fixtures are FULL pages when page_number/offset
    pagination is declared (token/cursor types stop on token absence instead).
+
+## §9 Source-lock declaration import
+
+Connector batches begin with the connector-owned
+`sources/<connector>-operation-source-lock.json`; never give the generator an
+alternate provider URL or a downloaded production artifact. Run:
+
+```sh
+go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path>
+go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path> --check
+```
+
+The first command retrieves only the lock's fixed public URL without credentials
+and verifies the exact locked byte count and SHA-256 before parsing. A mismatch
+is a **source-lock refresh** decision: do not infer a replacement schema or
+accept source drift. The generated descriptor is an intermediate provider
+contract for later fixed declaration materializers, never an execution command
+or a generic HTTP escape hatch.
+
+Descriptors preserve fixed method/path and separated typed input schemas, plus
+the complete provider-declared response status shapes and ordinary output
+fields. Output classification is additive; it does not erase fields because
+they are unusual, privileged, paid-tier, destructive, or sensitive-looking.
+Any later runtime masking must leave field presence explicit. Batches may then
+materialize only contracts their closed runtime supports, preserving existing
+credential and write-plan/preview/approval policies.

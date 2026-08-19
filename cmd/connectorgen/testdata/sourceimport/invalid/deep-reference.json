@@ -1,0 +1,1 @@
+{"openapi":"3.0.3","info":{"title":"invalid","version":"1"},"components":{"schemas":{"A":{"$ref":"#/components/schemas/B"},"B":{"$ref":"#/components/schemas/C"},"C":{"type":"string","maxLength":4}}},"paths":{"/items":{"get":{"operationId":"depth","responses":{"200":{"description":"x","content":{"application/json":{"schema":{"$ref":"#/components/schemas/A"}}}}}}}}}
