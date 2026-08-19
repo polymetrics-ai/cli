@@ -119,6 +119,14 @@ const configs = {
       { method: 'GET', path: '/{module_api_name}', covered_by: { stream: 'calls' } },
     ],
   },
+  activecampaign: {
+    sourceURL: 'https://developers.activecampaign.com/reference/list-all-contacts',
+    artifact: 'activecampaign-v3-embedded-openapi-3.1.0-2026-08-19',
+    api: 'ActiveCampaign API v3 embedded OpenAPI 3.1.0',
+    info: 'ActiveCampaign public API v3 OpenAPI document embedded in the provider reference',
+    docs: 'https://developers.activecampaign.com/reference/overview',
+    parser: 'activecampaign-embedded-openapi',
+  },
 };
 const config = configs[connector];
 if (!config) throw new Error(`unsupported connector ${connector}; add an authoritative-source config`);
@@ -131,6 +139,27 @@ const parseRedocState = artifact => {
   const state = JSON.parse(JSON.parse(source.slice(prefix.length, -suffix.length)));
   if (!state?.definition?.data) throw new Error(`${config.sourceURL} has no embedded OpenAPI definition`);
   return state.definition.data;
+};
+const parseActiveCampaignEmbeddedOpenAPI = artifact => {
+  const source = artifact.toString('utf8');
+  const start = source.indexOf('{"openapi":"3.1.0"');
+  if (start < 0) throw new Error(`${config.sourceURL} has no embedded OpenAPI 3.1.0 document`);
+  let depth = 0;
+  let quoted = false;
+  let escaped = false;
+  for (let index = start; index < source.length; index += 1) {
+    const character = source[index];
+    if (quoted) {
+      if (escaped) escaped = false;
+      else if (character === '\\') escaped = true;
+      else if (character === '"') quoted = false;
+      continue;
+    }
+    if (character === '"') { quoted = true; continue; }
+    if (character === '{') depth += 1;
+    if (character === '}' && --depth === 0) return JSON.parse(source.slice(start, index + 1));
+  }
+  throw new Error(`${config.sourceURL} embedded OpenAPI document is incomplete`);
 };
 let bytes;
 let document;
@@ -164,7 +193,7 @@ if (config.parser === 'bigin-rendered-reference') {
   const response = await fetch(config.sourceURL);
   bytes = Buffer.from(await response.arrayBuffer());
   if (!response.ok) throw new Error(`HTTP ${response.status} ${config.sourceURL}`);
-  document = config.parser === 'redoc-state' ? parseRedocState(bytes) : JSON.parse(bytes.toString('utf8'));
+  document = config.parser === 'redoc-state' ? parseRedocState(bytes) : config.parser === 'activecampaign-embedded-openapi' ? parseActiveCampaignEmbeddedOpenAPI(bytes) : JSON.parse(bytes.toString('utf8'));
   if (!document.paths || (!document.openapi && !document.swagger)) throw new Error(`${config.sourceURL} is not an OpenAPI document`);
   sourceHash = createHash('sha256').update(bytes).digest('hex');
   sourceBytes = bytes.length;

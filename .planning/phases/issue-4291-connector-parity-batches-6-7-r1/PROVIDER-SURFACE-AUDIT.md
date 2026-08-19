@@ -15,7 +15,7 @@ The source-lock recovery audit covers every connector owned by this issue. A row
 | intercom | 10 | 231 | official Intercom OpenAPI 3.0.1 v2.16 specification | complete — remapped |
 | freshdesk | 10 | 170 | complete rendered reference: all 171 endpoint sections in the 3.2MB reference, normalizing to 170 HTTP operations | complete — remapped |
 | segment | 188 | 201 | provider-published OpenAPI 3.0.3 embedded in the versioned Segment Redoc state artifact (100 GET, 43 POST, 23 PATCH, 7 PUT, 28 DELETE) | complete — remapped; legacy `/workspaces` list stream removed in favour of singleton `GET /` |
-| activecampaign | 61 | — | pending provider-surface audit | pending |
+| activecampaign | 61 | 296 | official ActiveCampaign v3 OpenAPI 3.1.0 document embedded in the provider reference (186 paths) | complete — remapped |
 | iterable | 4 | 148 | official Iterable Swagger 2.0 specification | complete — remapped |
 | help-scout | 144 | — | pending provider-surface audit | pending |
 | gorgias | 114 | 114 | official OpenAPI 3.1.0 specification | complete — remapped, count unchanged |

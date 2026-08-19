@@ -61,6 +61,10 @@ ServiceNow is intentionally not assigned a fabricated count of instance tables. 
 
 The legacy 22 rows were three selected table instantiations, not a truthful platform denominator. The regenerated ledger is six source rows (two direct writes with exact existing typed actions, four declaration-pending), and six extra `api_surface` coverage projections preserve the existing incident/user/group streams and typed actions without increasing the six-template count. Every one of the four direct-write templates records `generic-typed-destination-executor` only as a reverse-ETL attribute; no transport binding is declared.
 
+## ActiveCampaign — embedded machine-readable reference recovery
+
+ActiveCampaign's reference renderer embeds a complete public API v3 OpenAPI 3.1.0 document in the official `list-all-contacts` reference response. The 1,867,455-byte provider artifact contains **186** paths and **296** operations: 139 GET, 58 POST, 44 PUT, 5 PATCH, and 50 DELETE. It replaces the legacy 61-row documentation-index boundary with a complete machine-readable 296-operation source lock, API surface, and disposition ledger. No operation becomes enabled solely through the remap: all 157 direct writes are `direct_write`, are declaration-pending until source-backed typed actions exist, and carry the neutral destination executor only as their reverse-ETL foundation gap.
+
 ## Remaining full-batch audit
 
 All 20 owned connectors are in the recovery audit—not only the eight whose initial counts were visibly implausible. Each will receive a comprehensive provider-surface review: source lock, API surface, and every disposition row are regenerated from the authoritative source when the legacy source understates it. ServiceNow is dynamic-schema: its fixed platform surface must be pinned separately from its instance-dependent schema basis. A connector whose complete source proves the legacy count correct is an explicit no-change result, with source count and confidence basis recorded. A small number alone will never be presented as complete coverage.
