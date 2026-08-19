@@ -21,6 +21,19 @@ func (e *EmptySecretError) Error() string {
 	return fmt.Sprintf("credential secret field %q is empty; supply a non-empty value", e.Field)
 }
 
+// InvalidSecretValueError reports credential bytes that cannot be safely sent
+// in an HTTP header without exposing the credential value itself.
+type InvalidSecretValueError struct {
+	Field string
+}
+
+func (e *InvalidSecretValueError) Error() string {
+	if e == nil || e.Field == "" {
+		return "credential value contains prohibited header control characters; supply a valid value"
+	}
+	return fmt.Sprintf("credential secret field %q contains prohibited header control characters; supply a valid value", e.Field)
+}
+
 // NormalizeStdin removes at most one documented terminal transport delimiter
 // from a stdin-supplied secret. It preserves every other byte, including
 // leading/trailing whitespace and earlier newlines in multiline credentials.
@@ -63,11 +76,22 @@ func RequirePersistentValues(values map[string]string) error {
 }
 
 // RequireAuthenticationValue rejects a blank value before a shared auth helper
-// can produce an empty request credential. Authentication helpers retain their
-// existing surrounding-whitespace normalization for non-blank values.
+// can produce an empty request credential.
 func RequireAuthenticationValue(field, value string) error {
 	if strings.TrimSpace(value) == "" {
 		return &EmptySecretError{Field: field}
+	}
+	return nil
+}
+
+// ValidateHTTPHeaderValue rejects credential bytes that HTTP cannot transport
+// safely in a header while preserving all transport-valid bytes unchanged.
+func ValidateHTTPHeaderValue(field, value string) error {
+	for i := 0; i < len(value); i++ {
+		byteValue := value[i]
+		if (byteValue < 0x20 && byteValue != '\t') || byteValue == 0x7f {
+			return &InvalidSecretValueError{Field: field}
+		}
 	}
 	return nil
 }

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -20,6 +21,16 @@ func newReq(t *testing.T) *http.Request {
 		t.Fatalf("new request: %v", err)
 	}
 	return req
+}
+
+func assertCredentialBytes(t *testing.T, got, want string) {
+	t.Helper()
+	if gotLength, wantLength := len(got), len(want); gotLength != wantLength {
+		t.Fatalf("credential length = %d, want %d", gotLength, wantLength)
+	}
+	if gotHash, wantHash := sha256.Sum256([]byte(got)), sha256.Sum256([]byte(want)); gotHash != wantHash {
+		t.Fatalf("credential SHA-256 = %x, want %x", gotHash, wantHash)
+	}
 }
 
 func TestBearerSetsAuthorization(t *testing.T) {
@@ -80,15 +91,89 @@ func TestAPIKeyQueryAddsParam(t *testing.T) {
 	}
 }
 
+func TestAuthenticatorsPreserveCredentialBytes(t *testing.T) {
+	t.Run("bearer header", func(t *testing.T) {
+		token := strings.Repeat("header-canary-", 1024) + "\t "
+		req := newReq(t)
+		if err := Bearer(token).Apply(context.Background(), req); err != nil {
+			t.Fatalf("Apply: %v", err)
+		}
+		assertCredentialBytes(t, req.Header.Get("Authorization"), "Bearer "+token)
+	})
+
+	t.Run("API key header", func(t *testing.T) {
+		key := "\tapi-header-canary "
+		req := newReq(t)
+		if err := APIKeyHeader("X-API-Key", key, "Token ").Apply(context.Background(), req); err != nil {
+			t.Fatalf("Apply: %v", err)
+		}
+		assertCredentialBytes(t, req.Header.Get("X-API-Key"), "Token "+key)
+	})
+
+	t.Run("Basic", func(t *testing.T) {
+		username := "\tbasic-user"
+		password := "basic-password "
+		req := newReq(t)
+		if err := Basic(username, password).Apply(context.Background(), req); err != nil {
+			t.Fatalf("Apply: %v", err)
+		}
+		gotUsername, gotPassword, ok := req.BasicAuth()
+		if !ok {
+			t.Fatal("BasicAuth() = false")
+		}
+		assertCredentialBytes(t, gotUsername, username)
+		assertCredentialBytes(t, gotPassword, password)
+	})
+
+	t.Run("API key query", func(t *testing.T) {
+		key := "query-canary\n"
+		req := newReq(t)
+		if err := APIKeyQuery("api_key", key).Apply(context.Background(), req); err != nil {
+			t.Fatalf("Apply: %v", err)
+		}
+		assertCredentialBytes(t, req.URL.Query().Get("api_key"), key)
+	})
+}
+
+func TestHeaderAuthenticatorsRejectProhibitedControlCharacters(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		auth Authenticator
+	}{
+		{name: "bearer newline", auth: Bearer("bearer-canary\nvalue")},
+		{name: "API key header carriage return", auth: APIKeyHeader("X-API-Key", "api-key-canary\rvalue", "")},
+		{name: "Basic optional password newline", auth: BasicWithRequirements("basic-user", "basic-password\nvalue", true, false)},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			req := newReq(t)
+			err := tt.auth.Apply(context.Background(), req)
+			var invalid *credential.InvalidSecretValueError
+			if !errors.As(err, &invalid) {
+				t.Fatalf("Apply() error is not typed invalid-secret classification: %T", err)
+			}
+			if got := req.Header.Get("Authorization"); got != "" {
+				t.Fatal("Authorization header emitted for prohibited credential bytes")
+			}
+			if got := req.Header.Get("X-API-Key"); got != "" {
+				t.Fatal("API-key header emitted for prohibited credential bytes")
+			}
+		})
+	}
+}
+
 func TestRequiredAuthenticatorsRejectEmptyCredentialBeforeRequestMutation(t *testing.T) {
 	for _, tt := range []struct {
 		name string
 		auth Authenticator
 	}{
 		{name: "bearer", auth: Bearer("")},
+		{name: "bearer LF-only", auth: Bearer("\n")},
+		{name: "bearer CRLF-only", auth: Bearer("\r\n")},
 		{name: "basic", auth: Basic("user", "")},
 		{name: "API key header", auth: APIKeyHeader("X-API-Key", "", "Token ")},
 		{name: "API key query", auth: APIKeyQuery("api_key", "")},
+		{name: "API key query LF-only", auth: APIKeyQuery("api_key", "\n")},
+		{name: "API key query CRLF-only", auth: APIKeyQuery("api_key", "\r\n")},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			req := newReq(t)
@@ -121,6 +206,8 @@ func TestOAuth2ClientCredentialsRejectsEmptyRequiredMaterialBeforeTokenRequest(t
 	}{
 		{name: "client ID", clientSecret: "synthetic-client-secret"},
 		{name: "client secret", clientID: "synthetic-client-id"},
+		{name: "client ID LF-only", clientID: "\n", clientSecret: "synthetic-client-secret"},
+		{name: "client secret CRLF-only", clientID: "synthetic-client-id", clientSecret: "\r\n"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			var tokenCalls int32
@@ -151,6 +238,48 @@ func TestOAuth2ClientCredentialsRejectsEmptyRequiredMaterialBeforeTokenRequest(t
 				t.Fatalf("Authorization header emitted for empty OAuth2 material: %q", got)
 			}
 		})
+	}
+}
+
+func TestOAuth2ClientCredentialsPreservesFormCredentialBytes(t *testing.T) {
+	clientID := "client-id-canary\n"
+	clientSecret := strings.Repeat("client-secret-canary-", 1024) + "\n"
+	var gotClientID, gotClientSecret string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Errorf("ParseForm: %v", err)
+		}
+		gotClientID = r.PostForm.Get("client_id")
+		gotClientSecret = r.PostForm.Get("client_secret")
+		_, _ = w.Write([]byte(`{"access_token":"access-token","expires_in":3600}`))
+	}))
+	defer srv.Close()
+
+	auth := &OAuth2ClientCredentials{
+		TokenURL:     srv.URL,
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+	}
+	if err := auth.Apply(context.Background(), newReq(t)); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	assertCredentialBytes(t, gotClientID, clientID)
+	assertCredentialBytes(t, gotClientSecret, clientSecret)
+}
+
+func TestOAuth2ClientCredentialsRejectsHeaderControlToken(t *testing.T) {
+	auth := &OAuth2ClientCredentials{
+		token:   "access-token\ncanary",
+		expires: time.Now().Add(time.Hour),
+	}
+	req := newReq(t)
+	err := auth.Apply(context.Background(), req)
+	var invalid *credential.InvalidSecretValueError
+	if !errors.As(err, &invalid) {
+		t.Fatalf("Apply() error is not typed invalid-secret classification: %T", err)
+	}
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatal("Authorization header emitted for prohibited access-token bytes")
 	}
 }
 

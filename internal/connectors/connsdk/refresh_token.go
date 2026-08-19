@@ -187,6 +187,9 @@ func (a *OAuth2RefreshToken) Apply(ctx context.Context, req *http.Request) error
 	if err != nil {
 		return err
 	}
+	if err := credential.ValidateHTTPHeaderValue("OAuth2 access token", token); err != nil {
+		return fmt.Errorf("oauth2 refresh: %w", err)
+	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	return nil
 }
@@ -254,7 +257,7 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 		return "", errors.New("oauth2 refresh: token_url is required")
 	}
 	if !a.seeded {
-		a.refreshToken = strings.TrimSpace(a.RefreshToken)
+		a.refreshToken = a.RefreshToken
 		a.seeded = true
 	}
 	if err := credential.RequireAuthenticationValue("OAuth2 refresh token", a.refreshToken); err != nil {
@@ -313,11 +316,14 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 		// the failure, not its content.
 		return "", errors.New("oauth2 refresh: token endpoint returned a body that is not a valid token response")
 	}
-	if strings.TrimSpace(out.AccessToken) == "" {
-		return "", errors.New("oauth2 refresh: token response has no access_token")
+	if err := credential.RequireAuthenticationValue("OAuth2 access token", out.AccessToken); err != nil {
+		return "", fmt.Errorf("oauth2 refresh: %w", err)
 	}
 
-	if rotated := strings.TrimSpace(out.RefreshToken); rotated != "" && rotated != a.refreshToken {
+	if rotated := out.RefreshToken; rotated != "" && rotated != a.refreshToken {
+		if err := credential.RequireAuthenticationValue("OAuth2 refresh token", rotated); err != nil {
+			return "", fmt.Errorf("oauth2 refresh: %w", err)
+		}
 		a.refreshToken = rotated
 		if a.OnRefreshTokenRotated != nil {
 			if err := a.OnRefreshTokenRotated(ctx, rotated); err != nil {

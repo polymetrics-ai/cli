@@ -28,16 +28,24 @@ func (f AuthFunc) Apply(ctx context.Context, req *http.Request) error { return f
 
 // staticHeader sets a fixed request header.
 type staticHeader struct {
-	name          string
-	value         string
-	required      [2]requiredCredential
-	requiredCount int
+	name                  string
+	value                 string
+	required              [2]requiredCredential
+	requiredCount         int
+	headerCredentials     [2]requiredCredential
+	headerCredentialCount int
 }
 
 func (a staticHeader) Apply(_ context.Context, req *http.Request) error {
 	for index := 0; index < a.requiredCount; index++ {
 		required := a.required[index]
 		if err := credential.RequireAuthenticationValue(required.field, required.value); err != nil {
+			return err
+		}
+	}
+	for index := 0; index < a.headerCredentialCount; index++ {
+		headerCredential := a.headerCredentials[index]
+		if err := credential.ValidateHTTPHeaderValue(headerCredential.field, headerCredential.value); err != nil {
 			return err
 		}
 	}
@@ -55,10 +63,12 @@ type requiredCredential struct {
 // Bearer authenticates with an Authorization: Bearer <token> header.
 func Bearer(token string) Authenticator {
 	return staticHeader{
-		name:          "Authorization",
-		value:         "Bearer " + strings.TrimSpace(token),
-		required:      [2]requiredCredential{{field: "bearer token", value: token}},
-		requiredCount: 1,
+		name:                  "Authorization",
+		value:                 "Bearer " + token,
+		required:              [2]requiredCredential{{field: "bearer token", value: token}},
+		requiredCount:         1,
+		headerCredentials:     [2]requiredCredential{{field: "bearer token", value: token}},
+		headerCredentialCount: 1,
 	}
 }
 
@@ -66,10 +76,12 @@ func Bearer(token string) Authenticator {
 // An optional prefix is prepended to the value (e.g. "Token ").
 func APIKeyHeader(header, value, prefix string) Authenticator {
 	return staticHeader{
-		name:          header,
-		value:         prefix + strings.TrimSpace(value),
-		required:      [2]requiredCredential{{field: "API key", value: value}},
-		requiredCount: 1,
+		name:                  header,
+		value:                 prefix + value,
+		required:              [2]requiredCredential{{field: "API key", value: value}},
+		requiredCount:         1,
+		headerCredentials:     [2]requiredCredential{{field: "API key", value: value}},
+		headerCredentialCount: 1,
 	}
 }
 
@@ -81,8 +93,10 @@ func Basic(username, password string) Authenticator {
 func BasicWithRequirements(username, password string, requireUsername, requirePassword bool) Authenticator {
 	creds := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
 	auth := staticHeader{
-		name:  "Authorization",
-		value: "Basic " + creds,
+		name:                  "Authorization",
+		value:                 "Basic " + creds,
+		headerCredentials:     [2]requiredCredential{{field: "basic username", value: username}, {field: "basic password", value: password}},
+		headerCredentialCount: 2,
 	}
 	if requireUsername {
 		auth.required[auth.requiredCount] = requiredCredential{field: "basic username", value: username}
@@ -116,7 +130,7 @@ func (a apiKeyQuery) Apply(_ context.Context, req *http.Request) error {
 func APIKeyQuery(param, value string) Authenticator {
 	return apiKeyQuery{
 		param:    param,
-		value:    strings.TrimSpace(value),
+		value:    value,
 		required: requiredCredential{field: "API key", value: value},
 	}
 }
@@ -152,6 +166,9 @@ func (a *OAuth2ClientCredentials) Apply(ctx context.Context, req *http.Request) 
 	token, err := a.accessToken(ctx)
 	if err != nil {
 		return err
+	}
+	if err := credential.ValidateHTTPHeaderValue("OAuth2 access token", token); err != nil {
+		return fmt.Errorf("oauth2: %w", err)
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	return nil
@@ -215,8 +232,8 @@ func (a *OAuth2ClientCredentials) accessToken(ctx context.Context) (string, erro
 	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
 		return "", fmt.Errorf("oauth2: decode token response: %w", err)
 	}
-	if strings.TrimSpace(out.AccessToken) == "" {
-		return "", errors.New("oauth2: token response missing access_token")
+	if err := credential.RequireAuthenticationValue("OAuth2 access token", out.AccessToken); err != nil {
+		return "", fmt.Errorf("oauth2: %w", err)
 	}
 
 	a.token = out.AccessToken
