@@ -106,6 +106,12 @@ COMMAND SURFACE
   Help topics:
     destructive-confirmation - Stripe DELETE/destructive operations are in scope only through typed destructive confirmation and the reverse ETL plan → preview → approval → execute path.
 
+SYNC TRANSPORT
+  Source transport: declared
+  Destination transport: unsupported
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Source executor: declarative_api/declarative_stream_source
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect stripe

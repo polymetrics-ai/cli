@@ -85,6 +85,13 @@ Reads GitLab projects, groups, users, and issues through existing GitLab REST AP
   - operation-inventory - The provider-owned GitLab OpenAPI v3 ledger records all 1,745 callable operations; this wave exposes only the four existing stream reads.
   - known-limits - Of 1,745 inventoried operations, 4 are executable here; 1,618 need connector declarations, 45 need the multipart/file-upload foundation, 64 are provider-restricted, and 14 are deprecated exclusions.
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

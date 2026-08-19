@@ -54,3 +54,13 @@ Bitbucket 331, GitLab 1,755, CircleCI 111, Sentry 224, Vercel 422, Asana 249,
 Jira 617), while their settled provider OpenAPI counts are 54, 49, 589, 331,
 1,755, 111, 223, 400, 249 and 617. The 6/1/22 positive deltas are documented
 bounded variants or legacy entries, not a source-completeness substitute.
+
+## CI verify repair
+
+The batch's source-only transport declarations exposed an order-dependent test
+assumption in `TestDefinitionTransportFactoriesSelectDeclaredEvidence`: a
+shared factory may hold a declaration's evidence as its primary record or an
+additional accepted record. The test now asserts the actual accepted-evidence
+contract, and both the targeted test and complete `internal/app` package pass
+locally. This is test-only; it does not change transport composition,
+connector declarations, credentials, or live-certification status.

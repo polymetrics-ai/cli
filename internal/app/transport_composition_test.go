@@ -290,8 +290,18 @@ func TestDefinitionTransportFactoriesSelectDeclaredEvidence(t *testing.T) {
 			destinationFactory = factory
 		}
 	}
-	if sourceFactory == nil || sourceFactory.SourceEvidence != source.Conformance {
-		t.Fatalf("source factory evidence = %#v, want declaration %#v", sourceFactory, source.Conformance)
+	if sourceFactory == nil {
+		t.Fatal("declarative source factory was not registered")
+	}
+	sourceEvidenceAccepted := sourceFactory.SourceEvidence == source.Conformance
+	for _, accepted := range sourceFactory.AcceptedSourceEvidences {
+		if accepted == source.Conformance {
+			sourceEvidenceAccepted = true
+			break
+		}
+	}
+	if !sourceEvidenceAccepted {
+		t.Fatalf("source factory evidence = %#v, want declaration %#v to be accepted", sourceFactory, source.Conformance)
 	}
 	if destinationFactory == nil || destinationFactory.DestinationEvidence != destination.Conformance {
 		t.Fatalf("destination factory evidence = %#v, want declaration %#v", destinationFactory, destination.Conformance)

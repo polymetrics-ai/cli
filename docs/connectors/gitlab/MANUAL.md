@@ -80,6 +80,12 @@ COMMAND SURFACE
     operation-inventory - The provider-owned GitLab OpenAPI v3 ledger records all 1,745 callable operations; this wave exposes only the four existing stream reads.
     known-limits - Of 1,745 inventoried operations, 4 are executable here; 1,618 need connector declarations, 45 need the multipart/file-upload foundation, 64 are provider-restricted, and 14 are deprecated exclusions.
 
+SYNC TRANSPORT
+  Source transport: declared
+  Destination transport: unsupported
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Source executor: declarative_api/declarative_stream_source
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect gitlab

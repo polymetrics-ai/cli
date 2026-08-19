@@ -224,3 +224,30 @@ inventory from a complete provider-published OpenAPI document. The maps report
 `operations_found` and high-confidence machine-readable-spec basis instead of
 a self-referential declaration percentage. PR #4294 remains held while the
 fleet-wide suspect-lock correction is completed.
+
+## CI verify gap — shared source-evidence assertion
+
+### Red
+
+The pushed PR verification run `32271368383` fails
+`TestDefinitionTransportFactoriesSelectDeclaredEvidence`. The test assumes
+GitHub's conformance record occupies `DefinitionFactory.SourceEvidence`, but
+the shared declarative source factory intentionally selects the first
+declaration's evidence and admits the rest through `AcceptedSourceEvidences`.
+Batch-1 declarations make Asana first, while GitHub's evidence is correctly
+present in the accepted set.
+
+### Green
+
+The test must assert the public factory contract: GitHub's declared evidence
+is accepted by the shared source factory, whether it is the primary evidence
+or one of its additional accepted references. It must not encode registry
+iteration order. The destination assertion remains exact because it has one
+definition-owned destination declaration.
+
+### Refactor
+
+Change only the failing test assertion and its delivery evidence. Do not alter
+the source-factory selection, connector declarations, or conformance data to
+make GitHub happen to sort first. Re-run the exact failing test before the
+affected package and static declaration gates.

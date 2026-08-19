@@ -281,6 +281,29 @@ For every later connector, calculate the provider operation set first and
 generate/extend `api_surface.json` from that set. An old API surface is never
 evidence of the provider’s complete documented surface.
 
+## CI verify gap — shared declarative source evidence
+
+### Red
+
+`go test -timeout 20m ./internal/app -run
+'^TestDefinitionTransportFactoriesSelectDeclaredEvidence$' -count=1` fails:
+the source factory has Asana as the deterministic first evidence and GitHub in
+`AcceptedSourceEvidences`, but the test demands that GitHub occupy the primary
+field. The failing CI run is `32271368383`.
+
+### Green
+
+The test asserts that the GitHub declaration's exact evidence occurs in the
+factory's accepted source-evidence set (primary or additional), which is the
+contract enforced by `synctransport.RegisterDeclaredTransports`. It continues
+to assert GitHub's destination evidence exactly. A direct rerun of the test
+and the `internal/app` package demonstrate the fix.
+
+### Refactor
+
+Keep factory evidence ordered only as an implementation detail; no connector
+name or registry ordering is introduced into production composition.
+
 ## Classification correction — direct write is not reverse ETL
 
 ### Red

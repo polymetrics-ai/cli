@@ -207,6 +207,13 @@ Reads public Docker Hub repositories and image tags, and performs source-declare
   - organization access token update - Update access token [intent=reverse_etl availability=implemented write=update_organization_access_token]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.; flags: --label, --description, --resources, --is-active, --org-name (required), --access-token-id (required)
   - organization access token delete - Delete access token [intent=reverse_etl availability=implemented write=delete_organization_access_token]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.; flags: --org-name (required), --access-token-id (required)
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

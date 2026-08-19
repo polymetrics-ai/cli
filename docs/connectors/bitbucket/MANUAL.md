@@ -733,6 +733,12 @@ COMMAND SURFACE
     bitbucket-writes - Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked.
     bitbucket-binary-direct - Binary and provider-search operation ledger rows are present but command execution is blocked until the shared bounded-command foundations land.
 
+SYNC TRANSPORT
+  Source transport: declared
+  Destination transport: unsupported
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Source executor: declarative_api/declarative_stream_source
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect bitbucket

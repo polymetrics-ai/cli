@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "complete-six-class-map-static-validation",
+  "state": "ci-verify-gap-fixed-local-validation",
   "delivery_mode": "declarations-and-complete-map; non-live-certification-only",
   "connectors": [
     "dockerhub",
@@ -17,6 +17,6 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "The complete map is stable. Run the permitted non-live/static certification gates only; do not use provider credentials or provider I/O. Rebase before a push, preserve connector-boundary as CI-gated unless its detached capture produces an exit record.",
+  "next": "Run static declaration checks with the provider audits, rebase onto current origin/main, push the audit commits plus CI verify assertion repair, and wait for the required Verify check. Do not use provider credentials or provider I/O.",
   "updated_at": "2026-08-19T00:00:00Z"
 }

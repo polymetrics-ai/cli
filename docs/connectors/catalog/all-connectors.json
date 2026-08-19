@@ -8487,6 +8487,44 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "workspaces",
+          "projects",
+          "tasks",
+          "users",
+          "teams",
+          "tags",
+          "sections",
+          "stories",
+          "custom_fields",
+          "project_statuses",
+          "team_memberships",
+          "workspace_memberships"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "asana_all_executable_streams_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Asana Connection Specification",
@@ -14682,6 +14720,175 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "repositories",
+          "hook_events",
+          "hook_events_subject_type",
+          "repositories_workspace",
+          "repositories_workspace_repo_slug",
+          "repositories_workspace_repo_slug_branch_restrictions",
+          "repositories_workspace_repo_slug_branch_restrictions_id",
+          "repositories_workspace_repo_slug_branching_model",
+          "repositories_workspace_repo_slug_branching_model_settings",
+          "repositories_workspace_repo_slug_commit_commit",
+          "repositories_workspace_repo_slug_commit_commit_comments",
+          "repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+          "repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+          "repositories_workspace_repo_slug_commit_commit_pullrequests",
+          "repositories_workspace_repo_slug_commit_commit_reports",
+          "repositories_workspace_repo_slug_commit_commit_reports_reportid",
+          "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
+          "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+          "repositories_workspace_repo_slug_commit_commit_statuses",
+          "repositories_workspace_repo_slug_commit_commit_statuses_build_key",
+          "repositories_workspace_repo_slug_commits",
+          "repositories_workspace_repo_slug_commits_revision",
+          "repositories_workspace_repo_slug_components",
+          "repositories_workspace_repo_slug_components_component_id",
+          "repositories_workspace_repo_slug_default_reviewers",
+          "repositories_workspace_repo_slug_default_reviewers_target_username",
+          "repositories_workspace_repo_slug_deploy_keys",
+          "repositories_workspace_repo_slug_deploy_keys_key_id",
+          "repositories_workspace_repo_slug_deployments",
+          "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
+          "repositories_workspace_repo_slug_deployments_deployment_uuid",
+          "repositories_workspace_repo_slug_diffstat_spec",
+          "repositories_workspace_repo_slug_effective_branching_model",
+          "repositories_workspace_repo_slug_effective_default_reviewers",
+          "repositories_workspace_repo_slug_environments",
+          "repositories_workspace_repo_slug_environments_environment_uuid",
+          "repositories_workspace_repo_slug_file_conflicts_spec",
+          "repositories_workspace_repo_slug_filehistory_commit_path",
+          "repositories_workspace_repo_slug_forks",
+          "repositories_workspace_repo_slug_hooks",
+          "repositories_workspace_repo_slug_hooks_uid",
+          "repositories_workspace_repo_slug_issues",
+          "repositories_workspace_repo_slug_issues_import",
+          "repositories_workspace_repo_slug_issues_issue_id",
+          "repositories_workspace_repo_slug_issues_issue_id_attachments",
+          "repositories_workspace_repo_slug_issues_issue_id_changes",
+          "repositories_workspace_repo_slug_issues_issue_id_changes_change_id",
+          "repositories_workspace_repo_slug_issues_issue_id_comments",
+          "repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+          "repositories_workspace_repo_slug_merge_base_revspec",
+          "repositories_workspace_repo_slug_milestones",
+          "repositories_workspace_repo_slug_milestones_milestone_id",
+          "repositories_workspace_repo_slug_override_settings",
+          "repositories_workspace_repo_slug_permissions_config_groups",
+          "repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+          "repositories_workspace_repo_slug_permissions_config_users",
+          "repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+          "repositories_workspace_repo_slug_pipelines",
+          "repositories_workspace_repo_slug_pipelines_config",
+          "repositories_workspace_repo_slug_pipelines_config_caches",
+          "repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri",
+          "repositories_workspace_repo_slug_pipelines_config_runners",
+          "repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+          "repositories_workspace_repo_slug_pipelines_config_schedules",
+          "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+          "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions",
+          "repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+          "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
+          "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+          "repositories_workspace_repo_slug_pipelines_config_variables",
+          "repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+          "repositories_workspace_repo_slug_pipelines_pipeline_uuid",
+          "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps",
+          "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid",
+          "repositories_workspace_repo_slug_properties_app_key_property_name",
+          "repositories_workspace_repo_slug_pullrequests",
+          "repositories_workspace_repo_slug_pullrequests_pull_request_id",
+          "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
+          "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+          "repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses",
+          "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
+          "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+          "repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+          "repositories_workspace_repo_slug_refs",
+          "repositories_workspace_repo_slug_refs_branches",
+          "repositories_workspace_repo_slug_refs_branches_name",
+          "repositories_workspace_repo_slug_refs_tags",
+          "repositories_workspace_repo_slug_refs_tags_name",
+          "repositories_workspace_repo_slug_src",
+          "repositories_workspace_repo_slug_versions",
+          "repositories_workspace_repo_slug_versions_version_id",
+          "repositories_workspace_repo_slug_watchers",
+          "snippets",
+          "snippets_workspace",
+          "snippets_workspace_encoded_id",
+          "snippets_workspace_encoded_id_comments",
+          "snippets_workspace_encoded_id_comments_comment_id",
+          "snippets_workspace_encoded_id_commits",
+          "snippets_workspace_encoded_id_commits_revision",
+          "snippets_workspace_encoded_id_node_id",
+          "snippets_workspace_encoded_id_watchers",
+          "teams_username_pipelines_config_variables",
+          "teams_username_pipelines_config_variables_variable_uuid",
+          "user",
+          "user_permissions_repositories",
+          "user_permissions_workspaces",
+          "user_workspaces",
+          "user_workspaces_workspace_permission",
+          "user_workspaces_workspace_permissions_repositories",
+          "users_selected_user",
+          "users_selected_user_gpg_keys",
+          "users_selected_user_gpg_keys_fingerprint",
+          "users_selected_user_pipelines_config_variables",
+          "users_selected_user_pipelines_config_variables_variable_uuid",
+          "users_selected_user_properties_app_key_property_name",
+          "users_selected_user_ssh_keys",
+          "users_selected_user_ssh_keys_key_id",
+          "workspaces",
+          "workspaces_workspace",
+          "workspaces_workspace_hooks",
+          "workspaces_workspace_hooks_uid",
+          "workspaces_workspace_members",
+          "workspaces_workspace_members_member",
+          "workspaces_workspace_permissions",
+          "workspaces_workspace_permissions_repositories",
+          "workspaces_workspace_permissions_repositories_repo_slug",
+          "workspaces_workspace_pipelines_config_runners",
+          "workspaces_workspace_pipelines_config_runners_runner_uuid",
+          "workspaces_workspace_pipelines_config_variables",
+          "workspaces_workspace_pipelines_config_variables_variable_uuid",
+          "workspaces_workspace_projects",
+          "workspaces_workspace_projects_project_key",
+          "workspaces_workspace_projects_project_key_branching_model",
+          "workspaces_workspace_projects_project_key_branching_model_settings",
+          "workspaces_workspace_projects_project_key_default_reviewers",
+          "workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+          "workspaces_workspace_projects_project_key_deploy_keys",
+          "workspaces_workspace_projects_project_key_deploy_keys_key_id",
+          "workspaces_workspace_projects_project_key_permissions_config_groups",
+          "workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+          "workspaces_workspace_projects_project_key_permissions_config_users",
+          "workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+          "workspaces_workspace_pullrequests_selected_user"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "bitbucket_all_executable_streams_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -26074,6 +26281,41 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects",
+          "pipelines",
+          "workflows",
+          "jobs",
+          "contexts",
+          "schedules",
+          "checkout_keys",
+          "environment_variables",
+          "insights_workflow_summary"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "circleci_all_executable_streams_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "CircleCI Connection Specification",
@@ -35644,6 +35886,36 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "repositories",
+          "tags",
+          "repository_detail",
+          "tag_detail"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "dockerhub_all_executable_streams_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -63661,6 +63933,36 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects",
+          "groups",
+          "users",
+          "issues"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "gitlab_all_executable_streams_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "GitLab Connection Specification",
@@ -77021,6 +77323,35 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "issues",
+          "projects",
+          "users"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "jira_all_executable_streams_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -97268,6 +97599,38 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "databases",
+          "pages",
+          "users",
+          "custom_emojis",
+          "file_uploads",
+          "views"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "notion_all_executable_streams_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Notion Connection Specification",
@@ -97293,6 +97656,26 @@
         "max_pages": {
           "type": "string",
           "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/notion/hooks.go's StreamHook -- NOT a declarative streams.json field (pagination is entirely hook-driven since POST /search's body cursor has no declarative equivalent; see docs.md Known limits). Permissive parse: empty, \"all\", \"unlimited\", or any non-positive-integer string means unbounded."
+        },
+        "oauth_client_id": {
+          "type": "string",
+          "description": "Notion OAuth client identifier for the declared OAuth credential-exchange routes. It is stored with credential material and never accepted inline.",
+          "x-secret": true
+        },
+        "oauth_client_secret": {
+          "type": "string",
+          "description": "Notion OAuth client secret for the declared OAuth credential-exchange routes. Never accepted inline.",
+          "x-secret": true
+        },
+        "authorization_code": {
+          "type": "string",
+          "description": "Notion OAuth authorization code used by the declared token-exchange route. Never accepted inline.",
+          "x-secret": true
+        },
+        "refresh_token": {
+          "type": "string",
+          "description": "Notion OAuth refresh token used by the declared token-exchange route. Never accepted inline.",
+          "x-secret": true
         }
       }
     },
@@ -135829,6 +136212,36 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects",
+          "issues",
+          "events",
+          "releases"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "sentry_all_executable_streams_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Sentry Connection Specification",
@@ -145650,6 +146063,37 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "customers",
+          "charges",
+          "invoices",
+          "subscriptions",
+          "products"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "stripe_all_executable_streams_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -159416,6 +159860,41 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "deployments",
+          "projects",
+          "teams",
+          "domains",
+          "project_env_vars",
+          "aliases",
+          "webhooks",
+          "log_drains",
+          "edge_configs"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "vercel_all_executable_streams_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",

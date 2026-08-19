@@ -137,3 +137,21 @@ No Batch-1 source operation is missing: the old/new counts remain 54/54,
 617/617, respectively. `API-SURFACE-REALITY-AUDIT.json` records the settled
 provider counts and explains the 6/1/22 retained non-source entries. No
 understated surface or fabricated dynamic basis remains.
+
+## CI verify regression review
+
+Reviewed the one failing assertion from Verify run `32271368383` together with
+the shared factory implementation in `internal/synctransport`.
+
+- The production verifier accepts the primary source evidence plus every
+  `AcceptedSourceEvidences` entry. The updated `internal/app` assertion checks
+  that same public contract and no longer relies on registry iteration order.
+- The exact regression test and the entire `internal/app` package pass. The
+  correction does not alter transport composition, connector declarations,
+  request handling, credentials, or authorization.
+- Regenerated connector manuals/skills and the catalog are the expected
+  repository-owned derivative of the ten source transport declarations; a
+  second docs check is clean.
+
+No Critical, Warning, or Info finding remains. Required `connector-boundary`
+continues to be CI-verified rather than claimed as locally verified.

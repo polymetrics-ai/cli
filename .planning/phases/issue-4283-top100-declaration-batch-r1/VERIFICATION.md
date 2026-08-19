@@ -152,3 +152,29 @@
 - [x] Notion (6), Sentry (1), and Vercel (22) retain explicitly described
   connector-specific or legacy entries beyond their current OpenAPI count; none
   masks a missing provider operation. No source is instance-dependent.
+
+## CI verify regression — shared source-evidence assertion
+
+- [x] Retrieved the failed GitHub `Verify` log for run `32271368383`; its sole
+  test failure was `TestDefinitionTransportFactoriesSelectDeclaredEvidence`.
+- [x] The assertion now accepts the GitHub declaration evidence in either
+  `SourceEvidence` or `AcceptedSourceEvidences`, matching the production
+  conformance verifier's contract and avoiding registry-order coupling.
+- [x] `go test -timeout 20m ./internal/app -run
+  '^TestDefinitionTransportFactoriesSelectDeclaredEvidence$' -count=1` — pass
+  (2.428s).
+- [x] `go test -timeout 20m ./internal/app -count=1` — pass (238.304s).
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json` —
+  552 connectors, zero findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connectors,
+  zero fields filled or corrected.
+- [x] `make docs-check` initially found stale generated connector artifacts;
+  `go run ./cmd/pm docs generate --dir docs/cli` regenerated the ten affected
+  connector manuals/skills and `docs/connectors/catalog/all-connectors.json`.
+  The subsequent `make docs-check` passes.
+- [x] `make tidy-check`, `make lint`, `make agent-contract-check`, `make
+  smoke-no-build`, `make connector-runtime-preflight`, and `make
+  connector-canon-check` pass. `make release-workflow-check` passes.
+- [x] A read-only local reconciliation independently checks each pinned lock's
+  total/per-method/inventory counts and its source method/path set against its
+  `api_surface.json`: 4,378 found, zero missing.
