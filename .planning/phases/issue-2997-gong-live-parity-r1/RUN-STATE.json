@@ -25,5 +25,18 @@
   "live_certification": {
     "status": "blocked_external_credential_reference",
     "detail": "no approved non-echoing disposable Gong credential reference available"
+  },
+  "captain_hard_gate": {
+    "status": "pending",
+    "required_surfaces": [
+      "etl",
+      "reverse_etl",
+      "direct_read",
+      "direct_write",
+      "binary_download",
+      "binary_upload"
+    ],
+    "rule": "scope, tier, safety, and destructive metadata require runtime controls and confirmations; they never disable a provider-defined operation",
+    "multipart_dependency": "cli-closed-operation-runtime-r1 F2/F4 approval-digest foundation is open as GitHub issue #4307; no published branch/head is available"
   }
 }

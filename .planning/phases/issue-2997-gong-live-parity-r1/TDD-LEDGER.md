@@ -8,6 +8,7 @@
 | Foundation reconciliation | Preserved branch predates current main, typed destinations, and Batch 2/3 source disposition evidence. | Merge ancestry proves retained branch history plus the exact published foundation heads. | Resolve connector-owned declarations, not provider-named engine conditions. |
 | Direct-read exact endpoint binding | Reproduce any Gong command that preflights with an implemented operation but no matching `api_surface` row. | Real `commandrunner.Preflight`, `surface-reconcile`, and a built CLI preflight sweep accept each declared direct read up to missing credentials. | Let `surface-sync` derive operation-owned metadata; do not hand-author it. |
 | Typed write and reverse-ETL declarations | Connector-local transport/certification tests initially fail for absent or inconsistent source/destination declarations. | Merged shared foundation admits only named Gong actions, required field bindings, keyed acknowledgements, and approval-gated plans. | No generic writer, raw body, arbitrary endpoint, or Gong-specific shared branch. |
+| Six-surface enabled parity | A source-locked operation can be structurally declared yet be absent from CLI/App dispatch, generated docs, or a supported ETL, reverse-ETL, direct, or binary path. | Generated inventory-to-surface evidence and built-CLI/App checks classify each of ETL, reverse ETL, direct read, direct write, binary download, and binary upload as proven or exact-source `not_applicable`. | Safety, scope, tier, and destructive metadata can add confirmation; they cannot disable a provider-defined operation. |
 | Certification evidence | No credential reference means live stages cannot assert persisted provider state. | Credential-free gates are green and the remaining external block is explicit and secret-free. | Do not substitute browser authentication or fixtures for live certification. |
 
 ## Recorded red evidence
@@ -30,3 +31,6 @@
 - focused Gong test names/results and direct-read built-binary classifications;
 - generator, docs, boundary, and static gate results;
 - an explicit live-certification result or the one non-secret credential-reference blocker.
+- six-surface inventory, CLI/help/manual/website reachability, output-preservation, and App-path
+  classifications for every supported provider operation; any `not_applicable` status cites the
+  exact source-audit row(s), never a safety or tier label.

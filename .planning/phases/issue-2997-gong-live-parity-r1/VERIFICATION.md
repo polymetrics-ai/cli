@@ -18,6 +18,31 @@
 - [ ] `go test -timeout 20m ./...` and `make verify` are attempted with a non-cutoff runner or truthfully left to CI.
 - [ ] Inline code review is recorded in `REVIEW.md`; automated-review route/dispositions are recorded in PR #3552.
 
+## Captain hard certification gate
+
+- [ ] All 69 official operations have an exact source-lock, disposition, declaration/API-surface,
+  and generated-CLI mapping; no provider-defined operation is disabled for scope, tier, safety, or
+  destructive classification.
+- [ ] Every enabled supported operation is reachable through the built CLI, persisted App path,
+  runtime help/manual, and website projection. Typed confirmation and approval guard writes;
+  they do not reduce reachability.
+- [ ] ETL reconciliation is proven, or the official source audit records exact `not_applicable`
+  evidence.
+- [ ] Reverse-ETL reconciliation is proven through declaration-selected target/action mappings,
+  plan, preview, explicit approval, apply, acknowledgement, and provider readback—or exact-source
+  `not_applicable` evidence is recorded.
+- [ ] Direct-read and direct-write reconciliation is proven against the real installed command
+  paths, including pagination and required-input behavior.
+- [ ] Binary-download and binary-upload reconciliation is proven through the closed operation
+  runtime, or exact-source `not_applicable` evidence is recorded. Multipart upload remains blocked
+  on the provider-neutral F2/F4 digest-binding foundation and is not claimed before it publishes.
+- [ ] Provider output-preservation evidence retains every ordinary non-secret response field and
+  uses an explicit marker where mandatory credential/transport-secret masking applies.
+- [ ] Live certification uses the persisted App path with an approved non-echoing disposable
+  credential reference, supported CRUD/application commands, cleanup, and bounded non-secret
+  request/result fingerprints.
+- [ ] No merge-ready claim appears in PR #3552 until every applicable item above is green.
+
 ## Live certification hold
 
 No approved disposable Gong credential reference was provided or discovered. The live stage is

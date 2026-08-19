@@ -17,6 +17,8 @@
 | Provider writes remain typed, declarative, and approval-bound | live | Definition validation and plan/preview/approval tests reject unbound or destructive actions before provider I/O; declarations name only fixed operations and schema-bound fields. |
 | Reverse-ETL transport uses the shared definition-selected foundation | fake | Actual Gong reverse-ETL requires an approved disposable credential reference. Connector-local destination declarations and credential-free admission tests prove the non-provider path; live apply/readback is blocked until that reference is supplied. |
 | Live provider certification covers real persisted App paths and cleanup | fake | No approved disposable Gong credential/store reference is available in this worktree. No secret will be requested, printed, persisted, or put in command arguments. |
+| Every provider-defined operation is source-traced, mapped, enabled, and reachable | live | The 69-row official source lock, disposition map, API surface, operation ledger, generated CLI surface, help/manual, and website projection agree. A safety tier, scope, or destructive classification can require typed confirmation but cannot make a declared operation unreachable. |
+| All six applicable execution surfaces reconcile | live | ETL, reverse ETL, direct read, direct write, binary download, and binary upload are each proven through their declaration-owned runtime path, or marked inapplicable only when the official source audit proves that Gong exposes no operation in that surface. |
 
 ## Locked discussion decisions
 
@@ -80,6 +82,32 @@ credential reference for live certification. It is not safe to invent or request
 5. Run focused gates, repository static gates, generated artifacts, connector boundary, full
    verification where the command timeout permits, a source/diff review, and the no-mistakes
    pipeline when firstmate authorizes its final gate.
+
+## Captain hard certification gate
+
+The branch is not merge-ready until the following evidence is complete. This gate supersedes any
+historical parity count or declaration-only validation result.
+
+1. **Source and mapping:** every current official provider operation is traceable to one immutable
+   source-lock row, one disposition, and the exact supported declaration/API/CLI surface. No source
+   row is hidden by tier, scope, safety, or inconvenience.
+2. **Enabled behavior:** every declared supported operation reaches its real command/App dispatch
+   path. Destructive or high-risk operations use runtime metadata, typed confirmation, and the
+   existing plan → preview → explicit approval → execute path—not `availability` or a connector
+   policy branch as a substitute for reachability.
+3. **Six-surface reconciliation:** separately certify ETL, reverse ETL, direct read, direct
+   write, binary download, and binary upload. A surface is `not_applicable` only with an exact
+   source-audit finding; otherwise it remains an unmet requirement. Binary upload includes
+   multipart after `cli-closed-operation-runtime-r1` publishes its approval-digest contract.
+4. **Discovery and output:** prove every supported operation is reachable from runtime CLI help,
+   generated manual/docs, and website discovery projections. Retain all ordinary non-secret
+   provider response fields; credential/transport-secret masking must preserve the masked field
+   with an explicit marker rather than dropping it.
+5. **Live evidence after foundations publish:** use only a non-echoing approved disposable Gong
+   credential reference and the persisted App path. Exercise supported CRUD and application
+   commands, each applicable surface, pagination, required-input errors, reverse-ETL
+   plan/preview/approval/apply/readback, binary paths, and cleanup. Record bounded counts,
+   classifications, and non-secret fingerprints—not customer payloads or credentials.
 
 ## CLI/docs parity
 
