@@ -12,6 +12,10 @@
 
 - [x] Record focused red loader test failure before the block-map edit.
 - [x] Record focused green loader test success after the edit: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestBundleLoadRegistersStatusAndTextExportOperations|TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations)$'` (pass).
-- [ ] Run changed-package tests, formatting, vet, build, generated/schema checks, lint/docs/smoke/contract/boundary/release gates, and GSD workflow check.
-- [ ] Record manual inline `verify-work` and code-review findings.
+- [x] Run focused and changed-package tests: the focused loader command, `go test -count=1 -timeout 20m ./internal/connectors/engine`, and `go test -count=1 -timeout 20m ./internal/cli` passed.
+- [x] Run formatting, static checks, and binary build: `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, and `make lint` passed.
+- [x] Run repository non-suite gates: `make tidy-check`, `make docs-check-no-build`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make github-parity-artifacts-check`, `make connectorgen-certification-candidates`, `make connectorgen-certification-sweep`, `make connector-canon-check`, `make release-workflow-check`, and `scripts/verify-gsd-workflow` passed.
+- [x] `make connector-boundary` passed from one attached completion-tracked terminal: `ConnectorBoundaryReport.outcome` was `clean` for 293 checked files and 552 loaded connectors, with zero findings and warnings.
+- [x] Manual inline `verify-work` and code review completed. `REVIEW.md` records no actionable findings and the post-PR route as trusted-author `claude_auto`.
+- [ ] Rebase on the latest `origin/main` and rerun the GitHub certification-matrix drift check, which previously failed before the attached boundary gate was available.
 - [ ] Rebase on `origin/main`, push only the working branch, open the PR, and verify its API base is `main`.

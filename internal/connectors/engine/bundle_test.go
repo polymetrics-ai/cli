@@ -1333,7 +1333,7 @@ func TestBundleLoadRegistersStatusAndTextExportOperations(t *testing.T) {
 				"rest": {
 					"method": "HEAD",
 					"path": "/v2/repositories/{repository}",
-					"max_bytes": 128
+					"max_bytes": 1024
 				}
 			},
 			{
@@ -1346,7 +1346,7 @@ func TestBundleLoadRegistersStatusAndTextExportOperations(t *testing.T) {
 				"binary": {
 					"method": "GET",
 					"path": "/v2/members/export",
-					"max_bytes": 4096,
+					"max_bytes": 1,
 					"accept": "text/csv"
 				}
 			}
@@ -1364,7 +1364,7 @@ func TestBundleLoadRegistersStatusAndTextExportOperations(t *testing.T) {
 	if status.Kind != "rest_status" || status.REST == nil || status.REST.Method != "HEAD" || status.OutputPolicy != "status" {
 		t.Fatalf("loaded rest_status = %#v, want declared status-only REST operation", status)
 	}
-	if export.Kind != "text_export" || export.Binary == nil || export.Binary.MaxBytes != 4096 || export.Binary.Accept != "text/csv" {
+	if export.Kind != "text_export" || export.Binary == nil || export.Binary.MaxBytes != 1 || export.Binary.Accept != "text/csv" {
 		t.Fatalf("loaded text_export = %#v, want bounded CSV binary operation", export)
 	}
 }
@@ -1438,7 +1438,7 @@ func TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations(t *testing.T) {
 				"output_policy": "file_manifest",
 				"rest": {"method": "GET", "path": "/v2/members/export"}
 			}`,
-			wantErr: "text_export\" must declare binary block, got rest",
+			wantErr: "kind \"text_export\" must declare binary block, got rest",
 		},
 	}
 

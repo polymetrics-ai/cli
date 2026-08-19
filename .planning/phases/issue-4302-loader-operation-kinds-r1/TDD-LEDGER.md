@@ -9,7 +9,7 @@
 ## Slice 1 — declaration reachability
 
 - Red: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestBundleLoadRegistersStatusAndTextExportOperations|TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations)$'` failed before loader implementation. The happy declaration was rejected as `unsupported kind "rest_status"`; every malformed-case assertion also stopped at the same unreachable-kind error. This proves the real loader did not reach either existing semantic validator.
-- Green: the same focused command passed. `Load` returned both parsed `OperationSpec` records with the correct `rest` and `binary` blocks; this is declaration reachability through the ordinary loader, not executor-only construction.
+- Green: the same focused command passed. `Load` returned both parsed `OperationSpec` records with the correct `rest` and `binary` blocks; it includes the status upper metadata-cap boundary (`max_bytes=1024`) and export minimum positive-cap boundary (`max_bytes=1`). This is declaration reachability through the ordinary loader, not executor-only construction.
 
 ## Slice 2 — fail-closed declaration semantics
 
