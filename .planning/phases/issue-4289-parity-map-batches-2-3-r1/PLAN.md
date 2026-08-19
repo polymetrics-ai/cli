@@ -3,7 +3,7 @@
 - Issue: Refs #4289 — chore(connectors): map parity batches 2 and 3
 - Base branch: fm/cli-reverse-etl-destination-r1
 - Merges into: fm/cli-reverse-etl-destination-r1 → main
-- Delivery: PR #4300 remains open from `fm/cli-map-batch23-r1` after a non-rewriting merge of the temporary typed-destination foundation; its GitHub API base is `fm/cli-reverse-etl-destination-r1`, local and generated gates are green, and final merge remains human-gated.
+- Delivery: PR #4300 remains open from `fm/cli-map-batch23-r1` after a non-rewriting merge of the temporary typed-destination foundation; its GitHub API base is `fm/cli-reverse-etl-destination-r1`. Historical local structural gates are green, while the captain pre-merge evidence gate is explicitly red until the recorded common foundations and generated evidence projections close.
 - Working branch: fm/cli-map-batch23-repair-r1 (publishes fast-forward to `fm/cli-map-batch23-r1`)
 - Task: Reconcile the preserved source-locked maps for batch 2 (`grafana`, `trello`, `slack`, `n8n`, `google-calendar`, `gmail`, `twilio`, `amazon-sqs`, `elasticsearch`) and batch 3 (`gong`, `google-ads`, `facebook-marketing`, `linkedin-ads`, `aircall`, `xero`, `paypal-transaction`, `gocardless`, `amazon-seller-partner`, `miro`) across binary read, binary write, direct read, direct write, ETL, reverse ETL, and installed-binary CLI command surfaces. Every documented operation remains connector-owned, source-pinned, API-surface-bound, and reachable when faithfully representable; Gitea remains excluded.
 - Verification: seven-surface ledger assertion; source-lock/disposition integrity checks; `go run ./cmd/connectorgen validate`; `go run ./cmd/connectorgen surface-sync --check`; generated-artifact checks; targeted conformance and commandrunner tests; detached `connector-boundary`; and repository verification gates applicable to definition data.
@@ -41,6 +41,10 @@ Complete documented REST write reachability also requires a declaration-bound st
 
 The decision is resolved: firstmate authorized the bounded capability and routed it to a separate engine PR. That foundation must permit a declaration-owned REST structured JSON body only when it is compiled and validated against that operation's exact `rest.body_schema`, retains declared redaction and size limits, and cannot choose a URL, method, operation, or arbitrary raw request. This is not a generic HTTP writer. This connector lane will neither implement shared engine code nor add a raw-body workaround; affected operations remain `declaration-pending` until the engine head is composed and exact bindings are authored.
 
+## Captain Pre-Merge Foundation Evidence Gate — 2026-08-20
+
+`FOUNDATION-GAP-LEDGER.json` is the machine-readable missing-foundation deliverable. It deduplicates each shared provider-neutral capability by stable id and fans it back out to exact source-locked provider operations with URL, document revision state, SHA-256, affected surface, runtime/validator refusal, owner lane, and closure commands. `OPERATION-EVIDENCE-LEDGER.json` adds the same operation-level merge-readiness state, so an open foundation gap is never credited as enabled or merge-ready. The current portfolio is deliberately red: seven gaps affect all 5,127 operations through required website-row and per-operation fixture/conformance projections, with further typed-destination, structured-body, bounded-binary-transfer, and scalar-union fan-out recorded separately. Batch-2 and batch-3 rollups are generated; an N/A surface is emitted only from the source-locked canonical parity class, never from risk, scope, tier, or destructive metadata.
+
 ## Batch 2 — Red / Green / Refactor
 
 1. **Red:** the nine target bundles lack `sources/<connector>-operation-source-lock.json` and `sources/<connector>-declaration-disposition.json`; therefore no provenance or six-class complete-map assertion can pass.
@@ -52,7 +56,7 @@ The decision is resolved: firstmate authorized the bounded capability and routed
 
 1. **Red:** the ten target bundles likewise lack complete connector-local source locks and corrected six-class disposition ledgers.
 2. **Green:** repeat the public-source provenance and exact source/API-surface crosswalk for `gong`, `google-ads`, `facebook-marketing`, `linkedin-ads`, `aircall`, `xero`, `paypal-transaction`, `gocardless`, `amazon-seller-partner`, and `miro`; each provider DELETE is declared or explicitly disabled.
-3. **Refactor:** apply the same vocabulary and transport assessment as batch 2. PR #4286 makes a declaration-owned ETL source possible, so an absent source `sync_transport.json` is connector-local `declaration-pending`. A typed write action remains an enabled `direct_write`; its nested and action-level reverse-ETL eligibility records distinguish semantic eligibility from the pending generic App/CLI dispatch and action-selection multiplicity foundations. No `transport_binding` action, arbitrary action selector, or destination descriptor is invented.
+3. **Refactor:** apply the same vocabulary and transport assessment as batch 2. PR #4286 makes a declaration-owned ETL source possible, so an absent source `sync_transport.json` is connector-local `declaration-pending`. A typed write action can remain semantically eligible, but an operation with an open foundation gap is not enabled for that affected surface and cannot contribute to a merge-ready verdict. No `transport_binding` action, arbitrary action selector, or destination descriptor is invented.
 4. Commit batch 3 after its local integrity and connector validation gates are green.
 
 ## Safety and Classification Rules

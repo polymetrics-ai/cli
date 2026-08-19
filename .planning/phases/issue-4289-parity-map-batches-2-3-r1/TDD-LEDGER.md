@@ -53,3 +53,9 @@ Keep the generated ledgers connector-local and use the exact corrected batch-1 s
 ## REST Body Input — Red / Foundation Routed
 
 Provider-backed nested REST bodies cannot be faithfully exposed from the current operation CLI surface: `commandrunner` accepts structured JSON only for fixed GraphQL operations and refuses an exact direct-write `body` mapping. Firstmate resolved `[key=rest-structured-body-cli]` by routing the bounded declaration-owned capability to a separate engine PR. No raw-body, unvalidated flag, or connector-local shared-engine workaround is allowed while this lane retains the exact action/source-binding evidence and waits to compose that foundation.
+
+## Captain Foundation-Gap Deliverable — Red / Green
+
+**Red:** source coverage, connector-level fixtures, and a structural command pass can conceal a missing shared engine or generator capability. A source operation with an open foundation gap was previously still capable of being counted as enabled or of disappearing into a generic disabled disposition.
+
+**Green:** `verify-seven-surfaces.mjs` emits `FOUNDATION-GAP-LEDGER.json` alongside the seven-surface and per-operation evidence ledgers. Stable shared IDs fan out to every exact source-locked operation, preserving source URL, published-or-explicitly-absent document revision, SHA-256, affected surface, failure evidence, owner lane, status, and closure commands. The verifier emits batch-2, batch-3, and portfolio rollups; it fails while any gap is open. It records generated website rows and source-operation fixture/conformance bindings as routing-required common gaps rather than falsely crediting generic documentation or connector-wide tests. An unauthored connector contract is still `declaration-pending`, not a foundation gap.
