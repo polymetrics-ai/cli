@@ -2,7 +2,8 @@
 
 ## Task Delivery Header
 
-- Issue: Firstmate launch brief — no GitHub issue supplied for this foundation PR.
+- Issue: Refs #4015 — incremental foundation delivery for the integration
+  branch's Production MVP certification parent issue.
 - Base branch: `integration/4015-mvp-flat-r1`
 - Merges into: `integration/4015-mvp-flat-r1` → `main`
 - Delivery: Pull request open against `integration/4015-mvp-flat-r1` with local gates complete and GitHub checks green; read the API-reported base after opening.
