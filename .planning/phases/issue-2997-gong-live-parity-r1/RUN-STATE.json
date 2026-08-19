@@ -1,0 +1,29 @@
+{
+  "phase": "issue-2997-gong-live-parity-r1",
+  "branch": "fm/cli-gong-parity-wave01-r1",
+  "pull_request": 3552,
+  "base_branch": "main",
+  "status": "planned",
+  "lifecycle": {
+    "discuss_phase": "inline: locked user decisions recorded in PLAN.md",
+    "plan_phase_tdd": "inline: PLAN.md and TDD-LEDGER.md created before production edits",
+    "execute_phase": "pending",
+    "verify_work": "pending",
+    "code_review": "pending"
+  },
+  "manual_gsd_fallback": {
+    "reason": "the canonical single-worker contract and runtime prohibit isolated GSD role spawning",
+    "command_sources": "scripts/gsd sources discuss-phase, plan-phase, execute-phase, verify-work, code-review"
+  },
+  "source_audit": {
+    "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+    "openapi": "3.0.1",
+    "operations": 69,
+    "semantic_inventory_matches_batch23_lock": true,
+    "raw_digest_note": "provider serialization is mutable between equivalent retrievals; captured lock is preserved"
+  },
+  "live_certification": {
+    "status": "blocked_external_credential_reference",
+    "detail": "no approved non-echoing disposable Gong credential reference available"
+  }
+}
