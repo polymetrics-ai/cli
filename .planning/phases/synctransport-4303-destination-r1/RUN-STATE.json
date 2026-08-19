@@ -1,0 +1,7 @@
+{
+  "issue": 4303,
+  "phase": "synctransport-4303-destination-r1",
+  "state": "plan_tdd",
+  "execution": "inline_manual_fallback",
+  "reason": "Compatible isolated GSD workers are unavailable and the canonical single-worker contract forbids role spawning."
+}
