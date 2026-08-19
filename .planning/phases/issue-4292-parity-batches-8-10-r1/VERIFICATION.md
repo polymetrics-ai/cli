@@ -156,6 +156,23 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Fifth five-connector typed-write CLI increment
+
+- [x] Red: 708 typed Datadog, Auth0, Okta, and FireHydrant actions remained
+  CLI-unbound; PagerDuty has no existing typed action and must not receive an
+  invented command.
+- [x] Green: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --write-cli datadog pagerduty auth0 okta firehydrant`
+  gives every existing action a connector command under strict exact binding
+  (implemented/partial: Datadog 13/14, Auth0 6/2, Okta 105/324,
+  FireHydrant 0/244).
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check datadog pagerduty auth0 okta firehydrant`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+- [x] `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
+
 ### Sixth five-connector declaration increment
 
 - [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check adobe-commerce-magento commercetools recharge docuseal eventbrite` failed before declarations with `adobe-commerce-magento: source transport declaration missing`.

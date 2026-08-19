@@ -193,6 +193,19 @@
   `connectorgen validate`, `surface-sync --check`, and runtime-preflight sweep
   pass.
 
+### Typed-write CLI proof — fifth increment
+
+- **Red:** the 708 unbound typed actions concentrated in Datadog, Auth0, Okta,
+  and FireHydrant could not remain ledger-only. PagerDuty's zero-action bundle
+  is not permission to invent a command.
+- **Green:** generated command contracts for all 708 actions. Exact matches
+  are implemented where the closed route/input contract reaches runtime
+  preflight; every remaining action is partial with its exact singular-route,
+  config-override, record-shape, or case-preserving-input blocker. Datadog has
+  13 implemented/14 partial, Auth0 6/2, Okta 105/324, and FireHydrant 0/244.
+  The focused trace, bundle validation, surface synchronization, and uncached
+  all-implemented runtime-preflight sweep pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

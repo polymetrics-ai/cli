@@ -24,11 +24,11 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 9 | recruitee | 938 | 370 | 563 | 0/0 | 5 | — | 0 | 0/0/0 |
 | 9 | hibob | 207 | 65 | 142 | 0/0 | 3 | — | 0 | 0/0/0 |
 | 9 | factorial | 155 | 61 | 94 | 0/0 | 5 | — | 0 | 0/0/0 |
-| 10 | datadog | 1739 | 735 | 989 | 0/0 | 15 | create_monitor | 20 | 0/0/0 |
+| 10 | datadog | 1739 | 735 | 989 | 0/0 | 15 | create_monitor | 20 | 13/14/27 |
 | 10 | pagerduty | 465 | 207 | 254 | 0/0 | 4 | — | 0 | 0/0/0 |
-| 10 | auth0 | 469 | 192 | 270 | 0/0 | 7 | update_user | 7 | 0/0/0 |
-| 10 | okta | 734 | 6 | 444 | 0/0 | 284 | create_api_v1_behaviors | 47 | 0/0/0 |
-| 10 | firehydrant | 373 | 13 | 204 | 0/0 | 205 | create_connection | 25 | 0/0/0 |
+| 10 | auth0 | 469 | 192 | 270 | 0/0 | 7 | update_user | 7 | 6/2/8 |
+| 10 | okta | 734 | 6 | 444 | 0/0 | 284 | create_api_v1_behaviors | 47 | 105/324/429 |
+| 10 | firehydrant | 373 | 13 | 204 | 0/0 | 205 | create_connection | 25 | 0/244/244 |
 | 10 | adobe-commerce-magento | dynamic | 0 | 0 | 0/0 | 10 | update_product | 4 | 0/0/0 |
 | 10 | commercetools | 821 | 463 | 355 | 0/0 | 3 | — | 0 | 0/0/0 |
 | 10 | recharge | 123 | 44 | 76 | 0/0 | 3 | — | 0 | 0/0/0 |
