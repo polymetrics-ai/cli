@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "blocked_dedicated_runtime_identity_and_auth",
+  "status": "blocked_official_recipe_noninteractive_bootstrap",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -20,7 +20,16 @@
     "captain_decision": "all 55 eligible actions remain mandatory; no connector workaround"
   },
   "live_certification_blocker": {
-    "reason": "No deployed local Twenty container/Compose project; Podman unavailable; protected runtime tree has no non-exporting credential or deployment reference",
-    "safe_next_step": "provide or start a dedicated disposable Twenty instance and an execution-time stdin/FD/approved-secret-store credential handoff without exposing the credential"
+    "reason": "The reviewed official production Compose recipe is topology-isolated but documents no supported noninteractive disposable workspace bootstrap or API-key issuance handoff. Its entrypoint migrates an empty database only.",
+    "safe_next_step": "provide an authoritative supported noninteractive Twenty workspace/API-key bootstrap path, or a registered disposable execution-time stdin/FD credential reference, without exposing its value"
+  },
+  "official_recipe_review": {
+    "upstream_commit": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+    "compose_blob": "0b0d172d52e5f41d6f4bee704ee8b7cb91fa5434",
+    "setup_blob": "14c4c5291c742eecc09006f06be750749e76bdf4",
+    "docker_compose_docs_blob": "650a2c9b632417667969715ac0bd3e92d25fd390",
+    "entrypoint_blob": "fd85657f5d0d010a5cea63b007023cdc3be513f9",
+    "cached_recipe_image_digest": "sha256:cb80b05bc2619a88a3a83293f45f2be495a55ac77a90946fa1f7d85f0b7fde24",
+    "review_outcome": "do_not_execute_without_supported_noninteractive_workspace_and_api_key_bootstrap"
   }
 }

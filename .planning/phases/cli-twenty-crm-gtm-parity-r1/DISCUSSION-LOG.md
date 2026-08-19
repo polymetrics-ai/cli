@@ -54,3 +54,13 @@
   credential or deployment reference. The lane remains blocked on a dedicated
   disposable running instance plus an execution-time stdin/FD/approved
   secret-store handoff; no production or unrelated local container may be used.
+- Official-recipe review result (2026-08-20): current upstream commit
+  `e14694f4ff9ca51b791ba6b09639fed0944c5ad7` declares a self-contained
+  production Compose topology, but its production entrypoint migrates the
+  database only. The official setup path requires the first workspace through
+  the interactive application flow and does not document noninteractive
+  workspace or API-key issuance. The upstream development seed is not part of
+  the production recipe. Decision: do not start a stack, edit its database,
+  bypass auth, or use an unreviewed browser-extracted credential. Remain
+  blocked until an authoritative noninteractive disposable bootstrap or a
+  registered non-echoing credential reference is available.

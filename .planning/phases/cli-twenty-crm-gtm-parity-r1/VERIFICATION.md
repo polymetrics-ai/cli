@@ -77,6 +77,53 @@ credential reference are available. The refreshed #4304 head is also still
 `c6f03c937`; it remains an ancestor, but it does not provide the required
 persisted multi-action selection.
 
+## Official Twenty Compose review — blocked before execution
+
+On 2026-08-20, the lane reviewed the exact current upstream Twenty source at
+commit `e14694f4ff9ca51b791ba6b09639fed0944c5ad7` without emitting environment
+assignments or secret material. The reviewed source blobs were:
+
+- `packages/twenty-docker/docker-compose.yml`:
+  `0b0d172d52e5f41d6f4bee704ee8b7cb91fa5434`
+- `packages/twenty-docs/developers/self-host/capabilities/docker-compose.mdx`:
+  `650a2c9b632417667969715ac0bd3e92d25fd390`
+- `packages/twenty-docs/developers/self-host/capabilities/setup.mdx`:
+  `14c4c5291c742eecc09006f06be750749e76bdf4`
+- `packages/twenty-docker/twenty/entrypoint.sh`:
+  `fd85657f5d0d010a5cea63b007023cdc3be513f9`
+
+The official production recipe declares four services (`server`, `worker`,
+`db`, and `redis`), two named data volumes, one published-port mapping, and
+health checks for the server and backing data services. It declares no
+external volume/network, host networking, privilege escalation, external HTTP
+endpoint, Twenty Cloud/production domain, or `env_file`. Its default published
+port is not loopback-only, so a future lane-owned project must override it to a
+unique loopback port and retain Compose's project-private network and new named
+volumes.
+
+The recipe declares image tags rather than immutable digests. The only
+recipe-declared Twenty image presently cached locally resolves to
+`sha256:cb80b05bc2619a88a3a83293f45f2be495a55ac77a90946fa1f7d85f0b7fde24`
+with local image ID
+`sha256:e4a44722897aa851ac139ad1693141e382c0480693f0153a4f50cbdc28fd12cc`.
+No additional image was pulled and no container, volume, network, or workspace
+was created during this review.
+
+The production entrypoint performs database setup/migrations but has no
+workspace-seed, admin-account, or API-key creation behavior. The reviewed
+official setup documentation describes the first single-workspace creation as
+an interactive application flow and does not document a noninteractive
+workspace/bootstrap or API-key issuance handoff. A development-image seed
+script exists upstream, but that image and script are not declared by the
+reviewed production Compose recipe, so this lane will not substitute it.
+
+Therefore the lane must not start the recipe yet: it lacks an authoritative,
+supported noninteractive disposable-workspace and API-key creation path that
+can feed the built CLI via stdin/FD without recording the credential. Editing
+the database, bypassing authentication, using a UI-extracted value, or
+repurposing the historical runtime would violate the live-certification safety
+contract.
+
 ## Local verification results
 
 All of these completed successfully unless explicitly marked as a documented
