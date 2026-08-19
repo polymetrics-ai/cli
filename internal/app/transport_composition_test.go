@@ -725,11 +725,10 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 
 // TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields
 // pins the declaration-time field boundary for the reusable destination
-// adapter. Field spelling belongs to the selected writes.json action schema:
-// snake_case and camelCase are both valid only when the exact property is
-// declared. This remains a schema/name check, never a dynamic record mapping
-// or runtime action selector, and all refusals occur before source/provider
-// I/O.
+// adapter. Field spelling belongs to the selected writes.json action schema,
+// which is the sole authority for provider-owned property names. This remains
+// a schema/name check, never a dynamic record mapping or runtime action
+// selector, and all refusals occur before source/provider I/O.
 func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields(t *testing.T) {
 	newConnector := func(t *testing.T, name, action, input string) *engine.Connector {
 		t.Helper()
@@ -746,6 +745,7 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 
 	snake := newConnector(t, "schema-snake", "apply_snake", "target_id")
 	camel := newConnector(t, "schema-camel", "apply_camel", "targetId")
+	providerOwned := newConnector(t, "schema-provider-owned", "apply_provider_owned", "http")
 	for _, testCase := range []struct {
 		name      string
 		connector *engine.Connector
@@ -754,6 +754,7 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 	}{
 		{name: "snake case action property", connector: snake, action: "apply_snake", input: "target_id"},
 		{name: "camel case action property", connector: camel, action: "apply_camel", input: "targetId"},
+		{name: "provider owned action property", connector: providerOwned, action: "apply_provider_owned", input: "http"},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
 			contract, err := declarativeTypedDestinationContractFor(testCase.connector)
@@ -775,6 +776,7 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 	app := &App{registry: connectors.NewEmptyRegistry()}
 	app.registry.Register(snake)
 	app.registry.Register(camel)
+	app.registry.Register(providerOwned)
 	if err := app.composeTransportRegistry(); err != nil {
 		t.Fatalf("compose cross-connector typed destinations: %v", err)
 	}
@@ -785,6 +787,7 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 	}{
 		{name: "snake selected action", destination: snake, action: "apply_snake"},
 		{name: "camel selected action", destination: camel, action: "apply_camel"},
+		{name: "provider owned selected action", destination: providerOwned, action: "apply_provider_owned"},
 	} {
 		t.Run(testCase.name+" preflight", func(t *testing.T) {
 			if _, err := app.transports.Preflight(synctransport.PreflightRequest{Source: testCase.destination, Destination: testCase.destination, Stream: "widgets", Mode: synccontract.ModeFullAppend, DestinationAction: testCase.action}); err != nil {
@@ -825,21 +828,115 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 	}
 
 	for _, testCase := range []struct {
-		name  string
-		input string
+		name          string
+		input         string
+		wantLoadError bool
 	}{
-		{name: "empty", input: ""},
+		{name: "empty", input: "", wantLoadError: true},
 		{name: "malformed", input: "target/id"},
+		{name: "whitespace", input: " target_id "},
 		{name: "generic", input: "genericHTTP"},
 		{name: "shell", input: "shell"},
-		{name: "http", input: "http"},
+		{name: "undeclared-provider-name", input: "http"},
 	} {
 		t.Run("refuses "+testCase.name+" binding name", func(t *testing.T) {
 			files := declarativeTypedDestinationActionBundleFS("invalid-"+testCase.name, "invalid_source", "invalid_destination", "apply_invalid", "/widgets/invalid")
 			path := "invalid-" + testCase.name + "/sync_transport.json"
 			files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `"input": "target_id"`, `"input": "`+testCase.input+`"`, 1))}
-			if _, err := engine.Load(files, "invalid-"+testCase.name); err == nil {
-				t.Fatalf("load accepted %s source binding input %q", testCase.name, testCase.input)
+			bundle, err := engine.Load(files, "invalid-"+testCase.name)
+			if testCase.wantLoadError {
+				if err == nil {
+					t.Fatalf("load accepted %s source binding input %q", testCase.name, testCase.input)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("load %s source binding input %q: %v", testCase.name, testCase.input, err)
+			}
+			contract, err := declarativeTypedDestinationContractFor(engine.New(bundle, nil))
+			if err != nil {
+				t.Fatalf("load %s contract: %v", testCase.name, err)
+			}
+			if _, err := contract.plan(contract.connector, "widgets", synccontract.ModeFullAppend, connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_invalid"}); err == nil {
+				t.Fatalf("plan accepted %s source binding input %q", testCase.name, testCase.input)
+			}
+		})
+	}
+}
+
+func TestDeclarativeTypedDestinationPreflightRejectsIncompleteMappingAndFullOverwriteBeforeIO(t *testing.T) {
+	ctx := context.Background()
+	for _, testCase := range []struct {
+		name     string
+		syncMode string
+		wantErr  string
+		mutate   func(fstest.MapFS, string)
+	}{
+		{
+			name:     "incomplete required mapping",
+			syncMode: string(synccontract.ModeFullAppend),
+			wantErr:  `required field "value" is not mapped`,
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `, {"input": "value", "field": "value"}`, "", 1))}
+			},
+		},
+		{
+			name:     "default full overwrite",
+			syncMode: "",
+			wantErr:  "does not implement full_overwrite",
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				contents := strings.ReplaceAll(string(files[path].Data), `"full_append"`, `"full_overwrite"`)
+				contents = strings.ReplaceAll(contents, `"strategy": "append"`, `"strategy": "replace"`)
+				files[path] = &fstest.MapFile{Data: []byte(contents)}
+			},
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			root := t.TempDir()
+			if err := InitProject(root); err != nil {
+				t.Fatal(err)
+			}
+			a, err := Open(root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			name := "preflight-" + strings.ReplaceAll(testCase.name, " ", "-")
+			files := declarativeTypedDestinationBundleFS(name, name+"-source", name+"-destination")
+			testCase.mutate(files, name)
+			bundle, err := engine.Load(files, name)
+			if err != nil {
+				t.Fatalf("load %s bundle: %v", testCase.name, err)
+			}
+
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				requests++
+			}))
+			t.Cleanup(server.Close)
+			a.registry.Register(engine.New(bundle, nil))
+			if err := a.composeTransportRegistry(); err != nil {
+				t.Fatalf("compose %s typed destination: %v", testCase.name, err)
+			}
+			for _, endpoint := range []string{"source", "destination"} {
+				if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+					t.Fatalf("add %s credential: %v", endpoint, err)
+				}
+			}
+			_, err = a.CreateConnection(ctx, CreateConnectionRequest{
+				Name:        "reject_" + strings.ReplaceAll(testCase.name, " ", "_"),
+				Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+				Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+				Streams: map[string]StreamConfig{"widgets": {
+					SyncMode: testCase.syncMode, PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+				}},
+			})
+			if err == nil || !strings.Contains(err.Error(), testCase.wantErr) {
+				t.Fatalf("CreateConnection error = %v, want %q", err, testCase.wantErr)
+			}
+			if requests != 0 {
+				t.Fatalf("CreateConnection reached source/provider I/O; requests = %d", requests)
 			}
 		})
 	}

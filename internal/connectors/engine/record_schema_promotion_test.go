@@ -104,3 +104,39 @@ func TestValidatePromotableRecordSchemaAllowsClosedNamedFields(t *testing.T) {
 		t.Fatalf("ValidatePromotableRecordSchema: %v", err)
 	}
 }
+
+func TestValidateRecordSchemaFieldMappingRequiresExactCompleteFields(t *testing.T) {
+	schema := json.RawMessage(`{
+		"type": "object",
+		"required": ["targetId", "http"],
+		"additionalProperties": false,
+		"properties": {
+			"targetId": {"type": "string"},
+			"http": {"type": "string"}
+		}
+	}`)
+	for _, testCase := range []struct {
+		name    string
+		fields  []string
+		wantErr string
+	}{
+		{name: "exact provider fields", fields: []string{"targetId", "http"}},
+		{name: "whitespace is not normalized", fields: []string{" targetId ", "http"}, wantErr: "not declared"},
+		{name: "unknown field", fields: []string{"target_id", "http"}, wantErr: "not declared"},
+		{name: "incomplete mapping", fields: []string{"targetId"}, wantErr: "required field \"http\" is not mapped"},
+		{name: "duplicate mapping", fields: []string{"targetId", "targetId", "http"}, wantErr: "duplicates field"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			err := ValidateRecordSchemaFieldMapping(schema, testCase.fields)
+			if testCase.wantErr == "" {
+				if err != nil {
+					t.Fatalf("ValidateRecordSchemaFieldMapping: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), testCase.wantErr) {
+				t.Fatalf("ValidateRecordSchemaFieldMapping error = %v, want %q", err, testCase.wantErr)
+			}
+		})
+	}
+}

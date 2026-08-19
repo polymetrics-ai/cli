@@ -1893,10 +1893,24 @@ func loadWrites(sub fs.FS, dirName string) ([]WriteAction, error) {
 	if err := strictDecode(raw, &doc); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
+	if err := validateWriteActionNames(doc.Actions); err != nil {
+		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
+	}
 	if err := validateWriteBodies(doc.Actions); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
 	return doc.Actions, nil
+}
+
+func validateWriteActionNames(actions []WriteAction) error {
+	seen := make(map[string]struct{}, len(actions))
+	for index, action := range actions {
+		if _, duplicate := seen[action.Name]; duplicate {
+			return fmt.Errorf("action %d duplicates write action name %q", index, action.Name)
+		}
+		seen[action.Name] = struct{}{}
+	}
+	return nil
 }
 
 func validateStreamGraphQL(streams []StreamSpec) error {

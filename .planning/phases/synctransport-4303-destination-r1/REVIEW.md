@@ -1,7 +1,7 @@
 ---
 status: clean
 depth: standard
-files_reviewed: 12
+files_reviewed: 16
 findings:
   critical: 0
   warning: 0
@@ -31,7 +31,21 @@ standard depth for:
 
 ## Disposition
 
-No findings.
+The prior review findings were legitimate and have been remediated in the
+shared declaration and selected-action preflight boundaries:
+
+- raw input mappings now defer property admission to the exact selected record
+  schema without identifier normalization;
+- required top-level action properties must all be mapped before source or
+  stage work;
+- the generic destination rejects `full_overwrite` until it has a run-scoped
+  protocol;
+- duplicate `writes.json` action names fail at definition load; and
+- successful bodyless `output_policy: none` results retain status and headers.
+
+Focused remediation verification passed:
+
+`go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/app -run '^(TestBundleLoadRejectsDuplicateWriteActionNames|TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies|TestValidateRecordSchemaFieldMappingRequiresExactCompleteFields|TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields|TestDeclarativeTypedDestinationPreflightRejectsIncompleteMappingAndFullOverwriteBeforeIO|TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies)$'`
 
 The review confirmed that the generic destination takes only declaration-owned
 action metadata and source field mappings; validates action schemas before

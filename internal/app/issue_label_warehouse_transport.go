@@ -317,6 +317,9 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 	}
 	actions := make(map[string]connectors.WriteActionInfo, len(definition.WriteActions))
 	for _, action := range definition.WriteActions {
+		if _, duplicate := actions[action.Name]; duplicate {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination duplicates write action %q", action.Name)
+		}
 		actions[action.Name] = action
 	}
 	for _, strategy := range descriptor.ApplyStrategies {
@@ -332,6 +335,9 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 }
 
 func (c declarativeTypedDestinationContract) plan(source connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) (connectors.DestinationSourceBinding, error) {
+	if mode == synccontract.ModeFullOverwrite {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination does not implement full_overwrite")
+	}
 	expected, err := c.descriptor.ApplyStrategyForAction(mode, strategy.Action)
 	if err != nil {
 		return connectors.DestinationSourceBinding{}, err
@@ -353,10 +359,12 @@ func (c declarativeTypedDestinationContract) plan(source connectors.Connector, s
 	if binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination requires input_fields source mapping")
 	}
-	for _, input := range binding.RecordMapping.Inputs {
-		if err := c.connector.PreflightWriteRecordField(strategy.Action, input.Input); err != nil {
-			return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q source input %q is not an exact record schema field: %w", strategy.Action, input.Input, err)
-		}
+	inputs := make([]string, len(binding.RecordMapping.Inputs))
+	for index, input := range binding.RecordMapping.Inputs {
+		inputs[index] = input.Input
+	}
+	if err := c.connector.PreflightWriteRecordFieldMapping(strategy.Action, inputs); err != nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q source inputs are not an exact complete record schema mapping: %w", strategy.Action, err)
 	}
 	return binding, nil
 }

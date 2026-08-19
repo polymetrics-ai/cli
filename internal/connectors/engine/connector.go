@@ -433,6 +433,16 @@ func (c *Connector) PreflightWriteRecordField(actionName, field string) error {
 	return ValidateRecordSchemaField(action.RecordSchema, field)
 }
 
+// PreflightWriteRecordFieldMapping proves a declaration-owned mapping covers
+// the required top-level fields of one exact write action.
+func (c *Connector) PreflightWriteRecordFieldMapping(actionName string, fields []string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateRecordSchemaFieldMapping(action.RecordSchema, fields)
+}
+
 // PreflightStructuredJSONRecordField makes the concrete write schema the
 // authority for a commandrunner `json` flag. It intentionally accepts a field
 // name rather than a raw body or arbitrary path, so the runner cannot grow a

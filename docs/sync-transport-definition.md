@@ -82,15 +82,21 @@ generic HTTP writer:
   issue-label destination.
 - Supply at least one `source_bindings` entry, all with `input_fields`. Its
   `input` is an action record field and its `field` is a source record field.
-  The input name is matched case-sensitively against the selected action's
-  top-level `record_schema.properties`: both `target_id` and a provider's
-  `targetId` are valid only when that exact property exists. The runtime never
-  rewrites snake case, camel case, or action names. Empty, malformed, unknown,
-  cross-action, `generic`/`shell`/`http`, and undeclared names fail before
-  source or provider I/O.
+  The input name is matched byte-for-byte against the selected action's
+  top-level `record_schema.properties`: both `target_id`, a provider's
+  `targetId`, and any other provider-owned property spelling are valid only
+  when that exact property exists. The runtime never trims, rewrites, or
+  normalizes property or action names. Every required top-level selected-action
+  property needs exactly one mapping. Empty, duplicate, unknown, cross-action,
+  and undeclared names fail before source or provider I/O. A provider property
+  that the declaration model cannot represent is a foundation gap, never a
+  silently renamed field.
   The adapter copies only those declared values and validates every result
   against the selected action's `record_schema` before it constructs a
   provider request.
+- The declarative typed destination has no run-scoped full-overwrite protocol.
+  A `full_overwrite` destination declaration is therefore rejected during
+  preflight before any source, stage, or provider I/O.
 - Declare `acknowledgement: "durable_warehouse"`,
   `delivery.idempotency: "keyed"`, and
   `delivery.deletes: "not_available"`. This adapter does not accept

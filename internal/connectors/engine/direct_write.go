@@ -807,24 +807,17 @@ func validateOperationDirectWriteOutputPolicy(policy string) error {
 }
 
 func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (any, error) {
+	if err := validateOperationDirectWriteOutputPolicy(policy); err != nil {
+		return nil, err
+	}
+	if policy == directWritePolicyNone && len(raw) == 0 {
+		return nil, nil
+	}
 	decoded, err := decodeDirectReadBody(raw, maxBytes)
 	if err != nil {
 		return nil, fmt.Errorf("operation direct write response is not JSON: %w", err)
 	}
-	switch policy {
-	case directWritePolicyNone,
-		directWritePolicyJSON,
-		directWritePolicyJSONRedacted,
-		directWritePolicyWriteResultRedacted,
-		directWritePolicyGongBoundedInputRedacted,
-		directWritePolicySecretStored:
-		// The legacy policy names remain valid declaration values, but they are
-		// not an output-redaction or scope instruction: direct writes retain
-		// their complete decoded response content.
-		return decoded, nil
-	default:
-		return nil, fmt.Errorf("operation direct write output policy %q is not supported", policy)
-	}
+	return decoded, nil
 }
 
 // validateOperationResponseSecretContract makes a response carrying a
