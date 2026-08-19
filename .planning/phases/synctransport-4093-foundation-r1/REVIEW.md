@@ -21,6 +21,11 @@ adapter's isolated review worker.
   tests.
 - `change_capture` is rejected as a destination declaration and remains on its
   distinct source-only connection-warehouse execution path.
+- The Gate A proof test permits a retained baseline only when it is exactly the
+  named label owned by that private proof issue; an empty baseline remains
+  valid and any unexpected label fails before the test can mutate GitHub. The
+  proof logs each completed one-record run only after its durable checkpoint
+  and independent post-exit read-back assertions pass.
 
 No unresolved actionable finding remains. The broader ad-hoc staticcheck
 findings are pre-existing and recorded in `VERIFICATION.md`; `make lint` is
