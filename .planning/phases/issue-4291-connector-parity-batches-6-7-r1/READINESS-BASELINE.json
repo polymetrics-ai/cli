@@ -18,14 +18,14 @@
     "direct_write_missing_exact_typed_action_bindings": 1745,
     "direct_write_cli_commands": 0,
     "etl_streams": 287,
-    "source_transports": 4,
-    "reverse_etl_destination_action_bindings": 4,
+    "source_transports": 5,
+    "reverse_etl_destination_action_bindings": 5,
     "binary_ledger_rows": 1,
     "binary_cli_commands": 2,
     "documented_deletes": 424,
     "connectors_with_unproven_source_inventory": 3,
     "provider_live_certified": 0,
-    "reverse_etl_destination_declarations_pending_app_dispatch": 4,
+    "reverse_etl_destination_declarations_pending_app_dispatch": 5,
     "reverse_etl_cli_commands": 131
   },
   "connectors": [
@@ -76,10 +76,13 @@
       },
       "etl": {
         "streams": 96,
-        "source_transport": false
+        "source_transport": true
       },
       "reverse_etl": {
-        "destination_action_bindings": 0
+        "destination_action_bindings": 1,
+        "cli_commands": 0,
+        "deployable_application_dispatch": false,
+        "pending_foundation": "#4304 persisted App/CLI dispatch integration"
       },
       "binary": {
         "ledger_rows": 0,
