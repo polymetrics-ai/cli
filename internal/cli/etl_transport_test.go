@@ -37,9 +37,19 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 		{"transport", "github-issue-label"},
 		{"transport", "github-issue-label", "cleanup"},
 		{"transport", "postgres-managed-target"},
+		{"transport", "declarative-typed-destination"},
 	} {
 		if command, ok := etlTransportManualCommand(args); !ok || command == "" {
 			t.Fatalf("etlTransportManualCommand(%v) = %q, %t; want a project-free transport manual", args, command, ok)
+		}
+	}
+	var declaredStdout bytes.Buffer
+	if err := runETLTransport(context.Background(), nil, []string{"declarative-typed-destination"}, &declaredStdout, false); err != nil {
+		t.Fatalf("runDeclarativeTypedDestinationTransport help = %v", err)
+	}
+	for _, want := range []string{"destination_action", "writes.json", "cannot pass a connector, action, URL, method, body, mapping, or evidence", "--approval-token-stdin"} {
+		if !strings.Contains(declaredStdout.String(), want) {
+			t.Fatalf("declarative typed destination help missing %q", want)
 		}
 	}
 	var postgresStdout bytes.Buffer
@@ -55,6 +65,22 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 	code := Run([]string{"etl", "transport", "github-issue-label", "cleanup", "--root", filepath.Join(t.TempDir(), "uninitialized")}, &stdout, &stderr)
 	if code != 0 || !strings.Contains(stdout.String(), "pm etl transport github-issue-label plan") || stderr.Len() != 0 {
 		t.Fatalf("bare cleanup namespace = code %d stdout=%q stderr=%q, want contextual manual without opening a project", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestDeclarativeTypedDestinationTransportRejectsCallerActionBeforeProjectIO(t *testing.T) {
+	var stdout bytes.Buffer
+	err := runETLTransport(context.Background(), nil, []string{
+		"declarative-typed-destination", "plan", "--connection", "typed_destination", "--stream", "widgets", "--action", "replace_widget",
+	}, &stdout, false)
+	if err == nil {
+		t.Fatal("declarative typed destination transport accepted caller action selection")
+	}
+	if !strings.Contains(err.Error(), "unknown transport flag --action") {
+		t.Fatalf("caller action refusal = %v, want unknown closed-selector flag", err)
+	}
+	if stdout.Len() != 0 {
+		t.Fatalf("caller action refusal wrote output before project I/O: %q", stdout.String())
 	}
 }
 

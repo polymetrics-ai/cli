@@ -164,6 +164,8 @@ func (*declarativeTypedDestinationExecutor) TransportExecutorReference() connect
 	return declarativeTypedDestinationReference
 }
 
+func (*declarativeTypedDestinationExecutor) DefinitionOwnedApprovalDestination() {}
+
 func (e *declarativeTypedDestinationExecutor) PlanDestination(_ context.Context, request synctransport.DestinationPlanRequest) (synctransport.DestinationPlan, error) {
 	if e == nil {
 		return synctransport.DestinationPlan{}, fmt.Errorf("declarative typed destination is unavailable")
@@ -203,12 +205,22 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
+	writeEvidence := request.Approval.Evidence
+	if request.Approval.IssueWriteEvidence != nil {
+		writeEvidence, err = request.Approval.IssueWriteEvidence(ctx)
+		if err != nil {
+			return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("authorize declarative typed destination action %q: %w", request.Plan.ApplyStrategy.Action, err)
+		}
+	}
+	if writeEvidence == nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q has no write evidence", request.Plan.ApplyStrategy.Action)
+	}
 	writeRequest := connectors.WriteRequest{
 		Stream:   request.Stream,
 		Table:    "sync_transport",
 		Action:   request.Plan.ApplyStrategy.Action,
 		Config:   request.Runtime,
-		Approval: request.Approval.Evidence,
+		Approval: writeEvidence,
 	}
 	if err := contract.connector.ValidateWrite(ctx, writeRequest, records); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("validate declarative typed destination action %q: %w", writeRequest.Action, err)
@@ -220,7 +232,19 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 	if result.RecordsWritten != len(records) || result.RecordsFailed != 0 {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q wrote=%d failed=%d, want %d durable writes", writeRequest.Action, result.RecordsWritten, result.RecordsFailed, len(records))
 	}
-	return synccontract.NewDurableDownstreamAcknowledgement(contract.connector.Name(), time.Now().UTC())
+	output, err := json.Marshal(connectors.SanitizeWriteResultForOutput(result, request.Runtime.Secrets))
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("encode declarative typed destination action %q output: %w", writeRequest.Action, err)
+	}
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(contract.connector.Name(), time.Now().UTC())
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	acknowledgement, err = acknowledgement.WithOutput(output)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("attach declarative typed destination action %q output: %w", writeRequest.Action, err)
+	}
+	return acknowledgement, nil
 }
 
 // validateDeclarativeTypedDestinationApproval keeps the generic adapter on
@@ -308,7 +332,7 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 }
 
 func (c declarativeTypedDestinationContract) plan(source connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) (connectors.DestinationSourceBinding, error) {
-	expected, err := c.descriptor.ApplyStrategyFor(mode)
+	expected, err := c.descriptor.ApplyStrategyForAction(mode, strategy.Action)
 	if err != nil {
 		return connectors.DestinationSourceBinding{}, err
 	}
@@ -329,7 +353,26 @@ func (c declarativeTypedDestinationContract) plan(source connectors.Connector, s
 	if binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination requires input_fields source mapping")
 	}
+	for _, input := range binding.RecordMapping.Inputs {
+		if err := c.connector.PreflightWriteRecordField(strategy.Action, input.Input); err != nil {
+			return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q source input %q is not an exact record schema field: %w", strategy.Action, input.Input, err)
+		}
+	}
 	return binding, nil
+}
+
+// validateDeclarativeTypedDestinationSelection binds a registry-selected
+// action to its action schema before a connection is persisted or a run is
+// allowed to read a source. The registry proves connector/source/mode/action
+// eligibility; this adds the exact writes.json record-property proof for the
+// selected action without accepting a caller-provided request shape.
+func validateDeclarativeTypedDestinationSelection(source, destination connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) error {
+	contract, err := declarativeTypedDestinationContractFor(destination)
+	if err != nil {
+		return err
+	}
+	_, err = contract.plan(source, stream, mode, strategy)
+	return err
 }
 
 func validateDeclarativeTypedDestinationWorkset(request synctransport.DestinationApplyRequest) error {

@@ -205,7 +205,7 @@ func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, re
 	if f.writeErr != nil {
 		return connectors.WriteResult{}, f.writeErr
 	}
-	if f.writeResult != (connectors.WriteResult{}) {
+	if f.writeResult.RecordsWritten != 0 || f.writeResult.RecordsFailed != 0 || f.writeResult.RecordsUnchanged != 0 || len(f.writeResult.ProviderResponses) != 0 {
 		return f.writeResult, nil
 	}
 	return connectors.WriteResult{RecordsWritten: len(records)}, nil

@@ -76,6 +76,36 @@ func ValidatePromotableRecordSchema(raw json.RawMessage) error {
 	return nil
 }
 
+// ValidateRecordSchemaField proves that field is an exact top-level property
+// of one concrete write record schema. It deliberately preserves case: JSON
+// Schema property names are provider-owned and a snake_case-to-camelCase
+// conversion would select a different request field. It does not accept
+// additionalProperties as authority for a transport mapping; a closed typed
+// destination must point at a named schema property.
+func ValidateRecordSchemaField(raw json.RawMessage, field string) error {
+	field = strings.TrimSpace(field)
+	if field == "" || strings.Contains(field, ".") {
+		return fmt.Errorf("record field %q must map to one top-level record property", field)
+	}
+	if err := ValidatePromotableRecordSchema(raw); err != nil {
+		return err
+	}
+	if _, err := CompileSchema(raw); err != nil {
+		return fmt.Errorf("record_schema: %w", err)
+	}
+
+	var root struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(raw, &root); err != nil {
+		return fmt.Errorf("invalid record_schema: %w", err)
+	}
+	if _, ok := root.Properties[field]; !ok {
+		return fmt.Errorf("record field %q is not declared in record_schema", field)
+	}
+	return nil
+}
+
 // ValidateStructuredJSONRecordField is the shared declaration gate for a
 // command flag which supplies one structured JSON value to a reverse-ETL
 // record. A JSON flag is deliberately narrower than a generic request body:
@@ -88,7 +118,7 @@ func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error 
 	if field == "" || strings.Contains(field, ".") {
 		return fmt.Errorf("structured JSON field %q must map to one top-level record property", field)
 	}
-	if err := ValidatePromotableRecordSchema(raw); err != nil {
+	if err := ValidateRecordSchemaField(raw, field); err != nil {
 		return err
 	}
 
@@ -98,10 +128,7 @@ func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error 
 	if err := json.Unmarshal(raw, &root); err != nil {
 		return fmt.Errorf("invalid record_schema: %w", err)
 	}
-	property, ok := root.Properties[field]
-	if !ok {
-		return fmt.Errorf("structured JSON field %q is not declared in record_schema", field)
-	}
+	property := root.Properties[field]
 
 	var schema struct {
 		Type string `json:"type"`

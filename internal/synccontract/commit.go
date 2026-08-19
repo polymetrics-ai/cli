@@ -2,6 +2,7 @@ package synccontract
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -21,7 +22,11 @@ var ErrDurableETLDestinationRequired = errors.New("checkpointed sync requires a 
 type DownstreamAcknowledgement struct {
 	Sink           string    `json:"sink"`
 	AcknowledgedAt time.Time `json:"acknowledged_at"`
-	durable        bool
+	// Output is connector-owned typed-action output captured after the target
+	// reports durable success. It is already credential-redacted at the
+	// adapter boundary; callers cannot supply it through the transport API.
+	Output  json.RawMessage `json:"output,omitempty"`
+	durable bool
 }
 
 // DurableETLDestination supplies an acknowledgement only after its writes are
@@ -61,6 +66,20 @@ func NewDurableDownstreamAcknowledgement(sink string, acknowledgedAt time.Time) 
 		return DownstreamAcknowledgement{}, err
 	}
 	return acknowledgement, nil
+}
+
+// WithOutput attaches validated, already-sanitized destination evidence to a
+// durable acknowledgement. The durable marker remains private, so this cannot
+// manufacture a checkpoint authority from an untrusted result payload.
+func (a DownstreamAcknowledgement) WithOutput(output json.RawMessage) (DownstreamAcknowledgement, error) {
+	if err := a.validate(); err != nil {
+		return DownstreamAcknowledgement{}, err
+	}
+	if len(output) == 0 || !json.Valid(output) {
+		return DownstreamAcknowledgement{}, fmt.Errorf("durable acknowledgement output must be valid JSON")
+	}
+	a.Output = append(json.RawMessage(nil), output...)
+	return a, nil
 }
 
 func (a DownstreamAcknowledgement) validate() error {
