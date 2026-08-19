@@ -19250,6 +19250,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -21627,6 +21628,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21654,6 +21656,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21681,6 +21684,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21708,6 +21712,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21735,6 +21740,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21762,6 +21768,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21789,6 +21796,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21816,6 +21824,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21843,6 +21852,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21870,6 +21880,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21897,6 +21908,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21924,6 +21936,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21951,6 +21964,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -21978,6 +21992,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22005,6 +22020,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22032,6 +22048,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22059,6 +22076,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22086,6 +22104,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22113,6 +22132,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22140,6 +22160,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22167,6 +22188,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22194,6 +22216,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22221,6 +22244,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22248,6 +22272,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22275,6 +22300,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22302,6 +22328,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22329,6 +22356,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22356,6 +22384,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22383,6 +22412,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22410,6 +22440,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22437,6 +22468,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22464,6 +22496,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22491,6 +22524,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22518,6 +22552,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22545,6 +22580,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22572,6 +22608,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22599,6 +22636,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22626,6 +22664,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22653,6 +22692,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22680,6 +22720,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22707,6 +22748,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22734,6 +22776,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22761,6 +22804,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22788,6 +22832,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22815,6 +22860,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22842,6 +22888,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22869,6 +22916,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22896,6 +22944,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22923,6 +22972,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -22950,6 +23000,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -22977,6 +23028,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23004,6 +23056,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23031,6 +23084,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23058,6 +23112,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23085,6 +23140,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23112,6 +23168,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23139,6 +23196,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23166,6 +23224,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23193,6 +23252,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23220,6 +23280,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23247,6 +23308,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23274,6 +23336,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23301,6 +23364,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23328,6 +23392,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23355,6 +23420,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23382,6 +23448,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23409,6 +23476,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -23436,6 +23504,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23463,6 +23532,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23490,6 +23560,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23517,6 +23588,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23544,6 +23616,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23571,6 +23644,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23598,6 +23672,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23625,6 +23700,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23652,6 +23728,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23679,6 +23756,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23706,6 +23784,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23733,6 +23812,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23760,6 +23840,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23787,6 +23868,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23814,6 +23896,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23841,6 +23924,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -23868,6 +23952,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -23895,6 +23980,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -23922,6 +24008,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -23949,6 +24036,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -23976,6 +24064,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24003,6 +24092,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24030,6 +24120,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24057,6 +24148,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24084,6 +24176,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24111,6 +24204,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24138,6 +24232,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24165,6 +24260,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24192,6 +24288,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24219,6 +24316,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24246,6 +24344,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24273,6 +24372,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24300,6 +24400,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24327,6 +24428,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24354,6 +24456,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24381,6 +24484,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24408,6 +24512,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24435,6 +24540,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24462,6 +24568,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24489,6 +24596,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24516,6 +24624,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24543,6 +24652,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24570,6 +24680,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24597,6 +24708,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24624,6 +24736,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24651,6 +24764,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24678,6 +24792,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24705,6 +24820,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24732,6 +24848,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24759,6 +24876,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24786,6 +24904,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24813,6 +24932,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24840,6 +24960,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24867,6 +24988,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24894,6 +25016,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24921,6 +25044,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24948,6 +25072,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -24975,6 +25100,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25002,6 +25128,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25029,6 +25156,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25056,6 +25184,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25083,6 +25212,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25110,6 +25240,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25137,6 +25268,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25164,6 +25296,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25191,6 +25324,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25218,6 +25352,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25245,6 +25380,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25272,6 +25408,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25299,6 +25436,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25326,6 +25464,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25353,6 +25492,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25380,6 +25520,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25407,6 +25548,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25434,6 +25576,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25461,6 +25604,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25488,6 +25632,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25515,6 +25660,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25542,6 +25688,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25569,6 +25716,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25596,6 +25744,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25623,6 +25772,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25650,6 +25800,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25677,6 +25828,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25704,6 +25856,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25731,6 +25884,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25758,6 +25912,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25785,6 +25940,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25812,6 +25968,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25839,6 +25996,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25866,6 +26024,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25893,6 +26052,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25920,6 +26080,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25947,6 +26108,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -25974,6 +26136,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26001,6 +26164,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26028,6 +26192,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26055,6 +26220,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26082,6 +26248,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26109,6 +26276,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26136,6 +26304,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26163,6 +26332,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26190,6 +26360,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26217,6 +26388,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26244,6 +26416,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26271,6 +26444,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26298,6 +26472,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26325,6 +26500,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26352,6 +26528,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26379,6 +26556,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26406,6 +26584,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26433,6 +26612,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26460,6 +26640,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26487,6 +26668,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26514,6 +26696,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26541,6 +26724,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26568,6 +26752,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26595,6 +26780,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26622,6 +26808,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26649,6 +26836,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26676,6 +26864,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26703,6 +26892,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26730,6 +26920,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26757,6 +26948,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26784,6 +26976,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26811,6 +27004,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26838,6 +27032,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26865,6 +27060,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26892,6 +27088,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26919,6 +27116,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26946,6 +27144,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -26973,6 +27172,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -27000,6 +27200,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -27027,6 +27228,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -27054,6 +27256,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -27081,6 +27284,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -27108,6 +27312,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -27135,6 +27340,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -27162,6 +27368,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27189,6 +27396,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27216,6 +27424,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27243,6 +27452,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27270,6 +27480,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27297,6 +27508,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27324,6 +27536,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27351,6 +27564,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27378,6 +27592,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27405,6 +27620,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27432,6 +27648,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27459,6 +27676,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27486,6 +27704,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27513,6 +27732,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27540,6 +27760,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27567,6 +27788,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27594,6 +27816,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27621,6 +27844,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27648,6 +27872,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27675,6 +27900,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27702,6 +27928,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27729,6 +27956,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27756,6 +27984,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27783,6 +28012,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27810,6 +28040,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27837,6 +28068,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27864,6 +28096,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27891,6 +28124,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27918,6 +28152,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27945,6 +28180,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27972,6 +28208,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -27999,6 +28236,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28026,6 +28264,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28053,6 +28292,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28080,6 +28320,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28107,6 +28348,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28134,6 +28376,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28161,6 +28404,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28188,6 +28432,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28215,6 +28460,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28242,6 +28488,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28269,6 +28516,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28296,6 +28544,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28323,6 +28572,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28350,6 +28600,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28377,6 +28628,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28404,6 +28656,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28431,6 +28684,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28458,6 +28712,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28485,6 +28740,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28512,6 +28768,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28539,6 +28796,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28566,6 +28824,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28593,6 +28852,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28620,6 +28880,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28647,6 +28908,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28674,6 +28936,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28701,6 +28964,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28728,6 +28992,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28755,6 +29020,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28782,6 +29048,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28809,6 +29076,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28836,6 +29104,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28863,6 +29132,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28890,6 +29160,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28917,6 +29188,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28944,6 +29216,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28971,6 +29244,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "update",
       "flags": [
         {
           "name": "input",
@@ -28998,6 +29272,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -31312,6 +31587,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -31500,6 +31776,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -31564,6 +31841,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -31616,6 +31894,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -40891,6 +41170,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -40938,6 +41218,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",
@@ -41689,6 +41970,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "create",
       "flags": [
         {
           "name": "input",
@@ -41759,6 +42041,7 @@
       "availability": "implemented",
       "operation_kind": "rest_write",
       "op_class": "direct_write",
+      "write_action_kind": "custom",
       "flags": [
         {
           "name": "input",

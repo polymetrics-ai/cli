@@ -170,6 +170,12 @@ func classifyCertificationParityCommand(command engine.CLICommand, operation *en
 					return certificationParityProjection{}, fmt.Errorf("direct_write command %q write action %q has unsupported kind %q", command.Path, write.Name, write.Kind)
 				}
 				projection.WriteActionKind = write.Kind
+			} else if operation != nil {
+				kind, err := certificationOperationWriteActionKind(command, *operation)
+				if err != nil {
+					return certificationParityProjection{}, err
+				}
+				projection.WriteActionKind = kind
 			}
 			return projection, nil
 		case certificationParityKindFileUpload:
@@ -205,6 +211,38 @@ func classifyCertificationParityCommand(command engine.CLICommand, operation *en
 	default:
 		return certificationParityProjection{}, nil
 	}
+}
+
+// certificationOperationWriteActionKind derives the mutation family from the
+// operation declaration when a command is not backed by writes.json. The
+// writes.json branch stays authoritative because it is the more specific
+// action declaration. Operation-backed actions must be explicit enough to
+// classify; an uncertain POST-style mutation remains a product defect instead
+// of being silently folded into custom.
+func certificationOperationWriteActionKind(command engine.CLICommand, operation engine.OperationSpec) (string, error) {
+	if validCertificationWriteActionKind(operation.MutationClass) {
+		return operation.MutationClass, nil
+	}
+	switch operation.Kind {
+	case "graphql_mutation":
+		// GraphQL mutations have no REST verb with CRUD semantics. Their declared
+		// operation kind is nevertheless sufficient to identify the custom
+		// mutation family, without guessing from a provider-specific operation ID.
+		return "custom", nil
+	case certificationParityKindRESTWrite:
+		if operation.REST == nil {
+			return "", fmt.Errorf("direct_write command %q operation %q cannot determine write action kind: rest_write has no REST declaration", command.Path, operation.ID)
+		}
+		switch strings.ToUpper(strings.TrimSpace(operation.REST.Method)) {
+		case "DELETE":
+			return "delete", nil
+		case "PATCH":
+			return "update", nil
+		case "PUT":
+			return "upsert", nil
+		}
+	}
+	return "", fmt.Errorf("direct_write command %q operation %q cannot determine write action kind from its operation declaration", command.Path, operation.ID)
 }
 
 func validCertificationWriteActionKind(kind string) bool {
