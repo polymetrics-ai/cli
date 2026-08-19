@@ -15503,10 +15503,10 @@
             "api_keys",
             "application_keys"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_monitor",
           "exact_record_driven_actions": [
             "create_monitor",
@@ -16034,7 +16034,7 @@
             "services",
             "teams"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
           "destination_transport": "declaration-pending",
@@ -16071,10 +16071,10 @@
             "role_users",
             "organization_members"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "update_user",
           "exact_record_driven_actions": [
             "update_user",
@@ -16537,10 +16537,10 @@
             "privileged_access_api_v1_service_accounts_id",
             "webauthn_registration_api_v1_users_user_id_enrollments"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_api_v1_behaviors",
           "exact_record_driven_actions": [
             "create_api_v1_behaviors",
@@ -21729,10 +21729,10 @@
             "search_slack_channels",
             "search_zendesk_tickets"
           ],
-          "source_transport": "declaration-pending"
+          "source_transport": "declared-static"
         },
         "reverse_etl": {
-          "destination_transport": "declaration-pending",
+          "destination_transport": "declared-static; application-dispatch-pending-foundation",
           "selected_initial_proof": "create_connection",
           "exact_record_driven_actions": [
             "create_connection",

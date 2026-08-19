@@ -71,6 +71,19 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Fifth five-connector declaration increment
+
+- [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check datadog pagerduty auth0 okta firehydrant` failed before declarations with `datadog: source transport declaration missing`.
+- [x] Green: wrote only connector-owned `sync_transport.json` declarations
+  for Datadog, PagerDuty, Auth0, Okta, and FireHydrant. Every typed action is
+  listed in the generated ledger with exact eligibility, CLI-binding, and
+  case-preserving-mapping foundation-gap status where applicable.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check datadog pagerduty auth0 okta firehydrant`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+
 ## Source-first map checks
 
 - [x] Red: initial maps rejected because their locks lacked complete provider

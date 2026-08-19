@@ -99,6 +99,19 @@
 - The regenerated declarations pass the focused checker, real
   `connectorgen validate`, and `surface-sync --check`.
 
+### Seven-surface declaration proof — fifth increment
+
+- **Red:** `node traces/reconcile-seven-surfaces.mjs --check datadog
+  pagerduty auth0 okta firehydrant` failed with `datadog: source transport
+  declaration missing`.
+- **Green:** generated source declarations for all five bundles, declarative
+  destination proofs for Datadog, Auth0, Okta, and FireHydrant, and no
+  invented PagerDuty destination because it has no typed action. The Okta
+  case-preserving inputs are recorded as the same exact `sync_transport.go:673`
+  foundation gap rather than silently relabelled as semantic exclusions.
+- The focused checker, real `connectorgen validate`, and `surface-sync --check`
+  pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:
