@@ -79,3 +79,17 @@
   verified lane project. A future resume should use the known source-backed
   local-storage setting directly in process environment; it must not edit the
   database or reuse the failed volumes.
+- Firstmate resume approval (2026-08-20): one additional startup is authorized
+  because the exact normalized local-storage enum has now been parsed from the
+  pinned upstream source rather than guessed. Keep that enum and all encryption
+  material process-only, validate only boolean rendered-config facts, and stop
+  without database edits/auth bypass if this source-backed restart fails.
+- Live preparation result (2026-08-20): the approved source-backed restart is
+  green. The `pm-twenty-cert-r1` project owns the four healthy/running official
+  Compose services, its private network and two new volumes, and the only
+  loopback port. Official interactive workspace/API-key creation succeeded. The
+  disposable key was copied by the UI into a non-echoing stdin handoff to the
+  built CLI's encrypted credential vault, cleared from the clipboard, and
+  validated by `pm credentials test` with `status: ok`. This is preparation
+  only; comprehensive live certification remains gated on the final #4304/#4305
+  dispatch foundation and must use the rebuilt binary plus persisted App path.

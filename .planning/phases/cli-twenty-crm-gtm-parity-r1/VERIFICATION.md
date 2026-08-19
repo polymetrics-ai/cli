@@ -176,6 +176,40 @@ API key, or business record was created. The verified lane-owned failed project
 must be torn down before pausing; a resumed worker can use the now-established
 source-backed local-storage setting directly in the process environment.
 
+### Approved source-backed restart
+
+Firstmate approved one resume after the two-attempt checkpoint. The restart
+must parse the normalized local-storage enum from the pinned upstream type
+definition at execution time, use it only in the Compose process environment,
+and confirm the server and worker render the source-derived setting through
+boolean-only configuration checks. The enum value, all environment assignments,
+and fresh generated encryption material are intentionally absent from evidence.
+
+### Source-backed local restart and interactive bootstrap — green
+
+The approved restart passed. Sanitized resolved-Compose checks confirmed that
+both application services received the source-derived local-storage setting,
+that fresh encryption material was present without rendering it, and that the
+topology remained four services, two lane-owned volumes, one project-default
+private network, and one loopback-only published port. The lane then created
+only its own disposable workspace/admin and disposable API key through Twenty's
+official interactive UI. The four containers are running under the unique
+`pm-twenty-cert-r1` Compose project; database, cache, and server are healthy,
+the worker is running, and the loopback health endpoint returned HTTP 200.
+
+The one-time API-key display was copied by the official UI and piped directly
+from the local clipboard to `pm credentials add --value-stdin api_key`; it was
+then cleared from the clipboard. The newly built CLI stored only the secret
+field name in its AES-GCM credential vault. A built-CLI credential test returned
+`status: ok`. No key, browser session secret, encryption value, connection
+string, or provider token was rendered in the terminal, planning evidence, or
+browser snapshot.
+
+This is environment and authentication preparation, not final connector
+certification. The mandated built-binary plus persisted-App create/read/update/
+delete, ETL, reverse-ETL, and eligible binary proofs remain pending the final
+published #4304/#4305 application-dispatch foundation integration.
+
 Redacted command/result evidence for this checkpoint:
 
 ```text

@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "blocked_repeated_official_compose_storage_configuration",
+  "status": "live_instance_prepared_waiting_for_final_foundation",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -19,9 +19,13 @@
     "required_state": "published persisted multi-action selection with exact per-action bindings",
     "captain_decision": "all 55 eligible actions remain mandatory; no connector workaround"
   },
-  "live_certification_blocker": {
-    "reason": "The isolated Twenty server reached configuration validation twice before application startup. The second attempt still rendered its storage setting empty because the non-echoing source lookup did not yield the required normalized local-storage value.",
-    "safe_next_step": "after the verified failed project is removed, resume with the upstream source-backed local-storage setting supplied directly as process-only Compose environment alongside fresh generated encryption material"
+  "live_certification_preparation": {
+    "authorization": "Firstmate approved one resume using the exact normalized local-storage enum parsed from the pinned upstream source.",
+    "safety_boundary": "Keep all environment and encryption values process-only. Render only boolean configuration checks. Do not edit the database, bypass authentication, access production, or reuse existing Docker resources.",
+    "source_backed_start_result": "passed: the four-service lane-owned project is healthy on its loopback-only port after boolean-only rendered-config validation",
+    "bootstrap_result": "passed: a disposable workspace/admin and disposable API key were created through the official interactive UI; the key moved only through a non-echoing clipboard-to-stdin handoff into the lane project's encrypted credential store",
+    "credential_validation": "passed: built CLI credential test returned status ok without emitting the key",
+    "next_step": "after the final published #4304/#4305 application-dispatch foundation is integrated, rebuild and run built-CLI plus persisted-App live certification"
   },
   "official_recipe_review": {
     "upstream_commit": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
@@ -38,6 +42,7 @@
       "postgres": "sha256:95206741a5b214807675e14165369d05b93a9cf692223b616d07cca227e74b0b",
       "redis": "sha256:344e3945a0b431c8ff1eecd58c5573538126bd756f02fc7e218ddf1fc2546366"
     },
-    "initial_start_result": "postgres_and_redis_healthy_server_configuration_validation_failed_before_workspace_creation"
+    "initial_start_result": "two documented red checkpoints preceded the approved source-backed green restart",
+    "source_backed_restart_result": "server, database, and cache healthy; worker running; health endpoint returned HTTP 200; resources remain isolated to pm-twenty-cert-r1"
   }
 }
