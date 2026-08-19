@@ -79,9 +79,9 @@ const sourceProfiles = {
 };
 
 const reverseETLGap = {
-  id: 'generic-typed-destination-executor',
-  evidence: 'internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.',
-  minimal_change: 'register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies',
+  id: 'application-generic-destination-dispatch',
+  evidence: 'internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.',
+  minimal_change: 'complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.',
 };
 
 function hash(bytes) {
@@ -1101,6 +1101,47 @@ async function writeSourceInventoryReport() {
   await writeFile(join(root, phase, 'SOURCE-INVENTORY-REPORT.md'), lines.join('\n'));
 }
 
+async function writeSevenSurfaceLedger(checkOnly = false) {
+  const connectors = [...batches.batch4, ...batches.batch5];
+  const rows = [];
+  for (const connector of connectors) {
+    const dir = join(root, 'internal/connectors/defs', connector);
+    const surface = await readJSON(join(dir, 'api_surface.json'));
+    const map = await readJSON(join(dir, 'sources', `${connector}-declaration-disposition.json`));
+    const cli = await readJSON(join(dir, 'cli_surface.json')) || { commands: [] };
+    const transport = await readJSON(join(dir, 'sync_transport.json')) || {};
+    const counts = Object.fromEntries((map.summary.parity_class_counts || []).map(({ key, count }) => [key, count]));
+    const writes = map.summary.writes_actions || 0;
+    rows.push({
+      connector,
+      documented_operations: map.summary.operations_found,
+      api_surface_rows: surface.endpoints.length,
+      binary_read: counts.binary_read || 0,
+      binary_write: counts.binary_write || 0,
+      direct_read: counts.direct_read || 0,
+      direct_write: counts.direct_write || 0,
+      etl: transport.source_transport ? 'declared' : 'declaration-pending',
+      reverse_etl: transport.destination_transport ? 'definition-declared; app-dispatch-pending' : writes > 0 ? 'foundation-gap: application-generic-destination-dispatch' : 'declaration-pending',
+      executable_cli_commands: cli.commands.filter(({ availability }) => availability === 'implemented').length,
+      cli_commands: cli.commands.length,
+      source_lock: `internal/connectors/defs/${connector}/sources/${connector}-operation-source-lock.json`,
+    });
+  }
+  assert(rows.length === 20 && new Set(rows.map(({ connector }) => connector)).size === 20, 'seven-surface ledger must contain each assigned connector exactly once');
+  const output = { schema_version: 1, issue: 4290, foundation_sha: 'c6f03c937c1f4e516d339b48e8c2143726179fdf', reverse_etl_note: 'The generic typed destination factory exists at this foundation SHA, but App dispatch integration is not yet merged; this ledger does not claim deployability.', rows };
+  const jsonPath = join(root, phase, 'SEVEN-SURFACE-LEDGER.json');
+  const markdownPath = join(root, phase, 'SEVEN-SURFACE-LEDGER.md');
+  if (checkOnly) {
+    const current = await readJSON(jsonPath);
+    assert(JSON.stringify(current) === JSON.stringify(output), 'seven-surface ledger is stale');
+    return;
+  }
+  await writeFile(jsonPath, json(output));
+  const lines = ['# Issue #4290 seven-surface ledger', '', output.reverse_etl_note, '', '| Connector | Documented | Binary R/W | Direct R/W | ETL | Reverse ETL | CLI implemented/declared |', '| --- | ---: | ---: | ---: | --- | --- | ---: |'];
+  for (const row of rows) lines.push(`| ${row.connector} | ${row.documented_operations ?? 'unknown'} | ${row.binary_read}/${row.binary_write} | ${row.direct_read}/${row.direct_write} | ${row.etl} | ${row.reverse_etl} | ${row.executable_cli_commands}/${row.cli_commands} |`);
+  await writeFile(markdownPath, `${lines.join('\n')}\n`);
+}
+
 async function materialize(connector) {
   const dir = join(root, 'internal/connectors/defs', connector);
   const sources = join(dir, 'sources');
@@ -1225,8 +1266,8 @@ async function materialize(connector) {
       writes_actions: rows.filter(({ api_surface }) => api_surface.covered_by?.write).length,
       terminal_commands: rows.filter(({ declaration }) => declaration.command?.availability === 'implemented').length,
       live_certification: 'pending',
-      gap_ids: ['generic-typed-destination-executor'],
-      foundation_gaps: [{ id: 'generic-typed-destination-executor', count: rows.filter(({ api_surface }) => api_surface.covered_by?.write).length, scope: 'shared_destination_runtime', note: 'Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class.' }],
+      gap_ids: [reverseETLGap.id],
+      foundation_gaps: [{ id: reverseETLGap.id, count: rows.filter(({ api_surface }) => api_surface.covered_by?.write).length, scope: 'shared_destination_runtime', note: 'Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class.' }],
       rejected_by_reason: countBy(rows.filter(({ rejection }) => rejection).map(({ rejection }) => ({ reason: rejection.reason })), 'reason'),
       transport: {
         source_transport: hasTransport ? { state: 'declared', evidence: `internal/connectors/defs/${connector}/sync_transport.json` } : { state: 'declaration-pending', evidence: `internal/connectors/defs/${connector}/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence.` },
@@ -1258,6 +1299,7 @@ async function check(connector) {
   const apiSurface = JSON.parse(await readFile(join(dir, 'api_surface.json')));
   const lock = JSON.parse(await readFile(join(dir, 'sources', `${connector}-operation-source-lock.json`)));
   const map = JSON.parse(await readFile(join(dir, 'sources', `${connector}-declaration-disposition.json`)));
+  const writes = await readJSON(join(dir, 'writes.json'));
   const wanted = apiSurface.endpoints.map(({ method, path }) => `${method}\u0000${path}`).sort();
   const providerOperations = [...lock.rest.operations, ...(lock.graphql?.operations || [])];
   const locked = providerOperations.map(({ method, path }) => `${method}\u0000${path}`).sort();
@@ -1300,16 +1342,22 @@ async function check(connector) {
     assert(row.parity_class !== 'reverse_etl', `${connector}: reverse_etl must be an eligibility attribute, not an endpoint parity class`);
     if (row.rejection?.reason === 'foundation-gap') {
       assert(row.foundation?.foundation_gap?.evidence && row.foundation?.foundation_gap?.minimal_change, `${connector}: foundation gap lacks evidence or minimal change`);
-      assert(row.foundation.foundation_gap.id === 'generic-typed-destination-executor', `${connector}: invented foundation gap ${row.foundation.foundation_gap.id}`);
+      assert(row.foundation.foundation_gap.id === reverseETLGap.id, `${connector}: invented foundation gap ${row.foundation.foundation_gap.id}`);
     }
     if (row.declaration?.reverse_etl_eligibility) {
       const eligibility = row.declaration.reverse_etl_eligibility;
       assert(row.parity_class === 'direct_write' && row.state === 'enabled', `${connector}: typed write must be enabled direct_write`);
       assert(eligibility.eligible && eligibility.state === 'foundation-gap', `${connector}: reverse ETL eligibility must expose the foundation gap`);
-      assert(eligibility.foundation_gap?.id === 'generic-typed-destination-executor' && eligibility.foundation_gap?.evidence && eligibility.foundation_gap?.minimal_change, `${connector}: malformed reverse ETL foundation evidence`);
+      assert(eligibility.foundation_gap?.id === reverseETLGap.id && eligibility.foundation_gap?.evidence && eligibility.foundation_gap?.minimal_change, `${connector}: malformed reverse ETL foundation evidence`);
     }
     if (row.state === 'declaration-pending') assert(row.rejection?.reason === 'declaration-pending', `${connector}: pending row has wrong reason`);
     if (row.api_surface?.excluded?.category === 'requires_elevated_scope') assert(row.state === 'enabled' && !row.rejection, `${connector}: elevated scope must stay enabled`);
+  }
+  for (const action of writes?.actions || []) {
+    const rows = map.ledger_dispositions.filter(({ api_surface }) => api_surface?.covered_by?.write === action.name);
+    assert(rows.length === 1, `${connector}: typed write action ${action.name} must have exactly one source-backed disposition`);
+    const eligibility = rows[0].declaration?.reverse_etl_eligibility;
+    assert(eligibility?.eligible && eligibility.state === 'foundation-gap' && eligibility.foundation_gap?.id === reverseETLGap.id, `${connector}: typed write action ${action.name} lacks an explicit reverse-ETL eligibility disposition`);
   }
   assert(map.summary.documented_deletes === apiSurface.endpoints.filter(({ method }) => method === 'DELETE').length, `${connector}: DELETE count mismatch`);
 }
@@ -1334,6 +1382,28 @@ async function main() {
   if (mode === 'report') {
     await writeSourceInventoryReport();
     console.log('report: source inventory');
+    return;
+  }
+  if (mode === 'seven-surface-ledger') {
+    await writeSevenSurfaceLedger(target === '--check');
+    console.log(`seven-surface-ledger: ${target === '--check' ? 'checked' : 'written'}`);
+    return;
+  }
+  if (mode === 'reconcile-dispatch') {
+    for (const connector of [...batches.batch4, ...batches.batch5]) {
+      const path = join(root, 'internal/connectors/defs', connector, 'sources', `${connector}-declaration-disposition.json`);
+      const map = await readJSON(path);
+      const replace = (value) => {
+        if (Array.isArray(value)) return value.map(replace);
+        if (!value || typeof value !== 'object') return value;
+        if (value.id === 'generic-typed-destination-executor') return clone(reverseETLGap);
+        return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, replace(item)]));
+      };
+      const updated = replace(map);
+      await writeFile(path, json(updated));
+      await writeFile(join(root, 'internal/connectors/defs', connector, 'sources', `${connector}-parity-map-summary.md`), summaryMarkdown(connector, updated));
+      console.log(`reconcile-dispatch: ${connector}`);
+    }
     return;
   }
   const connectors = batches[target] || (sourceProfiles[target] ? [target] : null);
