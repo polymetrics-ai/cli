@@ -213,6 +213,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			Runtime:       request.DestinationRuntime,
 			Source:        request.Source,
 			SourceRuntime: request.SourceRuntime,
+			Destination:   request.Destination,
 			Binding:       request.DestinationBinding,
 			Stream:        request.Stream,
 			Mode:          request.Mode,
@@ -242,6 +243,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				Runtime:         request.DestinationRuntime,
 				Source:          request.Source,
 				SourceRuntime:   request.SourceRuntime,
+				Destination:     request.Destination,
 				Binding:         request.DestinationBinding,
 				Stream:          request.Stream,
 				Mode:            request.Mode,
@@ -417,7 +419,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		}
 		applyRequest, err := cloneDestinationApplyRequest(DestinationApplyRequest{
 			ConnectionID: request.ConnectionID, Plan: plan, Receipt: receipt, Workset: destinationWorkset,
-			Runtime: request.DestinationRuntime, Source: request.Source, SourceRuntime: request.SourceRuntime,
+			Runtime: request.DestinationRuntime, Source: request.Source, SourceRuntime: request.SourceRuntime, Destination: request.Destination,
 			Binding: request.DestinationBinding, Stream: request.Stream, Mode: request.Mode,
 			BatchSize: request.BatchSize, Approval: request.Approval,
 		})

@@ -97,7 +97,7 @@ func TestDestinationTransportDescriptorRejectsStrategyOutsideDeclaredModes(t *te
 	}
 }
 
-func TestDestinationTransportDescriptorAllowsChangeCaptureWithClosedApplyStrategy(t *testing.T) {
+func TestDestinationTransportDescriptorRefusesChangeCaptureDestinationMode(t *testing.T) {
 	descriptor := DestinationTransportDescriptor{
 		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
 		EligibleActions: []string{"stage_change_capture"},
@@ -112,19 +112,12 @@ func TestDestinationTransportDescriptorAllowsChangeCaptureWithClosedApplyStrateg
 		}},
 	}
 
-	if err := descriptor.Validate(); err != nil {
-		t.Fatalf("Validate() = %v, want declared change_capture destination to be accepted", err)
-	}
-	strategy, err := descriptor.ApplyStrategyFor(synccontract.ModeChangeCapture)
-	if err != nil {
-		t.Fatalf("ApplyStrategyFor(change_capture) = %v", err)
-	}
-	if strategy.Strategy != ApplyStrategyChangeApply || strategy.Action != "stage_change_capture" {
-		t.Fatalf("change_capture strategy = %#v, want closed change_apply/stage_change_capture binding", strategy)
+	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "change_capture") {
+		t.Fatalf("Validate() = %v, want destination change_capture role refusal", err)
 	}
 }
 
-func TestDestinationTransportDescriptorRefusesChangeCaptureWithoutChangeApply(t *testing.T) {
+func TestDestinationTransportDescriptorRefusesChangeCaptureDestinationModeRegardlessOfStrategy(t *testing.T) {
 	descriptor := DestinationTransportDescriptor{
 		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
 		EligibleActions: []string{"stage_change_capture"},
@@ -139,8 +132,8 @@ func TestDestinationTransportDescriptorRefusesChangeCaptureWithoutChangeApply(t 
 		}},
 	}
 
-	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "change_apply") {
-		t.Fatalf("Validate() = %v, want change_capture strategy refusal", err)
+	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "change_capture") {
+		t.Fatalf("Validate() = %v, want destination change_capture role refusal", err)
 	}
 }
 

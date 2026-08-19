@@ -847,7 +847,7 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 		app:              a,
 		connection:       connection,
 		executor:         &issueLabelDestinationExecutor{app: a, connector: github, contract: contract},
-		sourceExecutor:   &declarativeStreamSourceExecutor{connector: github, descriptor: *github.Definition().SyncTransport.Source},
+		sourceExecutor:   &declarativeStreamSourceExecutor{},
 		sourceConnector:  sourceConnector,
 		sourceCredential: sourceCredential,
 		sourceRuntime:    sourceRuntime,

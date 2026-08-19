@@ -367,7 +367,7 @@ func (d DestinationTransportDescriptor) Validate() error {
 	if err := validateTransportNames("destination eligible action", d.EligibleActions); err != nil {
 		return err
 	}
-	if err := validateTransportModes(d.Modes); err != nil {
+	if err := validateDestinationTransportModes(d.Modes); err != nil {
 		return err
 	}
 	if err := d.Delivery.Validate(); err != nil {
@@ -414,6 +414,16 @@ func (d DestinationTransportDescriptor) Validate() error {
 		if _, exists := strategies[mode]; !exists {
 			return fmt.Errorf("destination transport is missing declared apply strategy for sync mode %q", mode)
 		}
+	}
+	return nil
+}
+
+func validateDestinationTransportModes(modes []synccontract.Mode) error {
+	if err := validateTransportModes(modes); err != nil {
+		return err
+	}
+	if containsTransportMode(modes, synccontract.ModeChangeCapture) {
+		return fmt.Errorf("destination transport cannot declare change_capture mode; change capture is source-only into the connection warehouse")
 	}
 	return nil
 }

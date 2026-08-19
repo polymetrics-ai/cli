@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -29,7 +30,7 @@ func TestTransportFamilyHalfPathConformance(t *testing.T) {
 	}
 
 	for _, family := range families {
-		for _, mode := range synccontract.AllModes() {
+		for _, mode := range destinationTransportModes() {
 			family := family
 			mode := mode
 			t.Run(family.name+"/"+string(mode), func(t *testing.T) {
@@ -115,6 +116,29 @@ func TestTransportFamilyHalfPathConformance(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestTransportFamilyHalfPathConformanceRefusesChangeCaptureDestinationBeforeIO(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeChangeCapture}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeChangeCapture}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"fixture_change_capture"}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
+		Mode: synccontract.ModeChangeCapture, Strategy: connectors.ApplyStrategyChangeApply, Action: "fixture_change_capture",
+	}}
+
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeChangeCapture,
+		BatchSize: 1, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+	})
+	if err == nil || !strings.Contains(err.Error(), "cannot declare change_capture") {
+		t.Fatalf("Run() error = %v, want destination change_capture refusal", err)
+	}
+	if pair.sourceExecutor.readCalls != 0 || pair.destinationExecutor.planCalls != 0 || pair.destinationExecutor.applyCalls != 0 {
+		t.Fatalf("change_capture refusal source reads/plans/applies = %d/%d/%d, want zero before I/O", pair.sourceExecutor.readCalls, pair.destinationExecutor.planCalls, pair.destinationExecutor.applyCalls)
 	}
 }
 
@@ -251,6 +275,16 @@ func configureTransportFamilyMode(pair *testTransportPair, mode synccontract.Mod
 	return pair.destination.descriptor.Destination.ApplyStrategies[0], nil
 }
 
+func destinationTransportModes() []synccontract.Mode {
+	modes := make([]synccontract.Mode, 0, len(synccontract.AllModes())-1)
+	for _, mode := range synccontract.AllModes() {
+		if mode != synccontract.ModeChangeCapture {
+			modes = append(modes, mode)
+		}
+	}
+	return modes
+}
+
 func transportFamilyApplyStrategy(mode synccontract.Mode) (connectors.ApplyStrategy, error) {
 	switch mode {
 	case synccontract.ModeFullOverwrite:
@@ -263,8 +297,6 @@ func transportFamilyApplyStrategy(mode synccontract.Mode) (connectors.ApplyStrat
 		return connectors.ApplyStrategyDedupe, nil
 	case synccontract.ModeIncrementalDedupeHistory:
 		return connectors.ApplyStrategyDedupeHistory, nil
-	case synccontract.ModeChangeCapture:
-		return connectors.ApplyStrategyChangeApply, nil
 	default:
 		return "", errors.New("unknown canonical sync mode")
 	}

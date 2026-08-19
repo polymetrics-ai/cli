@@ -18,10 +18,6 @@ import (
 const (
 	declarativeStreamSourceExecutorID          = "declarative_stream_source"
 	issueLabelDestinationExecutorID            = "issue_label_destination"
-	declarativeStreamSourceEvidenceSuite       = "declarative_stream_transport"
-	declarativeStreamSourceEvidenceRun         = "all_executable_streams_v1"
-	issueLabelDestinationEvidenceSuite         = "closed_transport_demo"
-	issueLabelDestinationEvidenceRun           = "accepted_issue_label_destination"
 	issueLabelTransportSourceIssueConfig       = "transport_source_issue_number"
 	issueLabelTransportTargetIssueConfig       = "transport_target_issue_number"
 	issueLabelTransportLabelConfig             = "transport_label"
@@ -41,47 +37,74 @@ var (
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     issueLabelDestinationExecutorID,
 	}
-	declarativeStreamSourceEvidence = connectors.ConformanceEvidenceReference{
-		Suite: declarativeStreamSourceEvidenceSuite,
-		RunID: declarativeStreamSourceEvidenceRun,
-	}
-	issueLabelDestinationEvidence = connectors.ConformanceEvidenceReference{
-		Suite: issueLabelDestinationEvidenceSuite,
-		RunID: issueLabelDestinationEvidenceRun,
-	}
 )
 
-// issueLabelTransportDefinitionFactories names only the two adapter hooks.
-// Their selection and evidence admission are performed generically from
-// sync_transport.json by synctransport.RegisterDeclaredTransports.
-func issueLabelTransportDefinitionFactories(a *App) []synctransport.DefinitionFactory {
-	return []synctransport.DefinitionFactory{
-		{
-			Reference:      declarativeStreamSourceReference,
-			SourceEvidence: declarativeStreamSourceEvidence,
-			BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
-				engineConnector, descriptor, err := declarativeStreamTransportConnector(connector)
-				if err != nil {
-					return nil, err
-				}
-				return &declarativeStreamSourceExecutor{connector: engineConnector, descriptor: descriptor}, nil
-			},
-		},
-		{
-			Reference:           issueLabelDestinationReference,
-			DestinationEvidence: issueLabelDestinationEvidence,
-			BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
-				if a == nil {
-					return nil, fmt.Errorf("closed issue-label transport requires an app")
-				}
-				engineConnector, contract, err := issueLabelTransportConnectorContract(connector)
-				if err != nil {
-					return nil, err
-				}
-				return &issueLabelDestinationExecutor{app: a, connector: engineConnector, contract: contract}, nil
-			},
-		},
+// definitionTransportDefinitionFactories supplies the reusable declarative
+// source and closed typed-action destination adapters from definitions already
+// admitted to the registry. Evidence comes only from the role declaration that
+// selected the adapter; the loop is intentionally over descriptors and exact
+// executor references, never connector names.
+func definitionTransportDefinitionFactories(a *App, registry *connectors.Registry) ([]synctransport.DefinitionFactory, error) {
+	if a == nil {
+		return nil, fmt.Errorf("definition transport factories require an app")
 	}
+	if registry == nil {
+		return nil, fmt.Errorf("definition transport factories require a connector registry")
+	}
+	var sourceEvidences, destinationEvidences []connectors.ConformanceEvidenceReference
+	for _, metadata := range registry.List() {
+		connector, ok := registry.Get(metadata.Name)
+		if !ok {
+			return nil, fmt.Errorf("declared connector %q disappeared from registry", metadata.Name)
+		}
+		descriptor, declared := connectors.SyncTransportDescriptorOf(connector)
+		if !declared {
+			continue
+		}
+		if descriptor.Source != nil && descriptor.Source.Executor == declarativeStreamSourceReference {
+			sourceEvidences = appendDefinitionTransportEvidence(sourceEvidences, descriptor.Source.Conformance)
+		}
+		if descriptor.Destination != nil && descriptor.Destination.Executor == issueLabelDestinationReference {
+			destinationEvidences = appendDefinitionTransportEvidence(destinationEvidences, descriptor.Destination.Conformance)
+		}
+	}
+	factories := make([]synctransport.DefinitionFactory, 0, 2)
+	if len(sourceEvidences) != 0 {
+		factories = append(factories, synctransport.DefinitionFactory{
+			Reference:               declarativeStreamSourceReference,
+			SourceEvidence:          sourceEvidences[0],
+			AcceptedSourceEvidences: append([]connectors.ConformanceEvidenceReference(nil), sourceEvidences[1:]...),
+			BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
+				if _, _, err := declarativeStreamTransportConnector(connector); err != nil {
+					return nil, err
+				}
+				return &declarativeStreamSourceExecutor{}, nil
+			},
+		})
+	}
+	if len(destinationEvidences) != 0 {
+		factories = append(factories, synctransport.DefinitionFactory{
+			Reference:                    issueLabelDestinationReference,
+			DestinationEvidence:          destinationEvidences[0],
+			AcceptedDestinationEvidences: append([]connectors.ConformanceEvidenceReference(nil), destinationEvidences[1:]...),
+			BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
+				if _, _, err := issueLabelTransportConnectorContract(connector); err != nil {
+					return nil, err
+				}
+				return &issueLabelDestinationExecutor{app: a}, nil
+			},
+		})
+	}
+	return factories, nil
+}
+
+func appendDefinitionTransportEvidence(values []connectors.ConformanceEvidenceReference, evidence connectors.ConformanceEvidenceReference) []connectors.ConformanceEvidenceReference {
+	for _, value := range values {
+		if value == evidence {
+			return values
+		}
+	}
+	return append(values, evidence)
 }
 
 func declarativeStreamTransportConnector(connector connectors.Connector) (*engine.Connector, connectors.SourceTransportDescriptor, error) {
@@ -94,8 +117,8 @@ func declarativeStreamTransportConnector(connector connectors.Connector) (*engin
 		return nil, connectors.SourceTransportDescriptor{}, fmt.Errorf("declarative stream transport requires a source declaration")
 	}
 	descriptor := *definition.SyncTransport.Source
-	if descriptor.Executor != declarativeStreamSourceReference || descriptor.Conformance != declarativeStreamSourceEvidence {
-		return nil, connectors.SourceTransportDescriptor{}, fmt.Errorf("declarative stream transport requires its exact executor and evidence")
+	if descriptor.Executor != declarativeStreamSourceReference {
+		return nil, connectors.SourceTransportDescriptor{}, fmt.Errorf("declarative stream transport requires its exact executor")
 	}
 	if err := validateDeclarativeStreamEligibility(definition.Streams, descriptor.EligibleStreams); err != nil {
 		return nil, connectors.SourceTransportDescriptor{}, err
@@ -573,8 +596,6 @@ func (a issueLabelTransportAction) targetAndLabel(record connectors.Record) (int
 }
 
 type declarativeStreamSourceExecutor struct {
-	connector  *engine.Connector
-	descriptor connectors.SourceTransportDescriptor
 }
 
 func (*declarativeStreamSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -586,13 +607,14 @@ func (*declarativeStreamSourceExecutor) TransportExecutorReference() connectors.
 func (*declarativeStreamSourceExecutor) AllowEmptySourceResult() {}
 
 func (e *declarativeStreamSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
-	if e == nil || e.connector == nil {
+	if e == nil || request.Connector == nil {
 		return fmt.Errorf("declarative stream transport source is unavailable")
 	}
-	if request.Connector == nil || request.Connector.Name() != e.connector.Name() || !transportContainsName(e.descriptor.EligibleStreams, request.Stream) {
+	descriptor, ok := connectors.SourceTransportDescriptorOf(request.Connector)
+	if !ok || descriptor.Executor != declarativeStreamSourceReference || !transportContainsName(descriptor.EligibleStreams, request.Stream) {
 		return fmt.Errorf("declarative stream transport source received an undeclared connector or stream")
 	}
-	if !transportContainsMode(e.descriptor.Modes, request.Mode) {
+	if !transportContainsMode(descriptor.Modes, request.Mode) {
 		return fmt.Errorf("declarative stream transport source does not support sync mode %q", request.Mode)
 	}
 	if request.BatchSize <= 0 || request.BatchSize > issueCollectionTransportMaxRecords {
@@ -611,12 +633,12 @@ func (e *declarativeStreamSourceExecutor) ReadTransport(ctx context.Context, req
 		return fmt.Errorf("%s is valid only for the issues stream", issueLabelTransportSourceIssueConfig)
 	}
 	if configuredIssue == "" {
-		return e.readDeclarativeCollection(ctx, request, emit)
+		return e.readDeclarativeCollection(ctx, request.Connector, request, emit)
 	}
-	return e.readConfiguredIssue(ctx, request, emit)
+	return e.readConfiguredIssue(ctx, request.Connector, request, emit)
 }
 
-func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
 	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
 		return err
 	}
@@ -629,7 +651,7 @@ func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Contex
 	}
 
 	records := make([]connectors.Record, 0, 1)
-	err = e.connector.Read(ctx, connectors.ReadRequest{
+	err = connector.Read(ctx, connectors.ReadRequest{
 		Stream:           "issues",
 		Config:           request.Runtime,
 		Limit:            request.BatchSize,
@@ -668,7 +690,7 @@ func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Contex
 // retains ownership of provider pagination. A persisted candidate is matched
 // and suppressed on resume, so acknowledged pages are not re-delivered even
 // though the provider sequence must be traversed again to recover its position.
-func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
 	maxPages, err := declarativeTransportMaxPages(request.Runtime.Config)
 	if err != nil {
 		return err
@@ -702,7 +724,7 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 		records = records[:0]
 		return emit(page)
 	}
-	err = e.connector.Read(ctx, connectors.ReadRequest{
+	err = connector.Read(ctx, connectors.ReadRequest{
 		Stream:           request.Stream,
 		Config:           request.Runtime,
 		MaxPages:         maxPages,
@@ -787,16 +809,17 @@ func (*issueLabelDestinationExecutor) TransportExecutorReference() connectors.Tr
 }
 
 func (e *issueLabelDestinationExecutor) PlanDestination(_ context.Context, request synctransport.DestinationPlanRequest) (synctransport.DestinationPlan, error) {
-	if e == nil || e.connector == nil {
+	connector, contract, err := e.destinationFor(request.Connector)
+	if err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	if e == nil || connector == nil {
 		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
-	if request.Connector == nil || request.Connector.Name() != e.connector.Name() {
-		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label destination received an undeclared strategy")
-	}
-	if !e.contract.matchesApplyStrategy(request.ApplyStrategy) {
+	if !contract.matchesApplyStrategy(request.ApplyStrategy) {
 		return synctransport.DestinationPlan{}, &IssueLabelTransportUnsupportedActionError{Action: request.ApplyStrategy.Action}
 	}
-	if _, err := e.sourceBindingFor(request.Source, request.Stream); err != nil {
+	if _, err := e.sourceBindingFor(connector, request.Source, request.Stream); err != nil {
 		return synctransport.DestinationPlan{}, err
 	}
 	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
@@ -811,19 +834,29 @@ func (e *issueLabelDestinationExecutor) PlanDestination(_ context.Context, reque
 	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
 }
 
-func (e *issueLabelDestinationExecutor) sourceBindingFor(source connectors.Connector, stream string) (connectors.DestinationSourceBinding, error) {
-	if e == nil || e.connector == nil || source == nil {
+func (e *issueLabelDestinationExecutor) destinationFor(candidate connectors.Connector) (*engine.Connector, issueLabelTransportContract, error) {
+	if e == nil {
+		return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport destination is unavailable")
+	}
+	if candidate == nil {
+		candidate = e.connector
+	}
+	return issueLabelTransportConnectorContract(candidate)
+}
+
+func (e *issueLabelDestinationExecutor) sourceBindingFor(destination *engine.Connector, source connectors.Connector, stream string) (connectors.DestinationSourceBinding, error) {
+	if e == nil || destination == nil || source == nil {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination received an undeclared source")
 	}
 	sourceDescriptor, ok := connectors.SourceTransportDescriptorOf(source)
 	if !ok {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination received a source without a transport declaration")
 	}
-	destination := e.connector.Definition().SyncTransport
-	if destination == nil || destination.Destination == nil {
+	descriptor := destination.Definition().SyncTransport
+	if descriptor == nil || descriptor.Destination == nil {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination lost its transport declaration")
 	}
-	binding, admitted := destination.Destination.SourceBindingFor(sourceDescriptor.Executor, stream)
+	binding, admitted := descriptor.Destination.SourceBindingFor(sourceDescriptor.Executor, stream)
 	if !admitted {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination does not admit source executor %q for stream %q", sourceDescriptor.Executor.ID, stream)
 	}
@@ -831,10 +864,14 @@ func (e *issueLabelDestinationExecutor) sourceBindingFor(source connectors.Conne
 }
 
 func (e *issueLabelDestinationExecutor) ApplyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
-	if e == nil || e.app == nil || e.connector == nil {
+	connector, contract, err := e.destinationFor(request.Destination)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	if e == nil || e.app == nil || connector == nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
-	if !e.contract.matchesApplyStrategy(request.Plan.ApplyStrategy) {
+	if !contract.matchesApplyStrategy(request.Plan.ApplyStrategy) {
 		return synccontract.DownstreamAcknowledgement{}, &IssueLabelTransportUnsupportedActionError{Action: request.Plan.ApplyStrategy.Action}
 	}
 	if request.Workset.ID == "" || len(request.Workset.Records) != 1 {
@@ -843,20 +880,24 @@ func (e *issueLabelDestinationExecutor) ApplyDestination(ctx context.Context, re
 	if _, err := e.app.ApplyIssueLabelTransport(ctx, request.ConnectionID, request.Approval, request.Runtime, request.Receipt, request.Workset); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
-	return synccontract.NewDurableDownstreamAcknowledgement(e.connector.Name(), time.Now().UTC())
+	return synccontract.NewDurableDownstreamAcknowledgement(connector.Name(), time.Now().UTC())
 }
 
 func (e *issueLabelDestinationExecutor) ReadBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
-	if e == nil || e.app == nil || e.connector == nil {
+	connector, contract, err := e.destinationFor(request.Destination)
+	if err != nil {
+		return err
+	}
+	if e == nil || e.app == nil || connector == nil {
 		return fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
 	if request.Workset.ID == "" {
 		return fmt.Errorf("closed issue-label destination read-back received an undeclared receipt")
 	}
-	if !e.contract.matchesApplyStrategy(request.Plan.ApplyStrategy) {
+	if !contract.matchesApplyStrategy(request.Plan.ApplyStrategy) {
 		return &IssueLabelTransportUnsupportedActionError{Action: request.Plan.ApplyStrategy.Action}
 	}
-	action, err := e.contract.actionForSyncMode(request.Plan.ApplyStrategy.Mode)
+	action, err := contract.actionForSyncMode(request.Plan.ApplyStrategy.Mode)
 	if err != nil {
 		return err
 	}
@@ -889,7 +930,7 @@ func (e *issueLabelDestinationExecutor) ReadBackDestination(ctx context.Context,
 	}
 	found := false
 	exact := request.Plan.ApplyStrategy.Mode == synccontract.ModeFullOverwrite || request.Plan.ApplyStrategy.Mode == synccontract.ModeIncrementalUpsert
-	err = e.connector.Read(ctx, connectors.ReadRequest{
+	err = connector.Read(ctx, connectors.ReadRequest{
 		Stream:   "issues",
 		Config:   request.Runtime,
 		Limit:    100,
