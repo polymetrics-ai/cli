@@ -27,3 +27,8 @@
 - Reconciliation decision: attachment resource CRUD is JSON REST metadata, not
   a documented file-transfer contract. The seven-surface ledger records zero
   binary read/write and direct-write operations rather than inventing them.
+- Source-audit confirmation: Twenty documents both REST and GraphQL as
+  workspace-schema-generated Core APIs. The source-locked #277 inventory is
+  the workspace-specific REST contract; no GraphQL or Metadata API operation
+  is inferred from its REST counterpart. This boundary is recorded in the
+  machine-readable ledger.

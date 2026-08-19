@@ -53,6 +53,8 @@ supplied and exercised from the refreshed #4304 head before final push.
 all 168 source-locked REST operations as declared with zero exclusions: 28 ETL
 reads, 28 operation-backed direct reads, and 112 typed reverse-ETL actions.
 The published source contract exposes neither file-transfer nor direct-write
-operations, so both binary surfaces and direct write are truthfully zero.
+operations in the source-locked REST inventory, so both binary surfaces and
+direct write are truthfully zero. Twenty's GraphQL and Metadata APIs are
+workspace-schema-generated and are not inferred from that REST contract.
 The no-tombstone destination does not weaken CLI reachability: 28 destructive
 delete actions remain implemented, approval-gated, and typed-confirmed.

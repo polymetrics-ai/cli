@@ -2,6 +2,7 @@
   "schema_version": 1,
   "connector": "twenty",
   "issue": 277,
+  "scope": "Issue #277's source-locked, workspace-specific Core REST inventory. Twenty generates REST and GraphQL schemas per workspace; no GraphQL or metadata operation is inferred from the REST contract.",
   "source_lock": {
     "api_surface": "internal/connectors/defs/twenty/api_surface.json",
     "operations": "internal/connectors/defs/twenty/operations.json",
@@ -15,12 +16,12 @@
     "binary_read": {
       "count": 0,
       "status": "not_documented",
-      "evidence": "The recovered published contract has only JSON REST resource endpoints. Attachment resource CRUD is not a documented binary transfer operation."
+      "evidence": "The source-locked REST inventory has only JSON resource endpoints. Attachment resource CRUD is not an inferred binary transfer operation."
     },
     "binary_write": {
       "count": 0,
       "status": "not_documented",
-      "evidence": "The recovered published contract has no documented upload or other binary transfer endpoint; no REST write is recast as binary."
+      "evidence": "The source-locked REST inventory has no upload or other binary transfer endpoint; no REST write is recast as binary."
     },
     "direct_read": {
       "count": 28,
@@ -32,7 +33,7 @@
     "direct_write": {
       "count": 0,
       "status": "not_documented",
-      "evidence": "The recovered published REST mutations are schema-backed typed reverse-ETL actions, not direct-write operation contracts."
+      "evidence": "The source-locked REST mutations are schema-backed typed reverse-ETL actions, not direct-write operation contracts. GraphQL mutations are separately schema-generated per workspace and are not inferred."
     },
     "etl": {
       "count": 28,
