@@ -480,6 +480,8 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 		"declarative JSON bundles",
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
+		"DECLARATION-BOUND STRUCTURED WRITE INPUTS",
+		"There is no raw\n  --body flag",
 		"pm connectors catalog --capability write --json",
 		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"legacy_unverified",

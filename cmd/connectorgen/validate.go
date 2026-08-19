@@ -944,19 +944,27 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 		switch {
 		case cmd.Intent == "reverse_etl" && strings.TrimSpace(cmd.Write) != "" && strings.HasPrefix(flag.MapsTo, "record."):
 			continue
-		case (cmd.Intent == "direct_read" || cmd.Intent == "direct_write") && strings.TrimSpace(cmd.Operation) != "":
+		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			operation, found := operations[cmd.Operation]
 			if ok && variable != "" && !strings.Contains(variable, ".") && found {
-				if err := engine.ValidateGraphQLOperationStructuredJSONVariable(operation, variable); err == nil {
+				if err := engine.ValidateOperationStructuredJSONBodyField(operation, variable); err == nil {
 					continue
 				} else {
 					findings = append(findings, Finding{
 						Connector: b.Name,
 						File:      "cli_surface.json",
 						Rule:      ruleCLISurfaceSafety,
-						Message:   fmt.Sprintf("implemented command %d (%q) fixed GraphQL variable --%s is not declared safely: %v", i, cmd.Path, flag.Name, err),
+						Message:   fmt.Sprintf("implemented command %d (%q) operation body field --%s is not declared safely: %v", i, cmd.Path, flag.Name, err),
 					})
+					continue
+				}
+			}
+		case cmd.Intent == "direct_read" && strings.TrimSpace(cmd.Operation) != "":
+			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
+			operation, found := operations[cmd.Operation]
+			if ok && variable != "" && !strings.Contains(variable, ".") && found {
+				if err := engine.ValidateGraphQLOperationStructuredJSONVariable(operation, variable); err == nil {
 					continue
 				}
 			}
@@ -965,7 +973,7 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented command %d (%q) structured JSON flag --%s is allowed only on a declared reverse-ETL record field or fixed GraphQL variable", i, cmd.Path, flag.Name),
+			Message:   fmt.Sprintf("implemented command %d (%q) structured JSON flag --%s is allowed only on a declared reverse-ETL record field, fixed REST body field, or fixed GraphQL variable", i, cmd.Path, flag.Name),
 		})
 	}
 	return findings
@@ -1333,7 +1341,7 @@ func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd e
 	for _, flag := range cmd.Flags {
 		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
 		if ok && target != "" {
-			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required, typeName: flag.Type})
 		}
 	}
 	var findings []Finding
@@ -1357,6 +1365,7 @@ type cliBodyFlagMapping struct {
 	target   string
 	name     string
 	required bool
+	typeName string
 }
 
 func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
@@ -1383,6 +1392,13 @@ func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTarg
 	optionalFound := false
 	for _, mapping := range mappedTargets {
 		covers := mapping.target == requiredPath
+		// A declaration-backed JSON flag supplies a whole closed, bounded
+		// object/array, including its required descendants. The separate shared
+		// structured-body validator proves this is not a scalar or arbitrary
+		// object before an implemented command can pass validation.
+		if !covers && mapping.typeName == "json" && dottedPathPrefix(mapping.target, requiredPath) {
+			covers = true
+		}
 		if !covers && err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, mapping.target) {
 			covers = true
 		}

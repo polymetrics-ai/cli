@@ -54,9 +54,10 @@ var (
 // compile-time proof that Base + those four methods together satisfy
 // connectors.Connector.
 var (
-	_ connectors.DefinitionProvider              = Base{}
-	_ connectors.OperationDirectReadPreflighter  = Base{}
-	_ connectors.OperationDirectWritePreflighter = Base{}
+	_ connectors.DefinitionProvider                     = Base{}
+	_ connectors.OperationDirectReadPreflighter         = Base{}
+	_ connectors.OperationDirectWritePreflighter        = Base{}
+	_ connectors.OperationStructuredJSONBodyPreflighter = Base{}
 )
 
 // --- test fixtures ---

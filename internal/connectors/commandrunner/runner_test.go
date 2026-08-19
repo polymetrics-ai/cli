@@ -2200,6 +2200,78 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 	if !ok || len(targets) != 1 {
 		t.Fatalf("targets = %#v, want one declared array entry", command.Record["targets"])
 	}
+
+	baseFlags := map[string][]string{
+		"workspace-id": {"workspace-1"},
+		"dry-run":      {"true"},
+		"label":        {"fixture widget"},
+		"attributes":   {`{"owner":"owner-1","active":true}`},
+		"targets":      {`[{"id":"target-1"}]`},
+	}
+	for _, tc := range []struct {
+		name    string
+		mutate  func(map[string][]string)
+		wantErr string
+	}{
+		{
+			name: "path cannot be supplied by body",
+			mutate: func(flags map[string][]string) {
+				delete(flags, "workspace-id")
+				flags["attributes"] = []string{`{"owner":"owner-1","active":true,"workspace_id":"wrong-namespace"}`}
+			},
+			wantErr: "missing required flag --workspace-id",
+		},
+		{
+			name: "malformed structured body",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":`}
+			},
+			wantErr: "invalid JSON for --attributes",
+		},
+		{
+			name: "structured body over flag limit",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":"` + strings.Repeat("x", maxStructuredJSONFlagBytes) + `","active":true}`}
+			},
+			wantErr: "structured JSON exceeds",
+		},
+		{
+			name: "raw body is not an escape hatch",
+			mutate: func(flags map[string][]string) {
+				flags["body"] = []string{`{"arbitrary":true}`}
+			},
+			wantErr: "unknown flag --body",
+		},
+		{
+			name: "request metadata is not caller controlled",
+			mutate: func(flags map[string][]string) {
+				flags["method"] = []string{http.MethodDelete}
+			},
+			wantErr: "unknown flag --method",
+		},
+		{
+			name: "other action fields cannot bind",
+			mutate: func(flags map[string][]string) {
+				flags["archive"] = []string{`{"reason":"wrong-action"}`}
+			},
+			wantErr: "unknown flag --archive",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			flags := make(map[string][]string, len(baseFlags))
+			for name, values := range baseFlags {
+				flags[name] = append([]string(nil), values...)
+			}
+			tc.mutate(flags)
+			_, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+				Path:  []string{"widgets", "create"},
+				Flags: flags,
+			})
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
 }
 
 func TestGitHubUserDraftCommandBuildsFixedGraphQLMutation(t *testing.T) {

@@ -272,6 +272,14 @@ func (c *Connector) PreflightOperationStructuredJSONVariable(operation, variable
 	return ValidateGraphQLOperationStructuredJSONVariable(op, variable)
 }
 
+// PreflightOperationStructuredJSONBodyField admits one declared top-level
+// structured input for a fixed REST or GraphQL write operation. It resolves no
+// credentials and makes no request; the operation schema remains the only
+// authority for the object or array accepted at that field.
+func (c *Connector) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	return PreflightOperationStructuredJSONBodyField(c.bundle, operation, field)
+}
+
 // PreflightOperationDirectWrite proves a command's declared binding can reach
 // this connector's typed write executor without resolving credentials or
 // making a network request.
@@ -488,6 +496,12 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 // operation direct-write binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
 	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+}
+
+// PreflightOperationStructuredJSONBodyField validates a native connector's
+// declaration-owned structured input without resolving credentials or I/O.
+func (b Base) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	return PreflightOperationStructuredJSONBodyField(b.bundle, operation, field)
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a

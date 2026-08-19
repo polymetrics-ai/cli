@@ -95,6 +95,13 @@ type structuredJSONRecordPreflighter interface {
 	PreflightStructuredJSONRecordField(actionName, field string) error
 }
 
+// structuredJSONOperationBodyPreflighter is intentionally an operation
+// contract rather than a generic JSON parser. The engine owns the source
+// schema, body mapping, and recursive bounds for the named field.
+type structuredJSONOperationBodyPreflighter interface {
+	PreflightOperationStructuredJSONBodyField(operation, field string) error
+}
+
 type BlockedCommandError struct {
 	Connector    string
 	Command      string
@@ -460,10 +467,11 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 }
 
 // preflightStructuredJSONFlags preserves the original reverse-ETL record
-// boundary and adds one equally declaration-bound GraphQL exception. A JSON
-// flag never means "take an arbitrary request body": the GraphQL branch can
-// name only body.<one variable>, and the engine then proves that variable is a
-// closed object/array in a fixed operation's schema.
+// boundary and adds operation-specific exceptions. A JSON flag never means
+// "take an arbitrary request body": a direct write can name only one
+// top-level body field from its fixed REST operation and a direct read can name
+// only one variable from its fixed GraphQL operation. The engine proves the
+// named value is a closed, bounded object or array in that exact declaration.
 func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
 	var preflighter structuredJSONRecordPreflighter
 	var graphQLPreflighter connectors.OperationStructuredJSONVariablePreflighter
@@ -487,7 +495,19 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 			if err := preflighter.PreflightStructuredJSONRecordField(cmd.Write, field); err != nil {
 				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
 			}
-		case (cmd.Intent == "direct_read" || cmd.Intent == "direct_write") && strings.TrimSpace(cmd.Operation) != "":
+		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
+			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
+			if !ok || variable == "" || strings.Contains(variable, ".") {
+				return fmt.Errorf("structured JSON flag --%s must map to one top-level body.<field> of its declared operation", flag.Name)
+			}
+			preflighter, supported := connector.(structuredJSONOperationBodyPreflighter)
+			if !supported {
+				return fmt.Errorf("structured JSON flag --%s requires declaration-backed operation body preflight", flag.Name)
+			}
+			if err := preflighter.PreflightOperationStructuredJSONBodyField(cmd.Operation, variable); err != nil {
+				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
+			}
+		case cmd.Intent == "direct_read" && strings.TrimSpace(cmd.Operation) != "":
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			if !ok || variable == "" || strings.Contains(variable, ".") {
 				return fmt.Errorf("structured JSON flag --%s must map to one top-level body.<variable> of a fixed GraphQL operation", flag.Name)
@@ -503,7 +523,7 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
 			}
 		default:
-			return fmt.Errorf("structured JSON flag --%s is allowed only on a declared reverse-ETL record field or fixed GraphQL variable", flag.Name)
+			return fmt.Errorf("structured JSON flag --%s is allowed only on a declared reverse-ETL record field, fixed REST body field, or fixed GraphQL variable", flag.Name)
 		}
 	}
 	return nil
@@ -1710,7 +1730,7 @@ func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connector
 	if cmd.Intent == "reverse_etl" && strings.HasPrefix(flag.MapsTo, "record.") {
 		return coerceRecordFlagValue(flag, values)
 	}
-	if flag.Type == "json" && isDeclaredStructuredGraphQLVariableFlag(cmd, flag) {
+	if flag.Type == "json" && isDeclaredStructuredJSONOperationBodyFlag(cmd, flag) {
 		return coerceDeclaredStructuredJSONRecordFlagValue(flag, values)
 	}
 	if cmd.Intent == "direct_read" && flag.MapsTo == "body" {
@@ -1719,13 +1739,12 @@ func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connector
 	return coerceFlagValue(flag, values)
 }
 
-// isDeclaredStructuredGraphQLVariableFlag mirrors the non-network preflight
-// shape before admitting JSON parsing. Runtime has already called
-// preflightStructuredJSONFlags, which asks the engine to prove the matching
-// fixed GraphQL operation variable. Keeping this syntactic guard here ensures
-// an internal caller cannot accidentally route a nested/direct REST body
-// through the structured parser.
-func isDeclaredStructuredGraphQLVariableFlag(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag) bool {
+// isDeclaredStructuredJSONOperationBodyFlag mirrors the non-network preflight
+// shape before admitting JSON parsing. Runtime has already tied the exact
+// field to either a fixed GraphQL variable or a closed REST body property.
+// Keeping this syntactic guard here ensures an internal caller cannot route a
+// raw or nested path through the structured parser.
+func isDeclaredStructuredJSONOperationBodyFlag(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag) bool {
 	if (cmd.Intent != "direct_read" && cmd.Intent != "direct_write") || strings.TrimSpace(cmd.Operation) == "" {
 		return false
 	}

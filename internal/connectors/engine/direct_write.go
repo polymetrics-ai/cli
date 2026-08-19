@@ -649,6 +649,14 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 	if op.REST == nil {
 		return nil, nil
 	}
+	for field, value := range overrides {
+		if !isStructuredJSONBodyValue(value) {
+			continue
+		}
+		if err := ValidateOperationStructuredJSONBodyField(op, field); err != nil {
+			return nil, err
+		}
+	}
 	body := cloneAnyMap(op.REST.Body)
 	for key, value := range overrides {
 		body[key] = value

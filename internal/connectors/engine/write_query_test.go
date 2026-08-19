@@ -126,6 +126,167 @@ func TestWriteActionQueryFromRecordField(t *testing.T) {
 	}
 }
 
+func TestBuildWriteQueryOmitWhenAbsentScopesMissingRecordValuesToTheirDeclaredQuery(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		param   QueryParam
+		vars    Vars
+		want    string
+		wantErr string
+	}{
+		{
+			name:  "missing optional record value is omitted",
+			param: QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{Config: map[string]string{"optional": "wrong-source"}, Record: map[string]any{"other": "present"}},
+		},
+		{
+			name:    "missing required record value fails",
+			param:   QueryParam{Template: "{{ record.required }}"},
+			vars:    Vars{Config: map[string]string{"required": "wrong-source"}},
+			wantErr: "unresolved key",
+		},
+		{
+			name:  "explicit record value is preserved",
+			param: QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{Record: map[string]any{"optional": "record-value"}},
+			want:  "record-value",
+		},
+		{
+			name:  "config omission remains unchanged",
+			param: QueryParam{Template: "{{ config.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{},
+		},
+		{
+			name:  "secret omission remains unchanged",
+			param: QueryParam{Template: "{{ secrets.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{},
+		},
+		{
+			name:  "incremental omission remains unchanged",
+			param: QueryParam{Template: "{{ incremental.lower_bound }}", OmitWhenAbsent: true},
+			vars:  Vars{},
+		},
+		{
+			name:    "wrong source remains a failure",
+			param:   QueryParam{Template: "{{ query.optional }}", OmitWhenAbsent: true},
+			vars:    Vars{},
+			wantErr: "unresolved key",
+		},
+		{
+			name:    "malformed explicit value remains a failure",
+			param:   QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "bad\r\nvalue"}},
+			wantErr: "contains CR/LF",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			query, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": tc.param},
+			}, tc.vars)
+			if tc.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+					t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("buildWriteQuery: %v", err)
+			}
+			if got := query.Get("optional"); got != tc.want {
+				t.Fatalf("optional query = %q, want %q", got, tc.want)
+			}
+			if tc.want == "" {
+				if _, present := query["optional"]; present {
+					t.Fatalf("optional query = %v, want parameter omitted", query)
+				}
+			}
+		})
+	}
+}
+
+func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		param   QueryParam
+		record  connectors.Record
+		wantErr string
+	}{
+		{
+			name:    "required record value",
+			param:   QueryParam{Template: "{{ record.required }}"},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: "unresolved key",
+		},
+		{
+			name:    "undeclared record value cannot cross-bind",
+			param:   QueryParam{Template: "{{ record.declared }}"},
+			record:  connectors.Record{"id": "w1", "undeclared": "attempted-value"},
+			wantErr: "unresolved key",
+		},
+		{
+			name:    "wrong source",
+			param:   QueryParam{Template: "{{ query.optional }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: "unresolved key",
+		},
+		{
+			name:    "malformed explicit value",
+			param:   QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1", "optional": "bad\r\nvalue"},
+			wantErr: "contains CR/LF",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv, seen := queryCaptureServer(t)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+				Query: map[string]QueryParam{"optional": tc.param},
+			})
+			err := writeOneRecord(t, bundle, "update_widget", connectors.RuntimeConfig{}, tc.record)
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("Write error = %v, want %q", err, tc.wantErr)
+			}
+			if len(*seen) != 0 {
+				t.Fatalf("rejected query reached provider; requests = %d", len(*seen))
+			}
+		})
+	}
+}
+
+func TestWriteActionOptionalRecordQueryIsOmittedOrPreservedAtProvider(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		record connectors.Record
+		want   string
+	}{
+		{name: "missing optional record value is omitted", record: connectors.Record{"id": "w1"}},
+		{name: "explicit record value is preserved", record: connectors.Record{"id": "w1", "optional": "record-value"}, want: "record-value"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv, seen := queryCaptureServer(t)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+				Query: map[string]QueryParam{"optional": {Template: "{{ record.optional }}", OmitWhenAbsent: true}},
+			})
+			if err := writeOneRecord(t, bundle, "update_widget", connectors.RuntimeConfig{}, tc.record); err != nil {
+				t.Fatalf("Write: %v", err)
+			}
+			if len(*seen) != 1 {
+				t.Fatalf("provider requests = %d, want 1", len(*seen))
+			}
+			if got := (*seen)[0].Get("optional"); got != tc.want {
+				t.Fatalf("optional query = %q, want %q", got, tc.want)
+			}
+			if tc.want == "" {
+				if _, present := (*seen)[0]["optional"]; present {
+					t.Fatalf("optional query = %v, want parameter omitted", (*seen)[0])
+				}
+			}
+		})
+	}
+}
+
 // TestWriteActionQueryAllBodyTypes: the resolved query must reach the wire for
 // every body_type branch, not just the default JSON one. executeWriteRecord
 // passed nil in all six branches before this capability existed.
