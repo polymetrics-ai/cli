@@ -70,6 +70,13 @@ async function fetchWithBackoff(url, progress, crawl) {
 const progress = readProgress();
 const crawl = progress.crawls.square;
 crawl.group_pages ||= {};
+// A previously rate-limited crawl may resume successfully. Keep the durable
+// state accurate while it is still incomplete rather than retaining a stale
+// rate-limit label or a non-durable historical probe count.
+crawl.state = 'in_progress';
+crawl.coverage_confidence = 'partial';
+crawl.resume_strategy = 'The persisted group_pages records are authoritative progress. Resume only missing pages, with bounded sequential exponential backoff; never promote a count before every root-discovered group succeeds.';
+writeProgress(progress);
 
 const rootBody = await fetchWithBackoff(root, progress, crawl);
 const groups = groupURLs(rootBody.toString('utf8'));
@@ -104,7 +111,8 @@ for (const groupURL of groups) {
   }
 }
 
-if (Object.keys(crawl.group_pages).length === groups.length) {
+const emptyGroups = groups.filter(groupURL => (crawl.group_pages[groupURL]?.operations ?? []).length === 0);
+if (Object.keys(crawl.group_pages).length === groups.length && emptyGroups.length === 0) {
   const all = Object.values(crawl.group_pages).flatMap(page => page.operations);
   const seen = new Set();
   const unique = all.filter(operation => {
@@ -125,5 +133,18 @@ if (Object.keys(crawl.group_pages).length === groups.length) {
   writeProgress(progress);
   console.log(`square crawl complete: ${groups.length}/${groups.length} groups, ${unique.length} unique operations`);
 } else {
-  console.log(`square crawl partial: ${Object.keys(crawl.group_pages).length}/${groups.length} groups; no source-lock count promoted`);
+  crawl.state = Object.keys(crawl.group_pages).length === groups.length ? 'partial_incomplete_extraction' : crawl.state;
+  crawl.groups_retrieved = Object.keys(crawl.group_pages).length;
+  crawl.groups_extracted = groups.length - emptyGroups.length;
+  crawl.operations_found = null;
+  crawl.coverage_confidence = 'partial';
+  crawl.last_error = emptyGroups.length ? `Rendered-reference parser found zero operations in ${emptyGroups.length} fetched group page(s): ${emptyGroups.join(', ')}` : crawl.last_error;
+  crawl.resume_strategy = emptyGroups.length
+    ? 'Resume at the listed zero-operation group pages using a rendered-browser extraction path. All groups must yield their operation cards before de-duplication; do not promote the partial operation list into a source lock.'
+    : 'Resume the saved crawl; do not use the partial group or operation total as a source-lock denominator.';
+  delete crawl.completed_operations;
+  delete crawl.operation_counts;
+  writeProgress(progress);
+  console.log(`square crawl partial: ${crawl.groups_retrieved}/${groups.length} pages fetched, ${crawl.groups_extracted}/${groups.length} operation groups extracted; no source-lock count promoted`);
+  process.exitCode = 75;
 }

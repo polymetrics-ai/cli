@@ -22,7 +22,7 @@ The source-lock recovery audit covers every connector owned by this issue. A row
 | service-now | 22 | — | pending fixed-platform and dynamic-schema basis | pending |
 | chatwoot | 148 | — | pending provider-surface audit | pending |
 | chargebee | 428 | — | pending provider-surface audit | pending |
-| square | 11 | — | rendered-reference crawl **partial: 16/40 groups confirmed; HTTP 429; no count promoted** | partial — resume required |
+| square | 11 | — | rendered-reference crawl **partial: 40/40 group pages fetched but only 33/40 operation groups extracted; `operations_found` remains null; no count promoted** | partial — rendered-browser extraction required |
 | braintree | 73 | — | pending provider-surface audit | pending |
 
 The legacy counts are the counts before remapping; Salesloft’s legacy count was 12 even though its source lock had already been updated to 211 in the first recovery step. They must not be treated as provider coverage.
