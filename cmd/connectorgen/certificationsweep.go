@@ -122,10 +122,11 @@ func classifyCertificationParity(input certificationParityInput) (certificationP
 		return certificationParityProjection{}, nil
 	}
 	if input.Changefeed != nil {
-		if input.Changefeed.Status == connectors.ChangefeedStatusImplemented {
-			return certificationParityProjection{OperationKind: certificationParityKindChangefeed, OpClass: certificationParityClassETL}, nil
-		}
-		return certificationParityProjection{}, nil
+		// A declared changefeed remains a changefeed projection even when its
+		// availability is not implemented. The sweep's accounting status carries
+		// that availability; suppressing the kind would turn a real ETL
+		// subcontract into an indistinguishable N/A row.
+		return certificationParityProjection{OperationKind: certificationParityKindChangefeed, OpClass: certificationParityClassETL}, nil
 	}
 	switch input.TransportRole {
 	case certificationParityTransportSource:
@@ -237,14 +238,16 @@ func validCertificationParityClass(opClass string) bool {
 }
 
 // certificationSweep is the deterministic, source-derived accounting record
-// for one connector's declared CLI surface. It deliberately holds no provider
-// response or credential: a generated candidate becomes a passing result only
-// when a separate live proof is accepted.
+// for every schedulable connector declaration: CLI commands, applicable
+// capabilities, changefeeds, and closed transport roles. It deliberately holds
+// no provider response or credential: a generated candidate becomes a passing
+// result only when a separate live proof is accepted.
 type certificationSweep struct {
 	SchemaVersion    int                                 `json:"schema_version"`
 	Connector        string                              `json:"connector"`
 	Source           string                              `json:"source"`
 	DeclaredCommands int                                 `json:"declared_commands"`
+	DeclaredRows     int                                 `json:"declared_rows"`
 	StatusTotal      int                                 `json:"status_total"`
 	Commands         []certificationSweepCommand         `json:"commands"`
 	ProductDefects   []certificationSweepProductDefect   `json:"product_defects"`
@@ -252,9 +255,10 @@ type certificationSweep struct {
 }
 
 // certificationSweepCommand is one generated certification candidate and its
-// current, non-affirmative accounting status. Assertion metadata is a narrow
-// overlay from certification.json; its command identity always originates in
-// cli_surface.json.
+// current, non-affirmative accounting status. Its path is either a CLI command
+// path or a stable declaration identity such as "capability read" or
+// "transport destination". Assertion metadata remains a narrow overlay from
+// certification.json and is available only for CLI-command rows.
 type certificationSweepCommand struct {
 	Summary             string                                `json:"summary"`
 	Path                string                                `json:"path"`
@@ -345,14 +349,14 @@ func runCertificationSweep(args []string, stdout, stderr io.Writer) int {
 			logf(stderr, "connectorgen certification-sweep: generated artifact %q has drift; run `go run ./cmd/connectorgen certification-sweep --connector %s`\n", filepath.ToSlash(path), options.connector)
 			return 1
 		}
-		logf(stdout, "connectorgen certification-sweep: %s is current (%d commands)\n", filepath.ToSlash(path), sweep.DeclaredCommands)
+		logf(stdout, "connectorgen certification-sweep: %s is current (%d rows; %d CLI commands)\n", filepath.ToSlash(path), sweep.DeclaredRows, sweep.DeclaredCommands)
 		return 0
 	}
 	if err := writeGeneratedArtifact(path, raw); err != nil {
 		logf(stderr, "connectorgen certification-sweep: write %q: %v\n", filepath.ToSlash(path), err)
 		return 1
 	}
-	logf(stdout, "connectorgen certification-sweep: wrote %s (%d commands)\n", filepath.ToSlash(path), sweep.DeclaredCommands)
+	logf(stdout, "connectorgen certification-sweep: wrote %s (%d rows; %d CLI commands)\n", filepath.ToSlash(path), sweep.DeclaredRows, sweep.DeclaredCommands)
 	return 0
 }
 
@@ -408,10 +412,6 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 	if err != nil {
 		return certificationSweep{}, fmt.Errorf("load connector %q: %w", connector, err)
 	}
-	if bundle.CLISurface == nil {
-		return certificationSweep{}, fmt.Errorf("connector %q has no cli_surface.json", connector)
-	}
-
 	assertions, err := certificationSweepAssertions(&bundle)
 	if err != nil {
 		return certificationSweep{}, err
@@ -443,15 +443,18 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 	for _, stream := range bundle.Streams {
 		streams[stream.Name] = stream
 	}
-	commands := append([]engine.CLICommand(nil), bundle.CLISurface.Commands...)
+	commands := []engine.CLICommand(nil)
+	if bundle.CLISurface != nil {
+		commands = append(commands, bundle.CLISurface.Commands...)
+	}
 	sort.Slice(commands, func(i, j int) bool { return commands[i].Path < commands[j].Path })
 
 	sweep := certificationSweep{
 		SchemaVersion:    certificationSweepSchemaVersion,
 		Connector:        connector,
-		Source:           "cli_surface.json",
+		Source:           "connector declarations",
 		DeclaredCommands: len(commands),
-		Commands:         make([]certificationSweepCommand, 0, len(commands)),
+		Commands:         make([]certificationSweepCommand, 0, len(commands)+5),
 		ProductDefects:   []certificationSweepProductDefect{},
 		ProviderRefusals: providerRefusals,
 	}
@@ -486,6 +489,15 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 			sweep.ProductDefects = append(sweep.ProductDefects, *defect)
 		}
 	}
+	declarations, declarationDefects := certificationSweepDeclarationRows(&bundle)
+	for _, row := range declarations {
+		if seen[row.Path] {
+			return certificationSweep{}, fmt.Errorf("connector %q declaration path %q conflicts with a CLI command", connector, row.Path)
+		}
+		seen[row.Path] = true
+		sweep.Commands = append(sweep.Commands, row)
+	}
+	sweep.ProductDefects = append(sweep.ProductDefects, declarationDefects...)
 	for path := range assertions {
 		if !seen[path] {
 			return certificationSweep{}, fmt.Errorf("certification assertion overlay command %q is absent from cli_surface.json", path)
@@ -496,11 +508,103 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 			return certificationSweep{}, fmt.Errorf("provider-refusal observation command %q is absent from cli_surface.json", path)
 		}
 	}
+	sweep.DeclaredRows = len(sweep.Commands)
 	sweep.StatusTotal = len(sweep.Commands)
 	if err := validateCertificationSweep(sweep); err != nil {
 		return certificationSweep{}, err
 	}
 	return sweep, nil
+}
+
+type certificationSweepDeclaration struct {
+	Summary      string
+	Path         string
+	Intent       string
+	Availability string
+	Status       string
+	Reason       string
+	Input        certificationParityInput
+}
+
+// certificationSweepDeclarationRows makes non-CLI contracts schedulable
+// without inventing a user command or consulting the generic Connector.Write
+// capability for a managed destination. These rows are deliberately fixture
+// required: G3+ owns cell execution and proof binding.
+func certificationSweepDeclarationRows(bundle *engine.Bundle) ([]certificationSweepCommand, []certificationSweepProductDefect) {
+	if bundle == nil {
+		return nil, []certificationSweepProductDefect{{Command: "<bundle>", Flag: "<parity-projection>", PathParameter: "<parity-projection>", Reason: "parity projection requires a bundle"}}
+	}
+	declarations := make([]certificationSweepDeclaration, 0, 5)
+	capabilities := &bundle.Metadata.Capabilities
+	if capabilities.Read {
+		declarations = append(declarations, certificationSweepDeclaration{
+			Summary: "Declared read capability", Path: "capability read", Intent: "capability_read", Availability: "implemented",
+			Status: certificationSweepFixtureRequired, Reason: "declared read capability requires connector-owned fixture and live proof",
+			Input: certificationParityInput{Capabilities: capabilities, Capability: "read"},
+		})
+	}
+	if capabilities.Write {
+		declarations = append(declarations, certificationSweepDeclaration{
+			Summary: "Declared write capability", Path: "capability write", Intent: "capability_write", Availability: "implemented",
+			Status: certificationSweepFixtureRequired, Reason: "declared write capability requires connector-owned fixture and live proof",
+			Input: certificationParityInput{Capabilities: capabilities, Capability: "write"},
+		})
+	}
+	if capabilities.CDC {
+		declarations = append(declarations, certificationSweepDeclaration{
+			Summary: "Declared CDC capability", Path: "capability cdc", Intent: "capability_cdc", Availability: "implemented",
+			Status: certificationSweepFixtureRequired, Reason: "declared CDC capability requires connector-owned fixture and live proof",
+			Input: certificationParityInput{Capabilities: capabilities, Capability: "cdc"},
+		})
+	}
+	if bundle.Changefeed != nil {
+		status := certificationSweepFixtureRequired
+		reason := "declared changefeed requires connector-owned fixture and live proof"
+		availability := string(bundle.Changefeed.Status)
+		if bundle.Changefeed.Status != connectors.ChangefeedStatusImplemented {
+			status = certificationSweepNotApplicable
+			reason = fmt.Sprintf("declared changefeed status is %q, not implemented", bundle.Changefeed.Status)
+		}
+		declarations = append(declarations, certificationSweepDeclaration{
+			Summary: "Declared changefeed", Path: "changefeed", Intent: "changefeed", Availability: availability,
+			Status: status, Reason: reason, Input: certificationParityInput{Changefeed: bundle.Changefeed},
+		})
+	}
+	if bundle.SyncTransport != nil && bundle.SyncTransport.Source != nil {
+		declarations = append(declarations, certificationSweepDeclaration{
+			Summary: "Declared source transport", Path: "transport source", Intent: "transport_source", Availability: "implemented",
+			Status: certificationSweepFixtureRequired, Reason: "declared source transport requires connector-owned fixture and live proof",
+			Input: certificationParityInput{Transport: bundle.SyncTransport, TransportRole: certificationParityTransportSource},
+		})
+	}
+	if bundle.SyncTransport != nil && bundle.SyncTransport.Destination != nil {
+		declarations = append(declarations, certificationSweepDeclaration{
+			Summary: "Declared managed destination transport", Path: "transport destination", Intent: "transport_destination", Availability: "implemented",
+			Status: certificationSweepFixtureRequired, Reason: "declared managed destination transport requires connector-owned fixture and live proof",
+			Input: certificationParityInput{Transport: bundle.SyncTransport, TransportRole: certificationParityTransportDestination},
+		})
+	}
+
+	rows := make([]certificationSweepCommand, 0, len(declarations))
+	defects := make([]certificationSweepProductDefect, 0)
+	for _, declaration := range declarations {
+		projection, err := classifyCertificationParity(declaration.Input)
+		row := certificationSweepCommand{
+			Summary: declaration.Summary, Path: declaration.Path, Intent: declaration.Intent, Availability: declaration.Availability,
+			OperationKind: certificationSweepParityValue(projection.OperationKind), OpClass: certificationSweepParityValue(projection.OpClass),
+			Flags: []certificationSweepFlag{}, APISurface: []engine.CLISurfaceEndpointRef{}, Status: declaration.Status, Reason: declaration.Reason,
+		}
+		if err == nil && (row.OperationKind == nil || row.OpClass == nil) {
+			err = errors.New("declared parity source has no valid projection")
+		}
+		if err != nil {
+			row.Status = certificationSweepStatusProductDefect
+			row.Reason = "parity projection: " + err.Error()
+			defects = append(defects, certificationSweepProductDefect{Command: row.Path, Flag: "<parity-projection>", PathParameter: "<parity-projection>", Reason: row.Reason})
+		}
+		rows = append(rows, row)
+	}
+	return rows, defects
 }
 
 type certificationSweepObservations struct {
@@ -780,11 +884,11 @@ func requiredPathFlagDefect(command engine.CLICommand, operation engine.Operatio
 }
 
 func validateCertificationSweep(sweep certificationSweep) error {
-	if sweep.SchemaVersion != certificationSweepSchemaVersion || !isSafeProofIdentifier(sweep.Connector) || sweep.Source != "cli_surface.json" {
-		return errors.New("sweep requires supported schema, safe connector, and cli_surface.json source")
+	if sweep.SchemaVersion != certificationSweepSchemaVersion || !isSafeProofIdentifier(sweep.Connector) || sweep.Source != "connector declarations" {
+		return errors.New("sweep requires supported schema, safe connector, and connector declarations source")
 	}
-	if sweep.DeclaredCommands <= 0 || sweep.DeclaredCommands != len(sweep.Commands) || sweep.StatusTotal != len(sweep.Commands) {
-		return errors.New("sweep command totals do not reconcile")
+	if sweep.DeclaredCommands < 0 || sweep.DeclaredRows != len(sweep.Commands) || sweep.StatusTotal != len(sweep.Commands) || sweep.DeclaredCommands > sweep.DeclaredRows {
+		return errors.New("sweep declaration totals do not reconcile")
 	}
 	paths := make(map[string]certificationSweepCommand, len(sweep.Commands))
 	for _, command := range sweep.Commands {
@@ -874,7 +978,8 @@ func validateCertificationSweepParity(command certificationSweepCommand) error {
 
 func certificationSweepIntentRequiresParity(intent string) bool {
 	switch intent {
-	case "direct_read", "direct_write", "etl", "reverse_etl", "binary_download":
+	case "direct_read", "direct_write", "etl", "reverse_etl", "binary_download",
+		"capability_read", "capability_write", "capability_cdc", "changefeed", "transport_source", "transport_destination":
 		return true
 	default:
 		return false

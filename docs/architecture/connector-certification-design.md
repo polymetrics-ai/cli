@@ -63,17 +63,20 @@ Capability completion by itself is not a certification claim.
 
 ### Generated parity projection, cell identity, and safe publication
 
-`certification-sweep.json` is the generated, exhaustive command inventory for
-one connector. Every row carries `operation_kind` and `op_class`, derived from
-the bundle's `operations.json`, CLI intent and references, capabilities,
-changefeed, or `sync_transport.json` descriptor. The closed operation-kind
+`certification-sweep.json` is the generated, exhaustive schedulable-declaration
+inventory for one connector. It retains `declared_commands` for the CLI count
+and `declared_rows` for the total: CLI commands plus stable capability,
+changefeed, and source/destination transport rows. Every row carries
+`operation_kind` and `op_class`, derived from the bundle's `operations.json`,
+CLI intent and references, capabilities, changefeed, or `sync_transport.json`
+descriptor. The closed operation-kind
 vocabulary is `rest_read`, `rest_write`, `etl`, `reverse_etl`,
 `binary_download`, `file_upload`, `cdc`, and `changefeed`; the closed parity
 classes are `direct_read`, `direct_write`, `etl`, `reverse_etl`, and `binary`.
 These are generated scheduler fields, never `certification.json` authoring.
-An ordinary non-executable declaration is represented by null projection
-fields; an executable declaration whose references cannot produce a valid
-projection is a generated `product_defect`, never a silent `n/a`. Classified
+Only a nonschedulable CLI namespace/config declaration can have null projection
+fields; every schedulable declaration row has a valid projection or is a
+generated `product_defect`, never a silent `n/a`. Classified
 write rows retain their declared `write_action_kind`, including `delete`, so a
 delete is selectable within its existing write family rather than becoming a
 sixth parity class.

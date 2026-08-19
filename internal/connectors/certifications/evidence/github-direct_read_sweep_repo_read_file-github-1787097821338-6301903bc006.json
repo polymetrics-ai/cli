@@ -8,12 +8,12 @@
   "connector": "github",
   "function_kind": "command:direct_read_sweep_repo_read_file",
   "provider": "github",
-  "executed_at": "2026-08-18T23:28:05.818Z",
-  "run_id": "github-1787095680987-19f5568235a6-direct_read_sweep_repo_read_file",
+  "executed_at": "2026-08-19T00:03:44.828Z",
+  "run_id": "github-1787097821338-6301903bc006-direct_read_sweep_repo_read_file",
   "proof": {
     "redaction_strategy": "repository_salted_hmac_sha256_v1",
     "pm_binary_sha256": "22a8ad26f44dad395cb21bd34d1e7d2a3129c7fe205387755c5e634db78b6ed3",
-    "pm_command_fingerprint": "{{pmcertfp:v1:df9e6bcb94fa0f201b852073b5c2a5be41696f77a9e9607ae85c27de7ff05169}}",
+    "pm_command_fingerprint": "{{pmcertfp:v1:d6debc24576de8f115135619f35625f057f21b1991aa79a32ea30e73b5ecca14}}",
     "credential_fingerprints": [
       "{{pmcertfp:v1:232db93aef59bb6c7d000f34f53c4d0bf63bf90749553015318a270b0f2c04f0}}"
     ],

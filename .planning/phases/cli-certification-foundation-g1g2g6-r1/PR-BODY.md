@@ -12,7 +12,8 @@ Base: `integration/4015-mvp-flat-r1` → `main`.
 - Added one generated classifier for the eight operation kinds and five parity
   classes. Sweep rows now always carry `operation_kind` and `op_class`; declared
   write actions also carry `write_action_kind`.
-- Regenerated GitHub's 1,571-row sweep. GitHub delete actions now project
+- Regenerated GitHub's 1,575-row sweep (1,571 CLI commands plus four generated
+  declaration rows). GitHub delete actions now project
   `rest_write/direct_write` with `write_action_kind=delete`; executable reads
   project `rest_read/direct_read`.
 - Added capability and managed-transport classifier coverage: Zoom/GitLab
@@ -61,7 +62,7 @@ Output: `github certification: executed=1 certified=1 no_object=0
 wrong_credential=0 entitlement=0 product_defect=0`.
 
 The `repo read-file` request returned HTTP 200 and published
-`internal/connectors/certifications/evidence/github-direct_read_sweep_repo_read_file-github-1787095680987-19f5568235a6.json`.
+`internal/connectors/certifications/evidence/github-direct_read_sweep_repo_read_file-github-1787097821338-6301903bc006.json` after the branch was rebased onto the integration target.
 The same run performed scoped GitHub matrix generation followed by:
 
 ```sh
@@ -76,17 +77,13 @@ matrix reader sees either no record or strictly valid JSON.
 ## Testing
 
 ```text
-go test -timeout 20m ./cmd/connectorgen                         PASS
-go test -timeout 20m ./internal/cli                             PASS
-go list ./... grouped into timeout-bounded go test invocations  PASS
+go test -count=1 -timeout 20m ./cmd/connectorgen                PASS
+go test -count=1 -timeout 20m ./...                             PASS
 go vet ./...                                                    PASS
 go build ./cmd/pm                                               PASS
 gofmt -w cmd internal                                           PASS
 git diff --check                                                PASS
-make lint                                                       PASS
-make docs-check                                                 PASS
-make smoke-no-build                                             PASS
-make connector-boundary                                         PASS
+make tidy-check lint docs-check smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check PASS
 go run ./cmd/agentcontractgen check                             PASS
 go run ./cmd/connectorgen validate internal/connectors/defs     PASS
 go run ./cmd/connectorgen surface-sync --check                  PASS
@@ -112,13 +109,13 @@ scripts/tests/{connector-canon,pinned-build-dependencies,homebrew-release-notify
   `golang-concurrency`, `golang-database`, and `golang-documentation`.
 - Delivery mode: direct PR; no no-mistakes pipeline was run, per the captain
   instruction.
-- Commit checkpoint: `2e215e5a3` (`feat(certification): harden parity
+- Rebased checkpoint: `96d6fa0d8` (`feat(certification): harden parity
   projection and evidence publication`).
 
 ## Scope Notes and Follow-up
 
 - No G3–G5, G7–G14 work, allowlist edit, or global `--all` refresh is included.
-- At base `d842c815a`, MySQL declares `write:false` but no
+- On the integration base, MySQL declares `write:false` but no
   `sync_transport.json`/managed-destination descriptor. The classifier test
   proves the required handling once that exact declaration exists; adding an
   unproven MySQL transport is intentionally deferred rather than fabricated.

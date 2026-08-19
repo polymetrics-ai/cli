@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
   "connector": "github",
-  "source": "cli_surface.json",
+  "source": "connector declarations",
   "declared_commands": 1571,
-  "status_total": 1571,
+  "declared_rows": 1575,
+  "status_total": 1575,
   "commands": [
     {
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/access",
@@ -51970,6 +51971,54 @@
       "required_flags": [
         "--workflow-id"
       ]
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared write capability",
+      "path": "capability write",
+      "intent": "capability_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared managed destination transport",
+      "path": "transport destination",
+      "intent": "transport_destination",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared managed destination transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

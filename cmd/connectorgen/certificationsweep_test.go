@@ -59,11 +59,11 @@ func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) 
 	if sweep.Connector != "github" {
 		t.Fatalf("connector = %q, want github", sweep.Connector)
 	}
-	if sweep.Source != "cli_surface.json" {
-		t.Fatalf("source = %q, want cli_surface.json", sweep.Source)
+	if sweep.Source != "connector declarations" {
+		t.Fatalf("source = %q, want connector declarations", sweep.Source)
 	}
-	if sweep.DeclaredCommands != 1571 || len(sweep.Commands) != 1571 {
-		t.Fatalf("declared/commands = %d/%d, want 1571/1571", sweep.DeclaredCommands, len(sweep.Commands))
+	if sweep.DeclaredCommands != 1571 || sweep.DeclaredRows != 1575 || len(sweep.Commands) != 1575 {
+		t.Fatalf("declared commands/rows/commands = %d/%d/%d, want 1571/1575/1575", sweep.DeclaredCommands, sweep.DeclaredRows, len(sweep.Commands))
 	}
 
 	seen := make(map[string]bool, len(sweep.Commands))
@@ -335,6 +335,10 @@ func TestCertificationParityClassifierProjectsOnlyTheNormalizedTaxonomy(t *testi
 			wantKind: certificationParityKindChangefeed, wantClass: certificationParityClassETL,
 		},
 		{
+			name: "planned changefeed retains its exact ETL subcontract", input: certificationParityInput{Changefeed: &connectors.ChangefeedDescriptor{Status: connectors.ChangefeedStatusPlanned}},
+			wantKind: certificationParityKindChangefeed, wantClass: certificationParityClassETL,
+		},
+		{
 			name: "managed database destination", input: certificationParityInput{Transport: managedDestination, TransportRole: certificationParityTransportDestination},
 			wantKind: certificationParityKindReverseETL, wantClass: certificationParityClassReverseETL,
 		},
@@ -375,6 +379,10 @@ func TestCertificationParityClassifierRefusesMismatchedOrUnresolvedReferences(t 
 		{
 			name:  "reverse ETL command lacks declared write action",
 			input: certificationParityInput{Command: &engine.CLICommand{Path: "widgets delete", Intent: "reverse_etl", Write: "delete_widget"}},
+		},
+		{
+			name:  "source transport is not a managed destination",
+			input: certificationParityInput{Transport: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{}}, TransportRole: certificationParityTransportDestination},
 		},
 	}
 	for _, tc := range cases {
@@ -474,6 +482,50 @@ func TestCertificationParityClassifierTreatsManagedDatabaseDestinationAsReverseE
 			}
 			if got.OperationKind != certificationParityKindReverseETL || got.OpClass != certificationParityClassReverseETL {
 				t.Fatalf("managed destination projection = %#v, want reverse_etl/reverse_etl despite generic write=false", got)
+			}
+		})
+	}
+}
+
+func TestCertificationSweepEmitsDeclaredManagedDestinationProjection(t *testing.T) {
+	sweep, err := buildCertificationSweep(repoRootForCertificationTest(t), "postgres")
+	if err != nil {
+		t.Fatalf("buildCertificationSweep(postgres) error = %v", err)
+	}
+	for _, row := range sweep.Commands {
+		if row.Path != "transport destination" {
+			continue
+		}
+		if row.OperationKind == nil || *row.OperationKind != certificationParityKindReverseETL || row.OpClass == nil || *row.OpClass != certificationParityClassReverseETL {
+			t.Fatalf("managed destination sweep projection = %#v, want reverse_etl/reverse_etl", row)
+		}
+		if row.Availability != "implemented" || row.Status != certificationSweepFixtureRequired {
+			t.Fatalf("managed destination sweep accounting = availability=%q status=%q, want implemented/fixture_required", row.Availability, row.Status)
+		}
+		return
+	}
+	t.Fatal("PostgreSQL managed destination transport is absent from the generated sweep")
+}
+
+func TestCertificationSweepProjectsDeclaredAPIReadCapabilities(t *testing.T) {
+	for _, connector := range []string{"zoom", "gitlab"} {
+		t.Run(connector, func(t *testing.T) {
+			sweep, err := buildCertificationSweep(repoRootForCertificationTest(t), connector)
+			if err != nil {
+				t.Fatalf("buildCertificationSweep(%s) error = %v", connector, err)
+			}
+			found := false
+			for _, row := range sweep.Commands {
+				if row.Path != "capability read" || row.Intent != "capability_read" || row.Availability != "implemented" {
+					continue
+				}
+				found = true
+				if row.OperationKind == nil || *row.OperationKind != certificationParityKindRESTRead || row.OpClass == nil || *row.OpClass != certificationParityClassDirectRead {
+					t.Fatalf("declared read %q projection = kind=%v class=%v, want rest_read/direct_read", row.Path, row.OperationKind, row.OpClass)
+				}
+			}
+			if !found {
+				t.Fatal("connector has no declared implemented read capability in its generated sweep")
 			}
 		})
 	}

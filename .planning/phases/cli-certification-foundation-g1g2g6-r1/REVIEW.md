@@ -9,6 +9,14 @@ generated GitHub artifact, tests, and architecture documentation. Re-ran
 `go test -timeout 20m ./cmd/connectorgen`, `go vet ./...`, `make lint`, and
 the generated-artifact checks after review.
 
+After rebasing onto `origin/integration/4015-mvp-flat-r1`, repeated the
+review for the declaration-row reconciliation: a native bundle without
+`cli_surface.json` now remains sweepable, capability/changefeed/transport rows
+have stable non-CLI identities, synthetic rows cannot borrow generic
+`write:false`, and the totals distinguish CLI commands from all declarations.
+Re-ran focused projection, artifact, full generator, full-suite, generated,
+lint, docs, smoke, boundary, release, and live-GitHub proof checks on that base.
+
 ## Findings
 
 No critical, warning, or actionable informational findings.
