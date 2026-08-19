@@ -164,6 +164,19 @@
   no action command. The focused trace, `connectorgen validate`,
   `surface-sync --check`, and runtime-preflight sweep pass.
 
+### Typed-write CLI proof — third increment
+
+- **Red:** Coda, ClickUp, Calendly, Greenhouse, and Lever still had no complete
+  action CLI disposition under the reconciled ledger. The substantial Coda and
+  ClickUp action sets could not be silently omitted because their actions are
+  privileged or uncommon.
+- **Green:** all 108 existing actions received a connector command. Coda and
+  ClickUp retain partial commands where no singular exact provider route meets
+  the declared binding rule; Calendly has six implemented and two precise
+  partials; Greenhouse and Lever have 58 and 14 implemented commands,
+  respectively. The trace, `connectorgen validate`, `surface-sync --check`,
+  and the real all-implemented runtime-preflight sweep pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

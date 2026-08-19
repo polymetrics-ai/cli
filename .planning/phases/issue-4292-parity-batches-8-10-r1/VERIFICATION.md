@@ -82,6 +82,23 @@
 - [x] `go test -timeout 20m ./internal/connectors/commandrunner -run
   '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
 
+### Third five-connector typed-write CLI increment
+
+- [x] Red: 108 Coda, ClickUp, Calendly, Greenhouse, and Lever typed actions
+  lacked a complete CLI disposition; safety or privilege is not an eligibility
+  exclusion.
+- [x] Green: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --write-cli coda clickup-api calendly greenhouse lever-hiring`
+  gives every existing action a connector command. Exact-route failures remain
+  partial (Coda/ClickUp), while exact contracts are implemented (Calendly 6,
+  Greenhouse 58, Lever 14).
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check coda clickup-api calendly greenhouse lever-hiring`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+- [x] `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
+
 ### Third five-connector declaration increment
 
 - [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check coda clickup-api calendly greenhouse lever-hiring` failed before declarations with `coda: source transport declaration missing`.

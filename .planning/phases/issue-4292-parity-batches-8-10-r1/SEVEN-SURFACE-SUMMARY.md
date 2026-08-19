@@ -14,9 +14,9 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 8 | looker | 433 | 206 | 222 | 0/0 | 5 | — | 0 | 0/0/0 |
 | 8 | mode | 94 | 49 | 45 | 0/0 | 5 | — | 0 | 0/0/0 |
 | 8 | dremio | 49 | 17 | 31 | 0/0 | 5 | create_user | 9 | 9/2/11 |
-| 9 | coda | 124 | 59 | 58 | 0/0 | 7 | — | 0 | 0/0/0 |
-| 9 | clickup-api | 173 | 58 | 107 | 0/0 | 8 | create_task | 16 | 0/0/0 |
-| 9 | calendly | 61 | 27 | 22 | 0/0 | 12 | create_share | 1 | 0/0/0 |
+| 9 | coda | 124 | 59 | 58 | 0/0 | 7 | — | 0 | 0/8/8 |
+| 9 | clickup-api | 173 | 58 | 107 | 0/0 | 8 | create_task | 16 | 0/20/20 |
+| 9 | calendly | 61 | 27 | 22 | 0/0 | 12 | create_share | 1 | 6/2/8 |
 | 9 | greenhouse | skipped | 0 | 0 | 0/0 | 69 | add_application_to_candidate_prospect | 20 | 127/0/127 |
 | 9 | lever-hiring | 104 | 30 | 51 | 0/0 | 25 | reactivate_user | 2 | 60/0/60 |
 | 9 | ashby | 193 | 9 | 113 | 0/0 | 71 | create_candidate | 6 | 169/9/178 |

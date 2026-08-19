@@ -14596,8 +14596,14 @@
             {
               "action": "upsert_rows",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "upsert rows apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field rows.0.cells.0.value."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: table_id, rows"
@@ -14606,8 +14612,14 @@
             {
               "action": "update_row",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update row apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field row.cells.0.value."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: table_id, row_id, row"
@@ -14616,8 +14628,14 @@
             {
               "action": "delete_row",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete row apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: table_id, row_id"
@@ -14626,8 +14644,14 @@
             {
               "action": "delete_rows",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete rows apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "foundation-gap",
                 "reason": "closed destination mapping rejects the provider's case-preserving input(s): rowIds",
@@ -14638,8 +14662,14 @@
             {
               "action": "push_button",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "push button apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: table_id, row_id, column_id"
@@ -14648,8 +14678,14 @@
             {
               "action": "create_page",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create page apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "foundation-gap",
                 "reason": "closed destination mapping rejects the provider's case-preserving input(s): iconName, imageUrl, parentPageId",
@@ -14660,8 +14696,14 @@
             {
               "action": "update_page",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update page apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: page_id"
@@ -14670,8 +14712,14 @@
             {
               "action": "delete_page",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete page apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: page_id"
@@ -14680,9 +14728,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 0,
+          "declared_commands": 8,
           "implemented_commands": 0,
-          "partial_commands": 0
+          "partial_commands": 8
         }
       }
     },
@@ -14737,8 +14785,14 @@
             {
               "action": "create_task",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create task apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.list_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14756,8 +14810,14 @@
             {
               "action": "update_task",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update task apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{id} disagrees with covered api_surface path /v2/task/{task_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14775,8 +14835,14 @@
             {
               "action": "delete_task",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete task apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{id} disagrees with covered api_surface path /v2/task/{task_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14794,8 +14860,14 @@
             {
               "action": "create_task_comment",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create task comment apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{task_id}/comment disagrees with covered api_surface path /v2/task/{task_id}/comment."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: task_id, comment_text, notify_all"
@@ -14804,8 +14876,14 @@
             {
               "action": "add_tag_to_task",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "add tag to task apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{task_id}/tag/{tag_name} disagrees with covered api_surface path /v2/task/{task_id}/tag/{tag_name}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: task_id, tag_name"
@@ -14814,8 +14892,14 @@
             {
               "action": "remove_tag_from_task",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "remove tag from task apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{task_id}/tag/{tag_name} disagrees with covered api_surface path /v2/task/{task_id}/tag/{tag_name}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: task_id, tag_name"
@@ -14824,8 +14908,14 @@
             {
               "action": "set_custom_field_value",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "set custom field value apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field value."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: task_id, field_id, value"
@@ -14834,8 +14924,14 @@
             {
               "action": "create_goal",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create goal apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14853,8 +14949,14 @@
             {
               "action": "create_folder",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create folder apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.space_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14872,8 +14974,14 @@
             {
               "action": "update_folder",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update folder apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /folder/{id} disagrees with covered api_surface path /v2/folder/{folder_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14896,8 +15004,14 @@
             {
               "action": "delete_folder",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete folder apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /folder/{id} disagrees with covered api_surface path /v2/folder/{folder_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14915,8 +15029,14 @@
             {
               "action": "create_list",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create list apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.folder_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14934,8 +15054,14 @@
             {
               "action": "update_list",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update list apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /list/{id} disagrees with covered api_surface path /v2/list/{list_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14958,8 +15084,14 @@
             {
               "action": "delete_list",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete list apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /list/{id} disagrees with covered api_surface path /v2/list/{list_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14977,8 +15109,14 @@
             {
               "action": "create_space",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create space apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -14996,8 +15134,14 @@
             {
               "action": "update_space",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update space apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /space/{id} disagrees with covered api_surface path /v2/space/{space_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -15020,8 +15164,14 @@
             {
               "action": "delete_space",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete space apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /space/{id} disagrees with covered api_surface path /v2/space/{space_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -15039,8 +15189,14 @@
             {
               "action": "create_webhook",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create webhook apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "webhooks",
@@ -15063,8 +15219,14 @@
             {
               "action": "update_webhook",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update webhook apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /webhook/{id} disagrees with covered api_surface path /v2/webhook/{webhook_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -15082,8 +15244,14 @@
             {
               "action": "delete_webhook",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete webhook apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /webhook/{id} disagrees with covered api_surface path /v2/webhook/{webhook_id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "tasks",
@@ -15101,9 +15269,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 0,
+          "declared_commands": 20,
           "implemented_commands": 0,
-          "partial_commands": 0
+          "partial_commands": 20
         }
       }
     },
@@ -15147,8 +15315,13 @@
             {
               "action": "cancel_scheduled_event",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "cancel scheduled event apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: uuid"
@@ -15157,8 +15330,13 @@
             {
               "action": "create_invitee",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create invitee apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: event_type, start_time, invitee"
@@ -15167,8 +15345,13 @@
             {
               "action": "create_webhook_subscription",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create webhook subscription apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: url, events, organization, scope"
@@ -15177,8 +15360,14 @@
             {
               "action": "delete_webhook_subscription",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete webhook subscription apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /webhook_subscriptions/{uuid} disagrees with covered api_surface path /webhook_subscriptions/{webhook_uuid}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: uuid"
@@ -15187,8 +15376,13 @@
             {
               "action": "remove_organization_membership",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "remove organization membership apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: uuid"
@@ -15197,8 +15391,14 @@
             {
               "action": "invite_user_to_organization",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "invite user to organization apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /organizations/{organization_uuid}/invitations disagrees with covered api_surface path /organizations/{uuid}/invitations."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: organization_uuid, email"
@@ -15207,8 +15407,13 @@
             {
               "action": "create_one_off_event_type",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create one off event type apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: name, host, duration, date_setting"
@@ -15217,8 +15422,13 @@
             {
               "action": "create_share",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create share apply",
+                  "availability": "implemented"
+                }
+              ],
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "scheduled_events",
@@ -15236,9 +15446,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 0,
-          "implemented_commands": 0,
-          "partial_commands": 0
+          "declared_commands": 8,
+          "implemented_commands": 6,
+          "partial_commands": 2
         }
       }
     },

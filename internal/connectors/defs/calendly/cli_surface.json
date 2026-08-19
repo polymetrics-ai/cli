@@ -1,0 +1,304 @@
+{
+  "tagline": "Run Calendly's declared typed write actions.",
+  "usage": "pm calendly <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "cancel scheduled event apply",
+        "create invitee apply",
+        "create one off event type apply",
+        "create share apply",
+        "create webhook subscription apply",
+        "delete webhook subscription apply",
+        "invite user to organization apply",
+        "remove organization membership apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "cancel scheduled event apply",
+      "summary": "POST /scheduled_events/{uuid}/cancellation (cancel_scheduled_event)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_scheduled_event",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scheduled_events/{uuid}/cancellation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; cancels a real scheduled event and notifies invitees; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm calendly cancel scheduled event apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create invitee apply",
+      "summary": "POST /invitees (create_invitee)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_invitee",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invitees"
+        }
+      ],
+      "flags": [
+        {
+          "name": "event-type",
+          "type": "string",
+          "summary": "Required event_type record field.",
+          "maps_to": "record.event_type",
+          "required": true
+        },
+        {
+          "name": "invitee-email",
+          "type": "string",
+          "summary": "Required invitee.email record field.",
+          "maps_to": "record.invitee.email",
+          "required": true
+        },
+        {
+          "name": "invitee-name",
+          "type": "string",
+          "summary": "Required invitee.name record field.",
+          "maps_to": "record.invitee.name",
+          "required": true
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "Required start_time record field.",
+          "maps_to": "record.start_time",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; books a real meeting slot on the target event type and notifies the invitee; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm calendly create invitee apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create one off event type apply",
+      "summary": "POST /one_off_event_types (create_one_off_event_type)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_one_off_event_type",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/one_off_event_types"
+        }
+      ],
+      "flags": [
+        {
+          "name": "date-setting",
+          "type": "json",
+          "summary": "Required date_setting record field.",
+          "maps_to": "record.date_setting",
+          "required": true
+        },
+        {
+          "name": "duration",
+          "type": "integer",
+          "summary": "Required duration record field.",
+          "maps_to": "record.duration",
+          "required": true
+        },
+        {
+          "name": "host",
+          "type": "string",
+          "summary": "Required host record field.",
+          "maps_to": "record.host",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; publishes a new one-off publicly-bookable event type; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm calendly create one off event type apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create share apply",
+      "summary": "POST /shares (create_share)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_share",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shares"
+        }
+      ],
+      "flags": [
+        {
+          "name": "event-type",
+          "type": "string",
+          "summary": "Required event_type record field.",
+          "maps_to": "record.event_type",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; creates a new shareable booking link with its own spot limit for an event type; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm calendly create share apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create webhook subscription apply",
+      "summary": "POST /webhook_subscriptions (create_webhook_subscription)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook_subscription",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhook_subscriptions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "events",
+          "type": "json",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true
+        },
+        {
+          "name": "organization",
+          "type": "string",
+          "summary": "Required organization record field.",
+          "maps_to": "record.organization",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "type": "string",
+          "summary": "Required scope record field.",
+          "maps_to": "record.scope",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; registers a new webhook endpoint that will receive live invitee/routing-form event payloads; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm calendly create webhook subscription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete webhook subscription apply",
+      "summary": "Typed action delete_webhook_subscription",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_webhook_subscription",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "risk": "destructive; permanently deletes a webhook subscription; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /webhook_subscriptions/{uuid} disagrees with covered api_surface path /webhook_subscriptions/{webhook_uuid}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /webhook_subscriptions/{uuid} disagrees with covered api_surface path /webhook_subscriptions/{webhook_uuid}.",
+      "examples": [
+        "pm calendly delete webhook subscription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "invite user to organization apply",
+      "summary": "Typed action invite_user_to_organization",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "invite_user_to_organization",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "organization-uuid",
+          "type": "string",
+          "summary": "Required organization_uuid record field.",
+          "maps_to": "record.organization_uuid",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; sends a real organization-invitation email to the given address; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /organizations/{organization_uuid}/invitations disagrees with covered api_surface path /organizations/{uuid}/invitations.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /organizations/{organization_uuid}/invitations disagrees with covered api_surface path /organizations/{uuid}/invitations.",
+      "examples": [
+        "pm calendly invite user to organization apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "remove organization membership apply",
+      "summary": "DELETE /organization_memberships/{uuid} (remove_organization_membership)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_organization_membership",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organization_memberships/{uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "risk": "destructive; permanently removes a user's membership from the organization, revoking their access; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm calendly remove organization membership apply --plan <plan-name>"
+      ]
+    }
+  ]
+}
