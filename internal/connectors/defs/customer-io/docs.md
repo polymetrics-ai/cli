@@ -129,6 +129,12 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 
 ## Known limits
 
+- **Declarative transport proof:** `sync_transport.json` declares all 16 executable streams and
+  binds `snippets(name,value)` to the exact typed `update_snippet` action for every closed mode. It
+  has keyed delivery, durable acknowledgement, and fixture/dry conformance evidence. This does not
+  claim persisted App/CLI destination dispatch or provider-live certification; both remain pending
+  #4304. The disposition identifies one bound action, nine typed actions awaiting closed exact-action
+  selection, and 58 un-authored direct writes as `declaration-pending` rather than a foundation gap.
 - Batch defaults: read_page_size=100.
 - API coverage includes 16 stream-backed endpoint group(s), 10 write-backed endpoint group(s).
 - Other documented endpoints are not exposed by this connector where they are classified as

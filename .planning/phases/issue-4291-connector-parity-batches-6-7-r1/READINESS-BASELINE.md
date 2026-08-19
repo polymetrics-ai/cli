@@ -15,7 +15,7 @@ provider-live certification. The machine-readable source is
 | zoho-bigin | complete | 75 | 0 / 26 | 6 / 43 | 0 / 13 | 0 | 0 / 0 | 11 | 0 |
 | klaviyo | complete | 345 | 0 / 198 | 0 / 141 | 0 / 6 | 0 | 0 / 0 | 30 | 0 |
 | braze | unproven | 95 | 0 / 21 | 29 / 53 | 0 / 21 | 0 | 0 / 0 | 4 | 0 |
-| customer-io | complete | 166 | 0 / 82 | 10 / 68 | 0 / 16 | 0 | 0 / 0 | 14 | 0 |
+| customer-io | complete | 166 | 0 / 82 | 10 / 68 | 1 / 16 | 1 (App dispatch pending) | 0 / 0 | 14 | 0 |
 | intercom | complete | 231 | 0 / 103 | 0 / 123 | 0 / 5 | 0 | 0 / 0 | 31 | 0 |
 | freshdesk | complete | 170 | 0 / 73 | 0 / 92 | 0 / 5 | 0 | 0 / 0 | 22 | 0 |
 | segment | complete | 201 | 0 / 97 | 0 / 101 | 0 / 3 | 0 | 0 / 0 | 28 | 0 |
@@ -30,8 +30,8 @@ provider-live certification. The machine-readable source is
 | braintree | unproven | 73 | 0 / 18 | 0 / 45 | 0 / 10 | 0 | 0 / 0 | 6 | 0 |
 
 Totals after the Gorgias increment: 3,932 documented operations; 1,465 direct reads with 123 exact
-command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, two source
-transports, two typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
+command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, three source
+transports, three typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
 deletes, and zero provider-live certifications.
 
 Help Scout still has a binary-ledger classification defect. Gorgias now maps its
@@ -55,3 +55,11 @@ declaration proof, with all seven streams declared as ETL sources. Its 60 typed 
 have an eligibility disposition: one bound proof and 59 actions pending #4304 closed exact-action
 selection. All existing approval-governed write commands remain user-reachable; persisted App/CLI
 destination dispatch and provider-live certification remain pending.
+
+## Increment — Customer.io declarative destination proof
+
+Customer.io declares all 16 streams and one fixture/dry `snippets(name,value) → update_snippet`
+proof. Its ten typed actions now have explicit eligibility states (one bound and nine pending closed
+action selection), while its remaining 58 direct writes are correctly `declaration-pending` until
+their exact typed operation and CLI contracts are authored. The destination does not claim
+application-level deployment while #4304 dispatch remains pending.

@@ -24,7 +24,7 @@ certification never make an operation unreachable.
 | zoho-bigin | complete | 0 / 26 | 6 / 43 | 0 | 0 / 13 | 0 | 0 / 0 | 11 |
 | klaviyo | complete | 0 / 198 | 0 / 141 | 0 | 0 / 6 | 0 | 0 / 0 | 30 |
 | braze | unproven | 0 / 21 | 29 / 53 | 0 | 0 / 21 | 0 | 0 / 0 | 4 |
-| customer-io | complete | 0 / 82 | 10 / 68 | 0 | 0 / 16 | 0 | 0 / 0 | 14 |
+| customer-io | complete | 0 / 82 | 10 / 68 | 10 | 1 / 16 | 1 (App dispatch pending) | 0 / 0 | 14 |
 | intercom | complete | 0 / 103 | 0 / 123 | 0 | 0 / 5 | 0 | 0 / 0 | 31 |
 | freshdesk | complete | 0 / 73 | 0 / 92 | 0 | 0 / 5 | 0 | 0 / 0 | 22 |
 | segment | complete | 0 / 97 | 0 / 101 | 0 | 0 / 3 | 0 | 0 / 0 | 28 |
@@ -44,13 +44,14 @@ certification never make an operation unreachable.
   bindings; 1,745 direct writes need exact typed actions. Gorgias already has 61 user-reachable
   approval-governed write commands; its native `direct_write` intent count remains zero, so the
   ledger keeps direct capability distinct from reverse-ETL deployment.
-- Gorgias and Chatwoot now declare their complete ETL stream sets and one exact typed-destination
-  proof each (`tickets → update_ticket` and `contacts → update_contact`) with keyed delivery,
-  durable acknowledgement, per-mode strategies, and fixture/dry conformance evidence. Neither is
-  application-level deployable yet: #4304 must land its persisted App/CLI generic-destination dispatch
-  integration. Their remaining ordinary actions are explicitly eligible but await closed exact-action
-  selection; Gorgias multipart `upload_file` has a named binary/multipart semantic exclusion and
-  remains CLI-reachable.
+- Gorgias, Chatwoot, and Customer.io now declare their complete ETL stream sets and one exact
+  typed-destination proof each (`tickets → update_ticket`, `contacts → update_contact`, and
+  `snippets → update_snippet`) with keyed delivery, durable acknowledgement, per-mode strategies,
+  and fixture/dry conformance evidence. None is application-level deployable yet: #4304 must land
+  persisted App/CLI generic-destination dispatch integration. The remaining typed actions are
+  explicitly eligible but await closed exact-action selection; Customer.io's un-authored direct writes
+  are correctly declaration-pending, and Gorgias multipart `upload_file` has a named binary/multipart
+  semantic exclusion while remaining CLI-reachable.
 - Braze, Help Scout, and Braintree source inventories remain unproven; the rest use a complete
   provider specification/reference or ServiceNow's explicitly dynamic fixed-template basis.
 - Help Scout still needs its binary command represented as a binary parity row; Gorgias now is.
