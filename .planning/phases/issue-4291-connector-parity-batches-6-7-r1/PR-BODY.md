@@ -21,7 +21,7 @@ certification never make an operation unreachable.
 | outreach | complete | 0 / 0 | 163 / 163 | 0 | 1 / 96 | 1 (App dispatch pending) | 0 / 0 | 36 |
 | salesloft | complete | 0 / 115 | 0 / 91 | 0 | 0 / 5 | 0 | 0 / 0 | 18 |
 | copper | complete | 0 / 32 | 0 / 52 | 0 | 0 / 5 | 0 | 0 / 0 | 11 |
-| zoho-bigin | complete | 0 / 26 | 6 / 43 | 0 | 0 / 13 | 0 | 0 / 0 | 11 |
+| zoho-bigin | complete | 0 / 26 | 6 / 43 | 0 | 1 / 13 | 1 (App dispatch pending) | 0 / 0 | 11 |
 | klaviyo | complete | 0 / 198 | 0 / 141 | 0 | 0 / 6 | 0 | 0 / 0 | 30 |
 | braze | unproven | 0 / 21 | 29 / 53 | 0 | 0 / 21 | 0 | 0 / 0 | 4 |
 | customer-io | complete | 0 / 82 | 10 / 68 | 10 | 1 / 16 | 1 (App dispatch pending) | 0 / 0 | 14 |
@@ -44,9 +44,10 @@ certification never make an operation unreachable.
   bindings; 1,745 direct writes need exact typed actions. Gorgias already has 61 user-reachable
   approval-governed write commands; its native `direct_write` intent count remains zero, so the
   ledger keeps direct capability distinct from reverse-ETL deployment.
-- Gorgias, Chatwoot, Customer.io, Close, and Outreach now declare their complete ETL stream sets and
+- Gorgias, Chatwoot, Customer.io, Close, Outreach, and Zoho Bigin now declare their complete ETL stream sets and
   one exact typed-destination proof each (`tickets → update_ticket`, `contacts → update_contact`,
-  `snippets → update_snippet`, `leads → update_lead`, and `sequences → activate_sequence`) with
+  `snippets → update_snippet`, `leads → update_lead`, `sequences → activate_sequence`, and
+  `records → delete_record`) with
   keyed delivery, durable acknowledgement, per-mode strategies, and fixture/dry conformance
   evidence. None is application-level deployable yet: #4304 must land persisted App/CLI
   generic-destination dispatch integration. The remaining typed actions are explicitly eligible but

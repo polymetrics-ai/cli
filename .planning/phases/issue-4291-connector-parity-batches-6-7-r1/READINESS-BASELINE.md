@@ -12,7 +12,7 @@ provider-live certification. The machine-readable source is
 | outreach | complete | 259 | 0 / 0 | 163 / 163 | 1 / 96 | 1 (App dispatch pending) | 0 / 0 | 36 | 0 |
 | salesloft | complete | 211 | 0 / 115 | 0 / 91 | 0 / 5 | 0 | 0 / 0 | 18 | 0 |
 | copper | complete | 89 | 0 / 32 | 0 / 52 | 0 / 5 | 0 | 0 / 0 | 11 | 0 |
-| zoho-bigin | complete | 75 | 0 / 26 | 6 / 43 | 0 / 13 | 0 | 0 / 0 | 11 | 0 |
+| zoho-bigin | complete | 75 | 0 / 26 | 6 / 43 | 1 / 13 | 1 (App dispatch pending) | 0 / 0 | 11 | 0 |
 | klaviyo | complete | 345 | 0 / 198 | 0 / 141 | 0 / 6 | 0 | 0 / 0 | 30 | 0 |
 | braze | unproven | 95 | 0 / 21 | 29 / 53 | 0 / 21 | 0 | 0 / 0 | 4 | 0 |
 | customer-io | complete | 166 | 0 / 82 | 10 / 68 | 1 / 16 | 1 (App dispatch pending) | 0 / 0 | 14 | 0 |
@@ -29,9 +29,9 @@ provider-live certification. The machine-readable source is
 | square | complete | 334 | 0 / 117 | 0 / 213 | 0 / 4 | 0 | 0 / 0 | 27 | 0 |
 | braintree | unproven | 73 | 0 / 18 | 0 / 45 | 0 / 10 | 0 | 0 / 0 | 6 | 0 |
 
-Totals after the Outreach increment: 3,932 documented operations; 1,465 direct reads with 123 exact
-command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, five source
-transports, five typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
+Totals after the Zoho Bigin increment: 3,932 documented operations; 1,465 direct reads with 123 exact
+command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, six source
+transports, six typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
 deletes, and zero provider-live certifications.
 
 Help Scout still has a binary-ledger classification defect. Gorgias now maps its
@@ -78,3 +78,10 @@ Outreach declares all 96 streams and one fixture/dry `sequences(id) → activate
 Every one of its 163 typed actions has an explicit eligibility state (one bound and 162 pending
 closed action selection). The mutating action remains approval-governed; no credential or provider
 operation was used, and persisted App/CLI destination dispatch remains #4304 work.
+
+## Increment — Zoho Bigin declarative destination proof
+
+Zoho Bigin declares all 13 streams and a fixture/dry `records(id) → delete_record` proof. Its
+six typed actions have explicit eligibility states (one bound and five pending closed action
+selection); the selected DELETE remains confirmation- and approval-governed, not omitted for its
+destructive kind. Persisted App/CLI destination dispatch remains #4304 work.

@@ -176,3 +176,24 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 - **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
   generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
   not claimed.
+
+## Zoho Bigin connector-owned destination increment — 2026-08-20
+
+- **RED:** Zoho Bigin had 13 source-locked streams and six exact typed actions but no source or
+  destination transport declaration. Its other 37 mutations lack connector-owned typed actions and
+  had been incorrectly assigned a generic destination foundation gap.
+- **GREEN:** `sync_transport.json` declares all 13 sources and the exact
+  `records(id) → delete_record` typed-destination proof, including keyed delivery, durable
+  acknowledgement, all three mode strategies, and fixture/dry conformance. All six typed actions
+  explicitly carry eligibility: `delete_record` is the destructive bound proof and the other five
+  await #4304 closed exact-action selection. The remaining mutations are correctly
+  `declaration-pending`; destructive safety remains confirmation/approval metadata. No credentials
+  or provider calls were used.
+- **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1` passed.
+- **PENDING FOUNDATION:** this is connector declaration and fixture/dry proof. The persisted App/CLI
+  generic-destination dispatch remains #4304 work, so application-level reverse-ETL deployment is
+  not claimed.
