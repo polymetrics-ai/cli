@@ -55,6 +55,29 @@ field, CLI command, or transport binding is guessed or synthesized.
 | Reverse ETL | Not a primary endpoint class. Every `direct_write` row records a `reverse_etl_eligibility` attribute: currently `foundation-gap` `generic-typed-destination-executor`, evidence `internal/app/issue_label_warehouse_transport.go:85-95`, with the locked minimal change from `CONTEXT.md`. |
 | Binary read/write | Enabled only for a bounded source-backed binary contract; otherwise disabled as `declaration-pending` or a source-backed schema/media limitation. |
 
+## Reverse-ETL freeze preparation — 2026-08-19
+
+Issue #4303 is now the estate-wide merge gate: it must add the
+connector-neutral typed destination factory before any connector can truthfully
+declare reverse ETL. This issue does **not** predeclare a destination or invent
+a `transport_binding` while that capability is absent.
+
+1. Generate a readiness audit and machine-readable typed-action inventory from
+   all 30 source-first ledgers. For every mapped provider write, distinguish a
+   row already bound to a named typed `writes.json` action from a row that still
+   needs connector-local typed-action authoring. Preserve exact source IDs,
+   routes, locations, and action IDs for the action-backed rows. Treat that
+   distinction as preparation evidence, not a destination declaration or a
+   product-safety decision.
+2. Retain the current `generic-typed-destination-executor` eligibility gap on
+   every direct-write row. After #4303 lands, only action-backed rows that also
+   receive connector-owned evidence, explicit source-field bindings,
+   acknowledgement, and per-sync-mode apply strategies may become destinations.
+3. Track Zoom separately as captain-directed critical-path preparation: its
+   204-action destination cohort is outside the #4292 batch source inventory
+   and is recorded as a decision-provided target, not as a source-derived
+   operation count. No Zoom destination declaration is made in this PR.
+
 ## TDD implementation slices
 
 ### Red — complete-map assertion before each batch
@@ -79,6 +102,16 @@ field, CLI command, or transport binding is guessed or synthesized.
    DELETE.
 4. Run the red assertions until they pass, then validate all changed bundles
    and generated metadata.
+
+### Red/green — reverse-ETL readiness freeze
+
+1. Red: an audit that counts a primary `reverse_etl` endpoint, treats a typed
+   direct-write action as an already-declared destination, or contains a
+   `transport_binding` is false.
+2. Green: generate an all-30 table from the ledgers, showing source write count,
+   typed-action-backed count, connector-local typed-action-pending count, and
+   the uniform #4303 foundation gate. Record unavailable/dynamic source states
+   as non-enumerable rather than zero-operation claims.
 
 ### Refactor — review and publication
 

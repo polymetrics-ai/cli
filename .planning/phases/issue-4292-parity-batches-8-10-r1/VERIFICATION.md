@@ -11,6 +11,13 @@
   the `generic-typed-destination-executor` eligibility attribute.
 - [x] All 30 old/new counts and source bases are recorded in
   `SOURCE-SURFACE-REPORT.md`.
+- [x] Red/green: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/audit-reverse-etl-readiness.mjs --check`
+  confirms direct-write action coverage without claiming a destination before
+  #4303 (26 mapped connectors; 6,311 writes; 1,419 action-backed; 4,892 pending
+  connector-local typed-action authoring; 4 unavailable/dynamic sources), and
+  confirms all 1,419 action-backed source/action bindings in
+  `REVERSE-ETL-TYPED-ACTION-INVENTORY.json` remain `not-declared` under the
+  uniform #4303 foundation gap.
 
 ## Completed generated/bundle checks
 
@@ -19,6 +26,10 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check`
   — `552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected
   across 0 connector(s)`.
+- [x] After the reverse-ETL readiness artifacts: reran
+  `go run ./cmd/connectorgen validate internal/connectors/defs` (552 checked,
+  0 findings) and `go run ./cmd/connectorgen surface-sync --check` (exit 0;
+  no surface drift reported).
 - [x] `git diff --check`.
 - [x] `go test -timeout 20m ./cmd/connectorgen ./internal/connectors/conformance ./internal/connectors/commandrunner`.
 - [x] `go test -timeout 20m ./internal/cli`.

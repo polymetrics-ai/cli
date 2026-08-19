@@ -32,6 +32,36 @@
 - `go run ./cmd/connectorgen surface-sync --check` passed with 552 scanned and
   zero fields changed.
 
+## Reverse-ETL readiness freeze — Red
+
+- Issue #4303's verified current state is red for every connector: the only
+  destination factory is GitHub issue-label-bound. A typed direct-write action
+  is therefore not evidence of an executable reverse-ETL destination.
+- Any readiness artifact that classifies a row as primary `reverse_etl`, says an
+  action-backed write is destination-enabled, or adds a `transport_binding`
+  fails the captain's safety boundary.
+
+## Reverse-ETL readiness freeze — Green
+
+- Added `traces/audit-reverse-etl-readiness.mjs`, which generates and checks a
+  deterministic all-30 readiness report from the source-first ledgers. It
+  rejects a primary `reverse_etl` row, a missing uniform #4303 gap, an enabled
+  direct write without its named typed action, or an invented
+  `transport_binding`.
+- The same trace generates `REVERSE-ETL-TYPED-ACTION-INVENTORY.json`, preserving
+  all 1,419 action-backed source ID/route/action-ID bindings, with a pointer to
+  each disposition ledger for the exact source location, as
+  pre-foundation inputs. The artifact explicitly sets the entire inventory to
+  `not-declared`; it applies the connector-owned evidence, bindings, acknowledgement,
+  mode-strategy, and product-safety work still required after #4303 uniformly.
+- `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/audit-reverse-etl-readiness.mjs --check`
+  passed: 26 source-enumerable connectors contain 6,311 direct-write
+  operations; 1,419 rows are already action-backed, 4,892 need connector-local
+  typed-action authoring, and four unavailable/dynamic provider surfaces remain
+  explicitly non-enumerable.
+- The report records Zoom's captain-directed 204-action future destination
+  cohort as a planning target, not an invented source count or declaration.
+
 ## Refactor / review
 
 - The source lock carries `counts.total`, per-method and per-kind counts,
