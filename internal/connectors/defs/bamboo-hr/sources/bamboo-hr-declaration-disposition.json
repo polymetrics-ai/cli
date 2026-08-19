@@ -57,10 +57,9 @@
     ],
     "foundation_gaps": [
       {
-        "id": "generic-typed-destination-executor",
-        "count": 101,
-        "scope": "shared_destination_runtime",
-        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class."
+        "id": "application-generic-destination-dispatch",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
       }
     ],
     "rejected_by_reason": [
@@ -81,9 +80,9 @@
       "destination_transport": {
         "state": "gap",
         "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
         }
       }
     }
@@ -166,9 +165,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -207,9 +206,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -248,9 +247,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -289,9 +288,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -958,9 +957,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -999,9 +998,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -4301,9 +4300,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -4385,9 +4384,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -4715,9 +4714,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -4799,9 +4798,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -4883,9 +4882,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -4924,9 +4923,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -5342,9 +5341,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -5383,9 +5382,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -5424,9 +5423,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -6835,9 +6834,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8214,9 +8213,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8255,9 +8254,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8296,9 +8295,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8380,9 +8379,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8464,9 +8463,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8505,9 +8504,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8546,9 +8545,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8587,9 +8586,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8628,9 +8627,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8669,9 +8668,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -8710,9 +8709,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9094,9 +9093,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9135,9 +9134,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9219,9 +9218,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9386,9 +9385,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9427,9 +9426,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9511,9 +9510,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9552,9 +9551,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9679,9 +9678,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9763,9 +9762,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9804,9 +9803,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9845,9 +9844,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9886,9 +9885,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9927,9 +9926,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -9968,9 +9967,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10009,9 +10008,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10179,9 +10178,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10220,9 +10219,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10304,9 +10303,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10345,9 +10344,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10386,9 +10385,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10470,9 +10469,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10511,9 +10510,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10595,9 +10594,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10636,9 +10635,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10719,9 +10718,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -10803,9 +10802,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11477,9 +11476,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11518,9 +11517,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11559,9 +11558,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11686,9 +11685,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11770,9 +11769,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11811,9 +11810,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11895,9 +11894,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -11936,9 +11935,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12020,9 +12019,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12229,9 +12228,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12270,9 +12269,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12311,9 +12310,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12352,9 +12351,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12479,9 +12478,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12520,9 +12519,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12561,9 +12560,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12602,9 +12601,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12643,9 +12642,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12726,9 +12725,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12810,9 +12809,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12851,9 +12850,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12892,9 +12891,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -12976,9 +12975,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13017,9 +13016,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13101,9 +13100,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13312,9 +13311,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13396,9 +13395,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13480,9 +13479,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13521,9 +13520,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13562,9 +13561,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13646,9 +13645,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13687,9 +13686,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13728,9 +13727,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13769,9 +13768,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13810,9 +13809,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13851,9 +13850,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13892,9 +13891,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13933,9 +13932,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -13974,9 +13973,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14015,9 +14014,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14056,9 +14055,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14097,9 +14096,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14138,9 +14137,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14179,9 +14178,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14220,9 +14219,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14261,9 +14260,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14302,9 +14301,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
@@ -14343,9 +14342,9 @@
           "eligible": true,
           "state": "foundation-gap",
           "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory builds and enforces the GitHub issue-label destination contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
           }
         }
       }
