@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "connector": "zoom",
+  "source": "connector declarations",
+  "declared_commands": 3,
+  "declared_rows": 4,
+  "status_total": 4,
+  "commands": [
+    {
+      "summary": "Read meetings for one Zoom user through the declared ETL stream.",
+      "path": "meetings list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "meetings",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "config.user_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/meetings"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Read Zoom users through the declared ETL stream.",
+      "path": "users list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "users",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Read webinars for one Zoom user through the declared ETL stream.",
+      "path": "webinars list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "webinars",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "config.user_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/webinars"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [],
+  "provider_refusals": []
+}

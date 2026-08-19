@@ -361,6 +361,61 @@ func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
 	}
 }
 
+// TestCertificationSweepProjectsExistingETL ensures the generated parity
+// inventory preserves the three already-executable streams without turning the
+// generated artifact into a live-certification claim.
+func TestCertificationSweepProjectsExistingETL(t *testing.T) {
+	raw, err := os.ReadFile("certification-sweep.json")
+	if err != nil {
+		t.Fatalf("read generated certification sweep: %v", err)
+	}
+	var sweep struct {
+		Connector        string `json:"connector"`
+		DeclaredCommands int    `json:"declared_commands"`
+		DeclaredRows     int    `json:"declared_rows"`
+		Commands         []struct {
+			Path          string `json:"path"`
+			Intent        string `json:"intent"`
+			Availability  string `json:"availability"`
+			OperationKind string `json:"operation_kind"`
+			OpClass       string `json:"op_class"`
+			Status        string `json:"status"`
+		} `json:"commands"`
+	}
+	if err := json.Unmarshal(raw, &sweep); err != nil {
+		t.Fatalf("decode generated certification sweep: %v", err)
+	}
+	if sweep.Connector != zoomBundleName || sweep.DeclaredCommands != 3 || sweep.DeclaredRows != 4 {
+		t.Fatalf("generated sweep = connector=%q declared_commands=%d declared_rows=%d, want zoom/3/4", sweep.Connector, sweep.DeclaredCommands, sweep.DeclaredRows)
+	}
+	rows := make(map[string]struct {
+		intent, availability, kind, class, status string
+	}, len(sweep.Commands))
+	for _, command := range sweep.Commands {
+		rows[command.Path] = struct {
+			intent, availability, kind, class, status string
+		}{command.Intent, command.Availability, command.OperationKind, command.OpClass, command.Status}
+	}
+	if len(rows) != sweep.DeclaredRows {
+		t.Fatalf("generated sweep distinct rows = %d, want declared_rows=%d", len(rows), sweep.DeclaredRows)
+	}
+	for _, path := range []string{"users list", "meetings list", "webinars list"} {
+		row, ok := rows[path]
+		if !ok {
+			t.Errorf("generated sweep lacks %q", path)
+			continue
+		}
+		if row.intent != "etl" || row.availability != "implemented" || row.kind != "etl" || row.class != "etl" || row.status != "fixture_required" {
+			t.Errorf("generated sweep %q = %+v, want implemented etl/etl fixture_required", path, row)
+		}
+	}
+	if row, ok := rows["capability read"]; !ok {
+		t.Error("generated sweep lacks capability read")
+	} else if row.intent != "capability_read" || row.availability != "implemented" || row.kind != "rest_read" || row.class != "direct_read" || row.status != "fixture_required" {
+		t.Errorf("generated sweep capability read = %+v, want implemented rest_read/direct_read fixture_required", row)
+	}
+}
+
 func zoomFixtureResponseBody(t *testing.T, stream, file string) json.RawMessage {
 	t.Helper()
 	raw, err := os.ReadFile(filepath.Join("fixtures", "streams", stream, file))
