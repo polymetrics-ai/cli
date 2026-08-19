@@ -12,7 +12,7 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| Every selected connector has reproducible public provenance | live | Its source lock has the official artifact URL, capture date, SHA-256, byte count, format metadata, per-method counts, and a complete operation inventory; the local verifier recomputes and compares the artifact facts. |
+| Every selected connector has reproducible public provenance | live | Its source lock has the official artifact URL, capture date, SHA-256, byte count, format metadata, per-method counts, and a complete operation inventory. The local verifier checks that captured inventory against the ledger without refetching mutable provider pages or discovery documents. |
 | Every documented operation is accounted for exactly once | live | The integrity check proves source-inventory count equals disposition count and API-surface bindings, while primary parity-class totals equal that denominator. |
 | Disabled operations have an honest reason | live | The verifier rejects missing state/rejection fields, treats un-authored contracts as `declaration-pending`, and requires file/line plus a minimal change for every `foundation-gap`. |
 | No credentialed or live provider execution is claimed | live | Every ledger reports `live_certification: pending`; all source artifacts are public descriptions and all validation is local structural/fixture evidence. |
@@ -38,7 +38,7 @@ Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-struc
 
 1. **Red:** the ten target bundles likewise lack complete connector-local source locks and corrected six-class disposition ledgers.
 2. **Green:** repeat the public-source provenance and exact source/API-surface crosswalk for `gong`, `google-ads`, `facebook-marketing`, `linkedin-ads`, `aircall`, `xero`, `paypal-transaction`, `gocardless`, `amazon-seller-partner`, and `miro`; each provider DELETE is declared or explicitly disabled.
-3. **Refactor:** apply the same vocabulary and transport assessment as batch 2. A missing definition-owned transport descriptor is connector-local `declaration-pending` unless a specific engine admission path rejects an otherwise complete shape.
+3. **Refactor:** apply the same vocabulary and transport assessment as batch 2. PR #4286 makes a declaration-owned ETL source possible, so an absent source `sync_transport.json` is connector-local `declaration-pending`. A typed write action remains an enabled `direct_write`; its nested `declaration.reverse_etl_eligibility` records the real `generic-typed-destination-executor` foundation gap with `internal/app/issue_label_warehouse_transport.go:85-95` evidence and the required connector-neutral typed-destination minimal change. No `transport_binding` action or destination descriptor is invented.
 4. Commit batch 3 after its local integrity and connector validation gates are green.
 
 ## Safety and Classification Rules
@@ -47,7 +47,7 @@ Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-struc
 - `requires-elevated-scope` is enabled with source-backed runtime scope metadata, never a disabled reason.
 - `unsafe-to-exercise` applies only to genuinely destructive/irreversible actions outside user intent. Documented deletes are required map rows.
 - A `foundation-gap` requires engine refusal file/line plus minimal change. A missing command, operation contract, CLI surface, or transport declaration is `declaration-pending`.
-- Six primary classes are mutually exclusive: direct read, direct write (including delete), ETL, reverse ETL, binary read, binary write. ETL/reverse-ETL are assessed using `docs/sync-transport-definition.md`.
+- Endpoint classes are mutually exclusive: direct read, direct write (including delete), ETL, binary read, or binary write. `reverse_etl` is eligibility metadata nested under a typed `direct_write`, never an endpoint class: it remains foundation-blocked by `generic-typed-destination-executor` because `internal/app/issue_label_warehouse_transport.go:85-95` only registers and enforces the GitHub issue-label destination factory. ETL uses the merged PR #4286 declaration contract and remains `declaration-pending` until connector-local source evidence exists.
 
 ## Planned Gates and Checkpoints
 

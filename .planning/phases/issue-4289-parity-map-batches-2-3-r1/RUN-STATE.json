@@ -2,7 +2,7 @@
   "issue": 4289,
   "branch": "fm/cli-map-batch23-r1",
   "base": "main",
-  "state": "planned",
+  "state": "executing",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "commands_reviewed": [
@@ -16,5 +16,10 @@
   "batches": {
     "batch_2": ["grafana", "trello", "slack", "n8n", "google-calendar", "gmail", "twilio", "amazon-sqs", "elasticsearch"],
     "batch_3": ["gong", "google-ads", "facebook-marketing", "linkedin-ads", "aircall", "xero", "paypal-transaction", "gocardless", "amazon-seller-partner", "miro"]
+  },
+  "evidence": {
+    "map_integrity": "green: 19 connectors / 3340 documented operations",
+    "connectorgen_validate": "green: 552 connectors / 0 findings",
+    "surface_sync": "green: 552 connectors / 0 field changes"
   }
 }

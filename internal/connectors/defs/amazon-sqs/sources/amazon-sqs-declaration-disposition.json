@@ -1,0 +1,1019 @@
+{
+  "schema_version": 1,
+  "connector": "amazon-sqs",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+    "source_sha256": "282d08c85a2003ab91ed400a81339fe81952e446ae40a599877705903e870c0f",
+    "source_bytes": 157139,
+    "source_operation_count": 23
+  },
+  "summary": {
+    "api_surface_rows": 23,
+    "exact_source_rows": 23,
+    "declared_operations": 23,
+    "declared_percent": 100,
+    "enabled_operations": 22,
+    "enabled_percent": 95.65,
+    "disabled_operations": 1,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 6
+      },
+      {
+        "key": "direct_write",
+        "count": 16
+      },
+      {
+        "key": "etl",
+        "count": 1
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 1,
+    "writes_actions": 16,
+    "terminal_commands": 22,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 16,
+        "scope": "destination_transport"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 1
+      }
+    ],
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "typed_direct_write_operations": 16,
+      "foundation_gap": {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+      }
+    },
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-amazon-sqs",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/amazon-sqs/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-source-definition-amazon-sqs"
+    ],
+    "declaration_pending": [
+      {
+        "id": "sync-transport-source-definition-amazon-sqs",
+        "count": 1
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "POST",
+      "path": "SQS.AddPermission",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.AddPermission",
+        "covered_by": {
+          "write": "add_permission"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.AddPermission",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"AddPermission\"]",
+        "operation_id": "AddPermission",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "add_permission"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.CancelMessageMoveTask",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.CancelMessageMoveTask",
+        "covered_by": {
+          "write": "cancel_message_move_task"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.CancelMessageMoveTask",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"CancelMessageMoveTask\"]",
+        "operation_id": "CancelMessageMoveTask",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "cancel_message_move_task"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ChangeMessageVisibility",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.ChangeMessageVisibility",
+        "covered_by": {
+          "write": "change_message_visibility"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.ChangeMessageVisibility",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"ChangeMessageVisibility\"]",
+        "operation_id": "ChangeMessageVisibility",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "change_message_visibility"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ChangeMessageVisibilityBatch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.ChangeMessageVisibilityBatch",
+        "covered_by": {
+          "write": "change_message_visibility_batch"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.ChangeMessageVisibilityBatch",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"ChangeMessageVisibilityBatch\"]",
+        "operation_id": "ChangeMessageVisibilityBatch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "change_message_visibility_batch"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.CreateQueue",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.CreateQueue",
+        "covered_by": {
+          "write": "create_queue"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.CreateQueue",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"CreateQueue\"]",
+        "operation_id": "CreateQueue",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "create_queue"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.DeleteMessage",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.DeleteMessage",
+        "covered_by": {
+          "write": "delete_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.DeleteMessage",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"DeleteMessage\"]",
+        "operation_id": "DeleteMessage",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.DeleteMessageBatch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.DeleteMessageBatch",
+        "covered_by": {
+          "write": "delete_message_batch"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.DeleteMessageBatch",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"DeleteMessageBatch\"]",
+        "operation_id": "DeleteMessageBatch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_message_batch"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.DeleteQueue",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.DeleteQueue",
+        "covered_by": {
+          "write": "delete_queue"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.DeleteQueue",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"DeleteQueue\"]",
+        "operation_id": "DeleteQueue",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_queue"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.GetQueueAttributes",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.GetQueueAttributes",
+        "covered_by": {
+          "direct_read": "queue attributes"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.GetQueueAttributes",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"GetQueueAttributes\"]",
+        "operation_id": "GetQueueAttributes",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "queue attributes"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.GetQueueUrl",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.GetQueueUrl",
+        "covered_by": {
+          "direct_read": "queue url"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.GetQueueUrl",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"GetQueueUrl\"]",
+        "operation_id": "GetQueueUrl",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "queue url"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListDeadLetterSourceQueues",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.ListDeadLetterSourceQueues",
+        "covered_by": {
+          "direct_read": "dead-letter-source-queues list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.ListDeadLetterSourceQueues",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"ListDeadLetterSourceQueues\"]",
+        "operation_id": "ListDeadLetterSourceQueues",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "dead-letter-source-queues list"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListMessageMoveTasks",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.ListMessageMoveTasks",
+        "covered_by": {
+          "direct_read": "message-move-tasks list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.ListMessageMoveTasks",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"ListMessageMoveTasks\"]",
+        "operation_id": "ListMessageMoveTasks",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "message-move-tasks list"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListQueueTags",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.ListQueueTags",
+        "covered_by": {
+          "direct_read": "queue tags"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.ListQueueTags",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"ListQueueTags\"]",
+        "operation_id": "ListQueueTags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "queue tags"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListQueues",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.ListQueues",
+        "covered_by": {
+          "direct_read": "queues list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.ListQueues",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"ListQueues\"]",
+        "operation_id": "ListQueues",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "queues list"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.PurgeQueue",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.PurgeQueue",
+        "covered_by": {
+          "write": "purge_queue"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.PurgeQueue",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"PurgeQueue\"]",
+        "operation_id": "PurgeQueue",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "purge_queue"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ReceiveMessage",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.ReceiveMessage",
+        "covered_by": {
+          "stream": "messages"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.ReceiveMessage",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"ReceiveMessage\"]",
+        "operation_id": "ReceiveMessage",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-amazon-sqs",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/amazon-sqs/sync_transport.json is absent for POST SQS.ReceiveMessage.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/amazon-sqs/sync_transport.json is absent for POST SQS.ReceiveMessage."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-amazon-sqs",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.RemovePermission",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.RemovePermission",
+        "covered_by": {
+          "write": "remove_permission"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.RemovePermission",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"RemovePermission\"]",
+        "operation_id": "RemovePermission",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "remove_permission"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.SendMessage",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.SendMessage",
+        "covered_by": {
+          "write": "send_message"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.SendMessage",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"SendMessage\"]",
+        "operation_id": "SendMessage",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "send_message"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.SendMessageBatch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.SendMessageBatch",
+        "covered_by": {
+          "write": "send_message_batch"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.SendMessageBatch",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"SendMessageBatch\"]",
+        "operation_id": "SendMessageBatch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "send_message_batch"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.SetQueueAttributes",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.SetQueueAttributes",
+        "covered_by": {
+          "write": "set_queue_attributes"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.SetQueueAttributes",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"SetQueueAttributes\"]",
+        "operation_id": "SetQueueAttributes",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "set_queue_attributes"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.StartMessageMoveTask",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.StartMessageMoveTask",
+        "covered_by": {
+          "write": "start_message_move_task"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.StartMessageMoveTask",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"StartMessageMoveTask\"]",
+        "operation_id": "StartMessageMoveTask",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "start_message_move_task"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.TagQueue",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.TagQueue",
+        "covered_by": {
+          "write": "tag_queue"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.TagQueue",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"TagQueue\"]",
+        "operation_id": "TagQueue",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "tag_queue"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.UntagQueue",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "SQS.UntagQueue",
+        "covered_by": {
+          "write": "untag_queue"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/amazon-sqs-operation-source-lock.json",
+        "source_id": "amazon-sqs.rest.UntagQueue",
+        "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+        "source_location": "operations[\"UntagQueue\"]",
+        "operation_id": "UntagQueue",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "untag_queue"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-executor",
+            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
+            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          }
+        }
+      }
+    }
+  ]
+}

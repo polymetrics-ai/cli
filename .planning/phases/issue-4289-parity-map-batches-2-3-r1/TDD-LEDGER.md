@@ -12,7 +12,7 @@ For each selected bundle, a source lock pins a credential-free public provider d
 - every row has all required corrected batch-1 fields;
 - every source operation has exactly one method/path API-surface binding;
 - parity-class totals equal the pinned source denominator;
-- `foundation-gap` records include a concrete engine file/line and minimal change;
+- `foundation-gap` records include a concrete engine file/line and minimal change; enabled typed `direct_write` rows carry reverse-ETL eligibility metadata using the actual `generic-typed-destination-executor` refusal at `internal/app/issue_label_warehouse_transport.go:85-95` rather than the retired estate-wide source gap;
 - unauthored connector work is `declaration-pending`, and elevated scopes do not disable rows.
 
 `connectorgen validate` and `surface-sync --check` remain the production structural green gates. No behavior changes are made, so no Go unit-test red phase is appropriate; the map-integrity assertion is the testable artifact behavior added by this issue.

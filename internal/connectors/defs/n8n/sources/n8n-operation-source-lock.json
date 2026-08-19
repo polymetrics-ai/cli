@@ -1,0 +1,1407 @@
+{
+  "schema_version": 2,
+  "connector": "n8n",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+    "sha256": "ff35172ab6ea789c2d3d9effd48964d51bb420f7f66f52e6f7757262d3eb8c0f",
+    "bytes": 8956,
+    "openapi": "3.0.0",
+    "info_version": "1.1.1",
+    "operation_counts": {
+      "DELETE": 15,
+      "GET": 34,
+      "PATCH": 8,
+      "POST": 31,
+      "PUT": 12
+    },
+    "operations": [
+      {
+        "id": "n8n.rest.post-/api/v1/audit",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/audit",
+        "operation_id": "post-/api/v1/audit",
+        "deprecated": false,
+        "source_location": "paths[\"/audit\"] (./handlers/audit/spec/paths/audit.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/audit/spec/paths/audit.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/ldap",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/ldap",
+        "operation_id": "get-/api/v1/settings/ldap",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/ldap\"] (./handlers/ldap/spec/paths/settings.ldap.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/settings/ldap",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/settings/ldap",
+        "operation_id": "put-/api/v1/settings/ldap",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/ldap\"] (./handlers/ldap/spec/paths/settings.ldap.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/ldap/sync",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/ldap/sync",
+        "operation_id": "get-/api/v1/settings/ldap/sync",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/ldap/sync\"] (./handlers/ldap/spec/paths/settings.ldap.sync.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.sync.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/settings/ldap/sync",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/settings/ldap/sync",
+        "operation_id": "post-/api/v1/settings/ldap/sync",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/ldap/sync\"] (./handlers/ldap/spec/paths/settings.ldap.sync.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.sync.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/security-policy",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/security-policy",
+        "operation_id": "get-/api/v1/settings/security-policy",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/security-policy\"] (./handlers/security-policy/spec/paths/security-policy.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/security-policy/spec/paths/security-policy.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/settings/security-policy",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/settings/security-policy",
+        "operation_id": "put-/api/v1/settings/security-policy",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/security-policy\"] (./handlers/security-policy/spec/paths/security-policy.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/security-policy/spec/paths/security-policy.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/otel",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/otel",
+        "operation_id": "get-/api/v1/settings/otel",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/otel\"] (./handlers/otel/spec/paths/settings.otel.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/settings/otel",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/settings/otel",
+        "operation_id": "put-/api/v1/settings/otel",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/otel\"] (./handlers/otel/spec/paths/settings.otel.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/settings/otel/test-trace",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/settings/otel/test-trace",
+        "operation_id": "post-/api/v1/settings/otel/test-trace",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/otel/test-trace\"] (./handlers/otel/spec/paths/settings.otel.test-trace.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.test-trace.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/sso/oidc",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/sso/oidc",
+        "operation_id": "get-/api/v1/settings/sso/oidc",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/sso/oidc\"] (./handlers/sso-oidc/spec/paths/settings.sso.oidc.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-oidc/spec/paths/settings.sso.oidc.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/settings/sso/oidc",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/settings/sso/oidc",
+        "operation_id": "put-/api/v1/settings/sso/oidc",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/sso/oidc\"] (./handlers/sso-oidc/spec/paths/settings.sso.oidc.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-oidc/spec/paths/settings.sso.oidc.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/sso/saml",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/sso/saml",
+        "operation_id": "get-/api/v1/settings/sso/saml",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/sso/saml\"] (./handlers/sso-saml/spec/paths/settings.sso.saml.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-saml/spec/paths/settings.sso.saml.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/settings/sso/saml",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/settings/sso/saml",
+        "operation_id": "put-/api/v1/settings/sso/saml",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/sso/saml\"] (./handlers/sso-saml/spec/paths/settings.sso.saml.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-saml/spec/paths/settings.sso.saml.yml"
+      },
+      {
+        "id": "n8n.rest.getCredentials",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/credentials",
+        "operation_id": "getCredentials",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials\"] (./handlers/credentials/spec/paths/credentials.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.yml"
+      },
+      {
+        "id": "n8n.rest.createCredential",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/credentials",
+        "operation_id": "createCredential",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials\"] (./handlers/credentials/spec/paths/credentials.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.yml"
+      },
+      {
+        "id": "n8n.rest.getCredential",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/credentials/{id}",
+        "operation_id": "getCredential",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials/{id}\"] (./handlers/credentials/spec/paths/credentials.id.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.yml"
+      },
+      {
+        "id": "n8n.rest.updateCredential",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/credentials/{id}",
+        "operation_id": "updateCredential",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials/{id}\"] (./handlers/credentials/spec/paths/credentials.id.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.yml"
+      },
+      {
+        "id": "n8n.rest.deleteCredential",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/credentials/{id}",
+        "operation_id": "deleteCredential",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials/{id}\"] (./handlers/credentials/spec/paths/credentials.id.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.yml"
+      },
+      {
+        "id": "n8n.rest.testCredential",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/credentials/{id}/test",
+        "operation_id": "testCredential",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials/{id}/test\"] (./handlers/credentials/spec/paths/credentials.id.test.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.test.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/credentials/schema/{credentialTypeName}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/credentials/schema/{credentialTypeName}",
+        "operation_id": "get-/api/v1/credentials/schema/{credentialTypeName}",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials/schema/{credentialTypeName}\"] (./handlers/credentials/spec/paths/credentials.schema.id.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.schema.id.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/credentials/{id}/transfer",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/credentials/{id}/transfer",
+        "operation_id": "put-/api/v1/credentials/{id}/transfer",
+        "deprecated": false,
+        "source_location": "paths[\"/credentials/{id}/transfer\"] (./handlers/credentials/spec/paths/credentials.id.transfer.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.transfer.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/executions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/executions",
+        "operation_id": "get-/api/v1/executions",
+        "deprecated": false,
+        "source_location": "paths[\"/executions\"] (./handlers/executions/spec/paths/executions.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/executions/{id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/executions/{id}",
+        "operation_id": "get-/api/v1/executions/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/executions/{id}\"] (./handlers/executions/spec/paths/executions.id.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/executions/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/executions/{id}",
+        "operation_id": "delete-/api/v1/executions/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/executions/{id}\"] (./handlers/executions/spec/paths/executions.id.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/executions/{id}/retry",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/executions/{id}/retry",
+        "operation_id": "post-/api/v1/executions/{id}/retry",
+        "deprecated": false,
+        "source_location": "paths[\"/executions/{id}/retry\"] (./handlers/executions/spec/paths/executions.id.retry.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.retry.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/executions/{id}/stop",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/executions/{id}/stop",
+        "operation_id": "post-/api/v1/executions/{id}/stop",
+        "deprecated": false,
+        "source_location": "paths[\"/executions/{id}/stop\"] (./handlers/executions/spec/paths/executions.id.stop.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.stop.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/executions/stop",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/executions/stop",
+        "operation_id": "post-/api/v1/executions/stop",
+        "deprecated": false,
+        "source_location": "paths[\"/executions/stop\"] (./handlers/executions/spec/paths/executions.stop.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.stop.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/executions/{id}/tags",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/executions/{id}/tags",
+        "operation_id": "get-/api/v1/executions/{id}/tags",
+        "deprecated": false,
+        "source_location": "paths[\"/executions/{id}/tags\"] (./handlers/executions/spec/paths/executions.id.tags.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.tags.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/executions/{id}/tags",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/executions/{id}/tags",
+        "operation_id": "put-/api/v1/executions/{id}/tags",
+        "deprecated": false,
+        "source_location": "paths[\"/executions/{id}/tags\"] (./handlers/executions/spec/paths/executions.id.tags.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.tags.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/tags",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/tags",
+        "operation_id": "post-/api/v1/tags",
+        "deprecated": false,
+        "source_location": "paths[\"/tags\"] (./handlers/tags/spec/paths/tags.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/tags/{id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/tags/{id}",
+        "operation_id": "get-/api/v1/tags/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/tags/{id}\"] (./handlers/tags/spec/paths/tags.id.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.id.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/tags/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/tags/{id}",
+        "operation_id": "delete-/api/v1/tags/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/tags/{id}\"] (./handlers/tags/spec/paths/tags.id.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.id.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/tags/{id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/tags/{id}",
+        "operation_id": "put-/api/v1/tags/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/tags/{id}\"] (./handlers/tags/spec/paths/tags.id.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.id.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/workflows",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/workflows",
+        "operation_id": "post-/api/v1/workflows",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows\"] (./handlers/workflows/spec/paths/workflows.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/workflows/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/workflows/{id}",
+        "operation_id": "delete-/api/v1/workflows/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}\"] (./handlers/workflows/spec/paths/workflows.id.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/workflows/{id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/workflows/{id}",
+        "operation_id": "put-/api/v1/workflows/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}\"] (./handlers/workflows/spec/paths/workflows.id.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/workflows/{id}/{versionId}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/workflows/{id}/{versionId}",
+        "operation_id": "get-/api/v1/workflows/{id}/{versionId}",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/{versionId}\"] (./handlers/workflows/spec/paths/workflows.id.versionId.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.versionId.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/workflows/{id}/activate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/workflows/{id}/activate",
+        "operation_id": "post-/api/v1/workflows/{id}/activate",
+        "deprecated": true,
+        "source_location": "paths[\"/workflows/{id}/activate\"] (./handlers/workflows/spec/paths/workflows.id.activate.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.activate.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/workflows/{id}/deactivate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/workflows/{id}/deactivate",
+        "operation_id": "post-/api/v1/workflows/{id}/deactivate",
+        "deprecated": true,
+        "source_location": "paths[\"/workflows/{id}/deactivate\"] (./handlers/workflows/spec/paths/workflows.id.deactivate.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.deactivate.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/workflows/{id}/publish",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/workflows/{id}/publish",
+        "operation_id": "post-/api/v1/workflows/{id}/publish",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/publish\"] (./handlers/workflows/spec/paths/workflows.id.publish.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/workflows/{id}/unpublish",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/workflows/{id}/unpublish",
+        "operation_id": "post-/api/v1/workflows/{id}/unpublish",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/unpublish\"] (./handlers/workflows/spec/paths/workflows.id.unpublish.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/workflows/{id}/test-runs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/workflows/{id}/test-runs",
+        "operation_id": "get-/api/v1/workflows/{id}/test-runs",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/test-runs\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/workflows/{id}/test-runs",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/workflows/{id}/test-runs",
+        "operation_id": "post-/api/v1/workflows/{id}/test-runs",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/test-runs\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/workflows/{id}/test-runs/{runId}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/workflows/{id}/test-runs/{runId}",
+        "operation_id": "get-/api/v1/workflows/{id}/test-runs/{runId}",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/test-runs/{runId}\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.runId.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/workflows/{id}/test-runs/{runId}/cancel",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/workflows/{id}/test-runs/{runId}/cancel",
+        "operation_id": "post-/api/v1/workflows/{id}/test-runs/{runId}/cancel",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/test-runs/{runId}/cancel\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.runId.cancel.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.cancel.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/workflows/{id}/test-runs/{runId}/test-cases",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/workflows/{id}/test-runs/{runId}/test-cases",
+        "operation_id": "get-/api/v1/workflows/{id}/test-runs/{runId}/test-cases",
+        "deprecated": false,
+        "source_location": "paths[\"/workflows/{id}/test-runs/{runId}/test-cases\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.runId.test-cases.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.test-cases.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/users",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/users",
+        "operation_id": "get-/api/v1/users",
+        "deprecated": false,
+        "source_location": "paths[\"/users\"] (./handlers/users/spec/paths/users.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/users",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/users",
+        "operation_id": "post-/api/v1/users",
+        "deprecated": false,
+        "source_location": "paths[\"/users\"] (./handlers/users/spec/paths/users.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/users/{id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/users/{id}",
+        "operation_id": "get-/api/v1/users/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{id}\"] (./handlers/users/spec/paths/users.id.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.id.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/users/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/users/{id}",
+        "operation_id": "delete-/api/v1/users/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{id}\"] (./handlers/users/spec/paths/users.id.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.id.yml"
+      },
+      {
+        "id": "n8n.rest.patch-/api/v1/users/{id}/role",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/users/{id}/role",
+        "operation_id": "patch-/api/v1/users/{id}/role",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{id}/role\"] (./handlers/users/spec/paths/users.id.role.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.id.role.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/source-control/pull",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/source-control/pull",
+        "operation_id": "post-/api/v1/source-control/pull",
+        "deprecated": false,
+        "source_location": "paths[\"/source-control/pull\"] (./handlers/source-control/spec/paths/sourceControl.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/source-control/spec/paths/sourceControl.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/variables",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/variables",
+        "operation_id": "post-/api/v1/variables",
+        "deprecated": false,
+        "source_location": "paths[\"/variables\"] (./handlers/variables/spec/paths/variables.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/variables",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/variables",
+        "operation_id": "get-/api/v1/variables",
+        "deprecated": false,
+        "source_location": "paths[\"/variables\"] (./handlers/variables/spec/paths/variables.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/variables/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/variables/{id}",
+        "operation_id": "delete-/api/v1/variables/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/variables/{id}\"] (./handlers/variables/spec/paths/variables.id.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.id.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/variables/{id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/variables/{id}",
+        "operation_id": "put-/api/v1/variables/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/variables/{id}\"] (./handlers/variables/spec/paths/variables.id.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.id.yml"
+      },
+      {
+        "id": "n8n.rest.list-data-tables",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/data-tables",
+        "operation_id": "list-data-tables",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables\"] (./handlers/data-tables/spec/paths/data-tables.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.yml"
+      },
+      {
+        "id": "n8n.rest.create-data-table",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/data-tables",
+        "operation_id": "create-data-table",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables\"] (./handlers/data-tables/spec/paths/data-tables.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.yml"
+      },
+      {
+        "id": "n8n.rest.get-data-table",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/data-tables/{dataTableId}",
+        "operation_id": "get-data-table",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.yml"
+      },
+      {
+        "id": "n8n.rest.update-data-table",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/data-tables/{dataTableId}",
+        "operation_id": "update-data-table",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.yml"
+      },
+      {
+        "id": "n8n.rest.delete-data-table",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/data-tables/{dataTableId}",
+        "operation_id": "delete-data-table",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.yml"
+      },
+      {
+        "id": "n8n.rest.get-data-table-rows",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/data-tables/{dataTableId}/rows",
+        "operation_id": "get-data-table-rows",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/rows\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.rows.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.yml"
+      },
+      {
+        "id": "n8n.rest.insert-data-table-rows",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/data-tables/{dataTableId}/rows",
+        "operation_id": "insert-data-table-rows",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/rows\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.rows.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.yml"
+      },
+      {
+        "id": "n8n.rest.update-data-table-rows",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/data-tables/{dataTableId}/rows/update",
+        "operation_id": "update-data-table-rows",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/rows/update\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.rows.update.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.update.yml"
+      },
+      {
+        "id": "n8n.rest.upsert-data-table-row",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/data-tables/{dataTableId}/rows/upsert",
+        "operation_id": "upsert-data-table-row",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/rows/upsert\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.rows.upsert.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.upsert.yml"
+      },
+      {
+        "id": "n8n.rest.clear-data-table-rows",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/data-tables/{dataTableId}/rows/clear",
+        "operation_id": "clear-data-table-rows",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/rows/clear\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.rows.clear.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.clear.yml"
+      },
+      {
+        "id": "n8n.rest.delete-data-table-rows",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/data-tables/{dataTableId}/rows/delete",
+        "operation_id": "delete-data-table-rows",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/rows/delete\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.rows.delete.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.delete.yml"
+      },
+      {
+        "id": "n8n.rest.list-data-table-columns",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/data-tables/{dataTableId}/columns",
+        "operation_id": "list-data-table-columns",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/columns\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.columns.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.yml"
+      },
+      {
+        "id": "n8n.rest.create-data-table-column",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/data-tables/{dataTableId}/columns",
+        "operation_id": "create-data-table-column",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/columns\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.columns.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.yml"
+      },
+      {
+        "id": "n8n.rest.delete-data-table-column",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
+        "operation_id": "delete-data-table-column",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/columns/{columnId}\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.columns.columnId.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.columnId.yml"
+      },
+      {
+        "id": "n8n.rest.update-data-table-column",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
+        "operation_id": "update-data-table-column",
+        "deprecated": false,
+        "source_location": "paths[\"/data-tables/{dataTableId}/columns/{columnId}\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.columns.columnId.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.columnId.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/projects",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/projects",
+        "operation_id": "post-/api/v1/projects",
+        "deprecated": false,
+        "source_location": "paths[\"/projects\"] (./handlers/projects/spec/paths/projects.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/projects",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/projects",
+        "operation_id": "get-/api/v1/projects",
+        "deprecated": false,
+        "source_location": "paths[\"/projects\"] (./handlers/projects/spec/paths/projects.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/projects/{projectId}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/projects/{projectId}",
+        "operation_id": "delete-/api/v1/projects/{projectId}",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}\"] (./handlers/projects/spec/paths/projects.projectId.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/projects/{projectId}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/projects/{projectId}",
+        "operation_id": "put-/api/v1/projects/{projectId}",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}\"] (./handlers/projects/spec/paths/projects.projectId.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/projects/{projectId}/users",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/projects/{projectId}/users",
+        "operation_id": "get-/api/v1/projects/{projectId}/users",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/users\"] (./handlers/projects/spec/paths/projects.projectId.users.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/projects/{projectId}/users",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/projects/{projectId}/users",
+        "operation_id": "post-/api/v1/projects/{projectId}/users",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/users\"] (./handlers/projects/spec/paths/projects.projectId.users.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/projects/{projectId}/users/{userId}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/projects/{projectId}/users/{userId}",
+        "operation_id": "delete-/api/v1/projects/{projectId}/users/{userId}",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/users/{userId}\"] (./handlers/projects/spec/paths/projects.projectId.users.userId.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.userId.yml"
+      },
+      {
+        "id": "n8n.rest.patch-/api/v1/projects/{projectId}/users/{userId}",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/projects/{projectId}/users/{userId}",
+        "operation_id": "patch-/api/v1/projects/{projectId}/users/{userId}",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/users/{userId}\"] (./handlers/projects/spec/paths/projects.projectId.users.userId.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.userId.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/community-packages",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/community-packages",
+        "operation_id": "post-/api/v1/community-packages",
+        "deprecated": false,
+        "source_location": "paths[\"/community-packages\"] (./handlers/community-packages/spec/paths/community-packages.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/community-packages",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/community-packages",
+        "operation_id": "get-/api/v1/community-packages",
+        "deprecated": false,
+        "source_location": "paths[\"/community-packages\"] (./handlers/community-packages/spec/paths/community-packages.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.yml"
+      },
+      {
+        "id": "n8n.rest.patch-/api/v1/community-packages/{name}",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/community-packages/{name}",
+        "operation_id": "patch-/api/v1/community-packages/{name}",
+        "deprecated": false,
+        "source_location": "paths[\"/community-packages/{name}\"] (./handlers/community-packages/spec/paths/community-packages.packageName.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.packageName.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/community-packages/{name}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/community-packages/{name}",
+        "operation_id": "delete-/api/v1/community-packages/{name}",
+        "deprecated": false,
+        "source_location": "paths[\"/community-packages/{name}\"] (./handlers/community-packages/spec/paths/community-packages.packageName.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.packageName.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/discover",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/discover",
+        "operation_id": "get-/api/v1/discover",
+        "deprecated": false,
+        "source_location": "paths[\"/discover\"] (./handlers/discover/spec/paths/discover.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/discover/spec/paths/discover.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/insights/summary",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/insights/summary",
+        "operation_id": "get-/api/v1/insights/summary",
+        "deprecated": false,
+        "source_location": "paths[\"/insights/summary\"] (./handlers/insights/spec/paths/insights.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/insights/spec/paths/insights.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/projects/{projectId}/folders",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/projects/{projectId}/folders",
+        "operation_id": "post-/api/v1/projects/{projectId}/folders",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/folders\"] (./handlers/folders/spec/paths/folders.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/projects/{projectId}/folders",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/projects/{projectId}/folders",
+        "operation_id": "get-/api/v1/projects/{projectId}/folders",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/folders\"] (./handlers/folders/spec/paths/folders.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/projects/{projectId}/folders/{folderId}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+        "operation_id": "delete-/api/v1/projects/{projectId}/folders/{folderId}",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/folders/{folderId}\"] (./handlers/folders/spec/paths/folders.folderId.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/projects/{projectId}/folders/{folderId}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+        "operation_id": "get-/api/v1/projects/{projectId}/folders/{folderId}",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/folders/{folderId}\"] (./handlers/folders/spec/paths/folders.folderId.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml"
+      },
+      {
+        "id": "n8n.rest.patch-/api/v1/projects/{projectId}/folders/{folderId}",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+        "operation_id": "patch-/api/v1/projects/{projectId}/folders/{folderId}",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{projectId}/folders/{folderId}\"] (./handlers/folders/spec/paths/folders.folderId.yml).patch",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/n8n-packages/export",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/n8n-packages/export",
+        "operation_id": "post-/api/v1/n8n-packages/export",
+        "deprecated": false,
+        "source_location": "paths[\"/n8n-packages/export\"] (./handlers/n8n-packages/spec/paths/n8n-packages.export.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.export.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/n8n-packages/import",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/n8n-packages/import",
+        "operation_id": "post-/api/v1/n8n-packages/import",
+        "deprecated": false,
+        "source_location": "paths[\"/n8n-packages/import\"] (./handlers/n8n-packages/spec/paths/n8n-packages.import.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.import.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/log-streaming/event-types",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/log-streaming/event-types",
+        "operation_id": "get-/api/v1/settings/log-streaming/event-types",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/log-streaming/event-types\"] (./handlers/log-streaming/spec/paths/event-types.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/event-types.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/log-streaming/destinations",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/log-streaming/destinations",
+        "operation_id": "get-/api/v1/settings/log-streaming/destinations",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/log-streaming/destinations\"] (./handlers/log-streaming/spec/paths/destinations.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/settings/log-streaming/destinations",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/settings/log-streaming/destinations",
+        "operation_id": "post-/api/v1/settings/log-streaming/destinations",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/log-streaming/destinations\"] (./handlers/log-streaming/spec/paths/destinations.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.yml"
+      },
+      {
+        "id": "n8n.rest.post-/api/v1/settings/log-streaming/destinations/{id}/test",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v1/settings/log-streaming/destinations/{id}/test",
+        "operation_id": "post-/api/v1/settings/log-streaming/destinations/{id}/test",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/log-streaming/destinations/{id}/test\"] (./handlers/log-streaming/spec/paths/destinations.id.test.yml).post",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.test.yml"
+      },
+      {
+        "id": "n8n.rest.get-/api/v1/settings/log-streaming/destinations/{id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v1/settings/log-streaming/destinations/{id}",
+        "operation_id": "get-/api/v1/settings/log-streaming/destinations/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/log-streaming/destinations/{id}\"] (./handlers/log-streaming/spec/paths/destinations.id.yml).get",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml"
+      },
+      {
+        "id": "n8n.rest.put-/api/v1/settings/log-streaming/destinations/{id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/api/v1/settings/log-streaming/destinations/{id}",
+        "operation_id": "put-/api/v1/settings/log-streaming/destinations/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/log-streaming/destinations/{id}\"] (./handlers/log-streaming/spec/paths/destinations.id.yml).put",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml"
+      },
+      {
+        "id": "n8n.rest.delete-/api/v1/settings/log-streaming/destinations/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v1/settings/log-streaming/destinations/{id}",
+        "operation_id": "delete-/api/v1/settings/log-streaming/destinations/{id}",
+        "deprecated": false,
+        "source_location": "paths[\"/settings/log-streaming/destinations/{id}\"] (./handlers/log-streaming/spec/paths/destinations.id.yml).delete",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml"
+      }
+    ],
+    "modules": [
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/audit/spec/paths/audit.yml",
+        "sha256": "748d2dc4d0c318934c8f1bbbaa891fbf5fa2cf506ba0597cd85cd29e866eb074",
+        "bytes": 1138,
+        "source_path": "packages/cli/src/public-api/v1/handlers/audit/spec/paths/audit.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.yml",
+        "sha256": "a98e59de577bac17c225efdbccd5db076fa3f3d60e60af2abcab70014d0a8f75",
+        "bytes": 2011,
+        "source_path": "packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.sync.yml",
+        "sha256": "a3101755546400c89d441becd8d05e0d8ba1134c02816a011d617410a614fde3",
+        "bytes": 1793,
+        "source_path": "packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.sync.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/security-policy/spec/paths/security-policy.yml",
+        "sha256": "91a7a9d71bade9e7a7a63d10727c385d7c1c984e1598b0187902dbf562957e3e",
+        "bytes": 2349,
+        "source_path": "packages/cli/src/public-api/v1/handlers/security-policy/spec/paths/security-policy.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.yml",
+        "sha256": "ef4569e96251187ec6b56cf994d20f29c8cccbd718b55973c9f9cd5ca67191ff",
+        "bytes": 2078,
+        "source_path": "packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.test-trace.yml",
+        "sha256": "06ef98bfa69595842d4e54c060d156a8951ab002c72a5ec4dce4fcea58abe483",
+        "bytes": 1163,
+        "source_path": "packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.test-trace.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-oidc/spec/paths/settings.sso.oidc.yml",
+        "sha256": "62a6324e889b007514052540bf32330c110e8d264a055e8a32bf4f1129374cef",
+        "bytes": 2251,
+        "source_path": "packages/cli/src/public-api/v1/handlers/sso-oidc/spec/paths/settings.sso.oidc.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-saml/spec/paths/settings.sso.saml.yml",
+        "sha256": "5c43728757294fe179f6138bcc983e2e0f5e2fb6e7643712e54eb017411567d1",
+        "bytes": 2446,
+        "source_path": "packages/cli/src/public-api/v1/handlers/sso-saml/spec/paths/settings.sso.saml.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.yml",
+        "sha256": "53cf6128be2234facb8dadcc88a74b182c831a2e99a59469bb613f4502ae3fd7",
+        "bytes": 1809,
+        "source_path": "packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.yml",
+        "sha256": "e6983923dfdbfd42c6b8ddd1a8d6314ac2a624b6c4743f1bcbd6bc06953abff0",
+        "bytes": 2814,
+        "source_path": "packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.test.yml",
+        "sha256": "205c9e192bda6c641ac41b829f1c3ca9acd30dcf5d86557c9fe0550a73454413",
+        "bytes": 779,
+        "source_path": "packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.test.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.schema.id.yml",
+        "sha256": "6e8eb6eb5f826109f6e9317002bc7fd8beab21641c973bd8347b20f6d6f9c9f7",
+        "bytes": 1248,
+        "source_path": "packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.schema.id.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.transfer.yml",
+        "sha256": "e8cd4f8205b999dc196a06a6468130893d3908ec6e8d6b3c8175fadacb9ebd3d",
+        "bytes": 1036,
+        "source_path": "packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.transfer.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.yml",
+        "sha256": "0d183ab5c33aaddee59f3e8d57edef84b2cacdd50b6d83e5a5debfe947ffc197",
+        "bytes": 1812,
+        "source_path": "packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.yml",
+        "sha256": "b6ad19ec800c221c8029dc4b96c81af06eae0607ce8602d8f8a863d1ce4e0a64",
+        "bytes": 1784,
+        "source_path": "packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.retry.yml",
+        "sha256": "9531765acba927d43b80ad7e6749eb547dbb1c76fb1d2138654b7119b65596aa",
+        "bytes": 1107,
+        "source_path": "packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.retry.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.stop.yml",
+        "sha256": "d7eb7a3373cb5e3b09d18b6f7f76005d64ce66d9d0e4a842920625453a0cee99",
+        "bytes": 622,
+        "source_path": "packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.stop.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.stop.yml",
+        "sha256": "0da95366a6f40dfedbcc5077a0bf012a3b5ded2e34959b8c1a6256a1e39bacfc",
+        "bytes": 1924,
+        "source_path": "packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.stop.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.tags.yml",
+        "sha256": "cafe61bd6facd9ccc459554d1ce01590d459ef8fbd09eb34714d67e992c513f9",
+        "bytes": 1582,
+        "source_path": "packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.tags.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.yml",
+        "sha256": "aab7e491681b545c291b86c24e75d7593151720dc83f3a244549b03d34ebf790",
+        "bytes": 752,
+        "source_path": "packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.id.yml",
+        "sha256": "99c4c6daaa33b0e014aba5dbc6f6e617d9cd3321c7f63a46622ea69fa83501fa",
+        "bytes": 2078,
+        "source_path": "packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.id.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.yml",
+        "sha256": "9ad651b88d8d733be1a29479e5eee7b0c2076dce39c9c620f6fb8176f0788f8c",
+        "bytes": 885,
+        "source_path": "packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.yml",
+        "sha256": "35442af1e4170b17b85faff724b65cdd5b2eaa4ecc94bd55560330b1cc648fd4",
+        "bytes": 2393,
+        "source_path": "packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.versionId.yml",
+        "sha256": "39e02c0169b4c5fef3b8eda85e21e99689bee596925af7161513cde20b3f1e22",
+        "bytes": 870,
+        "source_path": "packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.versionId.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.activate.yml",
+        "sha256": "08b1d4a8eb8025ed91450c55a37c26dda4bb73675973396f86c717ed8fa5dec7",
+        "bytes": 1794,
+        "source_path": "packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.activate.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.deactivate.yml",
+        "sha256": "6b75d21fd88b74827428a06b60b9455c640bcf3ff567086d514edd5bfb58b79c",
+        "bytes": 700,
+        "source_path": "packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.deactivate.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml",
+        "sha256": "fabf8c6956121643629de011023011ca232e9109162fde383f91f0715822b31d",
+        "bytes": 1699,
+        "source_path": "packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml",
+        "sha256": "937c9051939f2343f9fa04ba909db7494a2eb5d57e9b0188e444ccb91abaca94",
+        "bytes": 679,
+        "source_path": "packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.yml",
+        "sha256": "f64485ce84f3ab90d4110145dab974d8067bb60e1c23c79ad90ac917ef887e63",
+        "bytes": 2090,
+        "source_path": "packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.yml",
+        "sha256": "33538ed304fa6645e5dfec29a57778bbf1c9ee4f33af90ff132f7fc372e72231",
+        "bytes": 834,
+        "source_path": "packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.cancel.yml",
+        "sha256": "bd1ecda42ab2f898639f755428542b2099af25e2f54264378b577c357c80e73d",
+        "bytes": 956,
+        "source_path": "packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.cancel.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.test-cases.yml",
+        "sha256": "d8ec9a5f7f7535cd3ae493fc35ceadd28fe7abfc4b152e5cb8e8fdba5dcdbb5e",
+        "bytes": 919,
+        "source_path": "packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.test-cases.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.yml",
+        "sha256": "9a280f88420577932354daae80dcaeae745a78e2e1a0f19784accb15c54daec8",
+        "bytes": 2288,
+        "source_path": "packages/cli/src/public-api/v1/handlers/users/spec/paths/users.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.id.yml",
+        "sha256": "95cce2810ccd0c883f776d3b1b97a8229e4ab54370789880a9776d5324d7c9db",
+        "bytes": 1212,
+        "source_path": "packages/cli/src/public-api/v1/handlers/users/spec/paths/users.id.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/users/spec/paths/users.id.role.yml",
+        "sha256": "bfb3c45dce27b6e19a7f6f9222ad479ba1155967d916feff37d52e390a0a0004",
+        "bytes": 900,
+        "source_path": "packages/cli/src/public-api/v1/handlers/users/spec/paths/users.id.role.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/source-control/spec/paths/sourceControl.yml",
+        "sha256": "652f0cedb3bc4fbc787a88907a4f34a26f69e1eb289fb7847fb069c8e8d1f8c5",
+        "bytes": 1170,
+        "source_path": "packages/cli/src/public-api/v1/handlers/source-control/spec/paths/sourceControl.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.yml",
+        "sha256": "e2b3ae88c75fe85f557976571de8e3b86ffd0d4b02ee6bb0b54e4084ecab15b2",
+        "bytes": 1569,
+        "source_path": "packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.id.yml",
+        "sha256": "e9d71ea27d7746634099ee710c59abdd198ba61db8528957ec546362d6a39e72",
+        "bytes": 1394,
+        "source_path": "packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.id.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.yml",
+        "sha256": "25157fdabedaa38d3dee0480acf202ebe12b29ccb55905dd06e86fccdfd60973",
+        "bytes": 2840,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.yml",
+        "sha256": "0ab942d3661e279ec0ddd13fc21159f8496d54af6edb4668651ece54e87884f2",
+        "bytes": 2408,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.yml",
+        "sha256": "50b34aa13cead41a4b9cdf3342e41ce46395ac12199af2c1130f1e78488e4f63",
+        "bytes": 3265,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.update.yml",
+        "sha256": "8b36902c84bfcf69a60dfdfcab124a23c05da8af1f787eb8de3fae8f18c9ae2d",
+        "bytes": 1516,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.update.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.upsert.yml",
+        "sha256": "c301bbd4a778501febffad52a050d4d38170d42beae458a05762f9a86307cef3",
+        "bytes": 1559,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.upsert.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.clear.yml",
+        "sha256": "08cdaa5c9513875facec9ebbcd4e5e0be13ea2aa4ab7e4b4efe0b37a1652e952",
+        "bytes": 949,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.clear.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.delete.yml",
+        "sha256": "60c5f4df65f53da473ae43eea1737a41dd08b11d76af142009df305324d537fc",
+        "bytes": 1834,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.delete.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.yml",
+        "sha256": "fcc962c771cb808882c31676bfd3c4c17b016396a4192208e68206b168c2cd44",
+        "bytes": 1926,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.columnId.yml",
+        "sha256": "7dfd7bc951e8f4e46139d95105d2f4c7fb24b23d4756b11ddf8ccf102f132154",
+        "bytes": 1879,
+        "source_path": "packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.columnId.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.yml",
+        "sha256": "c50caacb45b68e0beacc1bd13a400b390b981342ce1e6eba2c2e2b4b0eeb39cd",
+        "bytes": 1256,
+        "source_path": "packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.yml",
+        "sha256": "2b64737a43e89a45fc7f91d4f8791dd9c2530b6268a3d7e60dc5d67eba341c7a",
+        "bytes": 1602,
+        "source_path": "packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.yml",
+        "sha256": "52a84f786d7973f3858389806308313c5ef8e9c2b4c3b701579fb08c0c9a96d5",
+        "bytes": 2589,
+        "source_path": "packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.userId.yml",
+        "sha256": "5140eea3bece3bb41f428cf8f6ec86140568fa754acc9ae436d52404cc6fec93",
+        "bytes": 2066,
+        "source_path": "packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.userId.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.yml",
+        "sha256": "96462a6a73ae0dda0a4796f92b289e48b3b717ee7b4d9eccbb34c4fec745de48",
+        "bytes": 1500,
+        "source_path": "packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.packageName.yml",
+        "sha256": "2c89e7e9f5b403d9b6c204658ac51ddc3601f66340b60c8a520fe44a1eb20ee6",
+        "bytes": 2228,
+        "source_path": "packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.packageName.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/discover/spec/paths/discover.yml",
+        "sha256": "ce100c9e58b952ffa2ded230d22159b7a4b05f7e228e3b6db25c09701879e7bc",
+        "bytes": 3485,
+        "source_path": "packages/cli/src/public-api/v1/handlers/discover/spec/paths/discover.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/insights/spec/paths/insights.yml",
+        "sha256": "8cbbf0ddb0dc3dd70f0a6e388e8168c8db67be2e8010acf81034e0a155d6cf61",
+        "bytes": 1241,
+        "source_path": "packages/cli/src/public-api/v1/handlers/insights/spec/paths/insights.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.yml",
+        "sha256": "f22c5db4f9a204f23eaabf2e937374905a025bed98ab5d911419a57213ede44c",
+        "bytes": 3523,
+        "source_path": "packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml",
+        "sha256": "30a75780e54d520c1101ca987fd88c79bc87f41bf02539095b6e629d66c91b01",
+        "bytes": 4148,
+        "source_path": "packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.export.yml",
+        "sha256": "39b3b73b2d7d95948898a8073dc3c097b194db8721c7c52a1a1910ca57d539d1",
+        "bytes": 2319,
+        "source_path": "packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.export.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.import.yml",
+        "sha256": "4b93cfb7ba04af3641dd583622742b43cab930bf8d777f9e94496bd51536263e",
+        "bytes": 34522,
+        "source_path": "packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.import.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/event-types.yml",
+        "sha256": "8df235562c37c4d27cfec4765eee365847d66e49d686fd66f4f6559b03f4afc3",
+        "bytes": 738,
+        "source_path": "packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/event-types.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.yml",
+        "sha256": "362dd3325d803b7f2c519a5c6f056f2b38cf670bc9298388c3864ec5b0cbb00f",
+        "bytes": 2013,
+        "source_path": "packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.test.yml",
+        "sha256": "c1b09fd1c438bd17642e24f0cde60b4afd9322b14f96dad1f1c6ea3d02ac9465",
+        "bytes": 1013,
+        "source_path": "packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.test.yml"
+      },
+      {
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml",
+        "sha256": "8b29d870a8c1eae8270e48f58d0261a23c3e273ca20dde8569d1b7ced29b49be",
+        "bytes": 3672,
+        "source_path": "packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 100,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 100
+  }
+}
