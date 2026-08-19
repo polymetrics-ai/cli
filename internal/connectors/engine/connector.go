@@ -241,6 +241,25 @@ func (c *Connector) PreflightOperationDirectRead(operation, method, path string,
 	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
+// OperationStatusCheck delegates one closed, response-less HEAD operation to
+// the engine. It remains distinct from direct reads so a status declaration
+// cannot gain JSON response behavior through the connector adapter.
+func (c *Connector) OperationStatusCheck(ctx context.Context, req connectors.OperationStatusCheckRequest) (connectors.OperationStatusCheckResult, error) {
+	var result connectors.OperationStatusCheckResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationStatusCheck(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
+}
+
+// PreflightOperationStatusCheck proves a status_check command's fixed HEAD
+// binding without resolving credentials or sending a request.
+func (c *Connector) PreflightOperationStatusCheck(operation, method, path, outputPolicy string) error {
+	return PreflightOperationStatusCheck(c.bundle, operation, method, path, outputPolicy)
+}
+
 // PreflightOperationStructuredJSONVariable lets commandrunner admit a JSON
 // flag only after the fixed GraphQL operation's own closed variables schema
 // has accepted that exact top-level variable. It resolves no credential and

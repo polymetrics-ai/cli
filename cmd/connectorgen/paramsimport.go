@@ -220,6 +220,15 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 			changed++
 			setImportedParameters(rest, want)
 		}
+		if paginationRaw, ok := rest.get("pagination"); ok {
+			if pagination, ok := paginationRaw.(*orderedObject); ok {
+				wantPaging := importedOperationPaginationParameters(doc, parsed.Parameters, operationPaginationParameterNames(pagination))
+				if !sameImportedField(rest, "pagination_parameters", wantPaging) {
+					changed++
+					setImportedField(rest, "pagination_parameters", wantPaging)
+				}
+			}
+		}
 	}
 
 	if opts.check || changed == 0 {
@@ -402,6 +411,64 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 	return out
 }
 
+// importedOperationPaginationParameters records the exact source parameters a
+// per-operation pager consumes, but never exposes them as CLI flags. The
+// declaration remains authoritative for the pagination shape; the artifact
+// proves its query names are actually documented by this endpoint.
+func importedOperationPaginationParameters(doc openAPIDoc, params []openAPIParameter, names map[string]bool) []map[string]any {
+	out := make([]map[string]any, 0, len(names))
+	for _, raw := range params {
+		p, ok := resolveOpenAPIParameter(doc, raw)
+		if !ok || p.In != "query" || !names[p.Name] {
+			continue
+		}
+		entry := map[string]any{"name": p.Name, "in": p.In}
+		if typ := firstNonEmpty(p.Schema.Type, p.Type); typ != "" {
+			entry["type"] = typ
+		}
+		if p.Required {
+			entry["required"] = true
+		}
+		out = append(out, entry)
+	}
+	sort.SliceStable(out, func(i, j int) bool { return out[i]["name"].(string) < out[j]["name"].(string) })
+	return out
+}
+
+func operationPaginationParameterNames(pagination *orderedObject) map[string]bool {
+	names := map[string]bool{}
+	add := func(name string) {
+		if strings.TrimSpace(name) != "" {
+			names[name] = true
+		}
+	}
+	switch stringField(pagination, "type") {
+	case "page_number":
+		add(stringField(pagination, "page_param"))
+		add(stringField(pagination, "size_param"))
+	case "offset_limit":
+		add(stringField(pagination, "offset_param"))
+		add(stringField(pagination, "limit_param"))
+		add(stringField(pagination, "size_param"))
+	case "cursor":
+		add(stringField(pagination, "cursor_param"))
+		add(stringField(pagination, "size_param"))
+	case "start_index":
+		start := stringField(pagination, "start_index_param")
+		if start == "" {
+			start = "startIndex"
+		}
+		add(start)
+		count := stringField(pagination, "count_param")
+		if count == "" {
+			count = "count"
+		}
+		add(count)
+		add(stringField(pagination, "size_param"))
+	}
+	return names
+}
+
 func firstNonEmpty(values ...string) string {
 	for _, value := range values {
 		if strings.TrimSpace(value) != "" {
@@ -431,7 +498,11 @@ func firstLine(text string) string {
 // the parameter set the artifact declares, so --check can distinguish drift
 // from a no-op and a rerun does not rewrite an unchanged file.
 func sameImportedParameters(rest *orderedObject, want []map[string]any) bool {
-	existing := arrayField(rest, "parameters")
+	return sameImportedField(rest, "parameters", want)
+}
+
+func sameImportedField(rest *orderedObject, field string, want []map[string]any) bool {
+	existing := arrayField(rest, field)
 	if len(existing) != len(want) {
 		return false
 	}
@@ -483,8 +554,12 @@ func sameImportedParameter(got *orderedObject, want map[string]any) bool {
 // artifact is the only source of truth, so a stale entry is drift rather than a
 // local choice worth preserving.
 func setImportedParameters(rest *orderedObject, want []map[string]any) {
+	setImportedField(rest, "parameters", want)
+}
+
+func setImportedField(rest *orderedObject, field string, want []map[string]any) {
 	if len(want) == 0 {
-		rest.remove("parameters")
+		rest.remove(field)
 		return
 	}
 	entries := make([]any, 0, len(want))
@@ -510,5 +585,5 @@ func setImportedParameters(rest *orderedObject, want []map[string]any) {
 		}
 		entries = append(entries, entry)
 	}
-	rest.set("parameters", entries)
+	rest.set(field, entries)
 }

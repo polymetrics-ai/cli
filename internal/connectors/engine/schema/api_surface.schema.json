@@ -89,6 +89,8 @@
                 "enum": [
                   "direct_read",
                   "binary_read",
+                  "text_export",
+                  "status_check",
                   "sensitive_reverse_etl",
                   "admin_reverse_etl",
                   "destructive_action",

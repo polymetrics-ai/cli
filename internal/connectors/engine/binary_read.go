@@ -105,10 +105,18 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	if op.Kind != "binary_download" || op.Binary == nil {
-		return BinaryDownloadResult{}, fmt.Errorf("binary download requires binary_download operation, got %q", op.Kind)
+	if (op.Kind != "binary_download" && op.Kind != "text_export") || op.Binary == nil {
+		return BinaryDownloadResult{}, fmt.Errorf("file download requires binary_download or text_export operation, got %q", op.Kind)
 	}
 	spec := op.Binary
+	if op.Kind == "text_export" {
+		if spec.MaxBytes <= 0 {
+			return BinaryDownloadResult{}, fmt.Errorf("text export requires positive max_bytes")
+		}
+		if !strings.EqualFold(strings.TrimSpace(spec.Accept), "text/csv") {
+			return BinaryDownloadResult{}, fmt.Errorf("text export requires the closed text/csv accept contract")
+		}
+	}
 	// Refused at EXECUTION time rather than at bundle validation: two github
 	// operations already declare extract_archives true, and a foundation
 	// change must not invalidate an existing connector bundle. Extraction is
@@ -175,6 +183,12 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		return BinaryDownloadResult{}, formatResponseError(fmt.Sprintf("binary download GET %s: %s", spec.Path, msg), err)
 	}
 	defer func() { _ = resp.Body.Close() }()
+	if op.Kind == "text_export" {
+		mediaType, _, parseErr := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+		if parseErr != nil || !strings.EqualFold(mediaType, "text/csv") {
+			return BinaryDownloadResult{}, fmt.Errorf("text export response is not text/csv")
+		}
+	}
 
 	fileName, err := resolveBinaryDownloadFileName(req.FileName, resp.Header.Get("Content-Disposition"), op.ID)
 	if err != nil {

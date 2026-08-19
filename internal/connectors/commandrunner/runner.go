@@ -52,6 +52,7 @@ type Result struct {
 	Count          int                                       `json:"count,omitempty"`
 	DirectRead     *connectors.DirectReadResult              `json:"direct_read,omitempty"`
 	BinaryDownload *connectors.OperationBinaryDownloadResult `json:"binary_download,omitempty"`
+	StatusCheck    *connectors.OperationStatusCheckResult    `json:"status_check,omitempty"`
 }
 
 type WriteCommand struct {
@@ -291,8 +292,11 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if cmd.Intent == "direct_read" {
 		return runDirectRead(ctx, connector, cmd, req)
 	}
-	if cmd.Intent == "binary_download" {
+	if cmd.Intent == "binary_download" || cmd.Intent == "text_export" {
 		return runBinaryDownload(ctx, connector, cmd, req)
+	}
+	if cmd.Intent == "status_check" {
+		return runStatusCheck(ctx, connector, cmd, req)
 	}
 	if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream == "" {
 		return Result{}, &BlockedCommandError{
@@ -343,7 +347,10 @@ func resolveRunnableCommand(connector connectors.Connector, path []string) (conn
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
 		return cmd, command, nil
 	}
-	if cmd.Intent == "binary_download" && cmd.Availability == "implemented" {
+	if (cmd.Intent == "binary_download" || cmd.Intent == "text_export") && cmd.Availability == "implemented" {
+		return cmd, command, nil
+	}
+	if cmd.Intent == "status_check" && cmd.Availability == "implemented" {
 		return cmd, command, nil
 	}
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
@@ -384,7 +391,8 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 			}
 		}
 	}
-	if cmd.Operation != "" && cmd.Intent != "binary_download" &&
+	if cmd.Operation != "" && cmd.Intent != "binary_download" && cmd.Intent != "text_export" &&
+		cmd.Intent != "status_check" &&
 		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
 		(cmd.Intent != "direct_write" || cmd.Availability != "implemented") {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
@@ -395,8 +403,14 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 			Reason:       fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation),
 		}
 	}
-	if cmd.Intent == "binary_download" && cmd.Availability == "implemented" {
+	if (cmd.Intent == "binary_download" || cmd.Intent == "text_export") && cmd.Availability == "implemented" {
 		if err := validateBinaryDownloadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, err
+		}
+		return cmd, command, nil
+	}
+	if cmd.Intent == "status_check" && cmd.Availability == "implemented" {
+		if err := validateStatusCheckCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, err
 		}
 		return cmd, command, nil
@@ -787,6 +801,7 @@ var (
 		"json_redacted":               {},
 		"write_result_redacted":       {},
 		"gong_bounded_input_redacted": {},
+		"secret_stored":               {},
 	}
 )
 
@@ -1953,4 +1968,41 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, nil
+}
+
+func validateStatusCheckCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	checker, ok := connector.(connectors.OperationStatusChecker)
+	if !ok || checker == nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support HEAD status checks"}
+	}
+	preflighter, ok := connector.(connectors.OperationStatusCheckPreflighter)
+	if !ok || strings.TrimSpace(cmd.Operation) == "" || len(cmd.APISurface) != 1 {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "status_check commands require one declared operation endpoint"}
+	}
+	endpoint := cmd.APISurface[0]
+	if !strings.EqualFold(endpoint.Method, http.MethodHead) || isAbsoluteHTTPURL(endpoint.Path) || cmd.OutputPolicy != "status" {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "status_check commands require a connector-relative HEAD endpoint and status output"}
+	}
+	if err := preflighter.PreflightOperationStatusCheck(cmd.Operation, endpoint.Method, endpoint.Path, cmd.OutputPolicy); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("status check metadata is not executable: %v", err)}
+	}
+	return nil
+}
+
+func runStatusCheck(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	if err := validateStatusCheckCommand(connector, cmd); err != nil {
+		return Result{}, err
+	}
+	pathParams, query, err := directReadOverrides(cmd, req.Flags)
+	if err != nil {
+		return Result{}, err
+	}
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
+		return Result{}, err
+	}
+	status, err := connector.(connectors.OperationStatusChecker).OperationStatusCheck(ctx, connectors.OperationStatusCheckRequest{Operation: cmd.Operation, Config: req.Config, PathParams: pathParams, Query: query})
+	if err != nil {
+		return Result{}, err
+	}
+	return Result{Connector: connector.Name(), Command: cmd.Path, StatusCheck: &status}, nil
 }

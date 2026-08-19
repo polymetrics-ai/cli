@@ -1,0 +1,17 @@
+{
+  "issue": 4287,
+  "phase": "issue-4287-engine-gaps-batch1-r1",
+  "status": "planned",
+  "base_branch": "main",
+  "working_branch": "fm/cli-engine-gaps-batch1-r1",
+  "manual_gsd_fallback": true,
+  "reason": "issue is not a roadmap phase and the direct-PR task forbids role spawning",
+  "target_connector": null,
+  "foundation_scope": [
+    "per-operation-rest-pagination",
+    "head-status-operation",
+    "closed-json-family-write-content-types",
+    "bounded-text-export",
+    "secret-response-keychain-routing"
+  ]
+}
