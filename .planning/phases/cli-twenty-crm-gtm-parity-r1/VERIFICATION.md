@@ -226,6 +226,60 @@ No payload values, identifier, credential, header, or browser session material
 was emitted. The unique Compose project, private volumes/network, local
 workspace, and encrypted credential remain intact for authorization-path repair.
 
+### Read-only authorization audit — shared CLI dependency
+
+The authorized read-only audit establishes that this is not a Twenty connector
+header/scheme defect. A read-only App open selected exactly one Twenty
+credential. Its encrypted secret bundle has one declared field and declares
+`api_key`, but the decrypted value has length zero (its SHA-256 is the standard
+empty-input digest). The real declarative reader therefore reached a local
+in-process receiver with `Authorization: Bearer` and no credential value. The
+receiver emitted zero records and returned successfully; no live Twenty request
+or state mutation occurred during this probe.
+
+This matches the shared CLI source: `runCredentials` reads
+`--value-stdin` with `io.ReadAll`, trims only line endings, and persists the
+result without rejecting an empty value. The vault round trip faithfully
+preserves that empty input. Existing engine bearer tests pass, and the Twenty
+bundle's declared `bearer` mode correctly maps the expected `api_key` field to
+that header. The original HTTP 403 is therefore expected and must not be
+retried while the stored secret is empty.
+
+Pinned Twenty source confirms that its REST API extracts a bearer token, rejects
+user-session tokens as bearer credentials, and validates API keys separately
+through the workspace API-key cache, expiry/revocation check, and assigned API
+key role. Its current API-key tokens use the database-backed asymmetric signing
+key; the legacy `APP_SECRET` path is only a verification fallback. Boolean-only
+inspection of the two application containers found current encryption and
+fallback-encryption material present, no legacy `APP_SECRET`, and no evidence
+of a self-host authorization configuration mismatch. The official UI's API-key
+table showed one visible disposable key with Admin role, Never expiry, and no
+revoked-state label. No identifier, token, response field, environment value,
+or session material was rendered.
+
+The minimal provider-neutral dependency is: reject an empty
+`credentials add --value-stdin <field>` value after line-ending normalization
+and before `App.AddCredential`/vault persistence, with happy (non-empty), bad
+(empty), and edge (newline-only) tests. This is shared CLI credential-ingestion
+behavior, not connector-owned code. Per the lane boundary, no generic fix or
+Twenty-specific workaround has been added here. A separate approved repair must
+land before a newly acquired disposable key can be injected through the
+corrected path and the built-CLI HTTP-200 gate can be retried.
+
+Commands and redacted results:
+
+```text
+go run ./.twenty-cert-r1/credential-wire-audit
+# PASS audit execution: one Twenty credential, expected secret field present,
+# zero-length decrypted value, bearer scheme with no token, zero-record local receiver.
+go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test.*Bearer|TestSelectAuth'
+# PASS (1.088s)
+chrome-devtools-axi eval <boolean-only API-key-table projection>
+# PASS: one visible key; Admin + Never labels; no revoked label.
+docker inspect <lane server, worker> | jq <boolean-only auth-config projection>
+# PASS: both services have encryption and fallback-encryption material; legacy APP_SECRET absent.
+```
+
 Redacted command/result evidence for this checkpoint:
 
 ```text

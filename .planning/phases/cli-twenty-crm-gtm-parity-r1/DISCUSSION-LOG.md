@@ -100,3 +100,13 @@
   `authentication_or_authorization` blocker, not a route or instance-health
   failure. Preserve all lane resources and the credential vault for repair;
   never expose or regenerate the disposable token merely to diagnose it.
+- Authorization-audit decision (2026-08-20): a read-only App/vault-to-engine
+  probe found exactly one Twenty credential with the required secret-field
+  declaration but a zero-length decrypted input. The engine emitted a bearer
+  scheme without a token, matching the HTTP 403. Pinned Twenty source and
+  boolean-only UI/config checks rule out a connector scheme, API-key
+  role/expiry, workspace, or self-host authorization mismatch. The shared
+  `credentials add --value-stdin` path accepts and persists empty input; its
+  provider-neutral guard and three-case test matrix are a foundation dependency.
+  This connector lane stops without a generic edit, token replacement, or live
+  retry.

@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "blocked_cli_bearer_authorization_against_live_twenty",
+  "status": "blocked_shared_cli_empty_stdin_credential",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -24,9 +24,10 @@
     "safety_boundary": "Keep all environment and encryption values process-only. Render only boolean configuration checks. Do not edit the database, bypass authentication, access production, or reuse existing Docker resources.",
     "source_backed_start_result": "passed: the four-service lane-owned project is healthy on its loopback-only port after boolean-only rendered-config validation",
     "bootstrap_result": "passed: a disposable workspace/admin and disposable API key were created through the official interactive UI; the key moved only through a non-echoing clipboard-to-stdin handoff into the lane project's encrypted credential store",
-    "credential_validation": "passed: built CLI credential test returned status ok without emitting the key",
-    "read_smoke": "blocked: built CLI bounded companies list received HTTP 403 with the encrypted bearer credential; the same lane-local REST route returned HTTP 200 for the official authenticated UI session",
-    "next_step": "repair the API-key authorization path without exposing or regenerating the credential, then rerun bounded CLI list/get before final #4304/#4305 certification"
+    "credential_validation": "incomplete: the built CLI credential test returned status ok but did not detect that the stored api_key value was empty",
+    "read_smoke": "blocked: built CLI bounded companies list received HTTP 403 because the encrypted api_key field decrypted to a zero-length value; the same lane-local REST route returned HTTP 200 for the official authenticated UI session",
+    "authorization_audit": "passed read-only: one Twenty credential and one api_key field resolved; its value was zero-length, and the engine emitted a Bearer header with no token. Pinned Twenty source and boolean-only UI/config checks found no connector scheme, role/expiry, workspace, or self-host authorization mismatch.",
+    "next_step": "land the provider-neutral shared CLI guard rejecting empty --value-stdin before vault persistence; do not retry live auth or replace the disposable token on this connector-only lane"
   },
   "official_recipe_review": {
     "upstream_commit": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
@@ -44,6 +45,13 @@
       "redis": "sha256:344e3945a0b431c8ff1eecd58c5573538126bd756f02fc7e218ddf1fc2546366"
     },
     "initial_start_result": "two documented red checkpoints preceded the approved source-backed green restart",
-    "source_backed_restart_result": "server, database, and cache healthy; worker running; health endpoint returned HTTP 200; resources remain isolated to pm-twenty-cert-r1"
+    "source_backed_restart_result": "server, database, and cache healthy; worker running; health endpoint returned HTTP 200; resources remain isolated to pm-twenty-cert-r1",
+    "authorization_config_audit": "pinned source uses bearer extraction plus API-key-specific asymmetric JWT validation, cache, expiry/revocation, and assigned role authorization. Both application containers have encryption/fallback-encryption material; legacy APP_SECRET is absent but only supports the source's legacy JWT fallback."
+  },
+  "credential_ingestion_dependency": {
+    "kind": "provider_neutral_shared_cli",
+    "required_change": "reject empty credentials add --value-stdin input after newline normalization and before vault persistence",
+    "required_tests": ["non-empty stdin accepted", "empty stdin rejected", "newline-only stdin rejected"],
+    "lane_action": "blocked without foundation change or token replacement"
   }
 }

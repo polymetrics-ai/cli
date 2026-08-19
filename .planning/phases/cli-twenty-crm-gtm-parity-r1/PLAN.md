@@ -1,5 +1,20 @@
 # Twenty CRM all-ops recovery plan
 
+## Task delivery header
+
+- Primary issue: #277 — Twenty CRM all-ops CLI parity.
+- Active branch / PR: `fm/cli-twenty-crm-gtm-parity-r1` / #4298, stacked on
+  `fm/cli-reverse-etl-destination-r1` / #4304.
+- Scope: connector-local Twenty definitions, generated projections, and the
+  dedicated disposable `pm-twenty-cert-r1` live-certification evidence. No
+  production GTM workspace, generic writer, foundation bypass, force-push, or
+  merge is permitted.
+- Delivery mode: direct PR; status evidence is appended only at supervisor
+  checkpoints. Every commit and the PR body carry `Refs #277`.
+- Current live-certification gate: diagnose the bounded companies-list HTTP
+  403 read-only. First prove the built CLI and an independent bearer request
+  return HTTP 200 before any mutation or reverse-ETL proof.
+
 ## GSD and skills
 
 - Lifecycle: `discuss-phase` → `plan-phase --tdd` → `execute-phase` →
@@ -70,6 +85,13 @@
    exact SHA is an ancestor, exercise its installed App/CLI dispatch path, push
    the stacked branch, and read PR #4298's #4304 base back through the GitHub
    API.
+7. Audit the current live-read HTTP 403 without changing the disposable API
+   key: prove the encrypted-vault token's length/hash is identical at the
+   actual runtime bearer header, inspect only non-secret API-key role/expiry
+   state through the official UI, and compare Twenty's pinned-source JWT/API
+   key guards plus boolean-only self-host configuration. If the header path is
+   connector-owned, add a failing focused test then fix it locally; if it is a
+   shared-engine gap, record the provider-neutral dependency and stop.
 
 ## CLI/docs parity checklist
 
