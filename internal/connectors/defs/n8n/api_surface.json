@@ -489,6 +489,334 @@
       "covered_by": {
         "write": "generate_audit"
       }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/ldap",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/ldap has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/ldap",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-/api/v1/settings/ldap has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/ldap/sync",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/ldap/sync has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/ldap/sync",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/settings/ldap/sync has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/security-policy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/security-policy has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/security-policy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-/api/v1/settings/security-policy has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/otel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/otel has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/otel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-/api/v1/settings/otel has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/otel/test-trace",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/settings/otel/test-trace has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/sso/oidc",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/sso/oidc has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/sso/oidc",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-/api/v1/settings/sso/oidc has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/sso/saml",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/sso/saml has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/sso/saml",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-/api/v1/settings/sso/saml has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/publish",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/workflows/{id}/publish has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/unpublish",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/workflows/{id}/unpublish has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/test-runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/workflows/{id}/test-runs has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/test-runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/workflows/{id}/test-runs has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/test-runs/{runId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/workflows/{id}/test-runs/{runId} has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/test-runs/{runId}/cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/workflows/{id}/test-runs/{runId}/cancel has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/test-runs/{runId}/test-cases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/workflows/{id}/test-runs/{runId}/test-cases has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/clear",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation clear-data-table-rows is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/community-packages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/community-packages has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/community-packages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/community-packages has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/community-packages/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation patch-/api/v1/community-packages/{name} has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/community-packages/{name}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-/api/v1/community-packages/{name} is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/discover",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/discover has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/insights/summary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/insights/summary has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/{projectId}/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/projects/{projectId}/folders has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects/{projectId}/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/projects/{projectId}/folders has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-/api/v1/projects/{projectId}/folders/{folderId} is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/projects/{projectId}/folders/{folderId} has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation patch-/api/v1/projects/{projectId}/folders/{folderId} has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/n8n-packages/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/n8n-packages/export has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/n8n-packages/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/n8n-packages/import has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/log-streaming/event-types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/log-streaming/event-types has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/log-streaming/destinations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/log-streaming/destinations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/log-streaming/destinations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/settings/log-streaming/destinations has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}/test",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-/api/v1/settings/log-streaming/destinations/{id}/test has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-/api/v1/settings/log-streaming/destinations/{id} has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-/api/v1/settings/log-streaming/destinations/{id} has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-/api/v1/settings/log-streaming/destinations/{id} is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml"
+      }
     }
   ]
 }

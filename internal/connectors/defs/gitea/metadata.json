@@ -1,0 +1,21 @@
+{
+  "name": "gitea",
+  "display_name": "Gitea",
+  "description": "Declares the complete public Gitea REST API v1 source surface. All provider operations remain disabled until connector-owned schemas, fixtures, and typed executor contracts are derived from the pinned public document.",
+  "integration_type": "api",
+  "docs_url": "https://docs.gitea.com/api/1.24/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": false,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "No Gitea request is executable in this declaration-only bundle; future reads must be bounded by connector-owned schemas, pagination, fixtures, and conformance evidence.",
+    "write": "No Gitea write is executable. The pinned source includes destructive and administrative operations that require typed reverse-ETL records, approval, and destructive confirmation before enablement.",
+    "approval": "Any future write must use plan, preview, explicit approval, execute, and typed destructive confirmation where the documented operation removes provider state."
+  }
+}

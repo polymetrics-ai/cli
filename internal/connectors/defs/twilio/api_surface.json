@@ -1382,6 +1382,1582 @@
       "covered_by": {
         "write": "update_account"
       }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateAccount has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAccount has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchAccount has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateAccount has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Addresses.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateAddress has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Addresses.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAddress has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteAddress is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchAddress has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateAddress has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Applications.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateApplication has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Applications.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListApplication has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteApplication is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchApplication has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateApplication has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps/{ConnectAppSid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchAuthorizedConnectApp has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAuthorizedConnectApp has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberCountry has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchAvailablePhoneNumberCountry has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Local.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberLocal has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/MachineToMachine.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberMachineToMachine has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Mobile.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberMobile has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/National.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberNational has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/SharedCost.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberSharedCost has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/TollFree.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberTollFree has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Voip.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListAvailablePhoneNumberVoip has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Balance.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchBalance has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateCall has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListCall has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteCall is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchCall has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateCall has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Events.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListCallEvent has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchCallNotification has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListCallNotification has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateCallRecording has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListCallRecording has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateCallRecording has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchCallRecording has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteCallRecording is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchConference has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateConference has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListConference has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListConferenceRecording has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateConferenceRecording has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchConferenceRecording has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteConferenceRecording is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchConnectApp has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateConnectApp has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteConnectApp is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListConnectApp has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{AddressSid}/DependentPhoneNumbers.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListDependentPhoneNumber has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateIncomingPhoneNumber has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchIncomingPhoneNumber has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteIncomingPhoneNumber is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListIncomingPhoneNumber has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateIncomingPhoneNumber has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchIncomingPhoneNumberAssignedAddOn has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteIncomingPhoneNumberAssignedAddOn is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListIncomingPhoneNumberAssignedAddOn has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateIncomingPhoneNumberAssignedAddOn has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchIncomingPhoneNumberAssignedAddOnExtension has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListIncomingPhoneNumberAssignedAddOnExtension has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListIncomingPhoneNumberLocal has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateIncomingPhoneNumberLocal has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListIncomingPhoneNumberMobile has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateIncomingPhoneNumberMobile has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListIncomingPhoneNumberTollFree has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateIncomingPhoneNumberTollFree has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchKey has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateKey has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteKey is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Keys.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListKey has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Keys.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateNewKey has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteMedia is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchMedia has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListMedia has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchMember has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateMember has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListMember has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateMessage has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListMessage has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteMessage is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchMessage has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateMessage has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateMessageFeedback has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateNewSigningKey has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSigningKey has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Notifications/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchNotification has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Notifications.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListNotification has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchOutgoingCallerId has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateOutgoingCallerId has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteOutgoingCallerId is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListOutgoingCallerId has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateValidationRequest has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchParticipant has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateParticipant has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteParticipant is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateParticipant has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListParticipant has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreatePayments has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdatePayments has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchQueue has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateQueue has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteQueue is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListQueue has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Queues.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateQueue has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateRealtimeTranscription has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateRealtimeTranscription has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchRecording has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteRecording is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListRecording has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchRecordingAddOnResult has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteRecordingAddOnResult is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListRecordingAddOnResult has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchRecordingAddOnResultPayload has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteRecordingAddOnResultPayload is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListRecordingAddOnResultPayload has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{PayloadSid}/Data.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchRecordingAddOnResultPayloadData has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchRecordingTranscription has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteRecordingTranscription is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListRecordingTranscription has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchShortCode has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateShortCode has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListShortCode has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSigningKey has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateSigningKey has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSigningKey is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipAuthCallsCredentialListMapping has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipAuthCallsCredentialListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipAuthCallsCredentialListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipAuthCallsCredentialListMapping is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipAuthCallsIpAccessControlListMapping has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipAuthCallsIpAccessControlListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipAuthCallsIpAccessControlListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipAuthCallsIpAccessControlListMapping is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipAuthRegistrationsCredentialListMapping has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipAuthRegistrationsCredentialListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipAuthRegistrationsCredentialListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipAuthRegistrationsCredentialListMapping is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipCredential has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipCredential has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipCredential has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateSipCredential has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipCredential is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipCredentialList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipCredentialList has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipCredentialList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateSipCredentialList has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipCredentialList is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipCredentialListMapping has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipCredentialListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipCredentialListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipCredentialListMapping is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipDomain has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipDomain has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipDomain has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateSipDomain has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipDomain is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipIpAccessControlList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipIpAccessControlList has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipIpAccessControlList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateSipIpAccessControlList has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipIpAccessControlList is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipIpAccessControlListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipIpAccessControlListMapping is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipIpAccessControlListMapping has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipIpAccessControlListMapping has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListSipIpAddress has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSipIpAddress has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchSipIpAddress has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateSipIpAddress has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteSipIpAddress is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateSiprec has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateSiprec has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateStream has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateStream has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Tokens.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateToken has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchTranscription has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteTranscription is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Transcriptions.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListTranscription has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecord has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/AllTime.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordAllTime has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Daily.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordDaily has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/LastMonth.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordLastMonth has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Monthly.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordMonthly has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/ThisMonth.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordThisMonth has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Today.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordToday has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Yearly.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordYearly has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Yesterday.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageRecordYesterday has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation FetchUsageTrigger has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation UpdateUsageTrigger has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteUsageTrigger is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateUsageTrigger has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation ListUsageTrigger has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateUserDefinedMessage has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation CreateUserDefinedMessageSubscription has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation DeleteUserDefinedMessageSubscription is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json"
+      }
     }
   ]
 }

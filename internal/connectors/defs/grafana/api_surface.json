@@ -86,6 +86,2518 @@
         "category": "out_of_scope",
         "reason": "/api/dashboards/uid/{uid} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
       }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listRoles has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createRole has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/access-control/roles/{roleUID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteRole is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/roles/{roleUID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getRole has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/access-control/roles/{roleUID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateRole has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/roles/{roleUID}/assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getRoleAssignments has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/access-control/roles/{roleUID}/assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setRoleAssignments has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getAccessControlStatus has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/teams/roles/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listTeamsRoles has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/teams/{teamId}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listTeamRoles has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/teams/{teamId}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addTeamRole has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/access-control/teams/{teamId}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setTeamRoles has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/access-control/teams/{teamId}/roles/{roleUID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation removeTeamRole is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/users/roles/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listUsersRoles has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/users/{userId}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listUserRoles has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/users/{userId}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addUserRole has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/access-control/users/{userId}/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setUserRoles has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/access-control/users/{userId}/roles/{roleUID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation removeUserRole is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/{resource}/description",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getResourceDescription has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access-control/{resource}/{resourceID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getResourcePermissions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/{resource}/{resourceID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setResourcePermissions has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/{resource}/{resourceID}/builtInRoles/{builtInRole}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setResourcePermissionsForBuiltInRole has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/{resource}/{resourceID}/teams/{teamID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setResourcePermissionsForTeam has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access-control/{resource}/{resourceID}/users/{userID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setResourcePermissionsForUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ldap-sync-status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSyncStatus has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/ldap/reload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation reloadLDAPCfg has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ldap/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getLDAPStatus has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/ldap/sync/{user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postSyncUserWithLDAP has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ldap/{user_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserFromLDAP has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/provisioning/access-control/reload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminProvisioningReloadAccessControl has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/provisioning/dashboards/reload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminProvisioningReloadDashboards has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/provisioning/datasources/reload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminProvisioningReloadDatasources has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/provisioning/plugins/reload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminProvisioningReloadPlugins has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminGetSettings has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminGetStats has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminCreateUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/users/{user_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation adminDeleteUser is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/users/{user_id}/auth-tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminGetUserAuthTokens has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/users/{user_id}/disable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminDisableUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/users/{user_id}/enable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminEnableUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/users/{user_id}/logout",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminLogoutUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/users/{user_id}/password",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminUpdateUserPassword has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/users/{user_id}/permissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminUpdateUserPermissions has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/users/{user_id}/quotas",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserQuota has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/users/{user_id}/quotas/{quota_target}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateUserQuota has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/users/{user_id}/revoke-auth-token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation adminRevokeUserAuthToken has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/annotations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getAnnotations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/annotations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postAnnotation has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/annotations/graphite",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postGraphiteAnnotation has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/annotations/mass-delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation massDeleteAnnotations has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/annotations/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getAnnotationTags has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/annotations/{annotation_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteAnnotationByID is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/annotations/{annotation_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getAnnotationByID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/annotations/{annotation_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation patchAnnotation has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/annotations/{annotation_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateAnnotation has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/anonymous/devices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listDevices has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/anonymous/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation SearchDevices has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cloudmigration/migration",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSessionList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cloudmigration/migration",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createSession has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cloudmigration/migration/{uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteSession is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cloudmigration/migration/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSession has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cloudmigration/migration/{uid}/snapshot",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createSnapshot has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cloudmigration/migration/{uid}/snapshot/{snapshotUid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSnapshot has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cloudmigration/migration/{uid}/snapshot/{snapshotUid}/cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation cancelSnapshot has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cloudmigration/migration/{uid}/snapshot/{snapshotUid}/upload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation uploadSnapshot has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cloudmigration/migration/{uid}/snapshots",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getShapshotList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cloudmigration/resources/dependencies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getResourceDependencies has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cloudmigration/token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCloudMigrationToken has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cloudmigration/token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createCloudMigrationToken has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cloudmigration/token/{uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteCloudMigrationToken is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/convert/api/prom/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusCortexGetRules has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/convert/api/prom/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusCortexPostRuleGroups has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/convert/api/prom/rules/{NamespaceTitle}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteConvertPrometheusCortexDeleteNamespace is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/convert/api/prom/rules/{NamespaceTitle}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusCortexGetNamespace has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/convert/api/prom/rules/{NamespaceTitle}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusCortexPostRuleGroup has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/convert/api/prom/rules/{NamespaceTitle}/{Group}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteConvertPrometheusCortexDeleteRuleGroup is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/convert/api/prom/rules/{NamespaceTitle}/{Group}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusCortexGetRuleGroup has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/convert/prometheus/config/v1/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusGetRules has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/convert/prometheus/config/v1/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusPostRuleGroups has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/convert/prometheus/config/v1/rules/{NamespaceTitle}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteConvertPrometheusDeleteNamespace is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/convert/prometheus/config/v1/rules/{NamespaceTitle}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusGetNamespace has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/convert/prometheus/config/v1/rules/{NamespaceTitle}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusPostRuleGroup has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/convert/prometheus/config/v1/rules/{NamespaceTitle}/{Group}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteConvertPrometheusDeleteRuleGroup is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/convert/prometheus/config/v1/rules/{NamespaceTitle}/{Group}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteConvertPrometheusGetRuleGroup has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/snapshots",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchDashboardSnapshots has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dashboards/db",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postDashboard has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/home",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getHomeDashboard has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dashboards/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation importDashboard has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dashboards/interpolate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation interpolateDashboard has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/public-dashboards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listPublicDashboards has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDashboardTags has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/uid/{dashboardUid}/public-dashboards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getPublicDashboard has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dashboards/uid/{dashboardUid}/public-dashboards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createPublicDashboard has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/dashboards/uid/{dashboardUid}/public-dashboards/{uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deletePublicDashboard is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/dashboards/uid/{dashboardUid}/public-dashboards/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updatePublicDashboard has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/dashboards/uid/{uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteDashboardByUID is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/uid/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDashboardByUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/uid/{uid}/permissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDashboardPermissionsListByUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dashboards/uid/{uid}/permissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateDashboardPermissionsByUID has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dashboards/uid/{uid}/restore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation restoreDashboardVersionByUID has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/uid/{uid}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDashboardVersionsByUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/uid/{uid}/versions/{DashboardVersionID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDashboardVersionByUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDataSources has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addDataSource has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/correlations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCorrelations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/id/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDataSourceIdByName has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/datasources/name/{name}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteDataSourceByName is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/name/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDataSourceByName has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/datasources/proxy/uid/{uid}/{datasource_proxy_route}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation datasourceProxyDELETEByUIDcalls is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/proxy/uid/{uid}/{datasource_proxy_route}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation datasourceProxyGETByUIDcalls has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasources/proxy/uid/{uid}/{datasource_proxy_route}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation datasourceProxyPOSTByUIDcalls has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/uid/{sourceUID}/correlations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCorrelationsBySourceUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasources/uid/{sourceUID}/correlations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createCorrelation has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/uid/{sourceUID}/correlations/{correlationUID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCorrelation has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/datasources/uid/{sourceUID}/correlations/{correlationUID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateCorrelation has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/datasources/uid/{uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteDataSourceByUID is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/uid/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDataSourceByUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasources/uid/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateDataSourceByUID has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/datasources/uid/{uid}/correlations/{correlationUID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteCorrelation is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/uid/{uid}/health",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation checkDatasourceHealthWithUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/uid/{uid}/lbac/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getTeamLBACRulesApi has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasources/uid/{uid}/lbac/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateTeamLBACRulesApi has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/uid/{uid}/resources/{datasource_proxy_route}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation callDatasourceResourceWithUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasources/{dataSourceUID}/cache",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDataSourceCacheConfig has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasources/{dataSourceUID}/cache",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setDataSourceCacheConfig has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasources/{dataSourceUID}/cache/clean",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation cleanDataSourceCache has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasources/{dataSourceUID}/cache/disable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation disableDataSourceCache has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasources/{dataSourceUID}/cache/enable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation enableDataSourceCache has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ds/query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation queryMetricsWithExpressions has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getFolders has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createFolder has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folder_uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteFolder is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getFolderByUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateFolder has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_uid}/counts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getFolderDescendantCounts has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folder_uid}/move",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation moveFolder has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_uid}/permissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getFolderPermissionList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folder_uid}/permissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateFolderPermissions has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getHealth has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/library-elements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getLibraryElements has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/library-elements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createLibraryElement has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/library-elements/name/{library_element_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getLibraryElementByName has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/library-elements/{library_element_uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteLibraryElementByUID is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/library-elements/{library_element_uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getLibraryElementByUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/library-elements/{library_element_uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateLibraryElement has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/library-elements/{library_element_uid}/connections/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getLibraryElementConnections has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licensing/check",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getStatus has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licensing/custom-permissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCustomPermissionsReport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licensing/custom-permissions-csv",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCustomPermissionsCSV has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licensing/refresh-stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation refreshLicenseStats has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/licensing/token",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteLicenseToken is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licensing/token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getLicenseToken has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/licensing/token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postLicenseToken has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/licensing/token/renew",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postRenewLicenseToken has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/logout/saml",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSAMLLogout has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCurrentOrg has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/org",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateCurrentOrg has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/org/address",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateCurrentOrgAddress has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org/invites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getPendingOrgInvites has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/org/invites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addOrgInvite has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/org/invites/{invitation_code}/revoke",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation revokeInvite is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getOrgPreferences has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/org/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation patchOrgPreferences has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/org/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateOrgPreferences has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org/quotas",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getCurrentOrgQuota has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getOrgUsersForCurrentOrg has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/org/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addOrgUserToCurrentOrg has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org/users/lookup",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getOrgUsersForCurrentOrgLookup has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/org/users/{user_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation removeOrgUserForCurrentOrg is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/org/users/{user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateOrgUserForCurrentOrg has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchOrgs has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createOrg has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/name/{org_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getOrgByName has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{org_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteOrgByID is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{org_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getOrgByID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{org_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateOrg has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{org_id}/address",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateOrgAddress has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{org_id}/quotas",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getOrgQuota has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{org_id}/quotas/{quota_target}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateOrgQuota has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{org_id}/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getOrgUsers has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{org_id}/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addOrgUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{org_id}/users/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchOrgUsers has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{org_id}/users/{user_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation removeOrgUser is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{org_id}/users/{user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateOrgUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/playlists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchPlaylists has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/playlists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createPlaylist has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/playlists/{uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deletePlaylist is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/playlists/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getPlaylist has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/playlists/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updatePlaylist has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/playlists/{uid}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getPlaylistItems has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/dashboards/{accessToken}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation viewPublicDashboard has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/dashboards/{accessToken}/annotations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getPublicAnnotations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/dashboards/{accessToken}/panels/{panelId}/query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation queryPublicDashboard has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/query-history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchQueries has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/query-history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createQuery has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/query-history/star/{query_history_uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation unstarQuery is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/query-history/star/{query_history_uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation starQuery has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/query-history/{query_history_uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteQuery is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/query-history/{query_history_uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation patchQueryComment has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recording-rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listRecordingRules has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recording-rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createRecordingRule has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recording-rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateRecordingRule has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recording-rules/test",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation testCreateRecordingRule has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recording-rules/writer",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteRecordingRuleWriteTarget is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recording-rules/writer",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getRecordingRuleWriteTarget has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recording-rules/writer",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createRecordingRuleWriteTarget has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recording-rules/{recordingRuleID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteRecordingRule is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getReports has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createReport has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/dashboards/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getReportsByDashboardUID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/email",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation sendReport has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/images/:image",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSettingsImage has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/render/csvs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation renderReportCSVs has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/render/pdfs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation renderReportPDFs has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getReportSettings has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation saveReportSettings has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/test-email",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation sendTestEmail has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reports/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteReport is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getReport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reports/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateReport has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/saml/acs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postACS has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saml/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getMetadata has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saml/slo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSLO has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/saml/slo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation postSLO has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation search has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/sorting",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listSortOptions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/serviceaccounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createServiceAccount has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/serviceaccounts/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchOrgServiceAccountsWithPaging has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/serviceaccounts/{serviceAccountId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteServiceAccount is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/serviceaccounts/{serviceAccountId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation retrieveServiceAccount has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/serviceaccounts/{serviceAccountId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateServiceAccount has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/serviceaccounts/{serviceAccountId}/tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listTokens has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/serviceaccounts/{serviceAccountId}/tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createToken has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/serviceaccounts/{serviceAccountId}/tokens/{tokenId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteToken is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/signing-keys/keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation retrieveJWKS has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snapshot/shared-options",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSharingOptions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snapshots",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createDashboardSnapshot has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snapshots-delete/{deleteKey}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation deleteDashboardSnapshotByDeleteKey has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snapshots/{key}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteDashboardSnapshot is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snapshots/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getDashboardSnapshot has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation createTeam has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchTeams has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{teamId}/groups",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation removeTeamGroupApiQuery is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{teamId}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getTeamGroupsApi has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{teamId}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addTeamGroupApi has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{teamId}/groups/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchTeamGroups has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{team_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleteTeamByID is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getTeamByID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{team_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateTeam has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getTeamMembers has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation addTeamMember has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{team_id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation setTeamMemberships has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{team_id}/members/{user_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation removeTeamMember is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{team_id}/members/{user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateTeamMember has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getTeamPreferences has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{team_id}/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateTeamPreferences has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSignedInUser has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/user",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateSignedInUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/auth-tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserAuthTokens has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/email/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateUserEmail has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/orgs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSignedInUserOrgList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/user/password",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation changeUserPassword has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserPreferences has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/user/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation patchUserPreferences has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/user/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateUserPreferences has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/quotas",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserQuotas has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user/revoke-auth-token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation revokeUserAuthToken has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/user/stars/dashboard/uid/{dashboard_uid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation unstarDashboardByUID is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user/stars/dashboard/uid/{dashboard_uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation starDashboardByUID has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getSignedInUserTeamList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user/using/{org_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation userSetUsingOrg has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchUsers has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/lookup",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserByLoginOrEmail has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation searchUsersWithPaging has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserByID has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateUser has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/orgs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserOrgList has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getUserTeams has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/alert-rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetAlertRules has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/provisioning/alert-rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePostAlertRule has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/alert-rules/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetAlertRulesExport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/provisioning/alert-rules/{UID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteDeleteAlertRule is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/alert-rules/{UID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetAlertRule has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/provisioning/alert-rules/{UID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePutAlertRule has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/alert-rules/{UID}/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetAlertRuleExport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/contact-points",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetContactpoints has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/provisioning/contact-points",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePostContactpoints has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/contact-points/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetContactpointsExport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/provisioning/contact-points/{UID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteDeleteContactpoints is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/provisioning/contact-points/{UID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePutContactpoint has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteDeleteAlertRuleGroup is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetAlertRuleGroup has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePutAlertRuleGroup has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/folder/{FolderUID}/rule-groups/{Group}/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetAlertRuleGroupExport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/mute-timings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetMuteTimings has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/provisioning/mute-timings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePostMuteTiming has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/mute-timings/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteExportMuteTimings has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/provisioning/mute-timings/{name}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteDeleteMuteTiming is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/mute-timings/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetMuteTiming has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/provisioning/mute-timings/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePutMuteTiming has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/mute-timings/{name}/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteExportMuteTiming has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/provisioning/policies",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteResetPolicyTree is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetPolicyTree has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/provisioning/policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePutPolicyTree has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/policies/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetPolicyTreeExport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetTemplates has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/provisioning/templates/{name}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation RouteDeleteTemplate is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/provisioning/templates/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RouteGetTemplate has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/provisioning/templates/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation RoutePutTemplate has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sso-settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation listAllProvidersSettings has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/sso-settings/{key}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation removeProviderSettings is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sso-settings/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation getProviderSettings has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/sso-settings/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation patchProviderSettings has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/sso-settings/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation updateProviderSettings has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json"
+      }
     }
   ]
 }

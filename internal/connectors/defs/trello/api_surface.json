@@ -4,12 +4,2114 @@
   "reviewed_at": "2026-07-03",
   "scope": "L-size fresh migration of internal/connectors/trello: boards (full parity) plus lists/checklists (board_ids-scoped fan_out; auto-discovery narrowed, see docs.md). cards/actions are blocked — see blockers.",
   "endpoints": [
-    { "method": "GET", "path": "/members/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-member identity probe used only by Check(), not a syncable object stream" } },
-    { "method": "GET", "path": "/members/me/boards", "covered_by": { "stream": "boards" } },
-    { "method": "GET", "path": "/boards/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy's board_ids-configured per-id GET path for the boards stream itself is not modeled; boards always lists every accessible board (see docs.md Known limits) — a documented, non-security-relevant deviation, not a missing endpoint in practice (the same board data is still reachable via /members/me/boards)" } },
-    { "method": "GET", "path": "/boards/{id}/lists", "covered_by": { "stream": "lists" } },
-    { "method": "GET", "path": "/boards/{id}/checklists", "covered_by": { "stream": "checklists" } },
-    { "method": "GET", "path": "/boards/{id}/cards", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: cards requires board auto-discovery (fan_out.ids_from.request) AND id-cursor pagination (before param, last_record_field) on the SAME stream; the engine reuses one PaginationSpec for both the id-listing request and the per-board sub-fetch, so the id-listing call would either hard 401 (stream.Query's token param is not applied to fan_out.ids_from.request) or infinite-loop under lastRecordCursor (no short-page stop, no loop guard, and /members/me/boards ignores the before param entirely). See docs.md Known limits and this migration's reported blockers[]." } },
-    { "method": "GET", "path": "/boards/{id}/actions", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical fan_out + cursor-pagination conflict as /boards/{id}/cards above (actions also uses id-cursor before pagination). See docs.md Known limits and this migration's reported blockers[]." } }
+    {
+      "method": "GET",
+      "path": "/members/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-member identity probe used only by Check(), not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/me/boards",
+      "covered_by": {
+        "stream": "boards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy's board_ids-configured per-id GET path for the boards stream itself is not modeled; boards always lists every accessible board (see docs.md Known limits) — a documented, non-security-relevant deviation, not a missing endpoint in practice (the same board data is still reachable via /members/me/boards)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/lists",
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/checklists",
+      "covered_by": {
+        "stream": "checklists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/cards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: cards requires board auto-discovery (fan_out.ids_from.request) AND id-cursor pagination (before param, last_record_field) on the SAME stream; the engine reuses one PaginationSpec for both the id-listing request and the per-board sub-fetch, so the id-listing call would either hard 401 (stream.Query's token param is not applied to fan_out.ids_from.request) or infinite-loop under lastRecordCursor (no short-page stop, no loop guard, and /members/me/boards ignores the before param entirely). See docs.md Known limits and this migration's reported blockers[]."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/actions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: identical fan_out + cursor-pagination conflict as /boards/{id}/cards above (actions also uses id-cursor before pagination). See docs.md Known limits and this migration's reported blockers[]."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/actions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-actions-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/actions/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-actions-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id-field has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/board",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id-board has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/card",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id-card has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id-list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/member",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id-member has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/memberCreator",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id-membercreator has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/organization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-id-organization has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/actions/{id}/text",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-actions-id-text has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{idAction}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-idaction-reactions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/actions/{idAction}/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-actions-idaction-reactions has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{idAction}/reactions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-idaction-reactions-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/actions/{idAction}/reactions/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-actions-idaction-reactions-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{idAction}/reactionsSummary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-actions-idaction-reactionsummary has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{key}/compliance",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation applications-key-compliance has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-batch has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-memberships has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-boards-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-field has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{boardId}/actions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-actions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{boardId}/boardStars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-boardstars has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/cards/{filter}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-cards-filter has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/customFields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-customfields has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-labels has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-labels has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/lists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-lists has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/lists/{filter}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-lists-filter has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-members has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-members has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/members/{idMember}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-members-idmember has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}/members/{idMember}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation boardsidmembersidmember is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/memberships/{idMembership}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-memberships-idmembership has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/emailPosition",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-myprefs-emailposition has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/idEmailList",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-myprefs-idemaillist has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebar",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-myPrefs-showsidebar has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebarActivity",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-myPrefs-showsidebaractivity has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebarBoardActions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-myPrefs-showsidebarboardactions has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebarMembers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-boards-id-myPrefs-showsidebarmembers has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/calendarKey/generate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-calendarkey-generate has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/emailKey/generate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-emailkey-generate has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/idTags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-idtags has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/markedAsViewed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-markedasviewed has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/boardPlugins",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-boardplugins has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/boardPlugins",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-boardplugins has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}/boardPlugins/{idPlugin}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-boards-id-boardplugins is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/plugins",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-board-id-plugins has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/exports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-boards-id-exports has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/exports/{idExport}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-exports-idexport has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}/exports/{idExport}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-boards-id-exports-idexport is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/exports/{idExport}/download",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-exports-idexport-download has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/exports/mostRecent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-boards-id-exports-mostrecent has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-cards-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-cards-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-field has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/actions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-actions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-attachments has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-attachments has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/attachments/{idAttachment}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-attachments-idattachment has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/attachments/{idAttachment}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation deleted-cards-id-attachments-idattachment is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/board",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-board has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/checkItemStates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-checkitemstates has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/checklists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-checklists has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/checklists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-checklists has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/checkItem/{idCheckItem}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-checkitem-idcheckitem has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}/checkItem/{idCheckItem}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-cards-id-checkitem-idcheckitem has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/checkItem/{idCheckItem}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-cards-id-checkitem-idcheckitem is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-members has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/membersVoted",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-membersvoted has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/membersVoted",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation cardsidmembersvoted-1 has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/pluginData",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-plugindata has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/stickers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-stickers has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/stickers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-stickers has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/stickers/{idSticker}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-stickers-idsticker has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/stickers/{idSticker}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-cards-id-stickers-idsticker is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}/stickers/{idSticker}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-cards-id-stickers-idsticker has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}/actions/{idAction}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-cards-id-actions-idaction-comments has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/actions/{idAction}/comments",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-cards-id-actions-id-comments is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{idCard}/customField/{idCustomField}/item",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-cards-idcard-customfield-idcustomfield-item has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{idCard}/customFields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-cards-idcard-customfields has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/customFieldItems",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-cards-id-customfielditems has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/actions/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-actions-comments has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/idLabels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-idlabels has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/idMembers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-idmembers has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-labels has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/markAssociatedNotificationsRead",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-cards-id-markassociatednotificationsread has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/idLabels/{idLabel}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-cards-id-idlabels-idlabel is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/idMembers/{idMember}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-id-idmembers-idmember is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/membersVoted/{idMember}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-cards-id-membersvoted-idmember is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-cards-idcard-checklist-idchecklist-checkitem-idcheckitem has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/checklists/{idChecklist}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-cards-id-checklists-idchecklist is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checklists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-checklists has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-checklists-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/checklists/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-checlists-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/checklists/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-checklists-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-checklists-id-field has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/checklists/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-checklists-id-field has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/board",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-checklists-id-board has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/cards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-checklists-id-cards has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/checkItems",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-checklists-id-checkitems has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checklists/{id}/checkItems",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-checklists-id-checkitems has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/checkItems/{idCheckItem}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-checklists-id-checkitems-idcheckitem has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/checklists/{id}/checkItems/{idCheckItem}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-checklists-id-checkitems-idcheckitem is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customFields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-customfields has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customFields/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-customfields-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customFields/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-customfields-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customFields/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-customfields-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customFields/{id}/options",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-customfields-id-options has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customFields/{id}/options",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-customfields-id-options has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customFields/{id}/options/{idCustomFieldOption}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-customfields-options-idcustomfieldoption has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customFields/{id}/options/{idCustomFieldOption}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-customfields-options-idcustomfieldoption is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emoji",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation emoji has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/auditlog",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-auditlog has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/admins",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-admins has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/signupUrl",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-signupurl has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/members/query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-users-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-members has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/members/{idMember}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-members-idmember has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/transferrable/organization/{idOrganization}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-transferrable-organization-idOrganization has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/transferrable/bulk/{idOrganizations}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-transferrable-bulk-idOrganizations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/${id}/enterpriseJoinRequest/bulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-enterprises-id-enterpriseJoinRequest-bulk has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/claimableOrganizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-claimableOrganizations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/pendingOrganizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-pendingOrganizations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/enterprises/{id}/tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-enterprises-id-tokens has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/organizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-organizations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/organizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-enterprises-id-organizations has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/members/{idMember}/licensed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-enterprises-id-members-idmember-licensed has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/members/{idMember}/deactivated",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation enterprises-id-members-idMember-deactivated has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/admins/{idMember}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-enterprises-id-admins-idmember has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/enterprises/{id}/admins/{idMember}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation enterprises-id-organizations-idmember is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/enterprises/{id}/organizations/{idOrg}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-enterprises-id-organizations-idorg is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/organizations/bulk/{idOrganizations}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-enterprises-id-organizations-bulk-idOrganizations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/labels/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-labels-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/labels/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-labels-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/labels/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-labels-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/labels/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-labels-id-field has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-labels has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-lists-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-lists-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-lists has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{id}/archiveAllCards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-lists-id-archiveallcards has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{id}/moveAllCards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-lists-id-moveallcards has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}/closed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-lists-id-closed has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}/idBoard",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-id-idboard has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-lists-id-field has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}/actions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-lists-id-actions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}/board",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-lists-id-board has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}/cards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-lists-id-cards has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members=id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-field has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/actions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-actions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardBackgrounds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-boardbackgrounds has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/boardBackgrounds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-members-id-boardbackgrounds-1 has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardBackgrounds/{idBackground}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-boardbackgrounds-idbackground has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/boardBackgrounds/{idBackground}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id-boardbackgrounds-idbackground has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/boardBackgrounds/{idBackground}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-members-id-boardbackgrounds-idbackground is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardStars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-boardstars has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/boardStars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-members-id-boardstars has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardStars/{idStar}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-boardstars-idstar has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/boardStars/{idStar}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id-boardstars-idstar has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/boardStars/{idStar}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-members-id-boardstars-idstar is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-boards has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardsInvited",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-boardsinvited has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/cards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-cards has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customBoardBackgrounds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-customboardbackgrounds has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/customBoardBackgrounds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation membersidcustomboardbackgrounds-1 has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-customboardbackgrounds-idbackground has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id-customboardbackgrounds-idbackground has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-members-id-customboardbackgrounds-idbackground is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customEmoji",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-customemoji has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/customEmoji",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-members-id-customemoji has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customEmoji/{idEmoji}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation membersidcustomemojiidemoji has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customStickers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-customstickers has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/customStickers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-members-id-customstickers has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customStickers/{idSticker}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-customstickers-idsticker has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/customStickers/{idSticker}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-members-id-customstickers-idsticker is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/notifications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-notifications has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/organizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-organizations has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/organizationsInvited",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-organizationsinvited has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/savedSearches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-savedsearches has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/savedSearches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-members-id-savedsearches has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/savedSearches/{idSearch}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-savedsearches-idsearch has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/savedSearches/{idSearch}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id-savedsearches-idsearch has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/savedSearches/{idSearch}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-members-id-savedsearches-idsearch is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/tokens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-tokens has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/avatar",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation membersidavatar has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/oneTimeMessagesDismissed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-members-id-onetimemessagesdismissed has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/notificationsChannelSettings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-notificationChannelSettings has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/notificationsChannelSettings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id-notificationChannelSettings-channel-blockedKeys has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/notificationsChannelSettings/{channel}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-members-id-notificationChannelSettings-channel has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/notificationsChannelSettings/{channel}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id-notificationChannelSettings-channel-blockedKeys has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/notificationsChannelSettings/{channel}/{blockedKeys}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-members-id-notificationChannelSettings-channel-blockedKeys has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-notifications-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/notifications/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-notifications-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-notifications-id-field has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notifications/all/read",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-notifications-all-read has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/notifications/{id}/unread",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-notifications-id-unread has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/board",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-notifications-id-board has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/card",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-notifications-id-card has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-notifications-id-list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/member",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation notificationsidmember has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/memberCreator",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-notifications-id-membercreator has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/organization",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-notifications-id-organization has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-organizations has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-organizations-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-organizations-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-field has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/actions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-actions has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/boards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-boards has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{id}/exports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-organizations-id-exports has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/exports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-exports has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-members has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-organizations-id-members has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-memberships has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/memberships/{idMembership}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-memberships-idmembership has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/pluginData",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-plugindata has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-tags has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{id}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-organizations-id-tags has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}/members/{idMember}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-organizations-id-members-idmember has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/members/{idMember}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-organizations-id-members is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}/members/{idMember}/deactivated",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-organizations-id-members-idmember-deactivated has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{id}/logo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-organizations-id-logo has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/logo",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-organizations-id-logo is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/members/{idMember}/all",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation organizations-id-members-idmember-all is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/prefs/associatedDomain",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-organizations-id-prefs-associateddomain is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/prefs/orgInviteRestrict",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-organizations-id-prefs-orginviterestrict is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/tags/{idTag}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-organizations-id-tags-idtag is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/newBillableGuests/{idBoard}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-organizations-id-newbillableguests-idboard has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plugins/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-plugins-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plugins/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-plugins-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plugins/{idPlugin}/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-plugins-idplugin-listing has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plugins/{id}/compliance/memberPrivacy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-plugins-id-compliance-memberprivacy has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plugins/{idPlugin}/listings/{idListing}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-plugins-idplugin-listings-idlisting has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-search has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/members/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-search-members has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-tokens-token has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}/member",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-tokens-token-member has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-tokens-token-webhooks has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tokens/{token}/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-tokens-token-webhooks has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}/webhooks/{idWebhook}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-tokens-token-webhooks-idwebhook has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tokens/{token}/webhooks/{idWebhook}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-tokens-token-webhooks-idwebhook is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tokens/{token}/webhooks/{idWebhook}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation tokenstokenwebhooks-1 has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tokens/{token}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-token is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation post-webhooks has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation get-webhooks-id has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation put-webhooks-id has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Pinned source operation delete-webhooks-id is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pinned source operation webhooksidfield has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence. Source: https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+      }
+    }
   ]
 }

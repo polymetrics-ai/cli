@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gitea Connection Specification",
+  "type": "object",
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://gitea.com/api/v1",
+      "description": "Gitea API v1 base URL. No request is enabled in this declaration-only bundle."
+    }
+  }
+}

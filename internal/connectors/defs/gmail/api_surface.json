@@ -634,6 +634,1033 @@
         "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
         "notes": "Named dependency: google-workspace-cse-addon. Client-Side Encryption surface."
       }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/profile",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.getProfile has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.getProfile; source_location=discovery method \"gmail.users.getProfile\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/watch",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.watch has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.watch; source_location=discovery method \"gmail.users.watch\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/stop",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.stop has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.stop; source_location=discovery method \"gmail.users.stop\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/{id}/untrash",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.untrash has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.untrash; source_location=discovery method \"gmail.users.messages.untrash\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/batchModify",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.batchModify has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.batchModify; source_location=discovery method \"gmail.users.messages.batchModify\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/send",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.send has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.send; source_location=discovery method \"gmail.users.messages.send\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/{id}/trash",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.trash has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.trash; source_location=discovery method \"gmail.users.messages.trash\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/import",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.import has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.import; source_location=discovery method \"gmail.users.messages.import\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/messages/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.get; source_location=discovery method \"gmail.users.messages.get\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/{id}/modify",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.modify has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.modify; source_location=discovery method \"gmail.users.messages.modify\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/batchDelete",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.batchDelete has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.batchDelete; source_location=discovery method \"gmail.users.messages.batchDelete\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/messages/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.delete; source_location=discovery method \"gmail.users.messages.delete\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.insert has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.insert; source_location=discovery method \"gmail.users.messages.insert\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/messages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.list; source_location=discovery method \"gmail.users.messages.list\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/messages/{messageId}/attachments/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.messages.attachments.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.messages.attachments.get; source_location=discovery method \"gmail.users.messages.attachments.get\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/labels",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.labels.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.labels.create; source_location=discovery method \"gmail.users.labels.create\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.labels.update has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.labels.update; source_location=discovery method \"gmail.users.labels.update\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.labels.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.labels.delete; source_location=discovery method \"gmail.users.labels.delete\""
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.labels.patch has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.labels.patch; source_location=discovery method \"gmail.users.labels.patch\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.labels.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.labels.get; source_location=discovery method \"gmail.users.labels.get\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/labels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.labels.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.labels.list; source_location=discovery method \"gmail.users.labels.list\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/drafts/send",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.drafts.send has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.drafts.send; source_location=discovery method \"gmail.users.drafts.send\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.drafts.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.drafts.get; source_location=discovery method \"gmail.users.drafts.get\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/drafts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.drafts.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.drafts.list; source_location=discovery method \"gmail.users.drafts.list\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.drafts.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.drafts.delete; source_location=discovery method \"gmail.users.drafts.delete\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/drafts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.drafts.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.drafts.create; source_location=discovery method \"gmail.users.drafts.create\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.drafts.update has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.drafts.update; source_location=discovery method \"gmail.users.drafts.update\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/history",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.history.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.history.list; source_location=discovery method \"gmail.users.history.list\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/threads/{id}/untrash",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.threads.untrash has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.threads.untrash; source_location=discovery method \"gmail.users.threads.untrash\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/threads/{id}/modify",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.threads.modify has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.threads.modify; source_location=discovery method \"gmail.users.threads.modify\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/threads/{id}/trash",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.threads.trash has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.threads.trash; source_location=discovery method \"gmail.users.threads.trash\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/threads/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.threads.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.threads.delete; source_location=discovery method \"gmail.users.threads.delete\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/threads/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.threads.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.threads.get; source_location=discovery method \"gmail.users.threads.get\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/threads",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.threads.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.threads.list; source_location=discovery method \"gmail.users.threads.list\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/imap",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.updateImap has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.updateImap; source_location=discovery method \"gmail.users.settings.updateImap\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/pop",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.getPop has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.getPop; source_location=discovery method \"gmail.users.settings.getPop\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/imap",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.getImap has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.getImap; source_location=discovery method \"gmail.users.settings.getImap\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/vacation",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.getVacation has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.getVacation; source_location=discovery method \"gmail.users.settings.getVacation\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/vacation",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.updateVacation has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.updateVacation; source_location=discovery method \"gmail.users.settings.updateVacation\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/pop",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.updatePop has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.updatePop; source_location=discovery method \"gmail.users.settings.updatePop\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/autoForwarding",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.updateAutoForwarding has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.updateAutoForwarding; source_location=discovery method \"gmail.users.settings.updateAutoForwarding\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/language",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.updateLanguage has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.updateLanguage; source_location=discovery method \"gmail.users.settings.updateLanguage\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/autoForwarding",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.getAutoForwarding has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.getAutoForwarding; source_location=discovery method \"gmail.users.settings.getAutoForwarding\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/language",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.getLanguage has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.getLanguage; source_location=discovery method \"gmail.users.settings.getLanguage\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.create; source_location=discovery method \"gmail.users.settings.sendAs.create\""
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.update has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.update; source_location=discovery method \"gmail.users.settings.sendAs.update\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.list; source_location=discovery method \"gmail.users.settings.sendAs.list\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.get; source_location=discovery method \"gmail.users.settings.sendAs.get\""
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.patch has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.patch; source_location=discovery method \"gmail.users.settings.sendAs.patch\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.delete; source_location=discovery method \"gmail.users.settings.sendAs.delete\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/verify",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.verify has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.verify; source_location=discovery method \"gmail.users.settings.sendAs.verify\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.smimeInfo.setDefault has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.smimeInfo.setDefault; source_location=discovery method \"gmail.users.settings.sendAs.smimeInfo.setDefault\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.smimeInfo.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.smimeInfo.list; source_location=discovery method \"gmail.users.settings.sendAs.smimeInfo.list\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.smimeInfo.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.smimeInfo.get; source_location=discovery method \"gmail.users.settings.sendAs.smimeInfo.get\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.smimeInfo.insert has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.smimeInfo.insert; source_location=discovery method \"gmail.users.settings.sendAs.smimeInfo.insert\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.sendAs.smimeInfo.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.sendAs.smimeInfo.delete; source_location=discovery method \"gmail.users.settings.sendAs.smimeInfo.delete\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/filters",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.filters.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.filters.list; source_location=discovery method \"gmail.users.settings.filters.list\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/filters/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.filters.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.filters.get; source_location=discovery method \"gmail.users.settings.filters.get\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/filters/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.filters.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.filters.delete; source_location=discovery method \"gmail.users.settings.filters.delete\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/filters",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.filters.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.filters.create; source_location=discovery method \"gmail.users.settings.filters.create\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.identities.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.identities.delete; source_location=discovery method \"gmail.users.settings.cse.identities.delete\""
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities/{emailAddress}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.identities.patch has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.identities.patch; source_location=discovery method \"gmail.users.settings.cse.identities.patch\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.identities.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.identities.get; source_location=discovery method \"gmail.users.settings.cse.identities.get\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.identities.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.identities.list; source_location=discovery method \"gmail.users.settings.cse.identities.list\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.identities.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.identities.create; source_location=discovery method \"gmail.users.settings.cse.identities.create\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.keypairs.disable has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.keypairs.disable; source_location=discovery method \"gmail.users.settings.cse.keypairs.disable\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.keypairs.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.keypairs.get; source_location=discovery method \"gmail.users.settings.cse.keypairs.get\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.keypairs.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.keypairs.list; source_location=discovery method \"gmail.users.settings.cse.keypairs.list\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.keypairs.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.keypairs.create; source_location=discovery method \"gmail.users.settings.cse.keypairs.create\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.keypairs.enable has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.keypairs.enable; source_location=discovery method \"gmail.users.settings.cse.keypairs.enable\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.cse.keypairs.obliterate has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.cse.keypairs.obliterate; source_location=discovery method \"gmail.users.settings.cse.keypairs.obliterate\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/delegates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.delegates.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.delegates.list; source_location=discovery method \"gmail.users.settings.delegates.list\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/delegates/{delegateEmail}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.delegates.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.delegates.get; source_location=discovery method \"gmail.users.settings.delegates.get\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/delegates/{delegateEmail}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.delegates.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.delegates.delete; source_location=discovery method \"gmail.users.settings.delegates.delete\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/delegates",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.delegates.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.delegates.create; source_location=discovery method \"gmail.users.settings.delegates.create\""
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.forwardingAddresses.delete is destructive. It remains disabled until a named typed delete action has a bounded record schema, redaction, idempotency handling, destructive confirmation, fixture, and approval evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.forwardingAddresses.delete; source_location=discovery method \"gmail.users.settings.forwardingAddresses.delete\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.forwardingAddresses.list has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.forwardingAddresses.list; source_location=discovery method \"gmail.users.settings.forwardingAddresses.list\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.forwardingAddresses.get has no connector-owned bounded stream/direct-read schema, pagination contract, sanitized fixture, and conformance evidence.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.forwardingAddresses.get; source_location=discovery method \"gmail.users.settings.forwardingAddresses.get\""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned source operation gmail.users.settings.forwardingAddresses.create has no named typed write action with a bounded record schema, redaction, approval, fixture, and endpoint binding.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "source_operation_id=gmail.users.settings.forwardingAddresses.create; source_location=discovery method \"gmail.users.settings.forwardingAddresses.create\""
+      }
     }
   ],
   "operation_ledger_version": 1
