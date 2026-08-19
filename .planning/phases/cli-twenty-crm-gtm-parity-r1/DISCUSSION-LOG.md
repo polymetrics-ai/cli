@@ -64,3 +64,18 @@
   bypass auth, or use an unreviewed browser-extracted credential. Remain
   blocked until an authoritative noninteractive disposable bootstrap or a
   registered non-echoing credential reference is available.
+- Captain decision correction (2026-08-20): the official interactive
+  first-workspace and API-key flow is an approved supported bootstrap when run
+  only inside a new lane-owned disposable local instance. This resolves the
+  noninteractive requirement but changes none of the isolation, no-production,
+  no-database-edit, no-auth-bypass, or no-token-exposure boundaries. Use the
+  source-pinned Compose with new resources and a loopback-only port override,
+  then hand the newly created key directly to the CLI credential stdin path.
+- Runtime red checkpoint (2026-08-20): the first two lane-owned startups both
+  stopped at Twenty configuration validation before a workspace existed. The
+  source-backed diagnosis is an empty local-storage setting; the second
+  non-echoing lookup failed to supply it. This is the same obstacle twice, so
+  the lane contract requires a `blocked` handoff after tearing down only the
+  verified lane project. A future resume should use the known source-backed
+  local-storage setting directly in process environment; it must not edit the
+  database or reuse the failed volumes.

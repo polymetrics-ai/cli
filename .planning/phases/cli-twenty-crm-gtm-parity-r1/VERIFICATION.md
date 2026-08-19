@@ -124,6 +124,76 @@ the database, bypassing authentication, using a UI-extracted value, or
 repurposing the historical runtime would violate the live-certification safety
 contract.
 
+### Captain decision correction — interactive bootstrap authorized
+
+The captain subsequently authorized the official interactive first-workspace
+and API-key flow within this new disposable local instance. This resolves only
+the noninteractive-bootstrap blocker: it does not authorize database edits,
+authentication bypasses, production access, existing Docker-resource reuse, or
+token display in a browser snapshot/transcript. The next lane step is a
+project-private Compose deployment with a unique project name, new named
+volumes/default network, a unique loopback-only override for the one published
+port, and redacted per-image digest evidence before startup. The generated API
+key must move directly from the approved local application flow to the built
+CLI's stdin credential input without printing or persisting the plaintext.
+
+### Isolated Compose inputs resolved before startup
+
+The lane reserved Compose project `pm-twenty-cert-r1` and verified its project
+containers, networks, and volumes do not exist. Loopback port `39177` was
+unbound and is the only host binding in the lane override
+`.twenty-cert-r1/compose.loopback.yml`; the production recipe's original public
+mapping is replaced rather than supplemented.
+
+Before any container startup, the recipe-declared images resolved locally to:
+
+- `twentycrm/twenty@sha256:cb80b05bc2619a88a3a83293f45f2be495a55ac77a90946fa1f7d85f0b7fde24`
+- `postgres@sha256:95206741a5b214807675e14165369d05b93a9cf692223b616d07cca227e74b0b`
+- `redis@sha256:344e3945a0b431c8ff1eecd58c5573538126bd756f02fc7e218ddf1fc2546366`
+
+The two backing images were pulled only because the reviewed recipe declares
+them. Docker has not yet created a container, network, volume, or workspace
+for this project. Server-internal encryption material and local application URL
+will be generated only in the startup process environment and will not be
+written to the override, logs, evidence, or source control.
+
+### Initial local-start red checkpoint — no workspace data created
+
+The first isolated startup created only the lane project's network, volumes,
+and four containers. PostgreSQL and Redis became healthy, but the Twenty server
+restarted during configuration validation before serving the health endpoint;
+the worker remained unstarted. Redacted classification identified an unset
+storage configuration. A clean second lane-owned recreation reached the same
+validation failure because the non-echoing enum lookup used to populate the
+local-storage setting was a no-op; a sanitized rendered Compose check confirmed
+that the field remained empty. The exact upstream configuration source requires
+the normalized local-storage option for this recipe, with its default local
+path, and validates the setting before application startup.
+
+This is the second occurrence of the same startup obstacle. Per the lane
+contract, do not make a third attempt in this turn. No workspace, account,
+API key, or business record was created. The verified lane-owned failed project
+must be torn down before pausing; a resumed worker can use the now-established
+source-backed local-storage setting directly in the process environment.
+
+Redacted command/result evidence for this checkpoint:
+
+```text
+docker compose --project-name pm-twenty-cert-r1 ... config --images
+# PASS: exactly the three reviewed recipe image references
+docker image inspect --format '<id> <repo-digest>' <each declared image>
+# PASS: all three immutable digests recorded above before startup
+docker compose --project-name pm-twenty-cert-r1 ... config --format json | jq <structural projection>
+# PASS: one loopback-only port, four services, project-default network, two named volumes
+docker compose --project-name pm-twenty-cert-r1 ... create
+docker start pm-twenty-cert-r1-db-1 pm-twenty-cert-r1-redis-1 pm-twenty-cert-r1-server-1
+# RED: backing services healthy; Twenty server configuration validation fails before /healthz
+docker rm -f <four verified pm-twenty-cert-r1 containers>
+docker network rm pm-twenty-cert-r1_default
+docker volume rm pm-twenty-cert-r1_db-data pm-twenty-cert-r1_server-local-data
+# PASS: verified lane-only teardown; no project resources remain
+```
+
 ## Local verification results
 
 All of these completed successfully unless explicitly marked as a documented
