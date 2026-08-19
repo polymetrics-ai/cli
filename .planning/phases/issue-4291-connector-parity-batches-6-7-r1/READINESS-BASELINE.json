@@ -18,15 +18,15 @@
     "direct_write_missing_exact_typed_action_bindings": 1745,
     "direct_write_cli_commands": 0,
     "etl_streams": 287,
-    "source_transports": 1,
-    "reverse_etl_destination_action_bindings": 1,
+    "source_transports": 2,
+    "reverse_etl_destination_action_bindings": 2,
     "binary_ledger_rows": 1,
     "binary_cli_commands": 2,
     "documented_deletes": 424,
     "connectors_with_unproven_source_inventory": 3,
     "provider_live_certified": 0,
-    "reverse_etl_destination_declarations_pending_app_dispatch": 1,
-    "reverse_etl_cli_commands": 61
+    "reverse_etl_destination_declarations_pending_app_dispatch": 2,
+    "reverse_etl_cli_commands": 121
   },
   "connectors": [
     {
@@ -496,10 +496,13 @@
       },
       "etl": {
         "streams": 7,
-        "source_transport": false
+        "source_transport": true
       },
       "reverse_etl": {
-        "destination_action_bindings": 0
+        "destination_action_bindings": 1,
+        "cli_commands": 60,
+        "deployable_application_dispatch": false,
+        "pending_foundation": "#4304 persisted App/CLI generic destination dispatch"
       },
       "binary": {
         "ledger_rows": 0,

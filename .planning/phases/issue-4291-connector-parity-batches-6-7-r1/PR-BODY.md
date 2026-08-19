@@ -33,7 +33,7 @@ certification never make an operation unreachable.
 | help-scout | unproven | 50 / 55 | 65 / 65 | 0 | 0 / 24 | 0 | 1 / 0 | 18 |
 | gorgias | complete | 41 / 42 | 61 / 68 | 61 | 1 / 4 | 1 (App dispatch pending) | 1 / 1 | 18 |
 | service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 0 / 3 | 0 | 0 / 0 | 1 |
-| chatwoot | complete | 32 / 57 | 60 / 84 | 0 | 0 / 7 | 0 | 0 / 0 | 18 |
+| chatwoot | complete | 32 / 57 | 60 / 84 | 60 | 1 / 7 | 1 (App dispatch pending) | 0 / 0 | 18 |
 | chargebee | complete | 0 / 128 | 36 / 367 | 0 | 0 / 32 | 0 | 0 / 0 | 0 |
 | square | complete | 0 / 117 | 0 / 213 | 0 | 0 / 4 | 0 | 0 / 0 | 27 |
 | braintree | unproven | 0 / 18 | 0 / 45 | 0 | 0 / 10 | 0 | 0 / 0 | 6 |
@@ -44,12 +44,13 @@ certification never make an operation unreachable.
   bindings; 1,745 direct writes need exact typed actions. Gorgias already has 61 user-reachable
   approval-governed write commands; its native `direct_write` intent count remains zero, so the
   ledger keeps direct capability distinct from reverse-ETL deployment.
-- Gorgias now declares all four ETL streams as a source transport and one `tickets → update_ticket`
-  typed-destination proof with exact source bindings, keyed delivery, durable acknowledgement,
-  per-mode strategies, and fixture/dry conformance evidence. It is not application-level deployable
-  yet: #4304 must land its persisted App/CLI generic-destination dispatch integration. The remaining
-  59 ordinary Gorgias actions are explicitly eligible but await closed exact-action selection; the
-  multipart `upload_file` action has a named binary/multipart semantic exclusion and remains CLI-reachable.
+- Gorgias and Chatwoot now declare their complete ETL stream sets and one exact typed-destination
+  proof each (`tickets → update_ticket` and `contacts → update_contact`) with keyed delivery,
+  durable acknowledgement, per-mode strategies, and fixture/dry conformance evidence. Neither is
+  application-level deployable yet: #4304 must land its persisted App/CLI generic-destination dispatch
+  integration. Their remaining ordinary actions are explicitly eligible but await closed exact-action
+  selection; Gorgias multipart `upload_file` has a named binary/multipart semantic exclusion and
+  remains CLI-reachable.
 - Braze, Help Scout, and Braintree source inventories remain unproven; the rest use a complete
   provider specification/reference or ServiceNow's explicitly dynamic fixed-template basis.
 - Help Scout still needs its binary command represented as a binary parity row; Gorgias now is.

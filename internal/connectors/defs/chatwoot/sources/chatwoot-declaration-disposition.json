@@ -58,12 +58,17 @@
     "writes_actions": 60,
     "terminal_commands": 101,
     "gap_ids": [
-      "generic-typed-destination-executor"
+      "declarative-typed-destination-app-dispatch",
+      "declarative-typed-destination-exact-action-selection"
     ],
     "foundation_gaps": [
       {
-        "id": "generic-typed-destination-executor",
-        "count": 84
+        "id": "declarative-typed-destination-app-dispatch",
+        "count": 1
+      },
+      {
+        "id": "declarative-typed-destination-exact-action-selection",
+        "count": 59
       }
     ],
     "rejected_by_reason": [
@@ -75,26 +80,20 @@
     "transport": {
       "contract": "docs/sync-transport-definition.md",
       "source_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-chatwoot",
-          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/chatwoot/sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
-        }
+        "state": "declared",
+        "declaration": "sync_transport.json",
+        "conformance": "declarative_stream_transport/chatwoot_fixture_source_v1"
       },
       "destination_transport": {
-        "state": "foundation-gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-        }
+        "state": "declared_pending_foundation_dispatch",
+        "declaration": "sync_transport.json",
+        "action": "update_contact",
+        "foundation_dependency": "#4304 persisted App/CLI dispatch integration"
       }
     },
     "declaration_pending_ids": [
       "runnable-command-binding-chatwoot",
-      "typed-operation-contract-chatwoot",
-      "sync-transport-source-definition-chatwoot"
+      "typed-operation-contract-chatwoot"
     ],
     "declaration_pending": [
       {
@@ -145,12 +144,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -187,12 +189,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -229,12 +234,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -271,12 +279,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -313,12 +324,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -355,12 +369,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -397,12 +414,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -439,12 +459,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -481,12 +504,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -523,12 +549,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -565,12 +594,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -607,12 +639,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -649,12 +684,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -691,12 +729,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3417,12 +3458,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3459,12 +3503,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3501,12 +3548,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3543,12 +3593,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3585,12 +3638,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3627,12 +3683,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3669,12 +3728,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3711,12 +3773,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3795,12 +3860,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3837,12 +3905,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3879,12 +3950,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3921,12 +3995,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -3963,12 +4040,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4005,12 +4085,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4047,12 +4130,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4089,12 +4175,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4131,12 +4220,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4215,12 +4307,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4257,12 +4352,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4299,12 +4397,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4395,12 +4496,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4437,12 +4541,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4479,12 +4586,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4521,12 +4631,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4563,12 +4676,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4605,12 +4721,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4647,12 +4766,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4689,12 +4811,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -4731,12 +4856,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5313,11 +5441,23 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+          "state": "bound_pending_foundation_dispatch",
+          "direct_cli": "contacts update",
+          "destination_binding": {
+            "declaration": "sync_transport.json",
+            "action": "update_contact",
+            "source_executor": "declarative_api/declarative_stream_source",
+            "source_stream": "contacts",
+            "input_fields": [
+              "id",
+              "blocked"
+            ]
+          },
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending application/CLI dispatch integration",
+            "evidence": "internal/app/transport_composition.go:12-29 composes definition factories; #4304 must make persisted App/CLI dispatch select the declared generic destination.",
+            "certification": "fixture/dry declaration only; provider-live execution is pending credentialed certification"
           }
         }
       }
@@ -5409,12 +5549,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5451,12 +5594,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5493,12 +5639,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5535,12 +5684,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5577,12 +5729,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5619,12 +5774,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5661,12 +5819,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5703,12 +5864,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5745,12 +5909,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5787,12 +5954,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5883,12 +6053,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5925,12 +6098,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -5967,12 +6143,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -6009,12 +6188,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -6051,12 +6233,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -6093,12 +6278,15 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "eligible_pending_exact_action_selection",
+          "direct_cli": "existing connector reverse-ETL command",
+          "foundation_dependency": {
+            "issue": "#4304",
+            "state": "pending exact action-selection multiplicity",
+            "evidence": "internal/connectors/sync_transport.go:405-409 permits one declaration-owned action per mode and internal/connectors/sync_transport.go:468-480 resolves only that mode strategy; the closed contract has no caller-selected action channel.",
+            "minimal_change": "Extend the closed definition-owned destination selector to choose an exact eligible action from a source-bound, typed declaration without accepting a caller-provided operation, then add its explicit input_fields binding."
+          },
+          "certification": "Direct CLI reachability is declared separately; provider-live execution remains pending credentialed certification."
         }
       }
     },
@@ -6377,6 +6565,8 @@
   "notes": [
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.1.0 document; every 148 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
-    "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound."
+    "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
+    "Reverse-ETL eligibility is explicit for all 60 typed actions: update_contact is the connector one source-bound declarative_typed_destination proof; 59 ordinary typed actions await #4304 exact declaration-owned action-selection multiplicity.",
+    "The current proof is declaration- and fixture-backed only. Do not claim application-level reverse-ETL deployability until #4304 persisted App/CLI dispatch integration is merged and exercised."
   ]
 }

@@ -24,14 +24,14 @@ provider-live certification. The machine-readable source is
 | help-scout | unproven | 144 | 50 / 55 | 65 / 65 | 0 / 24 | 0 | 1 / 0 | 18 | 139 |
 | gorgias | complete | 114 | 41 / 42 | 61 / 68 | 1 / 4 | 1 (App dispatch pending) | 1 / 1 | 18 | 94 |
 | service-now | dynamic templates | 6 | 0 / 1 | 2 / 4 | 0 / 3 | 0 | 0 / 0 | 1 | 0 |
-| chatwoot | complete | 148 | 32 / 57 | 60 / 84 | 0 / 7 | 0 | 0 / 0 | 18 | 100 |
+| chatwoot | complete | 148 | 32 / 57 | 60 / 84 | 1 / 7 | 1 (App dispatch pending) | 0 / 0 | 18 | 100 |
 | chargebee | complete | 527 | 0 / 128 | 36 / 367 | 0 / 32 | 0 | 0 / 0 | 0 | 0 |
 | square | complete | 334 | 0 / 117 | 0 / 213 | 0 / 4 | 0 | 0 / 0 | 27 | 0 |
 | braintree | unproven | 73 | 0 / 18 | 0 / 45 | 0 / 10 | 0 | 0 / 0 | 6 | 0 |
 
 Totals after the Gorgias increment: 3,932 documented operations; 1,465 direct reads with 123 exact
-command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, one source
-transport, one typed-destination declaration pending #4304 persisted App/CLI dispatch, 424 documented
+command bindings; 2,189 direct writes with 444 exact typed-action bindings; 287 streams, two source
+transports, two typed-destination declarations pending #4304 persisted App/CLI dispatch, 424 documented
 deletes, and zero provider-live certifications.
 
 Help Scout still has a binary-ledger classification defect. Gorgias now maps its
@@ -47,3 +47,11 @@ typed actions await #4304's closed exact-action selection, and `upload_file` has
 multipart semantic exclusion while remaining reachable as `pm gorgias files upload`. The installed
 binary reaches both `tickets messages list` and `tickets update` before stopping at the expected
 credential preflight; no provider credentials or provider calls were used.
+
+## Increment — Chatwoot declarative destination proof
+
+The `contacts(id, blocked) → update_contact` mapping makes Chatwoot the second fixture/dry
+declaration proof, with all seven streams declared as ETL sources. Its 60 typed actions now each
+have an eligibility disposition: one bound proof and 59 actions pending #4304 closed exact-action
+selection. All existing approval-governed write commands remain user-reachable; persisted App/CLI
+destination dispatch and provider-live certification remain pending.

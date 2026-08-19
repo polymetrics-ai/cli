@@ -99,3 +99,21 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   still needs persisted App/CLI generic-destination dispatch. Do not mark application-level
   reverse-ETL deployable until the final foundation merge is an ancestor and the real App/CLI path
   exercises the declared destination.
+
+## Chatwoot connector-owned destination increment — 2026-08-20
+
+- **RED:** Chatwoot exposed seven fixture-backed streams and 60 source-bound typed actions but had
+  neither a `sync_transport.json` declaration nor a per-action eligibility state beyond the superseded
+  generic-destination gap.
+- **GREEN:** `sync_transport.json` now declares all seven source streams and the concrete
+  `contacts(id,blocked) → update_contact` proof for all closed modes, keyed delivery, durable
+  acknowledgement, and fixture/dry conformance. The source disposition distinguishes the bound
+  action from 59 eligible actions awaiting #4304 exact selection. Its 60 existing approval-governed
+  write commands remain user-reachable; no provider credential or call was used.
+- **GREEN:** `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`,
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`, and `go test -timeout 20m
+  ./internal/connectors/engine -run 'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll'
+  -count=1` passed.
+- **PENDING FOUNDATION:** persisted App/CLI generic-destination dispatch remains #4304 work; this
+  connector declares a fixture/dry route only and does not claim application-level deployment.
