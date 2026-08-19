@@ -9,4 +9,4 @@
 - [x] `make connector-boundary` is green (final detached run, exit 0; log: `connector-boundary-final.log`).
 - [x] Focused tests are green: `go test -timeout 20m ./cmd/connectorgen`, `go test -timeout 20m ./internal/connectors/engine` (7.508s), and `go test -timeout 20m ./internal/cli`.
 - [x] Repository generated/docs and compile checks are green: `go vet ./...`; `go build ./cmd/pm`; `make tidy-check`; `make lint` (0 issues); `make docs-check`; `make smoke-no-build`; `make agent-contract-check`; and `make release-workflow-check`.
-- [ ] The PR base is read back from the GitHub API after opening.
+- [x] PR #4295 base is `main`, read from the GitHub API with `gh api /repos/polymetrics-ai/cli/pulls/4295 --jq .base.ref`.
