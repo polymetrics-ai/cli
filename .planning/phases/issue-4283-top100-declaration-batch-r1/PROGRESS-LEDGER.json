@@ -3,7 +3,7 @@
   "issue": 4283,
   "cohort": "top100-daily-use-increment-001",
   "scope": "public-source declarations plus non-live certification only",
-  "generated_at": "2026-08-19T11:37:51Z",
+  "generated_at": "2026-08-19T13:01:43Z",
   "connectors": [
     {
       "connector": "asana",
@@ -274,9 +274,11 @@
       },
       "files_produced": [
         "api_surface.json (source cross-check)",
+        "certification-sweep.json",
         "operations.json",
-        "writes.json",
-        "certification-sweep.json"
+        "sources/dockerhub-declaration-disposition.json",
+        "sources/dockerhub-operation-crosswalk.json",
+        "writes.json"
       ],
       "operations": {
         "documented": 54,
@@ -284,7 +286,15 @@
         "surface_unblocked": 4,
         "disabled": 50,
         "coverage_percent": 100,
-        "operation_ledger_entries": 0
+        "operation_ledger_entries": 49,
+        "typed_source_contracts": 49,
+        "typed_source_contracts_by_kind": {
+          "rest_read": 23,
+          "rest_write": 26
+        },
+        "delete_source_contracts": 6,
+        "terminal_commands": 4,
+        "coverage_basis": "54/54 pinned operations are explicitly crosswalked and dispositioned; 49 have source-contract inventory, four remain ETL stream bindings, and 50 terminal routes are disabled."
       },
       "sync_transport": {
         "state": "blocked",
@@ -313,7 +323,11 @@
         "statuses": {
           "fixture_required": 5
         },
-        "live_certification": "pending"
+        "live_certification": "pending",
+        "certification_json": {
+          "state": "not_applicable",
+          "reason": "No new direct-read or direct-write terminal command was declared; source-contract inventory rows remain non-terminal. Live certification remains pending."
+        }
       },
       "parity_classes": [
         "source-lock",
@@ -323,12 +337,13 @@
         "non-live-certification-sweep",
         "sync-transport-blocked-foundation-gap"
       ],
-      "state": "declarations_complete_non_live_certification_pending",
-      "timestamp": "2026-08-19T11:37:51Z",
-      "resume_pointer": "Increment 2: select the next ranked connectors with retrievable public API descriptions after #4283 checkpoint review.",
+      "state": "full-parity-declarations-complete_non-live-certification-pending",
+      "timestamp": "2026-08-19T13:01:43Z",
+      "resume_pointer": "Full parity order: Docker Hub complete; next connector is Notion after captain review.",
       "writes": {
         "actions": 0,
-        "kinds": {}
+        "kinds": {},
+        "reason": "No documented Docker Hub mutation is an approved warehouse destination action in this credential-free bundle."
       }
     },
     {

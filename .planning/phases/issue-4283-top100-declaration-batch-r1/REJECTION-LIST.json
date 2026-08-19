@@ -4332,10 +4332,10 @@
         "method": "POST",
         "path": "/v2/users/login"
       },
-      "reason": "requires-elevated-scope",
-      "evidence": "username+password session-token exchange; this bundle's spec.json declares no password field and the public registry read surface needs no auth, so no login flow is wired",
+      "reason": "provider-does-not-expose",
+      "evidence": "Pinned Docker Hub OpenAPI marks this session-login operation deprecated: true; it remains source-inventoried but is not declared as a terminal command.",
       "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Enable after a least-privilege credential scope is documented and live certification is authorized."
+      "recoverability": "Revisit only after a newly pinned provider API description removes the deprecated marker and a least-privilege authentication contract is documented."
     },
     {
       "connector": "dockerhub",

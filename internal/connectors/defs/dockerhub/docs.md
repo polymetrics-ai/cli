@@ -64,3 +64,15 @@ tag data.
 - API coverage includes 4 stream-backed endpoint group(s).
 - Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented
   legacy endpoint is exposed by this bundle.
+- `sources/dockerhub-operation-crosswalk.json` and
+  `sources/dockerhub-declaration-disposition.json` account for all 54 pinned
+  operations. `operations.json` carries 49 source-contract inventory entries
+  (including six DELETE contracts), but none is a terminal direct-read or
+  direct-write command; a terminal command needs its own bounded schema,
+  policy, fixture, and non-live proof.
+- Three pinned HEAD existence checks remain disabled under a recoverable
+  response-less executor foundation gap. The pinned deprecated login endpoint
+  remains disabled. `sync_transport.json` is absent under the separate
+  recoverable #4093 transport foundation gap.
+- No `certification.json` is emitted because there are no new terminal command
+  candidates. Live certification remains pending and was not attempted.

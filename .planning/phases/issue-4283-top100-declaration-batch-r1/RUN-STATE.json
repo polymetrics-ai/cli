@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "increment-001-transport-gap-recorded",
+  "state": "full-parity-dockerhub-complete",
   "delivery_mode": "declaration-only-non-live-certification",
   "connectors": [
     "dockerhub",
@@ -17,5 +17,5 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Commit the transport-gap record and obtain checkpoint acceptance before selecting increment 002 from the ranked daily-use pool."
+  "next": "Commit and report the Docker Hub full-parity proof slice. Do not select Increment 2; the next permitted connector under the captain order is Notion."
 }

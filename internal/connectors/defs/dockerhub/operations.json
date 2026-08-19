@@ -1,3 +1,1438 @@
 {
-  "operations": []
+  "operations": [
+    {
+      "id": "dockerhub.postusers2falogin",
+      "kind": "rest_write",
+      "summary": "Second factor authentication",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.PostUsers2FALogin; source location: paths[\"/v2/users/2fa-login\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/2fa-login",
+        "content_type": "application/json"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.authcreateaccesstoken",
+      "kind": "rest_write",
+      "summary": "Create access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.AuthCreateAccessToken; source location: paths[\"/v2/auth/token\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/auth/token",
+        "content_type": "application/json"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.post__v2_access-tokens",
+      "kind": "rest_write",
+      "summary": "Create personal access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/access-tokens; source location: paths[\"/v2/access-tokens\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/access-tokens",
+        "content_type": "application/json"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.get__v2_access-tokens",
+      "kind": "rest_read",
+      "summary": "List personal access tokens",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/access-tokens; source location: paths[\"/v2/access-tokens\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/access-tokens",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "number"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.patch__v2_access-tokens__uuid_",
+      "kind": "rest_write",
+      "summary": "Update personal access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.patch_/v2/access-tokens/{uuid}; source location: paths[\"/v2/access-tokens/{uuid}\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/access-tokens/{uuid}",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.get__v2_access-tokens__uuid_",
+      "kind": "rest_read",
+      "summary": "Get personal access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/access-tokens/{uuid}; source location: paths[\"/v2/access-tokens/{uuid}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/access-tokens/{uuid}",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.delete__v2_access-tokens__uuid_",
+      "kind": "rest_write",
+      "summary": "Delete personal access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.delete_/v2/access-tokens/{uuid}; source location: paths[\"/v2/access-tokens/{uuid}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/access-tokens/{uuid}",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "id": "dockerhub.auditlogs_listauditactions",
+      "kind": "rest_read",
+      "summary": "List audit log actions",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.AuditLogs_ListAuditActions; source location: paths[\"/v2/auditlogs/{account}/actions\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}/actions",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Namespace to query audit log actions for."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.auditlogs_listauditlogs",
+      "kind": "rest_read",
+      "summary": "List audit log events",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.AuditLogs_ListAuditLogs; source location: paths[\"/v2/auditlogs/{account}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Namespace to query audit logs for."
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "type": "string",
+            "summary": "action name one of [\"repo.tag.push\", ...]. Optional parameter to filter specific audit log actions.\n"
+          },
+          {
+            "name": "actor",
+            "in": "query",
+            "type": "string",
+            "summary": "actor name. Optional parameter to filter audit log events to the specific user who triggered the event.\n"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "type": "string",
+            "summary": "Start of the time window you wish to query audit events for."
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "summary": "name. Optional parameter to filter audit log events to a specific name. For repository events, this is the name of the repository. For organization events, this is the name of the organization. For team member events, this is the username of the team member.\n"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "page - specify page number. Page number to get."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "page_size - specify page size. Number of events to return per page."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "type": "string",
+            "summary": "End of the time window you wish to query audit events for."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__name__settings",
+      "kind": "rest_read",
+      "summary": "Get organization settings",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{name}/settings; source location: paths[\"/v2/orgs/{name}/settings\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{name}/settings",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.put__v2_orgs__name__settings",
+      "kind": "rest_write",
+      "summary": "Update organization settings",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.put_/v2/orgs/{name}/settings; source location: paths[\"/v2/orgs/{name}/settings\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/orgs/{name}/settings",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization."
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.post__v2_orgs__name__access-tokens",
+      "kind": "rest_write",
+      "summary": "Create access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/orgs/{name}/access-tokens; source location: paths[\"/v2/orgs/{name}/access-tokens\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "content_type": "application/json"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__name__access-tokens",
+      "kind": "rest_read",
+      "summary": "List access tokens",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{name}/access-tokens; source location: paths[\"/v2/orgs/{name}/access-tokens\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "number"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__access-tokens__access_token_id_",
+      "kind": "rest_read",
+      "summary": "Get access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}; source location: paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "parameters": [
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The ID of the access token to retrieve"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.patch__v2_orgs__org_name__access-tokens__access_token_id_",
+      "kind": "rest_write",
+      "summary": "Update access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}; source location: paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "parameters": [
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The ID of the access token to retrieve"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__access-tokens__access_token_id_",
+      "kind": "rest_write",
+      "summary": "Delete access token",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}; source location: paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "parameters": [
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The ID of the access token to retrieve"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "id": "dockerhub.listrepositorytags",
+      "kind": "rest_read",
+      "summary": "List repository tags",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.ListRepositoryTags; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "Page number to get. Defaults to 1."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "Number of items to get per page. Defaults to 10. Max of 100."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.getrepositorytag",
+      "kind": "rest_read",
+      "summary": "Read repository tag",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.GetRepositoryTag; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "tag",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.updaterepositoryimmutabletags",
+      "kind": "rest_write",
+      "summary": "Update repository immutable tags",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.UpdateRepositoryImmutableTags; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.verifyrepositoryimmutabletags",
+      "kind": "rest_write",
+      "summary": "Verify repository immutable tags",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.VerifyRepositoryImmutableTags; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.createrepositorygroup",
+      "kind": "rest_write",
+      "summary": "Assign a group (Team) to a repository for access",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.CreateRepositoryGroup; source location: paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/repositories/{namespace}/{repository}/groups",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.listnamespacerepositories",
+      "kind": "rest_read",
+      "summary": "List repositories in a namespace",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.listNamespaceRepositories; source location: paths[\"/v2/namespaces/{namespace}/repositories\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "summary": "Filter repositories by name (partial match)."
+          },
+          {
+            "name": "ordering",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "name",
+              "-name",
+              "last_updated",
+              "-last_updated",
+              "pull_count",
+              "-pull_count"
+            ],
+            "summary": "Order repositories by the specified field. Prefix with '-' for descending order.\nAvailable options:\n- `name` / `-name`: Repository name (ascending/descending)\n- `last_updated` / `-last_updated`: Last update time (ascending/descending)\n- `pull_count` / `-pull_count`: Number of pulls (ascending/descending)\n"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "Page number to get. Defaults to 1."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "Number of repositories to get per page. Defaults to 10. Max of 100."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.createrepository",
+      "kind": "rest_write",
+      "summary": "Create a new repository",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.CreateRepository; source location: paths[\"/v2/namespaces/{namespace}/repositories\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.getrepository",
+      "kind": "rest_read",
+      "summary": "Get repository in a namespace",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.GetRepository; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__members",
+      "kind": "rest_read",
+      "summary": "List org members",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/members; source location: paths[\"/v2/orgs/{org_name}/members\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/members",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "invites",
+            "in": "query",
+            "type": "boolean",
+            "summary": "Include invites in the response."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "Page number (starts on 1)."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "Number of items (rows) per page."
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "owner",
+              "editor",
+              "member"
+            ]
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "integer",
+            "summary": "Search term."
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "all",
+              "invitee",
+              "member"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.put__v2_orgs__org_name__members__username_",
+      "kind": "rest_write",
+      "summary": "Update org member (role)",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}; source location: paths[\"/v2/orgs/{org_name}/members/{username}\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Username, identifier for the user (namespace, DockerID)."
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__members__username_",
+      "kind": "rest_write",
+      "summary": "Remove member from org",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}; source location: paths[\"/v2/orgs/{org_name}/members/{username}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Username, identifier for the user (namespace, DockerID)."
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__invites",
+      "kind": "rest_read",
+      "summary": "List org invites",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/invites; source location: paths[\"/v2/orgs/{org_name}/invites\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/invites",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__groups",
+      "kind": "rest_read",
+      "summary": "Get groups of an organization",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/groups; source location: paths[\"/v2/orgs/{org_name}/groups\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "Page number (starts on 1)."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "Number of items (rows) per page."
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string",
+            "summary": "Get groups for the specified group in the organization."
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "type": "string",
+            "summary": "Get groups for the specified username in the organization."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.post__v2_orgs__org_name__groups",
+      "kind": "rest_write",
+      "summary": "Create a new group",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/orgs/{org_name}/groups; source location: paths[\"/v2/orgs/{org_name}/groups\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_read",
+      "summary": "Get a group of an organization",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.put__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_write",
+      "summary": "Update the details for an organization group",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.patch__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_write",
+      "summary": "Update some details for an organization group",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ],
+        "content_type": "application/json"
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_write",
+      "summary": "Delete an organization group",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__groups__group_name__members",
+      "kind": "rest_read",
+      "summary": "List members of a group",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "Page number (starts on 1)."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "Number of items (rows) per page."
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string",
+            "summary": "Search members by username, full_name or email."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.post__v2_orgs__org_name__groups__group_name__members",
+      "kind": "rest_write",
+      "summary": "Add a member to a group",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          }
+        ]
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name__members__username_",
+      "kind": "rest_write",
+      "summary": "Remove a user from a group",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+        "parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Username, identifier for the user (namespace, DockerID)."
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "id": "dockerhub.delete__v2_invites__id_",
+      "kind": "rest_write",
+      "summary": "Cancel an invite",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.delete_/v2/invites/{id}; source location: paths[\"/v2/invites/{id}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/invites/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "id": "dockerhub.patch__v2_invites__id__resend",
+      "kind": "rest_write",
+      "summary": "Resend an invite",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.patch_/v2/invites/{id}/resend; source location: paths[\"/v2/invites/{id}/resend\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/invites/{id}/resend",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "mutation_class": "update"
+    },
+    {
+      "id": "dockerhub.post__v2_invites_bulk",
+      "kind": "rest_write",
+      "summary": "Bulk create invites",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/invites/bulk; source location: paths[\"/v2/invites/bulk\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/invites/bulk"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_serviceproviderconfig",
+      "kind": "rest_read",
+      "summary": "Get service provider config",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig; source location: paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ServiceProviderConfig"
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_resourcetypes",
+      "kind": "rest_read",
+      "summary": "List resource types",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/ResourceTypes; source location: paths[\"/v2/scim/2.0/ResourceTypes\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes"
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_resourcetypes__name_",
+      "kind": "rest_read",
+      "summary": "Get a resource type",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}; source location: paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes/{name}",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_schemas",
+      "kind": "rest_read",
+      "summary": "List schemas",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/Schemas; source location: paths[\"/v2/scim/2.0/Schemas\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas"
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_schemas__id_",
+      "kind": "rest_read",
+      "summary": "Get a schema",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}; source location: paths[\"/v2/scim/2.0/Schemas/{id}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_users",
+      "kind": "rest_read",
+      "summary": "List users",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users",
+        "parameters": [
+          {
+            "name": "attributes",
+            "in": "query",
+            "type": "string",
+            "summary": "Comma delimited list of attributes to limit to in the response."
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "type": "string",
+            "summary": "User attribute to sort by."
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "ascending",
+              "descending"
+            ]
+          },
+          {
+            "name": "startIndex",
+            "in": "query",
+            "type": "integer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.post__v2_scim_2.0_users",
+      "kind": "rest_write",
+      "summary": "Create user",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/scim/2.0/Users"
+      },
+      "mutation_class": "create"
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_users__id_",
+      "kind": "rest_read",
+      "summary": "Get a user",
+      "description": "Provider-source contract inventory only; api_surface remains blocked or stream-covered until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.get_/v2/scim/2.0/Users/{id}; source location: paths[\"/v2/scim/2.0/Users/{id}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The user ID."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.put__v2_scim_2.0_users__id_",
+      "kind": "rest_write",
+      "summary": "Update a user",
+      "description": "Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.put_/v2/scim/2.0/Users/{id}; source location: paths[\"/v2/scim/2.0/Users/{id}\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The user ID."
+          }
+        ]
+      },
+      "mutation_class": "update"
+    }
+  ]
 }

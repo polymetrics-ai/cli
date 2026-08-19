@@ -13,3 +13,19 @@ This declaration-only increment does not claim a generic API sync transport. The
 ## Schema-shaped operations that remain disabled
 
 The rejection list classifies 1,602 operations as `schema-incompatible`. This increment intentionally did not create request, response, pagination, or body schemas where the pinned provider document lacked a bounded usable contract. Those entries become enabled only after the provider publishes a usable schema or the engine implements the documented shape.
+
+## Docker Hub response-less HEAD operations
+
+- State: open connector/runtime foundation gap, recorded in
+  `FOUNDATION-GAP-REASONS.json` and Docker Hub's declaration-disposition
+  ledger.
+- Affected operations: `HEAD /v2/namespaces/{namespace}/repositories/{repository}`;
+  `HEAD /v2/namespaces/{namespace}/repositories/{repository}/tags`; and
+  `HEAD /v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}`.
+- Evidence: the pinned Docker Hub OpenAPI records these as HEAD existence checks
+  with no response-body content contract. `internal/connectors/engine/bundle.go:2676-2681`
+  admits only GET and POST for `rest_read`, refusing HEAD before a network call.
+- Recovery: add a bounded typed HEAD/status executor and a separate terminal
+  command contract that cannot be presented as a JSON direct read; then add
+  connector-local source, fixture, and non-live evidence. Until then all three
+  remain `foundation-gap`, disabled, and recoverable.

@@ -20,6 +20,18 @@ All ten were chosen from the ranked daily-use shortlist because they expose a re
 
 Each bundle now has a pinned source-lock plus `operations.json`, `writes.json`, and a generated `certification-sweep.json`. The current engine has no safely registered generic declarative API source/destination transport, so no `sync_transport.json` was fabricated; see `FOUNDATION-GAPS.md` and #4093.
 
+### Docker Hub full-parity proof
+
+Docker Hub's 54 pinned method/path rows now have a connector-local exact
+crosswalk and declaration-disposition ledger. The bundle materializes 49
+source-contract inventory rows (23 `rest_read`, 26 `rest_write`, including 6
+typed delete contracts) while retaining its four existing ETL stream bindings.
+Those inventory rows are deliberately non-terminal: the API surface keeps 50
+routes disabled (46 elevated-scope, three HEAD-executor foundation gaps, and
+one source-deprecated login). No new command or reverse-ETL action is claimed,
+so `certification.json` is not applicable and live certification remains
+pending. This gives Docker Hub 54 / 54 explicit source dispositions (100%).
+
 Transport parity is intentionally **blocked, recoverable, and recorded for all ten**: the ten dedicated `sync_transport` rejection entries carry `reason: foundation-gap`, `recoverable: true`, and the minimum safe recovery. See `TRANSPORT-GAP.md` before selecting increment 2.
 
 The JSON progress ledger, exact per-operation rejection list, and foundation-gap reason index are adjacent to this summary.

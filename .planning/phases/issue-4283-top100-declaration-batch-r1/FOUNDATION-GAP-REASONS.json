@@ -11840,6 +11840,41 @@
           "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
         }
       ]
+    },
+    {
+      "reason": "Docker Hub documents three response-less HEAD existence checks. The declarative operation model rejects HEAD for rest_read before dispatch, so the routes remain explicitly disabled rather than being misrepresented as JSON reads.",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request.",
+        "internal/connectors/defs/dockerhub/sources/dockerhub-operation-crosswalk.json records the pinned OpenAPI HEAD method and absence of a response-body content contract."
+      ],
+      "minimal_change": "Add a typed bounded HEAD/status operation executor and a terminal command contract that is distinct from JSON direct-read output.",
+      "recoverability": "Enable after the bounded HEAD/status executor and connector-local terminal evidence are available.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "HEAD",
+            "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        }
+      ]
     }
   ]
 }

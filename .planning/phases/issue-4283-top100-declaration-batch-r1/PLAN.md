@@ -53,3 +53,41 @@ Transport gate follow-up: Captain review required the omission to be explicit be
 - Inline/manual GSD fallback: this execution environment does not provide the compatible Pi runtime and the canonical contract forbids spawning GSD roles. Generated and reviewed: `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, `code-review` for issue `4283`.
 - Skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-testing`.
 - CLI parity reference reviewed. It becomes applicable after a connector-local declaration changes a generated command surface.
+
+## Captain full-parity correction — Docker Hub first
+
+Captain's 2026-08-19 work order suspends Increment 2 after its draft inventory
+was preserved on `fm/cli-top100-declaration-batch-r1-inc2-wip`. Before any new
+connector, the ten Increment-1 source locks must each account for every pinned
+operation with a source-backed typed contract or an itemized disabled
+disposition. Docker Hub is the first proof slice.
+
+### Docker Hub source facts and intended disposition
+
+The pinned Docker Hub OpenAPI 3.0.3 artifact contains 54 REST operations: 24
+GET, 12 POST, 5 PATCH, 4 PUT, 6 DELETE, and 3 HEAD. Its existing v2 API
+surface maps all 54 exactly once: four GET routes already back declared ETL
+streams, 47 routes are authenticated/elevated-scope blocks, and three HEAD
+routes have no response-body executor. `POST /v2/users/login` is explicitly
+deprecated in the pinned source. The plan is therefore to derive connector-local
+source-contract inventory entries for the 23 JSON GET and 26 mutating
+non-deprecated routes, retain the four stream bindings, and record all 54 rows
+in an immutable crosswalk/disposition artifact. The three HEAD operations and
+deprecated login remain disabled with their fixed-vocabulary reasons.
+
+No Docker Hub source-contract inventory entry is a terminal direct-read or
+direct-write command. A terminal command would additionally require its own
+complete request/response/pagination or body contract, output policy, fixture,
+and Foundation Check. This slice intentionally leaves the existing blocked API
+surface rows blocked, records live certification as pending, and does not create
+`sync_transport.json` while #4093 remains open.
+
+### Docker Hub Foundation Check
+
+| Need | Evidence | Disposition |
+| --- | --- | --- |
+| Source-operation contract inventory | Pinned OpenAPI method/path/parameters/content-type plus source location | Materialize `operations.json` only for source-supported GET and mutating methods; each row crosswalks to its exact API-surface method/path. |
+| Direct-read/direct-write terminal command | Complete source contract, fixture, command surface, and real runtime preflight | Not claimed. Inventory rows remain non-terminal and their API-surface row remains blocked. |
+| HEAD operation | A bounded response-less status/existence executor | `foundation-gap`; retain an explicit disabled disposition. |
+| Deprecated login | Pinned source marks `deprecated: true` | `provider-does-not-expose`; do not materialize a terminal contract. |
+| Sync transport | Connector-neutral registration, connector evidence, and destination acknowledgement | Existing recoverable #4093 record; no placeholder descriptor. |

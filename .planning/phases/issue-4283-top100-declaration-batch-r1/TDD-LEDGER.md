@@ -53,3 +53,42 @@ The generated certification sweeps, structural validation, `surface-sync --check
 **Red:** none of the ten selected bundles has a connector-specific registered declarative source and typed destination factory with its own evidence and acknowledgement contract.
 
 **Green:** each selected connector receives recoverable source/destination `sync_transport` foundation-gap records tied to #4093, with the evidence and smallest safe recovery already documented in `TRANSPORT-GAP.md`. No descriptor is copied from GitHub or invented from REST documentation.
+
+## Full-parity correction — Docker Hub source-contract inventory
+
+### Red
+
+`internal/connectors/defs/dockerhub/operations.json` contains an empty array,
+so no pinned Docker Hub operation has a typed source-contract inventory. There
+is also no connector-local source-to-API-surface crosswalk or per-operation
+disposition artifact. The existing global rejection list proves broad API
+surface blocking but does not prove that each pinned source row has a durable
+declaration record.
+
+### Green
+
+The Docker Hub bundle contains source-derived `rest_read` and `rest_write`
+inventory rows only where the pinned OpenAPI supports their GET or mutating
+method and documented parameters/content type. A connector-local crosswalk and
+declaration-disposition ledger account for all 54 source rows. Every inventory
+row binds to an exact existing API-surface method/path; all non-terminal rows
+remain blocked in `api_surface.json`. The three HEAD rows are explicit
+`foundation-gap` dispositions and the deprecated login row is explicit
+`provider-does-not-expose`.
+
+### Refactor
+
+Keep the derivation connector-local and data-only. Do not add a generator,
+engine executor, command, fixture, credential path, transport descriptor, or
+provider request. Re-run surface synchronization only to prove it introduces
+no unreviewed command-surface drift.
+
+Observed green result: `operations.json` now holds 49 source-backed inventory
+contracts (23 `rest_read`, 26 `rest_write`, including six `delete` contracts).
+The exact 54-row crosswalk and disposition ledger retain four declared stream
+bindings and 50 disabled terminal rows: 46 `requires-elevated-scope`, three
+`foundation-gap` HEAD operations, and one `provider-does-not-expose` deprecated
+login. Docker Hub-only validation, source-byte verification, certification
+sweep check, conformance, runtime preflight, surface sync, docs, CLI golden
+tests, boundary/canon checks, and the applicable repository gates pass without
+a provider credential or provider request.

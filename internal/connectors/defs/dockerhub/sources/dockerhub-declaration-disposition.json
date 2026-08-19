@@ -1,0 +1,5358 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/dockerhub-operation-source-lock.json",
+    "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+    "api_surface": "api_surface.json"
+  },
+  "summary": {
+    "api_surface_rows": 54,
+    "exact_source_rows": 54,
+    "stream_bindings": 4,
+    "disabled_api_surface_rows": 50,
+    "operation_inventory_entries": 49,
+    "operation_inventory_by_kind": [
+      {
+        "key": "rest_read",
+        "count": 23
+      },
+      {
+        "key": "rest_write",
+        "count": 26
+      }
+    ],
+    "delete_operation_inventory_entries": 6,
+    "terminal_commands": 0,
+    "writes_actions": 0,
+    "live_certification": "pending",
+    "rejected_by_reason": [
+      {
+        "key": "foundation-gap",
+        "count": 3
+      },
+      {
+        "key": "provider-does-not-expose",
+        "count": 1
+      },
+      {
+        "key": "requires-elevated-scope",
+        "count": 46
+      }
+    ]
+  },
+  "notes": [
+    "Source-contract inventory records source-supported REST identity and parameters/content type only. It does not enable a direct-read or direct-write command.",
+    "The existing four ETL stream bindings remain the only executable Docker Hub API surface; every other API-surface row remains blocked.",
+    "writes.json remains empty because no documented Docker Hub mutation is an approved warehouse destination action in this credential-free bundle.",
+    "sync_transport.json remains absent under recoverable foundation gap #4093."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "POST",
+      "path": "/v2/users/login",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "username+password session-token exchange; this bundle's spec.json declares no password field and the public registry read surface needs no auth, so no login flow is wired"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.PostUsersLogin",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/users/login\"].post",
+        "security_requirements": [],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/UsersLoginRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/PostUsersLoginErrorResponse",
+            "#/components/schemas/PostUsersLoginSuccessResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "provider-does-not-expose",
+        "recoverable": false,
+        "detail": "The pinned OpenAPI marks this session-login operation deprecated. It remains visible in the source ledger but is not materialized as a terminal declaration.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.PostUsersLogin",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/users/login\"].post",
+          "security_requirements": [],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/UsersLoginRequest"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/PostUsersLoginErrorResponse",
+              "#/components/schemas/PostUsersLoginSuccessResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "status": "disabled; no typed operation inventory emitted"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/users/2fa-login",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "second-factor login continuation of the excluded /v2/users/login session exchange"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.PostUsers2FALogin",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/users/2fa-login\"].post",
+        "security_requirements": [],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/Users2FALoginRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/PostUsers2FALoginErrorResponse",
+            "#/components/schemas/PostUsersLoginSuccessResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "second-factor login continuation of the excluded /v2/users/login session exchange The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.PostUsers2FALogin",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/users/2fa-login\"].post",
+          "security_requirements": [],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/Users2FALoginRequest"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/PostUsers2FALoginErrorResponse",
+              "#/components/schemas/PostUsersLoginSuccessResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.postusers2falogin",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/auth/token",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "scoped registry bearer-token exchange (docker login/pull credential flow); not a data-read endpoint and out of scope for this credential-free public bundle"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.AuthCreateAccessToken",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/auth/token\"].post",
+        "security_requirements": [],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/AuthCreateTokenResponse",
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "scoped registry bearer-token exchange (docker login/pull credential flow); not a data-read endpoint and out of scope for this credential-free public bundle The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.AuthCreateAccessToken",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/auth/token\"].post",
+          "security_requirements": [],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/AuthCreateTokenResponse",
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.authcreateaccesstoken",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/access-tokens",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "personal access token creation; authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/createAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/createAccessTokensResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "personal access token creation; authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.post_/v2/access-tokens",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/access-tokens\"].post",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/createAccessTokenRequest"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/ValueError",
+              "#/components/schemas/createAccessTokensResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_access-tokens",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/access-tokens",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "personal access token management requires an authenticated user session this bundle has no credential for"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "number"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "number"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/getAccessTokensResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "personal access token management requires an authenticated user session this bundle has no credential for The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/access-tokens",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/access-tokens\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [
+              {
+                "name": "page",
+                "in": "query",
+                "type": "number"
+              },
+              {
+                "name": "page_size",
+                "in": "query",
+                "type": "number"
+              }
+            ],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/ValueError",
+              "#/components/schemas/getAccessTokensResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_access-tokens",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/access-tokens/{uuid}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "personal access token update; authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "uuid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/patchAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/patchAccessTokenResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "personal access token update; authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "uuid",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/patchAccessTokenRequest"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/ValueError",
+              "#/components/schemas/patchAccessTokenResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.patch__v2_access-tokens__uuid_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/access-tokens/{uuid}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "personal access token detail; authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/access-tokens/{uuid}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "uuid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "personal access token detail; authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/access-tokens/{uuid}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/access-tokens/{uuid}\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "uuid",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_access-tokens__uuid_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/access-tokens/{uuid}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes a personal access token; destructive and authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "uuid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "revokes a personal access token; destructive and authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "uuid",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.delete__v2_access-tokens__uuid_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/auditlogs/{account}/actions",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization audit log action catalog; same auth gate as the audit log stream above"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.AuditLogs_ListAuditActions",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/auditlogs/{account}/actions\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "account",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/GetAuditActionsResponse",
+            "#/components/schemas/rpcStatus"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "organization audit log action catalog; same auth gate as the audit log stream above The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.AuditLogs_ListAuditActions",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/auditlogs/{account}/actions\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "account",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/GetAuditActionsResponse",
+              "#/components/schemas/rpcStatus"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.auditlogs_listauditactions",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/auditlogs/{account}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization audit log read; requires an authenticated org-admin session not available to this credential-free bundle"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.AuditLogs_ListAuditLogs",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/auditlogs/{account}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "account",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "action",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "actor",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "from",
+              "in": "query",
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "format": "int32"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer",
+              "format": "int32"
+            },
+            {
+              "name": "to",
+              "in": "query",
+              "type": "string",
+              "format": "date-time"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/GetAuditLogsResponse",
+            "#/components/schemas/rpcStatus"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "organization audit log read; requires an authenticated org-admin session not available to this credential-free bundle The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.AuditLogs_ListAuditLogs",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/auditlogs/{account}\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "account",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [
+              {
+                "name": "action",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "actor",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "from",
+                "in": "query",
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "name": "name",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "page",
+                "in": "query",
+                "type": "integer",
+                "format": "int32"
+              },
+              {
+                "name": "page_size",
+                "in": "query",
+                "type": "integer",
+                "format": "int32"
+              },
+              {
+                "name": "to",
+                "in": "query",
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/GetAuditLogsResponse",
+              "#/components/schemas/rpcStatus"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.auditlogs_listauditlogs",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{name}/settings",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org settings read; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{name}/settings",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/settings\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/orgSettings"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org settings read; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{name}/settings",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{name}/settings\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/orgSettings"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__name__settings",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orgs/{name}/settings",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org settings mutation; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/orgs/{name}/settings",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/settings\"].put",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/orgSettings"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org settings mutation; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.put_/v2/orgs/{name}/settings",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{name}/settings\"].put",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/orgSettings"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.put__v2_orgs__name__settings",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org-scoped access token creation; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/createOrgAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/createOrgAccessTokenResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org-scoped access token creation; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/createOrgAccessTokenRequest"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/ValueError",
+              "#/components/schemas/createOrgAccessTokenResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_orgs__name__access-tokens",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org-scoped access token listing; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "number"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "number"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/getOrgAccessTokensResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org-scoped access token listing; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [
+              {
+                "name": "page",
+                "in": "query",
+                "type": "number"
+              },
+              {
+                "name": "page_size",
+                "in": "query",
+                "type": "number"
+              }
+            ],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/getOrgAccessTokensResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__name__access-tokens",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org-scoped access token detail; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "access_token_id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/getOrgAccessTokenResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org-scoped access token detail; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "access_token_id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/getOrgAccessTokenResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__org_name__access-tokens__access_token_id_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org-scoped access token update; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "access_token_id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/updateOrgAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/updateOrgAccessTokenResponse"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org-scoped access token update; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "access_token_id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/updateOrgAccessTokenRequest"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/updateOrgAccessTokenResponse"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.patch__v2_orgs__org_name__access-tokens__access_token_id_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes an org-scoped access token; destructive and authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "access_token_id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "revokes an org-scoped access token; destructive and authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "access_token_id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.delete__v2_orgs__org_name__access-tokens__access_token_id_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "api_surface": {
+        "model": "covered",
+        "status": "declared",
+        "covered_by": {
+          "stream": "tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.ListRepositoryTags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/paginated_tags"
+          ]
+        }
+      },
+      "state": "declared",
+      "rejection": null,
+      "declaration": {
+        "kind": "stream_etl",
+        "stream": "tags",
+        "status": "existing ETL stream binding",
+        "source_contract_inventory": {
+          "kind": "rest_read",
+          "id": "dockerhub.listrepositorytags",
+          "status": "source-contract inventory only; no terminal command"
+        }
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "HEAD existence-check only; no response body to stream"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist.",
+        "foundation_gap": {
+          "id": "head-response-less-operation-executor",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request."
+          ],
+          "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
+        },
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "namespace",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "repository",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "status": "disabled; no typed operation inventory emitted"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "api_surface": {
+        "model": "covered",
+        "status": "declared",
+        "covered_by": {
+          "stream": "tag_detail"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.GetRepositoryTag",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "tag",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/tag"
+          ]
+        }
+      },
+      "state": "declared",
+      "rejection": null,
+      "declaration": {
+        "kind": "stream_etl",
+        "stream": "tag_detail",
+        "status": "existing ETL stream binding",
+        "source_contract_inventory": {
+          "kind": "rest_read",
+          "id": "dockerhub.getrepositorytag",
+          "status": "source-contract inventory only; no terminal command"
+        }
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "HEAD existence-check only; no response body to stream"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "tag",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist.",
+        "foundation_gap": {
+          "id": "head-response-less-operation-executor",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request."
+          ],
+          "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
+        },
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "namespace",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "repository",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "tag",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "status": "disabled; no typed operation inventory emitted"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org-admin immutable-tag policy mutation; requires an authenticated session this credential-free public bundle has no auth path for"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.UpdateRepositoryImmutableTags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/update_repository_immutable_tags_request"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org-admin immutable-tag policy mutation; requires an authenticated session this credential-free public bundle has no auth path for The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.UpdateRepositoryImmutableTags",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "namespace",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "repository",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/update_repository_immutable_tags_request"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/repository_info"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.updaterepositoryimmutabletags",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org-admin immutable-tag policy verification; requires an authenticated session this credential-free public bundle has no auth path for"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.VerifyRepositoryImmutableTags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/immutable_tags_verify_request"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/immutable_tags_verify_response"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org-admin immutable-tag policy verification; requires an authenticated session this credential-free public bundle has no auth path for The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.VerifyRepositoryImmutableTags",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "namespace",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "repository",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/immutable_tags_verify_request"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/immutable_tags_verify_response"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.verifyrepositoryimmutabletags",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/repositories/{namespace}/{repository}/groups",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "assigns a Team/group to a repository; org-admin operation requiring an authenticated session not available to this credential-free bundle"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.CreateRepositoryGroup",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/RepositoryGroupCreationRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/RepositoryGroup",
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "assigns a Team/group to a repository; org-admin operation requiring an authenticated session not available to this credential-free bundle The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.CreateRepositoryGroup",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "namespace",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "repository",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/RepositoryGroupCreationRequest"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/Error",
+              "#/components/schemas/RepositoryGroup",
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.createrepositorygroup",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "api_surface": {
+        "model": "covered",
+        "status": "declared",
+        "covered_by": {
+          "stream": "repositories"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.listNamespaceRepositories",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          },
+          {}
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "name",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "ordering",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "name",
+                "-name",
+                "last_updated",
+                "-last_updated",
+                "pull_count",
+                "-pull_count"
+              ]
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/list_repositories_response"
+          ]
+        }
+      },
+      "state": "declared",
+      "rejection": null,
+      "declaration": {
+        "kind": "stream_etl",
+        "stream": "repositories",
+        "status": "existing ETL stream binding",
+        "source_contract_inventory": {
+          "kind": "rest_read",
+          "id": "dockerhub.listnamespacerepositories",
+          "status": "source-contract inventory only; no terminal command"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "repository creation requires an authenticated session; legacy never implemented repository create/update and this bundle's spec.json declares no credential to authenticate the request"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.CreateRepository",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post",
+        "security_requirements": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/repo_creation_request"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "repository creation requires an authenticated session; legacy never implemented repository create/update and this bundle's spec.json declares no credential to authenticate the request The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.CreateRepository",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post",
+          "security_requirements": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "namespace",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": [
+              "#/components/schemas/repo_creation_request"
+            ]
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/repository_info"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.createrepository",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+      "api_surface": {
+        "model": "covered",
+        "status": "declared",
+        "covered_by": {
+          "stream": "repository_detail"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.GetRepository",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          },
+          {}
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "declared",
+      "rejection": null,
+      "declaration": {
+        "kind": "stream_etl",
+        "stream": "repository_detail",
+        "status": "existing ETL stream binding",
+        "source_contract_inventory": {
+          "kind": "rest_read",
+          "id": "dockerhub.getrepository",
+          "status": "source-contract inventory only; no terminal command"
+        }
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "HEAD existence-check only; no response body to stream"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.CheckRepository",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          },
+          {}
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The pinned OpenAPI documents a HEAD existence check with no response-body contract. The operation is retained as disabled until a bounded response-less executor and terminal command contract exist.",
+        "foundation_gap": {
+          "id": "head-response-less-operation-executor",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2676-2681 only admits GET and POST for rest_read; HEAD is rejected before any request."
+          ],
+          "minimal_change": "Add a typed bounded HEAD/status operation executor and command contract that cannot be confused with a JSON direct read."
+        },
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.CheckRepository",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            },
+            {}
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "namespace",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "repository",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/repository_info"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "status": "disabled; no typed operation inventory emitted"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/members",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org member listing; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "invites",
+              "in": "query",
+              "type": "boolean"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "role",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "owner",
+                "editor",
+                "member"
+              ]
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "type",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "all",
+                "invitee",
+                "member"
+              ]
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org member listing; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [
+              {
+                "name": "invites",
+                "in": "query",
+                "type": "boolean"
+              },
+              {
+                "name": "page",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "page_size",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "role",
+                "in": "query",
+                "type": "string",
+                "values": [
+                  "owner",
+                  "editor",
+                  "member"
+                ]
+              },
+              {
+                "name": "search",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "type",
+                "in": "query",
+                "type": "string",
+                "values": [
+                  "all",
+                  "invitee",
+                  "member"
+                ]
+              }
+            ],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__org_name__members",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/members/export",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org member CSV export; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json",
+            "text/csv"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "The pinned source documents text/csv output and the API surface requires an authenticated org-admin session. No terminal binary-download contract is declared in this credential-free bundle.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json",
+              "text/csv"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "status": "disabled; no typed operation inventory emitted"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "updates an org member's role; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_member"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "updates an org member's role; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "username",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/org_member"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.put__v2_orgs__org_name__members__username_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "removes a member from an org; destructive and authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "removes a member from an org; destructive and authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "username",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.delete__v2_orgs__org_name__members__username_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/invites",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org pending-invite listing; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/invites",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/invites\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org pending-invite listing; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/invites",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/invites\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__org_name__invites",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org Teams/groups listing; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "query",
+              "type": "string"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org Teams/groups listing; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [
+              {
+                "name": "page",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "page_size",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "search",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "username",
+                "in": "query",
+                "type": "string"
+              }
+            ],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__org_name__groups",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org Team/group creation; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org Team/group creation; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/org_group"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_orgs__org_name__groups",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org Team/group detail; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org Team/group detail; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "group_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/org_group"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__org_name__groups__group_name_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org Team/group full update; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org Team/group full update; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "group_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/org_group"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.put__v2_orgs__org_name__groups__group_name_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org Team/group partial update; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org Team/group partial update; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "group_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error",
+              "#/components/schemas/org_group"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.patch__v2_orgs__org_name__groups__group_name_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes an org Team/group; destructive and authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "deletes an org Team/group; destructive and authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "group_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "org Team/group membership listing; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "type": "string"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org Team/group membership listing; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "group_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [
+              {
+                "name": "page",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "page_size",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "search",
+                "in": "query",
+                "type": "string"
+              }
+            ],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_orgs__org_name__groups__group_name__members",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "adds a member to an org Team/group; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "adds a member to an org Team/group; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "group_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_orgs__org_name__groups__group_name__members",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "removes a user from an org Team/group; destructive and authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "removes a user from an org Team/group; destructive and authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "group_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "org_name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "username",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name__members__username_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "delete"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invites/{id}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "cancels a pending org invite; destructive and authenticated-session-only"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/invites/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/invites/{id}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "cancels a pending org invite; destructive and authenticated-session-only The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.delete_/v2/invites/{id}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/invites/{id}\"].delete",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.delete__v2_invites__id_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "delete"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/invites/{id}/resend",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "resends an org invite email; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/invites/{id}/resend",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/invites/{id}/resend\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "resends an org invite email; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.patch_/v2/invites/{id}/resend",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/invites/{id}/resend\"].patch",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.patch__v2_invites__id__resend",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invites/bulk",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "org member invitation creation; authenticated org-admin session required"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/invites/bulk",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/invites/bulk\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "org member invitation creation; authenticated org-admin session required The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.post_/v2/invites/bulk",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/invites/bulk\"].post",
+          "security_requirements": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/json"
+            ],
+            "schema_references": [
+              "#/components/schemas/error"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_invites_bulk",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/ServiceProviderConfig",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "SCIM service provider config; same SCIM-token gate"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_service_provider_config"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM service provider config; same SCIM-token gate The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": [
+              "#/components/schemas/scim_service_provider_config"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_serviceproviderconfig",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/ResourceTypes",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "SCIM identity-provisioning metadata; requires a separate SCIM bearer token this bundle has no auth path for"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/ResourceTypes\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": []
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM identity-provisioning metadata; requires a separate SCIM bearer token this bundle has no auth path for The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/ResourceTypes\"].get",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": []
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_resourcetypes",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/ResourceTypes/{name}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "SCIM identity-provisioning metadata; same SCIM-token gate"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_resource_type"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM identity-provisioning metadata; same SCIM-token gate The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": [
+              "#/components/schemas/scim_resource_type"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_resourcetypes__name_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Schemas",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "SCIM schema metadata; same SCIM-token gate"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Schemas\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": []
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM schema metadata; same SCIM-token gate The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/Schemas\"].get",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": []
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_schemas",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Schemas/{id}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "SCIM schema metadata; same SCIM-token gate"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Schemas/{id}\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_schema"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM schema metadata; same SCIM-token gate The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/Schemas/{id}\"].get",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": [
+              "#/components/schemas/scim_schema"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_schemas__id_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Users",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "SCIM-provisioned user listing; same SCIM-token gate, also PII-adjacent identity data outside this connector's public-registry-data scope"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [
+            {
+              "name": "attributes",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "count",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "filter",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "sortBy",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "sortOrder",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "ascending",
+                "descending"
+              ]
+            },
+            {
+              "name": "startIndex",
+              "in": "query",
+              "type": "integer"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": []
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM-provisioned user listing; same SCIM-token gate, also PII-adjacent identity data outside this connector's public-registry-data scope The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/Users\"].get",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [
+              {
+                "name": "attributes",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "count",
+                "in": "query",
+                "type": "integer"
+              },
+              {
+                "name": "filter",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "sortBy",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "sortOrder",
+                "in": "query",
+                "type": "string",
+                "values": [
+                  "ascending",
+                  "descending"
+                ]
+              },
+              {
+                "name": "startIndex",
+                "in": "query",
+                "type": "integer"
+              }
+            ],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": []
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_users",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/scim/2.0/Users",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "SCIM user provisioning; same SCIM-token gate"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/scim/2.0/Users",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/scim+json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_user"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM user provisioning; same SCIM-token gate The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.post_/v2/scim/2.0/Users",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/scim+json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": [
+              "#/components/schemas/scim_user"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_scim_2.0_users",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "SCIM user detail; same SCIM-token gate"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_user"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM user detail; same SCIM-token gate The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users/{id}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].get",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": [
+              "#/components/schemas/scim_user"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_users__id_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "api_surface": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "SCIM user update; same SCIM-token gate"
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/scim+json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_user"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "requires-elevated-scope",
+        "recoverable": true,
+        "detail": "SCIM user update; same SCIM-token gate The source-backed inventory remains non-terminal until a connector-local credential, command policy, fixture, and certification evidence are available.",
+        "evidence": {
+          "source_lock": "sources/dockerhub-operation-source-lock.json",
+          "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+          "source_id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
+          "security_requirements": [
+            {
+              "bearerSCIMAuth": []
+            }
+          ],
+          "request": {
+            "path_parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "query_parameters": [],
+            "body_content_types": [
+              "application/scim+json"
+            ],
+            "body_schema_references": []
+          },
+          "response": {
+            "content_types": [
+              "application/scim+json"
+            ],
+            "schema_references": [
+              "#/components/schemas/scim_user"
+            ]
+          }
+        }
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.put__v2_scim_2.0_users__id_",
+        "status": "source-contract inventory only; no terminal command",
+        "mutation_class": "update"
+      }
+    }
+  ],
+  "source_only_dispositions": []
+}

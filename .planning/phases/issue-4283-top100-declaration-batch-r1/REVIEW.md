@@ -21,3 +21,24 @@ No Critical, Warning, or Info findings. In particular, review confirmed:
 ## Transport follow-up review
 
 Path (b) was reviewed after the increment checkpoint. `go test -timeout 20m ./internal/connectors/certify -run '^TestCertificationDeclaredTransportPairFailsWhenRegistrationIsMissing$'` and `go test -timeout 20m ./internal/synctransport -run 'TestRegisterDeclaredTransports'` pass. The ten transport rejections are recoverable and do not weaken the runtime's factory/evidence admission.
+
+## Docker Hub full-parity review
+
+Reviewed the Docker Hub source-contract inventory, exact crosswalk, and 54
+per-operation dispositions against the pinned OpenAPI source.
+
+- The 49 `operations.json` entries bind exactly to existing API-surface
+  method/path entries but do not claim a terminal CLI route; `surface-sync`
+  therefore correctly makes no command-surface change.
+- Every DELETE is retained as a `rest_write` inventory contract with
+  `mutation_class: delete` and destructive confirmation, while its actual
+  terminal route remains disabled with evidence.
+- The CSV export is not mislabeled as a JSON direct read; all three HEAD
+  operations are explicit, recoverable response-less executor gaps; and the
+  source-deprecated login is `provider-does-not-expose` rather than a
+  misleading scope failure.
+- No capability was promoted, no write action or transport descriptor was
+  fabricated, and no file outside Docker Hub definitions and issue #4283
+  evidence changed.
+
+No Critical, Warning, or Info findings remain for the Docker Hub proof slice.
