@@ -68,12 +68,12 @@
       }
     ],
     "gap_ids": [
-      "operation-execution-block-registration",
+      "operation-kind-loader-registration",
       "generic-typed-destination-executor"
     ],
     "foundation_gaps": [
       {
-        "id": "operation-execution-block-registration",
+        "id": "operation-kind-loader-registration",
         "count": 4
       },
       {
@@ -1557,7 +1557,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
         }
       },
       "source": {
@@ -1603,15 +1603,15 @@
       "rejection": {
         "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
+          "id": "operation-kind-loader-registration",
           "evidence": [
-            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
           ],
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         },
-        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
       },
       "declaration": {
         "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
@@ -1626,9 +1626,9 @@
       "foundation": {
         "state": "absent",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
-          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         }
       }
     },
@@ -1713,7 +1713,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
         }
       },
       "source": {
@@ -1765,15 +1765,15 @@
       "rejection": {
         "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
+          "id": "operation-kind-loader-registration",
           "evidence": [
-            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
           ],
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         },
-        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
       },
       "declaration": {
         "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
@@ -1788,9 +1788,9 @@
       "foundation": {
         "state": "absent",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
-          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         }
       }
     },
@@ -2271,7 +2271,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
         }
       },
       "source": {
@@ -2319,15 +2319,15 @@
       "rejection": {
         "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
+          "id": "operation-kind-loader-registration",
           "evidence": [
-            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
           ],
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         },
-        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
       },
       "declaration": {
         "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
@@ -2342,9 +2342,9 @@
       "foundation": {
         "state": "absent",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
-          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         }
       }
     },
@@ -2457,7 +2457,7 @@
           "status": "blocked",
           "risk": "medium",
           "blocked_by_default": true,
-          "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation block validation does not yet admit text_export."
+          "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation-kind loader/validation path does not register text_export."
         }
       },
       "source": {
@@ -2498,15 +2498,15 @@
       "rejection": {
         "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared bundle loader does not map either operation kind to its declared execution block.",
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
+          "id": "operation-kind-loader-registration",
           "evidence": [
-            "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
           ],
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         },
-        "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export."
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
       },
       "declaration": {
         "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
@@ -2521,9 +2521,9 @@
       "foundation": {
         "state": "absent",
         "foundation_gap": {
-          "id": "operation-execution-block-registration",
-          "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
-          "minimal_change": "Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
         }
       }
     },

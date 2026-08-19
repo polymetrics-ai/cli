@@ -609,7 +609,7 @@
         "statuses": {
           "fixture_required": 48
         },
-        "static_contract_validation": "connectorgen validate and surface-sync --check pass locally. Four PR #4297 repair commands reach the runtime credential gate without provider I/O; four remaining source rows are held by operation-execution-block-registration.",
+        "static_contract_validation": "connectorgen validate and surface-sync --check pass locally. Four PR #4297 repair commands reach the runtime credential gate without provider I/O; four remaining source rows are held by operation-kind-loader-registration.",
         "live_certification": "pending",
         "certification_json": {
           "state": "not_emitted",
@@ -627,7 +627,7 @@
       ],
       "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "PR #4297 enabled operation-scoped pagination and SCIM JSON writes: audit logs, SCIM users, SCIM create, and SCIM update are now runnable. The three HEAD checks and members CSV export remain disabled only until expectedOperationBlock registers rest_status and text_export; reverse-ETL eligibility remains pending generic-typed-destination-executor. Live certification remains pending.",
+      "resume_pointer": "PR #4297 enabled operation-scoped pagination and SCIM JSON writes: audit logs, SCIM users, SCIM create, and SCIM update are now runnable. The three HEAD checks and members CSV export remain disabled only until the operation-kind loader/validation path registers rest_status and text_export; reverse-ETL eligibility remains pending generic-typed-destination-executor. Live certification remains pending.",
       "writes": {
         "actions": 20,
         "kinds": {
@@ -664,7 +664,7 @@
           }
         ],
         "gap_ids": [
-          "operation-execution-block-registration",
+          "operation-kind-loader-registration",
           "generic-typed-destination-executor"
         ],
         "live_certification": "pending",

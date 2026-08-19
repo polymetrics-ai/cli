@@ -1166,7 +1166,7 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
           },
           "covered_by": null
         },
@@ -1300,7 +1300,7 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
           },
           "covered_by": null
         },
@@ -1776,7 +1776,7 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation block validation does not yet admit rest_status."
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
           },
           "covered_by": null
         },
@@ -1931,7 +1931,7 @@
             "status": "blocked",
             "risk": "medium",
             "blocked_by_default": true,
-            "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation block validation does not yet admit text_export."
+            "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation-kind loader/validation path does not register text_export."
           },
           "covered_by": null
         },

@@ -270,11 +270,13 @@ description is mechanically normalized to its exact object-plus-annotation
 shape for the engine's closed schema dialect; no field is invented.
 
 The other four intended flips do not load: the `rest_status` and `text_export`
-executors exist, but `internal/connectors/engine/bundle.go:2431-2436` rejects
-them because `expectedOperationBlock` at lines 2467-2488 omits both kinds. The
-rows remain a recoverable shared
-`operation-execution-block-registration` foundation gap. This definitions-only
-shard records the exact minimal shared change and does not alter engine code.
+executors exist, but the operation-kind loader/validation path at
+`internal/connectors/engine/bundle.go:2451,2676,2705,2733` omits both kinds.
+The rows remain a recoverable shared `operation-kind-loader-registration`
+foundation gap. The required foundation change is to register `rest_status` and
+`text_export` in the bundle loader operation-kind switch and validation so a
+definition can declare them. This definitions-only shard does not alter engine
+code.
 
 ### Refactor
 

@@ -17,6 +17,6 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Four PR-4297 repairs are validated at 45/54. Do not claim the remaining HEAD and CSV rows enabled until expectedOperationBlock registers rest_status and text_export; then re-run this repair from the pinned OpenAPI. Do not use provider credentials or provider I/O.",
+  "next": "Four PR-4297 repairs are validated at 45/54. Do not claim the remaining HEAD and CSV rows enabled until the operation-kind loader/validation path registers rest_status and text_export; then re-run this repair from the pinned OpenAPI. Do not use provider credentials or provider I/O.",
   "updated_at": "2026-08-19T00:00:00Z"
 }

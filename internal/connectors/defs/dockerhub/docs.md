@@ -83,10 +83,11 @@ store declaration is complete. None is classified `unsafe-to-exercise`.
   `application/scim+json` write type executable, so the audit-log, SCIM-user,
   and SCIM-write contracts are now runnable. Three `HEAD` status checks and
   the bounded members CSV export remain disabled only because
-  `internal/connectors/engine/bundle.go:2467-2485` omits the otherwise
-  implemented `rest_status` and `text_export` kinds from its operation-block
-  mapping. This is a recoverable foundation integration gap, not a provider or
-  connector schema limitation.
+  `internal/connectors/engine/bundle.go:2451,2676,2705,2733` omits the
+  otherwise implemented `rest_status` and `text_export` kinds from its
+  operation-kind loader/validation path. This is the recoverable
+  `operation-kind-loader-registration` foundation integration gap, not a
+  provider or connector schema limitation.
 - `sync_transport.json` declares the definition-owned ETL source transport.
   Reverse-ETL eligibility remains blocked on the connector-neutral typed
   destination executor.

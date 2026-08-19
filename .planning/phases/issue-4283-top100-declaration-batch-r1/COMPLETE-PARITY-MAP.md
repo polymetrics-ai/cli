@@ -15,7 +15,7 @@ only destination factory remains the issue-label-specific one.
 
 | Connector | Operations found / mapped | Input confidence | Enabled | Disabled | ENABLED% | Deletes | Endpoint classes: DR / DW / ETL / BR / BW | ETL source | Reverse-ETL eligibility | gap_ids | declaration_pending_ids |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | --- | --- | --- | --- | --- |
-| Docker Hub | 54 / 54 | high — OpenAPI | 45 | 9 | 83.33 | 6 / 6 | 22 / 27 / 4 / 1 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `operation-execution-block-registration`, `generic-typed-destination-executor` | `declaration-pending-dockerhub` |
+| Docker Hub | 54 / 54 | high — OpenAPI | 45 | 9 | 83.33 | 6 / 6 | 22 / 27 / 4 / 1 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `operation-kind-loader-registration`, `generic-typed-destination-executor` | `declaration-pending-dockerhub` |
 | Notion | 49 / 49 | high — OpenAPI | 43 | 6 | 87.76 | 4 / 4 | 18 / 25 / 5 / 0 / 1 | declared (6 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `command-availability-notion`, `cli-command-contract-notion` |
 | Stripe | 589 / 589 | high — OpenAPI | 8 | 581 | 1.36 | 1 / 32 | 254 / 326 / 5 / 4 / 0 | declared (5 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `typed-operation-contract-stripe` |
 | Bitbucket | 331 / 331 | high — OpenAPI | 3 | 328 | 0.91 | 1 / 54 | 21 / 148 / 143 / 15 / 4 | declared (143 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `cli-command-contract-bitbucket`, `typed-operation-contract-bitbucket` |
@@ -48,7 +48,8 @@ or destination declaration is fabricated.
 Docker Hub repair after PR #4297: operation-scoped REST pagination enabled
 `GET /v2/auditlogs/{account}` and `GET /v2/scim/2.0/Users`; the closed SCIM
 media type enabled `POST /v2/scim/2.0/Users` and `PUT /v2/scim/2.0/Users/{id}`.
-The three HEAD checks and CSV export do not flip yet: the executors exist, but
-`internal/connectors/engine/bundle.go:2467-2488` does not map `rest_status` or
-`text_export` to their `rest`/`binary` execution blocks. This is recorded as
-recoverable `operation-execution-block-registration`, not as a connector gap.
+The three HEAD checks and CSV export do not flip yet: #4297 supplied their
+executors, but the operation-kind loader/validation path at
+`internal/connectors/engine/bundle.go:2451,2676,2705,2733` omits
+`rest_status` and `text_export`. This is recorded as recoverable
+`operation-kind-loader-registration`, not as a connector gap.

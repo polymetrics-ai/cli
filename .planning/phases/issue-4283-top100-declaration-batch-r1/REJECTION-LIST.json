@@ -37155,10 +37155,11 @@
         "path": "/v2/namespaces/{namespace}/repositories/{repository}"
       },
       "reason": "foundation-gap",
-      "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+      "foundation_gap_id": "operation-kind-loader-registration",
+      "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
       "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
       "recoverable": true,
-      "recoverability": "Enable after Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+      "recoverability": "Enable after register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
     },
     {
       "connector": "dockerhub",
@@ -37167,10 +37168,11 @@
         "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
       },
       "reason": "foundation-gap",
-      "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+      "foundation_gap_id": "operation-kind-loader-registration",
+      "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
       "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
       "recoverable": true,
-      "recoverability": "Enable after Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+      "recoverability": "Enable after register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
     },
     {
       "connector": "dockerhub",
@@ -37179,10 +37181,11 @@
         "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
       },
       "reason": "foundation-gap",
-      "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+      "foundation_gap_id": "operation-kind-loader-registration",
+      "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
       "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
       "recoverable": true,
-      "recoverability": "Enable after Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+      "recoverability": "Enable after register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
     },
     {
       "connector": "dockerhub",
@@ -37191,10 +37194,11 @@
         "path": "/v2/orgs/{org_name}/members/export"
       },
       "reason": "foundation-gap",
-      "evidence": "internal/connectors/engine/bundle.go:2431-2436 rejects any kind without expectedOperationBlock; internal/connectors/engine/bundle.go:2467-2488 maps rest_read/rest_write to rest and binary_download to binary but omits rest_status and text_export.",
+      "foundation_gap_id": "operation-kind-loader-registration",
+      "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
       "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
       "recoverable": true,
-      "recoverability": "Enable after Register rest_status as the rest execution block and text_export as the binary execution block in expectedOperationBlock, with a bundle-load regression test for both declaration kinds."
+      "recoverability": "Enable after register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
     }
   ],
   "supersession": {

@@ -348,9 +348,10 @@ dispatch without provider I/O. Docker Hub moves from 41 / 54 to 45 / 54.
 ### Refactor
 
 The three HEAD checks and CSV export remain disabled as
-`operation-execution-block-registration`. The minimal shared fix is to map
-`rest_status` to `rest` and `text_export` to `binary` in
-`expectedOperationBlock` (`internal/connectors/engine/bundle.go:2467-2488`),
-then add a loader regression test. This definitions-only repair does not make
-that foundation edit, and it does not repurpose the five secret-response rows
-as unsafe-operation refusals.
+`operation-kind-loader-registration`. The shared loader/validation path at
+`internal/connectors/engine/bundle.go:2451,2676,2705,2733` omits
+`rest_status` and `text_export`. The minimal shared fix is to register
+`rest_status` and `text_export` in the bundle loader operation-kind switch and
+validation so a definition can declare them, then add a loader regression test.
+This definitions-only repair does not make that foundation edit, and it does
+not repurpose the five secret-response rows as unsafe-operation refusals.
