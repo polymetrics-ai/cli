@@ -27,6 +27,10 @@ The adapter was checked with `scripts/gsd doctor`; its command sources were reso
 
 Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-testing`. These are used only to assess existing engine contracts and validation truth; no Go implementation is added.
 
+## Foundation Coordination — 2026-08-20
+
+The merged `c6f03c937` typed-destination foundation admits `declarative_api/declarative_typed_destination` declarations through the orchestrator, but the App/CLI persisted-dispatch path does not yet select that generic destination as it does GitHub's specialized adapter. Connector-local `sync_transport.json` declarations and their structural/preflight tests may proceed; they must record reverse ETL as foundation-pending and must not claim application-level deployment or add a connector-local dispatch workaround. Before the final push, fetch and merge the latest `origin/fm/cli-reverse-etl-destination-r1`, prove its SHA is an ancestor of this branch, and exercise the installed App/CLI path against the real selected foundation head.
+
 ## Batch 2 — Red / Green / Refactor
 
 1. **Red:** the nine target bundles lack `sources/<connector>-operation-source-lock.json` and `sources/<connector>-declaration-disposition.json`; therefore no provenance or six-class complete-map assertion can pass.
@@ -47,7 +51,7 @@ Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-struc
 - `requires-elevated-scope` is enabled with source-backed runtime scope metadata, never a disabled reason.
 - `unsafe-to-exercise` applies only to genuinely destructive/irreversible actions outside user intent. Documented deletes are required map rows.
 - A `foundation-gap` requires engine refusal file/line plus minimal change. A missing command, operation contract, CLI surface, or transport declaration is `declaration-pending`.
-- Endpoint classes are mutually exclusive: direct read, direct write (including delete), ETL, binary read, or binary write. `reverse_etl` is eligibility metadata nested under a typed `direct_write`, never an endpoint class: it remains foundation-blocked by `generic-typed-destination-executor` because `internal/app/issue_label_warehouse_transport.go:85-95` only registers and enforces the GitHub issue-label destination factory. ETL uses the merged PR #4286 declaration contract and remains `declaration-pending` until connector-local source evidence exists.
+- Endpoint classes are mutually exclusive: direct read, direct write (including delete), ETL, binary read, or binary write. `reverse_etl` is a connector-owned destination declaration and command surface, never an endpoint class. Until the updated #4304 foundation reaches this branch and the persisted App dispatch selects the generic destination, it is accurately reported as foundation-pending rather than deployable. ETL uses the merged source declaration contract and remains declaration-pending until connector-local source evidence exists.
 
 ## Planned Gates and Checkpoints
 
