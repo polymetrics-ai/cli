@@ -30,7 +30,8 @@
 
 ## Pending final gates
 
-- [ ] Rebase to current `main` (including PR #4297), regenerate/rerun the
-  declaration integrity checks as needed, then repeat the relevant final
-  checks.
+- [x] Rebased to `origin/main` at `51dd6d468` (including PR #4297), then
+  reran all three declaration integrity checks, connector validation,
+  `surface-sync --check`, targeted Go tests, `go build`, lint, and the agent
+  contract check. No map retains the superseded HEAD/pagination engine-gap IDs.
 - [ ] Review, commit, push, and open the direct PR.
