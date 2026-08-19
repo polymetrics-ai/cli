@@ -1,0 +1,1005 @@
+{
+  "tagline": "Run Workable's declared typed write actions.",
+  "usage": "pm workable <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "approve offer apply",
+        "approve requisition apply",
+        "archive time entry apply",
+        "bulk create time entries apply",
+        "comment on candidate apply",
+        "copy candidate apply",
+        "create department apply",
+        "create employee apply",
+        "create job candidate apply",
+        "create requisition apply",
+        "create review template apply",
+        "create subscription apply",
+        "create talent pool candidate apply",
+        "create time entry apply",
+        "create timeoff request apply",
+        "deactivate member apply",
+        "decide timeoff approval apply",
+        "delete department apply",
+        "delete subscription apply",
+        "disqualify candidate apply",
+        "enable member apply",
+        "invite member apply",
+        "merge department apply",
+        "move candidate apply",
+        "rate candidate apply",
+        "reject offer apply",
+        "reject requisition apply",
+        "relocate candidate apply",
+        "revert candidate disqualification apply",
+        "update candidate apply",
+        "update candidate custom attribute apply",
+        "update candidate rating apply",
+        "update candidate tags apply",
+        "update department apply",
+        "update employee apply",
+        "update member apply",
+        "update requisition apply",
+        "update time entry apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "approve offer apply",
+      "summary": "Typed action approve_offer",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "approve_offer",
+      "flags": [
+        {
+          "name": "offer-id",
+          "type": "string",
+          "summary": "Required offer_id record field.",
+          "maps_to": "record.offer_id",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /offers/{{ record.offer_id }}/approve mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /offers/{offer_id}/approve disagrees with covered api_surface path /spi/v3/offers/{id}/approve.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /offers/{offer_id}/approve disagrees with covered api_surface path /spi/v3/offers/{id}/approve.",
+      "examples": [
+        "pm workable approve offer apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "approve requisition apply",
+      "summary": "Typed action approve_requisition",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "approve_requisition",
+      "flags": [
+        {
+          "name": "requisition-code",
+          "type": "string",
+          "summary": "Required requisition_code record field.",
+          "maps_to": "record.requisition_code",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /requisitions/{{ record.requisition_code }}/approve mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /requisitions/{requisition_code}/approve disagrees with covered api_surface path /spi/v3/requisitions/{code}/approve.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions/{requisition_code}/approve disagrees with covered api_surface path /spi/v3/requisitions/{code}/approve.",
+      "examples": [
+        "pm workable approve requisition apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "archive time entry apply",
+      "summary": "Typed action archive_time_entry",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "archive_time_entry",
+      "flags": [
+        {
+          "name": "employee-id",
+          "type": "string",
+          "summary": "Required employee_id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries/{uuid} disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries/{uuid}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries/{uuid} disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries/{uuid}.",
+      "examples": [
+        "pm workable archive time entry apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "bulk create time entries apply",
+      "summary": "Typed action bulk_create_time_entries",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "bulk_create_time_entries",
+      "flags": [
+        {
+          "name": "time-entries",
+          "type": "json",
+          "summary": "Required time_entries record field.",
+          "maps_to": "record.time_entries",
+          "required": true
+        }
+      ],
+      "risk": "POST /time-tracking/time-entries mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /time-tracking/time-entries disagrees with covered api_surface path /spi/v3/time-tracking/time-entries.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/time-entries disagrees with covered api_surface path /spi/v3/time-tracking/time-entries.",
+      "examples": [
+        "pm workable bulk create time entries apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "comment on candidate apply",
+      "summary": "Typed action comment_on_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "comment_on_candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "comment",
+          "type": "string",
+          "summary": "Required comment record field.",
+          "maps_to": "record.comment",
+          "required": true
+        }
+      ],
+      "risk": "POST /candidates/{{ record.candidate_id }}/comments mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/comments disagrees with covered api_surface path /spi/v3/candidates/{id}/comments.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/comments disagrees with covered api_surface path /spi/v3/candidates/{id}/comments.",
+      "examples": [
+        "pm workable comment on candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "copy candidate apply",
+      "summary": "Typed action copy_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "copy_candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "member-id",
+          "type": "string",
+          "summary": "Required member_id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "target-job-shortcode",
+          "type": "string",
+          "summary": "Required target_job_shortcode record field.",
+          "maps_to": "record.target_job_shortcode",
+          "required": true
+        },
+        {
+          "name": "target-stage",
+          "type": "string",
+          "summary": "Required target_stage record field.",
+          "maps_to": "record.target_stage",
+          "required": true
+        }
+      ],
+      "risk": "POST /candidates/{{ record.candidate_id }}/copy mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/copy disagrees with covered api_surface path /spi/v3/candidates/{id}/copy.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/copy disagrees with covered api_surface path /spi/v3/candidates/{id}/copy.",
+      "examples": [
+        "pm workable copy candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create department apply",
+      "summary": "Typed action create_department",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_department",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "POST /departments mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /departments disagrees with covered api_surface path /spi/v3/departments.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments disagrees with covered api_surface path /spi/v3/departments.",
+      "examples": [
+        "pm workable create department apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create employee apply",
+      "summary": "Typed action create_employee",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_employee",
+      "flags": [],
+      "risk": "POST /employees mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /employees disagrees with covered api_surface path /spi/v3/employees.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /employees disagrees with covered api_surface path /spi/v3/employees.",
+      "examples": [
+        "pm workable create employee apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create job candidate apply",
+      "summary": "Typed action create_job_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_job_candidate",
+      "flags": [
+        {
+          "name": "job-shortcode",
+          "type": "string",
+          "summary": "Required job_shortcode record field.",
+          "maps_to": "record.job_shortcode",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "POST /jobs/{{ record.job_shortcode }}/candidates mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /jobs/{job_shortcode}/candidates disagrees with covered api_surface path /spi/v3/jobs/{shortcode}/candidates.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /jobs/{job_shortcode}/candidates disagrees with covered api_surface path /spi/v3/jobs/{shortcode}/candidates.",
+      "examples": [
+        "pm workable create job candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create requisition apply",
+      "summary": "Typed action create_requisition",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_requisition",
+      "flags": [],
+      "risk": "POST /requisitions mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /requisitions disagrees with covered api_surface path /spi/v3/requisitions.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions disagrees with covered api_surface path /spi/v3/requisitions.",
+      "examples": [
+        "pm workable create requisition apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create review template apply",
+      "summary": "Typed action create_review_template",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_review_template",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "POST /review-cycles/templates mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /review-cycles/templates disagrees with covered api_surface path /spi/v3/review-cycles/templates.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /review-cycles/templates disagrees with covered api_surface path /spi/v3/review-cycles/templates.",
+      "examples": [
+        "pm workable create review template apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create subscription apply",
+      "summary": "Typed action create_subscription",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_subscription",
+      "flags": [
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "Required event record field.",
+          "maps_to": "record.event",
+          "required": true
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "summary": "Required target record field.",
+          "maps_to": "record.target",
+          "required": true
+        }
+      ],
+      "risk": "POST /subscriptions mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /subscriptions disagrees with covered api_surface path /spi/v3/subscriptions.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /subscriptions disagrees with covered api_surface path /spi/v3/subscriptions.",
+      "examples": [
+        "pm workable create subscription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create talent pool candidate apply",
+      "summary": "Typed action create_talent_pool_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_talent_pool_candidate",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "stage",
+          "type": "string",
+          "summary": "Required stage record field.",
+          "maps_to": "record.stage",
+          "required": true
+        }
+      ],
+      "risk": "POST /talent_pool/{{ record.stage }}/candidates mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /talent_pool/{stage}/candidates disagrees with covered api_surface path /spi/v3/talent_pool/{stage}/candidates.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /talent_pool/{stage}/candidates disagrees with covered api_surface path /spi/v3/talent_pool/{stage}/candidates.",
+      "examples": [
+        "pm workable create talent pool candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create time entry apply",
+      "summary": "Typed action create_time_entry",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_time_entry",
+      "flags": [
+        {
+          "name": "employee-id",
+          "type": "string",
+          "summary": "Required employee_id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /time-tracking/employees/{{ record.employee_id }}/time-entries mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries.",
+      "examples": [
+        "pm workable create time entry apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create timeoff request apply",
+      "summary": "Typed action create_timeoff_request",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_timeoff_request",
+      "flags": [
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Required from_date record field.",
+          "maps_to": "record.from_date",
+          "required": true
+        }
+      ],
+      "risk": "POST /timeoff/requests mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /timeoff/requests disagrees with covered api_surface path /spi/v3/timeoff/requests.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /timeoff/requests disagrees with covered api_surface path /spi/v3/timeoff/requests.",
+      "examples": [
+        "pm workable create timeoff request apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "deactivate member apply",
+      "summary": "Typed action deactivate_member",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "deactivate_member",
+      "flags": [
+        {
+          "name": "member-id",
+          "type": "string",
+          "summary": "Required member_id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /members/{{ record.member_id }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /members/{member_id} disagrees with covered api_surface path /spi/v3/members/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members/{member_id} disagrees with covered api_surface path /spi/v3/members/{id}.",
+      "examples": [
+        "pm workable deactivate member apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "decide timeoff approval apply",
+      "summary": "Typed action decide_timeoff_approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "decide_timeoff_approval",
+      "flags": [
+        {
+          "name": "approval-key",
+          "type": "string",
+          "summary": "Required approval_key record field.",
+          "maps_to": "record.approval_key",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "summary": "Required state record field.",
+          "maps_to": "record.state",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /timeoff/approvals/{{ record.approval_key }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /timeoff/approvals/{approval_key} disagrees with covered api_surface path /spi/v3/timeoff/approvals/{key}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /timeoff/approvals/{approval_key} disagrees with covered api_surface path /spi/v3/timeoff/approvals/{key}.",
+      "examples": [
+        "pm workable decide timeoff approval apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete department apply",
+      "summary": "Typed action delete_department",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_department",
+      "flags": [
+        {
+          "name": "department-id",
+          "type": "string",
+          "summary": "Required department_id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        },
+        {
+          "name": "force",
+          "type": "string",
+          "summary": "Required force record field.",
+          "maps_to": "record.force",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /departments/{{ record.department_id }}?force={{ record.force }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /departments/{department_id} disagrees with covered api_surface path /spi/v3/departments/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments/{department_id} disagrees with covered api_surface path /spi/v3/departments/{id}.",
+      "examples": [
+        "pm workable delete department apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete subscription apply",
+      "summary": "Typed action delete_subscription",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_subscription",
+      "flags": [
+        {
+          "name": "subscription-id",
+          "type": "string",
+          "summary": "Required subscription_id record field.",
+          "maps_to": "record.subscription_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /subscriptions/{{ record.subscription_id }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /subscriptions/{subscription_id} disagrees with covered api_surface path /spi/v3/subscriptions/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /subscriptions/{subscription_id} disagrees with covered api_surface path /spi/v3/subscriptions/{id}.",
+      "examples": [
+        "pm workable delete subscription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "disqualify candidate apply",
+      "summary": "Typed action disqualify_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "disqualify_candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /candidates/{{ record.candidate_id }}/disqualify mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/disqualify disagrees with covered api_surface path /spi/v3/candidates/{id}/disqualify.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/disqualify disagrees with covered api_surface path /spi/v3/candidates/{id}/disqualify.",
+      "examples": [
+        "pm workable disqualify candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "enable member apply",
+      "summary": "Typed action enable_member",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "enable_member",
+      "flags": [
+        {
+          "name": "member-id",
+          "type": "string",
+          "summary": "Required member_id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /members/{{ record.member_id }}/enable mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /members/{member_id}/enable disagrees with covered api_surface path /spi/v3/members/{id}/enable.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members/{member_id}/enable disagrees with covered api_surface path /spi/v3/members/{id}/enable.",
+      "examples": [
+        "pm workable enable member apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "invite member apply",
+      "summary": "Typed action invite_member",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "invite_member",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        }
+      ],
+      "risk": "POST /members/invite mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /members/invite disagrees with covered api_surface path /spi/v3/members/invite.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members/invite disagrees with covered api_surface path /spi/v3/members/invite.",
+      "examples": [
+        "pm workable invite member apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "merge department apply",
+      "summary": "Typed action merge_department",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "merge_department",
+      "flags": [
+        {
+          "name": "department-id",
+          "type": "string",
+          "summary": "Required department_id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        },
+        {
+          "name": "target-department-id",
+          "type": "string",
+          "summary": "Required target_department_id record field.",
+          "maps_to": "record.target_department_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /departments/{{ record.department_id }}/merge mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /departments/{department_id}/merge disagrees with covered api_surface path /spi/v3/departments/{id}/merge.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments/{department_id}/merge disagrees with covered api_surface path /spi/v3/departments/{id}/merge.",
+      "examples": [
+        "pm workable merge department apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "move candidate apply",
+      "summary": "Typed action move_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "move_candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "target-stage",
+          "type": "string",
+          "summary": "Required target_stage record field.",
+          "maps_to": "record.target_stage",
+          "required": true
+        }
+      ],
+      "risk": "POST /candidates/{{ record.candidate_id }}/move mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/move disagrees with covered api_surface path /spi/v3/candidates/{id}/move.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/move disagrees with covered api_surface path /spi/v3/candidates/{id}/move.",
+      "examples": [
+        "pm workable move candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "rate candidate apply",
+      "summary": "Typed action rate_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "rate_candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "rating",
+          "type": "number",
+          "summary": "Required rating record field.",
+          "maps_to": "record.rating",
+          "required": true
+        }
+      ],
+      "risk": "POST /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/ratings disagrees with covered api_surface path /spi/v3/candidates/{id}/ratings.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/ratings disagrees with covered api_surface path /spi/v3/candidates/{id}/ratings.",
+      "examples": [
+        "pm workable rate candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "reject offer apply",
+      "summary": "Typed action reject_offer",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "reject_offer",
+      "flags": [
+        {
+          "name": "offer-id",
+          "type": "string",
+          "summary": "Required offer_id record field.",
+          "maps_to": "record.offer_id",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /offers/{{ record.offer_id }}/reject mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /offers/{offer_id}/reject disagrees with covered api_surface path /spi/v3/offers/{id}/reject.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /offers/{offer_id}/reject disagrees with covered api_surface path /spi/v3/offers/{id}/reject.",
+      "examples": [
+        "pm workable reject offer apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "reject requisition apply",
+      "summary": "Typed action reject_requisition",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "reject_requisition",
+      "flags": [
+        {
+          "name": "requisition-code",
+          "type": "string",
+          "summary": "Required requisition_code record field.",
+          "maps_to": "record.requisition_code",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /requisitions/{{ record.requisition_code }}/reject mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /requisitions/{requisition_code}/reject disagrees with covered api_surface path /spi/v3/requisitions/{code}/reject.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions/{requisition_code}/reject disagrees with covered api_surface path /spi/v3/requisitions/{code}/reject.",
+      "examples": [
+        "pm workable reject requisition apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "relocate candidate apply",
+      "summary": "Typed action relocate_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "relocate_candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "target-job-shortcode",
+          "type": "string",
+          "summary": "Required target_job_shortcode record field.",
+          "maps_to": "record.target_job_shortcode",
+          "required": true
+        }
+      ],
+      "risk": "POST /candidates/{{ record.candidate_id }}/relocate mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/relocate disagrees with covered api_surface path /spi/v3/candidates/{id}/relocate.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/relocate disagrees with covered api_surface path /spi/v3/candidates/{id}/relocate.",
+      "examples": [
+        "pm workable relocate candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "revert candidate disqualification apply",
+      "summary": "Typed action revert_candidate_disqualification",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "revert_candidate_disqualification",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /candidates/{{ record.candidate_id }}/revert mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/revert disagrees with covered api_surface path /spi/v3/candidates/{id}/revert.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/revert disagrees with covered api_surface path /spi/v3/candidates/{id}/revert.",
+      "examples": [
+        "pm workable revert candidate disqualification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update candidate apply",
+      "summary": "Typed action update_candidate",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_candidate",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /candidates/{{ record.candidate_id }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id} disagrees with covered api_surface path /spi/v3/candidates/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id} disagrees with covered api_surface path /spi/v3/candidates/{id}.",
+      "examples": [
+        "pm workable update candidate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update candidate custom attribute apply",
+      "summary": "Typed action update_candidate_custom_attribute",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_candidate_custom_attribute",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "custom-attribute-id",
+          "type": "string",
+          "summary": "Required custom_attribute_id record field.",
+          "maps_to": "record.custom_attribute_id",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /candidates/{{ record.candidate_id }}/update_custom_attribute_value mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/update_custom_attribute_value disagrees with covered api_surface path /spi/v3/candidates/{id}/update_custom_attribute_value.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/update_custom_attribute_value disagrees with covered api_surface path /spi/v3/candidates/{id}/update_custom_attribute_value.",
+      "examples": [
+        "pm workable update candidate custom attribute apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update candidate rating apply",
+      "summary": "Typed action update_candidate_rating",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_candidate_rating",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "rating",
+          "type": "number",
+          "summary": "Required rating record field.",
+          "maps_to": "record.rating",
+          "required": true
+        }
+      ],
+      "risk": "PUT /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/ratings disagrees with covered api_surface path /spi/v3/candidates/{id}/ratings.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/ratings disagrees with covered api_surface path /spi/v3/candidates/{id}/ratings.",
+      "examples": [
+        "pm workable update candidate rating apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update candidate tags apply",
+      "summary": "Typed action update_candidate_tags",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_candidate_tags",
+      "flags": [
+        {
+          "name": "candidate-id",
+          "type": "string",
+          "summary": "Required candidate_id record field.",
+          "maps_to": "record.candidate_id",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "json",
+          "summary": "Required tags record field.",
+          "maps_to": "record.tags",
+          "required": true
+        }
+      ],
+      "risk": "PUT /candidates/{{ record.candidate_id }}/tags mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /candidates/{candidate_id}/tags disagrees with covered api_surface path /spi/v3/candidates/{id}/tags.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/tags disagrees with covered api_surface path /spi/v3/candidates/{id}/tags.",
+      "examples": [
+        "pm workable update candidate tags apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update department apply",
+      "summary": "Typed action update_department",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_department",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /departments mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /departments disagrees with covered api_surface path /spi/v3/departments.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments disagrees with covered api_surface path /spi/v3/departments.",
+      "examples": [
+        "pm workable update department apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update employee apply",
+      "summary": "Typed action update_employee",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_employee",
+      "flags": [
+        {
+          "name": "employee-id",
+          "type": "string",
+          "summary": "Required employee_id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /employees/{{ record.employee_id }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /employees/{employee_id} disagrees with covered api_surface path /spi/v3/employees/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /employees/{employee_id} disagrees with covered api_surface path /spi/v3/employees/{id}.",
+      "examples": [
+        "pm workable update employee apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update member apply",
+      "summary": "Typed action update_member",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_member",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /members mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /members disagrees with covered api_surface path /spi/v3/members.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members disagrees with covered api_surface path /spi/v3/members.",
+      "examples": [
+        "pm workable update member apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update requisition apply",
+      "summary": "Typed action update_requisition",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_requisition",
+      "flags": [
+        {
+          "name": "requisition-id",
+          "type": "string",
+          "summary": "Required requisition_id record field.",
+          "maps_to": "record.requisition_id",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /requisitions/{{ record.requisition_id }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /requisitions/{requisition_id} disagrees with covered api_surface path /spi/v3/requisitions/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions/{requisition_id} disagrees with covered api_surface path /spi/v3/requisitions/{id}.",
+      "examples": [
+        "pm workable update requisition apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update time entry apply",
+      "summary": "Typed action update_time_entry",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_time_entry",
+      "flags": [
+        {
+          "name": "employee-id",
+          "type": "string",
+          "summary": "Required employee_id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }} mutates Workable data; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries/{uuid} disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries/{uuid}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries/{uuid} disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries/{uuid}.",
+      "examples": [
+        "pm workable update time entry apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

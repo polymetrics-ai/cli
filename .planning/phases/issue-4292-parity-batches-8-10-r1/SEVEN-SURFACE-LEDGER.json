@@ -17210,6 +17210,11 @@
                   "path": "application-feedback submit",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
+                },
+                {
+                  "path": "submit application feedback apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field feedbackForm.fieldSubmissions.0.value."
                 }
               ],
               "direct_write_cli_status": "partial-blocked",
@@ -17904,6 +17909,11 @@
               "kind": "create",
               "direct_write_cli": [
                 {
+                  "path": "create offer apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field offerForm.fieldSubmissions.0.value."
+                },
+                {
                   "path": "offer create",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
@@ -17959,6 +17969,11 @@
                   "path": "offer update",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
+                },
+                {
+                  "path": "update offer apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field offerForm.fieldSubmissions.0.value."
                 }
               ],
               "direct_write_cli_status": "partial-blocked",
@@ -18181,9 +18196,13 @@
                   "path": "custom-field set-value",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
+                },
+                {
+                  "path": "set custom field value apply",
+                  "availability": "implemented"
                 }
               ],
-              "direct_write_cli_status": "partial-blocked",
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "foundation-gap",
                 "reason": "closed destination mapping rejects the provider's case-preserving input(s): objectId, objectType, fieldId, fieldValue",
@@ -18199,9 +18218,13 @@
                   "path": "custom-field set-values",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
+                },
+                {
+                  "path": "set custom field values apply",
+                  "availability": "implemented"
                 }
               ],
-              "direct_write_cli_status": "partial-blocked",
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "foundation-gap",
                 "reason": "closed destination mapping rejects the provider's case-preserving input(s): objectId, objectType",
@@ -18348,12 +18371,16 @@
               "kind": "update",
               "direct_write_cli": [
                 {
+                  "path": "set user custom field value apply",
+                  "availability": "implemented"
+                },
+                {
                   "path": "user set-custom-field-value",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 }
               ],
-              "direct_write_cli_status": "partial-blocked",
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "foundation-gap",
                 "reason": "closed destination mapping rejects the provider's case-preserving input(s): userId, fieldId, fieldValue",
@@ -18366,12 +18393,16 @@
               "kind": "update",
               "direct_write_cli": [
                 {
+                  "path": "set user custom field values apply",
+                  "availability": "implemented"
+                },
+                {
                   "path": "user set-custom-field-values",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 }
               ],
-              "direct_write_cli_status": "partial-blocked",
+              "direct_write_cli_status": "implemented",
               "reverse_etl_eligibility": {
                 "state": "foundation-gap",
                 "reason": "closed destination mapping rejects the provider's case-preserving input(s): userId",
@@ -18383,6 +18414,11 @@
               "action": "create_referral",
               "kind": "create",
               "direct_write_cli": [
+                {
+                  "path": "create referral apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field fieldSubmissions.0.value."
+                },
                 {
                   "path": "referral create",
                   "availability": "partial",
@@ -18562,6 +18598,11 @@
               "kind": "create",
               "direct_write_cli": [
                 {
+                  "path": "create survey submission apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; foundation-gap: internal/connectors/commandrunner/runner.go:484 requires the registered native connector to expose declarative record-schema preflight for structured JSON flags; minimal change: delegate PreflightStructuredJSONRecordField from native Ashby to its existing loaded engine bundle."
+                },
+                {
                   "path": "survey-submission create",
                   "availability": "partial",
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
@@ -18738,9 +18779,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 178,
-          "implemented_commands": 169,
-          "partial_commands": 9
+          "declared_commands": 187,
+          "implemented_commands": 173,
+          "partial_commands": 14
         }
       }
     },
@@ -18826,8 +18867,14 @@
             {
               "action": "create_department",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create department apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments disagrees with covered api_surface path /spi/v3/departments."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -18845,8 +18892,14 @@
             {
               "action": "update_department",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update department apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments disagrees with covered api_surface path /spi/v3/departments."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -18864,8 +18917,14 @@
             {
               "action": "merge_department",
               "kind": "custom",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "merge department apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments/{department_id}/merge disagrees with covered api_surface path /spi/v3/departments/{id}/merge."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: department_id, target_department_id"
@@ -18874,8 +18933,14 @@
             {
               "action": "delete_department",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete department apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /departments/{department_id} disagrees with covered api_surface path /spi/v3/departments/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: department_id, force"
@@ -18884,8 +18949,14 @@
             {
               "action": "invite_member",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "invite member apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members/invite disagrees with covered api_surface path /spi/v3/members/invite."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -18903,8 +18974,14 @@
             {
               "action": "update_member",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update member apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members disagrees with covered api_surface path /spi/v3/members."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -18922,8 +18999,14 @@
             {
               "action": "deactivate_member",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "deactivate member apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members/{member_id} disagrees with covered api_surface path /spi/v3/members/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: member_id"
@@ -18932,8 +19015,14 @@
             {
               "action": "enable_member",
               "kind": "custom",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "enable member apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /members/{member_id}/enable disagrees with covered api_surface path /spi/v3/members/{id}/enable."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: member_id"
@@ -18942,8 +19031,14 @@
             {
               "action": "create_subscription",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create subscription apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /subscriptions disagrees with covered api_surface path /spi/v3/subscriptions."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: target, event"
@@ -18952,8 +19047,14 @@
             {
               "action": "delete_subscription",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "delete subscription apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /subscriptions/{subscription_id} disagrees with covered api_surface path /spi/v3/subscriptions/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: subscription_id"
@@ -18962,8 +19063,14 @@
             {
               "action": "create_employee",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create employee apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /employees disagrees with covered api_surface path /spi/v3/employees."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: firstname, lastname, personal_email"
@@ -18972,8 +19079,14 @@
             {
               "action": "update_employee",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update employee apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /employees/{employee_id} disagrees with covered api_surface path /spi/v3/employees/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -18991,8 +19104,14 @@
             {
               "action": "create_review_template",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create review template apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /review-cycles/templates disagrees with covered api_surface path /spi/v3/review-cycles/templates."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19010,8 +19129,14 @@
             {
               "action": "bulk_create_time_entries",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "bulk create time entries apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/time-entries disagrees with covered api_surface path /spi/v3/time-tracking/time-entries."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: time_entries"
@@ -19020,8 +19145,14 @@
             {
               "action": "create_time_entry",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create time entry apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19039,8 +19170,14 @@
             {
               "action": "update_time_entry",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update time entry apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries/{uuid} disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries/{uuid}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19063,8 +19200,14 @@
             {
               "action": "archive_time_entry",
               "kind": "delete",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "archive time entry apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /time-tracking/employees/{employee_id}/time-entries/{uuid} disagrees with covered api_surface path /spi/v3/time-tracking/employees/{id}/time-entries/{uuid}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19087,8 +19230,14 @@
             {
               "action": "decide_timeoff_approval",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "decide timeoff approval apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /timeoff/approvals/{approval_key} disagrees with covered api_surface path /spi/v3/timeoff/approvals/{key}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: approval_key, state"
@@ -19097,8 +19246,14 @@
             {
               "action": "create_timeoff_request",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create timeoff request apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /timeoff/requests disagrees with covered api_surface path /spi/v3/timeoff/requests."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19116,8 +19271,14 @@
             {
               "action": "update_candidate_custom_attribute",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update candidate custom attribute apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/update_custom_attribute_value disagrees with covered api_surface path /spi/v3/candidates/{id}/update_custom_attribute_value."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, custom_attribute_id, value"
@@ -19126,8 +19287,14 @@
             {
               "action": "comment_on_candidate",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "comment on candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/comments disagrees with covered api_surface path /spi/v3/candidates/{id}/comments."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, comment"
@@ -19136,8 +19303,14 @@
             {
               "action": "copy_candidate",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "copy candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/copy disagrees with covered api_surface path /spi/v3/candidates/{id}/copy."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, member_id, target_job_shortcode, target_stage"
@@ -19146,8 +19319,14 @@
             {
               "action": "disqualify_candidate",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "disqualify candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/disqualify disagrees with covered api_surface path /spi/v3/candidates/{id}/disqualify."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19165,8 +19344,14 @@
             {
               "action": "create_job_candidate",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create job candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /jobs/{job_shortcode}/candidates disagrees with covered api_surface path /spi/v3/jobs/{shortcode}/candidates."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: job_shortcode, name"
@@ -19175,8 +19360,14 @@
             {
               "action": "move_candidate",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "move candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/move disagrees with covered api_surface path /spi/v3/candidates/{id}/move."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, target_stage"
@@ -19185,8 +19376,14 @@
             {
               "action": "relocate_candidate",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "relocate candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/relocate disagrees with covered api_surface path /spi/v3/candidates/{id}/relocate."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, target_job_shortcode"
@@ -19195,8 +19392,14 @@
             {
               "action": "revert_candidate_disqualification",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "revert candidate disqualification apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/revert disagrees with covered api_surface path /spi/v3/candidates/{id}/revert."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19214,8 +19417,14 @@
             {
               "action": "update_candidate_tags",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update candidate tags apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/tags disagrees with covered api_surface path /spi/v3/candidates/{id}/tags."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, tags"
@@ -19224,8 +19433,14 @@
             {
               "action": "rate_candidate",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "rate candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/ratings disagrees with covered api_surface path /spi/v3/candidates/{id}/ratings."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, rating"
@@ -19234,8 +19449,14 @@
             {
               "action": "update_candidate_rating",
               "kind": "upsert",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update candidate rating apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id}/ratings disagrees with covered api_surface path /spi/v3/candidates/{id}/ratings."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: candidate_id, rating"
@@ -19244,8 +19465,14 @@
             {
               "action": "update_candidate",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /candidates/{candidate_id} disagrees with covered api_surface path /spi/v3/candidates/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "representable",
                 "stream": "jobs",
@@ -19263,8 +19490,14 @@
             {
               "action": "approve_offer",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "approve offer apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /offers/{offer_id}/approve disagrees with covered api_surface path /spi/v3/offers/{id}/approve."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: offer_id"
@@ -19273,8 +19506,14 @@
             {
               "action": "reject_offer",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "reject offer apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /offers/{offer_id}/reject disagrees with covered api_surface path /spi/v3/offers/{id}/reject."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: offer_id"
@@ -19283,8 +19522,14 @@
             {
               "action": "create_requisition",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create requisition apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions disagrees with covered api_surface path /spi/v3/requisitions."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: code, reason"
@@ -19293,8 +19538,14 @@
             {
               "action": "update_requisition",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "update requisition apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions/{requisition_id} disagrees with covered api_surface path /spi/v3/requisitions/{id}."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: requisition_id"
@@ -19303,8 +19554,14 @@
             {
               "action": "approve_requisition",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "approve requisition apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions/{requisition_code}/approve disagrees with covered api_surface path /spi/v3/requisitions/{code}/approve."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: requisition_code"
@@ -19313,8 +19570,14 @@
             {
               "action": "reject_requisition",
               "kind": "update",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "reject requisition apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /requisitions/{requisition_code}/reject disagrees with covered api_surface path /spi/v3/requisitions/{code}/reject."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: requisition_code"
@@ -19323,8 +19586,14 @@
             {
               "action": "create_talent_pool_candidate",
               "kind": "create",
-              "direct_write_cli": [],
-              "direct_write_cli_status": "declaration-pending-cli-binding",
+              "direct_write_cli": [
+                {
+                  "path": "create talent pool candidate apply",
+                  "availability": "partial",
+                  "block_reason": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /talent_pool/{stage}/candidates disagrees with covered api_surface path /spi/v3/talent_pool/{stage}/candidates."
+                }
+              ],
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "no executable source-stream schema provides every typed action input: stage, name"
@@ -19333,9 +19602,9 @@
           ]
         },
         "cli": {
-          "declared_commands": 0,
+          "declared_commands": 38,
           "implemented_commands": 0,
-          "partial_commands": 0
+          "partial_commands": 38
         }
       }
     },

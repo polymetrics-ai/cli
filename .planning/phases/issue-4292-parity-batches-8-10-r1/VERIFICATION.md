@@ -126,6 +126,23 @@
 - [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
   scanned, 0 changes.
 
+### Fourth five-connector typed-write CLI increment
+
+- [x] Red: real `TestEveryImplementedCommandPassesRuntimePreflight` rejected
+  Ashby's `create survey submission apply`: runner line 484 requires the
+  native connector to delegate the closed structured-JSON record-schema gate.
+- [x] Green: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --write-cli ashby workable recruitee hibob factorial`
+  records that command partial with the exact refusal/minimal bridge change;
+  it gives every existing Ashby and Workable action a command and leaves the
+  zero-action bundles free of invented CLI actions.
+- [x] `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check ashby workable recruitee hibob factorial`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 552
+  connector(s) checked, 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connector(s)
+  scanned, 0 changes.
+- [x] `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'`.
+
 ### Fifth five-connector declaration increment
 
 - [x] Red: `node .planning/phases/issue-4292-parity-batches-8-10-r1/traces/reconcile-seven-surfaces.mjs --check datadog pagerduty auth0 okta firehydrant` failed before declarations with `datadog: source transport declaration missing`.

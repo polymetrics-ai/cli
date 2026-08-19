@@ -16,6 +16,16 @@ const defs = resolve(root, "internal/connectors/defs");
 const ledgerPath = resolve(phase, "SEVEN-SURFACE-LEDGER.json");
 const summaryPath = resolve(phase, "SEVEN-SURFACE-SUMMARY.md");
 
+// These are runtime-preflight refusals reproduced through the real registered
+// connector, not route or schema guesses. Keep the action callable as partial
+// while the native bridge lacks the closed preflight hook required by the
+// command runner; do not expose the JSON field as an unchecked body escape.
+const runtimePreflightBlocks = {
+  ashby: {
+    create_survey_submission: "foundation-gap: internal/connectors/commandrunner/runner.go:484 requires the registered native connector to expose declarative record-schema preflight for structured JSON flags; minimal change: delegate PreflightStructuredJSONRecordField from native Ashby to its existing loaded engine bundle",
+  },
+};
+
 const connectors = [
   "brex", "zoho-books", "testrail", "amplitude", "posthog", "metabase", "dbt", "looker", "mode", "dremio",
   "coda", "clickup-api", "calendly", "greenhouse", "lever-hiring", "ashby", "workable", "recruitee", "hibob", "factorial",
@@ -276,7 +286,11 @@ async function materializeWriteCLI(connector) {
   const paths = new Set();
   for (const command of surface.commands) {
     paths.add(command.path);
-    if (command.write) commandsByWrite.set(command.write, command);
+    if (command.write) {
+      const commands = commandsByWrite.get(command.write) ?? [];
+      commands.push(command);
+      commandsByWrite.set(command.write, commands);
+    }
   }
   let writeGroup = surface.groups.find((group) => /write|reverse/i.test(group.id));
   if (!writeGroup) {
@@ -285,7 +299,8 @@ async function materializeWriteCLI(connector) {
   }
   writeGroup.commands = array(writeGroup.commands);
   for (const action of array(writesDocument.actions)) {
-    const existingCommand = commandsByWrite.get(action.name);
+    const actionCommands = commandsByWrite.get(action.name) ?? [];
+    const existingCommand = actionCommands.find((command) => command.notes?.startsWith("Generated from the connector-owned typed action;")) ?? actionCommands[0];
     const route = exactRouteBinding(action, apiSurface.endpoints);
     const generated = existingCommand?.notes?.startsWith("Generated from the connector-owned typed action;");
     if (existingCommand && !generated && existingCommand.availability === "implemented") continue;
@@ -299,10 +314,13 @@ async function materializeWriteCLI(connector) {
     }
     const reason = materialized.reason ?? query.reason;
     const configInput = flags.find((flag) => flag.maps_to.startsWith("config."));
-    const availability = reason || configInput ? "partial" : "implemented";
+    const runtimePreflightBlock = runtimePreflightBlocks[connector]?.[action.name];
+    const availability = reason || configInput || runtimePreflightBlock ? "partial" : "implemented";
     const blockedReason = reason
       ? `declaration-pending: ${reason}`
-      : "foundation-gap: internal/connectors/commandrunner/runner.go:1565 rejects config.* flags in reverse-ETL recordOverrides; minimal change: apply declared config overrides through the existing closed config-override path before assembling the typed write record";
+      : configInput
+        ? "foundation-gap: internal/connectors/commandrunner/runner.go:1565 rejects config.* flags in reverse-ETL recordOverrides; minimal change: apply declared config overrides through the existing closed config-override path before assembling the typed write record"
+        : runtimePreflightBlock;
     const command = {
       path,
       summary: route.endpoint ? `${route.endpoint.method} ${route.endpoint.path} (${action.name})` : `Typed action ${action.name}`,

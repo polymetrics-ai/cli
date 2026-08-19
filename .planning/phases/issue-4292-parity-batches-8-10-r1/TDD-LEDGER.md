@@ -177,6 +177,22 @@
   respectively. The trace, `connectorgen validate`, `surface-sync --check`,
   and the real all-implemented runtime-preflight sweep pass.
 
+### Typed-write CLI proof — fourth increment
+
+- **Red:** the initial runtime-preflight sweep rejected Ashby's generated
+  `create survey submission apply`: its declared `submittedValues` JSON flag
+  is closed and typed, but the registered native connector does not expose the
+  declarative record-schema preflight interface required at
+  `internal/connectors/commandrunner/runner.go:484`.
+- **Green:** the reconciliation generator preserves that command as partial
+  with the exact refusal and minimal native-bridge delegation change, then
+  reruns deterministically without selecting the wrong duplicate partial
+  command. Ashby has 93 implemented/5 partial commands and Workable's 38
+  actions all receive exact-route partial commands; source-only Recruitee,
+  HiBob, and Factorial do not gain invented actions. The focused trace,
+  `connectorgen validate`, `surface-sync --check`, and runtime-preflight sweep
+  pass.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

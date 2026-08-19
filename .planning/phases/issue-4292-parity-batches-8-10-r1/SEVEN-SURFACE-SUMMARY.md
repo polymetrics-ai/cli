@@ -19,8 +19,8 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 9 | calendly | 61 | 27 | 22 | 0/0 | 12 | create_share | 1 | 6/2/8 |
 | 9 | greenhouse | skipped | 0 | 0 | 0/0 | 69 | add_application_to_candidate_prospect | 20 | 127/0/127 |
 | 9 | lever-hiring | 104 | 30 | 51 | 0/0 | 25 | reactivate_user | 2 | 60/0/60 |
-| 9 | ashby | 193 | 9 | 113 | 0/0 | 71 | create_candidate | 6 | 169/9/178 |
-| 9 | workable | 84 | 45 | 39 | 0/0 | 42 | create_department | 13 | 0/0/0 |
+| 9 | ashby | 193 | 9 | 113 | 0/0 | 71 | create_candidate | 6 | 173/14/187 |
+| 9 | workable | 84 | 45 | 39 | 0/0 | 42 | create_department | 13 | 0/38/38 |
 | 9 | recruitee | 938 | 370 | 563 | 0/0 | 5 | — | 0 | 0/0/0 |
 | 9 | hibob | 207 | 65 | 142 | 0/0 | 3 | — | 0 | 0/0/0 |
 | 9 | factorial | 155 | 61 | 94 | 0/0 | 5 | — | 0 | 0/0/0 |
