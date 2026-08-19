@@ -649,10 +649,12 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 	if op.REST == nil {
 		return nil, nil
 	}
+	hasStructuredOverride := false
 	for field, value := range overrides {
 		if !isStructuredJSONBodyValue(value) {
 			continue
 		}
+		hasStructuredOverride = true
 		if err := ValidateOperationStructuredJSONBodyField(op, field); err != nil {
 			return nil, err
 		}
@@ -662,9 +664,19 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 		body[key] = value
 	}
 	if len(op.REST.BodySchema) > 0 {
-		sch, err := CompileSchema(op.REST.BodySchema)
-		if err != nil {
-			return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
+		var sch *Schema
+		if hasStructuredOverride {
+			compiled, err := compileStructuredRESTBodySchema(op)
+			if err != nil {
+				return nil, err
+			}
+			sch = compiled.schema
+		} else {
+			var err error
+			sch, err = CompileSchema(op.REST.BodySchema)
+			if err != nil {
+				return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
+			}
 		}
 		if err := sch.Validate(body); err != nil {
 			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)

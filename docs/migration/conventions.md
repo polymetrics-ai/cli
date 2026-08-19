@@ -375,7 +375,12 @@ not a full override by default.
   `kind:"rest_write"` operation only when its `rest` declaration fixes the method,
   connector-relative path, JSON (or SCIM JSON) content type, positive `max_bytes`, and a
   `body_schema`. The root and every nested object must declare
-  `"additionalProperties": false`; every array must declare `maxItems` and an item schema. The
+  `"additionalProperties": false`; every array must declare `maxItems` and an item schema. A
+  structural node may omit `type` only when its shape is unambiguous: `properties` or
+  `additionalProperties` normalizes it to `object`, while `items` or `prefixItems` normalizes it to
+  `array`. An untyped node with both object and array structure, or a structural declaration that
+  conflicts with its explicit type, is a foundation gap and is rejected before I/O. `prefixItems`
+  must cover every allowed position or pair with `items` to constrain the remaining positions. The
   engine additionally refuses a schema deeper than 16 levels, with more than 256 object fields, or
   more than 1024 allowed collection items. A command may use `type:"json"` only for one declared,
   top-level `maps_to:"body.<field>"` object or array. Keep scalar fields as their normal typed

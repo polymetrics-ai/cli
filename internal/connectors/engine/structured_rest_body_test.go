@@ -339,6 +339,218 @@ func TestOperationDirectWriteStructuredRESTBodyRejectsUnconstrainedArrayDeclarat
 	}
 }
 
+func TestOperationStructuredJSONBodyPreflightNormalizesUnambiguousTypes(t *testing.T) {
+	base := structuredRESTBodyBundle("https://example.invalid")
+	first := base.Operations[0]
+	tests := []struct {
+		name       string
+		bodySchema json.RawMessage
+		wantErr    string
+	}{
+		{
+			name:       "explicit object type",
+			bodySchema: structuredRESTBodySchemaWithTarget(`{"type":"object","additionalProperties":false,"properties":{}}`),
+		},
+		{
+			name: "omitted root and nested object types",
+			bodySchema: json.RawMessage(`{
+				"additionalProperties": false,
+				"properties": {
+					"targets": {
+						"additionalProperties": false,
+						"properties": {
+							"settings": {"additionalProperties": false, "properties": {}}
+						}
+					}
+				}
+			}`),
+		},
+		{
+			name:       "omitted array type through items",
+			bodySchema: structuredRESTBodySchemaWithTarget(`{"maxItems":1,"items":{"type":"string"}}`),
+		},
+		{
+			name:       "omitted array type through prefix items",
+			bodySchema: structuredRESTBodySchemaWithTarget(`{"maxItems":1,"prefixItems":[{"type":"string"}]}`),
+		},
+		{
+			name:       "conflicting explicit type",
+			bodySchema: structuredRESTBodySchemaWithTarget(`{"type":"array","maxItems":1,"items":{"type":"string"},"properties":{}}`),
+			wantErr:    "foundation gap",
+		},
+		{
+			name:       "ambiguous omitted type",
+			bodySchema: structuredRESTBodySchemaWithTarget(`{"additionalProperties":false,"properties":{},"maxItems":1,"items":{"type":"string"}}`),
+			wantErr:    "foundation gap",
+		},
+		{
+			name:       "unconstrained prefix item tail",
+			bodySchema: structuredRESTBodySchemaWithTarget(`{"maxItems":2,"prefixItems":[{"type":"string"}]}`),
+			wantErr:    "foundation gap",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			op := first
+			rest := *first.REST
+			rest.BodySchema = test.bodySchema
+			op.REST = &rest
+
+			err := ValidateOperationStructuredJSONBodyField(op, "targets")
+			if test.wantErr == "" {
+				if err != nil {
+					t.Fatalf("ValidateOperationStructuredJSONBodyField: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), test.wantErr) {
+				t.Fatalf("ValidateOperationStructuredJSONBodyField error = %v, want %q", err, test.wantErr)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteStructuredRESTBodyMaterializesInferredTypes(t *testing.T) {
+	tests := []struct {
+		name         string
+		targetSchema string
+	}{
+		{
+			name: "items",
+			targetSchema: `{
+				"maxItems": 1,
+				"items": {
+					"additionalProperties": false,
+					"required": ["settings"],
+					"properties": {
+						"settings": {"additionalProperties": false, "properties": {}}
+					}
+				}
+			}`,
+		},
+		{
+			name: "prefix items",
+			targetSchema: `{
+				"maxItems": 1,
+				"prefixItems": [{
+					"additionalProperties": false,
+					"required": ["settings"],
+					"properties": {
+						"settings": {"additionalProperties": false, "properties": {}}
+					}
+				}]
+			}`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"ok":true}`))
+			}))
+			t.Cleanup(server.Close)
+
+			bundle := structuredRESTBodyBundle(server.URL)
+			rest := *bundle.Operations[0].REST
+			rest.BodySchema = structuredRESTBodySchemaWithTarget(test.targetSchema)
+			bundle.Operations[0].REST = &rest
+			request := structuredRESTBodyRequest()
+			request.Body = map[string]any{
+				"targets": []any{map[string]any{"settings": map[string]any{}}},
+			}
+
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			request.Approval = approvedEvidenceForPreview(t, preview)
+			request.PreviewDigest = preview.Digest
+			if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
+				t.Fatalf("OperationDirectWrite: %v", err)
+			}
+			if calls != 1 {
+				t.Fatalf("valid request calls = %d, want 1", calls)
+			}
+
+			for _, invalid := range []struct {
+				name  string
+				value any
+				want  string
+			}{
+				{
+					name:  "wrong nested object type",
+					value: []any{map[string]any{"settings": []any{}}},
+					want:  "does not match type",
+				},
+				{
+					name:  "undeclared nested object field",
+					value: []any{map[string]any{"settings": map[string]any{"undeclared": true}}},
+					want:  "additional property",
+				},
+			} {
+				t.Run(invalid.name, func(t *testing.T) {
+					invalidRequest := structuredRESTBodyRequest()
+					invalidRequest.Body = map[string]any{"targets": invalid.value}
+					_, err := OperationDirectWrite(context.Background(), bundle, invalidRequest, nil)
+					if err == nil || !strings.Contains(err.Error(), invalid.want) {
+						t.Fatalf("OperationDirectWrite error = %v, want %q", err, invalid.want)
+					}
+					if calls != 1 {
+						t.Fatalf("invalid request reached transport; calls = %d, want 1", calls)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestStructuredRESTBodyPrefixItemsRemainPositionBound(t *testing.T) {
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	op := bundle.Operations[0]
+	rest := *op.REST
+	rest.BodySchema = json.RawMessage(`{
+		"additionalProperties": false,
+		"properties": {
+			"targets": {
+				"maxItems": 2,
+				"prefixItems": [{"type": "string"}],
+				"items": {"type": "boolean"}
+			}
+		}
+	}`)
+	op.REST = &rest
+	compiled, err := compileStructuredRESTBodySchema(op)
+	if err != nil {
+		t.Fatalf("compileStructuredRESTBodySchema: %v", err)
+	}
+	for _, test := range []struct {
+		name    string
+		value   any
+		wantErr string
+	}{
+		{name: "valid prefix and tail", value: map[string]any{"targets": []any{"head", true}}},
+		{name: "wrong prefix type", value: map[string]any{"targets": []any{true, true}}, wantErr: "does not match type"},
+		{name: "wrong tail type", value: map[string]any{"targets": []any{"head", "tail"}}, wantErr: "does not match type"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			err := compiled.schema.Validate(test.value)
+			if test.wantErr == "" {
+				if err != nil {
+					t.Fatalf("Validate: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), test.wantErr) {
+				t.Fatalf("Validate error = %v, want %q", err, test.wantErr)
+			}
+		})
+	}
+}
+
 func TestOperationStructuredJSONBodyPreflightRejectsSchemaAndActionMismatches(t *testing.T) {
 	bundle := structuredRESTBodyBundle("https://example.invalid")
 	first := bundle.Operations[0]
