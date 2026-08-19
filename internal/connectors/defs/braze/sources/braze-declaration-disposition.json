@@ -1,0 +1,3809 @@
+{
+  "schema_version": 1,
+  "connector": "braze",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/braze-operation-source-lock.json",
+    "source_url": "https://www.braze.com/docs/api/home/",
+    "source_sha256": "d08404d3078f65b07539b64aab7ba29af6b12ecc21cafb86121259992221371d",
+    "source_bytes": 337088,
+    "source_operation_count": 95
+  },
+  "summary": {
+    "api_surface_rows": 95,
+    "exact_source_rows": 95,
+    "declared_operations": 95,
+    "declared_percent": 100,
+    "enabled_operations": 21,
+    "enabled_percent": 22.11,
+    "disabled_operations": 74,
+    "documented_deletes": 4,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 21
+      },
+      {
+        "key": "direct_write",
+        "count": 24
+      },
+      {
+        "key": "etl",
+        "count": 21
+      },
+      {
+        "key": "reverse_etl",
+        "count": 29
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 21,
+    "writes_actions": 29,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 29
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 45
+      },
+      {
+        "key": "foundation-gap",
+        "count": 29
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-braze",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/braze/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-braze",
+      "sync-transport-source-definition-braze"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-braze",
+        "count": 45
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/campaigns/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/campaigns/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "campaigns"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CampaignsList0",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "campaigns"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "campaigns"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/details",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/campaigns/details",
+        "operation": null,
+        "covered_by": {
+          "stream": "campaign_details"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CampaignsDetails1",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "campaign_details"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "campaign_details"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/data_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/campaigns/data_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CampaignsDataSeries2",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-campaign analytics time series requiring a length/ending_at window coupling for a single campaign id; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage, distinct from the already-covered list/details metadata streams",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-campaign analytics time series requiring a length/ending_at window coupling for a single campaign id; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage, distinct from the already-covered list/details metadata streams"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canvas/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/canvas/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "canvases"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CanvasList3",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "canvases"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "canvases"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canvas/details",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/canvas/details",
+        "operation": null,
+        "covered_by": {
+          "stream": "canvas_details"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CanvasDetails4",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "canvas_details"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "canvas_details"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canvas/data_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/canvas/data_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CanvasDataSeries5",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-Canvas step/variant-breakdown analytics time series; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-Canvas step/variant-breakdown analytics time series; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canvas/data_summary",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/canvas/data_summary",
+        "operation": null,
+        "covered_by": {
+          "stream": "canvas_data_summary"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CanvasDataSummary6",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[6] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "canvas_data_summary"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "canvas_data_summary"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/catalogs",
+        "operation": null,
+        "covered_by": {
+          "stream": "catalogs"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.Catalogs7",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[7] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "catalogs"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "catalogs"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/catalogs",
+        "operation": null,
+        "covered_by": {
+          "write": "create_catalog"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.Catalogs8",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/{catalog_name}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/catalogs/{catalog_name}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_catalog"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.delete.CatalogsCatalogName9",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalog_name}/items",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CatalogsCatalogNameItems10",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "catalog ITEM listing requires an already-known catalog_name (available via the catalogs stream) and a separate per-catalog request/pagination sequence with no engine fan_out wired to this bundle's catalogs stream this pass; the catalogs stream itself already syncs every catalog's name/description/fields/item-count metadata",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "catalog ITEM listing requires an already-known catalog_name (available via the catalogs stream) and a separate per-catalog request/pagination sequence with no engine fan_out wired to this bundle's catalogs stream this pass; the catalogs stream itself already syncs every catalog's name/description/fields/item-count metadata"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalog_name}/items",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation": null,
+        "covered_by": {
+          "write": "create_catalog_items"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CatalogsCatalogNameItems11",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalogs/{catalog_name}/items",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.put.CatalogsCatalogNameItems12",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "bulk full-replace of catalog items; the same item-array upsert shape create_catalog_items (POST) already covers, using PUT semantics this dialect's single body_type/method-per-action model does not need a second action to express",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "bulk full-replace of catalog items; the same item-array upsert shape create_catalog_items (POST) already covers, using PUT semantics this dialect's single body_type/method-per-action model does not need a second action to express"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/{catalog_name}/items",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation": null,
+        "covered_by": {
+          "write": "update_catalog_items"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.patch.CatalogsCatalogNameItems13",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/{catalog_name}/items",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.delete.CatalogsCatalogNameItems14",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "bulk multi-item delete-by-id-array over the same catalog the single-item delete_catalog_item action already covers per-record",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "bulk multi-item delete-by-id-array over the same catalog the single-item delete_catalog_item action already covers per-record"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalog_name}/items/{item_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.CatalogsCatalogNameItemsItemId15",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single catalog item detail; requires an item_id already in hand with no list-discovery endpoint feeding it (catalog items list is excluded above for the same reason), not a distinct syncable resource",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single catalog item detail; requires an item_id already in hand with no list-discovery endpoint feeding it (catalog items list is excluded above for the same reason), not a distinct syncable resource"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalog_name}/items/{item_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CatalogsCatalogNameItemsItemId16",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single-item create-by-id variant of the batch create_catalog_items action, same underlying mutation shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-item create-by-id variant of the batch create_catalog_items action, same underlying mutation shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalogs/{catalog_name}/items/{item_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.put.CatalogsCatalogNameItemsItemId17",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single-item full-replace variant of the batch update_catalog_items action, same underlying mutation shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-item full-replace variant of the batch update_catalog_items action, same underlying mutation shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/{catalog_name}/items/{item_id}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_catalog_item"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.patch.CatalogsCatalogNameItemsItemId18",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/{catalog_name}/items/{item_id}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_catalog_item"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.delete.CatalogsCatalogNameItemsItemId19",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content_blocks/create",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/content_blocks/create",
+        "operation": null,
+        "covered_by": {
+          "write": "create_content_block"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.ContentBlocksCreate20",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_blocks/info",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/content_blocks/info",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.ContentBlocksInfo21",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single content block detail; identical record shape to the content_blocks list stream's per-item object plus its own content body, already covered by that stream for sync purposes",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single content block detail; identical record shape to the content_blocks list stream's per-item object plus its own content body, already covered by that stream for sync purposes"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_blocks/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/content_blocks/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "content_blocks"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.ContentBlocksList22",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[22]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[22] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "content_blocks"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "content_blocks"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content_blocks/update",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/content_blocks/update",
+        "operation": null,
+        "covered_by": {
+          "write": "update_content_block"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.ContentBlocksUpdate23",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/blacklist",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/email/blacklist",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.EmailBlacklist24",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "legacy alias of the identical POST /email/blocklist mutation (Braze's own docs deprecate the blacklist wording in favor of blocklist); create_email_blocklist already covers this mutation shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "legacy alias of the identical POST /email/blocklist mutation (Braze's own docs deprecate the blacklist wording in favor of blocklist); create_email_blocklist already covers this mutation shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/blocklist",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/email/blocklist",
+        "operation": null,
+        "covered_by": {
+          "write": "create_email_blocklist"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.EmailBlocklist25",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/bounce/remove",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/email/bounce/remove",
+        "operation": null,
+        "covered_by": {
+          "write": "remove_email_hard_bounce"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.EmailBounceRemove26",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/hard_bounces",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/email/hard_bounces",
+        "operation": null,
+        "covered_by": {
+          "stream": "email_hard_bounces"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.EmailHardBounces27",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[27] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "email_hard_bounces"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "email_hard_bounces"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/spam/remove",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/email/spam/remove",
+        "operation": null,
+        "covered_by": {
+          "write": "remove_email_spam"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.EmailSpamRemove28",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[28]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/status",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/email/status",
+        "operation": null,
+        "covered_by": {
+          "write": "set_email_subscription_status"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.EmailStatus29",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[29]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/unsubscribes",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/email/unsubscribes",
+        "operation": null,
+        "covered_by": {
+          "stream": "email_unsubscribes"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.EmailUnsubscribes30",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[30]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[30] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "email_unsubscribes"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "email_unsubscribes"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/data_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/events/data_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.EventsDataSeries31",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[31]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-custom-event-name analytics time series requiring an event name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-custom-event-name analytics time series requiring an event name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/list",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/events/list",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.EventsList32",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[32]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "engine's declarative array extraction (connsdk.RecordsAt) only yields JSON-object array elements; Braze's events/list returns an array of bare event-name STRINGS, which RecordsAt silently drops rather than wrapping into a record the way legacy's decodeRecords does; see docs.md Known limits (ENGINE_GAP, unchanged from wave2)",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "engine's declarative array extraction (connsdk.RecordsAt) only yields JSON-object array elements; Braze's events/list returns an array of bare event-name STRINGS, which RecordsAt silently drops rather than wrapping into a record the way legacy's decodeRecords does; see docs.md Known limits (ENGINE_GAP, unchanged from wave2)"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feed/data_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/feed/data_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.FeedDataSeries33",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[33]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-Content-Card analytics time series requiring a card_id already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-Content-Card analytics time series requiring a card_id already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feed/details",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/feed/details",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.FeedDetails34",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[34]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single Content Card detail; identical record shape to the feed_cards list stream's per-item object, already covered by that stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single Content Card detail; identical record shape to the feed_cards list stream's per-item object, already covered by that stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feed/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/feed/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "feed_cards"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.FeedList35",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[35]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[35] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "feed_cards"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "feed_cards"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kpi/dau/data_series",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/kpi/dau/data_series",
+        "operation": null,
+        "covered_by": {
+          "stream": "kpi_dau"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.KpiDauDataSeries36",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[36]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[36] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "kpi_dau"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "kpi_dau"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kpi/mau/data_series",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/kpi/mau/data_series",
+        "operation": null,
+        "covered_by": {
+          "stream": "kpi_mau"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.KpiMauDataSeries37",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[37]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[37] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "kpi_mau"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "kpi_mau"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kpi/new_users/data_series",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/kpi/new_users/data_series",
+        "operation": null,
+        "covered_by": {
+          "stream": "kpi_new_users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.KpiNewUsersDataSeries38",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[38]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[38] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "kpi_new_users"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "kpi_new_users"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kpi/uninstalls/data_series",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/kpi/uninstalls/data_series",
+        "operation": null,
+        "covered_by": {
+          "stream": "kpi_uninstalls"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.KpiUninstallsDataSeries39",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[39]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[39] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "kpi_uninstalls"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "kpi_uninstalls"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages/live_activity/update",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/messages/live_activity/update",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.MessagesLiveActivityUpdate40",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[40]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "real-time Live Activity push-state update, a narrow iOS-specific messaging extension distinct from Braze's general campaign/data model; Pass B breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "real-time Live Activity push-state update, a narrow iOS-specific messaging extension distinct from Braze's general campaign/data model; Pass B breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages/schedule/create",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/messages/schedule/create",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.MessagesScheduleCreate41",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[41]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "creates an asynchronous scheduled-send job with its own lifecycle (a schedule_id to later update/cancel), not a plain synchronous data mutation this dialect's fire-once write model fits; messages/send (immediate send) already covers the core messaging mutation shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "creates an asynchronous scheduled-send job with its own lifecycle (a schedule_id to later update/cancel), not a plain synchronous data mutation this dialect's fire-once write model fits; messages/send (immediate send) already covers the core messaging mutation shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages/schedule/delete",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/messages/schedule/delete",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.MessagesScheduleDelete42",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[42]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "cancels a job created by the excluded messages/schedule/create; no scheduled job is ever created by this bundle to cancel",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "cancels a job created by the excluded messages/schedule/create; no scheduled job is ever created by this bundle to cancel"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages/schedule/update",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/messages/schedule/update",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.MessagesScheduleUpdate43",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[43]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "mutates a job created by the excluded messages/schedule/create; no scheduled job is ever created by this bundle to update",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "mutates a job created by the excluded messages/schedule/create; no scheduled job is ever created by this bundle to update"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/scheduled_broadcasts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/messages/scheduled_broadcasts",
+        "operation": null,
+        "covered_by": {
+          "stream": "scheduled_broadcasts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.MessagesScheduledBroadcasts44",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[44]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[44] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "scheduled_broadcasts"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "scheduled_broadcasts"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages/send",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/messages/send",
+        "operation": null,
+        "covered_by": {
+          "write": "send_message"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.MessagesSend45",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[45]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/preference_center/v1",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/preference_center/v1",
+        "operation": null,
+        "covered_by": {
+          "write": "create_preference_center"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.PreferenceCenterV146",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[46]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/preference_center/v1/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/preference_center/v1/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "preference_centers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.PreferenceCenterV1List47",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[47]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[47] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "preference_centers"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "preference_centers"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/preference_center/v1/{PreferenceCenterExternalID}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/preference_center/v1/{PreferenceCenterExternalID}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.PreferenceCenterV1PreferenceCenterExternalID48",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[48]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single preference center detail; identical record shape to the preference_centers list stream's per-item object, already covered by that stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single preference center detail; identical record shape to the preference_centers list stream's per-item object, already covered by that stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/preference_center/v1/{PreferenceCenterExternalID}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/preference_center/v1/{PreferenceCenterExternalID}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_preference_center"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.put.PreferenceCenterV1PreferenceCenterExternalID49",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[49]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/preference_center/v1/{PreferenceCenterExternalID}/url/{UserID}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/preference_center/v1/{PreferenceCenterExternalID}/url/{UserID}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.PreferenceCenterV1PreferenceCenterExternalIDUrlUserID50",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[50]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "generates a one-time signed preference-center URL for a specific user, not a syncable object or a data mutation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "generates a one-time signed preference-center URL for a specific user, not a syncable object or a data mutation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchases/product_list",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/purchases/product_list",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.PurchasesProductList51",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[51]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "same ENGINE_GAP class as /events/list: the response's products array is a bare list of NAME STRINGS, not objects (`{\"products\": [\"product_name\", ...]}`), which the engine's declarative array extraction (connsdk.RecordsAt) silently drops rather than wrapping into a one-field record; see docs.md Known limits",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "same ENGINE_GAP class as /events/list: the response's products array is a bare list of NAME STRINGS, not objects (`{\"products\": [\"product_name\", ...]}`), which the engine's declarative array extraction (connsdk.RecordsAt) silently drops rather than wrapping into a one-field record; see docs.md Known limits"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchases/quantity_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/purchases/quantity_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.PurchasesQuantitySeries52",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[52]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-product purchase-quantity analytics time series requiring a product name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-product purchase-quantity analytics time series requiring a product name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchases/revenue_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/purchases/revenue_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.PurchasesRevenueSeries53",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[53]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-product revenue analytics time series requiring a product name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-product revenue analytics time series requiring a product name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Users",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scim/v2/Users",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.ScimV2Users54",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[54]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "SCIM 2.0 identity list is a distinct, separately-authenticated (bearer SCIM token, not the standard Braze API key) protocol for managing Braze DASHBOARD USER accounts, not Braze's own customer/campaign data model; out of scope for this data connector",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "SCIM 2.0 identity list is a distinct, separately-authenticated (bearer SCIM token, not the standard Braze API key) protocol for managing Braze DASHBOARD USER accounts, not Braze's own customer/campaign data model; out of scope for this data connector"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scim/v2/Users",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/scim/v2/Users",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.ScimV2Users55",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[55]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "SCIM 2.0 identity provisioning is a distinct, separately-authenticated (bearer SCIM token, not the standard Braze API key) protocol for managing Braze DASHBOARD USER accounts, not Braze's own customer/campaign data model; out of scope for this data connector",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "SCIM 2.0 identity provisioning is a distinct, separately-authenticated (bearer SCIM token, not the standard Braze API key) protocol for managing Braze DASHBOARD USER accounts, not Braze's own customer/campaign data model; out of scope for this data connector"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Users/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scim/v2/Users/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.ScimV2UsersId56",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[56]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "SCIM 2.0 identity read; same separately-authenticated dashboard-user-provisioning protocol as the SCIM write endpoints, out of scope for this data connector",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "SCIM 2.0 identity read; same separately-authenticated dashboard-user-provisioning protocol as the SCIM write endpoints, out of scope for this data connector"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/scim/v2/Users/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/scim/v2/Users/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.put.ScimV2UsersId57",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[57]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "SCIM 2.0 identity update; same separately-authenticated dashboard-user-provisioning protocol, out of scope for this data connector",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "SCIM 2.0 identity update; same separately-authenticated dashboard-user-provisioning protocol, out of scope for this data connector"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scim/v2/Users/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/scim/v2/Users/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.delete.ScimV2UsersId58",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[58]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "SCIM 2.0 identity deprovisioning; same separately-authenticated dashboard-user-provisioning protocol, out of scope for this data connector",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "SCIM 2.0 identity deprovisioning; same separately-authenticated dashboard-user-provisioning protocol, out of scope for this data connector"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/segments/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "segments"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SegmentsList59",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[59]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[59] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "segments"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "segments"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/details",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/segments/details",
+        "operation": null,
+        "covered_by": {
+          "stream": "segment_details"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SegmentsDetails60",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[60]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[60] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "segment_details"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "segment_details"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/data_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/segments/data_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SegmentsDataSeries61",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[61]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-segment size-over-time analytics time series requiring a segment id already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-segment size-over-time analytics time series requiring a segment id already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sends/data_series",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sends/data_series",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SendsDataSeries62",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[62]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "per-send-id analytics time series requiring a send_id already in hand (send ids are generated at send time, not enumerable via any list endpoint); part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "per-send-id analytics time series requiring a send_id already in hand (send ids are generated at send time, not enumerable via any list endpoint); part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sends/id/create",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/sends/id/create",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.SendsIdCreate63",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[63]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "pre-generates a send_id label for a future campaign trigger send; a naming/bookkeeping helper, not itself a data mutation on any Braze object",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "pre-generates a send_id label for a future campaign trigger send; a naming/bookkeeping helper, not itself a data mutation on any Braze object"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sessions/data_series",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sessions/data_series",
+        "operation": null,
+        "covered_by": {
+          "stream": "sessions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SessionsDataSeries64",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[64]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[64] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "sessions"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "sessions"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms/invalid_phone_numbers",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/sms/invalid_phone_numbers",
+        "operation": null,
+        "covered_by": {
+          "stream": "sms_invalid_phone_numbers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SmsInvalidPhoneNumbers65",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[65]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[65] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "sms_invalid_phone_numbers"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "sms_invalid_phone_numbers"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms/invalid_phone_numbers/remove",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/sms/invalid_phone_numbers/remove",
+        "operation": null,
+        "covered_by": {
+          "write": "remove_sms_invalid_phone_numbers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.SmsInvalidPhoneNumbersRemove66",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[66]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription/status/get",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/subscription/status/get",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SubscriptionStatusGet67",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[67]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single-user subscription-group status lookup keyed by an external_id/email already in hand, with no list/enumeration variant; not a syncable collection stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-user subscription-group status lookup keyed by an external_id/email already in hand, with no list/enumeration variant; not a syncable collection stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription/status/set",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/subscription/status/set",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.SubscriptionStatusSet68",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[68]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single-user, single-subscription-group variant superseded by the v2 batch endpoint (POST /v2/subscription/status/set), which set_subscription_status_v2 covers with the identical effect for any input the v1 shape accepts plus multi-group batching",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-user, single-subscription-group variant superseded by the v2 batch endpoint (POST /v2/subscription/status/set), which set_subscription_status_v2 covers with the identical effect for any input the v1 shape accepts plus multi-group batching"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscription/status/set",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/subscription/status/set",
+        "operation": null,
+        "covered_by": {
+          "write": "set_subscription_status_v2"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.V2SubscriptionStatusSet69",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[69]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription/user/status",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/subscription/user/status",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.SubscriptionUserStatus70",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[70]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single-user subscription status lookup by external_id/email already in hand, with no list/enumeration variant; not a syncable collection stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-user subscription status lookup by external_id/email already in hand, with no list/enumeration variant; not a syncable collection stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/email/info",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/templates/email/info",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.TemplatesEmailInfo71",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[71]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "single email template detail; identical record shape to the email_templates list stream's per-item object plus its own body content, already covered by that stream for sync purposes",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single email template detail; identical record shape to the email_templates list stream's per-item object plus its own body content, already covered by that stream for sync purposes"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/email/list",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/templates/email/list",
+        "operation": null,
+        "covered_by": {
+          "stream": "email_templates"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.get.TemplatesEmailList72",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[72]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[72] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "email_templates"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "email_templates"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/email/create",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/templates/email/create",
+        "operation": null,
+        "covered_by": {
+          "write": "create_email_template"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.TemplatesEmailCreate73",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[73]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/email/update",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/templates/email/update",
+        "operation": null,
+        "covered_by": {
+          "write": "update_email_template"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.TemplatesEmailUpdate74",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[74]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactional/v1/campaigns/{campaign_id}/send",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/transactional/v1/campaigns/{campaign_id}/send",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.TransactionalV1CampaignsCampaignIdSend75",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[75]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "Braze Transactional Messaging is a separately-entitled product surface (its own v1-prefixed API family with its own onboarding) layered on top of standard campaigns, not part of the base messaging surface send_message/trigger writes already cover",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "Braze Transactional Messaging is a separately-entitled product surface (its own v1-prefixed API family with its own onboarding) layered on top of standard campaigns, not part of the base messaging surface send_message/trigger writes already cover"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/alias/new",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/alias/new",
+        "operation": null,
+        "covered_by": {
+          "write": "create_user_alias"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersAliasNew76",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[76]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/alias/update",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/alias/update",
+        "operation": null,
+        "covered_by": {
+          "write": "update_user_alias"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersAliasUpdate77",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[77]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/delete",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/delete",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersDelete78",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[78]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/export/global_control_group",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/export/global_control_group",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersExportGlobalControlGroup79",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[79]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "asynchronous bulk export job kickoff (delivered later to cloud storage), not a synchronous read/write record operation; Pass B breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "asynchronous bulk export job kickoff (delivered later to cloud storage), not a synchronous read/write record operation; Pass B breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/export/ids",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/export/ids",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersExportIds80",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[80]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "asynchronous bulk export job kickoff for a caller-supplied id list, not a synchronous read/write record operation; Pass B breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "asynchronous bulk export job kickoff for a caller-supplied id list, not a synchronous read/write record operation; Pass B breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/export/segment",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/export/segment",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersExportSegment81",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[81]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "asynchronous bulk export job kickoff for an entire segment's membership, not a synchronous read/write record operation; Pass B breadth-vs-cost triage",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "asynchronous bulk export job kickoff for an entire segment's membership, not a synchronous read/write record operation; Pass B breadth-vs-cost triage"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/external_ids/remove",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/external_ids/remove",
+        "operation": null,
+        "covered_by": {
+          "write": "remove_user_external_ids"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersExternalIdsRemove82",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[82]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/external_ids/rename",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/external_ids/rename",
+        "operation": null,
+        "covered_by": {
+          "write": "rename_user_external_ids"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersExternalIdsRename83",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[83]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/identify",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/identify",
+        "operation": null,
+        "covered_by": {
+          "write": "identify_users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersIdentify84",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[84]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/merge",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/merge",
+        "operation": null,
+        "covered_by": {
+          "write": "merge_users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersMerge85",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[85]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/track",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users/track",
+        "operation": null,
+        "covered_by": {
+          "write": "track_users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.UsersTrack86",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[86]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/trigger/send",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/campaigns/trigger/send",
+        "operation": null,
+        "covered_by": {
+          "write": "trigger_campaign_send"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CampaignsTriggerSend87",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[87]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/trigger/schedule/create",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/campaigns/trigger/schedule/create",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CampaignsTriggerScheduleCreate88",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[88]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "creates an asynchronous scheduled API-triggered-campaign job with its own lifecycle, not a plain synchronous data mutation this dialect's fire-once write model fits; trigger_campaign_send (immediate trigger) already covers the core API-triggered-campaign mutation shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "creates an asynchronous scheduled API-triggered-campaign job with its own lifecycle, not a plain synchronous data mutation this dialect's fire-once write model fits; trigger_campaign_send (immediate trigger) already covers the core API-triggered-campaign mutation shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/trigger/schedule/delete",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/campaigns/trigger/schedule/delete",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CampaignsTriggerScheduleDelete89",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[89]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "cancels a job created by the excluded campaigns/trigger/schedule/create; no scheduled job is ever created by this bundle to cancel",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "cancels a job created by the excluded campaigns/trigger/schedule/create; no scheduled job is ever created by this bundle to cancel"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/trigger/schedule/update",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/campaigns/trigger/schedule/update",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CampaignsTriggerScheduleUpdate90",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[90]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "mutates a job created by the excluded campaigns/trigger/schedule/create; no scheduled job is ever created by this bundle to update",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "mutates a job created by the excluded campaigns/trigger/schedule/create; no scheduled job is ever created by this bundle to update"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canvas/trigger/send",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/canvas/trigger/send",
+        "operation": null,
+        "covered_by": {
+          "write": "trigger_canvas_send"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CanvasTriggerSend91",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[91]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canvas/trigger/schedule/create",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/canvas/trigger/schedule/create",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CanvasTriggerScheduleCreate92",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[92]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "creates an asynchronous scheduled API-triggered-Canvas job with its own lifecycle, not a plain synchronous data mutation this dialect's fire-once write model fits; trigger_canvas_send (immediate trigger) already covers the core API-triggered-Canvas mutation shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "creates an asynchronous scheduled API-triggered-Canvas job with its own lifecycle, not a plain synchronous data mutation this dialect's fire-once write model fits; trigger_canvas_send (immediate trigger) already covers the core API-triggered-Canvas mutation shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canvas/trigger/schedule/delete",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/canvas/trigger/schedule/delete",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CanvasTriggerScheduleDelete93",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[93]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "cancels a job created by the excluded canvas/trigger/schedule/create; no scheduled job is ever created by this bundle to cancel",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "cancels a job created by the excluded canvas/trigger/schedule/create; no scheduled job is ever created by this bundle to cancel"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canvas/trigger/schedule/update",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/canvas/trigger/schedule/update",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braze-operation-source-lock.json",
+        "source_id": "braze.rest.post.CanvasTriggerScheduleUpdate94",
+        "source_url": "https://www.braze.com/docs/api/home/",
+        "source_location": "api_surface.json:endpoints[94]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braze",
+          "evidence": "mutates a job created by the excluded canvas/trigger/schedule/create; no scheduled job is ever created by this bundle to update",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "mutates a job created by the excluded canvas/trigger/schedule/create; no scheduled job is ever created by this bundle to update"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braze",
+        "contract": null
+      }
+    }
+  ]
+}

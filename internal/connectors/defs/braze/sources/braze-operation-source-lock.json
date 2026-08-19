@@ -1,0 +1,977 @@
+{
+  "schema_version": 2,
+  "connector": "braze",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://www.braze.com/docs/api/home/",
+    "sha256": "d08404d3078f65b07539b64aab7ba29af6b12ecc21cafb86121259992221371d",
+    "bytes": 337088,
+    "openapi": "public-provider-description",
+    "info_version": "Braze REST API (regional; https://www.braze.com/docs/api/basics/)",
+    "operation_counts": {
+      "DELETE": 4,
+      "GET": 42,
+      "PATCH": 2,
+      "POST": 43,
+      "PUT": 4
+    },
+    "operations": [
+      {
+        "id": "braze.rest.get.CampaignsList0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CampaignsDetails1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CampaignsDataSeries2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/campaigns/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CanvasList3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canvas/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CanvasDetails4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canvas/details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CanvasDataSeries5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canvas/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CanvasDataSummary6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canvas/data_summary",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.Catalogs7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalogs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.Catalogs8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/catalogs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.delete.CatalogsCatalogName9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/catalogs/{catalog_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CatalogsCatalogNameItems10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CatalogsCatalogNameItems11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.put.CatalogsCatalogNameItems12",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.patch.CatalogsCatalogNameItems13",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.delete.CatalogsCatalogNameItems14",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/catalogs/{catalog_name}/items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.CatalogsCatalogNameItemsItemId15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CatalogsCatalogNameItemsItemId16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.put.CatalogsCatalogNameItemsItemId17",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.patch.CatalogsCatalogNameItemsItemId18",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.delete.CatalogsCatalogNameItemsItemId19",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/catalogs/{catalog_name}/items/{item_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.ContentBlocksCreate20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/content_blocks/create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.ContentBlocksInfo21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/content_blocks/info",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.ContentBlocksList22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/content_blocks/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.ContentBlocksUpdate23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/content_blocks/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.EmailBlacklist24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/email/blacklist",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.EmailBlocklist25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/email/blocklist",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.EmailBounceRemove26",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/email/bounce/remove",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.EmailHardBounces27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email/hard_bounces",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.EmailSpamRemove28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/email/spam/remove",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.EmailStatus29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/email/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.EmailUnsubscribes30",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email/unsubscribes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.EventsDataSeries31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/events/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.EventsList32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/events/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.FeedDataSeries33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/feed/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.FeedDetails34",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/feed/details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.FeedList35",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/feed/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.KpiDauDataSeries36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/kpi/dau/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.KpiMauDataSeries37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/kpi/mau/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.KpiNewUsersDataSeries38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/kpi/new_users/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.KpiUninstallsDataSeries39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/kpi/uninstalls/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.MessagesLiveActivityUpdate40",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messages/live_activity/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.MessagesScheduleCreate41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messages/schedule/create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.MessagesScheduleDelete42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messages/schedule/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.MessagesScheduleUpdate43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messages/schedule/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.MessagesScheduledBroadcasts44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/messages/scheduled_broadcasts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.MessagesSend45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/messages/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.PreferenceCenterV146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/preference_center/v1",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.PreferenceCenterV1List47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/preference_center/v1/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.PreferenceCenterV1PreferenceCenterExternalID48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/preference_center/v1/{PreferenceCenterExternalID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.put.PreferenceCenterV1PreferenceCenterExternalID49",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/preference_center/v1/{PreferenceCenterExternalID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.PreferenceCenterV1PreferenceCenterExternalIDUrlUserID50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/preference_center/v1/{PreferenceCenterExternalID}/url/{UserID}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.PurchasesProductList51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/purchases/product_list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.PurchasesQuantitySeries52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/purchases/quantity_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.PurchasesRevenueSeries53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/purchases/revenue_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.ScimV2Users54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scim/v2/Users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.ScimV2Users55",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scim/v2/Users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.ScimV2UsersId56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scim/v2/Users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.put.ScimV2UsersId57",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/scim/v2/Users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.delete.ScimV2UsersId58",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/scim/v2/Users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SegmentsList59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/segments/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SegmentsDetails60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/segments/details",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SegmentsDataSeries61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/segments/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SendsDataSeries62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sends/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.SendsIdCreate63",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sends/id/create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SessionsDataSeries64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sessions/data_series",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SmsInvalidPhoneNumbers65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sms/invalid_phone_numbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.SmsInvalidPhoneNumbersRemove66",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sms/invalid_phone_numbers/remove",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SubscriptionStatusGet67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/subscription/status/get",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.SubscriptionStatusSet68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/subscription/status/set",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.V2SubscriptionStatusSet69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/subscription/status/set",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.SubscriptionUserStatus70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/subscription/user/status",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.TemplatesEmailInfo71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/templates/email/info",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.get.TemplatesEmailList72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/templates/email/list",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.TemplatesEmailCreate73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/templates/email/create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.TemplatesEmailUpdate74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/templates/email/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.TransactionalV1CampaignsCampaignIdSend75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/transactional/v1/campaigns/{campaign_id}/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersAliasNew76",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/alias/new",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersAliasUpdate77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/alias/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersDelete78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersExportGlobalControlGroup79",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/export/global_control_group",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersExportIds80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/export/ids",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersExportSegment81",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/export/segment",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersExternalIdsRemove82",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/external_ids/remove",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersExternalIdsRename83",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/external_ids/rename",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersIdentify84",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/identify",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersMerge85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/merge",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.UsersTrack86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/track",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CampaignsTriggerSend87",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/trigger/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CampaignsTriggerScheduleCreate88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/trigger/schedule/create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CampaignsTriggerScheduleDelete89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/trigger/schedule/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CampaignsTriggerScheduleUpdate90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/campaigns/trigger/schedule/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CanvasTriggerSend91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/canvas/trigger/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CanvasTriggerScheduleCreate92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/canvas/trigger/schedule/create",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CanvasTriggerScheduleDelete93",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/canvas/trigger/schedule/delete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      },
+      {
+        "id": "braze.rest.post.CanvasTriggerScheduleUpdate94",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/canvas/trigger/schedule/update",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "source_url": "https://www.braze.com/docs/api/home/"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 95,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 95
+  }
+}

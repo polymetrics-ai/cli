@@ -1,0 +1,73 @@
+{
+  "schema_version": 2,
+  "connector": "copper",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developer.copper.com/",
+    "sha256": "e9019cf4dc1c8e8aa1bf17ccaf1855d405602e8d0ef26b1d32dd25ebe59f3a68",
+    "bytes": 71327,
+    "openapi": "public-provider-description",
+    "info_version": "Copper legacy connector hook surface",
+    "operation_counts": {
+      "HOOK": 5
+    },
+    "operations": [
+      {
+        "id": "copper.rest.hook.InternalConnectorsCopperPeopleReadPath0",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/copper people read path",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developer.copper.com/"
+      },
+      {
+        "id": "copper.rest.hook.InternalConnectorsCopperCompaniesReadPath1",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/copper companies read path",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developer.copper.com/"
+      },
+      {
+        "id": "copper.rest.hook.InternalConnectorsCopperOpportunitiesReadPath2",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/copper opportunities read path",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developer.copper.com/"
+      },
+      {
+        "id": "copper.rest.hook.InternalConnectorsCopperLeadsReadPath3",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/copper leads read path",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developer.copper.com/"
+      },
+      {
+        "id": "copper.rest.hook.InternalConnectorsCopperTasksReadPath4",
+        "protocol": "rest",
+        "method": "HOOK",
+        "path": "internal/connectors/copper tasks read path",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developer.copper.com/"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 5,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 5
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 2,
+  "connector": "intercom",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+    "sha256": "2d60b712636a12c61f0a475b89ce7e3530ffb682ec48b9a060ddb77a553f7721",
+    "bytes": 617616,
+    "openapi": "public-provider-description",
+    "info_version": "Intercom REST API (https://api.intercom.io)",
+    "operation_counts": {
+      "DELETE": 1,
+      "GET": 6,
+      "POST": 2,
+      "PUT": 1
+    },
+    "operations": [
+      {
+        "id": "intercom.rest.get.Contacts0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.get.Companies1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/companies",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.get.Conversations2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/conversations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.get.Admins3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/admins",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.get.Tags4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.post.Contacts5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.put.ContactsId6",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/contacts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.post.ConversationsIdReply7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/conversations/{id}/reply",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.delete.ContactsId8",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/contacts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      },
+      {
+        "id": "intercom.rest.get.Me9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/me",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 10,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 10
+  }
+}

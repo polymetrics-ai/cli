@@ -1,0 +1,144 @@
+{
+  "schema_version": 2,
+  "connector": "salesloft",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.salesloft.com/docs/api/",
+    "sha256": "c900bd9b79f2caad4aa1e8902171aef142784da0495b46ba486a0e36fe7f1d54",
+    "bytes": 84498,
+    "openapi": "public-provider-description",
+    "info_version": "Salesloft REST API v2 (https://api.salesloft.com/v2)",
+    "operation_counts": {
+      "GET": 10,
+      "POST": 2
+    },
+    "operations": [
+      {
+        "id": "salesloft.rest.get.V2People0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/people",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Accounts1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Cadences2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/cadences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Users3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Emails4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/emails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.post.OauthToken5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/oauth/token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Calls6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Meetings7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/meetings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Notes8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/notes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2Tasks9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/tasks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.get.V2ActionItems10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/action_items",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      },
+      {
+        "id": "salesloft.rest.post.V2People11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/people",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://developers.salesloft.com/docs/api/"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 12,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 12
+  }
+}

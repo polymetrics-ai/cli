@@ -1,0 +1,124 @@
+{
+  "schema_version": 2,
+  "connector": "freshdesk",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.freshdesk.com/api/#change_log",
+    "sha256": "e70f8e31ed12141e248ddd06e753bb951c95da3a4ec16af3763b8d9363ab7e29",
+    "bytes": 3228889,
+    "openapi": "public-provider-description",
+    "info_version": "Freshdesk REST API v2",
+    "operation_counts": {
+      "GET": 9,
+      "POST": 1
+    },
+    "operations": [
+      {
+        "id": "freshdesk.rest.get.Tickets0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tickets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.Contacts1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contacts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.Companies2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/companies",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.Agents3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/agents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.Groups4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.TicketsIdConversations5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tickets/{id}/conversations",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.TicketsIdTimeEntries6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tickets/{id}/time_entries",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.SolutionsCategories7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/solutions/categories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.get.CannedResponseFolders8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/canned-response-folders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      },
+      {
+        "id": "freshdesk.rest.post.Tickets9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tickets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://developers.freshdesk.com/api/#change_log"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 10,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 10
+  }
+}

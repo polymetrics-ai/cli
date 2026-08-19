@@ -1,0 +1,115 @@
+{
+  "schema_version": 2,
+  "connector": "klaviyo",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+    "sha256": "f307aca9ee2364f956ccd5c2b7ec1ed5664633c89eef04e731a3601449f39f07",
+    "bytes": 1624646,
+    "openapi": "public-provider-description",
+    "info_version": "Klaviyo REST (JSON:API) API (https://a.klaviyo.com/api)",
+    "operation_counts": {
+      "*": 1,
+      "GET": 7,
+      "POST/PATCH/DELETE": 1
+    },
+    "operations": [
+      {
+        "id": "klaviyo.rest.get.ApiProfiles0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/profiles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest.get.ApiEvents1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest.get.ApiCampaigns2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/campaigns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest.get.ApiLists3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/lists",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest.get.ApiMetrics4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest.get.ApiSegments5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/segments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest.get.ApiAccounts6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest._.ApiFlowsApiTemplatesApiCatalogsApiCouponsApiImagesApiReviewsApiFormsApiTags7",
+        "protocol": "rest",
+        "method": "*",
+        "path": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      },
+      {
+        "id": "klaviyo.rest.post_patch_delete.AllKlaviyoMutationEndpoints8",
+        "protocol": "rest",
+        "method": "POST/PATCH/DELETE",
+        "path": "all Klaviyo mutation endpoints",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 9,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 9
+  }
+}

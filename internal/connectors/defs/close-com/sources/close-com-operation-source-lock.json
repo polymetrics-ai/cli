@@ -1,0 +1,2996 @@
+{
+  "schema_version": 2,
+  "connector": "close-com",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://developer.close.com/",
+    "sha256": "b51eb606e41383c9caf7b10bd7d46e7a59493cf8e0d4fbace468ddd23a717c00",
+    "bytes": 468612,
+    "openapi": "public-provider-description",
+    "info_version": "Close REST API v1 (https://api.close.com/api/v1)",
+    "operation_counts": {
+      "DELETE": 51,
+      "GET": 135,
+      "POST": 64,
+      "PUT": 47
+    },
+    "operations": [
+      {
+        "id": "close-com.rest.get.Activity0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityCall1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/call/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityCall2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/call/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityCallId3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/call/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ActivityCallId4",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/activity/call/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityCallId5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/call/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityCreated6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/created/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityCreatedId7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/created/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityCustom8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/custom/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityCustom9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/custom/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityCustomId10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/custom/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ActivityCustomId11",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/activity/custom/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityCustomId12",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/custom/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityEmail13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/email/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityEmail14",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/email/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityEmailId15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/email/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ActivityEmailId16",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/activity/email/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityEmailId17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/email/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityEmailthread18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/emailthread/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityEmailthreadId19",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/emailthread/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityEmailthreadId20",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/emailthread/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityFormSubmission21",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/form_submission/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityFormSubmissionId22",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/form_submission/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityFormSubmissionId23",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/form_submission/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityLeadMerge24",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/lead_merge/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityLeadMergeId25",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/lead_merge/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityMeeting26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/meeting/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityMeetingId27",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/meeting/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ActivityMeetingId28",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/activity/meeting/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityMeetingId29",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/meeting/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityMeetingIdIntegration30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/meeting/{id}/integration/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityNote31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/note/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityNote32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/note/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityNoteId33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/note/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ActivityNoteId34",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/activity/note/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityNoteId35",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/note/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivitySms36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/sms/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivitySms37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/sms/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivitySmsId38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/sms/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ActivitySmsId39",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/activity/sms/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivitySmsId40",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/sms/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityStatusChangeLead41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/status_change/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityStatusChangeLead42",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/status_change/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityStatusChangeLeadId43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/status_change/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityStatusChangeLeadId44",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/status_change/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityStatusChangeOpportunity45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/status_change/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityStatusChangeOpportunity46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/status_change/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityStatusChangeOpportunityId47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/status_change/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityStatusChangeOpportunityId48",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/status_change/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityTaskCompleted49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/task_completed/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityTaskCompletedId50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/task_completed/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityTaskCompletedId51",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/task_completed/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityWhatsappMessage52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/whatsapp_message/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ActivityWhatsappMessage53",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/activity/whatsapp_message/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ActivityWhatsappMessageId54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/activity/whatsapp_message/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ActivityWhatsappMessageId55",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/activity/whatsapp_message/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ActivityWhatsappMessageId56",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/activity/whatsapp_message/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BlockedPhoneNumber57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/blocked_phone_number/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.BlockedPhoneNumber58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/blocked_phone_number/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BlockedPhoneNumberSettings59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/blocked_phone_number/settings/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.BlockedPhoneNumberSettings60",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/blocked_phone_number/settings/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BlockedPhoneNumberId61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/blocked_phone_number/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.BlockedPhoneNumberId62",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/blocked_phone_number/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.BlockedPhoneNumberId63",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/blocked_phone_number/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionDelete64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/delete/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.BulkActionDelete65",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bulk_action/delete/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionDeleteId66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/delete/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionEdit67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/edit/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.BulkActionEdit68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bulk_action/edit/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionEditId69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/edit/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionEmail70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/email/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.BulkActionEmail71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bulk_action/email/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionEmailId72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/email/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionSequenceSubscription73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/sequence_subscription/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.BulkActionSequenceSubscription74",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/bulk_action/sequence_subscription/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.BulkActionSequenceSubscriptionId75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/bulk_action/sequence_subscription/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Comment76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/comment/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Comment77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/comment/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CommentId78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/comment/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CommentId79",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/comment/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CommentId80",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/comment/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CommentThread81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/comment_thread/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CommentThreadId82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/comment_thread/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ConnectedAccount83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/connected_account/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ConnectedAccountId84",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/connected_account/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Contact85",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contact/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Contact86",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/contact/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ContactId87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/contact/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.ContactId88",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/contact/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.ContactId89",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/contact/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomActivity90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_activity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomActivity91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_activity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomActivityId92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_activity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomActivityId93",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_activity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomActivityId94",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_activity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldActivity95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/activity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomFieldActivity96",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/activity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldActivityId97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/activity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldActivityId98",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field/activity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomFieldActivityId99",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/activity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldContact100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/contact/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomFieldContact101",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/contact/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldContactId102",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/contact/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldContactId103",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field/contact/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomFieldContactId104",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/contact/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldCustomObjectType105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/custom_object_type/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomFieldCustomObjectType106",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/custom_object_type/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldCustomObjectTypeId107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/custom_object_type/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldCustomObjectTypeId108",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field/custom_object_type/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomFieldCustomObjectTypeId109",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/custom_object_type/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldLead110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomFieldLead111",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldLeadId112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldLeadId113",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomFieldLeadId114",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldOpportunity115",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomFieldOpportunity116",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldOpportunityId117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldOpportunityId118",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomFieldOpportunityId119",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldShared120",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/shared/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomFieldShared121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/shared/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldSharedId122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/shared/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldSharedId123",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field/shared/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomFieldSharedId124",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/shared/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomFieldSharedScfIdAssociation125",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_field/shared/{scf_id}/association/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldSharedScfIdAssociationObjectType126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldSharedScfIdAssociationObjectType127",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomFieldSharedScfIdAssociationObjectType128",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomFieldSchemaObjectType129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_field_schema/{object_type}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomFieldSchemaObjectType130",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_field_schema/{object_type}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomObject131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_object/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomObject132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_object/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomObjectId133",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_object/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomObjectId134",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_object/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomObjectId135",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_object/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomObjectType136",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_object_type/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.CustomObjectType137",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_object_type/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.CustomObjectTypeId138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_object_type/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.CustomObjectTypeId139",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_object_type/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.CustomObjectTypeId140",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_object_type/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Dialer141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dialer/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.DialerId142",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/dialer/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.EmailTemplate143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email_template/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.EmailTemplate144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/email_template/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.EmailTemplateId145",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email_template/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.EmailTemplateId146",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/email_template/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.EmailTemplateId147",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/email_template/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.EmailTemplateIdRender148",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/email_template/{id}/render/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.EnrichField149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/enrich_field/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Event150",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.EventId151",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/event/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Export152",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/export/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ExportLead153",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/export/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ExportLead154",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/export/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ExportLeadId155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/export/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ExportOpportunity156",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/export/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ExportOpportunity157",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/export/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ExportOpportunityId158",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/export/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ExportId159",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/export/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[159]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.FilesUpload160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/files/upload/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[160]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Form161",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/form/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[161]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.FormId162",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/form/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[162]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Group163",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/group/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[163]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Group164",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/group/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[164]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.GroupGroupIdMember165",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/group/{group_id}/member/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[165]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.GroupGroupIdMemberUserId166",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/group/{group_id}/member/{user_id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[166]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.GroupId167",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/group/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[167]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.GroupId168",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/group/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[168]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.GroupId169",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/group/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[169]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.IntegrationLink170",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/integration_link/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[170]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.IntegrationLink171",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/integration_link/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[171]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.IntegrationLinkId172",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/integration_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[172]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.IntegrationLinkId173",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/integration_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[173]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.IntegrationLinkId174",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/integration_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[174]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Lead175",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[175]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Lead176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[176]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.LeadMerge177",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/lead/merge/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[177]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.LeadId178",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[178]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.LeadId179",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[179]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.LeadId180",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[180]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Me181",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/me/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[181]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Membership182",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/membership/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[182]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.Membership183",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/membership/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[183]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.MembershipId184",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/membership/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[184]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.MembershipId185",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/membership/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[185]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.MembershipIdPinnedViews186",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/membership/{id}/pinned_views/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[186]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.MembershipIdPinnedViews187",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/membership/{id}/pinned_views/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[187]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Opportunity188",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[188]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Opportunity189",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[189]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.OpportunityId190",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[190]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.OpportunityId191",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[191]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.OpportunityId192",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[192]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.OrganizationId193",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[193]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.OrganizationId194",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/organization/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[194]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Outcome195",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outcome/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[195]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Outcome196",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/outcome/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[196]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.OutcomeId197",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/outcome/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[197]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.OutcomeId198",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/outcome/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[198]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.OutcomeId199",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/outcome/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[199]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.PhoneNumber200",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/phone_number/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[200]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.PhoneNumberRequestInternal201",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/phone_number/request/internal/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[201]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.PhoneNumberId202",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/phone_number/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[202]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.PhoneNumberId203",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/phone_number/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[203]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.PhoneNumberId204",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/phone_number/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[204]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Pipeline205",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pipeline/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[205]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Pipeline206",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/pipeline/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[206]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.PipelineId207",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/pipeline/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[207]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.PipelineId208",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/pipeline/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[208]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.PipelineId209",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/pipeline/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[209]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Playbook210",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/playbook/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[210]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Playbook211",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/playbook/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[211]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.PlaybookId212",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/playbook/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[212]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.PlaybookId213",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/playbook/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[213]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.PlaybookId214",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/playbook/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[214]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.PlaybookIdArchive215",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/playbook/{id}/archive/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[215]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.PlaybookIdUnarchive216",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/playbook/{id}/unarchive/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[216]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ReportActivity217",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/report/activity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[217]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ReportActivityMetrics218",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/report/activity/metrics/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[218]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ReportCustomOrgId219",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/report/custom/{org_id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[219]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ReportFunnelOpportunityStages220",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/report/funnel/opportunity/stages/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[220]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.ReportFunnelOpportunityTotals221",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/report/funnel/opportunity/totals/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[221]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ReportSentEmailsOrgId222",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/report/sent_emails/{org_id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[222]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ReportStatusesLeadOrgId223",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/report/statuses/lead/{org_id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[223]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.ReportStatusesOpportunityOrgId224",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/report/statuses/opportunity/{org_id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[224]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Role225",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/role/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[225]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Role226",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/role/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[226]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.RoleId227",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/role/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[227]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.RoleId228",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/role/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[228]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.RoleId229",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/role/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[229]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SavedSearch230",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/saved_search/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[230]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SavedSearch231",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/saved_search/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[231]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SavedSearchId232",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/saved_search/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[232]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.SavedSearchId233",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/saved_search/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[233]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SavedSearchId234",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/saved_search/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[234]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SchedulingLink235",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduling_link/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[235]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SchedulingLink236",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scheduling_link/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[236]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SchedulingLinkIntegration237",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scheduling_link/integration/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[237]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SchedulingLinkIntegrationSourceId238",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/scheduling_link/integration/{source_id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[238]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SchedulingLinkId239",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scheduling_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[239]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.SchedulingLinkId240",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/scheduling_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[240]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SchedulingLinkId241",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/scheduling_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[241]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SendAs242",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/send_as/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[242]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SendAs243",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/send_as/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[243]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SendAs244",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/send_as/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[244]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SendAsBulk245",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/send_as/bulk/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[245]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SendAsId246",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/send_as/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[246]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SendAsId247",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/send_as/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[247]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Sequence248",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sequence/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[248]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Sequence249",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[249]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SequenceId250",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sequence/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[250]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.SequenceId251",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/sequence/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[251]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SequenceId252",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sequence/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[252]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SequenceSubscription253",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sequence_subscription/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[253]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SequenceSubscription254",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sequence_subscription/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[254]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SequenceSubscriptionId255",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sequence_subscription/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[255]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.SequenceSubscriptionId256",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/sequence_subscription/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[256]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SequenceSubscriptionId257",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sequence_subscription/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[257]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SharedSchedulingLink258",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shared_scheduling_link/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[258]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SharedSchedulingLink259",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shared_scheduling_link/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[259]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SharedSchedulingLinkId260",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/shared_scheduling_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[260]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.SharedSchedulingLinkId261",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/shared_scheduling_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[261]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SharedSchedulingLinkId262",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/shared_scheduling_link/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[262]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SharedSchedulingLinkAssociation263",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shared_scheduling_link_association/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[263]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SharedSchedulingLinkAssociationUnmap264",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/shared_scheduling_link_association/unmap/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[264]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SmsTemplate265",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sms_template/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[265]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.SmsTemplate266",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sms_template/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[266]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.SmsTemplateId267",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sms_template/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[267]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.SmsTemplateId268",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/sms_template/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[268]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.SmsTemplateId269",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sms_template/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[269]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.StatusLead270",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/status/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[270]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.StatusLead271",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/status/lead/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[271]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.StatusLeadId272",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/status/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[272]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.StatusLeadId273",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/status/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[273]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.StatusLeadId274",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/status/lead/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[274]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.StatusOpportunity275",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/status/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[275]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.StatusOpportunity276",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/status/opportunity/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[276]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.StatusOpportunityId277",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/status/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[277]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.StatusOpportunityId278",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/status/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[278]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.StatusOpportunityId279",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/status/opportunity/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[279]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Task280",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/task/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[280]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Task281",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/task/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[281]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.Task282",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/task/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[282]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.TaskId283",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/task/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[283]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.TaskId284",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/task/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[284]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.TaskId285",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/task/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[285]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.UnsubscribeEmail286",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/unsubscribe/email/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[286]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.UnsubscribeEmail287",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/unsubscribe/email/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[287]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.UnsubscribeEmailEmailAddress288",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/unsubscribe/email/{email_address}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[288]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.User289",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[289]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.UserAvailability290",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/availability/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[290]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.UserId291",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[291]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.Webhook292",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[292]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.post.Webhook293",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhook/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[293]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.get.WebhookId294",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhook/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[294]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.put.WebhookId295",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/webhook/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[295]",
+        "source_url": "https://developer.close.com/"
+      },
+      {
+        "id": "close-com.rest.delete.WebhookId296",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/webhook/{id}/",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[296]",
+        "source_url": "https://developer.close.com/"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 297,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 297
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "connector": "copper",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/copper-operation-source-lock.json",
+    "source_url": "https://developer.copper.com/",
+    "source_sha256": "e9019cf4dc1c8e8aa1bf17ccaf1855d405602e8d0ef26b1d32dd25ebe59f3a68",
+    "source_bytes": 71327,
+    "source_operation_count": 5
+  },
+  "summary": {
+    "api_surface_rows": 5,
+    "exact_source_rows": 5,
+    "declared_operations": 5,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 100,
+    "disabled_operations": 0,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 0
+      },
+      {
+        "key": "direct_write",
+        "count": 0
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0
+      }
+    ],
+    "rejected_by_reason": [],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-copper",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/copper/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-copper",
+      "sync-transport-source-definition-copper"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-copper",
+        "count": 0
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper people read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/copper people read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "people"
+        }
+      },
+      "source": {
+        "source_lock": "sources/copper-operation-source-lock.json",
+        "source_id": "copper.rest.hook.InternalConnectorsCopperPeopleReadPath0",
+        "source_url": "https://developer.copper.com/",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "people"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "people"
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper companies read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/copper companies read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "companies"
+        }
+      },
+      "source": {
+        "source_lock": "sources/copper-operation-source-lock.json",
+        "source_id": "copper.rest.hook.InternalConnectorsCopperCompaniesReadPath1",
+        "source_url": "https://developer.copper.com/",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "companies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "companies"
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper opportunities read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/copper opportunities read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "opportunities"
+        }
+      },
+      "source": {
+        "source_lock": "sources/copper-operation-source-lock.json",
+        "source_id": "copper.rest.hook.InternalConnectorsCopperOpportunitiesReadPath2",
+        "source_url": "https://developer.copper.com/",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "opportunities"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "opportunities"
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper leads read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/copper leads read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "leads"
+        }
+      },
+      "source": {
+        "source_lock": "sources/copper-operation-source-lock.json",
+        "source_id": "copper.rest.hook.InternalConnectorsCopperLeadsReadPath3",
+        "source_url": "https://developer.copper.com/",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "leads"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "leads"
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper tasks read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/copper tasks read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "tasks"
+        }
+      },
+      "source": {
+        "source_lock": "sources/copper-operation-source-lock.json",
+        "source_id": "copper.rest.hook.InternalConnectorsCopperTasksReadPath4",
+        "source_url": "https://developer.copper.com/",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "tasks"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "tasks"
+        }
+      }
+    }
+  ]
+}

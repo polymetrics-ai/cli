@@ -1,0 +1,558 @@
+{
+  "schema_version": 1,
+  "connector": "salesloft",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/salesloft-operation-source-lock.json",
+    "source_url": "https://developers.salesloft.com/docs/api/",
+    "source_sha256": "c900bd9b79f2caad4aa1e8902171aef142784da0495b46ba486a0e36fe7f1d54",
+    "source_bytes": 84498,
+    "source_operation_count": 12
+  },
+  "summary": {
+    "api_surface_rows": 12,
+    "exact_source_rows": 12,
+    "declared_operations": 12,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 41.67,
+    "disabled_operations": 7,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 5
+      },
+      {
+        "key": "direct_write",
+        "count": 2
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 7
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-salesloft",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/salesloft/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-salesloft",
+      "sync-transport-source-definition-salesloft"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-salesloft",
+        "count": 7
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/v2/people",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/people",
+        "operation": null,
+        "covered_by": {
+          "stream": "people"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2People0",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/salesloft/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "people"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "people"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/accounts",
+        "operation": null,
+        "covered_by": {
+          "stream": "accounts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Accounts1",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/salesloft/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "accounts"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "accounts"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cadences",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/cadences",
+        "operation": null,
+        "covered_by": {
+          "stream": "cadences"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Cadences2",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/salesloft/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "cadences"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "cadences"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/users",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Users3",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/salesloft/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "users"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "users"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/emails",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/emails",
+        "operation": null,
+        "covered_by": {
+          "stream": "emails"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Emails4",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/salesloft/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "emails"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "emails"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/token",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/oauth/token",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.post.OauthToken5",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-salesloft",
+          "evidence": "OAuth2 refresh-token exchange, consumed internally by the salesloft AuthHook, not a syncable object stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "OAuth2 refresh-token exchange, consumed internally by the salesloft AuthHook, not a syncable object stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-salesloft",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/calls",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/calls",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Calls6",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-salesloft",
+          "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-salesloft",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/meetings",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/meetings",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Meetings7",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-salesloft",
+          "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-salesloft",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/notes",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/notes",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Notes8",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-salesloft",
+          "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-salesloft",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/tasks",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2Tasks9",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-salesloft",
+          "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-salesloft",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/action_items",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v2/action_items",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.get.V2ActionItems10",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-salesloft",
+          "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-salesloft",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/people",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v2/people",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/salesloft-operation-source-lock.json",
+        "source_id": "salesloft.rest.post.V2People11",
+        "source_url": "https://developers.salesloft.com/docs/api/",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-salesloft",
+          "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented by legacy internal/connectors/salesloft; capability expansion"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-salesloft",
+        "contract": null
+      }
+    }
+  ]
+}

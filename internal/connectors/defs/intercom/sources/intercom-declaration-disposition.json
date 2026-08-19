@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "connector": "intercom",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/intercom-operation-source-lock.json",
+    "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+    "source_sha256": "2d60b712636a12c61f0a475b89ce7e3530ffb682ec48b9a060ddb77a553f7721",
+    "source_bytes": 617616,
+    "source_operation_count": 10
+  },
+  "summary": {
+    "api_surface_rows": 10,
+    "exact_source_rows": 10,
+    "declared_operations": 10,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 50,
+    "disabled_operations": 5,
+    "documented_deletes": 1,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 1
+      },
+      {
+        "key": "direct_write",
+        "count": 4
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 5
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-intercom",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/intercom/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-intercom",
+      "sync-transport-source-definition-intercom"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-intercom",
+        "count": 5
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/contacts",
+        "operation": null,
+        "covered_by": {
+          "stream": "contacts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.get.Contacts0",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "contacts"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "contacts"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/companies",
+        "operation": null,
+        "covered_by": {
+          "stream": "companies"
+        }
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.get.Companies1",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "companies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "companies"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/conversations",
+        "operation": null,
+        "covered_by": {
+          "stream": "conversations"
+        }
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.get.Conversations2",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "conversations"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "conversations"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/admins",
+        "operation": null,
+        "covered_by": {
+          "stream": "admins"
+        }
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.get.Admins3",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "admins"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "admins"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/tags",
+        "operation": null,
+        "covered_by": {
+          "stream": "tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.get.Tags4",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "tags"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "tags"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/contacts",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.post.Contacts5",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-intercom",
+          "evidence": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-intercom",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/contacts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.put.ContactsId6",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-intercom",
+          "evidence": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-intercom",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{id}/reply",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/conversations/{id}/reply",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.post.ConversationsIdReply7",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-intercom",
+          "evidence": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-intercom",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/contacts/{id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.delete.ContactsId8",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-intercom",
+          "evidence": "destructive contact deletion, not a syncable read",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "destructive contact deletion, not a syncable read"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-intercom",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/me",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/intercom-operation-source-lock.json",
+        "source_id": "intercom.rest.get.Me9",
+        "source_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-intercom",
+          "evidence": "identical account-identity info to /admins; check uses /admins instead",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "identical account-identity info to /admins; check uses /admins instead"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-intercom",
+        "contract": null
+      }
+    }
+  ]
+}

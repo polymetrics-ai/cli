@@ -1,0 +1,1616 @@
+{
+  "schema_version": 2,
+  "connector": "customer-io",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://docs.customer.io/files/journeys-app.json",
+    "sha256": "530247ec5c40de4c6dd62f2154e952b2e99184a9bf60243e44503984b8182f6d",
+    "bytes": 10503986,
+    "openapi": "public-provider-description",
+    "info_version": "Customer.io App API v1 (https://api.customer.io/v1, or https://api-eu.customer.io/v1 for the EU region)",
+    "operation_counts": {
+      "DELETE": 14,
+      "GET": 95,
+      "POST": 31,
+      "PUT": 19
+    },
+    "operations": [
+      {
+        "id": "customer-io.rest.get.V1Campaigns0",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[0]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Newsletters1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[1]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Segments2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/segments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[2]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Broadcasts3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[3]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Activities4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/activities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[4]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Messages5",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[5]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Exports6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/exports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[6]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Transactional7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transactional",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[7]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ObjectTypes8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/object_types",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[8]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ReportingWebhooks9",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/reporting_webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[9]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SenderIdentities10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/sender_identities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[10]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Snippets11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/snippets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[11]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SubscriptionChannels12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/subscription_channels",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[12]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SubscriptionTopics13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/subscription_topics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[13]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Workspaces14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/workspaces",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[14]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Collections15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/collections",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[15]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1Snippets16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/snippets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[16]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1Snippets17",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/snippets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[17]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1SnippetsSnippetName18",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/snippets/{snippet_name}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[18]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1ReportingWebhooks19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/reporting_webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[19]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1ReportingWebhooksWebhookId20",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/reporting_webhooks/{webhook_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[20]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1ReportingWebhooksWebhookId21",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/reporting_webhooks/{webhook_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[21]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1Segments22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/segments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[22]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1SegmentsSegmentId23",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/segments/{segment_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[23]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1SendEmail24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/send/email",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[24]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1CampaignsBroadcastIdTriggers25",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/campaigns/{broadcast_id}/triggers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[25]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Assets26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/assets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[26]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1AssetsFiles27",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/assets/files",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[27]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1AssetsFilesId28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/assets/files/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[28]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1AssetsFilesId29",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/assets/files/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[29]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1AssetsFilesId30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/assets/files/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[30]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1AssetsFolders31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/assets/folders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[31]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1AssetsFolders32",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/assets/folders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[32]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1AssetsFoldersId33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/assets/folders/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[33]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1AssetsFoldersId34",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/assets/folders/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[34]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1AssetsFoldersId35",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/assets/folders/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[35]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastId36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[36]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdActions37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[37]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdActionsActionId38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[38]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1BroadcastsBroadcastIdActionsActionId39",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[39]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdActionsActionIdLanguageLanguage40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[40]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1BroadcastsBroadcastIdActionsActionIdLanguageLanguage41",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[41]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdActionsActionIdMetrics42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[42]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdActionsActionIdMetricsLinks43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[43]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdMessages44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[44]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdMetrics45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[45]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdMetricsLinks46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/metrics/links",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[46]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1BroadcastsBroadcastIdTriggers47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/triggers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[47]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsBroadcastIdTriggersTriggerId48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[48]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsBroadcastIdTriggersTriggerIdErrors49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[49]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignId50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[50]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdActions51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[51]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdActionsActionId52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[52]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1CampaignsCampaignIdActionsActionId53",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[53]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdActionsActionIdLanguageLanguage54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[54]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1CampaignsCampaignIdActionsActionIdLanguageLanguage55",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[55]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdActionsActionIdMetrics56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[56]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdActionsActionIdMetricsLinks57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[57]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdJourneyMetrics58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/journey_metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[58]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdMessages59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[59]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdMetrics60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[60]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CampaignsCampaignIdMetricsLinks61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/metrics/links",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[61]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1Collections62",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/collections",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[62]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CollectionsCollectionId63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/collections/{collection_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[63]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1CollectionsCollectionId64",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/collections/{collection_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[64]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1CollectionsCollectionId65",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/collections/{collection_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[65]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CollectionsCollectionIdContent66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/collections/{collection_id}/content",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[66]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1CollectionsCollectionIdContent67",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/collections/{collection_id}/content",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[67]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1Customers68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[68]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1Customers69",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[69]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1CustomersAttributes70",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/customers/attributes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[70]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CustomersCustomerIdActivities71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/activities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[71]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CustomersCustomerIdAttributes72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/attributes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[72]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CustomersCustomerIdMessages73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[73]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CustomersCustomerIdRelationships74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/relationships",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[74]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CustomersCustomerIdSegments75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/segments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[75]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1CustomersCustomerIdSubscriptionPreferences76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/subscription_preferences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[76]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1DataIndexAttributes77",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/data_index/attributes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[77]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1DataIndexEvents78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/data_index/events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[78]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioComponents79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/components",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[79]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1DesignStudioComponents80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/design_studio/components",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[80]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioComponentsId81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/components/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[81]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1DesignStudioComponentsId82",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/design_studio/components/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[82]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1DesignStudioComponentsId83",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/design_studio/components/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[83]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioEmails84",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/emails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[84]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1DesignStudioEmails85",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/design_studio/emails",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[85]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioEmailsId86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/emails/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[86]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1DesignStudioEmailsId87",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/design_studio/emails/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[87]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1DesignStudioEmailsId88",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/design_studio/emails/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[88]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioEmailsIdLanguages89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/emails/{id}/languages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[89]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1DesignStudioEmailsIdLanguages90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/design_studio/emails/{id}/languages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[90]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioEmailsIdLanguagesLanguage91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/emails/{id}/languages/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[91]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1DesignStudioEmailsIdLanguagesLanguage92",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/design_studio/emails/{id}/languages/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[92]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1DesignStudioEmailsIdLanguagesLanguage93",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/design_studio/emails/{id}/languages/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[93]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioFolders94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/folders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[94]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1DesignStudioFolders95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/design_studio/folders",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[95]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1DesignStudioFoldersId96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/design_studio/folders/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[96]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1DesignStudioFoldersId97",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/design_studio/folders/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[97]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1DesignStudioFoldersId98",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/design_studio/folders/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[98]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1EspDomainsDomainNameSuppressionSuppressionType99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/esp/domains/{domain_name}/suppression/{suppression_type}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[99]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1EspSearchSuppressionEmailAddress100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/esp/search_suppression/{email_address}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[100]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1EspSuppressionSuppressionType101",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/esp/suppression/{suppression_type}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[101]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1EspSuppressionSuppressionTypeEmailAddress102",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[102]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1EspSuppressionSuppressionTypeEmailAddress103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[103]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1ExportsCustomers104",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/exports/customers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[104]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1ExportsDeliveries105",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/exports/deliveries",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[105]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ExportsExportId106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/exports/{export_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[106]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ExportsExportIdDownload107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/exports/{export_id}/download",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[107]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1Imports108",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/imports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[108]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ImportsImportId109",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/imports/{import_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[109]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1InfoIpAddresses110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/info/ip_addresses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[110]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1MessagesMessageId111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/messages/{message_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[111]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1MessagesMessageIdArchivedMessage112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/messages/{message_id}/archived_message",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[112]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1Newsletters113",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/newsletters",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[113]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterId114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[114]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1NewslettersNewsletterId115",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/newsletters/{newsletter_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[115]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdContents116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[116]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdContentsContentId117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[117]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1NewslettersNewsletterIdContentsContentId118",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[118]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdContentsContentIdMetrics119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[119]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdContentsContentIdMetricsLinks120",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[120]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1NewslettersNewsletterIdLanguage121",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/language",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[121]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdLanguageLanguage122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[122]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1NewslettersNewsletterIdLanguageLanguage123",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[123]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1NewslettersNewsletterIdLanguageLanguage124",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[124]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdMessages125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[125]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdMetrics126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[126]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdMetricsLinks127",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/metrics/links",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[127]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1NewslettersNewsletterIdSchedule128",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/schedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[128]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1NewslettersNewsletterIdSend129",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/send",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[129]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1NewslettersNewsletterIdTestGroupTestGroupIdLanguage130",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[130]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdTestGroupTestGroupIdLanguageLanguage131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[131]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1NewslettersNewsletterIdTestGroupTestGroupIdLanguageLanguage132",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[132]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.delete.V1NewslettersNewsletterIdTestGroupTestGroupIdLanguageLanguage133",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[133]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1NewslettersNewsletterIdTestGroups134",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/test_groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[134]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1NewslettersNewsletterIdTestGroups135",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/test_groups",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[135]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1Objects136",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/objects",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[136]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ObjectsObjectTypeIdObjectIdAttributes137",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/objects/{object_type_id}/{object_id}/attributes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[137]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ObjectsObjectTypeIdObjectIdRelationships138",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/objects/{object_type_id}/{object_id}/relationships",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[138]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1ReportingWebhooksWebhookId139",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/reporting_webhooks/{webhook_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[139]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SegmentsSegmentId140",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[140]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SegmentsSegmentIdCustomerCount141",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}/customer_count",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[141]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SegmentsSegmentIdMembership142",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}/membership",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[142]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SegmentsSegmentIdUsedBy143",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}/used_by",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[143]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1SendInApp144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/send/in_app",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[144]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1SendInboxMessage145",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/send/inbox_message",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[145]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1SendPush146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/send/push",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[146]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.post.V1SendSms147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/send/sms",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[147]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SenderIdentitiesSenderId148",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/sender_identities/{sender_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[148]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SenderIdentitiesSenderIdUsedBy149",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/sender_identities/{sender_id}/used_by",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[149]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1SubscriptionCenterCustomerIdToken150",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/subscription_center/{customer_id}/token",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[150]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1TransactionalTransactionalId151",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[151]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1TransactionalTransactionalIdContents152",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/contents",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[152]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1TransactionalTransactionalIdLanguageLanguage153",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[153]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1TransactionalTransactionalIdMessages154",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/messages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[154]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1TransactionalTransactionalIdMetrics155",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/metrics",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[155]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.get.V1TransactionalTransactionalIdMetricsLinks156",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/metrics/links",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[156]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1TransactionalTransactionalIdContentContentId157",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/transactional/{transactional_id}/content/{content_id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[157]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      },
+      {
+        "id": "customer-io.rest.put.V1TransactionalTransactionalIdLanguageLanguage158",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/transactional/{transactional_id}/language/{language}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "api_surface.json:endpoints[158]",
+        "source_url": "https://docs.customer.io/files/journeys-app.json"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 159,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 159
+  }
+}

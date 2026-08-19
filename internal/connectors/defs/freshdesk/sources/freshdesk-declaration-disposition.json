@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "connector": "freshdesk",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/freshdesk-operation-source-lock.json",
+    "source_url": "https://developers.freshdesk.com/api/#change_log",
+    "source_sha256": "e70f8e31ed12141e248ddd06e753bb951c95da3a4ec16af3763b8d9363ab7e29",
+    "source_bytes": 3228889,
+    "source_operation_count": 10
+  },
+  "summary": {
+    "api_surface_rows": 10,
+    "exact_source_rows": 10,
+    "declared_operations": 10,
+    "declared_percent": 100,
+    "enabled_operations": 5,
+    "enabled_percent": 50,
+    "disabled_operations": 5,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 4
+      },
+      {
+        "key": "direct_write",
+        "count": 1
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 5
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-freshdesk",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/freshdesk/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-freshdesk",
+      "sync-transport-source-definition-freshdesk"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-freshdesk",
+        "count": 5
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/tickets",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/tickets",
+        "operation": null,
+        "covered_by": {
+          "stream": "tickets"
+        }
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.Tickets0",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "tickets"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "tickets"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/contacts",
+        "operation": null,
+        "covered_by": {
+          "stream": "contacts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.Contacts1",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "contacts"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "contacts"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/companies",
+        "operation": null,
+        "covered_by": {
+          "stream": "companies"
+        }
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.Companies2",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "companies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "companies"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/agents",
+        "operation": null,
+        "covered_by": {
+          "stream": "agents"
+        }
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.Agents3",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "agents"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "agents"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/groups",
+        "operation": null,
+        "covered_by": {
+          "stream": "groups"
+        }
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.Groups4",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "groups"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "groups"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/conversations",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/tickets/{id}/conversations",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.TicketsIdConversations5",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-freshdesk",
+          "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-freshdesk",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/time_entries",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/tickets/{id}/time_entries",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.TicketsIdTimeEntries6",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-freshdesk",
+          "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-freshdesk",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/solutions/categories",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.SolutionsCategories7",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-freshdesk",
+          "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-freshdesk",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned-response-folders",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/canned-response-folders",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.get.CannedResponseFolders8",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-freshdesk",
+          "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-freshdesk",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/tickets",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/freshdesk-operation-source-lock.json",
+        "source_id": "freshdesk.rest.post.Tickets9",
+        "source_url": "https://developers.freshdesk.com/api/#change_log",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-freshdesk",
+          "evidence": "not implemented in this bundle; legacy is read-only",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "not implemented in this bundle; legacy is read-only"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-freshdesk",
+        "contract": null
+      }
+    }
+  ]
+}

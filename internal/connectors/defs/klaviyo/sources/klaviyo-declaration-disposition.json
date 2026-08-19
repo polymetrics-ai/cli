@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "connector": "klaviyo",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/klaviyo-operation-source-lock.json",
+    "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+    "source_sha256": "f307aca9ee2364f956ccd5c2b7ec1ed5664633c89eef04e731a3601449f39f07",
+    "source_bytes": 1624646,
+    "source_operation_count": 9
+  },
+  "summary": {
+    "api_surface_rows": 9,
+    "exact_source_rows": 9,
+    "declared_operations": 9,
+    "declared_percent": 100,
+    "enabled_operations": 6,
+    "enabled_percent": 66.67,
+    "disabled_operations": 3,
+    "documented_deletes": 0,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 1
+      },
+      {
+        "key": "direct_write",
+        "count": 2
+      },
+      {
+        "key": "etl",
+        "count": 6
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 6,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 0
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 3
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-klaviyo",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/klaviyo/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-klaviyo",
+      "sync-transport-source-definition-klaviyo"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-klaviyo",
+        "count": 3
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/api/profiles",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/profiles",
+        "operation": null,
+        "covered_by": {
+          "stream": "profiles"
+        }
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.get.ApiProfiles0",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "profiles"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "profiles"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/events",
+        "operation": null,
+        "covered_by": {
+          "stream": "events"
+        }
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.get.ApiEvents1",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "events"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "events"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/campaigns",
+        "operation": null,
+        "covered_by": {
+          "stream": "campaigns"
+        }
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.get.ApiCampaigns2",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "campaigns"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "campaigns"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/lists",
+        "operation": null,
+        "covered_by": {
+          "stream": "lists"
+        }
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.get.ApiLists3",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "lists"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "lists"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/metrics",
+        "operation": null,
+        "covered_by": {
+          "stream": "metrics"
+        }
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.get.ApiMetrics4",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "metrics"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "metrics"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/segments",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/segments",
+        "operation": null,
+        "covered_by": {
+          "stream": "segments"
+        }
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.get.ApiSegments5",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[5] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "segments"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "segments"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/accounts",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.get.ApiAccounts6",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-klaviyo",
+          "evidence": "used only by check.json's connectivity probe, not a data stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "used only by check.json's connectivity probe, not a data stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-klaviyo",
+        "contract": null
+      }
+    },
+    {
+      "method": "*",
+      "path": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "*",
+        "path": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest._.ApiFlowsApiTemplatesApiCatalogsApiCouponsApiImagesApiReviewsApiFormsApiTags7",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-klaviyo",
+          "evidence": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-klaviyo",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST/PATCH/DELETE",
+      "path": "all Klaviyo mutation endpoints",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST/PATCH/DELETE",
+        "path": "all Klaviyo mutation endpoints",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/klaviyo-operation-source-lock.json",
+        "source_id": "klaviyo.rest.post_patch_delete.AllKlaviyoMutationEndpoints8",
+        "source_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-klaviyo",
+          "evidence": "Legacy itself is read-only (capabilities.write: false)",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "Legacy itself is read-only (capabilities.write: false)"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-klaviyo",
+        "contract": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,2029 @@
+{
+  "schema_version": 1,
+  "connector": "zoho-bigin",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+    "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+    "source_sha256": "f06704251737d3330153c8e39bf428abfa1d099a920f2356c25e7a0454dbf80e",
+    "source_bytes": 8018,
+    "source_operation_count": 50
+  },
+  "summary": {
+    "api_surface_rows": 50,
+    "exact_source_rows": 50,
+    "declared_operations": 50,
+    "declared_percent": 100,
+    "enabled_operations": 14,
+    "enabled_percent": 28,
+    "disabled_operations": 36,
+    "documented_deletes": 6,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 14
+      },
+      {
+        "key": "direct_write",
+        "count": 16
+      },
+      {
+        "key": "etl",
+        "count": 14
+      },
+      {
+        "key": "reverse_etl",
+        "count": 6
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 14,
+    "writes_actions": 6,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 6
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 30
+      },
+      {
+        "key": "foundation-gap",
+        "count": 6
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-zoho-bigin",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/zoho-bigin/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-zoho-bigin",
+      "sync-transport-source-definition-zoho-bigin"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-zoho-bigin",
+        "count": 30
+      }
+    ]
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "Reverse ETL is blocked only by the connector-neutral destination executor foundation gap; no transport binding or action was invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/Pipelines",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Pipelines",
+        "operation": null,
+        "covered_by": {
+          "stream": "pipelines"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Pipelines0",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "pipelines"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "pipelines"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{module_name}",
+        "operation": null,
+        "covered_by": {
+          "stream": "records"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.ModuleName1",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "records"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "records"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Contacts",
+        "operation": null,
+        "covered_by": {
+          "stream": "contacts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Contacts2",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "contacts"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "contacts"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Accounts",
+        "operation": null,
+        "covered_by": {
+          "stream": "companies"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Accounts3",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "companies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "companies"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Products",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Products",
+        "operation": null,
+        "covered_by": {
+          "stream": "products"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Products4",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "products"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "products"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Tasks",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Tasks",
+        "operation": null,
+        "covered_by": {
+          "stream": "tasks"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Tasks5",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[5] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "tasks"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "tasks"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Events",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Events",
+        "operation": null,
+        "covered_by": {
+          "stream": "events"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Events6",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[6] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "events"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "events"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Calls",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Calls",
+        "operation": null,
+        "covered_by": {
+          "stream": "calls"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Calls7",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[7] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "calls"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "calls"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Notes",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/Notes",
+        "operation": null,
+        "covered_by": {
+          "stream": "notes"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Notes8",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[8] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "notes"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "notes"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Users9",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[9] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "users"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "users"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/tags",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/tags",
+        "operation": null,
+        "covered_by": {
+          "stream": "tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsTags10",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[10] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "tags"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "tags"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/modules",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/modules",
+        "operation": null,
+        "covered_by": {
+          "stream": "modules"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsModules11",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[11] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "modules"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "modules"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/fields",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/fields",
+        "operation": null,
+        "covered_by": {
+          "stream": "fields"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsFields12",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[12] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "fields"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "fields"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{module_name}",
+        "operation": null,
+        "covered_by": {
+          "write": "create_record"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.ModuleName13",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{module_name}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/{module_name}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_record"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.put.ModuleName14",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}/upsert",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{module_name}/upsert",
+        "operation": null,
+        "covered_by": {
+          "write": "upsert_record"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.ModuleNameUpsert15",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_name}/{record_id}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/{module_name}/{record_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_record"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.delete.ModuleNameRecordId16",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}/{record_id}/Notes",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{module_name}/{record_id}/Notes",
+        "operation": null,
+        "covered_by": {
+          "write": "create_note"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.ModuleNameRecordIdNotes17",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_name}/{record_id}/Notes/{note_id}",
+      "parity_class": "reverse_etl",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/{module_name}/{record_id}/Notes/{note_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_note"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.delete.ModuleNameRecordIdNotesNoteId18",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "absent",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The engine has no connector-neutral typed destination DefinitionFactory; the existing destination is GitHub issue-label specific.",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+      },
+      "declaration": {
+        "status": "disabled; foundation-gap generic-typed-destination-executor",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}/{record_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{module_name}/{record_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.ModuleNameRecordId19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "single-record fetch by id is a strict subset of the records/contacts/companies/etc. list streams already covered; no dedicated single-record stream is needed since the engine's declarative read path always lists, never fetches-by-id",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-record fetch by id is a strict subset of the records/contacts/companies/etc. list streams already covered; no dedicated single-record stream is needed since the engine's declarative read path always lists, never fetches-by-id"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}/{record_id}/{related_list_api_name}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{module_name}/{record_id}/{related_list_api_name}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.ModuleNameRecordIdRelatedListApiName20",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "related-list traversal needs a per-parent-record fan_out (docs/migration/conventions.md's fan_out dialect) whose id source would itself be one of the already-covered list streams (contacts/companies/pipelines); a dedicated per-relation stream per module pairing is combinatorial (Contacts->Notes, Companies->Tasks, Pipelines->Products, etc.) and not requested by any known consumer of this bundle -- Notes is already covered as its own top-level module-scoped stream (GET /Notes), which is the one related-list relation with real read demand",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "related-list traversal needs a per-parent-record fan_out (docs/migration/conventions.md's fan_out dialect) whose id source would itself be one of the already-covered list streams (contacts/companies/pipelines); a dedicated per-relation stream per module pairing is combinatorial (Contacts->Notes, Companies->Tasks, Pipelines->Products, etc.) and not requested by any known consumer of this bundle -- Notes is already covered as its own top-level module-scoped stream (GET /Notes), which is the one related-list relation with real read demand"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}/search",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{module_name}/search",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.ModuleNameSearch21",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "criteria/email/phone/word search is a query-shaped read (parameterized filter, not a syncable list), out of scope for this bundle's declarative full-table stream model; the existing list streams already page through every record",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "criteria/email/phone/word search is a query-shaped read (parameterized filter, not a syncable list), out of scope for this bundle's declarative full-table stream model; the existing list streams already page through every record"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}/{record_id}/Attachments",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{module_name}/{record_id}/Attachments",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.ModuleNameRecordIdAttachments22",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[22]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "attachment listing returns file metadata but the actual file/photo download (GET .../Attachments/{id}) and upload (POST multipart/form-data) are binary payloads the JSON declarative dialect cannot express; a metadata-only list stream with no way to fetch the underlying binary has limited standalone value and was not prioritized for this pass",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "attachment listing returns file metadata but the actual file/photo download (GET .../Attachments/{id}) and upload (POST multipart/form-data) are binary payloads the JSON declarative dialect cannot express; a metadata-only list stream with no way to fetch the underlying binary has limited standalone value and was not prioritized for this pass"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_name}/{record_id}/photo",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/{module_name}/{record_id}/photo",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.ModuleNameRecordIdPhoto23",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "returns raw image bytes, not JSON; the dialect has no binary-response stream type",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "returns raw image bytes, not JSON; the dialect has no binary-response stream type"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}/{record_id}/Attachments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{module_name}/{record_id}/Attachments",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.ModuleNameRecordIdAttachments24",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "multipart/form-data file upload; the write dialect's body_type is json|form|none, none of which express a multipart file part",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "multipart/form-data file upload; the write dialect's body_type is json|form|none, none of which express a multipart file part"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}/{record_id}/photo",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{module_name}/{record_id}/photo",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.ModuleNameRecordIdPhoto25",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "multipart/form-data image upload; same limitation as record attachment upload",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "multipart/form-data image upload; same limitation as record attachment upload"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_name}/{record_id}/Attachments/{attachment_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/{module_name}/{record_id}/Attachments/{attachment_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.delete.ModuleNameRecordIdAttachmentsAttachmentId26",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "deleting a specific attachment is only meaningful paired with the attachment listing/upload surface this pass excludes as binary_payload; no read stream exists to source attachment_id from",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "deleting a specific attachment is only meaningful paired with the attachment listing/upload surface this pass excludes as binary_payload; no read stream exists to source attachment_id from"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_name}/{record_id}/photo",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/{module_name}/{record_id}/photo",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.delete.ModuleNameRecordIdPhoto27",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "paired with the excluded photo upload/download surface",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "paired with the excluded photo upload/download surface"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/fields?module={module}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/fields?module={module}",
+        "operation": null,
+        "covered_by": {
+          "stream": "fields"
+        }
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsFieldsModuleModule28",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[28]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[28] binds the pinned source operation to an existing etl declaration.",
+        "contract": {
+          "stream": "fields"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl declaration binds the pinned source contract",
+        "contract": {
+          "stream": "fields"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/related_lists",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/related_lists",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsRelatedLists29",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[29]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "related-list layout metadata (which related lists exist per module), not itself a syncable record stream; supports the already-excluded related-list read surface",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "related-list layout metadata (which related lists exist per module), not itself a syncable record stream; supports the already-excluded related-list read surface"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/layouts",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/layouts",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsLayouts30",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[30]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "page-layout/field-arrangement UI metadata, not syncable business data",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "page-layout/field-arrangement UI metadata, not syncable business data"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/pipelines",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/pipelines",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsPipelines31",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[31]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "sub-pipeline/stage configuration metadata for the Pipelines module; the pipelines stream (GET /Pipelines) already covers the pipeline records themselves, and this settings variant is the same information from the metadata/configuration side, not additional record data",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sub-pipeline/stage configuration metadata for the Pipelines module; the pipelines stream (GET /Pipelines) already covers the pipeline records themselves, and this settings variant is the same information from the metadata/configuration side, not additional record data"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/currencies",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/currencies",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsCurrencies32",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[32]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "organization currency configuration (symbol, decimal places, exchange rate), not a syncable business-record stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "organization currency configuration (symbol, decimal places, exchange rate), not a syncable business-record stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/roles",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/roles",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsRoles33",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[33]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "user role/hierarchy metadata; no read demand identified for this pass beyond the users stream's own embedded role/profile lookup objects",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "user role/hierarchy metadata; no read demand identified for this pass beyond the users stream's own embedded role/profile lookup objects"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/profiles",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/profiles",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsProfiles34",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[34]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "permission-profile metadata; same reasoning as /settings/roles",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "permission-profile metadata; same reasoning as /settings/roles"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/territories",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/settings/territories",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.SettingsTerritories35",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[35]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "sales-territory hierarchy metadata; no read demand identified for this pass",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sales-territory hierarchy metadata; no read demand identified for this pass"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/settings/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/settings/tags",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.SettingsTags36",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[36]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "creating a new tag definition (distinct from tagging a record) is a settings/admin-shaped mutation with low sync-pipeline demand relative to the record CRUD + notes surface prioritized this pass",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "creating a new tag definition (distinct from tagging a record) is a settings/admin-shaped mutation with low sync-pipeline demand relative to the record CRUD + notes surface prioritized this pass"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/tags/{tag_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/settings/tags/{tag_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.put.SettingsTagsTagId37",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[37]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "renaming an existing tag definition; same reasoning as tag creation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "renaming an existing tag definition; same reasoning as tag creation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/tags/{tag_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/settings/tags/{tag_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.delete.SettingsTagsTagId38",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[38]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "deleting a tag definition; same reasoning as tag creation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "deleting a tag definition; same reasoning as tag creation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}/actions/add_tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{module_name}/actions/add_tags",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.ModuleNameActionsAddTags39",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[39]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "associates existing tags with one or more records (a many-to-many join mutation on the tags stream, not a record CRUD action); lower priority than the core record/notes write surface for this pass",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "associates existing tags with one or more records (a many-to-many join mutation on the tags stream, not a record CRUD action); lower priority than the core record/notes write surface for this pass"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{module_name}/actions/remove_tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/{module_name}/actions/remove_tags",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.ModuleNameActionsRemoveTags40",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[40]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "removes tag associations from one or more records; same reasoning as add_tags",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "removes tag associations from one or more records; same reasoning as add_tags"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Notes/{note_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/Notes/{note_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.put.NotesNoteId41",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[41]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "note content update; create_note/delete_note cover the note write lifecycle's create and destroy ends, which is the pairing with the most sync-pipeline demand (append an activity note, retract one); update was not prioritized this pass",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "note content update; create_note/delete_note cover the note write lifecycle's create and destroy ends, which is the pairing with the most sync-pipeline demand (append an activity note, retract one); update was not prioritized this pass"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users/{user_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.UsersUserId42",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[42]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "single-user fetch by id is a strict subset of the users stream (GET /users) already covered",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "single-user fetch by id is a strict subset of the users stream (GET /users) already covered"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/users",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.post.Users43",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[43]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "creating a Bigin user is an organization-administration action requiring an admin-tier OAuth scope beyond the standard record-CRUD scopes this bundle's refresh-token grant is documented/tested against",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "creating a Bigin user is an organization-administration action requiring an admin-tier OAuth scope beyond the standard record-CRUD scopes this bundle's refresh-token grant is documented/tested against"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/users/{user_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.put.UsersUserId44",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[44]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "modifying a user's role/profile/status is an organization-administration action, same elevated-scope reasoning as user creation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "modifying a user's role/profile/status is an organization-administration action, same elevated-scope reasoning as user creation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/users/{user_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.delete.UsersUserId45",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[45]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "deactivating/deleting an organizational user account is an irreversible administration action outside this bundle's record-sync purpose",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "deactivating/deleting an organizational user account is an irreversible administration action outside this bundle's record-sync purpose"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/org",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/org",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest.get.Org46",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[46]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "organization metadata snapshot (company profile, license, feature flags), not a syncable object stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "organization metadata snapshot (company profile, license, feature flags), not a syncable object stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "*",
+      "path": "/bulk/v1/*",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "*",
+        "path": "/bulk/v1/*",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest._.BulkV147",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[47]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "the separate Bulk Read/Write API (CSV-oriented, async job-submit-then-poll-then-download-a-file protocol) is architecturally distinct from this bundle's synchronous per-page REST reads; large-volume sync is already served by this bundle's ordinary paginated list streams for Bigin's realistic per-org record volumes (a small-business CRM, not a large-record-count system) -- if a genuine need for async bulk export/import surfaces, it is a StreamHook/WriteHook (Tier-2) candidate, not a Tier-1 addition, since it needs job-poll-then-download orchestration this dialect cannot express",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "the separate Bulk Read/Write API (CSV-oriented, async job-submit-then-poll-then-download-a-file protocol) is architecturally distinct from this bundle's synchronous per-page REST reads; large-volume sync is already served by this bundle's ordinary paginated list streams for Bigin's realistic per-org record volumes (a small-business CRM, not a large-record-count system) -- if a genuine need for async bulk export/import surfaces, it is a StreamHook/WriteHook (Tier-2) candidate, not a Tier-1 addition, since it needs job-poll-then-download orchestration this dialect cannot express"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "*",
+      "path": "/notifications/*",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "*",
+        "path": "/notifications/*",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest._.Notifications48",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[48]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "the Notifications (webhook subscription) API registers Bigin-initiated push callbacks to a consumer-hosted URL; this is an inbound-webhook-receiver concern for the connector's OWN operator infrastructure, not a pollable read/write surface this connector's outbound HTTP dialect can express",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "the Notifications (webhook subscription) API registers Bigin-initiated push callbacks to a consumer-hosted URL; this is an inbound-webhook-receiver concern for the connector's OWN operator infrastructure, not a pollable read/write surface this connector's outbound HTTP dialect can express"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    },
+    {
+      "method": "*",
+      "path": "/coql",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "*",
+        "path": "/coql",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/zoho-bigin-operation-source-lock.json",
+        "source_id": "zoho-bigin.rest._.Coql49",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/",
+        "source_location": "api_surface.json:endpoints[49]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-zoho-bigin",
+          "evidence": "the CRM Object Query Language (COQL) API accepts an arbitrary SQL-like query string in a POST body and is a power-user ad hoc query surface, not a fixed syncable stream shape; every record set it could return is already reachable via this bundle's ordinary list streams",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "the CRM Object Query Language (COQL) API accepts an arbitrary SQL-like query string in a POST body and is a power-user ad hoc query surface, not a fixed syncable stream shape; every record set it could return is already reachable via this bundle's ordinary list streams"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-zoho-bigin",
+        "contract": null
+      }
+    }
+  ]
+}
