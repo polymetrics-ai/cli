@@ -12,11 +12,12 @@
 
 - [x] Record focused red loader test failure before the block-map edit.
 - [x] Record focused green loader test success after the edit: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestBundleLoadRegistersStatusAndTextExportOperations|TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations)$'` (pass).
-- [x] Run focused and changed-package tests: the focused loader command, `go test -count=1 -timeout 20m ./internal/connectors/engine`, and `go test -count=1 -timeout 20m ./internal/cli` passed.
+- [x] Run focused and changed-package tests: the focused loader command, `go test -count=1 -timeout 20m ./internal/connectors/engine`, `go test -count=1 -timeout 20m ./cmd/connectorgen`, and `go test -count=1 -timeout 20m ./internal/cli` passed.
 - [x] Run formatting, static checks, and binary build: `gofmt -w cmd internal`, `go vet ./...`, `go build ./cmd/pm`, and `make lint` passed.
 - [x] Run repository non-suite gates: `make tidy-check`, `make docs-check-no-build`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make github-parity-artifacts-check`, `make connectorgen-certification-candidates`, `make connectorgen-certification-sweep`, `make connector-canon-check`, `make release-workflow-check`, and `scripts/verify-gsd-workflow` passed.
-- [x] `make connector-boundary` passed from one attached completion-tracked terminal: `ConnectorBoundaryReport.outcome` was `clean` for 293 checked files and 552 loaded connectors, with zero findings and warnings.
+- [x] `make connector-boundary` passed from one attached completion-tracked terminal after the final artifact refresh. The command exited successfully; the prior attached report was `clean` for 293 checked files and 552 loaded connectors, with zero findings and warnings.
 - [x] Manual inline `verify-work` and code review completed. `REVIEW.md` records no actionable findings and the post-PR route as trusted-author `claude_auto`.
-- [x] Rebase on the latest `origin/main` and rerun `make connectorgen-certification-matrix`.
-- [ ] Blocked outside #4302 scope: after the clean rebase, `make connectorgen-certification-matrix` failed because `internal/connectors/defs/github/certification-matrix.json` has drift. This lane changes no `internal/connectors/defs/github/**` file and the task expressly forbids connector-definition edits, so regenerating that shard is not an authorized fix. The attached `connector-boundary` gate remains clean.
+- [x] Rebase on the latest `origin/main` (`51dd6d4`) and rerun `make connectorgen-certification-matrix`.
+- [x] Resolve `certification-matrix-scope`: the approval authorizes only #4302-derived generated fallout. `go run ./cmd/connectorgen certification-matrix --all` changed exactly the GitHub, PostgreSQL, and Zoom `certification-matrix.json` shards; each gains the two loader-discovered operation kinds as `operation_kind_not_declared`. No connector declaration or capability changed.
+- [x] Prove deterministic generation: a second `go run ./cmd/connectorgen certification-matrix --all` had the identical SHA-256 aggregate across every certification-matrix shard, `git diff --check` passed, and `make connectorgen-certification-matrix` passed.
 - [ ] Rebase on `origin/main`, push only the working branch, open the PR, and verify its API base is `main`.

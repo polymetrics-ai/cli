@@ -264,6 +264,20 @@
         }
       },
       {
+        "function_kind": "operation:rest_status",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"rest_status\""
+        }
+      },
+      {
         "function_kind": "operation:rest_write",
         "applicable": false,
         "declared": false,
@@ -289,6 +303,20 @@
         "not_applicable": {
           "code": "operation_kind_not_declared",
           "reason": "connector \"postgres\" does not declare operation kind \"stream_etl\""
+        }
+      },
+      {
+        "function_kind": "operation:text_export",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"postgres\" does not declare operation kind \"text_export\""
         }
       },
       {
@@ -430,6 +458,12 @@
       "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
     },
     {
+      "id": "operation:rest_status",
+      "category": "operation",
+      "name": "rest_status",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_status)"
+    },
+    {
       "id": "operation:rest_write",
       "category": "operation",
       "name": "rest_write",
@@ -441,6 +475,12 @@
       "category": "operation",
       "name": "stream_etl",
       "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=stream_etl)"
+    },
+    {
+      "id": "operation:text_export",
+      "category": "operation",
+      "name": "text_export",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=text_export)"
     },
     {
       "id": "operation:xml_export",
