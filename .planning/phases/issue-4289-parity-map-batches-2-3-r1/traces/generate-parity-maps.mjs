@@ -554,14 +554,19 @@ async function typedWriteActionDispositions(connector, rows) {
     return {
       action: action.name,
       semantic_eligibility: "eligible",
-      closed_destination_contract: "representable",
-      source_row_binding: sourceIDs.length > 0
+      closed_destination_action_shape: "representable",
+      provider_operation_binding: sourceIDs.length > 0
         ? { state: "source-bound", source_ids: sourceIDs }
         : {
             state: "declaration-pending",
             detail: "The existing typed action is individually representable, but the pinned source inventory has no exact source-row binding for its base-relative or unmatched action path.",
             minimal_change: "Pin the provider operation that exactly backs this existing action, then add its source-row and installed direct-command declarations; do not infer a request contract."
           },
+      source_input_binding: {
+        state: "declaration-pending",
+        detail: "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+        minimal_change: "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+      },
       destination_binding: {
         state: "foundation-gap",
         foundation_gap: multiplicity

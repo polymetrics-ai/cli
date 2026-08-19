@@ -50,6 +50,7 @@ for (const connector of connectors) {
   const map = await readJSON(path.join(dir, "sources", `${connector}-declaration-disposition.json`), { ledger_dispositions: [] });
   const operations = (await readJSON(path.join(dir, "operations.json"), { operations: [] })).operations;
   const commands = (await readJSON(path.join(dir, "cli_surface.json"), { commands: [] })).commands;
+  const writes = (await readJSON(path.join(dir, "writes.json"), { actions: [] })).actions;
   const transport = await readJSON(path.join(dir, "sync_transport.json"), null);
   const missing = { direct_read: 0, direct_write: 0, etl: 0, binary_read: 0, binary_write: 0 };
   const represented = { direct_read: 0, direct_write: 0, etl: 0, binary_read: 0, binary_write: 0 };
@@ -76,14 +77,29 @@ for (const connector of connectors) {
     (ok ? represented : missing)[row.parity_class]++;
     if (!ok) incomplete = true;
   }
+  const actionDispositions = map.summary?.reverse_etl_eligibility?.action_dispositions || [];
+  const actionDispositionByName = new Map(actionDispositions.map((disposition) => [disposition.action, disposition]));
+  const destinationActions = transport?.destination_transport?.eligible_actions || [];
+  const missingDestinationActions = writes.map((action) => action.name).filter((action) => !destinationActions.includes(action));
+  const sourceInputPending = writes.map((action) => actionDispositionByName.get(action.name)).filter((disposition) => disposition?.source_input_binding?.state !== "source-bound").length;
+  const reverseETL = writes.length === 0
+    ? { declaration: "not-applicable", eligible_actions: 0, source_input_bindings_pending: 0, application_dispatch: "not-applicable" }
+    : {
+        declaration: transport?.destination_transport ? "present" : "missing",
+        eligible_actions: writes.length,
+        bound_actions: destinationActions.length,
+        missing_actions: missingDestinationActions.length,
+        source_input_bindings_pending: sourceInputPending,
+        application_dispatch: "foundation-pending",
+        action_selection: "foundation-pending"
+      };
+  if (writes.length > 0 && (!transport?.destination_transport || missingDestinationActions.length > 0 || sourceInputPending > 0)) incomplete = true;
   ledger.push({
     connector,
     source_operations: map.ledger_dispositions.length,
     represented,
     missing,
-    reverse_etl: transport?.destination_transport
-      ? { declaration: "present", application_dispatch: "foundation-pending" }
-      : { declaration: "missing", application_dispatch: "not-applicable" },
+    reverse_etl: reverseETL,
     executable_commands: commands.filter((command) => command.availability === "implemented").length,
   });
 }

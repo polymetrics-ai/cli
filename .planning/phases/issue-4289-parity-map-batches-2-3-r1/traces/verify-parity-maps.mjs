@@ -63,13 +63,14 @@ for (const connector of connectors) {
   if (actionDispositionByName.size !== actionDispositions.length) throw new Error(`${connector}: reverse-ETL action disposition duplicates an action`);
   for (const action of expectedActions) {
     const disposition = actionDispositionByName.get(action);
-    if (!disposition || disposition.semantic_eligibility !== "eligible" || disposition.closed_destination_contract !== "representable") throw new Error(`${connector}: typed write action ${action} lacks an eligible closed-destination disposition`);
-    if (!disposition.source_row_binding || !["source-bound", "declaration-pending"].includes(disposition.source_row_binding.state)) throw new Error(`${connector}: typed write action ${action} has invalid source-row binding disposition`);
+    if (!disposition || disposition.semantic_eligibility !== "eligible" || disposition.closed_destination_action_shape !== "representable") throw new Error(`${connector}: typed write action ${action} lacks an eligible closed-destination disposition`);
+    if (!disposition.provider_operation_binding || !["source-bound", "declaration-pending"].includes(disposition.provider_operation_binding.state)) throw new Error(`${connector}: typed write action ${action} has invalid provider-operation binding disposition`);
+    if (disposition.source_input_binding?.state !== "declaration-pending") throw new Error(`${connector}: typed write action ${action} omits its pending exact source-input binding`);
     if (disposition.destination_binding?.state !== "foundation-gap" || disposition.destination_binding.foundation_gap?.id !== "declarative-typed-destination-action-multiplicity") throw new Error(`${connector}: typed write action ${action} omits the action-selection foundation hold`);
   }
   const exactSourceBoundActions = new Set(map.ledger_dispositions.flatMap(actionNames));
   for (const disposition of actionDispositions) {
-    if (disposition.source_row_binding.state === "source-bound" && (!Array.isArray(disposition.source_row_binding.source_ids) || disposition.source_row_binding.source_ids.length === 0 || !exactSourceBoundActions.has(disposition.action))) throw new Error(`${connector}: typed write action ${disposition.action} claims an invalid exact source-row binding`);
+    if (disposition.provider_operation_binding.state === "source-bound" && (!Array.isArray(disposition.provider_operation_binding.source_ids) || disposition.provider_operation_binding.source_ids.length === 0 || !exactSourceBoundActions.has(disposition.action))) throw new Error(`${connector}: typed write action ${disposition.action} claims an invalid exact provider-operation binding`);
   }
   const declarationPending = map.ledger_dispositions.filter((row) => row.state === "disabled").length;
   const rejected = Object.fromEntries(map.summary.rejected_by_reason.map((entry) => [entry.key, entry.count]));

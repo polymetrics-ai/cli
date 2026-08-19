@@ -91,1437 +91,1806 @@
         {
           "action": "create_a_bank_authorisation",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.bank_authorisations.5"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_billing_request",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests.8"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "collect_customer_details",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_collect_customer_details.10"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "collect_bank_account_details",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_collect_bank_account.11"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "confirm_the_payer_details",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_confirm_payer_details.12"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "fulfil_a_billing_request",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_fulfil.13"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "cancel_a_billing_request",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_cancel.14"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "notify_the_customer",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_notify.16"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "trigger_fallback",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_fallback.17"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "change_currency",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_choose_currency.18"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "select_institution_for_a_billing_request",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_billing_request_id_actions_select_institution.19"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_billing_request_flow",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_request_flows.20"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "initialise_a_billing_request_flow",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_request_flows_billing_request_flow_id_actions_initialise.21"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_billing_request_template",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_request_templates.23"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_billing_request_template",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.billing_request_templates_billing_request_template_id.25"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_billing_request_with_actions",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.billing_requests_create_with_actions.26"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_bank_account_holder_verification",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.bank_account_holder_verifications.3"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_block",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.blocks.27"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "disable_a_block",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.blocks_block_id_actions_disable.30"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "enable_a_block",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.blocks_block_id_actions_enable.31"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_blocks_by_reference",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.blocks_block_by_ref.32"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_creditor",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.creditors.33"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_creditor",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.creditors_creditor_id.36"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_creditor_bank_account",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.creditor_bank_accounts.37"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "disable_a_creditor_bank_account",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.creditor_bank_accounts_creditor_bank_account_id_actions_disable.40"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_customer",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.customers.42"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_customer",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.customers_customer_id.45"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "remove_a_customer",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.delete.customers_customer_id.46"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_customer_bank_account",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.customer_bank_accounts.47"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_customer_bank_account",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.customer_bank_accounts_customer_bank_account_id.50"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "disable_a_customer_bank_account",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.customer_bank_accounts_customer_bank_account_id_actions_disable.51"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "handle_a_notification",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.customer_notifications_customer_notification_id_actions_handle.52"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_with_dates",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.instalment_schedules.58"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_an_instalment_schedule",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.instalment_schedules_instalment_schedule_id.61"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "cancel_an_instalment_schedule",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.instalment_schedules_instalment_schedule_id_actions_cancel.62"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_logo_associated_with_a_creditor",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.branding_logos.65"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_mandate",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandates.66"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_mandate",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.mandates_mandate_id.69"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "cancel_a_mandate",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandates_mandate_id_actions_cancel.70"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "reinstate_a_mandate",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandates_mandate_id_actions_reinstate.71"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_new_mandate_import",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandate_imports.72"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "submit_a_mandate_import",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandate_imports_mandate_import_id_actions_submit.74"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "cancel_a_mandate_import",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandate_imports_mandate_import_id_actions_cancel.75"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "add_a_mandate_import_entry",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandate_import_entries.76"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_an_outbound_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.outbound_payments.80"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_withdrawal_outbound_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.outbound_payments_withdrawal.82"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "cancel_an_outbound_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.outbound_payments_outbound_payment_id_actions_cancel.83"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "approve_an_outbound_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.outbound_payments_outbound_payment_id_actions_approve.84"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_an_outbound_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.outbound_payments_outbound_payment_id.86"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_an_outbound_payment_import",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.outbound_payment_imports.88"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_payer_authorisation",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.payer_authorisations.94"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_payer_authorisation",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.payer_authorisations_payer_authorisation_id.93"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "submit_a_payer_authorisation",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.payer_authorisations_payer_authorisation_id_actions_submit.95"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "confirm_a_payer_authorisation",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.payer_authorisations_payer_authorisation_id_actions_confirm.96"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_payer_theme_associated_with_a_creditor",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.branding_payer_themes.97"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.payments.98"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.payments_payment_id.101"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "cancel_a_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.payments_payment_id_actions_cancel.102"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "retry_a_payment",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.payments_payment_id_actions_retry.103"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_payout",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.payouts_payout_id.110"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_redirect_flow",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.redirect_flows.112"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "complete_a_redirect_flow",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.redirect_flows_redirect_flow_id_actions_complete.114"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_refund",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.refunds.115"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_refund",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.refunds_refund_id.118"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "simulate_a_scenario",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.scenario_simulators_scenario_simulator_id_actions_run.119"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_scheme_identifier",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.scheme_identifiers.120"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_subscription",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.subscriptions.123"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "update_a_subscription",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.put.subscriptions_subscription_id.126"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "pause_a_subscription",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.subscriptions_subscription_id_actions_pause.127"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "resume_a_subscription",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.subscriptions_subscription_id_actions_resume.128"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "cancel_a_subscription",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.subscriptions_subscription_id_actions_cancel.129"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_verification_detail",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.verification_details.133"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "retry_a_webhook",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.webhooks_webhook_id_actions_retry.137"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "perform_a_bank_details_lookup",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.bank_details_lookups.7"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_mandate_pdf",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
             "state": "source-bound",
             "source_ids": [
               "gocardless.rest.post.mandate_pdfs.78"
             ]
           },
-          "destination_binding": {
-            "state": "foundation-gap",
-            "foundation_gap": {
-              "id": "declarative-typed-destination-action-multiplicity",
-              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
-              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
-            }
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         },
         {
           "action": "create_a_customer_bank_account_token",
           "semantic_eligibility": "eligible",
-          "closed_destination_contract": "representable",
-          "source_row_binding": {
-            "state": "declaration-pending",
-            "detail": "The existing typed action is individually representable, but the pinned source inventory has no exact source-row binding for its base-relative or unmatched action path.",
-            "minimal_change": "Pin the provider operation that exactly backs this existing action, then add its source-row and installed direct-command declarations; do not infer a request contract."
-          },
           "destination_binding": {
             "state": "foundation-gap",
             "foundation_gap": {
@@ -1529,6 +1898,17 @@
               "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
               "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
             }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "declaration-pending",
+            "detail": "The existing typed action is individually representable, but the pinned source inventory has no exact source-row binding for its base-relative or unmatched action path.",
+            "minimal_change": "Pin the provider operation that exactly backs this existing action, then add its source-row and installed direct-command declarations; do not infer a request contract."
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
           }
         }
       ]

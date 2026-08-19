@@ -44,7 +44,7 @@ Keep the generated ledgers connector-local and use the exact corrected batch-1 s
 
 **Red:** a source-row-only eligibility assertion leaves five existing typed actions without an exact action disposition because their legacy paths are base-relative or their published source inventory has no exact row. It also makes a one-action destination look like a connector-complete reverse-ETL declaration.
 
-**Green:** `verify-parity-maps.mjs` requires every `writes.json` action to have exactly one action-level eligibility disposition. The 621 target actions are semantically eligible and individually representable by `declarative_api/declarative_typed_destination`; none is excluded for safety, privilege, or destructive behavior. The disposition records whether it has an exact source-row binding and names `declarative-typed-destination-action-multiplicity` when the current one-action-per-mode descriptor cannot select all eligible actions. This is a foundation hold, never a connector-local selector or a completion claim.
+**Green:** `verify-parity-maps.mjs` requires every `writes.json` action to have exactly one action-level eligibility disposition. The 621 target actions are semantically eligible and individually representable as `declarative_api/declarative_typed_destination` action shapes; none is excluded for safety, privilege, or destructive behavior. The disposition records provider-operation provenance separately from the still-pending exact stream-to-required-input mapping and names `declarative-typed-destination-action-multiplicity` when the current one-action-per-mode descriptor cannot select all eligible actions. This is a foundation/declaration hold, never a connector-local selector or a completion claim.
 
 ## REST Body Input — Red
 

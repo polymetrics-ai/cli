@@ -20,7 +20,9 @@
         "binary_write": 0
       },
       "reverse_etl": {
-        "declaration": "missing",
+        "declaration": "not-applicable",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -43,7 +45,9 @@
         "binary_write": 0
       },
       "reverse_etl": {
-        "declaration": "missing",
+        "declaration": "not-applicable",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -66,7 +70,9 @@
         "binary_write": 0
       },
       "reverse_etl": {
-        "declaration": "missing",
+        "declaration": "not-applicable",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -90,7 +96,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 29,
+        "bound_actions": 0,
+        "missing_actions": 29,
+        "source_input_bindings_pending": 29,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 0
     },
@@ -113,7 +124,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 26,
+        "bound_actions": 0,
+        "missing_actions": 26,
+        "source_input_bindings_pending": 26,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 38
     },
@@ -136,7 +152,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 40,
+        "bound_actions": 0,
+        "missing_actions": 40,
+        "source_input_bindings_pending": 40,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 63
     },
@@ -159,7 +180,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 94,
+        "bound_actions": 0,
+        "missing_actions": 94,
+        "source_input_bindings_pending": 94,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 0
     },
@@ -182,7 +208,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 16,
+        "bound_actions": 0,
+        "missing_actions": 16,
+        "source_input_bindings_pending": 16,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 23
     },
@@ -204,7 +235,9 @@
         "binary_write": 0
       },
       "reverse_etl": {
-        "declaration": "missing",
+        "declaration": "not-applicable",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -228,7 +261,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 27,
+        "bound_actions": 0,
+        "missing_actions": 27,
+        "source_input_bindings_pending": 27,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 45
     },
@@ -251,7 +289,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 7,
+        "bound_actions": 0,
+        "missing_actions": 7,
+        "source_input_bindings_pending": 7,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 21
     },
@@ -274,7 +317,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 3,
+        "bound_actions": 0,
+        "missing_actions": 3,
+        "source_input_bindings_pending": 3,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 0
     },
@@ -296,7 +344,9 @@
         "binary_write": 0
       },
       "reverse_etl": {
-        "declaration": "missing",
+        "declaration": "not-applicable",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -320,7 +370,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 20,
+        "bound_actions": 0,
+        "missing_actions": 20,
+        "source_input_bindings_pending": 20,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 0
     },
@@ -343,7 +398,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 87,
+        "bound_actions": 0,
+        "missing_actions": 87,
+        "source_input_bindings_pending": 87,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 23
     },
@@ -365,7 +425,9 @@
         "binary_write": 0
       },
       "reverse_etl": {
-        "declaration": "missing",
+        "declaration": "not-applicable",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -389,7 +451,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 76,
+        "bound_actions": 0,
+        "missing_actions": 76,
+        "source_input_bindings_pending": 76,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 0
     },
@@ -412,7 +479,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 98,
+        "bound_actions": 0,
+        "missing_actions": 98,
+        "source_input_bindings_pending": 98,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 0
     },
@@ -435,7 +507,12 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "application_dispatch": "not-applicable"
+        "eligible_actions": 98,
+        "bound_actions": 0,
+        "missing_actions": 98,
+        "source_input_bindings_pending": 98,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
       },
       "executable_commands": 0
     }

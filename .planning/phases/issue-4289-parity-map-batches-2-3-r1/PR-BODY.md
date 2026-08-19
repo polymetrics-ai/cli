@@ -28,7 +28,7 @@ Refs #4289
 ## Classification and Safety
 
 - Unauthored operations are `declaration-pending`, not `foundation-gap`.
-- Typed writes remain enabled `direct_write`. All 621 existing schema-backed write actions are semantically eligible and individually representable by the closed typed destination. Reverse-ETL eligibility remains foundation-pending on persisted App/CLI dispatch and exact multi-action selection; no transport binding, selector, or action is invented.
+- Typed writes remain enabled `direct_write`. All 621 existing schema-backed write actions are semantically eligible and individually representable as closed destination action shapes; their exact stream-to-required-input routes are still declaration-pending. Reverse-ETL eligibility remains foundation-pending on persisted App/CLI dispatch and exact multi-action selection; no source field, transport binding, selector, or action is invented.
 - ETL is declaration-pending until a connector authors `sync_transport.json`; no engine code, credential, provider call, schema, runtime contract, or executable command changed.
 - All provider artifacts were retrieved credential-free from public documentation/source URLs. No live provider operation was executed.
 
