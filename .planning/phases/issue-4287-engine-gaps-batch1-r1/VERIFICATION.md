@@ -2,17 +2,17 @@
 
 ## Required Checks
 
-- [ ] Targeted engine, command-runner, keychain/credential, and CLI tests with `-timeout 20m`.
-- [ ] `go vet ./...`.
-- [ ] `go build ./cmd/pm`.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`.
-- [ ] `go run ./cmd/connectorgen surface-sync --check`.
-- [ ] `make connector-boundary` via the required detached task-local log and exit-code file.
-- [ ] `make lint` and `make docs-check`.
-- [ ] `make verify` after individual gates complete.
-- [ ] `git diff --check`.
-- [ ] Synthetic fixture-bundle proof for each declared capability; Docker Hub reclassification is a post-merge sweep-lane integration check and is intentionally out of this worktree's scope.
-- [ ] Deep code review with all actionable findings resolved or dispositioned.
+- [x] Targeted engine, command-runner, keychain/credential, and CLI tests with `-timeout 20m`.
+- [x] `go vet ./...`.
+- [x] `go build ./cmd/pm`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`.
+- [x] `go run ./cmd/connectorgen surface-sync --check`.
+- [x] `make connector-boundary` via the required detached task-local log and exit-code file.
+- [x] `make lint` and `make docs-check`.
+- [x] `make verify` after individual gates complete.
+- [x] `git diff --check`.
+- [x] Synthetic fixture-bundle proof for each declared capability; Docker Hub reclassification is a post-merge sweep-lane integration check and is intentionally out of this worktree's scope.
+- [x] Deep code review with all actionable findings resolved or dispositioned.
 
 ## CLI Parity Assessment
 
@@ -29,4 +29,9 @@ main and is not tracked in this phase.
 
 ## Results
 
-Pending implementation.
+- PASS — `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/connsdk ./cmd/connectorgen` after the final rebase. Synthetic fixtures prove operation-owned page/page-size pagination and source disagreement refusal; HEAD success plus non-HEAD/over-cap refusal; closed SCIM JSON plus unknown-type refusal; bounded CSV success, no-cap refusal, and no artifact on cap overflow; and encrypted-store secret persistence with complete response/error retention.
+- PASS — `go vet ./...`, `go build ./cmd/pm`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `go run ./cmd/connectorgen surface-sync --check` after the final rebase.
+- PASS — `make lint && make docs-check && make tidy-check smoke-no-build agent-contract-check release-workflow-check`.
+- PASS — detached tracked `make connector-boundary` wrote task-local stdout/stderr and an exit-code file under `.task-tmp/issue-4287/`; exit code was `0`.
+- PASS — `make verify` after the final rebase, including `go test -timeout 20m ./...`, generated snapshots, docs, smoke, lint, generator, boundary, canon, and release parity gates. `internal/cli` completed in 883.051 seconds under the repository-required timeout.
+- PASS — final source review fixed the generator/runtime mirror omissions for `status_check`, `text_export`, `secret_stored`, and `application/scim+json`; no connector-name branch or open review finding remains.
