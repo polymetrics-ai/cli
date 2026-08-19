@@ -20,4 +20,4 @@
 - [x] Rebase on the latest `origin/main` (`51dd6d4`) and rerun `make connectorgen-certification-matrix`.
 - [x] Resolve `certification-matrix-scope`: the approval authorizes only #4302-derived generated fallout. `go run ./cmd/connectorgen certification-matrix --all` changed exactly the GitHub, PostgreSQL, and Zoom `certification-matrix.json` shards; each gains the two loader-discovered operation kinds as `operation_kind_not_declared`. No connector declaration or capability changed.
 - [x] Prove deterministic generation: a second `go run ./cmd/connectorgen certification-matrix --all` had the identical SHA-256 aggregate across every certification-matrix shard, `git diff --check` passed, and `make connectorgen-certification-matrix` passed.
-- [ ] Rebase on `origin/main`, push only the working branch, open the PR, and verify its API base is `main`.
+- [x] Rebase on `origin/main`, push only the working branch, and open [PR #4308](https://github.com/polymetrics-ai/cli/pull/4308). The GitHub API reports `base=main` and `head=fm/cli-loader-kind-registration-r1`.
