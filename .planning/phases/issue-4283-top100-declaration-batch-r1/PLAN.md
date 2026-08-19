@@ -38,6 +38,8 @@ Captain clarification on 2026-08-19 defines this as a parity-declaration lane, n
 
 The concrete registration gap was confirmed for this cohort. No `sync_transport.json` was emitted because the generic source/destination adapter is not registered; `FOUNDATION-GAPS.md` links #4093 and exact engine/test evidence.
 
+Transport gate follow-up: Captain review required the omission to be explicit before increment 2. `TRANSPORT-GAP.md` records the path-(b) decision, the runtime evidence, the smallest safe recovery, and ten recoverable rejection entries. No new descriptor may use GitHub's evidence or issue-label action contract for another connector.
+
 ## Lifecycle Record
 
 - Inline/manual GSD fallback: this execution environment does not provide the compatible Pi runtime and the canonical contract forbids spawning GSD roles. Generated and reviewed: `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, `code-review` for issue `4283`.

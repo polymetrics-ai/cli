@@ -17,3 +17,7 @@ No Critical, Warning, or Info findings. In particular, review confirmed:
 - each newly surfaced GitLab, Notion, Vercel, and Sentry endpoint is disabled with source provenance;
 - GitHub-source-lock aggregate schema parity was restored with `counts`, while per-method counts remain recorded; and
 - the source-to-surface denominator is 4,378 / 4,378, checked again after the review.
+
+## Transport follow-up review
+
+Path (b) was reviewed after the increment checkpoint. `go test -timeout 20m ./internal/connectors/certify -run '^TestCertificationDeclaredTransportPairFailsWhenRegistrationIsMissing$'` and `go test -timeout 20m ./internal/synctransport -run 'TestRegisterDeclaredTransports'` pass. The ten transport rejections are recoverable and do not weaken the runtime's factory/evidence admission.

@@ -11713,6 +11713,133 @@
           "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
         }
       ]
+    },
+    {
+      "reason": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "recoverable": true,
+      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "gitlab",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
+        },
+        {
+          "connector": "jira",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
+        },
+        {
+          "connector": "vercel",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
+        },
+        {
+          "connector": "notion",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
+        },
+        {
+          "connector": "stripe",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
+        },
+        {
+          "connector": "bitbucket",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
+        },
+        {
+          "connector": "circleci",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
+        },
+        {
+          "connector": "sentry",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json"
+        },
+        {
+          "connector": "asana",
+          "operation": {
+            "kind": "sync_transport",
+            "roles": [
+              "source_transport",
+              "destination_transport"
+            ]
+          },
+          "parity_class": "sync_transport",
+          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
+        }
+      ]
     }
   ]
 }

@@ -1,14 +1,14 @@
 # Foundation gaps — increment 001
 
-This declaration-only increment does not claim a generic API sync transport. The complete, operation-level foundation reasons are machine-readable in `FOUNDATION-GAP-REASONS.json` (140 distinct reasons across 1,359 disabled public operations); the entries retain their exact source operation and recovery condition.
+This declaration-only increment does not claim a generic API sync transport. The complete, operation-level foundation reasons are machine-readable in `FOUNDATION-GAP-REASONS.json`; the entries retain their exact source operation and recovery condition. `TRANSPORT-GAP.md` records the explicit, recoverable transport decision for all ten connectors.
 
 ## Shared generic declarative API transport registration
 
 - State: open, tracked by [#4093](https://github.com/polymetrics-ai/cli/issues/4093).
 - Affected connectors: Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana.
-- Effect: no `sync_transport.json` is emitted for this cohort. Source ETL and reverse-ETL destination transport remain disabled rather than claiming a source or destination executor which the runtime cannot register.
-- Evidence: `internal/connectors/sync_transport.go:34` requires every descriptor to name a concrete, registered executor. `internal/connectors/engine/bundle.go:1751` loads and validates a descriptor but does not register one. `internal/connectors/certify/stages_transport_internal_test.go:89` proves that an unregistered `declarative_stream_source` fails before any provider call.
-- Recovery: deliver #4093 with registered, bounded declarative API source and destination adapters plus durable acknowledgement / apply-strategy evidence. Then derive each connector-local descriptor from its pinned source and rerun the non-live sweep.
+- Effect: no `sync_transport.json` is emitted for this cohort. Source ETL and reverse-ETL destination transport are marked `foundation-gap`, `recoverable: true` rather than claiming an executor or a conformance run which does not apply to these bundles.
+- Evidence: `internal/synctransport/definition_composition.go:145-168` requires an exact registered factory and accepted evidence. `internal/app/issue_label_warehouse_transport.go:54-103` admits the source only under the GitHub-specific evidence constant, while lines 322-368 restrict the destination to the issue-label action contract. `internal/connectors/certify/stages_transport_internal_test.go:89` proves failure before any provider call if registration is missing.
+- Recovery: deliver #4093 with a connector-neutral source factory and per-bundle evidence, plus a closed typed destination adapter with explicit bindings, acknowledgement, and per-mode strategies. Then derive each connector-local descriptor from its pinned source and rerun the non-live sweep.
 
 ## Schema-shaped operations that remain disabled
 

@@ -10,3 +10,4 @@
 - [x] `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make tidy-check`, `make lint`, and `go build ./cmd/pm` pass.
 - [x] No provider credential is requested, read, printed, or stored.
 - [x] Live certification is recorded `pending` for every connector.
+- [x] Transport-parity blocker is explicit: 10 `sync_transport` entries are `foundation-gap` and `recoverable: true`; `TRANSPORT-GAP.md` has file-and-line evidence plus a smallest safe recovery. No GitHub-only transport evidence or destination contract was copied.

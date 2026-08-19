@@ -6,6 +6,6 @@ Ten ranked daily-use API connectors now have reproducible public-source locks an
 - Explicitly disabled with exact evidence/recovery: 3,405.
 - Typed write actions retained: 471, including 157 `delete` actions.
 - Generated non-live certification commands: 909; all connector live certifications remain pending.
-- No `sync_transport.json` was invented: shared generic declarative source/destination registration is tracked by #4093.
+- No `sync_transport.json` was invented: all ten source/destination transport gaps are explicitly `recoverable: true`, with runtime evidence and the smallest safe recovery in `TRANSPORT-GAP.md`; #4093 tracks the foundation.
 
 Verification and review evidence is in `VERIFICATION.md`, `SOURCE-LOCK-VERIFICATION.json`, and `REVIEW.md`. This is a checkpoint summary, not the final batch delivery: the next increment must be selected from the ranked daily-use pool after the #4283 checkpoint commit.
