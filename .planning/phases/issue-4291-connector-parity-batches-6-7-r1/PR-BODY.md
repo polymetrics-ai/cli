@@ -101,6 +101,12 @@ certification never make an operation unreachable.
   connectors focused tests, `npm --prefix website run gen:website-data`, and `git diff --check`.
   The first operation-evidence increment also passed exact five-ledger and 3,932-row `jq`
   assertions before its connector validation and surface-sync checks.
+- Before the latest push, `origin/fm/cli-reverse-etl-destination-r1` was fetched and merged
+  (already current); foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` is an ancestor. A
+  fresh installed binary passed declarative-typed-destination help and Help Scout transport
+  inspection, then sent the actual closed `connections create ... --destination-action
+  update_conversation` path to the expected missing-credential preflight before provider I/O. This
+  proves sealed App/CLI dispatch, not provider-live certification.
   The installed, fresh-built binary exposes the closed declarative transport command and Help Scout
   inspection; the connection path stops at missing credentials before provider I/O. Full repository
   gates will be recorded after the connector-owned increments complete.

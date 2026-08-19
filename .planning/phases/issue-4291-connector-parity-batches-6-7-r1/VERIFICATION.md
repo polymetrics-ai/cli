@@ -351,3 +351,15 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll' -count=1`;
   `npm --prefix website run gen:website-data`; `make connector-boundary` (managed detached run,
   exit `0`, log `/tmp/cli-map-batch67-r1-connector-boundary.log`); and `git diff --check`.
+- **STACKED FOUNDATION / INSTALLED BINARY:** fetched `origin/fm/cli-reverse-etl-destination-r1`,
+  merged it with `Already up to date`, and proved
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` is an ancestor of this branch. A fresh
+  `go build -o /tmp/cli-map-batch67-r1-proof.PtA3NA/pm ./cmd/pm` then passed
+  `pm etl transport declarative-typed-destination --help` and
+  `pm connectors inspect help-scout --json`: the installed binary reports the exact
+  `update_conversation` destination action, all three declared modes, and durable acknowledgement.
+  In a fresh initialized temporary project, the real
+  `pm connections create help-scout-route-proof --source help-scout:credential-free-proof
+  --destination help-scout:credential-free-proof --stream conversations --destination-action
+  update_conversation` path exited `1` with `error: resolve source: credential
+  "credential-free-proof" not found`, before provider I/O. No credential was created or used.
