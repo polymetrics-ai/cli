@@ -162,7 +162,7 @@ func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, vari
 	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
 	return f.operationJSONVariableErr
 }
-func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, _ ...string) error {
 	f.operationWritePreflight = operationDirectWritePreflightCall{
 		operation:    operation,
 		method:       method,
@@ -2115,6 +2115,11 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 				Path:        "/workspaces/{workspace_id}/widgets",
 				ContentType: "application/json",
 				MaxBytes:    1024,
+				Parameters: []engine.OperationParameter{{
+					Name: "dry_run",
+					In:   "query",
+					Type: "boolean",
+				}},
 				BodySchema: json.RawMessage(`{
 					"type": "object",
 					"additionalProperties": false,
@@ -2269,6 +2274,114 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 			})
 			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
 				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestBuildOperationDirectWriteCommandRejectsUndeclaredQueryBindings(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.widgets.create",
+			Kind:          "rest_write",
+			Summary:       "Create one widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				Parameters: []engine.OperationParameter{{
+					Name: "dry_run",
+					In:   "query",
+					Type: "boolean",
+				}},
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/widgets",
+			Operation: &engine.SurfaceOperation{Model: "write"},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.widgets.create",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets"}},
+			OutputPolicy: "json",
+			Flags:        []engine.CLIFlag{{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"}},
+		}}},
+	}
+
+	for _, test := range []struct {
+		name   string
+		mutate func(*engine.Bundle)
+		want   string
+	}{
+		{
+			name: "exact source query binding",
+		},
+		{
+			name: "unknown query binding",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.CLISurface.Commands[0].Flags[0].MapsTo = "query.unknown"
+			},
+			want: "not source-declared",
+		},
+		{
+			name: "duplicate query binding",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.CLISurface.Commands[0].Flags = append(bundle.CLISurface.Commands[0].Flags, engine.CLIFlag{Name: "again", Type: "boolean", MapsTo: "query.dry_run"})
+			},
+			want: "maps more than one command flag",
+		},
+		{
+			name: "fixed query binding",
+			mutate: func(bundle *engine.Bundle) {
+				rest := bundle.Operations[0].REST
+				rest.Query = map[string]string{"dry_run": "true"}
+			},
+			want: "fixed by rest.query",
+		},
+		{
+			name: "required query has no binding",
+			mutate: func(bundle *engine.Bundle) {
+				rest := bundle.Operations[0].REST
+				rest.Parameters = append(rest.Parameters, engine.OperationParameter{Name: "scope", In: "query", Type: "string", Required: true})
+			},
+			want: "requires query parameter",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			testBundle := bundle
+			testBundle.Operations = append([]engine.OperationSpec(nil), bundle.Operations...)
+			testREST := *bundle.Operations[0].REST
+			testREST.Parameters = append([]engine.OperationParameter(nil), testREST.Parameters...)
+			testBundle.Operations[0].REST = &testREST
+			testSurface := *bundle.CLISurface
+			testSurface.Commands = append([]engine.CLICommand(nil), bundle.CLISurface.Commands...)
+			testSurface.Commands[0].Flags = append([]engine.CLIFlag(nil), bundle.CLISurface.Commands[0].Flags...)
+			testBundle.CLISurface = &testSurface
+			if test.mutate != nil {
+				test.mutate(&testBundle)
+			}
+			_, err := BuildWriteCommand(context.Background(), engine.New(testBundle, nil), Request{Path: []string{"widgets", "create"}})
+			if test.want == "" {
+				if err != nil {
+					t.Fatalf("BuildWriteCommand: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, test.want)
 			}
 		})
 	}

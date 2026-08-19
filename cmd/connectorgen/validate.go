@@ -1252,12 +1252,14 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	}
 
 	bodyMapped := false
+	queryFields := make([]string, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
-		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
-			// Typed path/query bindings are supported by the shared operation
-			// shaper and validated again at command runtime.
+		case strings.HasPrefix(mapsTo, "path."):
+			// Typed path bindings are supported by the shared operation shaper.
+		case strings.HasPrefix(mapsTo, "query."):
+			queryFields = append(queryFields, strings.TrimPrefix(mapsTo, "query."))
 		case strings.HasPrefix(mapsTo, "body."):
 			bodyMapped = true
 		default:
@@ -1269,6 +1271,46 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	}
 	if len(op.REST.BodySchema) > 0 {
 		findings = append(findings, checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct write")...)
+	}
+	findings = append(findings, checkCLISurfaceDirectWriteRequiredQueryMappings(b, i, cmd, op)...)
+	if len(cmd.APISurface) == 1 {
+		endpoint := cmd.APISurface[0]
+		if err := engine.PreflightOperationDirectWrite(b, cmd.Operation, endpoint.Method, endpoint.Path, cmd.OutputPolicy, queryFields...); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q is not executable: %v", i, cmd.Path, cmd.Operation, err)})
+		}
+	}
+	return findings
+}
+
+func checkCLISurfaceDirectWriteRequiredQueryMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	if op.REST == nil {
+		return nil
+	}
+	mapped := make(map[string][]engine.CLIFlag)
+	for _, flag := range cmd.Flags {
+		if name, ok := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "query."); ok {
+			mapped[name] = append(mapped[name], flag)
+		}
+	}
+	var findings []Finding
+	for _, parameter := range op.REST.Parameters {
+		if !parameter.Required || !strings.EqualFold(strings.TrimSpace(parameter.In), "query") {
+			continue
+		}
+		name := parameter.Name
+		if _, fixed := op.REST.Query[name]; fixed {
+			continue
+		}
+		flags := mapped[name]
+		if len(flags) == 0 {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q requires query.%s to be mapped", i, cmd.Path, op.ID, name)})
+			continue
+		}
+		for _, flag := range flags {
+			if !flag.Required {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flag --%s mapped to required query.%s must be required", i, cmd.Path, flag.Name, name)})
+			}
+		}
 	}
 	return findings
 }

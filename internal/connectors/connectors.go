@@ -664,10 +664,10 @@ type OperationDirectWriter interface {
 // OperationDirectWritePreflighter exposes the no-network admission check for
 // a command's exact direct-write binding. A command cannot be executable merely
 // because an operation has compatible metadata: its method, provider-relative
-// path, and output policy must match the fixed declaration that the runtime
-// will dispatch.
+// path, output policy, and query-field bindings must match the fixed
+// declaration that the runtime will dispatch.
 type OperationDirectWritePreflighter interface {
-	PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error
+	PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error
 }
 
 // OperationStructuredJSONBodyPreflighter proves that one named top-level

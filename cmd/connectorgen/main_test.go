@@ -659,6 +659,117 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 }
 
+func TestCheckCLISurfaceDirectWriteQueryBindings(t *testing.T) {
+	batchable := false
+	op := engine.OperationSpec{
+		ID:            "cli-surface.widgets.create",
+		Kind:          "rest_write",
+		Risk:          "high",
+		Approval:      "plan-preview-confirm-execute",
+		OutputPolicy:  "json",
+		MutationClass: "create",
+		Batchable:     &batchable,
+		REST: &engine.RESTOperationSpec{
+			Method:      "POST",
+			Path:        "/widgets",
+			ContentType: "application/json",
+			MaxBytes:    1024,
+			Parameters: []engine.OperationParameter{{
+				Name: "dry_run",
+				In:   "query",
+				Type: "boolean",
+			}},
+		},
+	}
+	baseCommand := engine.CLICommand{
+		Path:         "widget create",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    op.ID,
+		APISurface:   []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/widgets"}},
+		OutputPolicy: "json",
+		Flags:        []engine.CLIFlag{{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"}},
+	}
+
+	for _, test := range []struct {
+		name   string
+		mutate func(*engine.OperationSpec, *engine.CLICommand)
+		want   string
+	}{
+		{name: "exact source query binding"},
+		{
+			name: "unknown query binding",
+			mutate: func(_ *engine.OperationSpec, command *engine.CLICommand) {
+				command.Flags[0].MapsTo = "query.unknown"
+			},
+			want: "not source-declared",
+		},
+		{
+			name: "duplicate query binding",
+			mutate: func(_ *engine.OperationSpec, command *engine.CLICommand) {
+				command.Flags = append(command.Flags, engine.CLIFlag{Name: "again", Type: "boolean", MapsTo: "query.dry_run"})
+			},
+			want: "maps more than one command flag",
+		},
+		{
+			name: "fixed query binding",
+			mutate: func(operation *engine.OperationSpec, _ *engine.CLICommand) {
+				operation.REST.Query = map[string]string{"dry_run": "true"}
+			},
+			want: "fixed by rest.query",
+		},
+		{
+			name: "required query is unmapped",
+			mutate: func(operation *engine.OperationSpec, _ *engine.CLICommand) {
+				operation.REST.Parameters = append(operation.REST.Parameters, engine.OperationParameter{Name: "scope", In: "query", Type: "string", Required: true})
+			},
+			want: "requires query parameter",
+		},
+		{
+			name: "required query flag is optional",
+			mutate: func(operation *engine.OperationSpec, command *engine.CLICommand) {
+				operation.REST.Parameters = []engine.OperationParameter{{Name: "scope", In: "query", Type: "string", Required: true}}
+				command.Flags = []engine.CLIFlag{{Name: "scope", Type: "string", MapsTo: "query.scope"}}
+			},
+			want: "must be required",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			testOperation := op
+			testREST := *op.REST
+			testREST.Parameters = append([]engine.OperationParameter(nil), op.REST.Parameters...)
+			testOperation.REST = &testREST
+			testCommand := baseCommand
+			testCommand.Flags = append([]engine.CLIFlag(nil), baseCommand.Flags...)
+			if test.mutate != nil {
+				test.mutate(&testOperation, &testCommand)
+			}
+			bundle := engine.Bundle{
+				Name:       "cli-surface",
+				Operations: []engine.OperationSpec{testOperation},
+				Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+					Method:    "POST",
+					Path:      "/widgets",
+					Operation: &engine.SurfaceOperation{Model: "write"},
+				}}},
+			}
+			findings := checkCLISurfaceDirectWriteOperationSafety(bundle, 0, testCommand, testOperation)
+			if test.want == "" {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, test.want) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want %q", findings, test.want)
+		})
+	}
+}
+
 func TestValidate_CLISurfaceDirectWriteStructuredRESTBodyRequiresClosedBoundedDeclaration(t *testing.T) {
 	newBundle := func(bodySchema, mapsTo string) fstest.MapFS {
 		fsys := directWriteCLISurfaceBundleFS()
