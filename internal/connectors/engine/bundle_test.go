@@ -1319,6 +1319,142 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 }
 
+func TestBundleLoadRegistersStatusAndTextExportOperations(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "status",
+				"rest": {
+					"method": "HEAD",
+					"path": "/v2/repositories/{repository}",
+					"max_bytes": 128
+				}
+			},
+			{
+				"id": "acme.members.export",
+				"kind": "text_export",
+				"summary": "Export members as CSV",
+				"risk": "medium",
+				"approval": "explicit destination",
+				"output_policy": "file_manifest",
+				"binary": {
+					"method": "GET",
+					"path": "/v2/members/export",
+					"max_bytes": 4096,
+					"accept": "text/csv"
+				}
+			}
+		]
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load declarations for rest_status and text_export: %v", err)
+	}
+	if len(bundle.Operations) != 2 {
+		t.Fatalf("loaded operations = %d, want 2", len(bundle.Operations))
+	}
+	status, export := bundle.Operations[0], bundle.Operations[1]
+	if status.Kind != "rest_status" || status.REST == nil || status.REST.Method != "HEAD" || status.OutputPolicy != "status" {
+		t.Fatalf("loaded rest_status = %#v, want declared status-only REST operation", status)
+	}
+	if export.Kind != "text_export" || export.Binary == nil || export.Binary.MaxBytes != 4096 || export.Binary.Accept != "text/csv" {
+		t.Fatalf("loaded text_export = %#v, want bounded CSV binary operation", export)
+	}
+}
+
+func TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations(t *testing.T) {
+	tests := []struct {
+		name      string
+		operation string
+		wantErr   string
+	}{
+		{
+			name: "status cannot declare JSON response body policy",
+			operation: `{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {"method": "HEAD", "path": "/v2/repositories/{repository}"}
+			}`,
+			wantErr: "rest_status output_policy must be status",
+		},
+		{
+			name: "status cannot declare a request body",
+			operation: `{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "status",
+				"rest": {"method": "HEAD", "path": "/v2/repositories/{repository}", "body": {"unexpected": true}}
+			}`,
+			wantErr: "rest_status must not declare a request body",
+		},
+		{
+			name: "status requires HEAD",
+			operation: `{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "status",
+				"rest": {"method": "GET", "path": "/v2/repositories/{repository}"}
+			}`,
+			wantErr: "rest_status method must be HEAD",
+		},
+		{
+			name: "text export requires a positive byte bound",
+			operation: `{
+				"id": "acme.members.export",
+				"kind": "text_export",
+				"summary": "Export members as CSV",
+				"risk": "medium",
+				"approval": "explicit destination",
+				"output_policy": "file_manifest",
+				"binary": {"method": "GET", "path": "/v2/members/export", "accept": "text/csv"}
+			}`,
+			wantErr: "text_export must declare positive max_bytes",
+		},
+		{
+			name: "text export requires the binary execution block",
+			operation: `{
+				"id": "acme.members.export",
+				"kind": "text_export",
+				"summary": "Export members as CSV",
+				"risk": "medium",
+				"approval": "explicit destination",
+				"output_policy": "file_manifest",
+				"rest": {"method": "GET", "path": "/v2/members/export"}
+			}`,
+			wantErr: "text_export\" must declare binary block, got rest",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[` + tt.operation + `]}`)}
+
+			_, err := Load(fsys, "acme")
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("Load error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestBundleLoadAcceptsRuntimeSupportedDirectWriteOutputPolicies(t *testing.T) {
 	for _, tt := range []struct {
 		name   string
