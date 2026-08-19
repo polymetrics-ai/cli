@@ -332,43 +332,45 @@ func newProofBearingEvidenceForCredentialScope(completed completedLiveEvidence, 
 	return evidence, nil
 }
 
-// writeProofBearingEvidence is deliberately fed only a completed run. It owns
-// the repository-local salt and marshals the sanitized result in memory before
-// it opens the destination file, so raw request, response, or credential data
-// has no persistence path.
-func writeProofBearingEvidence(repoRoot, path string, completed completedLiveEvidence) (acceptedEvidence, error) {
+// preparedAcceptedEvidence is a fully rendered and validated record whose
+// destination is safe for publication. Preparing every record before calling
+// publishPreparedAcceptedEvidence keeps validation failures from producing a
+// prefix of a multi-record import.
+type preparedAcceptedEvidence struct {
+	outputPath string
+	evidence   acceptedEvidence
+	payload    []byte
+}
+
+// prepareProofBearingEvidence is deliberately fed only a completed run. It
+// owns the repository-local salt and renders the sanitized result in memory;
+// raw request, response, or credential data has no persistence path.
+func prepareProofBearingEvidence(repoRoot, path string, completed completedLiveEvidence) (preparedAcceptedEvidence, error) {
 	outputPath, err := acceptedEvidenceOutputPath(repoRoot, path)
 	if err != nil {
-		return acceptedEvidence{}, err
+		return preparedAcceptedEvidence{}, err
 	}
 	salt, err := repositoryFingerprintSalt(repoRoot)
 	if err != nil {
-		return acceptedEvidence{}, err
+		return preparedAcceptedEvidence{}, err
 	}
 	completed.RepositorySalt = salt
 	evidence, err := newProofBearingEvidence(completed)
 	if err != nil {
+		return preparedAcceptedEvidence{}, err
+	}
+	return prepareAcceptedEvidence(outputPath, evidence, "render proof-bearing evidence")
+}
+
+func writeProofBearingEvidence(repoRoot, path string, completed completedLiveEvidence) (acceptedEvidence, error) {
+	prepared, err := prepareProofBearingEvidence(repoRoot, path, completed)
+	if err != nil {
 		return acceptedEvidence{}, err
 	}
-	payload, err := marshalGeneratedJSON(evidence)
-	if err != nil {
-		return acceptedEvidence{}, fmt.Errorf("render proof-bearing evidence: %w", err)
+	if err := publishPreparedAcceptedEvidence([]preparedAcceptedEvidence{prepared}, nil); err != nil {
+		return acceptedEvidence{}, err
 	}
-	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
-		return acceptedEvidence{}, fmt.Errorf("create proof evidence directory: %w", err)
-	}
-	file, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
-	if err != nil {
-		return acceptedEvidence{}, fmt.Errorf("create proof-bearing evidence: %w", err)
-	}
-	if _, err := file.Write(payload); err != nil {
-		_ = file.Close()
-		return acceptedEvidence{}, fmt.Errorf("write proof-bearing evidence: %w", err)
-	}
-	if err := file.Close(); err != nil {
-		return acceptedEvidence{}, fmt.Errorf("close proof-bearing evidence: %w", err)
-	}
-	return evidence, nil
+	return prepared.evidence, nil
 }
 
 // importedLiveEvidence contains only values that ReadExternalProof has already
@@ -433,34 +435,135 @@ func newImportedProofBearingEvidence(completed importedLiveEvidence) (acceptedEv
 	return evidence, nil
 }
 
-func writeImportedProofBearingEvidence(repoRoot, path string, completed importedLiveEvidence) (acceptedEvidence, error) {
+func prepareImportedProofBearingEvidence(repoRoot, path string, completed importedLiveEvidence) (preparedAcceptedEvidence, error) {
 	outputPath, err := acceptedEvidenceOutputPath(repoRoot, path)
 	if err != nil {
-		return acceptedEvidence{}, err
+		return preparedAcceptedEvidence{}, err
 	}
 	evidence, err := newImportedProofBearingEvidence(completed)
 	if err != nil {
-		return acceptedEvidence{}, err
+		return preparedAcceptedEvidence{}, err
+	}
+	return prepareAcceptedEvidence(outputPath, evidence, "render imported proof-bearing evidence")
+}
+
+func prepareAcceptedEvidence(outputPath string, evidence acceptedEvidence, renderContext string) (preparedAcceptedEvidence, error) {
+	if err := validateAcceptedEvidence(evidence); err != nil {
+		return preparedAcceptedEvidence{}, err
 	}
 	payload, err := marshalGeneratedJSON(evidence)
 	if err != nil {
-		return acceptedEvidence{}, fmt.Errorf("render imported proof-bearing evidence: %w", err)
+		return preparedAcceptedEvidence{}, fmt.Errorf("%s: %w", renderContext, err)
 	}
-	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
-		return acceptedEvidence{}, fmt.Errorf("create proof evidence directory: %w", err)
+	return preparedAcceptedEvidence{outputPath: outputPath, evidence: evidence, payload: payload}, nil
+}
+
+// publishPreparedAcceptedEvidence writes each complete payload to a private
+// file on the target filesystem, fsyncs it, and atomically links it into the
+// evidence directory. os.Link refuses an existing destination, so publication
+// is both no-replace and invisible to matrix readers until the complete JSON is
+// durable. Callers must prepare the entire batch before publishing it.
+//
+// beforePublish is only used by the concurrent-reader regression test. It runs
+// after every record has been staged but before any final name exists.
+func publishPreparedAcceptedEvidence(records []preparedAcceptedEvidence, beforePublish func() error) error {
+	if len(records) == 0 {
+		return errors.New("no prepared evidence records to publish")
 	}
-	file, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	seen := make(map[string]struct{}, len(records))
+	for _, record := range records {
+		if record.outputPath == "" || len(record.payload) == 0 {
+			return errors.New("prepared evidence requires a destination and complete payload")
+		}
+		if _, exists := seen[record.outputPath]; exists {
+			return fmt.Errorf("prepared evidence has duplicate destination %q", filepath.ToSlash(record.outputPath))
+		}
+		seen[record.outputPath] = struct{}{}
+		if err := os.MkdirAll(filepath.Dir(record.outputPath), 0o755); err != nil {
+			return fmt.Errorf("create proof evidence directory: %w", err)
+		}
+		if _, err := os.Lstat(record.outputPath); err == nil {
+			return fmt.Errorf("publish proof-bearing evidence %q: destination already exists", filepath.ToSlash(record.outputPath))
+		} else if !errors.Is(err, os.ErrNotExist) {
+			return fmt.Errorf("inspect proof-bearing evidence destination %q: %w", filepath.ToSlash(record.outputPath), err)
+		}
+	}
+
+	staged := make([]string, len(records))
+	for index, record := range records {
+		path, err := stageEvidencePayload(record.outputPath, record.payload)
+		if err != nil {
+			for _, stagedPath := range staged[:index] {
+				_ = os.Remove(stagedPath)
+			}
+			return err
+		}
+		staged[index] = path
+	}
+	defer func() {
+		for _, stagedPath := range staged {
+			_ = os.Remove(stagedPath)
+		}
+	}()
+	if beforePublish != nil {
+		if err := beforePublish(); err != nil {
+			return err
+		}
+	}
+	for index, record := range records {
+		if err := os.Link(staged[index], record.outputPath); err != nil {
+			return fmt.Errorf("publish proof-bearing evidence %q without replacement: %w", filepath.ToSlash(record.outputPath), err)
+		}
+		if err := syncEvidenceDirectory(filepath.Dir(record.outputPath)); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func stageEvidencePayload(outputPath string, payload []byte) (string, error) {
+	file, err := os.CreateTemp(filepath.Dir(outputPath), "."+filepath.Base(outputPath)+".tmp-*")
 	if err != nil {
-		return acceptedEvidence{}, fmt.Errorf("create proof-bearing evidence: %w", err)
+		return "", fmt.Errorf("stage proof-bearing evidence: %w", err)
 	}
-	if _, err := file.Write(payload); err != nil {
+	path := file.Name()
+	if err := file.Chmod(0o600); err != nil {
 		_ = file.Close()
-		return acceptedEvidence{}, fmt.Errorf("write proof-bearing evidence: %w", err)
+		_ = os.Remove(path)
+		return "", fmt.Errorf("protect staged proof-bearing evidence: %w", err)
 	}
-	if err := file.Close(); err != nil {
-		return acceptedEvidence{}, fmt.Errorf("close proof-bearing evidence: %w", err)
+	written, err := file.Write(payload)
+	if err == nil && written != len(payload) {
+		err = io.ErrShortWrite
 	}
-	return evidence, nil
+	if err == nil {
+		err = file.Sync()
+	}
+	closeErr := file.Close()
+	if err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		_ = os.Remove(path)
+		return "", fmt.Errorf("write staged proof-bearing evidence: %w", err)
+	}
+	return path, nil
+}
+
+func syncEvidenceDirectory(directory string) error {
+	file, err := os.Open(directory)
+	if err != nil {
+		return fmt.Errorf("open proof evidence directory: %w", err)
+	}
+	err = file.Sync()
+	closeErr := file.Close()
+	if err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		return fmt.Errorf("sync proof evidence directory: %w", err)
+	}
+	return nil
 }
 
 func acceptedEvidenceOutputPath(repoRoot, path string) (string, error) {

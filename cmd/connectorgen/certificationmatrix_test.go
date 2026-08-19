@@ -830,6 +830,25 @@ func TestCertificationCheckValidatesCommittedStatusBeforeSourceReconstruction(t 
 	}
 }
 
+func TestCertificationScopedCheckDoesNotReadGlobalStatusOrOtherConnectorShards(t *testing.T) {
+	sourceRoot := repoRootForCertificationTest(t)
+	shards, err := buildCertificationShards(sourceRoot, []string{"github"})
+	if err != nil {
+		t.Fatalf("buildCertificationShards() error = %v", err)
+	}
+	payloads, err := marshalCertificationShards(shards)
+	if err != nil {
+		t.Fatalf("marshalCertificationShards() error = %v", err)
+	}
+	outputRoot := t.TempDir()
+	if err := writeCertificationShardScope(outputRoot, payloads, []string{"github"}); err != nil {
+		t.Fatalf("writeCertificationShardScope() error = %v", err)
+	}
+	if _, err := generateCertificationMatrix(sourceRoot, outputRoot, true, false, "github"); err != nil {
+		t.Fatalf("scoped matrix check error = %v, want it to validate only GitHub's generated shard", err)
+	}
+}
+
 func TestCertificationShardDriftFails(t *testing.T) {
 	root := repoRootForCertificationTest(t)
 	shards, err := buildCertificationShards(root, certificationConnectorAllowlist)
