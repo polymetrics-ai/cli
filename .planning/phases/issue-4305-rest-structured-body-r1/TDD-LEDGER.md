@@ -11,4 +11,8 @@
 
 ## Actual evidence
 
-Pending execution. Each red command, resulting failure, green command, and outcome will be recorded here as work proceeds.
+### 2026-08-20 — declaration-backed REST structured-body red checkpoint
+
+- Red: `go test -timeout 20m ./internal/connectors/commandrunner -run TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody -count=1` failed. The production-shaped synthetic command carries a declared path field, query field, scalar body field, closed nested object, and bounded nested array. Runtime refused the first `json` body flag with: `structured JSON variables require a fixed GraphQL operation, got "rest_write"`.
+- Observable contract: no caller-provided method, route, content type, or raw body exists in the fixture; the only missing capability is admitting the source-owned nested fields of the declared REST body.
+- Next green slice: add an operation-owned structured-body preflight, use it before parsing the JSON flag, then materialize the value only into the declared body path. Engine tests will prove recursive schema and limit failures occur before transport I/O.
